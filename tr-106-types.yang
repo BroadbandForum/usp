@@ -1,0 +1,77 @@
+// XXX manually created; only contains a few definitions
+module tr-106-types {
+  namespace "urn:types";
+  prefix types;
+  
+  organization
+    "TBD";
+  
+  contact
+    "TBD";
+  
+  description
+    "";
+  
+  revision 1970-01-01 {
+    description
+      "TBD";
+    reference
+      "TBD";
+  }
+
+  typedef Alias {
+    type string;
+  }
+
+  typedef Dbm1000 {
+    type int32;
+  }
+
+  typedef DiagnosticsState {
+    type string;
+  }
+
+  typedef IEEE_EUI64 {
+    type string;
+  }
+
+  typedef IPAddress {
+    type string;
+  }
+
+  typedef IPv4Address {
+    type string;
+  }
+
+  typedef IPv6Address {
+    type string;
+  }
+
+  typedef IPPrefix {
+    type string;
+  }
+
+  typedef IPv4Prefix {
+    type string;
+  }
+
+  typedef IPv6Prefix {
+    type string;
+  }
+
+  typedef MACAddress {
+    type string;
+  }
+
+  typedef StatsCounter32 {
+    type uint32;
+  }
+
+  typedef StatsCounter64 {
+    type uint64;
+  }
+
+  typedef ZigBeeNetworkAddress {
+    type string;
+  }
+}
