@@ -1,4 +1,5 @@
-YANG = Device.yang STBService.yang StorageService.yang
+YANG = Device.yang VoiceService.yang STBService.yang StorageService.yang \
+       FAPService.yang
 
 TREE = $(YANG:%.yang=%.tree)
 
@@ -31,10 +32,16 @@ clean:
 Device.yang: tr-181-2-10.xml dm2yang.pm
 	$(YANGRULE)
 
+VoiceService.yang: tr-104-2-0.xml dm2yang.pm
+	$(YANGRULE)
+
 STBService.yang: tr-135-1-4.xml dm2yang.pm
 	$(YANGRULE)
 
 StorageService.yang: tr-140-1-2.xml dm2yang.pm
+	$(YANGRULE)
+
+FAPService.yang: tr-196-2-1.xml dm2yang.pm
 	$(YANGRULE)
 
 %.tree: %.yang
