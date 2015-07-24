@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dm:document xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-4"
+             xmlns:dmr="urn:broadband-forum-org:cwmp:datamodel-report-0-1"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-4
+                                    http://www.broadband-forum.org/cwmp/cwmp-datamodel-1-4.xsd 
+                                 urn:broadband-forum-org:cwmp:datamodel-report-0-1
+                                    http://www.broadband-forum.org/cwmp/cwmp-datamodel-report.xsd"
+             spec="urn:broadband-forum-org:tbd" file="csda-example.xml">
+
+  <description>
+    CSDA "Objects with sub-objects" example from USP ''Sandbox for Protocol Discussion''.
+  </description>
+
+  <component name="bistate">
+    <parameter name="on" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="off" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="toggle" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="state" access="readWrite">
+      <syntax>
+        <boolean/>
+      </syntax>
+    </parameter>
+    <!-- XXX this doesn't work :(
+    <profile name="bistate:1">
+      <parameter ref="state" requirement="readWrite"/>
+    </profile>
+    -->
+  </component>
+  
+  <component name="intensity">
+    <parameter name="step_up" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="step_down" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="fade_auto" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="fade_up" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="fade_down" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="fade_stop" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="max" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="min" access="readWrite">
+      <syntax command="true">
+        <boolean/>
+      </syntax>
+    </parameter>
+    <parameter name="level" access="readWrite">
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+    <parameter name="ratio" access="readWrite">
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+    <parameter name="fading" access="readOnly">
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+  </component>
+  
+  <component name="energy">
+    <parameter name="consumption" access="readWrite">
+      <description>
+        {{issue|No DM ''decimal'' type; add based on YANG ''decimal64''?}}
+      </description>
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+    <parameter name="since" access="readOnly">
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+    <parameter name="instantaneous" access="readOnly">
+      <syntax>
+        <int/>
+      </syntax>
+    </parameter>
+  </component>
+  
+  <component name="dimmer-basic">
+    <object name="bistate." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="bistate"/>
+    </object>
+    <object name="intensity." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="intensity"/>
+    </object>
+  </component>
+  
+  <component name="dimmer">
+    <component ref="dimmer-basic"/>
+    <object name="energy." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="energy"/>
+    </object>
+  </component>
+
+  <component name="switch">
+    <object name="bistate." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="bistate"/>
+    </object>    
+  </component>
+
+  <component name="ceiling-fan">
+    <object name="switch." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="switch"/>
+    </object>    
+    <object name="dimmer." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="dimmer-basic"/>
+    </object>    
+  </component>
+
+  <!-- these are additional examples -->
+  <component name="my-switch">
+    <component ref="switch"/>
+    <parameter name="my-switch-parameter" access="readWrite">
+      <syntax>
+        <boolean/>
+      </syntax>
+    </parameter>
+  </component>
+
+  <!-- model that illustrates usage -->
+  <model name="csda-example:1.0">
+    <object name="ceiling-fan." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="ceiling-fan"/>
+    </object>
+
+    <object name="sw1." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="switch"/>
+    </object>
+    
+    <object name="sw2." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="my-switch"/>
+    </object>
+    
+    <parameter name="nsw" access="readOnly">
+      <description>
+        {{numentries}}
+      </description>
+      <syntax>
+        <unsignedInt/>
+      </syntax>
+    </parameter>
+    <object name="sw.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="nsw" dmr:noUniqueKeys="true">
+      <component ref="my-switch"/>
+    </object>
+    
+  </model>
+
+</dm:document>
