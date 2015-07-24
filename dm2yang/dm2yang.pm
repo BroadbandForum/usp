@@ -186,6 +186,8 @@ sub output_module_preamble_open {
     my $namespace = $module->{namespace};
     my $prefix = $module->{prefix};
 
+    # XXX need to include comments indicating that it's auto-created, the
+    #     command line etc
     output $i, qq{
 <CODE BEGINS> file "$file"
 module $name \{
@@ -271,8 +273,6 @@ sub output_includes {
 }
 
 # output module extensions
-# XXX should look at whether can use extensions to indicate use of mediawiki
-#     description markup
 sub output_extensions {
     my ($i, $module) = @_;
     
@@ -504,7 +504,7 @@ sub output_leaf {
     
     # XXX temporarily indicate if it's a command parameter; these and other
     #     parameters that should be command parameters can be converted to
-    #     RPCs?
+    #     actions?
     my $command = $syntax->{command} ? qq{ /* command */} : qq{};
 
     output $i+1, qq{type $type$opt_brace$command};
@@ -652,6 +652,7 @@ sub get_lengths {
             $min = 'min' unless defined $min && $min ne ''; 
             $max = 'max' unless defined $max && $max ne '';
 
+            # XXX this might not always be correct?
             $min = '0' if $min eq 'min';
 
             # XXX not covering all cases, e.g. min > max, disjoint, ascending
