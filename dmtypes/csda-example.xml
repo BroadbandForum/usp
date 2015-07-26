@@ -33,7 +33,7 @@
         <boolean/>
       </syntax>
     </parameter>
-    <!-- XXX this doesn't work :(
+    <!-- XXX profiles don't work when components can be expanded anywhere :(
     <profile name="bistate:1">
       <parameter ref="state" requirement="readWrite"/>
     </profile>
@@ -159,7 +159,7 @@
   <!-- model that illustrates usage -->
   <model name="csda-example:1.0">
     <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
-      <parameter name="my-switchNumberOfEntries" access="readOnly">
+      <parameter name="my-switch-arrayNumberOfEntries" access="readOnly">
         <description>
           {{numentries}}
         </description>
@@ -181,8 +181,12 @@
       <component ref="ceiling-fan"/>
     </object>
 
-    <object name="Device.my-switch.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
-      numEntriesParameter="my-switchNumberOfEntries" dmr:noUniqueKeys="true">
+    <object name="Device.my-switch-1." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="my-switch"/>
+    </object>
+    
+    <object name="Device.my-switch-array.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="my-switch-arrayNumberOfEntries" dmr:noUniqueKeys="true">
       <component ref="my-switch"/>
     </object>
     

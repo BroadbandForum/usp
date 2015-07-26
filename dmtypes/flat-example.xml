@@ -357,7 +357,15 @@
         </syntax>
       </parameter>
       
-      <parameter name="my-switchNumberOfEntries" access="readOnly">
+      <parameter name="my-switch-1" access="readOnly">
+        <syntax>
+          <string>
+            <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
+          </string>
+        </syntax>
+      </parameter>
+      
+      <parameter name="my-switch-arrayNumberOfEntries" access="readOnly">
         <description>
           {{numentries}}
         </description>
@@ -367,8 +375,8 @@
       </parameter>
     </object>
 
-    <object name="Device.my-switch.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
-      numEntriesParameter="my-switchNumberOfEntries" dmr:noUniqueKeys="true">
+    <object name="Device.my-switch-array.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="my-switch-arrayNumberOfEntries" dmr:noUniqueKeys="true">
       <parameter name="my-switch" access="readOnly">
         <syntax>
           <string>
