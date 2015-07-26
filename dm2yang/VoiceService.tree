@@ -1,0 +1,846 @@
+module: VoiceService
+   +--rw VoiceService* [Alias]
+      +--ro Capabilities
+      |  +--ro MaxLineCount?              int32
+      |  +--ro MaxExtensionCount?         int32
+      |  +--ro MaxCallLogCount?           int32
+      |  +--ro MaxSessionsPerLine?        int32
+      |  +--ro MaxSessionsPerExtension?   int32
+      |  +--ro MaxSessionCount?           int32
+      |  +--ro NetworkConnectionModes?    string
+      |  +--ro UserConnectionModes?       string
+      |  +--ro ToneFileFormats?           enumeration
+      |  +--ro RingFileFormats?           enumeration
+      |  +--ro FacilityActions?           enumeration
+      |  +--ro SIP
+      |  |  +--ro Client
+      |  |  |  +--ro Extensions?                   string
+      |  |  |  +--ro URISchemes?                   string
+      |  |  |  +--ro EventTypes?                   string
+      |  |  |  +--ro TLSAuthenticationProtocols?   enumeration
+      |  |  |  +--ro TLSAuthenticationKeySizes?    uint32
+      |  |  |  +--ro TLSEncryptionProtocols?       enumeration
+      |  |  |  +--ro TLSEncryptionKeySizes?        uint32
+      |  |  |  +--ro TLSKeyExchangeProtocols?      enumeration
+      |  |  +--ro Registrar
+      |  |     +--ro Extensions?                   string
+      |  |     +--ro URISchemes?                   string
+      |  |     +--ro EventTypes?                   string
+      |  |     +--ro TLSAuthenticationProtocols?   enumeration
+      |  |     +--ro TLSAuthenticationKeySizes?    uint32
+      |  |     +--ro TLSEncryptionProtocols?       enumeration
+      |  |     +--ro TLSEncryptionKeySizes?        uint32
+      |  |     +--ro TLSKeyExchangeProtocols?      enumeration
+      |  +--ro MGCP
+      |  |  +--ro Extensions?   string
+      |  +--ro H323
+      |  |  +--ro FastStart?                   boolean
+      |  |  +--ro H235AuthenticationMethods?   enumeration
+      |  +--ro ISDN
+      |  |  +--ro MSN?    boolean
+      |  |  +--ro DDI?    boolean
+      |  |  +--ro MCID?   boolean
+      |  |  +--ro MWI?    boolean
+      |  |  +--ro AoC?    boolean
+      |  |  +--ro ECT?    boolean
+      |  +--ro POTS
+      |  |  +--ro DialType?         enumeration
+      |  |  +--ro ClipGeneration?   boolean
+      |  |  +--ro ChargingPulse?    boolean
+      |  +--ro Codec* [Codec BitRate]
+      |  |  +--ro Codec                  enumeration
+      |  |  +--ro BitRate                uint32
+      |  |  +--ro PacketizationPeriod?   string
+      |  |  +--ro SilenceSuppression?    boolean
+      |  +--ro QualityIndicator
+      |     +--ro QIModelsSupported?   string
+      |     +--ro MaxQIValues?         uint32
+      |     +--ro MaxWorstQIValues?    uint32
+      +--rw ReservedPorts
+      |  +--rw WANPortRange?   string
+      |  +--rw LANPortRange?   string
+      +--rw ISDN
+      |  +--rw BRI* [Name]
+      |  |  +--rw Enable?                     boolean
+      |  |  +--ro Status?                     enumeration
+      |  |  +--ro Name                        string
+      |  |  +--rw ToneEventProfile?           string
+      |  |  +--rw ApplicationInterface?       enumeration
+      |  |  +--rw Protocol?                   enumeration
+      |  |  +--rw ProtocolEmulation?          enumeration
+      |  |  +--rw PermanentLayer2?            boolean
+      |  |  +--rw PermanentLayer1?            boolean
+      |  |  +--rw LapdDisconnectionTimeout?   boolean
+      |  |  +--rw TEINegotiation?             enumeration
+      |  |  +--rw StaticTEI?                  uint32
+      |  |  +--rw LifeLineHold?               boolean
+      |  |  +--rw PowerSourceOne?             boolean
+      |  |  +--rw MaxNumBChannels?            uint32
+      |  |  +--rw OutboundOnlyBChannels?      uint32
+      |  |  +--rw InboundOnlyBChannels?       uint32
+      |  |  +--rw BidirectionalBChannels?     uint32
+      |  +--rw PRI* [Name]
+      |     +--rw Enable?                   boolean
+      |     +--ro Status?                   enumeration
+      |     +--ro Name                      string
+      |     +--rw ToneEventProfile?         string
+      |     +--rw ApplicationInterface?     enumeration
+      |     +--rw Protocol?                 enumeration
+      |     +--rw ProtocolEmulation?        enumeration
+      |     +--rw PermanentLayer2?          boolean
+      |     +--rw Linecode?                 enumeration
+      |     +--rw ESF?                      enumeration
+      |     +--rw PhysicalInterfaceType?    enumeration
+      |     +--rw MaxNumBChannels?          uint32
+      |     +--rw OutboundOnlyBChannels?    uint32
+      |     +--rw InboundOnlyBChannels?     uint32
+      |     +--rw BidirectionalBChannels?   uint32
+      |     +--rw ClockMode?                enumeration
+      +--rw POTS
+      |  +--rw Region?   string
+      |  +--rw FXO* [Name]
+      |  |  +--rw Enable?                    boolean
+      |  |  +--ro Status?                    enumeration
+      |  |  +--ro Name                       string
+      |  |  +--rw ToneEventProfile?          string
+      |  |  +--rw SecondStepDialing?         boolean
+      |  |  +--rw TimeoutBeforeDialing?      uint32
+      |  |  +--rw RingingTimeout?            uint32
+      |  |  +--rw RingNumber?                uint32
+      |  |  +--rw OnHookMinDuration?         uint32
+      |  |  +--rw SignalingMode?             enumeration
+      |  |  +--rw DTMFDialoutInterval?       uint32
+      |  |  +--rw CallerIdDetectionEnable?   boolean
+      |  |  +--ro Active?                    boolean
+      |  |  +--rw DiagTests
+      |  |     +--rw DiagnosticsState?   enumeration
+      |  |     +--rw TestSelector?       enumeration
+      |  |     +--ro TestResult?         enumeration
+      |  +--rw FXS* [Name]
+      |  |  +--rw Enable?             boolean
+      |  |  +--ro Status?             enumeration
+      |  |  +--ro Name                string
+      |  |  +--rw ToneEventProfile?   string
+      |  |  +--rw FaxPassThrough?     enumeration
+      |  |  +--rw ModemPassThrough?   enumeration
+      |  |  +--rw DialType?           enumeration
+      |  |  +--rw ClipGeneration?     boolean
+      |  |  +--rw ChargingPulse?      boolean
+      |  |  +--ro Active?             boolean
+      |  |  +--rw TerminalType?       enumeration
+      |  |  +--rw VoiceProcessing
+      |  |  |  +--rw TransmitGain?             int32
+      |  |  |  +--rw ReceiveGain?              int32
+      |  |  |  +--rw EchoCancellationEnable?   boolean
+      |  |  |  +--ro EchoCancellationInUse?    boolean
+      |  |  |  +--ro EchoCancellationTail?     uint32
+      |  |  +--rw DiagTests
+      |  |     +--rw DiagnosticsState?   enumeration
+      |  |     +--rw TestSelector?       enumeration
+      |  |     +--ro TestResult?         enumeration
+      |  +--rw Ringer
+      |     +--rw Event* [Function]
+      |        +--ro Function    enumeration
+      |        +--rw Cadence?    uint32
+      +--rw DECT
+      |  +--rw Base* [RFPI]
+      |  |  +--rw Enable?                   boolean
+      |  |  +--ro Status?                   enumeration
+      |  |  +--ro Name?                     string
+      |  |  +--rw ToneEventProfile?         string
+      |  |  +--ro Standard?                 enumeration
+      |  |  +--ro RFPI                      yang:hex-string
+      |  |  +--rw MaxSupportedPP?           uint32
+      |  |  +--rw PIN?                      yang:hex-string
+      |  |  +--ro RepeaterSupportEnabled?   boolean
+      |  |  +--rw NEMOEnable?               boolean
+      |  |  +--rw SubscriptionEnable?       boolean
+      |  |  +--rw CipheringEnable?          boolean
+      |  |  +--ro EncryptionType?           enumeration
+      |  |  +--rw RFPowerControl?           enumeration
+      |  |  +--ro FirmwareVersion?          string
+      |  |  +--ro EepromVersion?            string
+      |  |  +--ro HardwareVersion?          string
+      |  |  +--ro Stats
+      |  |     +--ro Handovers?            uint32
+      |  |     +--ro HandoverFailures?     uint32
+      |  |     +--ro ControlFieldErrors?   uint32
+      |  |     +--ro PayloadFieldErrors?   uint32
+      |  |     +--ro SyncFailures?         uint32
+      |  +--rw Portable* [IPEI]
+      |     +--rw Enable?               boolean
+      |     +--ro Status?               enumeration
+      |     +--rw CodecList?            string
+      |     +--ro RegistrationStatus?   enumeration
+      |     +--ro IPUI?                 yang:hex-string
+      |     +--ro IPUILength?           uint32
+      |     +--ro IPEI                  yang:hex-string
+      |     +--ro PARK?                 yang:hex-string
+      |     +--ro BaseAttachedTo?       string
+      |     +--ro PortableType?         enumeration
+      |     +--ro SubscriptionTime?     yang:date-and-time
+      |     +--rw Control?              enumeration
+      |     +--ro HardwareVersion?      string
+      |     +--ro SoftwareVersion?      string
+      |     +--ro SoftwareUpgrade?      boolean
+      |     +--ro LastUpdateDateTime?   yang:date-and-time
+      |     +--rw OperatorName?         string
+      +--rw SIP
+      |  +--rw Client* [Alias]
+      |  |  +--rw Enable?           boolean
+      |  |  +--rw QuiescentMode?    boolean
+      |  |  +--ro Status?           enumeration
+      |  |  +--ro Origin?           enumeration
+      |  |  +--rw RegisterMode?     enumeration
+      |  |  +--rw AuthUserName?     string
+      |  |  +--rw AuthPassword?     string
+      |  |  +--rw Network?          string
+      |  |  +--rw MaxSessions?      uint32
+      |  |  +--rw RegisterURI?      string
+      |  |  +--rw E164Format?       boolean
+      |  |  +--rw T38Enable?        boolean
+      |  |  +--rw Contact* [Alias]
+      |  |  |  +--rw Enable?         boolean
+      |  |  |  +--ro Status?         enumeration
+      |  |  |  +--ro Origin?         enumeration
+      |  |  |  +--rw IPAddress?      types:IPAddress
+      |  |  |  +--rw Port?           uint32
+      |  |  |  +--rw ContactURI?     string
+      |  |  |  +--ro ExpireTime?     yang:date-and-time
+      |  |  |  +--rw PingInterval?   uint32
+      |  |  |  +--ro UserAgent?      string
+      |  |  +--rw EventSubscribe* [Event]
+      |  |     +--rw Enable?         boolean
+      |  |     +--ro Event           string
+      |  |     +--rw AuthUserName?   string
+      |  |     +--rw AuthPassword?   string
+      |  +--rw Network* [Alias]
+      |  |  +--rw Enable?                                boolean
+      |  |  +--rw QuiescentMode?                         boolean
+      |  |  +--ro Status?                                enumeration
+      |  |  +--rw ProxyServer?                           string
+      |  |  +--rw ProxyServerPort?                       uint32
+      |  |  +--rw ProxyServerTransport?                  enumeration
+      |  |  +--rw RegistrarServer?                       string
+      |  |  +--rw RegistrarServerPort?                   uint32
+      |  |  +--rw RegistrarServerTransport?              enumeration
+      |  |  +--rw ServerDomain?                          string
+      |  |  +--ro ChosenDomain?                          string
+      |  |  +--ro ChosenIPAddress?                       types:IPAddress
+      |  |  +--ro ChosenPort?                            uint32
+      |  |  +--rw UserAgentDomain?                       string
+      |  |  +--rw UserAgentPort?                         uint32
+      |  |  +--rw UserAgentTransport?                    enumeration
+      |  |  +--rw OutboundProxy?                         string
+      |  |  +--ro OutboundProxyResolvedAddress?          types:IPAddress
+      |  |  +--ro OutboundProxyPrecedence?               enumeration
+      |  |  +--rw OutboundProxyPort?                     uint32
+      |  |  +--rw STUNEnable?                            boolean
+      |  |  +--rw STUNServer?                            string
+      |  |  +--rw NonVoiceBandwidthReservedUpstream?     uint32
+      |  |  +--rw NonVoiceBandwidthReservedDownstream?   uint32
+      |  |  +--rw Organization?                          string
+      |  |  +--rw RegistrationPeriod?                    uint32
+      |  |  +--rw Realm?                                 string
+      |  |  +--rw TimerT1?                               uint32
+      |  |  +--rw TimerT2?                               uint32
+      |  |  +--rw TimerT4?                               uint32
+      |  |  +--rw TimerA?                                uint32
+      |  |  +--rw TimerB?                                uint32
+      |  |  +--rw TimerC?                                uint32
+      |  |  +--rw TimerD?                                uint32
+      |  |  +--rw TimerE?                                uint32
+      |  |  +--rw TimerF?                                uint32
+      |  |  +--rw TimerG?                                uint32
+      |  |  +--rw TimerH?                                uint32
+      |  |  +--rw TimerI?                                uint32
+      |  |  +--rw TimerJ?                                uint32
+      |  |  +--rw TimerK?                                uint32
+      |  |  +--rw InviteExpires?                         uint32
+      |  |  +--rw ReInviteExpires?                       uint32
+      |  |  +--rw RegisterExpires?                       uint32
+      |  |  +--rw RegisterRetryInterval?                 uint32
+      |  |  +--rw InboundAuth?                           enumeration
+      |  |  +--rw InboundAuthUsername?                   string
+      |  |  +--rw InboundAuthPassword?                   string
+      |  |  +--rw UseCodecPriorityInSDPResponse?         boolean
+      |  |  +--rw DSCPMark?                              uint32
+      |  |  +--rw VLANIDMark?                            int32
+      |  |  +--rw EthernetPriorityMark?                  int32
+      |  |  +--rw ConferenceCallDomainURI?               string
+      |  |  +--rw TimerLoginRejected?                    uint32
+      |  |  +--rw NoLoginRetry?                          boolean
+      |  |  +--rw TimerRegistrationFailed?               uint32
+      |  |  +--rw TimerSubscriptionFailed?               uint32
+      |  |  +--ro UnansweredRegistrationAttempts?        uint32
+      |  |  +--rw VoIPProfile?                           string
+      |  |  +--rw CodecList?                             string
+      |  |  +--rw MaxSessions?                           uint32
+      |  |  +--rw FQDNServer* [Domain]
+      |  |  |  +--rw Enable?        boolean
+      |  |  |  +--ro Origin?        enumeration
+      |  |  |  +--rw Domain         string
+      |  |  |  +--rw Weight?        uint32
+      |  |  |  +--rw Priority?      uint32
+      |  |  |  +--rw Port?          uint32
+      |  |  |  +--rw IPAddresses?   types:IPAddress
+      |  |  +--rw EventSubscribe* [Event]
+      |  |  |  +--rw Enable?              boolean
+      |  |  |  +--rw Event                string
+      |  |  |  +--rw Notifier?            string
+      |  |  |  +--rw NotifierPort?        uint32
+      |  |  |  +--rw NotifierTransport?   enumeration
+      |  |  |  +--rw ExpireTime?          uint32
+      |  |  +--rw ResponseMap* [SIPResponseNumber]
+      |  |     +--rw SIPResponseNumber    uint32
+      |  |     +--rw Enable?              boolean
+      |  |     +--rw TextMessage?         string
+      |  |     +--rw Tone?                string
+      |  +--rw Proxy* [ProxyIPAddress ProxyPort]
+      |  |  +--rw Enable?           boolean
+      |  |  +--ro Status?           enumeration
+      |  |  +--ro Origin?           enumeration
+      |  |  +--rw ProxyIPAddress    types:IPAddress
+      |  |  +--rw ProxyPort         uint32
+      |  |  +--ro ContactURI?       string
+      |  |  +--rw VoIPProfile?      string
+      |  +--rw Registrar* [RegistrarPort RegistrarIPAddress]
+      |     +--rw Enable?               boolean
+      |     +--rw QuiescentMode?        boolean
+      |     +--ro Status?               enumeration
+      |     +--ro Origin?               enumeration
+      |     +--rw RegistrarIPAddress    types:IPAddress
+      |     +--rw RegistrarPort         uint32
+      |     +--rw RegisterExpires?      uint32
+      |     +--rw PingInterval?         uint32
+      |     +--rw Organization?         string
+      |     +--rw Realm?                string
+      |     +--rw VoIPProfile?          string
+      |     +--ro ContactURI?           string
+      |     +--rw Account* [URI]
+      |        +--rw Enable?               enumeration
+      |        +--rw QuiescentMode?        boolean
+      |        +--ro Status?               enumeration
+      |        +--ro Origin?               enumeration
+      |        +--ro CallStatus?           enumeration
+      |        +--rw AuthUserName?         string
+      |        +--rw AuthPassword?         string
+      |        +--ro RegistrationStatus?   enumeration
+      |        +--rw URI                   string
+      |        +--rw Domain?               string
+      |        +--rw CodecList?            string
+      |        +--rw VoIPProfile?          string
+      |        +--rw Contact* [Alias]
+      |           +--rw Enable?       boolean
+      |           +--ro Status?       enumeration
+      |           +--ro Origin?       enumeration
+      |           +--rw IPAddress?    types:IPAddress
+      |           +--rw Port?         uint32
+      |           +--rw ContactURI?   string
+      |           +--ro ExpireTime?   yang:date-and-time
+      |           +--rw UserAgent?    string
+      +--rw MGCP
+      |  +--rw Client* [Alias]
+      |  |  +--rw Enable?          boolean
+      |  |  +--rw QuiescentMode?   boolean
+      |  |  +--ro Status?          enumeration
+      |  |  +--rw RegisterMode?    enumeration
+      |  |  +--rw LocalPort?       uint32
+      |  |  +--rw Domain?          string
+      |  |  +--rw User?            string
+      |  |  +--rw Network?         string
+      |  |  +--rw MaxSessions?     uint32
+      |  +--rw Network* [Alias]
+      |     +--rw Enable?                                boolean
+      |     +--rw QuiescentMode?                         boolean
+      |     +--ro Status?                                enumeration
+      |     +--rw CallAgent1?                            string
+      |     +--rw CallAgentPort1?                        uint32
+      |     +--rw CallAgent2?                            string
+      |     +--rw CallAgentPort2?                        uint32
+      |     +--rw RetranIntervalTimer?                   uint32
+      |     +--rw MaxRetranCount?                        uint32
+      |     +--rw DSCPMark?                              uint32
+      |     +--rw VLANIDMark?                            int32
+      |     +--rw EthernetPriorityMark?                  int32
+      |     +--rw AllowPiggybackEvents?                  boolean
+      |     +--rw SendRSIPImmediately?                   boolean
+      |     +--rw STUNEnable?                            boolean
+      |     +--rw STUNServer?                            string
+      |     +--rw NonVoiceBandwidthReservedUpstream?     uint32
+      |     +--rw NonVoiceBandwidthReservedDownstream?   uint32
+      |     +--rw MaxSessions?                           uint32
+      |     +--rw VoIPProfile?                           string
+      |     +--rw CodecList?                             string
+      +--rw H323
+      |  +--rw Client* [Alias]
+      |  |  +--rw Enable?               boolean
+      |  |  +--rw QuiescentMode?        boolean
+      |  |  +--ro Status?               enumeration
+      |  |  +--rw H235Authentication?   boolean
+      |  |  +--rw AuthPassword?         string
+      |  |  +--rw SendersID?            string
+      |  |  +--rw Network?              string
+      |  |  +--rw H323ID?               string
+      |  |  +--rw MaxSessions?          uint32
+      |  +--rw Network* [Alias]
+      |     +--rw Enable?                                boolean
+      |     +--rw QuiescentMode?                         boolean
+      |     +--ro Status?                                enumeration
+      |     +--rw Gatekeeper?                            string
+      |     +--rw GatekeeperPort?                        uint32
+      |     +--rw GatekeeperID?                          string
+      |     +--rw TimeToLive?                            uint32
+      |     +--rw DSCPMark?                              uint32
+      |     +--rw VLANIDMark?                            int32
+      |     +--rw EthernetPriorityMark?                  int32
+      |     +--rw STUNEnable?                            boolean
+      |     +--rw STUNServer?                            string
+      |     +--rw NonVoiceBandwidthReservedUpstream?     uint32
+      |     +--rw NonVoiceBandwidthReservedDownstream?   uint32
+      |     +--rw MaxSessions?                           uint32
+      |     +--rw VoIPProfile?                           string
+      |     +--rw CodecList?                             string
+      +--rw Trunk* [Alias]
+      |  +--rw Enable?                    boolean
+      |  +--rw QuiescentMode?             boolean
+      |  +--ro Status?                    enumeration
+      |  +--ro Origin?                    enumeration
+      |  +--rw Name?                      string
+      |  +--rw DDIRange?                  string
+      |  +--rw LineObjectCreation?        boolean
+      |  +--rw MaxChannels?               uint32
+      |  +--rw MaxOutboundChannelCount?   int32
+      |  +--rw MaxInboundChannelCount?    int32
+      |  +--rw CodecPriority?             enumeration
+      |  +--rw Provider?                  string
+      +--rw CallControl
+      |  +--rw MaxNumberOfLines?        uint32
+      |  +--rw MaxNumberOfExtensions?   uint32
+      |  +--rw Line* [DirectoryNumber]
+      |  |  +--rw Enable?            boolean
+      |  |  +--rw QuiescentMode?     boolean
+      |  |  +--ro Status?            enumeration
+      |  |  +--ro CallStatus?        enumeration
+      |  |  +--ro Origin?            enumeration
+      |  |  +--rw DirectoryNumber    string
+      |  |  +--rw Provider?          string
+      |  |  +--rw CallingFeatures?   string
+      |  |  +--ro Stats
+      |  |     +--ro IncomingCalls
+      |  |     |  +--ro CallsReceived?    uint32
+      |  |     |  +--ro CallsConnected?   uint32
+      |  |     |  +--ro CallsFailed?      uint32
+      |  |     |  +--ro CallsDropped?     uint32
+      |  |     |  +--ro TotalCallTime?    uint32
+      |  |     +--ro OutgoingCalls
+      |  |     |  +--ro CallsAttempted?   uint32
+      |  |     |  +--ro CallsConnected?   uint32
+      |  |     |  +--ro CallsFailed?      uint32
+      |  |     |  +--ro CallsDropped?     uint32
+      |  |     |  +--ro TotalCallTime?    uint32
+      |  |     +--ro RTP
+      |  |     |  +--ro PacketsReceived?   uint32
+      |  |     |  +--ro PacketsSent?       uint32
+      |  |     |  +--ro PacketsLost?       uint32
+      |  |     |  +--ro BytesSent?         uint32
+      |  |     |  +--ro BytesReceived?     uint32
+      |  |     +--ro DSP
+      |  |        +--ro Overruns?    uint32
+      |  |        +--ro Underruns?   uint32
+      |  +--rw Extension* [ExtensionNumber]
+      |  |  +--rw Enable?                          boolean
+      |  |  +--rw QuiescentMode?                   boolean
+      |  |  +--ro Status?                          enumeration
+      |  |  +--ro CallStatus?                      enumeration
+      |  |  +--ro Origin?                          enumeration
+      |  |  +--rw Name?                            string
+      |  |  +--rw ExtensionNumber                  string
+      |  |  +--rw Provider?                        string
+      |  |  +--rw NumberingPlan?                   string
+      |  |  +--rw CallingFeatures?                 string
+      |  |  +--ro CallWaitingStatus?               enumeration
+      |  |  +--ro ConferenceCallingStatus?         enumeration
+      |  |  +--ro ConferenceCallingSessionCount?   uint32
+      |  |  +--rw VoiceMail?                       string
+      |  |  +--ro Stats
+      |  |     +--ro IncomingCalls
+      |  |     |  +--ro CallsReceived?    uint32
+      |  |     |  +--ro CallsConnected?   uint32
+      |  |     |  +--ro CallsFailed?      uint32
+      |  |     |  +--ro CallsDropped?     uint32
+      |  |     |  +--ro TotalCallTime?    uint32
+      |  |     +--ro OutgoingCalls
+      |  |     |  +--ro CallsAttempted?   uint32
+      |  |     |  +--ro CallsConnected?   uint32
+      |  |     |  +--ro CallsFailed?      uint32
+      |  |     |  +--ro CallsDropped?     uint32
+      |  |     |  +--ro TotalCallTime?    uint32
+      |  |     +--ro RTP
+      |  |     |  +--ro PacketsReceived?   uint32
+      |  |     |  +--ro PacketsSent?       uint32
+      |  |     |  +--ro PacketsLost?       uint32
+      |  |     |  +--ro BytesSent?         uint32
+      |  |     |  +--ro BytesReceived?     uint32
+      |  |     +--ro DSP
+      |  |        +--ro Overruns?    uint32
+      |  |        +--ro Underruns?   uint32
+      |  +--rw Group* [Alias]
+      |  |  +--rw Extensions?    string
+      |  |  +--rw RingType?      enumeration
+      |  |  +--rw RingTimeout?   uint32
+      |  +--rw Mailbox* [Alias]
+      |  |  +--rw Enable?                   boolean
+      |  |  +--rw MaxMsg?                   uint32
+      |  |  +--rw MaxMessageTime?           uint32
+      |  |  +--rw MinSize?                  uint32
+      |  |  +--rw SMTPServerAddress?        string
+      |  |  +--rw SMTPServerPort?           uint32
+      |  |  +--rw SMTPUser?                 string
+      |  |  +--rw SMTPPassword?             string
+      |  |  +--rw SMTPAuthenticationType?   enumeration
+      |  |  +--rw SMTPFrom?                 string
+      |  +--rw IncomingMap* [Line Extension]
+      |  |  +--rw Enable?      boolean
+      |  |  +--rw Line         string
+      |  |  +--rw Extension    string
+      |  |  +--rw Order?       uint32
+      |  |  +--rw Timeout?     uint32
+      |  +--rw OutgoingMap* [Extension Line]
+      |  |  +--rw Enable?                  boolean
+      |  |  +--rw CLIPNoScreeningNumber?   string
+      |  |  +--rw Extension                string
+      |  |  +--rw Line                     string
+      |  |  +--rw Order?                   uint32
+      |  +--rw NumberingPlan* [Alias]
+      |  |  +--rw MinimumNumberOfDigits?   uint32
+      |  |  +--rw MaximumNumberOfDigits?   uint32
+      |  |  +--rw InterDigitTimerStd?      uint32
+      |  |  +--rw InterDigitTimerOpen?     uint32
+      |  |  +--rw TerminationDigit?        string
+      |  |  +--rw InvalidNumberTone?       string
+      |  |  +--ro PrefixInfoMaxEntries?    uint32
+      |  |  +--rw PrefixInfo* [Alias]
+      |  |     +--rw Enable?                    boolean
+      |  |     +--rw PrefixRange?               string
+      |  |     +--rw PrefixMinNumberOfDigits?   uint32
+      |  |     +--rw PrefixMaxNumberOfDigits?   uint32
+      |  |     +--rw NumberOfDigitsToRemove?    uint32
+      |  |     +--rw PosOfDigitsToRemove?       uint32
+      |  |     +--rw DialTone?                  string
+      |  |     +--rw FacilityAction?            string
+      |  |     +--rw FacilityActionArgument?    string
+      |  +--rw CallingFeatures
+      |     +--rw Set* [Alias]
+      |        +--rw CallerIDEnable?                     boolean
+      |        +--rw CallerIDNameEnable?                 boolean
+      |        +--rw CallWaitingEnable?                  boolean
+      |        +--rw CallForwardUnconditionalEnable?     boolean
+      |        +--rw CallForwardUnconditionalNumber?     string
+      |        +--rw CallForwardOnBusyEnable?            boolean
+      |        +--rw CallForwardOnBusyNumber?            string
+      |        +--rw CallForwardOnBusyRingTimeout?       uint32
+      |        +--rw CallForwardOnNoAnswerEnable?        boolean
+      |        +--rw CallForwardOnNoAnswerNumber?        string
+      |        +--rw CallForwardOnNoAnswerRingTimeout?   uint32
+      |        +--rw CallTransferEnable?                 boolean
+      |        +--rw MWIEnable?                          boolean
+      |        +--rw VMWIEnable?                         boolean
+      |        +--ro LineMessagesWaiting?                uint32
+      |        +--rw AnonymousCallRejectionEnable?       boolean
+      |        +--rw AnonymousCallEnable?                boolean
+      |        +--rw DoNotDisturbEnable?                 boolean
+      |        +--rw RepeatDialEnable?                   boolean
+      |        +--rw VoiceMailEnable?                    boolean
+      |        +--rw CallPickUpEnable?                   boolean
+      |        +--rw CCBSEnable?                         boolean
+      |        +--rw IIFCEnable?                         boolean
+      |        +--rw BlockForwardEnable?                 boolean
+      |        +--rw SecretForwarderEnable?              boolean
+      |        +--rw FollowMeEnable?                     boolean
+      |        +--rw CFT* [Alias]
+      |        |  +--rw Enable?              boolean
+      |        |  +--rw Day?                 enumeration
+      |        |  +--rw StartTime?           string
+      |        |  +--rw EndTime?             string
+      |        |  +--rw ForwardedToNumber?   string
+      |        +--rw SCF* [CallingNumber]
+      |        |  +--rw Enable?              boolean
+      |        |  +--rw CallingNumber        string
+      |        |  +--rw ForwardedToNumber?   string
+      |        +--rw SCREJ* [CallingNumber]
+      |        |  +--rw Enable?          boolean
+      |        |  +--rw CallingNumber    string
+      |        +--rw FollowMe* [Number Order]
+      |        |  +--rw Enable?   boolean
+      |        |  +--rw Delay?    uint32
+      |        |  +--rw Number    string
+      |        |  +--rw Order     uint32
+      |        +--rw Voice2Mail
+      |           +--rw Enable?             boolean
+      |           +--rw MaxMessageLength?   uint32
+      |           +--rw Attach?             boolean
+      |           +--rw KeepLocal?          boolean
+      |           +--rw EMailAddress?       string
+      +--rw Interwork* [Alias]
+      |  +--rw Enable?                               boolean
+      |  +--rw QuiescentMode?                        boolean
+      |  +--ro Status?                               enumeration
+      |  +--ro OperationalStatus?                    enumeration
+      |  +--ro OperationalStatusReason?              string
+      |  +--rw NetworkConnectionMode?                enumeration
+      |  +--rw UserConnectionMode?                   enumeration
+      |  +--rw E164Mode?                             boolean
+      |  +--rw NetworkAuthenticationChallengeMode?   enumeration
+      |  +--ro NetworkIPAddress?                     types:IPAddress
+      |  +--rw InterworkingRuleSetURI?               string
+      |  +--rw InterworkingRuleSetInterval?          uint32
+      |  +--rw InterworkingRuleSetTime?              yang:date-and-time
+      |  +--rw FirewallRuleSetURI?                   string
+      |  +--rw FirewallRuleSetInterval?              uint32
+      |  +--rw FirewallRuleSetTime?                  yang:date-and-time
+      |  +--rw InterworkName?                        string
+      |  +--rw ProxyServer?                          string
+      |  +--rw Networks?                             string
+      |  +--rw E164Client?                           string
+      |  +--rw UserInterface* [Registrar]
+      |  |  +--rw Enable?      boolean
+      |  |  +--rw Registrar    string
+      |  |  +--rw Network?     string
+      |  +--rw Map* [Alias]
+      |     +--rw Enable?              boolean
+      |     +--ro Status?              enumeration
+      |     +--ro StatusDescription?   string
+      |     +--ro LastTime?            yang:date-and-time
+      |     +--ro Origin?              enumeration
+      |     +--rw NetworkConnection?   string
+      |     +--rw UserConnection?      string
+      |     +--rw DigitMap?            string
+      |     +--rw DigitMapEnable?      boolean
+      |     +--rw Priority?            uint32
+      +--ro CallLog* [Alias]
+      |  +--ro CallingPartyNumber?     string
+      |  +--ro CalledPartyNumber?      string
+      |  +--ro Source?                 string
+      |  +--ro Destination?            string
+      |  +--ro RemoteParty?            string
+      |  +--ro UsedLine?               string
+      |  +--ro UsedExtensions?         string
+      |  +--ro Direction?              enumeration
+      |  +--ro Start?                  yang:date-and-time
+      |  +--ro Duration?               uint32
+      |  +--ro CallTerminationCause?   enumeration
+      |  +--ro SignalingPerformance* [Protocol]
+      |  |  +--ro Protocol                       enumeration
+      |  |  +--ro CallSetupDelay?                uint32
+      |  |  +--ro OutgoingMediaEstablishDelay?   int32
+      |  |  +--ro IncomingMediaEstablishDelay?   int32
+      |  +--ro Session* [SessionID]
+      |     +--ro StreamType?    enumeration
+      |     +--ro Start?         yang:date-and-time
+      |     +--ro Duration?      uint32
+      |     +--ro SessionID      string
+      |     +--ro Source
+      |     |  +--ro RTP
+      |     |  |  +--ro FarEndIPAddress?                    types:IPAddress
+      |     |  |  +--ro FarEndUDPPort?                      uint32
+      |     |  |  +--ro LocalUDPPort?                       uint32
+      |     |  |  +--ro MinJitter?                          int32
+      |     |  |  +--ro MaxJitter?                          int32
+      |     |  |  +--ro MeanJitter?                         int32
+      |     |  |  +--ro PacketDelayVariation?               int32
+      |     |  |  +--ro BufferDelay?                        int32
+      |     |  |  +--ro BurstCount?                         types:StatsCounter32
+      |     |  |  +--ro PacketsReceived?                    types:StatsCounter64
+      |     |  |  +--ro PacketsSent?                        types:StatsCounter64
+      |     |  |  +--ro PacketsLost?                        types:StatsCounter32
+      |     |  |  +--ro PacketsDiscarded?                   types:StatsCounter32
+      |     |  |  +--ro BytesReceived?                      types:StatsCounter64
+      |     |  |  +--ro BytesSent?                          types:StatsCounter64
+      |     |  |  +--ro ReceivePacketLossRate?              uint32
+      |     |  |  +--ro FarEndPacketLossRate?               uint32
+      |     |  |  +--ro ReceiveInterarrivalJitter?          int32
+      |     |  |  +--ro FarEndInterarrivalJitter?           int32
+      |     |  |  +--ro AverageReceiveInterarrivalJitter?   int32
+      |     |  |  +--ro AverageFarEndInterarrivalJitter?    int32
+      |     |  |  +--ro RoundTripDelay?                     int32
+      |     |  |  +--ro AverageRoundTripDelay?              int32
+      |     |  |  +--ro SamplingFrequency?                  uint32
+      |     |  +--ro DSP
+      |     |  |  +--ro ReceiveCodec
+      |     |  |  |  +--ro Codec?                string
+      |     |  |  |  +--ro SilenceSuppression?   boolean
+      |     |  |  |  +--ro Overruns?             uint32
+      |     |  |  |  +--ro Underruns?            uint32
+      |     |  |  +--ro TransmitCodec
+      |     |  |     +--ro Codec?                 string
+      |     |  |     +--ro SilenceSuppression?    boolean
+      |     |  |     +--ro PacketizationPeriod?   uint32
+      |     |  |     +--ro Overruns?              uint32
+      |     |  |     +--ro Underruns?             uint32
+      |     |  +--ro VoiceQuality
+      |     |     +--ro VoIPQualityIndicator?                  uint32
+      |     |     +--ro WorstVoIPQualityIndicatorsValues?      uint32
+      |     |     +--ro WorstVoIPQualityIndicatorTimestamps?   uint32
+      |     +--ro Destination
+      |        +--ro RTP
+      |        |  +--ro FarEndIPAddress?                    types:IPAddress
+      |        |  +--ro FarEndUDPPort?                      uint32
+      |        |  +--ro LocalUDPPort?                       uint32
+      |        |  +--ro MinJitter?                          int32
+      |        |  +--ro MaxJitter?                          int32
+      |        |  +--ro MeanJitter?                         int32
+      |        |  +--ro PacketDelayVariation?               int32
+      |        |  +--ro BufferDelay?                        int32
+      |        |  +--ro BurstCount?                         types:StatsCounter32
+      |        |  +--ro PacketsReceived?                    types:StatsCounter64
+      |        |  +--ro PacketsSent?                        types:StatsCounter64
+      |        |  +--ro PacketsLost?                        types:StatsCounter32
+      |        |  +--ro PacketsDiscarded?                   types:StatsCounter32
+      |        |  +--ro BytesReceived?                      types:StatsCounter64
+      |        |  +--ro BytesSent?                          types:StatsCounter64
+      |        |  +--ro ReceivePacketLossRate?              uint32
+      |        |  +--ro FarEndPacketLossRate?               uint32
+      |        |  +--ro ReceiveInterarrivalJitter?          int32
+      |        |  +--ro FarEndInterarrivalJitter?           int32
+      |        |  +--ro AverageReceiveInterarrivalJitter?   int32
+      |        |  +--ro AverageFarEndInterarrivalJitter?    int32
+      |        |  +--ro RoundTripDelay?                     int32
+      |        |  +--ro AverageRoundTripDelay?              int32
+      |        |  +--ro SamplingFrequency?                  uint32
+      |        +--ro DSP
+      |        |  +--ro ReceiveCodec
+      |        |  |  +--ro Codec?                string
+      |        |  |  +--ro SilenceSuppression?   boolean
+      |        |  |  +--ro Overruns?             uint32
+      |        |  |  +--ro Underruns?            uint32
+      |        |  +--ro TransmitCodec
+      |        |     +--ro Codec?                 string
+      |        |     +--ro SilenceSuppression?    boolean
+      |        |     +--ro PacketizationPeriod?   uint32
+      |        |     +--ro Overruns?              uint32
+      |        |     +--ro Underruns?             uint32
+      |        +--ro VoiceQuality
+      |           +--ro VoIPQualityIndicator?                  uint32
+      |           +--ro WorstVoIPQualityIndicatorsValues?      uint32
+      |           +--ro WorstVoIPQualityIndicatorTimestamps?   uint32
+      +--rw VoIPProfile* [Alias]
+      |  +--rw Enable?                  boolean
+      |  +--rw QuiescentMode?           boolean
+      |  +--rw Name?                    string
+      |  +--rw DTMFMethod?              enumeration
+      |  +--rw DTMFMethodG711?          enumeration
+      |  +--rw QIModelUsed?             string
+      |  +--rw QICalculationInterval?   uint32
+      |  +--rw NumberOfWorstQIValues?   uint32
+      |  +--rw RTP
+      |  |  +--rw LocalPortMin?                uint32
+      |  |  +--rw LocalPortMax?                uint32
+      |  |  +--rw Gmin?                        uint32
+      |  |  +--rw DSCPMark?                    uint32
+      |  |  +--rw VLANIDMark?                  int32
+      |  |  +--rw EthernetPriorityMark?        int32
+      |  |  +--rw TelephoneEventPayloadType?   uint32
+      |  |  +--rw JitterBufferType?            enumeration
+      |  |  +--rw JitterBufferMaxSize?         uint32
+      |  |  +--rw JitterBufferMinSize?         uint32
+      |  |  +--rw JitterBufferActualSize?      uint32
+      |  |  +--rw RTCP
+      |  |  |  +--rw Enable?             boolean
+      |  |  |  +--rw TxRepeatInterval?   uint32
+      |  |  |  +--rw LocalCName?         string
+      |  |  +--rw SRTP
+      |  |  |  +--rw Enable?               boolean
+      |  |  |  +--rw KeyingMethods?        enumeration
+      |  |  |  +--rw EncryptionKeySizes?   uint32
+      |  |  +--rw Redundancy
+      |  |     +--rw Enable?                       boolean
+      |  |     +--rw PayloadType?                  uint32
+      |  |     +--ro BlockPayloadType?             uint32
+      |  |     +--rw FaxAndModemRedundancy?        int32
+      |  |     +--rw ModemRedundancy?              int32
+      |  |     +--rw DTMFRedundancy?               int32
+      |  |     +--rw VoiceRedundancy?              int32
+      |  |     +--rw MaxSessionsUsingRedundancy?   uint32
+      |  +--rw FaxT38
+      |     +--rw MaxBitRate?            uint32
+      |     +--rw HighSpeedRedundancy?   uint32
+      |     +--rw LowSpeedRedundancy?    uint32
+      |     +--rw TCFMethod?             enumeration
+      +--rw CodecProfile* [Alias]
+      |  +--rw Enable?                boolean
+      |  +--ro Codec?                 string
+      |  +--rw PacketizationPeriod?   string
+      |  +--rw SilenceSuppression?    boolean
+      +--rw Tone
+      |  +--rw DefautEventProfile?   string
+      |  +--rw Description* [Alias]
+      |  |  +--rw ToneEnable?        boolean
+      |  |  +--rw ToneName?          string
+      |  |  +--rw TonePattern?       string
+      |  |  +--rw ToneFile?          string
+      |  |  +--rw ToneRepetitions?   uint32
+      |  |  +--rw ToneText?          string
+      |  +--rw Pattern* [Alias]
+      |  |  +--rw Enable?                boolean
+      |  |  +--rw ToneOn?                boolean
+      |  |  +--rw Frequency1?            uint32
+      |  |  +--rw Power1?                int32
+      |  |  +--rw Frequency2?            uint32
+      |  |  +--rw Power2?                int32
+      |  |  +--rw Frequency3?            uint32
+      |  |  +--rw Power3?                int32
+      |  |  +--rw Frequency4?            uint32
+      |  |  +--rw Power4?                int32
+      |  |  +--rw ModulationFrequency?   uint32
+      |  |  +--rw ModulationPower?       int32
+      |  |  +--rw Duration?              uint32
+      |  |  +--rw NextPattern?           string
+      |  +--rw EventProfile* [Alias]
+      |     +--rw Event* [Alias]
+      |        +--rw Function?   enumeration
+      |        +--rw Tone?       string
+      +--rw Terminal* [Alias]
+      |  +--rw Enable?             boolean
+      |  +--rw QuiescentMode?      boolean
+      |  +--ro Status?             enumeration
+      |  +--rw ToneEventProfile?   string
+      |  +--rw Audio* [Alias]
+      |  |  +--rw Name?              string
+      |  |  +--rw VoiceProcessing
+      |  |     +--rw TransmitGain?             int32
+      |  |     +--rw ReceiveGain?              int32
+      |  |     +--rw EchoCancellationEnable?   boolean
+      |  |     +--ro EchoCancellationInUse?    boolean
+      |  |     +--ro EchoCancellationTail?     uint32
+      |  +--rw ButtonMap
+      |  |  +--rw Button* [Alias]
+      |  |     +--ro ButtonName?               string
+      |  |     +--rw FacilityAction?           string
+      |  |     +--rw FacilityActionArgument?   string
+      |  |     +--rw QuickDialNumber?          string
+      |  |     +--rw ButtonMessage?            string
+      |  |     +--rw UserAccess?               boolean
+      |  +--rw Ringer
+      |  |  +--rw Description* [Alias]
+      |  |  |  +--rw RingEnable?    boolean
+      |  |  |  +--rw RingName?      string
+      |  |  |  +--rw RingPattern?   string
+      |  |  |  +--rw RingFile?      string
+      |  |  +--rw Pattern* [Alias]
+      |  |     +--rw Enable?        boolean
+      |  |     +--rw RingerOn?      boolean
+      |  |     +--rw Duration?      uint32
+      |  |     +--rw NextPattern?   string
+      |  +--rw DiagTests
+      |     +--rw DiagnosticsState?   enumeration
+      |     +--rw TestSelector?       enumeration
+      |     +--ro PhoneRinging?       boolean
+      +--rw ClockSynchronization
+         +--rw CurrentSource?   string
+         +--ro Description?     string
+         +--rw AutoRevert?      boolean
+         +--rw ClockSource* [Order]
+            +--rw Enable?      boolean
+            +--rw Order        uint32
+            +--rw Interface?   string

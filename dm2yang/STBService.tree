@@ -1,0 +1,557 @@
+module: STBService
+   +--rw STBService* [Alias]
+      +--rw Enable?              boolean
+      +--ro Capabilities
+      |  +--ro MaxActiveAVStreams?   int32
+      |  +--ro MaxActiveAVPlayers?   int32
+      |  +--ro FrontEnd
+      |  |  +--ro DVBT
+      |  |  |  +--ro MaxActiveDVBTStreams?   int32
+      |  |  |  +--ro MaxLogicalChannels?     int32
+      |  |  +--ro IP
+      |  |     +--ro MaxActiveIPStreams?                   int32
+      |  |     +--ro MaxActiveInboundIPStreams?            int32
+      |  |     +--ro MaxActiveOutboundIPStreams?           int32
+      |  |     +--ro StreamingControlProtocols?            enumeration
+      |  |     +--ro StreamingTransportProtocols?          enumeration
+      |  |     +--ro StreamingTransportControlProtocols?   enumeration
+      |  |     +--ro DownloadTransportProtocols?           enumeration
+      |  |     +--ro MultiplexTypes?                       enumeration
+      |  |     +--ro MaxDejitteringBufferSize?             int32
+      |  +--ro PVR
+      |  |  +--ro MaxIOStreams?          int32
+      |  |  +--ro MaxRecordingStreams?   int32
+      |  |  +--ro MaxPlaybackStreams?    int32
+      |  |  +--ro MaxTimeDelay?          int32
+      |  +--ro AudioDecoder
+      |  |  +--ro AudioStandards?   enumeration
+      |  +--ro VideoDecoder
+      |  |  +--ro VideoStandards?   enumeration
+      |  |  +--ro MPEG2Part2
+      |  |  |  +--ro AudioStandards?   string
+      |  |  |  +--ro ProfileLevel* [Profile Level]
+      |  |  |     +--ro Profile                      enumeration
+      |  |  |     +--ro Level                        enumeration
+      |  |  |     +--ro MaximumDecodingCapability?   uint32
+      |  |  +--ro MPEG4Part2
+      |  |  |  +--ro AudioStandards?   string
+      |  |  |  +--ro ProfileLevel* [Profile Level]
+      |  |  |     +--ro Profile                      enumeration
+      |  |  |     +--ro Level                        enumeration
+      |  |  |     +--ro MaximumDecodingCapability?   uint32
+      |  |  +--ro MPEG4Part10
+      |  |  |  +--ro AudioStandards?   string
+      |  |  |  +--ro ProfileLevel* [Profile Level]
+      |  |  |     +--ro Profile                      enumeration
+      |  |  |     +--ro Level                        enumeration
+      |  |  |     +--ro MaximumDecodingCapability?   uint32
+      |  |  +--ro SMPTEVC1
+      |  |     +--ro AudioStandards?   string
+      |  |     +--ro ProfileLevel* [Profile Level]
+      |  |        +--ro Profile                      enumeration
+      |  |        +--ro Level                        enumeration
+      |  |        +--ro MaximumDecodingCapability?   uint32
+      |  +--ro AudioOutput
+      |  |  +--ro AudioFormats?   enumeration
+      |  +--ro VideoOutput
+      |  |  +--ro CompositeVideoStandards?   enumeration
+      |  |  +--ro VideoFormats?              enumeration
+      |  |  +--ro Macrovision?               string
+      |  |  +--ro HDCP?                      string
+      |  |  +--ro DisplayFormats?            string
+      |  +--ro HDMI
+      |  |  +--ro SupportedResolutions?   enumeration
+      |  |  +--ro CECSupport?             boolean
+      |  |  +--ro HDMI3D?                 boolean
+      |  +--ro CDS
+      |  |  +--ro PushCapable?   boolean
+      |  |  +--ro PullCapable?   boolean
+      |  +--ro CA
+      |  |  +--ro CASystems?   string
+      |  +--ro DRM
+      |  |  +--ro DRMSystems?   string
+      |  +--ro ServiceMonitoring
+      |  |  +--ro ServiceTypes?                   enumeration
+      |  |  +--ro MaxEventsPerSampleInterval?     int32
+      |  |  +--ro MaxActiveMainStreams?           int32
+      |  |  +--ro MinSampleInterval?              int32
+      |  |  +--ro MaxReportSamples?               int32
+      |  |  +--ro HighLevelMetricNames?           string
+      |  |  +--ro MaxMainStreamEventLogEntries?   uint32
+      |  +--ro AudienceStats
+      |     +--ro MaxAudienceStatsChannels?   int32
+      +--rw Components
+      |  +--rw FrontEnd* [Name]
+      |  |  +--rw Enable?   boolean
+      |  |  +--ro Status?   enumeration
+      |  |  +--ro Name      string
+      |  |  +--rw DVBT
+      |  |  |  +--rw Modulation
+      |  |  |  |  +--rw Frequency?                 uint32
+      |  |  |  |  +--rw ChannelBandwidth?          enumeration
+      |  |  |  |  +--rw Constellation?             enumeration
+      |  |  |  |  +--rw HierarchicalInformation?   enumeration
+      |  |  |  |  +--rw CodeRateHP?                enumeration
+      |  |  |  |  +--rw CodeRateLP?                enumeration
+      |  |  |  |  +--rw GuardInterval?             enumeration
+      |  |  |  |  +--rw TransmissionMode?          enumeration
+      |  |  |  |  +--ro SNR?                       uint32
+      |  |  |  |  +--ro BER?                       uint32
+      |  |  |  |  +--ro CBER?                      uint32
+      |  |  |  |  +--ro Locked?                    boolean
+      |  |  |  +--ro Service
+      |  |  |  |  +--ro CurrentLogicalChannel?   string
+      |  |  |  |  +--ro CurrentService?          string
+      |  |  |  +--rw Install
+      |  |  |  |  +--rw Start?            boolean
+      |  |  |  |  +--ro Status?           enumeration
+      |  |  |  |  +--ro Progress?         uint32
+      |  |  |  |  +--rw StartFrequency?   uint32
+      |  |  |  |  +--rw StopFrequency?    uint32
+      |  |  |  +--rw ServiceListDatabase
+      |  |  |  |  +--rw Reset?            boolean
+      |  |  |  |  +--ro TotalServices?    uint32
+      |  |  |  |  +--rw LogicalChannel* [LogicalChannelNumber]
+      |  |  |  |     +--ro LogicalChannelNumber    uint32
+      |  |  |  |     +--rw Service* [DvbId]
+      |  |  |  |        +--ro Name?        string
+      |  |  |  |        +--ro DvbId        string
+      |  |  |  |        +--ro Frequency?   uint32
+      |  |  |  |        +--ro BER?         uint32
+      |  |  |  |        +--ro CBER?        uint32
+      |  |  |  |        +--ro SNR?         uint32
+      |  |  |  |        +--rw Preferred?   boolean
+      |  |  |  +--rw LogicalChannelConnect
+      |  |  |  |  +--rw LogicalChannelNumber?   uint32
+      |  |  |  +--rw ServiceConnect
+      |  |  |     +--rw DvbId?   string
+      |  |  +--rw IP
+      |  |     +--ro ActiveInboundIPStreams?    uint32
+      |  |     +--ro ActiveOutboundIPStreams?   uint32
+      |  |     +--rw RTCP
+      |  |     |  +--rw Enable?             boolean
+      |  |     |  +--ro Status?             enumeration
+      |  |     |  +--rw TxRepeatInterval?   uint32
+      |  |     +--rw RTPAVPF
+      |  |     |  +--rw Enable?              boolean
+      |  |     |  +--rw OperationMode?       enumeration
+      |  |     |  +--ro ECOperationStatus?   enumeration
+      |  |     |  +--ro Status?              enumeration
+      |  |     |  +--rw RetransmitTimeout?   uint32
+      |  |     |  +--rw MinLossPackets?      uint32
+      |  |     |  +--rw MaxReportTime?       uint32
+      |  |     |  +--rw MaxLossBurst?        uint32
+      |  |     +--rw FEC
+      |  |     |  +--rw Enable?              boolean
+      |  |     |  +--rw OperationMode?       enumeration
+      |  |     |  +--ro ECOperationStatus?   enumeration
+      |  |     +--rw IGMP
+      |  |     |  +--rw Enable?                            boolean
+      |  |     |  +--ro Status?                            enumeration
+      |  |     |  +--ro MaximumNumberOfConcurrentGroups?   uint32
+      |  |     |  +--ro MaximumNumberOfTrackedGroups?      uint32
+      |  |     |  +--rw LoggingEnable?                     boolean
+      |  |     |  +--rw DSCPMark?                          uint32
+      |  |     |  +--rw VLANIDMark?                        int32
+      |  |     |  +--rw EthernetPriorityMark?              int32
+      |  |     |  +--ro ClientVersion?                     enumeration
+      |  |     |  +--rw ClientRobustness?                  uint32
+      |  |     |  +--rw ClientUnsolicitedReportInterval?   uint32
+      |  |     |  +--ro ClientGroup* [GroupAddress]
+      |  |     |  |  +--ro GroupAddress    types:IPAddress
+      |  |     |  |  +--ro UpTime?         uint32
+      |  |     |  +--ro ClientGroupStats* [GroupAddress]
+      |  |     |     +--ro GroupAddress        types:IPAddress
+      |  |     |     +--ro TotalStart?         uint32
+      |  |     |     +--ro CurrentDayStart?    uint32
+      |  |     |     +--ro QuarterHourStart?   uint32
+      |  |     |     +--ro Total
+      |  |     |     |  +--ro NumberOfJoins?    uint32
+      |  |     |     |  +--ro NumberOfLeaves?   uint32
+      |  |     |     |  +--ro MaxJoinDelay?     uint32
+      |  |     |     +--ro CurrentDay
+      |  |     |     |  +--ro NumberOfJoins?    uint32
+      |  |     |     |  +--ro NumberOfLeaves?   uint32
+      |  |     |     |  +--ro MaxJoinDelay?     uint32
+      |  |     |     +--ro QuarterHour
+      |  |     |        +--ro NumberOfJoins?    uint32
+      |  |     |        +--ro NumberOfLeaves?   uint32
+      |  |     |        +--ro MaxJoinDelay?     uint32
+      |  |     +--rw Dejittering
+      |  |     |  +--rw BufferSize?           uint32
+      |  |     |  +--rw BufferInitialLevel?   uint32
+      |  |     +--ro Inbound* [Name]
+      |  |     |  +--ro Status?                              enumeration
+      |  |     |  +--ro Name                                 string
+      |  |     |  +--ro StreamingControlProtocol?            string
+      |  |     |  +--ro StreamingTransportProtocol?          string
+      |  |     |  +--ro StreamingTransportControlProtocol?   string
+      |  |     |  +--ro MultiplexType?                       string
+      |  |     |  +--ro DownloadTransportProtocol?           string
+      |  |     |  +--ro SourceAddress?                       types:IPAddress
+      |  |     |  +--ro SourcePort?                          uint32
+      |  |     |  +--ro DestinationAddress?                  types:IPAddress
+      |  |     |  +--ro DestinationPort?                     uint32
+      |  |     |  +--ro URI?                                 string
+      |  |     +--ro Outbound* [Name]
+      |  |     |  +--ro Status?          enumeration
+      |  |     |  +--ro Name             string
+      |  |     |  +--ro MultiplexType?   string
+      |  |     |  +--ro URI?             string
+      |  |     +--rw ServiceConnect
+      |  |     |  +--rw URI?   string
+      |  |     +--rw ForceMonitor
+      |  |        +--rw Enable?   boolean
+      |  |        +--ro Status?   enumeration
+      |  |        +--rw URI?      string
+      |  +--ro PVR
+      |  |  +--ro Storage* [Name]
+      |  |     +--ro Name         string
+      |  |     +--ro Reference?   string
+      |  +--rw AudioDecoder* [Name]
+      |  |  +--rw Enable?          boolean
+      |  |  +--ro Status?          enumeration
+      |  |  +--ro Name             string
+      |  |  +--ro AudioStandard?   string
+      |  +--rw VideoDecoder* [Name]
+      |  |  +--rw Enable?               boolean
+      |  |  +--ro Status?               enumeration
+      |  |  +--ro Name                  string
+      |  |  +--ro MPEG2Part2?           string
+      |  |  +--ro MPEG4Part2?           string
+      |  |  +--ro MPEG4Part10?          string
+      |  |  +--ro SMPTEVC1?             string
+      |  |  +--ro ContentAspectRatio?   enumeration
+      |  +--rw AudioOutput* [Name]
+      |  |  +--rw Enable?        boolean
+      |  |  +--ro Status?        enumeration
+      |  |  +--ro Name           string
+      |  |  +--ro AudioFormat?   string
+      |  |  +--rw AudioLevel?    uint32
+      |  |  +--rw CancelMute?    boolean
+      |  |  +--ro SCARTs?        string
+      |  +--rw SPDIF* [Name]
+      |  |  +--rw Enable?        boolean
+      |  |  +--ro Status?        enumeration
+      |  |  +--ro Name           string
+      |  |  +--rw ForcePCM?      boolean
+      |  |  +--ro Passthrough?   boolean
+      |  |  +--ro AudioDelay?    uint32
+      |  +--rw VideoOutput* [Name]
+      |  |  +--rw Enable?                   boolean
+      |  |  +--ro Status?                   enumeration
+      |  |  +--rw ColorbarEnable?           boolean
+      |  |  +--ro Name                      string
+      |  |  +--ro CompositeVideoStandard?   string
+      |  |  +--rw VideoFormat?              string
+      |  |  +--ro AspectRatioBehaviour?     enumeration
+      |  |  +--rw DisplayFormat?            string
+      |  |  +--ro Macrovision?              boolean
+      |  |  +--ro HDCP?                     boolean
+      |  |  +--ro SCARTs?                   string
+      |  +--rw SCART* [Name]
+      |  |  +--rw Enable?     boolean
+      |  |  +--ro Status?     enumeration
+      |  |  +--ro Name        string
+      |  |  +--rw Presence?   boolean
+      |  +--rw HDMI* [Name]
+      |  |  +--rw Enable?            boolean
+      |  |  +--ro Status?            enumeration
+      |  |  +--ro Name               string
+      |  |  +--rw ResolutionMode?    enumeration
+      |  |  +--rw ResolutionValue?   string
+      |  |  +--ro DisplayDevice
+      |  |     +--ro Status?                 enumeration
+      |  |     +--ro Name?                   string
+      |  |     +--ro EEDID?                  yang:hex-string
+      |  |     +--ro SupportedResolutions?   string
+      |  |     +--ro PreferredResolution?    string
+      |  |     +--ro VideoLatency?           uint32
+      |  |     +--ro CECSupport?             boolean
+      |  |     +--ro AutoLipSyncSupport?     boolean
+      |  |     +--ro HDMI3DPresent?          boolean
+      |  +--rw CA* [Name]
+      |  |  +--rw Enable?            boolean
+      |  |  +--ro Status?            enumeration
+      |  |  +--ro Name               string
+      |  |  +--ro SmartCardReader?   string
+      |  +--rw DRM* [Name]
+      |     +--rw Enable?            boolean
+      |     +--ro Status?            enumeration
+      |     +--ro Name               string
+      |     +--ro SmartCardReader?   string
+      +--ro AVStreams
+      |  +--ro ActiveAVStreams?   uint32
+      |  +--ro AVStream* [Name]
+      |     +--ro Status?         enumeration
+      |     +--ro Name            string
+      |     +--ro PVRState?       enumeration
+      |     +--ro FrontEnd?       string
+      |     +--ro Inbound?        string
+      |     +--ro Outbound?       string
+      |     +--ro AudioDecoder?   string
+      |     +--ro VideoDecoder?   string
+      |     +--ro CA?             string
+      |     +--ro DRM?            string
+      +--rw AVPlayers
+      |  +--ro ActiveAVPlayers?               uint32
+      |  +--rw PreferredAudioLanguage?        string
+      |  +--rw PreferredSubtitlingLanguage?   string
+      |  +--rw PreferredBehaviour?            string
+      |  +--rw ResetPINCode?                  boolean
+      |  +--rw AVPlayer* [Name]
+      |     +--rw Enable?               boolean
+      |     +--ro Status?               enumeration
+      |     +--ro Name                  string
+      |     +--ro AudioLanguage?        string
+      |     +--ro SubtitlingStatus?     enumeration
+      |     +--ro SubtitlingLanguage?   string
+      |     +--ro AudioOutputs?         string
+      |     +--ro VideoOutputs?         string
+      |     +--ro MainStream?           string
+      |     +--ro PIPStreams?           string
+      +--rw ServiceMonitoring
+      |  +--rw SampleEnable?              boolean
+      |  +--ro SampleState?               enumeration
+      |  +--rw SampleInterval?            uint32
+      |  +--rw ReportSamples?             uint32
+      |  +--rw EventsPerSampleInterval?   uint32
+      |  +--rw FetchSamples?              uint32
+      |  +--rw TimeReference?             yang:date-and-time
+      |  +--rw ForceSample?               boolean
+      |  +--ro ReportStartTime?           yang:date-and-time
+      |  +--ro ReportEndTime?             yang:date-and-time
+      |  +--rw EventCollectionEnable?     boolean
+      |  +--ro GlobalOperation
+      |  |  +--ro Total
+      |  |  |  +--ro ServiceAccessTime?       uint32
+      |  |  |  +--ro MinimumPortalResponse?   uint32
+      |  |  |  +--ro MaximumPortalResponse?   uint32
+      |  |  +--ro Sample
+      |  |     +--ro MinimumPortalResponse?   uint32
+      |  |     +--ro MaximumPortalResponse?   uint32
+      |  |     +--ro PortalResponse?          string
+      |  +--rw MainStream* [ServiceType]
+      |     +--rw Enable?                                       boolean
+      |     +--ro Status?                                       enumeration
+      |     +--ro SessionId?                                    yang:uuid
+      |     +--rw ServiceType                                   string
+      |     +--ro AVStream?                                     string
+      |     +--rw Gmin?                                         uint32
+      |     +--rw SevereLossMinDistance?                        uint32
+      |     +--rw SevereLossMinLength?                          uint32
+      |     +--rw ChannelChangeFailureTimeout?                  uint32
+      |     +--rw PacketsLostByEventHistogramIntervals?         uint32
+      |     +--rw DelayBetweenLossEventsHistogramIntervals?     uint32
+      |     +--rw DurationSevereLossEventsHistogramIntervals?   uint32
+      |     +--rw EventLog
+      |     |  +--rw Reset?   boolean
+      |     |  +--ro Entry* [SequenceNumber]
+      |     |     +--ro SequenceNumber    uint32
+      |     |     +--ro Type?             string
+      |     |     +--ro Time?             yang:date-and-time
+      |     |     +--ro Parameter*
+      |     |        +--ro Name?    string
+      |     |        +--ro Value?   string
+      |     +--rw Total
+      |     |  +--ro TotalSeconds?         uint32
+      |     |  +--rw Reset?                boolean
+      |     |  +--ro ResetTime?            uint32
+      |     |  +--ro DejitteringStats
+      |     |  |  +--ro TotalSeconds?      uint32
+      |     |  |  +--ro EmptyBufferTime?   uint32
+      |     |  |  +--ro Overruns?          uint32
+      |     |  |  +--ro Underruns?         uint32
+      |     |  +--ro TCPStats
+      |     |  |  +--ro TotalSeconds?           uint32
+      |     |  |  +--ro PacketsReceived?        uint32
+      |     |  |  +--ro PacketsRetransmitted?   uint32
+      |     |  |  +--ro BytesReceived?          uint32
+      |     |  +--ro RTPStats
+      |     |  |  +--ro TotalSeconds?                                uint32
+      |     |  |  +--ro PacketsExpected?                             uint32
+      |     |  |  +--ro PacketsDiscarded?                            uint32
+      |     |  |  +--ro PacketsOutOfSequence?                        uint32
+      |     |  |  +--ro PacketsReceived?                             uint32
+      |     |  |  +--ro PacketsReceivedBeforeEC?                     uint32
+      |     |  |  +--ro PacketsLost?                                 uint32
+      |     |  |  +--ro PacketsLostBeforeEC?                         uint32
+      |     |  |  +--ro PacketsLostByEventHistogram?                 uint32
+      |     |  |  +--ro PacketsLostByEventHistogramBeforeEC?         uint32
+      |     |  |  +--ro LossEvents?                                  uint32
+      |     |  |  +--ro LossEventsBeforeEC?                          uint32
+      |     |  |  +--ro DelayBetweenLossEventsHistogram?             uint32
+      |     |  |  +--ro DelayBetweenLossEventsHistogramBeforeEC?     uint32
+      |     |  |  +--ro SevereLossIndexCount?                        uint32
+      |     |  |  +--ro SevereLossIndexCountBeforeEC?                uint32
+      |     |  |  +--ro SevereLossLengthCount?                       uint32
+      |     |  |  +--ro SevereLossLengthCountBeforeEC?               uint32
+      |     |  |  +--ro DurationSevereLossEventsHistogram?           uint32
+      |     |  |  +--ro DurationSevereLossEventsHistogramBeforeEC?   uint32
+      |     |  |  +--ro RetransmitTimeouts?                          uint32
+      |     |  +--ro MPEG2TSStats
+      |     |  |  +--ro TotalSeconds?                         uint32
+      |     |  |  +--ro TSPacketsReceived?                    uint32
+      |     |  |  +--ro TSSyncByteErrorCount?                 uint32
+      |     |  |  +--ro TSSyncLossCount?                      uint32
+      |     |  |  +--ro PacketDiscontinuityCounter?           uint32
+      |     |  |  +--ro PacketDiscontinuityCounterBeforeCA?   uint32
+      |     |  +--ro VideoDecoderStats
+      |     |  |  +--ro TotalSeconds?       uint32
+      |     |  |  +--ro FrameRate?          uint32
+      |     |  |  +--ro DecodedFrames?      uint32
+      |     |  |  +--ro LostFrames?         uint32
+      |     |  |  +--ro ConcealedFrames?    uint32
+      |     |  |  +--ro IDecodedFrames?     uint32
+      |     |  |  +--ro ILostFrames?        uint32
+      |     |  |  +--ro IConcealedFrames?   uint32
+      |     |  |  +--ro PDecodedFrames?     uint32
+      |     |  |  +--ro PLostFrames?        uint32
+      |     |  |  +--ro PConcealedFrames?   uint32
+      |     |  |  +--ro BDecodedFrames?     uint32
+      |     |  |  +--ro BLostFrames?        uint32
+      |     |  |  +--ro BConcealedFrames?   uint32
+      |     |  |  +--ro AVResynchCounter?   uint32
+      |     |  +--ro AudioDecoderStats
+      |     |  |  +--ro TotalSeconds?     uint32
+      |     |  |  +--ro DecodedFrames?    uint32
+      |     |  |  +--ro DecodingErrors?   uint32
+      |     |  +--ro VideoResponseStats
+      |     |     +--ro TotalSeconds?                 uint32
+      |     |     +--ro ChannelChangeFailures?        uint32
+      |     |     +--ro ChannelFailures?              string
+      |     |     +--ro MinimumVoDControlResponse?    uint32
+      |     |     +--ro MaximumVoDControlResponse?    uint32
+      |     |     +--ro RequestedTransactions?        uint32
+      |     |     +--ro AccessSuccesses?              uint32
+      |     |     +--ro CompletionCount?              uint32
+      |     |     +--ro MinimumVideoSystemResponse?   uint32
+      |     |     +--ro MaximumVideoSystemResponse?   uint32
+      |     +--rw Sample
+      |        +--ro SampleSeconds?          uint32
+      |        +--ro SignificantChanges?     uint32
+      |        +--ro PVRTimeShift?           boolean
+      |        +--ro DejitteringStats
+      |        |  +--ro SampleSeconds?     uint32
+      |        |  +--ro Overruns?          uint32
+      |        |  +--ro Underruns?         uint32
+      |        |  +--ro EmptyBufferTime?   uint32
+      |        +--ro TCPStats
+      |        |  +--ro SampleSeconds?          uint32
+      |        |  +--ro PacketsReceived?        uint32
+      |        |  +--ro PacketsRetransmitted?   uint32
+      |        |  +--ro BytesReceived?          uint32
+      |        +--ro RTPStats
+      |        |  +--ro SampleSeconds?                               uint32
+      |        |  +--ro PacketsExpected?                             uint32
+      |        |  +--ro PacketsDiscarded?                            uint32
+      |        |  +--ro PacketsOutOfSequence?                        uint32
+      |        |  +--ro PacketsReceived?                             uint32
+      |        |  +--ro PacketsReceivedBeforeEC?                     uint32
+      |        |  +--ro RetransmitTimeouts?                          uint32
+      |        |  +--ro PacketsLost?                                 uint32
+      |        |  +--ro PacketsLostBeforeEC?                         uint32
+      |        |  +--ro PacketsLostByEventHistogram?                 string
+      |        |  +--ro PacketsLostByEventHistogramBeforeEC?         string
+      |        |  +--ro LossEvents?                                  uint32
+      |        |  +--ro LossEventsBeforeEC?                          uint32
+      |        |  +--ro DelayBetweenLossEventsHistogram?             string
+      |        |  +--ro DelayBetweenLossEventsHistogramBeforeEC?     string
+      |        |  +--ro SevereLossIndexCount?                        uint32
+      |        |  +--ro SevereLossIndexCountBeforeEC?                uint32
+      |        |  +--ro AverageLossDistance?                         uint32
+      |        |  +--ro AverageLossDistanceBeforeEC?                 uint32
+      |        |  +--ro MinimumLossDistance?                         uint32
+      |        |  +--ro MinimumLossDistanceBeforeEC?                 uint32
+      |        |  +--ro SevereLossLengthCount?                       uint32
+      |        |  +--ro SevereLossLengthCountBeforeEC?               uint32
+      |        |  +--ro DurationSevereLossEventsHistogram?           string
+      |        |  +--ro DurationSevereLossEventsHistogramBeforeEC?   string
+      |        |  +--ro MaximumLossPeriod?                           uint32
+      |        |  +--ro MaximumLossPeriodBeforeEC?                   uint32
+      |        |  +--ro AverageLossPeriod?                           uint32
+      |        |  +--ro AverageLossPeriodBeforeEC?                   uint32
+      |        |  +--ro MinimumLossPeriod?                           uint32
+      |        |  +--ro MinimumLossPeriodBeforeEC?                   uint32
+      |        +--ro MPEG2TSStats
+      |        |  +--ro SampleSeconds?                        uint32
+      |        |  +--ro TSPacketsReceived?                    uint32
+      |        |  +--ro TSPacketsDrained?                     uint32
+      |        |  +--ro TSSyncByteErrorCount?                 uint32
+      |        |  +--ro TSSyncLossCount?                      uint32
+      |        |  +--ro PacketDiscontinuityCounter?           uint32
+      |        |  +--ro PacketDiscontinuityCounterBeforeCA?   uint32
+      |        +--ro VideoDecoderStats
+      |        |  +--ro SampleSeconds?      uint32
+      |        |  +--ro FrameRate?          uint32
+      |        |  +--ro DecodedFrames?      uint32
+      |        |  +--ro LostFrames?         uint32
+      |        |  +--ro ConcealedFrames?    uint32
+      |        |  +--ro IDecodedFrames?     uint32
+      |        |  +--ro ILostFrames?        uint32
+      |        |  +--ro IConcealedFrames?   uint32
+      |        |  +--ro PDecodedFrames?     uint32
+      |        |  +--ro PLostFrames?        uint32
+      |        |  +--ro PConcealedFrames?   uint32
+      |        |  +--ro BDecodedFrames?     uint32
+      |        |  +--ro BLostFrames?        uint32
+      |        |  +--ro BConcealedFrames?   uint32
+      |        |  +--ro AVResynchCounter?   uint32
+      |        +--ro AudioDecoderStats
+      |        |  +--ro SampleSeconds?    uint32
+      |        |  +--ro DecodedFrames?    uint32
+      |        |  +--ro DecodingErrors?   uint32
+      |        +--ro VideoResponseStats
+      |        |  +--ro SampleSeconds?                uint32
+      |        |  +--ro AverageVideoSystemResponse?   uint32
+      |        |  +--ro MinimumVideoSystemResponse?   uint32
+      |        |  +--ro MaximumVideoSystemResponse?   uint32
+      |        |  +--ro AverageVoDControlResponse?    uint32
+      |        |  +--ro MinimumVoDControlResponse?    uint32
+      |        |  +--ro MaximumVoDControlResponse?    uint32
+      |        |  +--ro VoDControlResponse?           string
+      |        |  +--ro VideoSystemResponse?          string
+      |        |  +--ro RequestedTransactions?        uint32
+      |        |  +--ro AccessSuccesses?              uint32
+      |        |  +--ro CompletionCount?              uint32
+      |        |  +--ro ChannelChangeFailures?        uint32
+      |        +--rw HighLevelMetricStats* [MetricName]
+      |           +--rw Enable?                 boolean
+      |           +--ro Status?                 enumeration
+      |           +--ro MetricName              string
+      |           +--rw Metric1Threshold?       uint32
+      |           +--rw Metric2Threshold?       uint32
+      |           +--ro SampleSeconds?          uint32
+      |           +--ro Metric1?                uint32
+      |           +--ro Metric2?                uint32
+      |           +--ro Metric1Failures?        uint32
+      |           +--ro Metric2Failures?        uint32
+      |           +--rw MetricSampleInterval?   uint32
+      |           +--rw MetricThreshold?        uint32
+      |           +--ro Metric?                 uint32
+      |           +--ro MetricFailures?         uint32
+      +--rw Applications
+         +--rw ServiceProvider* [Name]
+         |  +--rw Name                      string
+         |  +--rw Domain?                   string
+         |  +--rw ServiceDiscoveryServer?   string
+         |  +--ro ActiveBCGServers?         string
+         +--rw AudienceStats
+         |  +--rw Enable?      boolean
+         |  +--rw Reset?       boolean
+         |  +--ro ResetTime?   uint32
+         |  +--ro Channel* [Name]
+         |     +--ro Name        string
+         |     +--ro Duration?   uint32
+         +--rw CDSPush
+         |  +--ro Reference?     string
+         |  +--rw ContentItem* [ContentReferenceId]
+         |     +--ro ContentReferenceId    string
+         |     +--ro VersionNumber?        uint32
+         |     +--rw DeleteItem?           boolean
+         +--rw CDSPull
+            +--ro Reference?     string
+            +--rw ContentItem* [ContentReferenceId]
+               +--ro ContentReferenceId    string
+               +--ro VersionNumber?        uint32
+               +--rw DeleteItem?           boolean

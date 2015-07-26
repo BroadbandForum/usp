@@ -1,0 +1,1100 @@
+module StorageService {
+  namespace "urn:tbd";
+  prefix TBD;
+  
+  import ietf-yang-types {
+    prefix yang;
+  }
+  
+  import tr-106-types {
+    prefix types;
+  }
+  
+  organization
+    "TBD";
+  
+  contact
+    "TBD";
+  
+  description
+    "";
+  
+  revision 1970-01-01 {
+    description
+      "TBD";
+    reference
+      "TBD";
+  }
+
+  list StorageService {
+    key "Alias";
+    description
+      "The Service Object for a Storage Service device.";
+    leaf Enable {
+      type boolean;
+      description
+        "Enables or Disables the entire Storage mechanism.";
+    }
+
+    container Capabilities {
+      config false;
+      description
+        "The overall capabilities of a Storage Service device.  This
+         is a constant read-only object, meaning that only a
+         firmware upgrade will cause these values to be altered.
+      
+         Note that when TR-140 was originally published there was
+         a typo in this object name, which has been corrected.";
+      leaf FTPCapable {
+        type boolean;
+        description
+          "Does this device contain an FTP server allowing clients
+           to access the data via an FTP client?";
+      }
+      leaf SFTPCapable {
+        type boolean;
+        description
+          "Does this device contain an SSH FTP server allowing
+           clients to access the data via an SFTP client?";
+      }
+      leaf HTTPCapable {
+        type boolean;
+        description
+          "Does this device contain an HTTP server allowing clients
+           to access the data via an HTTP client?";
+      }
+      leaf HTTPSCapable {
+        type boolean;
+        description
+          "Does this device contain an HTTPS server allowing clients
+           to access the data via an HTTPS client?";
+      }
+      leaf HTTPWritable {
+        type boolean;
+        description
+          "Does this device contain an HTTP server that supports
+           creating files via an HTTP PUT/POST mechanism that
+           would allow an HTTP client to upload files via HTTP?
+           This is also sometimes referred to as \"WebDAV\"
+           support.";
+      }
+      leaf SupportedNetworkProtocols {
+        type enumeration {
+          enum "SMB";
+          enum "NFS";
+          enum "AFP";
+        }
+        description
+          "{{list}} Supported application-level network protocols.
+           {{enum}}
+        
+           The list MAY include vendor-specific protocols, which
+           MUST be in the format defined in {{bibref|TR-106}}.
+           For example: \"X_EXAMPLE-COM_MyProt.";
+      }
+      leaf SupportedFileSystemTypes {
+        type enumeration {
+          enum "FAT16";
+          enum "FAT32";
+          enum "NTFS";
+          enum "HFS";
+          enum "HFS+";
+          enum "HSFJ";
+          enum "ext2";
+          enum "ext3";
+          enum "XFS";
+          enum "REISER";
+        }
+        description
+          "{{list}} Supported FileSystems Types.  {{enum}}
+        
+           The list MAY include vendor-specific protocols, which
+           MUST be in the format defined in {{bibref|TR-106}}.
+           For example: \"X_EXAMPLE-COM_MyType.";
+      }
+      leaf SupportedRaidTypes {
+        type enumeration {
+          enum "RAID0";
+          enum "RAID1";
+          enum "RAID2";
+          enum "RAID3";
+          enum "RAID4";
+          enum "RAID5";
+          enum "RAID6";
+          enum "RAID10";
+          enum "RAID0+1";
+          enum "RAID30";
+          enum "RAID50";
+          enum "RAID60";
+        }
+        description
+          "{{list}} Supported RAID types.  {{enum}}
+        
+           The list MAY include vendor-specific protocols, which
+           MUST be in the format defined in {{bibref|TR-106}}.
+           For example:\"X_EXAMPLE-COM_MyRaid.";
+      }
+      leaf VolumeEncryptionCapable {
+        type boolean;
+        description
+          "Does this device have the ability to encrypt and decrypt
+           Logical Volumes as they are stored and retrieved?";
+      }
+    }
+
+    container NetInfo {
+      description
+        "This object provides general LAN network information about
+         this device.";
+      leaf HostName {
+        type string {
+          length "0..64";
+        }
+        description
+          "Logical name which identifies the device on the local
+           network.  This is the first segment of a fully
+           qualified domain name (FQDN).  Combining {{param}}, a
+           \".\" and the {{param|DomainName}} will result in a
+           fully qualified domain name.";
+      }
+      leaf DomainName {
+        type string {
+          length "0..255";
+        }
+        description
+          "Domain name for the device on the local network.
+           Combining {{param|HostName}}, a \".\" and {{param}}
+           will result in a fully qualified domain name (FQDN).
+           For example, if the HostName contains \"myLaptop\" and
+           the DomainName contains \"dsl.sp1.com\", then the FQDN
+           would be \"myLaptop.dsl.sp1.com\".";
+      }
+    }
+
+    list UserGroup {
+      key "GroupName";
+      description
+        "This object provides information about each user group
+         configured on this device, which allows the grouping of
+         user accounts for easier maintenance of permissions.";
+      leaf Enable {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables this group.";
+      }
+      leaf GroupName {
+        type string {
+          length "0..64";
+        }
+        default "";
+        description
+          "The unique name of the group.";
+      }
+    }
+
+    list UserAccount {
+      key "Username";
+      description
+        "This object provides information about each user configured
+         on this device, which provides a means for controlling
+         access to the device.";
+      leaf Enable {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables this user.";
+      }
+      leaf Username {
+        type string {
+          length "0..64";
+        }
+        default "";
+        description
+          "The unique name of the user.  Also used for
+           authentication.";
+      }
+      leaf Password {
+        type string {
+          length "0..64";
+        }
+        description
+          "Password used to authenticate the user when connecting to
+           the Storage Service Device.";
+      }
+      leaf UserGroupParticipation {
+        type string;
+        default "";
+        description
+          "Represents a User Group that this User Account is a
+           member of.  Each {{object|.UserGroup.{i}.}} referenced
+           by this parameter MUST exist within the same
+           StorageService instance.";
+      }
+      leaf AllowFTPAccess {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables access via FTP (including SSH FTP
+           access) for this user.";
+      }
+      leaf AllowHTTPAccess {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables access via HTTP (including HTTPS
+           access) for this user.";
+      }
+    }
+
+    container NetworkServer {
+      description
+        "This object allows the control of network layer protocols
+         authorization enforcement.";
+      leaf AFPEnable {
+        type boolean;
+        description
+          "Enables or disables the AFP network protocol.";
+      }
+      leaf NFSEnable {
+        type boolean;
+        description
+          "Enables or disables the NFS network protocol.";
+      }
+      leaf SMBEnable {
+        type boolean;
+        description
+          "Enables or disables the SMB network protocol.";
+      }
+      leaf NetworkProtocolAuthReq {
+        type boolean;
+        description
+          "If this parameter is set to {{false}} then the device
+           MUST NOT attempt to request login credentials or
+           authenticate access from network layer protocols such
+           as AFP, NFS, and SMB.  If this parameter is set to
+           {{true}} then the device MUST attempt to request login
+           credentials or authenticate access from network layer
+           protocols such as AFP, NFS, and SMB by using an
+           instance of {{object|.UserAccount.{i}.}} found on this
+           device.";
+      }
+    }
+
+    container FTPServer {
+      description
+        "This object allows the configuration of the FTP server.";
+      leaf Enable {
+        type boolean;
+        description
+          "Enables or disables the FTP server.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Enabled";
+          enum "Disabled";
+          enum "Error";
+        }
+        config false;
+        description
+          "The current status of this FTP server.";
+      }
+      leaf MaxNumUsers {
+        type uint32 {
+          range "1..32";
+        }
+        description
+          "Maximum number of users allowed to log in to the device
+           at once via FTP.";
+      }
+      leaf IdleTime {
+        type uint32 {
+          range "0..600";
+        }
+        description
+          "Maximum amount of time in {{units}} that the FTP socket
+           will remain open without any activity.  If set to 0 an
+           infinite timeout will apply.";
+      }
+      leaf PortNumber {
+        type uint32 {
+          range "0..65535";
+        }
+        default "21";
+        description
+          "The port number that the FTP server is listening on.";
+      }
+
+      container AnonymousUser {
+        description
+          "This object allows the configuration of anonymous FTP
+           access.";
+        leaf Enable {
+          type boolean;
+          description
+            "Enables or disables support for anonymous access into
+             the FTP server";
+        }
+        leaf StartingFolder {
+          type string {
+            length "0..256";
+          }
+          description
+            "Represents the home directory for anonymous FTP access.
+             The {{object|.LogicalVolume.{i}.Folder.{i}.}}
+             referenced by this parameter MUST exist within the
+             same StorageService instance.";
+        }
+        leaf ReadOnlyAccess {
+          type boolean;
+          description
+            "If this is set to {{true}}, then the anonymous user is
+             limited to only retrieval of files from the Storage
+             Service (no deletions, copies, creations or
+             uploads).  If this is set to {{false}}, then the
+             anonymous user has full permissions within the
+             folder specified in {{param|StartingFolder}}.  This
+             SHOULD default to True.";
+        }
+      }
+    }
+
+    container SFTPServer {
+      description
+        "This object allows the configuration of the SSH FTP server.";
+      leaf Enable {
+        type boolean;
+        description
+          "Enables or disables the SSH FTP server.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Enabled";
+          enum "Disabled";
+          enum "Error";
+        }
+        config false;
+        description
+          "The current status of this SSH FTP server.";
+      }
+      leaf MaxNumUsers {
+        type uint32 {
+          range "1..32";
+        }
+        description
+          "Maximum number of users allowed to log in to the device
+           at once via SFTP.";
+      }
+      leaf IdleTime {
+        type uint32 {
+          range "0..600";
+        }
+        description
+          "Maximum amount of time in {{units}} that the SFTP socket
+           will remain open without any activity.  If set to 0 an
+           infinite timeout will apply.";
+      }
+      leaf PortNumber {
+        type uint32 {
+          range "0..65535";
+        }
+        default "115";
+        description
+          "The port number that the SSH FTP server is listening on.";
+      }
+    }
+
+    container HTTPServer {
+      description
+        "This object allows the configuration of the HTTP server.";
+      leaf Enable {
+        type boolean;
+        description
+          "Enables or disables the HTTP server.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Enabled";
+          enum "Disabled";
+          enum "Error";
+        }
+        config false;
+        description
+          "The current status of this HTTP server.";
+      }
+      leaf MaxNumUsers {
+        type uint32 {
+          range "1..32";
+        }
+        description
+          "Maximum number of users allowed to log in to the device
+           at once via HTTP.";
+      }
+      leaf IdleTime {
+        type uint32 {
+          range "0..600";
+        }
+        description
+          "Maximum amount of time in {{units}} that the HTTP socket
+           will remain open without any activity.  If set to 0 an
+           infinite timeout will apply.";
+      }
+      leaf HTTPWritingEnabled {
+        type boolean;
+        config false;
+        description
+          "Is support for the HTTP PUT/POST mechanism (WebDAV)
+           enabled?";
+      }
+      leaf PortNumber {
+        type uint32 {
+          range "0..65535";
+        }
+        default "80";
+        description
+          "The port number that the HTTP server is listening on.";
+      }
+      leaf AuthenticationReq {
+        type boolean;
+        description
+          "If {{true}}, HTTP will require login prior to access
+           (basic or digest authentication).";
+      }
+    }
+
+    container HTTPSServer {
+      description
+        "This object allows the configuration of the HTTPS server.";
+      leaf Enable {
+        type boolean;
+        description
+          "Enables or disables the HTTPS server.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Enabled";
+          enum "Disabled";
+          enum "Error";
+        }
+        config false;
+        description
+          "The current status of this HTTPS server.";
+      }
+      leaf MaxNumUsers {
+        type uint32 {
+          range "1..32";
+        }
+        description
+          "Maximum number of users allowed to log in to the device
+           at once via HTTPS.";
+      }
+      leaf IdleTime {
+        type uint32 {
+          range "0..600";
+        }
+        description
+          "Maximum amount of time in {{units}} that the HTTPS socket
+           will remain open without any activity.  If set to 0 an
+           infinite timeout will apply.";
+      }
+      leaf HTTPWritingEnabled {
+        type boolean;
+        config false;
+        description
+          "Is support for the HTTP PUT/POST mechanism (WebDAV)
+           enabled?";
+      }
+      leaf PortNumber {
+        type uint32 {
+          range "0..65535";
+        }
+        default "443";
+        description
+          "The port number that the HTTPS server is listening on.";
+      }
+      leaf AuthenticationReq {
+        type boolean;
+        description
+          "If {{true}}, HTTPS will require login prior to access
+           (basic or digest authentication).";
+      }
+    }
+
+    list PhysicalMedium {
+      key "Name";
+      description
+        "This object provides information about each physical medium
+         connected to this device.";
+      leaf Name {
+        type string {
+          length "0..64";
+        }
+        description
+          "A user-friendly name for this physical storage medium.";
+      }
+      leaf Vendor {
+        type string {
+          length "0..64";
+        }
+        config false;
+        description
+          "The vendor of this physical storage medium.";
+      }
+      leaf Model {
+        type string {
+          length "0..128";
+        }
+        config false;
+        description
+          "The model name/number of this physical storage medium.";
+      }
+      leaf SerialNumber {
+        type string {
+          length "0..64";
+        }
+        config false;
+        description
+          "The serial number of this physical storage medium.";
+      }
+      leaf FirmwareVersion {
+        type string {
+          length "0..64";
+        }
+        config false;
+        description
+          "The firmware version for firmware contained within the
+           physical medium's controller.";
+      }
+      leaf ConnectionType {
+        type enumeration {
+          enum "USB 1.1";
+          enum "USB 2.0";
+          enum "IEEE1394";
+          enum "IEEE1394b";
+          enum "IDE";
+          enum "EIDE";
+          enum "ATA/33";
+          enum "ATA/66";
+          enum "ATA/100";
+          enum "ATA/133";
+          enum "SATA/150";
+          enum "SATA/300";
+          enum "SCSI-1";
+          enum "Fast SCSI";
+          enum "Fast-Wide SCSI";
+          enum "Ultra SCSI";
+          enum "Ultra Wide SCSI";
+          enum "Ultra2 SCSI";
+          enum "Ultra2 Wide SCSI";
+          enum "Ultra3 SCSI";
+          enum "Ultra-320 SCSI";
+          enum "Ultra-640 SCSI";
+          enum "SSA";
+          enum "SSA-40";
+          enum "Fibre Channel";
+        }
+        config false;
+        description
+          "The method of connection to this storage device.
+           {{enum}}
+        
+           The parameter MAY instead be a vendor-specific
+           connection type, which MUST be in the format defined
+           in {{bibref|TR-106}}.  For example:
+        
+           \"X_EXAMPLE-COM_MyConnType\"";
+      }
+      leaf Removable {
+        type boolean;
+        config false;
+        description
+          "Is this physical storage medium removable?  Removable
+           storage implies that the removal action is part of
+           normal operations and is expected to leave the data on
+           the removable storage intact.";
+      }
+      leaf Capacity {
+        type uint32;
+        config false;
+        description
+          "The formatted capacity of the physical storage medium in
+           {{units}}.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Online";
+          enum "Standby";
+          enum "Offline";
+        }
+        config false;
+        description
+          "The general activity status of this physical storage
+           medium.";
+      }
+      leaf Uptime {
+        type uint32;
+        config false;
+        description
+          "Time since boot in {{units}}.  This MAY reflect
+           S.M.A.R.T.  PowerOnHours.";
+      }
+      leaf SMARTCapable {
+        type boolean;
+        config false;
+        description
+          "Is this physical medium capable of reporting S.M.A.R.T.
+           statistics?";
+      }
+      leaf Health {
+        type enumeration {
+          enum "OK";
+          enum "Failing";
+          enum "Error";
+        }
+        config false;
+        description
+          "The general health of this physical storage medium.
+           {{enum}}
+        
+           Note: Health MAY be obtained from S.M.A.R.T.  data
+           where available.";
+      }
+      leaf HotSwappable {
+        type boolean;
+        config false;
+        description
+          "Is this physical medium capable of being removed while
+           the device is powered up?  Hot-Swappable storage does
+           not imply Removable storage; hot-swappable is an
+           operation taken only when the disk has failed and
+           needs to be replaced.  The data on the hot-swapped
+           storage will not remain intact.";
+      }
+    }
+
+    list StorageArray {
+      key "PhysicalMediumReference";
+      description
+        "This object provides information about each storage array
+         (RAID) configured on this device.
+      
+         Creating an instance of this object generates a disabled
+         {{object}} instance.  Before this new {{object}}
+         instance can be enabled (via a SetParameterValues
+         command), it MUST have the following parameters
+         configured: {{param|Name}}, {{param|RaidType}}, and
+         {{param|PhysicalMediumReference}}.  Once an instance is
+         enabled the following parameters become immutable for
+         the life of the instance: {{param|Name}},
+         {{param|RaidType}}, and
+         {{param|PhysicalMediumReference}}.";
+      leaf Name {
+        type string {
+          length "0..64";
+        }
+        default "";
+        description
+          "A user-friendly name for this Storage Array.
+        
+           Once this instance becomes enabled, this parameter
+           will be immutable for the life of the instance.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Rebuilding";
+          enum "Initializing";
+          enum "Offline";
+          enum "Online";
+          enum "Error";
+          enum "Degraded";
+          enum "Critical";
+        }
+        config false;
+        default "Offline";
+        description
+          "The current status of this StorageArray.";
+      }
+      leaf Enable {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables this StorageArray instance.";
+      }
+      leaf RaidType {
+        type string;
+        default "Linear";
+        description
+          "Note that after creation of the Storage Array, any
+           subsequent writes to this parameter MUST be ignored as
+           array type migration is not supported.  To identify
+           which RAID Types are supported, see
+           {{param|.Capabilities.SupportedRaidTypes}}.
+        
+           Once this instance becomes enabled, this parameter
+           will be immutable for the life of the instance.";
+      }
+      leaf UsableCapacity {
+        type uint32;
+        config false;
+        description
+          "The total Usable Capacity of the Storage Array in
+           {{units}}.  This is computed by the system based on
+           {{param|PhysicalMediumReference}} and
+           {{param|RaidType}}.  Disk size is a consideration, as
+           many RAID Types use the smallest drive in the group
+           for calculations.";
+      }
+      leaf PhysicalMediumReference {
+        type string;
+        description
+          "Represents the physical medium used by this RAID.  Each
+           Physical Medium referenced by this parameter MUST
+           exist within the same StorageService instance.  A
+           {{object|.PhysicalMedium.{i}.}} MUST only be
+           referenced by one {{object|.StorageArray.{i}.}}
+           instance.
+        
+           Once this instance becomes enabled, this parameter
+           will be immutable for the life of the instance.";
+      }
+    }
+
+    list LogicalVolume {
+      key "Name";
+      description
+        "This object provides information about each logical volume
+         configured on this device.  A logical volume can reside
+         either on an instance of a single
+         {{object|.PhysicalMedium.{i}.}} or on an instance of a
+         single {{object|.StorageArray.{i}.}} instance, but it
+         can not span multiple instances of either.
+         {{param|PhysicalReference}} is used to define where this
+         {{object}} instance resides.
+      
+         Creating an instance of this object generates a disabled
+         {{object}} instance.  Before this new {{object}}
+         instance can be enabled (via a SetParameterValues
+         command), it MUST have the following parameters
+         configured: {{param|Name}}, {{param|PhysicalReference}},
+         and {{param|Capacity}}.  Once an instance is enabled the
+         following parameters become immutable for the life of
+         the instance: {{param|Name}},
+         {{param|PhysicalReference}}, and {{param|Capacity}}.";
+      leaf Name {
+        type string {
+          length "0..64";
+        }
+        default "";
+        description
+          "The name of the partition for this logical volume.
+        
+           Once this instance becomes enabled, this parameter
+           will be immutable for the life of the instance.  This
+           parameter acts as the unique identifier for the
+           instance, thus the device MUST NOT allow multiple
+           {{object}} instances to use the same {{param}}.";
+      }
+      leaf Status {
+        type enumeration {
+          enum "Offline";
+          enum "Online";
+          enum "Error";
+        }
+        config false;
+        default "Offline";
+        description
+          "The current status of this Logical Volume.  {{enum}}
+        
+           The default {{enum|Offline}} status will exist until
+           this {{object}} is enabled.";
+      }
+      leaf Enable {
+        type boolean;
+        default "false";
+        description
+          "Enables or disables this {{object}} instance.";
+      }
+      leaf PhysicalReference {
+        type string {
+          length "0..256";
+        }
+        description
+          "Represents the physical medium or RAID where this
+           {{object}} resides.  The
+           {{object|.PhysicalMedium.{i}.}} or
+           {{object|.StorageArray.{i}.}} referenced by this
+           parameter MUST exist within the same StorageService
+           instance.
+        
+           An AddObject followed by an enabling
+           SetParameterValues on {{param|Name}}, {{param}}, and
+           {{param|Capacity}} will cause the formatting of this
+           logical partition and these parameters to become
+           immutable for the life of this instance.";
+      }
+      leaf FileSystem {
+        type string;
+        config false;
+        description
+          "The file system for this {{object}} as it is currently
+           formatted.";
+      }
+      leaf Capacity {
+        type uint32;
+        description
+          "The Capacity of the Logical Volume in {{units}}.
+        
+           Once this instance becomes enabled, this parameter
+           will be immutable for the life of the instance.";
+      }
+      leaf UsedSpace {
+        type uint32;
+        config false;
+        description
+          "The Amount of Used Space on the Logical Volume in
+           {{units}}.";
+      }
+      leaf ThresholdLimit {
+        type uint32;
+        default "0";
+        description
+          "This value is specified in {{units}} and controls when
+           {{param|ThresholdReached}} will have its value
+           altered.  If the value of {{param|UsedSpace}} plus the
+           value of {{param}}r is greater than or equal to the
+           value of {{param|Capacity}} then the value of
+           {{param|ThresholdReached}} will be {{true}}, otherwise
+           it will be {{false}}.  Setting the value of this
+           parameter to 0 will disable the Thresholding
+           mechanism.";
+      }
+      leaf ThresholdReached {
+        type boolean;
+        config false;
+        default "false";
+        description
+          "When {{param|ThresholdLimit}} > 0 and {{param|UsedSpace}}
+           + {{param|ThresholdLimit}} >= {{param|Capacity}} this
+           will be {{true}}, else {{false}}.";
+      }
+      leaf Encrypted {
+        type boolean;
+        config false;
+        description
+          "Is the Volume Encrypted?  The type of encryption will be
+           handled by the device internally and is not a matter
+           for remote management.";
+      }
+
+      list Folder {
+        key "Name";
+        description
+          "This object provides information about each top-level
+           folder configured on this logical volume.  Each
+           top-level folder allows the configuration of quotas
+           and access permissions.
+        
+           Creating an instance of this object generates a
+           disabled {{object}} instance.  Before this new
+           {{object}} instance can be enabled (via a
+           SetParameterValues command), it MUST have the
+           {{param|Name}} configured.  Folder instances are
+           unique per {{object|.LogicalVolume.{i}.}} and the
+           unique key for this object is {{param|Name}} which
+           also means that once an instance is enabled
+           {{param|Name}} becomes immutable for the life of the
+           instance.";
+        leaf Name {
+          type string {
+            length "0..64";
+          }
+          default "";
+          description
+            "Setting of this variable will add a new folder.  The
+             full hierarchical pathname of the folder MUST be
+             specified.
+          
+             All folders created on the Logical Volume will
+             appear here, created locally or via AddObject.
+          
+             The local directory name will be formatted as a
+             UNIX-style directory name, for example: /home/ftp
+          
+             The presence of a trailing `/' character is
+             inconsequential, meaning that /home/ftp/ is the same
+             as /home/ftp.
+          
+             Once this instance becomes enabled, this parameter
+             will be immutable for the life of the instance.
+             This parameter acts as the unique identifier for the
+             instance, thus the device MUST NOT allow multiple
+             {{object}} instances within a
+             {{object|.LogicalVolume.{i}.}} to use the same
+             {{param}}.";
+        }
+        leaf Enable {
+          type boolean;
+          default "false";
+          description
+            "Entry is enabled or disabled";
+        }
+        leaf UserAccountAccess {
+          type uint32 {
+            range "0..3";
+          }
+          default "2";
+          description
+            "What are the User authentication requirements of this
+             folder?  The following bitmap is used.
+          
+             :11 = Authenticated Access required for Network
+             protocols (NFS/AFP/SMB) and for non Network
+             protocols (FTP/SFTP/HTTP/HTTPS)
+          
+             :10 = Authenticated Access required for Network
+             protocols (NFS/AFP/SMB)
+          
+             :01 = Authenticated Access Required for non Network
+             protocols (FTP/SFTP/HTTP/HTTPS)
+          
+             :00 = No Authentication required";
+        }
+
+        list UserAccess {
+          key "UserReference";
+          description
+            "This object provides information about each user
+             account configured for access permissions on this
+             folder.";
+          leaf Enable {
+            type boolean;
+            default "false";
+            description
+              "Enables or disables the entry.";
+          }
+          leaf UserReference {
+            type string {
+              length "0..256";
+            }
+            default "";
+            description
+              "Represents a user that has access to this folder.
+               The instance of {{object|.UserAccount.{i}.}}
+               referenced by this parameter MUST exist within the
+               same StorageService instance.";
+          }
+          leaf Permissions {
+            type uint32 {
+              range "0..7";
+            }
+            default "7";
+            description
+              "What permissions the user account has over this
+               {{object|.LogicalVolume.{i}.Folder.{i}.}}.  This
+               is an integer value like the xNIX systems use for
+               access permissions, meaning that it is a 3-bit
+               field with the following structure:
+            
+               :100 = read field
+            
+               :010 = write field
+            
+               :001 = execute field";
+          }
+        }
+
+        list GroupAccess {
+          key "GroupReference";
+          description
+            "This object provides information about each user group
+             configured for access permissions on this folder.";
+          leaf Enable {
+            type boolean;
+            default "false";
+            description
+              "Enables or disables the entry.";
+          }
+          leaf GroupReference {
+            type string {
+              length "0..256";
+            }
+            default "";
+            description
+              "Represents a user group that is a collection of User
+               Accounts that have access to this folder.  The
+               {{object|.UserGroup.{i}.}} referenced by this
+               parameter MUST exist within the same
+               StorageService instance.";
+          }
+          leaf Permissions {
+            type uint32 {
+              range "0..7";
+            }
+            default "7";
+            description
+              "What permissions the group members have over this
+               {{object|.LogicalVolume.{i}.Folder.{i}.}}
+               instance.  This is an integer value like the xNIX
+               systems use for access permissions, meaning that
+               it is a 3-bit field with the following structure:
+            
+               :100 = read field
+            
+               :010 = write field
+            
+               :001 = execute field";
+          }
+        }
+
+        container Quota {
+          description
+            "This object allows the configuration of per-folder
+             storage quota management.";
+          leaf Enable {
+            type boolean;
+            default "false";
+            description
+              "Enables or disables quota management for this folder.";
+          }
+          leaf Capacity {
+            type uint32;
+            description
+              "Maximum size in {{units}} of the quota for this
+               folder.";
+          }
+          leaf UsedSpace {
+            type uint32;
+            config false;
+            description
+              "Current size in {{units}} of this folder.";
+          }
+          leaf ThresholdLimit {
+            type uint32;
+            default "0";
+            description
+              "This value is specified in {{units}} and controls
+               when {{param|ThresholdReached}} will have its
+               value altered.  If the value of
+               {{param|UsedSpace}} plus the value of this
+               parameter is greater than or equal to the value of
+               {{param|Capacity}} then the value of
+               {{param|ThresholdReached}} will be {{true}},
+               otherwise it will be {{false}}.  Setting the value
+               of this parameter to 0 will disable the
+               Thresholding mechanism.";
+          }
+          leaf ThresholdReached {
+            type boolean;
+            config false;
+            default "false";
+            description
+              "When {{param|ThresholdLimit}} > 0 and
+               {{param|UsedSpace}} + {{param|ThresholdLimit}} >=
+               {{param|Capacity}} this will be {{true}}, else
+               {{false}}.";
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+module: StorageService
+   +--rw StorageService* [Alias]
+      +--rw Enable?           boolean
+      +--ro Capabilities
+      |  +--ro FTPCapable?                  boolean
+      |  +--ro SFTPCapable?                 boolean
+      |  +--ro HTTPCapable?                 boolean
+      |  +--ro HTTPSCapable?                boolean
+      |  +--ro HTTPWritable?                boolean
+      |  +--ro SupportedNetworkProtocols?   enumeration
+      |  +--ro SupportedFileSystemTypes?    enumeration
+      |  +--ro SupportedRaidTypes?          enumeration
+      |  +--ro VolumeEncryptionCapable?     boolean
+      +--rw NetInfo
+      |  +--rw HostName?     string
+      |  +--rw DomainName?   string
+      +--rw UserGroup* [GroupName]
+      |  +--rw Enable?      boolean
+      |  +--rw GroupName    string
+      +--rw UserAccount* [Username]
+      |  +--rw Enable?                   boolean
+      |  +--rw Username                  string
+      |  +--rw Password?                 string
+      |  +--rw UserGroupParticipation?   string
+      |  +--rw AllowFTPAccess?           boolean
+      |  +--rw AllowHTTPAccess?          boolean
+      +--rw NetworkServer
+      |  +--rw AFPEnable?                boolean
+      |  +--rw NFSEnable?                boolean
+      |  +--rw SMBEnable?                boolean
+      |  +--rw NetworkProtocolAuthReq?   boolean
+      +--rw FTPServer
+      |  +--rw Enable?          boolean
+      |  +--ro Status?          enumeration
+      |  +--rw MaxNumUsers?     uint32
+      |  +--rw IdleTime?        uint32
+      |  +--rw PortNumber?      uint32
+      |  +--rw AnonymousUser
+      |     +--rw Enable?           boolean
+      |     +--rw StartingFolder?   string
+      |     +--rw ReadOnlyAccess?   boolean
+      +--rw SFTPServer
+      |  +--rw Enable?        boolean
+      |  +--ro Status?        enumeration
+      |  +--rw MaxNumUsers?   uint32
+      |  +--rw IdleTime?      uint32
+      |  +--rw PortNumber?    uint32
+      +--rw HTTPServer
+      |  +--rw Enable?               boolean
+      |  +--ro Status?               enumeration
+      |  +--rw MaxNumUsers?          uint32
+      |  +--rw IdleTime?             uint32
+      |  +--ro HTTPWritingEnabled?   boolean
+      |  +--rw PortNumber?           uint32
+      |  +--rw AuthenticationReq?    boolean
+      +--rw HTTPSServer
+      |  +--rw Enable?               boolean
+      |  +--ro Status?               enumeration
+      |  +--rw MaxNumUsers?          uint32
+      |  +--rw IdleTime?             uint32
+      |  +--ro HTTPWritingEnabled?   boolean
+      |  +--rw PortNumber?           uint32
+      |  +--rw AuthenticationReq?    boolean
+      +--rw PhysicalMedium* [Name]
+      |  +--rw Name               string
+      |  +--ro Vendor?            string
+      |  +--ro Model?             string
+      |  +--ro SerialNumber?      string
+      |  +--ro FirmwareVersion?   string
+      |  +--ro ConnectionType?    enumeration
+      |  +--ro Removable?         boolean
+      |  +--ro Capacity?          uint32
+      |  +--ro Status?            enumeration
+      |  +--ro Uptime?            uint32
+      |  +--ro SMARTCapable?      boolean
+      |  +--ro Health?            enumeration
+      |  +--ro HotSwappable?      boolean
+      +--rw StorageArray* [PhysicalMediumReference]
+      |  +--rw Name?                      string
+      |  +--ro Status?                    enumeration
+      |  +--rw Enable?                    boolean
+      |  +--rw RaidType?                  string
+      |  +--ro UsableCapacity?            uint32
+      |  +--rw PhysicalMediumReference    string
+      +--rw LogicalVolume* [Name]
+         +--rw Name                 string
+         +--ro Status?              enumeration
+         +--rw Enable?              boolean
+         +--rw PhysicalReference?   string
+         +--ro FileSystem?          string
+         +--rw Capacity?            uint32
+         +--ro UsedSpace?           uint32
+         +--rw ThresholdLimit?      uint32
+         +--ro ThresholdReached?    boolean
+         +--ro Encrypted?           boolean
+         +--rw Folder* [Name]
+            +--rw Name                 string
+            +--rw Enable?              boolean
+            +--rw UserAccountAccess?   uint32
+            +--rw UserAccess* [UserReference]
+            |  +--rw Enable?          boolean
+            |  +--rw UserReference    string
+            |  +--rw Permissions?     uint32
+            +--rw GroupAccess* [GroupReference]
+            |  +--rw Enable?           boolean
+            |  +--rw GroupReference    string
+            |  +--rw Permissions?      uint32
+            +--rw Quota
+               +--rw Enable?             boolean
+               +--rw Capacity?           uint32
+               +--ro UsedSpace?          uint32
+               +--rw ThresholdLimit?     uint32
+               +--ro ThresholdReached?   boolean
