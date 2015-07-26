@@ -190,21 +190,21 @@
     </parameter>
     <object name="dimmer.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
         numEntriesParameter="dimmerNumberOfEntries" dmr:noUniqueKeys="true">
-      <parameter name="bistate" access="readOnly">
+      <parameter name="bs" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.bistate." targetType="row"/>
           </string>
         </syntax>
       </parameter>
-      <parameter name="intensity" access="readOnly">
+      <parameter name="int" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.intensity." targetType="row"/>
           </string>
         </syntax>
       </parameter>
-      <parameter name="energy" access="readOnly">
+      <parameter name="en" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.energy." targetType="row"/>
@@ -217,13 +217,13 @@
         <parameter ref="dimmerNumberOfEntries" requirement="readOnly"/>        
       </object>
       <object ref="Device.Objects.dimmer.{i}." requirement="present">
-        <parameter ref="bistate" requirement="readOnly"/>        
-        <parameter ref="intensity" requirement="readOnly"/>        
+        <parameter ref="bs" requirement="readOnly"/>        
+        <parameter ref="int" requirement="readOnly"/>        
       </object>
     </profile>
     <profile name="dimmer:1" extends="dimmer-basic:1 energy:1">
       <object ref="Device.Objects.dimmer.{i}." requirement="present">
-        <parameter ref="energy" requirement="readOnly"/>        
+        <parameter ref="en" requirement="readOnly"/>        
       </object>
     </profile>
   </component>
@@ -239,7 +239,7 @@
     </parameter>
     <object name="switch.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
         numEntriesParameter="switchNumberOfEntries" dmr:noUniqueKeys="true">
-      <parameter name="bistate" access="readOnly">
+      <parameter name="bs" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.bistate." targetType="row"/>
@@ -252,7 +252,7 @@
         <parameter ref="switchNumberOfEntries" requirement="readOnly"/>        
       </object>
       <object ref="Device.Objects.switch.{i}." requirement="present">
-        <parameter ref="bistate" requirement="readOnly"/>        
+        <parameter ref="bs" requirement="readOnly"/>        
       </object>
     </profile>
   </component>
@@ -268,14 +268,14 @@
     </parameter>
     <object name="ceiling-fan.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="ceiling-fanNumberOfEntries" dmr:noUniqueKeys="true">
-      <parameter name="switch" access="readOnly">
+      <parameter name="sw" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
           </string>
         </syntax>
       </parameter>
-      <parameter name="dimmer" access="readOnly">
+      <parameter name="dim" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.dimmer." targetType="row"/>
@@ -288,8 +288,8 @@
         <parameter ref="ceiling-fanNumberOfEntries" requirement="readOnly"/>        
       </object>
       <object ref="Device.Objects.ceiling-fan.{i}." requirement="present">
-        <parameter ref="switch" requirement="readOnly"/>        
-        <parameter ref="dimmer" requirement="readOnly"/>        
+        <parameter ref="sw" requirement="readOnly"/>        
+        <parameter ref="dim" requirement="readOnly"/>        
       </object>
     </profile>
   </component>
@@ -306,14 +306,14 @@
     </parameter>
     <object name="my-switch.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="my-switchNumberOfEntries" dmr:noUniqueKeys="true">
-      <parameter name="switch" access="readOnly">
+      <parameter name="sw" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
           </string>
         </syntax>
       </parameter>
-      <parameter name="my-switch-parameter" access="readWrite">
+      <parameter name="my-swp" access="readWrite">
         <syntax>
           <boolean/>
         </syntax>
@@ -324,8 +324,8 @@
         <parameter ref="my-switchNumberOfEntries" requirement="readOnly"/>        
       </object>
       <object ref="Device.Objects.my-switch.{i}." requirement="present">
-        <parameter ref="switch" requirement="readOnly"/>        
-        <parameter ref="my-switch-parameter" requirement="readWrite"/>        
+        <parameter ref="sw" requirement="readOnly"/>        
+        <parameter ref="my-swp" requirement="readWrite"/>        
       </object>
     </profile>
   </component>
@@ -333,7 +333,7 @@
   <!-- model that illustrates usage -->
   <model name="flat-example:1.0">
     <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
-      <parameter name="switch" access="readOnly">
+      <parameter name="sw1" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
@@ -341,7 +341,15 @@
         </syntax>
       </parameter>
       
-      <parameter name="dimmer" access="readOnly">
+      <parameter name="sw2" access="readOnly">
+        <syntax>
+          <string>
+            <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
+          </string>
+        </syntax>
+      </parameter>
+      
+      <parameter name="dim" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.dimmer." targetType="row"/>
@@ -349,7 +357,7 @@
         </syntax>
       </parameter>
       
-      <parameter name="ceiling-fan" access="readOnly">
+      <parameter name="fan" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.ceiling-fan." targetType="row"/>
@@ -357,7 +365,7 @@
         </syntax>
       </parameter>
       
-      <parameter name="my-switch-1" access="readOnly">
+      <parameter name="my-sw1" access="readOnly">
         <syntax>
           <string>
             <pathRef refType="strong" targetParent=".Objects.switch." targetType="row"/>
@@ -365,7 +373,7 @@
         </syntax>
       </parameter>
       
-      <parameter name="my-switch-arrayNumberOfEntries" access="readOnly">
+      <parameter name="my-swaNumberOfEntries" access="readOnly">
         <description>
           {{numentries}}
         </description>
@@ -375,8 +383,8 @@
       </parameter>
     </object>
 
-    <object name="Device.my-switch-array.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
-      numEntriesParameter="my-switch-arrayNumberOfEntries" dmr:noUniqueKeys="true">
+    <object name="Device.my-swa.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="my-swaNumberOfEntries" dmr:noUniqueKeys="true">
       <parameter name="my-switch" access="readOnly">
         <syntax>
           <string>

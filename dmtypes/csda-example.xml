@@ -120,28 +120,28 @@
   </component>
   
   <component name="dimmer">
-    <object name="bistate." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="bs." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="bistate"/>
     </object>
-    <object name="intensity." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="int." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="intensity"/>
     </object>
-    <object name="energy." access="readOnly" minEntries="0" maxEntries="1">
+    <object name="en." access="readOnly" minEntries="0" maxEntries="1">
       <component ref="energy"/>
     </object>
   </component>
 
   <component name="switch">
-    <object name="bistate." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="bs." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="bistate"/>
     </object>    
   </component>
 
   <component name="ceiling-fan">
-    <object name="switch." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="sw." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="switch"/>
     </object>    
-    <object name="dimmer." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="dim." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="dimmer"/>
     </object>    
   </component>
@@ -149,7 +149,7 @@
   <!-- these are additional examples -->
   <component name="my-switch">
     <component ref="switch"/>
-    <parameter name="my-switch-parameter" access="readWrite">
+    <parameter name="my-swp" access="readWrite">
       <syntax>
         <boolean/>
       </syntax>
@@ -159,7 +159,7 @@
   <!-- model that illustrates usage -->
   <model name="csda-example:1.0">
     <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
-      <parameter name="my-switch-arrayNumberOfEntries" access="readOnly">
+      <parameter name="my-swaNumberOfEntries" access="readOnly">
         <description>
           {{numentries}}
         </description>
@@ -169,24 +169,28 @@
       </parameter>
     </object>
 
-    <object name="Device.switch." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Device.sw1." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="switch"/>
     </object>
     
-    <object name="Device.dimmer." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Device.sw2." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="switch"/>
+    </object>
+    
+    <object name="Device.dim." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="dimmer"/>
     </object>
     
-    <object name="Device.ceiling-fan." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Device.fan." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="ceiling-fan"/>
     </object>
 
-    <object name="Device.my-switch-1." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Device.my-sw1." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="my-switch"/>
     </object>
     
-    <object name="Device.my-switch-array.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
-      numEntriesParameter="my-switch-arrayNumberOfEntries" dmr:noUniqueKeys="true">
+    <object name="Device.my-swa.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="my-swaNumberOfEntries" dmr:noUniqueKeys="true">
       <component ref="my-switch"/>
     </object>
     
