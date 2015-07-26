@@ -119,18 +119,14 @@
     </parameter>
   </component>
   
-  <component name="dimmer-basic">
+  <component name="dimmer">
     <object name="bistate." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="bistate"/>
     </object>
     <object name="intensity." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="intensity"/>
     </object>
-  </component>
-  
-  <component name="dimmer">
-    <component ref="dimmer-basic"/>
-    <object name="energy." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="energy." access="readOnly" minEntries="0" maxEntries="1">
       <component ref="energy"/>
     </object>
   </component>
@@ -146,7 +142,7 @@
       <component ref="switch"/>
     </object>    
     <object name="dimmer." access="readOnly" minEntries="1" maxEntries="1">
-      <component ref="dimmer-basic"/>
+      <component ref="dimmer"/>
     </object>    
   </component>
 
@@ -162,28 +158,31 @@
 
   <!-- model that illustrates usage -->
   <model name="csda-example:1.0">
-    <object name="ceiling-fan." access="readOnly" minEntries="1" maxEntries="1">
-      <component ref="ceiling-fan"/>
+    <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
+      <parameter name="my-switchNumberOfEntries" access="readOnly">
+        <description>
+          {{numentries}}
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
     </object>
 
-    <object name="sw1." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Device.switch." access="readOnly" minEntries="1" maxEntries="1">
       <component ref="switch"/>
     </object>
     
-    <object name="sw2." access="readOnly" minEntries="1" maxEntries="1">
-      <component ref="my-switch"/>
+    <object name="Device.dimmer." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="dimmer"/>
     </object>
     
-    <parameter name="nsw" access="readOnly">
-      <description>
-        {{numentries}}
-      </description>
-      <syntax>
-        <unsignedInt/>
-      </syntax>
-    </parameter>
-    <object name="sw.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
-      numEntriesParameter="nsw" dmr:noUniqueKeys="true">
+    <object name="Device.ceiling-fan." access="readOnly" minEntries="1" maxEntries="1">
+      <component ref="ceiling-fan"/>
+    </object>
+
+    <object name="Device.my-switch.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="my-switchNumberOfEntries" dmr:noUniqueKeys="true">
       <component ref="my-switch"/>
     </object>
     
