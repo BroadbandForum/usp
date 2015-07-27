@@ -27,6 +27,7 @@
     </parameter>
     <object name="bistate.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="bistateNumberOfEntries" dmr:noUniqueKeys="true">
+      <!--
       <parameter name="on" access="readWrite">
         <syntax command="true">
           <boolean/>
@@ -42,6 +43,7 @@
           <boolean/>
         </syntax>
       </parameter>
+      -->
       <parameter name="state" access="readWrite">
         <syntax>
           <boolean/>
@@ -69,6 +71,7 @@
     </parameter>
     <object name="intensity.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="intensityNumberOfEntries" dmr:noUniqueKeys="true">
+      <!--
       <parameter name="step_up" access="readWrite">
         <syntax command="true">
           <boolean/>
@@ -109,6 +112,7 @@
           <boolean/>
         </syntax>
       </parameter>
+      -->
       <parameter name="level" access="readWrite">
         <syntax>
           <int/>
