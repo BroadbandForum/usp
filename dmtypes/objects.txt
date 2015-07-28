@@ -1,12 +1,21 @@
-' this is valid PlantUML syntax
-' dmgen.py understands only a subset of PlantUML syntax
-
 @startuml
+
+' this is valid PlantUML class diagram syntax
+' plantumlparser.py understands only a subset
+
+'!define MY_SWITCH
+
+' XXX which primitive types can be assumed?
 
 hide empty fields
 hide empty methods
 
-' classes, fields and methods
+' aggregation: whole   o--  part (part poss shared; poss diff lifetimes)
+' composition: whole   *--  part (part owned; same lifetimes)
+' extension:   derived --|> base (or right to left)
+
+' including the role in the cardinality is a local convention; PlantUML doesn't
+' support association roles (and luckily doesn't parse cardinality)
 
 class bistate {
   +state: Boolean
@@ -18,7 +27,7 @@ class bistate {
 class intensity {
   +level: Int
   +ratio: Int
-  +fading: Int {readOnly}
+  +fading: Boolean {readOnly}
   +step_up()
   +step_down()
   +fade_auto()
@@ -30,45 +39,28 @@ class intensity {
 }
 
 class energy {
-  +consumption: Decimal
+  +consumption: Decimal {readOnly}
   +since: Int {readOnly}
   +instantaneous: Int {readOnly}
 }
 
-class dimmer {
-  +bs: bistate {readOnly}
-  +int: intensity {readOnly}
-  +en: energy {readOnly}
-}
+class switch
+switch "1" *-- "bs\n1" bistate
 
-class switch {
-  +bs: bistate {readOnly}
-}
+class dimmer
+dimmer "1" *-- "bs\n1" bistate
+dimmer "1" *-- "int\n1" intensity
+dimmer "1" *-- "en\n0..1" energy
 
-class ceiling_fan {
-  +sw: switch {readOnly}
-  +dim: dimmer {readOnly}
-}
+class ceiling_fan
+ceiling_fan "1" *-- "sw\n1" switch
+ceiling_fan "1" *-- "dim\n1" dimmer
 
+!ifdef MY_SWITCH
+my_switch --|> switch
 class my_switch {
   +my_swp: Boolean
 }
-
-' class relationships
-
-' aggregation: whole  o-- part (part poss shared; poss diff lifetimes)
-' composition: whole  *-- part (part owned; same lifetimes)
-' extension:   base  <|-- derived (or the other way round)
-
-switch "1" *-- "1" bistate
-
-dimmer "1" *-- "1" bistate
-dimmer "1" *-- "1" intensity
-dimmer "1" *-- "0..1" energy
-
-ceiling_fan "1" *-- "1" switch
-ceiling_fan "1" *-- "1" dimmer
-
-my_switch --|> switch
+!endif
 
 @enduml
