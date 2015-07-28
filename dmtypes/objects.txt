@@ -1,0 +1,74 @@
+' this is valid PlantUML syntax
+' dmgen.py understands only a subset of PlantUML syntax
+
+@startuml
+
+hide empty fields
+hide empty methods
+
+' classes, fields and methods
+
+class bistate {
+  +state: Boolean
+  +on()
+  +off()
+  +toggle()
+}
+
+class intensity {
+  +level: Int
+  +ratio: Int
+  +fading: Int {readOnly}
+  +step_up()
+  +step_down()
+  +fade_auto()
+  +fade_up()
+  +fade_down()
+  +fade_stop()
+  +max()
+  +min()
+}
+
+class energy {
+  +consumption: Decimal
+  +since: Int {readOnly}
+  +instantaneous: Int {readOnly}
+}
+
+class dimmer {
+  +bs: bistate {readOnly}
+  +int: intensity {readOnly}
+  +en: energy {readOnly}
+}
+
+class switch {
+  +bs: bistate {readOnly}
+}
+
+class ceiling_fan {
+  +sw: switch {readOnly}
+  +dim: dimmer {readOnly}
+}
+
+class my_switch {
+  +my_swp: Boolean
+}
+
+' class relationships
+
+' aggregation: whole  o-- part (part poss shared; poss diff lifetimes)
+' composition: whole  *-- part (part owned; same lifetimes)
+' extension:   base  <|-- derived (or the other way round)
+
+switch "1" *-- "1" bistate
+
+dimmer "1" *-- "1" bistate
+dimmer "1" *-- "1" intensity
+dimmer "1" *-- "0..1" energy
+
+ceiling_fan "1" *-- "1" switch
+ceiling_fan "1" *-- "1" dimmer
+
+my_switch --|> switch
+
+@enduml
