@@ -152,7 +152,7 @@ def p_error(t):
 
 parser = yacc.yacc()
 
-def parse(file, lexonly):
+def parse(file, lexonly=False):
     data = open(file).read()
 
     if lexonly:
