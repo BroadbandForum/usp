@@ -45,10 +45,10 @@ class energy {
 }
 
 class switch
-switch "1" *-- "bs\n1" bistate
+switch "1" *-- "1\nbs" bistate
 
 class dimmer
-dimmer "1" *-- "bs\n1" bistate
+dimmer "1" *-- "1\nbs" bistate
 dimmer "1" *-- "int\n1" intensity
 dimmer "1" *-- "en\n0..1" energy
 

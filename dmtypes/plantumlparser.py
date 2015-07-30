@@ -27,19 +27,94 @@ write_tables = False
 # parsed class tree (this is what's returned to the caller
 
 class Class:
-    _classes = []
-
-    def __init__(self, name, body):
-        self._name = name
-        self._body = body
-        Class._classes.append(self)
+    _classes = {}
 
     @staticmethod
-    def get_classes():
-        return Class._classes
+    def get(name):
+        # XXX yes I originally had Class._classes.get(name, Class(name)) and
+        #     then wondered why no class had more than one relationship!
+        return Class._classes.get(name) \
+            if name in Class._classes else Class(name)
+
+    @staticmethod
+    def get_classes(): return Class._classes
+
+    # XXX can one make a constructor private? simple answer: no
+    #     http://stackoverflow.com/questions/25040834
+    def __init__(self, name):
+        self._name = name
+        self._superclasses = []
+        self._associations = []
+        Class._classes[name] = self
+
+    def add_relationship(self, relationship):
+        class1 = relationship.get_class1()
+        rolecard1 = relationship.get_rolecard1()
+        relation = relationship.get_relation()
+        rolecard2 = relationship.get_rolecard2()
+        class2 = relationship.get_class2()
+        if class1 is not self:
+            raise ValueError(class1)
+        if relation not in (LAGGREG, LCOMPOS, REXTENS):
+            raise ValueError(relation)
+        if relation == REXTENS:
+            self._superclasses.append(class2)
+        else:
+            self._associations.append((class2, rolecard2))
+
+    def get_name(self): return self._name
         
     def __repr__(self):
-        return '<Class %s>' % self._name
+        superclasses = [s.get_name() for s in self._superclasses]
+
+        associations = ['%s:%s%s' % (r.get_role(), c.get_name(),
+                                       r.get_card_string())
+                        for c, r in self._associations]
+
+        info = ''
+        info += '(%s)' % ','.join(superclasses) if superclasses else ''
+        info += ' %s' % ' '.join(associations) if associations else ''
+        
+        return '<Class %s%s>' % (self._name, info)
+
+class Relationship:
+    def __init__(self, class1, rolecard1, relation, rolecard2, class2):   
+        self._class1 = class1
+        self._rolecard1 = rolecard1
+        self._relation = relation
+        self._rolecard2 = rolecard2
+        self._class2 = class2
+        class1.add_relationship(self)
+
+    def get_class1(self): return self._class1
+    def get_rolecard1(self): return self._rolecard1
+    def get_relation(self): return self._relation
+    def get_rolecard2(self): return self._rolecard2
+    def get_class2(self): return self._class2
+        
+    def __repr__(self):
+        return '<Relationship %s %s %s %s %s>' % \
+            (self._class1.get_name(), self._rolecard1, self._relation,
+             self._rolecard2, self._class2.get_name())
+
+class RoleCard:
+    def __init__(self, role, card):
+        self._role = role
+        self._card = card
+
+    # XXX better to have a Card class
+    def get_card_string(self):
+        card = self._card
+        # XXX assumes len(card) is 2 if tuple
+        (min, max) = card if type(card) is tuple else (card, card)
+        return '' if max == min and max == 1 else \
+            min if max == min else '[%s..%s]' % (min, max)
+        
+    def get_role(self): return self._role
+    def get_card(self): return self._card
+        
+    def __repr__(self):
+        return '<RoleCard %s %s>' % (self._role, self._card)
 
 # lexing rules
 
@@ -63,12 +138,22 @@ tokens = ['DOTDOT', 'LAGGREG', 'RAGGREG', 'LCOMPOS', 'RCOMPOS',
 
 t_DOTDOT  = r'\.\.'
 t_ESCAPE  = r'\\[a-z]'
+
 t_LAGGREG = r'o--'
 t_RAGGREG = r'--o'
 t_LCOMPOS = r'\*--'
 t_RCOMPOS = r'--\*'
 t_LEXTENS = r'<\|--'
 t_REXTENS = r'--\|>'
+
+# XXX should do something cleverer here (c.f. reserved words) that avoids
+#     need for later swapping logic
+LAGGREG = r'o--'
+RAGGREG = r'--o'
+LCOMPOS = r'*--'
+RCOMPOS = r'--*'
+LEXTENS = r'<|--'
+REXTENS = r'--|>'
 
 literals = r'!@:"+{}()'
 
@@ -128,15 +213,20 @@ def p_hide_directive(t):
                       | HIDE EMPTY METHODS EOL'''
 
 def p_class_statement(t):
-    '''class_statement : CLASS NAME class_body EOL'''
-    t[0] = Class(t[2], t[3])
+    '''class_statement : CLASS class_name class_body EOL'''
 
+def p_class_name(t):
+    '''class_name : NAME'''
+    t[0] = Class.get(t[1])
+    
 def p_class_body(t):
     '''class_body : '{' EOL fields_and_methods '}'
                   | empty'''
+    t[0] = t[3] if len(t) > 3 else None
     
 def p_fields_and_methods(t):
     '''fields_and_methods : fields methods'''
+    t[0] = (t[1], t[2])
     
 def p_fields(t):
     '''fields : empty
@@ -158,26 +248,54 @@ def p_methods(t):
 def p_method(t):
     '''method : '+' NAME '(' ')' EOL'''
 
+# XXX should treat extension separately because role_and_card doesn't apply?
 def p_class_rel(t):
     '''class_rel : NAME role_and_card rel role_and_card NAME EOL'''
+    cl1 = Class.get(t[1])
+    rc1 = t[2]
+    rel = t[3]
+    rc2 = t[4]
+    cl2 = Class.get(t[5])
+    # for LAGGREG, LCOMPOS and REXTENS, the first class references the second
+    if rel not in (LAGGREG, LCOMPOS, REXTENS):
+        cl1, cl2 = cl2, cl1
+        rc1, rc2 = rc2, rc1
+        rel = {RAGGREG: LAGGREG, RCOMPOS: LCOMPOS, LEXTENS: REXTENS}[rel]
+    t[0] = Relationship(cl1, rc1, rel, rc2, cl2)
 
 def p_role_and_card(t):
-    '''role_and_card : '"' role card '"'
+    '''role_and_card : '"' role_then_card '"'
+                     | '"' card_then_role '"'
                      | empty'''
+    t[0] = t[2] if len(t) > 2 else None
 
+def p_role_then_card(t):
+    '''role_then_card : role escape card'''
+    t[0] = RoleCard(t[1], t[3])
+    
+def p_card_then_role(t):
+    '''card_then_role : card escape role'''
+    t[0] = RoleCard(t[3], t[1])
+    
 def p_role(t):
     '''role : NAME
-            | NAME ESCAPE
             | empty'''
+    t[0] = t[1]
+    
+def p_escape(t):
+    '''escape : ESCAPE
+              | empty'''
     
 def p_card(t):
     '''card : card_number
             | card_number DOTDOT card_number
             | empty'''
+    t[0] = (t[1], t[3]) if len(t) > 2 else t[1] if len(t) > 1 else None
 
 def p_card_number(t):
     '''card_number : NUMBER
                    | '*' '''
+    t[0] = t[1]
     
 def p_rel(t):
     '''rel : LAGGREG
@@ -186,6 +304,7 @@ def p_rel(t):
            | REXTENS
            | LCOMPOS
            | RCOMPOS'''
+    t[0] = t[1]
     
 def p_empty(p):
     '''empty :'''
@@ -233,7 +352,9 @@ def main(argv=None):
             lexonly = True
 
     for arg in args:
-        print(parse(arg, lexonly))
+        classes = parse(arg, lexonly)
+        for name, clazz in classes.items():
+            print(clazz)
 
 if __name__ == "__main__":
     sys.exit(main())
