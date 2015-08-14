@@ -24,7 +24,7 @@ debug = False
 # set to True to enable creating parsetab.py
 write_tables = False
 
-# parsed class tree (this is what's returned to the caller
+# parsed class tree (this is what's returned to the caller)
 
 class Class:
     _classes = {}
@@ -53,10 +53,12 @@ class Class:
         relation = relationship.get_relation()
         rolecard2 = relationship.get_rolecard2()
         class2 = relationship.get_class2()
+
         if class1 is not self:
             raise ValueError(class1)
         if relation not in (LAGGREG, LCOMPOS, REXTENS):
             raise ValueError(relation)
+
         if relation == REXTENS:
             self._superclasses.append(class2)
         else:
@@ -65,7 +67,7 @@ class Class:
     def get_name(self): return self._name
         
     def __repr__(self):
-        superclasses = [s.get_name() for s in self._superclasses]
+        superclasses = ['%s' % s.get_name() for s in self._superclasses]
 
         associations = ['%s:%s%s' % (r.get_role(), c.get_name(),
                                        r.get_card_string())
@@ -108,7 +110,7 @@ class RoleCard:
         # XXX assumes len(card) is 2 if tuple
         (min, max) = card if type(card) is tuple else (card, card)
         return '' if max == min and max == 1 else \
-            min if max == min else '[%s..%s]' % (min, max)
+            max if max == min else '[%s..%s]' % (min, max)
         
     def get_role(self): return self._role
     def get_card(self): return self._card
