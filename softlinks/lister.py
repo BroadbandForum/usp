@@ -5,11 +5,13 @@
 
 import getopt, os, os.path, sys
 
-options = {
+options_default = {
     'check': False,
     'follow': False,
     'maxfollow': 5
 }
+
+options = options_default.copy()
 
 state = {
     'visited': {}
@@ -96,13 +98,18 @@ def readfile(parent, file, islink):
 
 # output usage
 def usage():
-    print 'Usage: %s [--check] [--follow] [--help] [dirs]' % sys.argv[0]
+    print 'Usage: %s [--check] [--follow] [--help] [--maxfollow=n] [dirs]' % \
+        sys.argv[0]
     print
-    print '--check  check for (and avoid) duplicate results'
-    print '--follow follow soft links (implied by --check)'
-    print '--help   output help'
+    print '--check     check for (and avoid) duplicate results ' + \
+        '(default %s)' % options_default['check']
+    print '--follow    follow soft links (implied by --check; ' + \
+        'default %s)' % options_default['follow']
+    print '--maxfollow maximum number of soft links to follow ' + \
+        '(default %d)' % options_default['maxfollow']
+    print '--help      output help'
     print
-    print 'dirs     directories to list; default "Device"'
+    print 'dirs        directories to list; default "Device"'
 
 # main program
 if __name__ == '__main__':
@@ -110,7 +117,7 @@ if __name__ == '__main__':
     try:
         (opts, dirs) = getopt.getopt(sys.argv[1:],
                                      'cfhm:',
-                                     ['check', 'follow', 'help', 'maxfollow'])
+                                     ['check', 'follow', 'help', 'maxfollow='])
     except getopt.GetoptError as err:
         print str(err)
         usage()
