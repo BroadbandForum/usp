@@ -2,31 +2,43 @@
 #
 # trivial version of the Unix ls program to list a directory hierarchy with
 # indentation and following soft links
-#
-# XXX actually it's a bit more than ls... (and a lot less)
 
 import getopt, os, os.path, sys
 
+options = {
+    'check': False,
+    'follow': False,
+    'maxfollow': 5
+}
+
+state = {
+    'visited': {}
+}
+    
 # first argument is the parent path; second is the local directory name
-def report_dir(parent, dir, indent=0, check=False, follow=False, islink=False,
-               visited={}):
+def report_dir(parent, dir, indent=0, numfollow=0):
+    check = options['check']
+    follow = options['follow']
+    maxfollow = options['maxfollow']
+
+    islink = os.path.islink(os.path.join(parent, dir))
 
     # report directory
-    (value, already) = readfile(parent, dir, islink, visited)
+    (value, already) = readfile(parent, dir, islink)
     almsg = '*' if check and already else ''
-
+    flmsg = '!' if numfollow > maxfollow else ''
     dot = '' if islink else '.'
     pre = ' = ' if value else ''
     suf = '' if value else ''
-    print '%s%s%s%s%s%s%s' % ('  ' * indent, dir, dot, pre, value, almsg, suf)
+    print '%s%s%s%s%s%s%s%s' % ('  ' * indent, dir, dot, pre,
+                                value, almsg, flmsg, suf)
 
-    # return for already visited
+    # check for already visited
     if check and already:
         return
     
-    # check for too-deep recursion
-    if indent > 10:
-        print '%s... (too deep)' % ('  ' * indent)
+    # check for too many follows
+    if numfollow > maxfollow:
         return
 
     # full directory path
@@ -45,21 +57,29 @@ def report_dir(parent, dir, indent=0, check=False, follow=False, islink=False,
 
     # report files first
     for (file, islink) in files:
-        report_file(dpath, file, indent+1, check, islink, visited)
+        report_file(dpath, file, indent+1)
     
     # report directories last
     for (dir, islink) in dirs:
-        report_dir(dpath, dir, indent+1, check, follow, islink, visited)
+        report_dir(dpath, dir, indent+1,
+                   numfollow+1 if follow and islink else numfollow)
 
 # first argument is the parent path; second is the local file name
-def report_file(parent, file, indent=0, check=False, islink=False, visited={}):
-    (value, already) = readfile(parent, file, islink, visited)
-    almsg = '*' if check and already else ''
+def report_file(parent, file, indent):
+    check = options['check']
 
+    islink = os.path.islink(os.path.join(parent, file))
+
+    (value, already) = readfile(parent, file, islink)
+    almsg = '*' if check and already else ''
     print '%s%s = %s%s' % ('  ' * indent, file, value, almsg)
 
 # read value of link (if link) or file (otherwise)
-def readfile(parent, file, islink, visited={}):
+# XXX reading a link follows multiple levels of soft link, so subverts
+#     maxfollow; should really do this by hand
+def readfile(parent, file, islink):
+    visited = state['visited']
+    
     path = os.path.join(parent, file)
     ino = os.stat(path).st_ino
     already = visited.has_key(ino)
@@ -89,25 +109,24 @@ if __name__ == '__main__':
 
     try:
         (opts, dirs) = getopt.getopt(sys.argv[1:],
-                                     'cfh',
-                                     ['check', 'follow', 'help'])
+                                     'cfhm:',
+                                     ['check', 'follow', 'help', 'maxfollow'])
     except getopt.GetoptError as err:
         print str(err)
         usage()
         sys.exit(2)
 
-    check = False
-    follow = False
-    indent = 0
     for o, a in opts:
         if o in ('-c', '--check'):
-            check = True
-            follow = True
+            options['check'] = True
+            options['follow'] = True
         elif o in ('-f', '--follow'):
-            follow = True
+            options['follow'] = True
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
+        elif o in ('-m', '--maxfollow'):
+            options['maxfollow'] = int(a)
         else:
             assert False, 'unhandled option'
 
@@ -115,4 +134,4 @@ if __name__ == '__main__':
         dirs = ['Device']
 
     for dir in dirs:
-        report_dir('', dir, indent, check, follow)
+        report_dir('', dir)
