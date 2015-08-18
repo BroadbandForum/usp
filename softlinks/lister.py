@@ -3,6 +3,9 @@
 # trivial version of the Unix ls program to list a directory hierarchy with
 # indentation and following soft links
 
+# XXX combine --follow and --maxfollow (default 0); add --depth (tied to
+#     indent)
+
 import getopt, os, os.path, sys
 
 options_default = {
