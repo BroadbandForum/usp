@@ -56,7 +56,7 @@ class Class:
 
         if class1 is not self:
             raise ValueError(class1)
-        if relation not in (LAGGREG, LCOMPOS, REXTENS):
+        if relation not in (LAGGREGA, LAGGREG, LCOMPOSA, LCOMPOS, REXTENS):
             raise ValueError(relation)
 
         if relation == REXTENS:
@@ -69,8 +69,8 @@ class Class:
     def __repr__(self):
         superclasses = ['%s' % s.get_name() for s in self._superclasses]
 
-        associations = ['%s:%s%s' % (r.get_role(), c.get_name(),
-                                       r.get_card_string())
+        associations = ['%s:%s%s' % (r.get_role(c.get_name()), c.get_name(),
+                                     r.get_card_string())
                         for c, r in self._associations]
 
         info = ''
@@ -105,14 +105,27 @@ class RoleCard:
         self._card = card
 
     # XXX better to have a Card class
-    def get_card_string(self):
+    def _get_card_tuple(self):
         card = self._card
         # XXX assumes len(card) is 2 if tuple
-        (min, max) = card if type(card) is tuple else (card, card)
+        return card if type(card) is tuple else (card, card)
+    
+    def get_card_string(self):
+        (min, max) = self._get_card_tuple()
         return '' if max == min and max == 1 else \
             max if max == min else '[%s..%s]' % (min, max)
         
-    def get_role(self): return self._role
+    def get_role(self, class_name=None):
+        if self._role:
+            return self._role
+        elif class_name:
+            role = class_name.lower()
+            (min, max) = self._get_card_tuple()
+            if max == '*' or max > 1: role += 's'
+            return role
+        else:
+            return None
+
     def get_card(self): return self._card
         
     def __repr__(self):
@@ -134,34 +147,53 @@ reserved = {
     'startuml': 'STARTUML'
 }
 
-tokens = ['DOTDOT', 'LAGGREG', 'RAGGREG', 'LCOMPOS', 'RCOMPOS',
+tokens = ['DOTDOT', 'LAGGREGA', 'LAGGREG', 'RAGGREGA', 'RAGGREG',
+          'LCOMPOSA', 'LCOMPOS', 'RCOMPOSA', 'RCOMPOS',
           'LEXTENS', 'REXTENS', 'NAME', 'ESCAPE', 'NUMBER', 'EOL'] + \
     list(reserved.values()) 
 
-t_DOTDOT  = r'\.\.'
-t_ESCAPE  = r'\\[a-z]'
+t_DOTDOT   = r'\.\.'
+t_ESCAPE   = r'\\[a-z]'
 
-t_LAGGREG = r'o--'
-t_RAGGREG = r'--o'
-t_LCOMPOS = r'\*--'
-t_RCOMPOS = r'--\*'
-t_LEXTENS = r'<\|--'
-t_REXTENS = r'--\|>'
+#t_LAGGREGA = r'o-->'
+#t_LAGGREG  = r'o--'
+t_RAGGREGA = r'<--o'
+t_RAGGREG  = r'--o'
+t_LCOMPOSA = r'\*-->'
+t_LCOMPOS  = r'\*--'
+t_RCOMPOSA = r'<--\*'
+t_RCOMPOS  = r'--\*'
+t_LEXTENS  = r'<\|--'
+t_REXTENS  = r'--\|>'
 
 # XXX should do something cleverer here (c.f. reserved words) that avoids
 #     need for later swapping logic
-LAGGREG = r'o--'
-RAGGREG = r'--o'
-LCOMPOS = r'*--'
-RCOMPOS = r'--*'
+LAGGREGA = r'o-->'
+LAGGREG  = r'o--'
+RAGGREGA = r'<--o'
+RAGGREG  = r'--o'
+LCOMPOSA = r'*-->'
+LCOMPOS  = r'*--'
+RCOMPOSA = r'<--*'
+RCOMPOS  = r'--*'
 LEXTENS = r'<|--'
 REXTENS = r'--|>'
 
-literals = r'!@:"+{}()'
+literals = r'!@:"+{}()*'
 
 def t_COMMENT(t):
     r'\'.*'
     pass
+
+# XXX this is to ensure that LAGGREGA and LAGGREG are tokenized correctly;
+#     need to use functions to ensure they are checked before NAME
+def t_LAGGREGA(t):
+    r'o-->'
+    return t
+
+def t_LAGGREG(t):
+    r'o--'
+    return t
 
 def t_NAME(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -259,10 +291,11 @@ def p_class_rel(t):
     rc2 = t[4]
     cl2 = Class.get(t[5])
     # for LAGGREG, LCOMPOS and REXTENS, the first class references the second
-    if rel not in (LAGGREG, LCOMPOS, REXTENS):
+    if rel not in (LAGGREGA, LAGGREG, LCOMPOSA, LCOMPOS, REXTENS):
         cl1, cl2 = cl2, cl1
         rc1, rc2 = rc2, rc1
-        rel = {RAGGREG: LAGGREG, RCOMPOS: LCOMPOS, LEXTENS: REXTENS}[rel]
+        rel = {RAGGREGA: LAGGREGA, RAGGREG: LAGGREG,
+               RCOMPOSA: LCOMPOSA, RCOMPOS: LCOMPOS, LEXTENS: REXTENS}[rel]
     t[0] = Relationship(cl1, rc1, rel, rc2, cl2)
 
 def p_role_and_card(t):
@@ -300,12 +333,16 @@ def p_card_number(t):
     t[0] = t[1]
     
 def p_rel(t):
-    '''rel : LAGGREG
+    '''rel : LAGGREGA
+           | LAGGREG
+           | RAGGREGA
            | RAGGREG
-           | LEXTENS
-           | REXTENS
+           | LCOMPOSA
            | LCOMPOS
-           | RCOMPOS'''
+           | RCOMPOSA
+           | RCOMPOS
+           | LEXTENS
+           | REXTENS'''
     t[0] = t[1]
     
 def p_empty(p):
@@ -355,8 +392,8 @@ def main(argv=None):
 
     for arg in args:
         classes = parse(arg, lexonly)
-        for name, clazz in classes.items():
-            print(clazz)
+        for name, class_ in classes.items():
+            print(class_)
 
 if __name__ == "__main__":
     sys.exit(main())
