@@ -137,6 +137,7 @@ class RoleCard:
 reserved = {
     'class':    'CLASS',
     'define':   'DEFINE',
+    'else':     'ELSE',
     'empty':    'EMPTY',
     'endif':    'ENDIF',
     'enduml' :  'ENDUML',
@@ -240,6 +241,7 @@ def p_at_directive(t):
 def p_preproc_directive(t):
     '''preproc_directive : '!' DEFINE NAME EOL
                          | '!' IFDEF NAME EOL
+                         | '!' ELSE EOL
                          | '!' ENDIF EOL'''
 
 def p_hide_directive(t):
