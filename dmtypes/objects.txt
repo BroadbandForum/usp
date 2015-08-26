@@ -14,6 +14,10 @@ hide empty methods
 ' composition: whole   *--  part (part owned; same lifetimes)
 ' extension:   derived --|> base (or right to left)
 
+' number of hyphens controls arrow length
+' dots rather than hyphens create dotted arrows
+' can also add < or > to agg/comp arrows to indicate navigability
+
 ' including the role in the cardinality is a local convention; PlantUML doesn't
 ' support association roles (and luckily doesn't parse cardinality)
 
