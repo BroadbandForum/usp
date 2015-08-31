@@ -135,6 +135,7 @@ class RoleCard:
 
 # XXX shouldn't use so many (or any) reserved words
 reserved = {
+    'abstract': 'ABSTRACT',
     'class':    'CLASS',
     'define':   'DEFINE',
     'else':     'ELSE',
@@ -249,8 +250,12 @@ def p_hide_directive(t):
                       | HIDE EMPTY METHODS EOL'''
 
 def p_class_statement(t):
-    '''class_statement : CLASS class_name class_body EOL'''
+    '''class_statement : class_abstract CLASS class_name class_body EOL'''
 
+def p_class_abstract(t):
+    '''class_abstract : ABSTRACT
+                      | empty'''
+    
 def p_class_name(t):
     '''class_name : NAME'''
     t[0] = Class.get(t[1])
@@ -270,8 +275,12 @@ def p_fields(t):
               | fields field'''
     
 def p_field(t):
-    '''field : '+' NAME ':' NAME field_options EOL'''
+    '''field : visibility NAME ':' NAME field_options EOL'''
 
+def p_visibility(t):
+    '''visibility : '+'
+                 | empty'''
+    
 def p_field_options(t):
     '''field_options : '{' NAME '}'
                      | empty'''
@@ -282,8 +291,21 @@ def p_methods(t):
                | methods method'''
     
 def p_method(t):
-    '''method : '+' NAME '(' ')' EOL'''
+    '''method : visibility NAME '(' ')' method_result method_modifiers EOL'''
 
+def p_method_result(t):
+    '''method_result : ':' NAME
+                     | empty'''
+    
+def p_method_modifiers(t):
+    '''method_modifiers : empty
+                        | method_modifier
+                        | method_modifiers method_modifier'''
+
+def p_method_modifier(t):
+    '''method_modifier : '{' ABSTRACT '}'
+                       | '{' NAME '}' '''
+    
 # XXX should treat extension separately because role_and_card doesn't apply?
 def p_class_rel(t):
     '''class_rel : NAME role_and_card rel role_and_card NAME EOL'''
