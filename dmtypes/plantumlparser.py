@@ -54,24 +54,25 @@ class Note:
 
 class Namespace:
     _namespaces = {}
-    _current = None
+    _stack = []
     
     @staticmethod
-    def open(name):
+    def push(name):
         return Namespace._namespaces.get(name) \
             if name in Namespace._namespaces else Namespace(name)
 
     @staticmethod
-    def close():
-        Namespace._current = None
+    def pop():
+        Namespace._stack.pop()
         
     @staticmethod
-    def get_current(): return Namespace._current
+    def top():
+        return Namespace._stack[-1] if Namespace._stack else None
 
     def __init__(self, name):
         self._name = name
-        self._parent = Namespace._current
-        Namespace._current = self
+        self._parent = Namespace.top()
+        Namespace._stack.append(self)
 
     def get_path(self):
         if self._parent is None:
@@ -88,7 +89,7 @@ class Namespace:
 class NamespacedItem:
     @staticmethod
     def get_full_name(name):
-        current_namespace = Namespace.get_current()
+        current_namespace = Namespace.top()
         if name.startswith('.'):
             path = name[1:]
         elif not current_namespace:
@@ -387,7 +388,7 @@ def t_LAGGREG(t):
     r'o--'
     return t
 
-# XXX this is to ensure that DOTDOR is tokenized correctly (as above)
+# XXX this is to ensure that DOTDOT is tokenized correctly (as above)
 def t_DOTDOT(t):
     r'\.\.'
     return t
@@ -461,14 +462,14 @@ def p_ns_statement(t):
 
 def p_ns_name(t):
     '''ns_name : NAME'''
-    t[0] = Namespace.open(t[1])
+    t[0] = Namespace.push(t[1])
 
 def p_ns_body(t):
     '''ns_body : other_statements'''
-    
+
 def p_ns_close(t):
     '''ns_close : empty'''
-    Namespace.close()
+    Namespace.pop()
     
 def p_enum_statement(t):
     '''enum_statement : ENUM enum_name '{' EOL values '}' '''
@@ -586,7 +587,7 @@ def p_role_and_card(t):
     '''role_and_card : '"' role_then_card '"'
                      | '"' card_then_role '"'
                      | empty'''
-    t[0] = t[2] if len(t) > 2 else None
+    t[0] = t[2] if len(t) > 2 else RoleCard('', 1)
 
 def p_role_then_card(t):
     '''role_then_card : role escape card'''
