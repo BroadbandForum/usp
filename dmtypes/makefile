@@ -1,8 +1,8 @@
 XML = $(wildcard *.xml)
-TXT = $(wildcard *.txt)
+UML = $(wildcard *.uml)
 
 HTML = $(XML:%.xml=%.html)
-PNG = $(TXT:%.txt=%.png)
+PNG = $(UML:%.uml=%.png)
 
 DMDIR = $(HOME)/links/cwmp-ils
 
@@ -23,7 +23,7 @@ clean:
 %.html: %.xml
 	$(REPORT) $(REPORTFLAGS) --report=html $< --outfile=$@
 
-%.png: %.txt
+%.png: %.uml
 	$(PLANTUMLCLIENT) $<
 
 .DELETE_ON_ERROR:
