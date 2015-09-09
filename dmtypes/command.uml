@@ -64,8 +64,8 @@ Request "1" *--> "1\nstate" RequestState
 
 ' XXX maybe not helpful to show these methods?
 class Requests {
-  list(): Request[] {static}
-  find(commandKey: String): Request 
+  'list(): Request[] {static}
+  'find(commandKey: String): Request 
 }
 
 Requests "1" *--> "*" Request

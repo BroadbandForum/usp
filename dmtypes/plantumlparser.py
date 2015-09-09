@@ -84,8 +84,7 @@ class Namespace:
         return '<Namespace %s>' % self.get_path()
 
 # XXX there is no explicit association with a Namespace object; instead the
-#     current namespace is used to derive the fully-qualified item name; this
-#     isn't ideal
+#     current namespace is used to derive the fully-qualified item name
 class NamespacedItem:
     @staticmethod
     def get_full_name(name):
