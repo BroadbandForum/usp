@@ -1,0 +1,27 @@
+@startuml
+
+title Asynchronous Operation
+
+hide footbox
+
+participant Controller as C
+participant Agent as A
+participant Worker as W
+
+C -> A : Request
+activate A #darksalmon
+
+A -> W : <<begin>>
+activate W
+
+A -> C : ACK/Response
+deactivate A
+
+W -> A : <<end>>
+deactivate W
+activate A
+
+A -> C : Completion
+deactivate A
+
+@enduml

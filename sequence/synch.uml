@@ -1,0 +1,25 @@
+@startuml
+
+title Synchronous Operation
+
+hide footbox
+
+participant Controller as C
+participant Agent as A
+participant Worker as W
+
+C -> A : Request
+activate A #darksalmon
+
+A -> C : ACK?
+
+A -> W : <<begin>>
+activate W
+
+W -> A : <<end>>
+deactivate W
+
+A -> C : Response
+deactivate A
+
+@enduml
