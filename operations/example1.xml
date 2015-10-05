@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dm:document
+  xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-6"
+  xmlns:dmr="urn:broadband-forum-org:cwmp:datamodel-report-0-1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-6
+                        cwmp-datamodel-1-6.xsd
+                      urn:broadband-forum-org:cwmp:datamodel-report-0-1
+                        http://www.broadband-forum.org/cwmp/cwmp-datamodel-report.xsd"
+  spec="urn:broadband-forum-org:example1"
+  file="example1.xml">
+  <description>
+    DM instance that illustrated USP commands.
+    Note that the HTML shows commands as objects. They can be distinguished because command names do not end in periods.
+  </description>
+
+  <bibliography>
+    <reference id="REF">
+      <name>Placeholder</name>
+    </reference>
+  </bibliography>
+
+  <component name="CommandContext">
+    <parameter name="Target" access="readOnly">
+      <description>
+        {{reference|the object on which this command was invoked|delete}}
+      </description>
+      <syntax>
+        <string>
+          <pathRef targetType="object" refType="strong"/>
+        </string>
+      </syntax>
+    </parameter>
+  </component>
+  
+  <!-- This pattern can be used for defining any type of command -->
+
+  <component name="RebootCommandInputs">
+  </component>
+  
+  <component name="RebootCommandOutputs">
+  </component>
+  
+  <component name="RebootCommand">
+    <command name="Reboot">
+      <description>
+        Reboot the entity represented by the object on which this command is invoked.
+      </description>
+      <component ref="RebootCommandInputs"/>
+      <component ref="RebootCommandOutputs"/>
+    </command>
+  </component>
+
+  <component name="RebootCommandInstance">
+    <component ref="CommandContext"/>
+    <component ref="RebootCommandInputs"/>
+    <component ref="RebootCommandOutputs"/>
+  </component>
+
+  <component name="DownloadCommandInputs">
+    <object name="Input." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        Input arguments. If not present, input arguments are assumed to be all writable arguments.
+      </description>
+      <parameter name="URL" access="readWrite">
+        <description>
+          URL, as defined in {{bibref|REF}}, specifying the source file location...
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="FileType" access="readWrite">
+        <description>
+          An integer followed by a space followed by the file type description. Only the following values are currently defined for the {{param}} argument:
+          {{enum}}
+          The following format is defined to allow the unique definition of vendor-specific file types:
+          * "X &lt;VENDOR&gt; &lt;Vendor-specific identifier&gt;"
+          ...
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="64"/>
+            <enumeration value="1 Firmware Upgrade Image"/>
+            <enumeration value="2 Web Content"/>
+            <enumeration value="3 Vendor Configuration File"/>
+            <enumeration value="4 Tone File"/>
+            <enumeration value="5 Ringer File"/>
+          </string>
+          <default type="object" value="1 Firmware Upgrade Image"/>
+        </syntax>
+      </parameter>
+      <parameter name="Username" access="readWrite">
+        <description>
+          Username to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+          <default type="object" value=""/>
+        </syntax>
+      </parameter>
+      <parameter name="Password" access="readWrite">
+        <description>
+          Password to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+          <default type="object" value=""/>
+        </syntax>
+      </parameter>
+      <parameter name="FileSize" access="readWrite">
+        <description>
+          The size of the file to be downloaded in bytes.
+          The {{param}} argument is intended as a hint to the CPE, which the CPE MAY use to determine if it has sufficient space for the file to be downloaded, or to prepare space to accept the file.
+          ...
+        </description>
+        <syntax>
+          <unsignedInt/>
+          <default type="object" value="0"/>
+        </syntax>
+      </parameter>
+      <parameter name="TargetFileName" access="readWrite">
+        <description>
+          The name of the file to be used on the target file system...
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+          <default type="object" value=""/>
+        </syntax>
+      </parameter>
+      <parameter name="DelaySeconds" access="readWrite">
+        <description>
+          This argument has different meanings for Unicast and Multicast downloads...
+        </description>
+        <syntax>
+          <unsignedInt/>
+          <default type="object" value="0"/>
+        </syntax>
+      </parameter>
+      <parameter name="SuccessURL" access="readWrite">
+        <description>
+          When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download completes successfully...
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+          <default type="object" value=""/>
+        </syntax>
+      </parameter>
+      <parameter name="FailureURL" access="readWrite">
+        <description>
+          When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download does not complete successfully...
+        </description>
+        <syntax>
+          <string>
+            <size maxLength="256"/>
+          </string>
+          <default type="object" value=""/>
+        </syntax>
+      </parameter>      
+    </object>
+  </component>
+
+  <component name="DownloadCommandOutputs">
+    <object name="Output." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        Output arguments. If not present, output arguments are assumed to be all read-only arguments.
+      </description>
+      <parameter name="Status" access="readOnly">
+        <description>
+          A successful response to this method returns an integer enumeration defined as follows...
+        </description>
+        <syntax>
+          <int>
+            <range minInclusive="0" maxInclusive="1"/>
+          </int>
+          <default type="object" value="1"/>
+        </syntax>
+      </parameter>
+      <parameter name="StartTime" access="readOnly">
+        <description>
+          The date and time download was started in UTC...
+        </description>
+        <syntax>
+          <dateTime/>
+          <default type="object" value="0001-01-01T00:00:00Z"/>
+        </syntax>
+      </parameter>
+      <parameter name="CompleteTime" access="readOnly">
+        <description>
+          The date and time the download was fully completed and applied in UTC...
+        </description>
+        <syntax>
+          <dateTime/>
+          <default type="object" value="0001-01-01T00:00:00Z"/>
+        </syntax>
+      </parameter>    
+    </object>
+  </component>
+
+  <component name="DownloadCommand">
+    <command name="Download">
+      <description>
+        Download a file to the entity represented by the object on which this command is invoked.
+        {{issue|Argument names are shown with leading "#" characters as a reminder that they don't exist in the data model.}}
+      </description>
+      <component ref="DownloadCommandInputs"/>
+      <component ref="DownloadCommandOutputs"/>
+    </command>
+  </component>
+  
+  <component name="DownloadCommandInstance">
+    <component ref="CommandContext"/>
+    <component ref="DownloadCommandInputs"/>
+    <component ref="DownloadCommandOutputs"/>
+  </component>
+    
+  <model name="Command:1.0">
+    <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        Physical device. The Reboot and Download commands operate on the device.
+      </description>
+      <parameter name="ExecEnvNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
+      <parameter name="LightNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
+    </object>
+
+    <!-- XXX could reference the components from within Device. but this mucks up the ordering in the report -->
+    <component path="Device." ref="RebootCommand"/>
+    <component path="Device." ref="DownloadCommand"/>
+
+    <object name="Device.ExecEnv.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="ExecEnvNumberOfEntries" dmr:noUniqueKeys="true">
+      <description>
+        Execution environments. The Reboot command operates on the execution environment instance.
+      </description>
+      <component ref="RebootCommand"/>
+    </object>
+
+    <object name="Device.Light.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="LightNumberOfEntries">
+      <uniqueKey functional="false">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      <parameter name="Name" access="readOnly">
+        <description>
+          Name of the light.
+        </description>
+        <syntax><string/></syntax>
+      </parameter>
+      <command name="On">
+        <description>
+          Switch the light on.
+          {{issue|This is a parameterless command that produces no results. This is very similar to a legacy CWMPv1 command parameter.}}
+        </description>
+      </command>
+      <command name="Toggle">
+        <description>
+          Toggle the state of the light.
+        </description>
+        <parameter name="WasOn" access="readOnly">
+          <description>
+            Whether the light was on.
+          </description>
+          <syntax><boolean/></syntax>
+        </parameter>
+      </command>
+    </object>
+
+    <object name="Device.Operations." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        Data model operations. This object is automatically maintained by the USP Agent.
+        * The {{object|Commands}} object contains a table for each supported command, e.g. {{object|Commands.Reboot}}. These tables contain an entry for each active command.
+        * The {{object|Request}} table contains an entry for each active request. Each ''Request'' references the corresponding command instance.
+      </description>
+      <parameter name="RequestNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
+    </object>
+    
+    <object name="Device.Operations.Commands." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        Active commands.
+      </description>
+      <parameter name="RebootNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
+      <parameter name="DownloadNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
+    </object>
+    
+    <object name="Device.Operations.Commands.Reboot.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="RebootNumberOfEntries" dmr:noUniqueKeys="true">
+      <description>
+        Active Reboot commands.
+      </description>
+      <component ref="RebootCommandInstance"/>      
+    </object>
+    
+    <object name="Device.Operations.Commands.Download.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="DownloadNumberOfEntries" dmr:noUniqueKeys="true">
+      <description>
+        Active Download commands.
+      </description>
+      <component ref="DownloadCommandInstance"/>      
+    </object>
+    
+    <object name="Device.Operations.Request.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="RequestNumberOfEntries">
+      <description>
+        Device operations. {{object}} instances are created using USP ''Operate'' messages. Only ''Operate'' messages with ''async''=''true'' will create a {{object}} instance in the data model.
+        An ''Operate'' message is associated with a command; commands are declared using the DM ''command'' element (a legacy CWMPv1 command parameter is a parameterless USP command).
+        {{issue|{{param|CommandKey}} would be a unique key, but can't be because it might be empty. We could add a DM uniqueKey attribute to cover this case, or could require the device to assign a unique value when the Controller doesn't supply one. The latter is better?}}
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Command"/>
+      </uniqueKey>
+      <parameter name="Command" access="readOnly">
+        <description>
+          {{reference||delete}}
+          {{issue|It's not possible to list all the possible targets in this way. They should be listed by base type (''Command'') rather than by name.}}
+        </description>
+        <syntax>
+          <string>
+            <pathRef targetType="row" targetParent="#.Commands.Reboot. #.Commands.Download." refType="strong"/>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="CommandKey" access="readOnly">
+        <description>
+          The command key from the USP ''Operate'' message.
+        </description>
+        <syntax><string/></syntax>
+      </parameter>
+      <parameter name="State" access="readOnly">
+        <syntax>
+          <string>
+            <enumeration value="Requested"/>
+            <enumeration value="Active"/>
+            <enumeration value="Canceling"/>
+            <enumeration value="Canceled"/>
+            <enumeration value="Success"/>
+            <enumeration value="Error"/>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="Message" access="readOnly">
+        <description>
+          Generic error message.
+        </description>
+        <syntax><string/></syntax>
+      </parameter>
+      <parameter name="Detail" access="readOnly">
+        <description>
+          Detailed error message.
+        </description>
+        <syntax><string/></syntax>
+      </parameter>
+      <command name="Cancel">
+        <description>
+          Request cancelation of this {{object|#}}'s command.
+          This command completes immediately. If successul, {{param|#.State}} will immediately change to {{enum|Canceling|#.State}} and will change to {{enum|Canceled|#.State}} when the cancelation is complete.
+        </description>
+      </command>
+      <command name="Delete">
+        <description>
+          Request deletion of this {{object|#}} instance.
+          This command completes immediately.
+        </description>
+      </command>
+    </object>
+
+  </model>
+</dm:document>

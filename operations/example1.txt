@@ -1,0 +1,60 @@
+urn:broadband-forum-org:example1
+  model Command:1.0
+    object Device.
+      unsignedInt ExecEnvNumberOfEntries
+      unsignedInt LightNumberOfEntries
+      command Reboot
+      command Download
+        object Input.
+          string(256) URL (W)
+          string(64) FileType (W) [1 Firmware Upgrade Image]
+          string(256) Username (W) []
+          string(256) Password (W) []
+          unsignedInt FileSize (W) [0]
+          string(256) TargetFileName (W) []
+          unsignedInt DelaySeconds (W) [0]
+          string(256) SuccessURL (W) []
+          string(256) FailureURL (W) []
+        object Output.
+          int[0:1] Status [1]
+          dateTime StartTime [0001-01-01T00:00:00Z]
+          dateTime CompleteTime [0001-01-01T00:00:00Z]
+      object ExecEnv.{i}.
+        command Reboot
+      object Light.{i}.
+        string Name
+        command On
+        command Toggle
+          boolean WasOn
+      object Operations.
+        unsignedInt RequestNumberOfEntries
+        object Commands.
+          unsignedInt RebootNumberOfEntries
+          unsignedInt DownloadNumberOfEntries
+          object Reboot.{i}.
+            string Target
+          object Download.{i}.
+            string Target
+            object Input.
+              string(256) URL (W)
+              string(64) FileType (W) [1 Firmware Upgrade Image]
+              string(256) Username (W) []
+              string(256) Password (W) []
+              unsignedInt FileSize (W) [0]
+              string(256) TargetFileName (W) []
+              unsignedInt DelaySeconds (W) [0]
+              string(256) SuccessURL (W) []
+              string(256) FailureURL (W) []
+            object Output.
+              int[0:1] Status [1]
+              dateTime StartTime [0001-01-01T00:00:00Z]
+              dateTime CompleteTime [0001-01-01T00:00:00Z]
+        object Request.{i}.
+          string Command
+          string CommandKey
+          string State
+          string Message
+          string Detail
+          command Cancel
+          command Delete
+    profile 
