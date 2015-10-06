@@ -60,7 +60,7 @@
   <component name="DownloadCommandInputs">
     <object name="Input." access="readOnly" minEntries="1" maxEntries="1">
       <description>
-        Input arguments. If not present, input arguments are assumed to be all writable arguments.
+        Input arguments.
       </description>
       <parameter name="URL" access="readWrite">
         <description>
@@ -173,7 +173,7 @@
   <component name="DownloadCommandOutputs">
     <object name="Output." access="readOnly" minEntries="1" maxEntries="1">
       <description>
-        Output arguments. If not present, output arguments are assumed to be all read-only arguments.
+        Output arguments.
       </description>
       <parameter name="Status" access="readOnly">
         <description>
@@ -248,8 +248,9 @@
       <description>
         Execution environments. The Reboot command operates on the execution environment instance.
       </description>
-      <component ref="RebootCommand"/>
     </object>
+
+    <component path="Device.ExecEnv.{i}." ref="RebootCommand"/>
 
     <object name="Device.Light.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="LightNumberOfEntries">
@@ -265,7 +266,6 @@
       <command name="On">
         <description>
           Switch the light on.
-          {{issue|This is a parameterless command that produces no results. This is very similar to a legacy CWMPv1 command parameter.}}
         </description>
       </command>
       <command name="Toggle">
