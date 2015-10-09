@@ -3,6 +3,7 @@ urn:broadband-forum-org:example1
     object Device.
       unsignedInt ExecEnvNumberOfEntries
       unsignedInt LightNumberOfEntries
+      unsignedInt DimmerNumberOfEntries
       command Reboot
       command Download
         object Input.
@@ -24,8 +25,15 @@ urn:broadband-forum-org:example1
       object Light.{i}.
         string Name
         command On
+        command Off
         command Toggle
           boolean WasOn
+      object Dimmer.{i}.
+        string Name
+        command On
+          unsignedInt[0:100] Brightness (W) [100]
+          unsignedInt[0:100] PreviousBrightness
+        command Off
       object Operations.
         unsignedInt RequestNumberOfEntries
         object Commands.

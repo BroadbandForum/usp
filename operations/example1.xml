@@ -10,8 +10,7 @@
   spec="urn:broadband-forum-org:example1"
   file="example1.xml">
   <description>
-    DM instance that illustrated USP commands.
-    Note that the HTML shows commands as objects. They can be distinguished because command names do not end in periods.
+    DM instance that illustrates USP commands.
   </description>
 
   <bibliography>
@@ -237,6 +236,10 @@
         <description>{{numentries}}</description>
         <syntax><unsignedInt/></syntax>
       </parameter>
+      <parameter name="DimmerNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax><unsignedInt/></syntax>
+      </parameter>
     </object>
 
     <!-- XXX could reference the components from within Device. but this mucks up the ordering in the report -->
@@ -268,6 +271,11 @@
           Switch the light on.
         </description>
       </command>
+      <command name="Off">
+        <description>
+          Switch the light off.
+        </description>
+      </command>
       <command name="Toggle">
         <description>
           Toggle the state of the light.
@@ -280,7 +288,53 @@
         </parameter>
       </command>
     </object>
-
+    
+    <object name="Device.Dimmer.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="DimmerNumberOfEntries">
+      <uniqueKey functional="false">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      <parameter name="Name" access="readOnly">
+        <description>
+          Name of the dimmer.
+        </description>
+        <syntax><string/></syntax>
+      </parameter>
+      <command name="On">
+        <description>
+          Switch the light on with the specified brightness.
+        </description>
+        <parameter name="Brightness" access="readWrite">
+          <description>
+            Requested brightness in {{units}}.
+          </description>
+          <syntax>
+            <unsignedInt>
+              <range minInclusive="0" maxInclusive="100"/>
+              <units value="percent"/>
+            </unsignedInt>
+            <default type="object" value="100"/>
+          </syntax>
+        </parameter>
+        <parameter name="PreviousBrightness" access="readOnly">
+          <description>
+            Previous brightness in {{units}}.
+          </description>
+          <syntax>
+            <unsignedInt>
+              <range minInclusive="0" maxInclusive="100"/>
+              <units value="percent"/>
+            </unsignedInt>
+          </syntax>
+        </parameter>
+      </command>
+      <command name="Off">
+        <description>
+          Switch the light off.
+        </description>
+      </command>
+    </object>
+    
     <object name="Device.Operations." access="readOnly" minEntries="1" maxEntries="1">
       <description>
         Data model operations. This object is automatically maintained by the USP Agent.
