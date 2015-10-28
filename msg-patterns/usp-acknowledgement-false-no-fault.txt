@@ -1,0 +1,12 @@
+@startuml
+participant uspSourceEndpoint #LightBlue
+participant uspTargetEndpoint #DarkSalmon
+participant HeaderProcessor
+
+uspSourceEndpoint -> uspTargetEndpoint : USP Message (Ack=False)
+uspTargetEndpoint -> HeaderProcessor : Process Header
+Activate HeaderProcessor
+HeaderProcessor -> uspTargetEndpoint : No Fault
+deactivate HeaderProcessor
+hnote over uspTargetEndpoint : Process Body
+@enduml
