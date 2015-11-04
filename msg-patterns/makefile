@@ -1,5 +1,5 @@
-UML = $(wildcard *.txt)
-PNG = $(UML:%.txt=%.png)
+UML = $(wildcard *.uml)
+PNG = $(UML:%.uml=%.png)
 
 PLANTUMLCLIENT = plantumlclient
 
@@ -10,7 +10,7 @@ png: $(PNG)
 clean:
 	$(RM) $(PNG)
 
-%.png: %.txt
+%.png: %.uml
 	$(PLANTUMLCLIENT) $<
 
 .DELETE_ON_ERROR:
