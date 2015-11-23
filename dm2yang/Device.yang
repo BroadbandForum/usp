@@ -1058,7 +1058,7 @@ module Device {
            before performing the reboot.
         
            If the value specifies a date and time that has
-           already passed (ie, a past date and time), no reboot
+           already passed (i.e., a past date and time), no reboot
            will be performed.";
       }
       leaf DelayReboot {
@@ -1070,7 +1070,7 @@ module Device {
            which this parameter value is set is ended until the
            CPE performs a reboot.
         
-           Whenever the CPE reboots, this value must be reset by
+           Whenever the CPE reboots, this value MUST be reset by
            the CPE to -1.";
       }
       leaf PeriodicInformEnable {
@@ -6528,9 +6528,7 @@ module Device {
               enum "Error_Other";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -8219,9 +8217,7 @@ module Device {
               enum "Error_Other";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -10950,9 +10946,7 @@ module Device {
               enum "Eror_InvalidOpcode";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -11086,9 +11080,7 @@ module Device {
               enum "Error_SampleIntervalTooSmall";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -14738,9 +14730,7 @@ module Device {
               enum "Error_InvalidPort";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Type {
             type enumeration {
@@ -15479,10 +15469,7 @@ module Device {
             enum "Completed";
           }
           description
-            "{{issue|A10-DIAG|Old state \"Completed\" => New state
-             \"Complete\"}}
-          
-             {{datatype|expand}}";
+            "{{datatype|expand}}";
         }
 
         list Result {
@@ -21791,9 +21778,7 @@ module Device {
               enum "Error_Other";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -21966,9 +21951,7 @@ module Device {
               enum "Error_Other";
             }
             description
-              "{{issue|A10-DIAG|No error state in original version}}
-            
-               {{datatype|expand}}";
+              "{{datatype|expand}}";
           }
           leaf Interface {
             type string {
@@ -26353,11 +26336,12 @@ module Device {
 
     container MAP {
       description
-        "The Mapping of Address and Port (MAP) object {{bibref|MAP}}
-         {{bibref|MAP-T}} {{bibref|MAP-DHCP}}.  This object
-         applies only to gateway devices that support IPv4 on the
-         LAN side, include a {{object|#.NAT}}, and typically have
-         only IPv6 connectivity on the WAN side.
+        "The Mapping of Address and Port (MAP) object
+         {{bibref|RFC7597}} {{bibref|RFC7599}}
+         {{bibref|RFC7598}}.  This object applies only to gateway
+         devices that support IPv4 on the LAN side, include a
+         {{object|#.NAT}}, and typically have only IPv6
+         connectivity on the WAN side.
       
          See the MAP Theory of Operation
          {{bibref|TR-181i2a8|Appendix XV}} for a description of
@@ -26371,8 +26355,9 @@ module Device {
       list Domain {
         key "WANInterface IPv6Prefix";
         description
-          "MAP domain settings {{bibref|MAP}} {{bibref|MAP-T}}.
-           Each instance models a MAP domain.
+          "MAP domain settings {{bibref|RFC7597}}
+           {{bibref|RFC7599}}.  Each instance models a MAP
+           domain.
         
            MAP supports two transport modes, both of which use
            NAPT44 (modified to use a restricted port range):
@@ -26401,14 +26386,7 @@ module Device {
            constraint; if this occurs, the CPE MUST set
            {{param|Status}} to
            {{enum|Error_Misconfigured|Status}} and disable the
-           offending {{object}} row.
-        
-           {{issue|SZN-MAP|Didn't rename the ''MAP'' bibref to
-           ''MAP-E'' because this would require a lot of changes;
-           it might be a good idea always to use bibref names
-           rather than IDs in the generated HTML because then
-           could easily change the name for an existing bibref
-           (would require a BBF Report Tool change).}}";
+           offending {{object}} row.";
         leaf Enable {
           type boolean;
           default "false";
@@ -26439,7 +26417,7 @@ module Device {
           description
             "The transport mode to use.
           
-             Corresponds to the {{bibref|MAP-DHCP}}
+             Corresponds to the {{bibref|RFC7598}}
              ''S46_CONT_MAPE'' and ''S46_CONT_MAPT'' container
              options.";
         }
@@ -26480,15 +26458,15 @@ module Device {
             "The MAP Border Relay (BR) address or prefix.
           
              * For MAP-E this is the BR address and therefore
-             MUST be a /128 {{bibref|MAP}}.  Note this address
-             can be an IPv6 anycast address.  This address
-             corresponds to the {{bibref|MAP-DHCP}}
+             MUST be a /128 {{bibref|RFC7597}}.  Note this
+             address can be an IPv6 anycast address.  This
+             address corresponds to the {{bibref|RFC7598}}
              ''OPTION_S46_BR'' (Border Relay) option.
           
-             * For MAP-T this is the BR prefix {{bibref|MAP-T}}.
-             This address prefix corresponds to the
-             {{bibref|MAP-DHCP}} ''OPTION_S46_DMR'' (Default
-             Mapping Rule) option.
+             * For MAP-T this is the BR prefix
+             {{bibref|RFC7599}}.  This address prefix corresponds
+             to the {{bibref|RFC7598}} ''OPTION_S46_DMR''
+             (Default Mapping Rule) option.
           
              Note: There will be a corresponding
              {{object|.Routing.Router.{i}.IPv4Forwarding}}
@@ -26522,7 +26500,7 @@ module Device {
             "''Port-set ID'' (PSID) offset in {{units}}.  The number
              of Port-sets is 2^{{param}}.
           
-             Corresponds to the {{bibref|MAP-DHCP}}
+             Corresponds to the {{bibref|RFC7598}}
              ''S46_PORTPARAMS'' (Port Parameters) option's
              ''offset'' field.";
         }
@@ -26535,7 +26513,7 @@ module Device {
             "The length in {{units}} of the ''Port-set id'' (PSID)
              configured in the {{param|PSID}} parameter.
           
-             Corresponds to the {{bibref|MAP-DHCP}}
+             Corresponds to the {{bibref|RFC7598}}
              ''S46_PORTPARAMS'' (Port Parameters) option's
              ''PSID-len'' field.";
         }
@@ -26553,7 +26531,7 @@ module Device {
              {{param}} value are used, so the parameter is
              ignored when {{param|PSIDLength}} is zero.
           
-             Corresponds to the {{bibref|MAP-DHCP}}
+             Corresponds to the {{bibref|RFC7598}}
              ''S46_PORTPARAMS'' (Port Parameters) option's
              ''PSID'' field.";
         }
@@ -26567,10 +26545,10 @@ module Device {
              for the default {{param|PSIDOffset}} value of 4,
              ports [0:4095] are not included in the Port-sets.
           
-             This parameter is related to {{bibref|MAP}}'s ''N'',
-             which is defined as ''the number of ports (e.g.,
-             1024) excluded from the lower end of the range''.
-             The parameter is relevant only when
+             This parameter is related to {{bibref|RFC7597}}'s
+             ''N'', which is defined as ''the number of ports
+             (e.g., 1024) excluded from the lower end of the
+             range''.  The parameter is relevant only when
              {{param|PSIDOffset}} is 0; {{false}} corresponds to
              ''N=1024'' and {{true}} corresponds to ''N=0''.";
         }
@@ -26578,7 +26556,7 @@ module Device {
         list Rule {
           key "IPv6Prefix";
           description
-            "The MAP domain's Mapping Rules {{bibref|MAP}}.  The
+            "The MAP domain's Mapping Rules {{bibref|RFC7597}}.  The
              rule with the longest match between its
              {{param|IPv6Prefix}} and the end-user
              {{param|#.IPv6Prefix}} is the Basic Mapping Rule
@@ -26630,8 +26608,8 @@ module Device {
                end-user ''IPv6Prefix'', and it MUST match the
                end-user ''IPv6Prefix''.
             
-               Corresponds to the {{bibref|MAP-DHCP}}
-               ''S46_RULE'' option's ''ipv6-prefix'' field.";
+               Corresponds to the {{bibref|RFC7598}} ''S46_RULE''
+               option's ''ipv6-prefix'' field.";
           }
           leaf IPv4Prefix {
             type types:IPv4Prefix;
@@ -26639,8 +26617,8 @@ module Device {
             description
               "The ''Rule IPv4 prefix''.
             
-               Corresponds to the {{bibref|MAP-DHCP}}
-               ''S46_RULE'' option's ''ipv4-prefix'' field.";
+               Corresponds to the {{bibref|RFC7598}} ''S46_RULE''
+               option's ''ipv4-prefix'' field.";
           }
           leaf EABitsLength {
             type uint32 {
@@ -26652,8 +26630,8 @@ module Device {
                (EA) bits'' in the end-user
                {{param|#.IPv6Prefix}}.
             
-               Corresponds to the {{bibref|MAP-DHCP}}
-               ''S46_RULE'' option's ''ea-len'' field.";
+               Corresponds to the {{bibref|RFC7598}} ''S46_RULE''
+               option's ''ea-len'' field.";
           }
           leaf IsFMR {
             type boolean;
@@ -26662,9 +26640,8 @@ module Device {
               "Indicates whether this rule is a ''Forwarding Mapping
                Rule'' (FMR), i.e.  can be used for forwarding.
             
-               Corresponds to the {{bibref|MAP-DHCP}}
-               ''S46_RULE'' option's ''flags'' field's
-               ''F-Flag''.";
+               Corresponds to the {{bibref|RFC7598}} ''S46_RULE''
+               option's ''flags'' field's ''F-Flag''.";
           }
         }
 
@@ -30967,10 +30944,7 @@ module Device {
           
              The ability to list inactive hosts is OPTIONAL.  The
              length of time an inactive host remains listed in
-             this table is a local matter to the CPE.
-          
-             {{issue|PTH-HOST|I changed ''should'' to ''SHOULD''
-             (also used {{false}} and {{true}}).}}";
+             this table is a local matter to the CPE.";
         }
 
         list IPv4Address {
@@ -41107,23 +41081,23 @@ module Device {
 
     container BulkData {
       description
-        "Bulk Data utilizes various solutions (e.g., IPDR, HTTP) to
-         collect data from devices and transfer the data to a
+        "This object provides bulk data collection capabilities and
+         global collection settings that affect the entire
+         device.
+      
+         Bulk Data utilizes various solutions (e.g., IPDR, HTTP)
+         to collect data from devices and transfer the data to a
          collection server.
       
          The IPDR solution is based on a service specification
          described in {{bibref|TR-232}}.
       
          The HTTP solution is based on transfer mechanisms
-         described in {{bibref|TR-157a5}}.
+         described in {{bibref|TR-157a10|Annex A}}.
       
          The Bulk Data Collection Profiles are measured over a
          reporting interval (which can be aligned with absolute
-         time) and are made available to the collection server.
-      
-         This object provides bulk data collection capabilities
-         and global collection settings that affect the entire
-         device.";
+         time) and are made available to the collection server.";
       leaf Enable {
         type boolean;
         description
@@ -41238,17 +41212,12 @@ module Device {
              If {{false}}, this profile will not be collected or
              reported.";
         }
-        leaf Protocol {
-          type string;
+        leaf Name {
+          type string {
+            length "0..255";
+          }
           description
-            "The Bulk Data Protocol being used for this collection
-             profile.";
-        }
-        leaf EncodingType {
-          type string;
-          description
-            "The Bulk Data encoding type being used for this
-             collection profile.";
+            "The name of the profile.";
         }
         leaf NumberOfRetainedFailedReports {
           type int32 {
@@ -41256,9 +41225,9 @@ module Device {
           }
           default "0";
           description
-            "The number of reports to be retained and be transmitted
-             within the current reporting interval defined by the
-             {{param|ReportingInterval}} parameter.
+            "The number of failed reports to be retained and
+             transmitted (in addition to the current report) at
+             the end of the current reporting interval.
           
              If the value of the {{param|EncodingType}} parameter
              is modified any outstanding failed reports are
@@ -41276,7 +41245,19 @@ module Device {
              reporting interval.
           
              A value of -1 indicates that the CPE will retain as
-             many failed reports as possible,";
+             many failed reports as possible.";
+        }
+        leaf Protocol {
+          type string;
+          description
+            "The Bulk Data Protocol being used for this collection
+             profile.";
+        }
+        leaf EncodingType {
+          type string;
+          description
+            "The Bulk Data encoding type being used for this
+             collection profile.";
         }
         leaf ReportingInterval {
           type uint32 {
@@ -41477,6 +41458,23 @@ module Device {
              Each entry in this table represents a parameter (or
              set of parameters if a partial path is provided) to
              be collected and reported.";
+          leaf Name {
+            type string {
+              length "0..64";
+            }
+            description
+              "Name of the parameter in the report body.
+            
+               If the value of this parameter is {{empty}}, then
+               the value of the {{param|Reference}} parameter is
+               used as the name.
+            
+               When the value {{param|Reference}} parameter
+               contains wildcards and/or partial parameter names,
+               the rules for determining the value of this
+               parameter are specified in
+               {{bibref|TR-157a10|Annex A.3.2.1}}.";
+          }
           leaf Reference {
             type string {
               length "0..256";
@@ -41485,92 +41483,63 @@ module Device {
             description
               "Represents the parameter(s) that are part of this
                Bulk Data collection profile.  The value MUST be a
-               path name of a parameter or an object instance.
+               path name of a parameter or an object.
             
                When the {{param|##.ParameterWildCardSupported}}
                parameter has a value of {{true}}, patterns for
-               object instances identifiers are permitted with
-               wildcards (an \"*\" character) in place of Object
-               Instance Identifiers; any attempt to set the value
+               instance identifiers are permitted with wildcards
+               (an \"*\" character) in place of instance
+               identifiers; any attempt to set the value
                otherwise MUST be rejected by the CPE.
             
                In the case where a partial parameter path is
-               specified sub-objects of the resolved pattern and
-               contained parameters will be part of the bulk data
-               collected and reported.  If the path name refers
-               to an object then it MUST end with a '.'.";
-          }
-          leaf Name {
-            type string {
-              length "0..64";
-            }
-            description
-              "Name of the parameter in the report body.
-            
-               If the value of this parameter is an {{empty}},
-               then the value of the name of the parameter uses
-               the name of the parameter in the
-               {{param|Reference}} parameter.
-            
-               The content of this value is only valid when the
-               Reference parameter is a fully qualified parameter
-               name.  The use of this parameter is not valid when
-               the {{param|Reference}} parameter uses wildcards
-               or a partial parameter path.";
+               specified, the sub-objects of the resolved pattern
+               and contained parameters will be part of the bulk
+               data collected and reported.  If the path name
+               refers to an object then it MUST end with a '.'.";
           }
         }
 
         container CSVEncoding {
           description
-            "This object defines the properties to be used when
-             encoding the data using CSV encoding.";
+            "This object defines the properties to be used when the
+             {{object|##.Profile}} object's
+             {{param|#.EncodingType}} parameter value is
+             {{enum|CSV|##.EncodingTypes}}.";
           leaf FieldSeparator {
             type string;
             default ",";
             description
-              "HTML encoded field separator to use when encoding CSV
-               file.  Default value is the HTML encoded comma
-               character.";
+              "Field separator to use when encoding CSV data.";
           }
           leaf RowSeparator {
             type string;
-            default "CRLF";
+            default "
+            ";
             description
-              "HTML encoded row separator to use when encoding CSV
-               file.  Default value is the HTML encoded carriage
-               return line feed characters (CRLF).";
+              "Row separator to use when encoding CSV data.";
           }
           leaf EscapeCharacter {
             type string;
+            default """;
             description
-              "HTML encoded escapte separator to use when encoding
-               CSV file.  Default value is the HTML encoded
-               double quote character.";
+              "Escape character to use when encoding CSV data.";
           }
           leaf ReportFormat {
             type enumeration {
               enum "ParameterPerRow";
               enum "ParameterPerColumn";
-              enum "SchemaDefined";
             }
+            default "ParameterPerColumn";
             description
               "This parameter describes the formatting used for
                reports defined by this profile as described in
-               {{bibref|TR-157a5}}.";
-          }
-          leaf ReportSchema {
-            type string {
-              length "0..1024";
-            }
-            default "";
-            description
-              "When the value of the {{param|ReportFormat}}
-               parameter is {{enum|SchemaDefined|ReportFormat}},
-               then the value of this parameter represents the
-               URI ({{bibref|RFC3986}}) that defines the schema
-               used to interpret the content of the report and
-               {{empty}} indicates that the content of the report
-               is implementation specific.";
+               {{bibref|TR-157a10|Annex A.3.4}}.
+            
+               Note: This parameter is encoded as a token in the
+               BBF-Report-Format header field and MUST NOT
+               include spaces or other characters excluded from
+               token characters defined in {{bibref|RFC2616}}.";
           }
           leaf RowTimestamp {
             type enumeration {
@@ -41578,39 +41547,34 @@ module Device {
               enum "ISO-8601";
               enum "None";
             }
+            default "Unix-Epoch";
             description
-              "The timestamp of when the data is collected to be
-               inserted into the row.";
+              "The format of the timestamp to use for data inserted
+               into the row.";
           }
         }
 
         container JSONEncoding {
           description
-            "This object defines the properties to be used when
-             encoding the data using JSON encoding.";
+            "This object defines the properties to be used when the
+             {{object|##.Profile}} object's
+             {{param|#.EncodingType}} parameter value is
+             {{enum|JSON|##.EncodingTypes}}.";
           leaf ReportFormat {
             type enumeration {
               enum "ObjectHierarchy";
               enum "NameValuePair";
-              enum "SchemaDefined";
             }
+            default "ObjectHierarchy";
             description
               "This parameter describes the formatting used for the
-               report as described in {{bibref|TR-157a5}}.";
-          }
-          leaf ReportSchema {
-            type string {
-              length "0..1024";
-            }
-            default "";
-            description
-              "When the value of the {{param|ReportFormat}}
-               parameter is {{enum|SchemaDefined|ReportFormat}},
-               then the value of this parameter represents the
-               URI ({{bibref|RFC3986}}) that defines the schema
-               used to interpret the content of the report and
-               {{empty}} indicates that the content of the report
-               is implementation specific.";
+               report as described in {{bibref|TR-157a10|Annex
+               A.3.5}}.
+            
+               Note: This parameter is encoded as a token in the
+               BBF-Report-Format header field and MUST NOT
+               include spaces or other characters excluded from
+               token characters defined in {{bibref|RFC2616}}.";
           }
           leaf ReportTimestamp {
             type enumeration {
@@ -41618,19 +41582,24 @@ module Device {
               enum "ISO-8601";
               enum "None";
             }
+            default "Unix-Epoch";
             description
-              "The timestamp of when the data is collected to be
-               inserted as a JSON Object named \"CollectionTime\"
-               as described in {{bibref|TR-157a5}}.";
+              "The format of timestamp to use for the JSON Object
+               named \"CollectionTime\" as described in
+               {{bibref|TR-157a10}}.";
           }
         }
 
         container HTTP {
           description
             "This object defines the properties to be used when
-             transporting bulk data using the HTTP/S protocol.
-             This object is used when the {{param|#.Protocol}}
-             parameter has a value of {{enum|HTTP|##.Protocols}}.";
+             transporting bulk data using the HTTP/HTTPS
+             protocol.  This object is used when the
+             {{param|#.Protocol}} parameter has a value of
+             {{enum|HTTP|##.Protocols}}.  For authentication
+             purposes the CPE MUST support HTTP Basic and Digest
+             Access Authentication as defined in
+             {{bibref|RFC2616}}.";
           leaf URL {
             type string {
               length "0..1024";
@@ -41656,7 +41625,7 @@ module Device {
               "Password used to authenticate the CPE when making a
                connection to the collection server.";
           }
-          leaf CompressionSupported {
+          leaf CompressionsSupported {
             type enumeration {
               enum "GZIP";
               enum "Compress";
@@ -41665,62 +41634,30 @@ module Device {
             config false;
             description
               "Indicates the HTTP Compression mechanism(s) supported
-               by this CPE for the purposes of transfering bulk
-               data.
-            
-               Vendors can extend the enumerated values with
-               vendor specific extensions, in which case the
-               rules outlined in {{bibref|TR-106a7|Section 3.3}}
-               MUST be adhered to.";
+               by this CPE for the purposes of transferring bulk
+               data.";
           }
           leaf Compression {
             type string;
+            default "None";
             description
               "The value of this parameter represents the HTTP
                Compression mechanism to be used by the CPE when
                transferring data to the collection server.";
           }
-          leaf TransferCodingSupported {
+          leaf MethodsSupported {
             type enumeration {
-              enum "Chunked";
-            }
-            config false;
-            description
-              "Indicates the HTTP transfer-coding mechanism(s)
-               supported by this CPE for the purposes of
-               transfering bulk data.
-            
-               Vendors can extend the enumerated values with
-               vendor specific extensions, in which case the
-               rules outlined in {{bibref|TR-106a7|Section 3.3}}
-               MUST be adhered to.";
-          }
-          leaf TransferCoding {
-            type string;
-            default "Chunked";
-            description
-              "The value of this parameter represents the HTTP
-               transfer-coding mechanism to be used by the CPE
-               when transferring data to the collection server.";
-          }
-          leaf MethodSupported {
-            type enumeration {
-              enum "Post";
-              enum "Put";
+              enum "POST";
+              enum "PUT";
             }
             config false;
             description
               "Indicates the HTTP method(s) supported by this CPE
-               for the purposes of transfering bulk data.
-            
-               Vendors can extend the enumerated values with
-               vendor specific extensions, in which case the
-               rules outlined in {{bibref|TR-106a7|Section 3.3}}
-               MUST be adhered to.";
+               for the purposes of transferring bulk data.";
           }
           leaf Method {
             type string;
-            default "Post";
+            default "POST";
             description
               "The value of this parameter represents the HTTP
                method to be used by the CPE when transferring
@@ -41748,8 +41685,8 @@ module Device {
             default "5";
             description
               "Configures the data transfer retry wait interval, in
-               seconds, as specified in {{bibref|TR-157|Appendix
-               I}}.
+               seconds, as specified in {{bibref|TR-157a10|Annex
+               A.2.2.1}}.
             
                The device MUST use a random value between
                {{param}} and ({{param}} *
@@ -41765,7 +41702,7 @@ module Device {
             default "2000";
             description
               "Configures the retry interval multiplier as specified
-               in {{bibref|TR-157|Appendix I}}.
+               in {{bibref|TR-157a10|Annex A.2.2.1}}.
             
                This value is expressed in units of 0.001.  Hence
                the values of the multiplier range between 1.000
@@ -41784,12 +41721,9 @@ module Device {
               "This object represents an instance of a parameter to
                be used in the report header used as part of the
                HTTP Request-URI transmitted by the CPE to the
-               collection server using the Request-URI.
-            
-               For example, the HTTP request from the CPE will
-               look like this:
-            
-               POST https://bdc.acme.com/csv1?oui=X&sn=Y&pc=Z";
+               collection server using the Request-URI in
+               addition to the parameters required by
+               {{bibref|TR-157a10|Annex A.2.1}}.";
             leaf Name {
               type string {
                 length "0..64";
@@ -41797,10 +41731,9 @@ module Device {
               description
                 "Name of the Request-URI parameter.
               
-                 If the value of this parameter is an {{empty}},
-                 then the value of the name of the header
-                 parameter uses the name of the parameter in the
-                 {{param|Reference}} parameter.";
+                 If {{param}} is {{empty}}, the name of the
+                 Request-URI parameter is the value of
+                 {{param|Reference}}.";
             }
             leaf Reference {
               type string {
@@ -41808,7 +41741,11 @@ module Device {
               }
               default "";
               description
-                "{{reference|the Request-URI parameter}}";
+                "The value MUST be the path name of the Request-URI
+                 parameter.
+              
+                 If the value of this parameter is empty, then
+                 this object is not encoded in the report header.";
             }
           }
         }
@@ -43525,14 +43462,14 @@ module Device {
       container Capabilities {
         config false;
         description
-          "Indicates the MQTT capabilities of the device";
+          "Indicates the MQTT capabilities of the device.";
         leaf ProtocolVersionsSupported {
           type enumeration {
             enum "3.1";
             enum "3.1.1";
           }
           description
-            "Indicates the supported protocol versions {{enum}}";
+            "Indicates the supported protocol versions.  {{enum}}";
         }
         leaf TransportProtocolSupported {
           type enumeration {
@@ -43546,16 +43483,16 @@ module Device {
         leaf MaxNumberOfClientSubscriptions {
           type uint32;
           description
-            "Indicates the maximum number of subscriptions per
+            "Indicates the maximum number of subscriptions per MQTT
              client, which can be stored in the
-             {{object|#.Client.{i}.Subscription.}} table.  A
-             value of 0 means no limit.";
+             {{object|#.Client.{i}.Subscription}} table.  A value
+             of 0 means no limit.";
         }
         leaf MaxNumberOfBrokerBridges {
           type uint32;
           description
             "Indicates the maximum number of bridges, which can be
-             configured in the {{object|#.Broker.{i}.Bridge.}}
+             configured in the {{object|#.Broker.{i}.Bridge}}
              table.  A value of 0 means no limit.";
         }
         leaf MaxNumberOfBrokerBridgeSubscriptions {
@@ -43563,7 +43500,7 @@ module Device {
           description
             "Indicates the maximum number of subscriptions, which
              can be stored per bridge instance in the
-             {{object|#.Broker.{i}.Bridge.{i}.Subscription.}}
+             {{object|#.Broker.{i}.Bridge.{i}.Subscription}}
              table.  A value of 0 means no limit.";
         }
       }
@@ -43571,7 +43508,7 @@ module Device {
       list Client {
         key "Alias";
         description
-          "MQTT Client table.  Contains a list of configured MQTT
+          "MQTT client table.  Contains a list of configured MQTT
            clients.";
         leaf Name {
           type string {
@@ -43583,7 +43520,25 @@ module Device {
         leaf Enable {
           type boolean;
           description
-            "Allows to enable or disable the MQTT client.";
+            "Allows to enable or disable the MQTT client.
+          
+             If a MQTT client gets enabled then the MQTT client
+             has first to establish a MQTT broker session and
+             then subscribe for all enabled topics in the
+             {{object|Subscription.}} table.  In case the
+             {{param|CleanSession}} is set to {{false}} a
+             subscription MUST only be sent for topics which
+             haven't been subscribed before (see
+             {{bibref|MQTT311|3.1.2.4}}).
+          
+             If a connected MQTT client gets disabled
+             ({{param|Status}} is either
+             {{enum|Connecting|Status}} or
+             {{enum|Connected|Status}}) then the MQTT client has
+             to send a MQTT DISCONNECT message to disconnect from
+             the MQTT broker ({{bibref|MQTT31|3.14}} or
+             {{bibref|MQTT311|3.14}}), before setting the
+             {{param|Status}} to {{enum|Disabled|Status}}.";
         }
         leaf Status {
           type enumeration {
@@ -43591,7 +43546,7 @@ module Device {
             enum "Connecting";
             enum "Connected";
             enum "Error_Misconfigured";
-            enum "Error_Broker_Unreachable";
+            enum "Error_BrokerUnreachable";
             enum "Error";
           }
           config false;
@@ -43600,15 +43555,153 @@ module Device {
           
              The {{enum|Error_Misconfigured}} value indicates
              that a necessary configuration value is undefined or
-             invalid (e.g.  The client can not use the defined
-             port, because it is blocked)
+             invalid (e.g.  The MQTT client can not use the
+             defined port, because it is blocked)
           
-             The {{enum|Error_Broker_Unreachable}} value
-             indicates that the connection to the broker could
-             not be established.
+             The {{enum|Error_BrokerUnreachable}} value indicates
+             that the connection to the MQTT broker could not be
+             established.
           
              The {{enum|Error}} value MAY be used by the CPE to
              indicate a locally defined error condition.";
+        }
+        leaf ClientID {
+          type string {
+            length "1..23";
+          }
+          description
+            "The MQTT client identifier used in the CONNECT message
+             (see {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.3.1}}).  This parameter MUST
+             NOT be {{empty}}, the CPE has to provide a default
+             value for the parameter, which can be changed by the
+             ACS.
+          
+             A change of this parameter is only communicated to
+             the MQTT broker with the next MQTT CONNECT message.
+             If the change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
+        }
+        leaf Username {
+          type string {
+            length "0..256";
+          }
+          description
+            "Username used to authenticate the CPE when making a
+             connection to the MQTT broker.
+             {{bibref|MQTT31|3.1}} recommends that the username
+             has 12 characters or fewer, but this is not
+             required.
+          
+             If this parameter is {{empty}} no authentication
+             parameters are sent in the MQTT CONNECT message.";
+        }
+        leaf Password {
+          type string {
+            length "0..256";
+          }
+          description
+            "Password used to authenticate the CPE when making a
+             connection to the MQTT broker (see
+             {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.3.4}}).
+          
+             This password is only sent in the MQTT CONNECT
+             message if {{param|Username}} is not {{empty}}.";
+        }
+        leaf TransportProtocol {
+          type string;
+          default "TCP/IP";
+          description
+            "Indicates the transport protocol to be used for the
+             MQTT broker connection.";
+        }
+        leaf ProtocolVersion {
+          type string;
+          description
+            "Specifies the MQTT protocol version used in the
+             communication with the MQTT broker.";
+        }
+        leaf CleanSession {
+          type boolean;
+          default "true";
+          description
+            "The value of the MQTT clean session flag in the MQTT
+             CONNECT message (see {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.4}}).  If this flag is set to
+             {{true}} (default), the MQTT broker will delete all
+             subscription information after a Disconnect.
+          
+             A change of this parameter is only effective after
+             the next MQTT CONNECT message to the MQTT broker.
+             If the change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
+        }
+        leaf MessageRetryTime {
+          type uint32 {
+            range "1..max";
+          }
+          default "5";
+          description
+            "Message retry time in {{units}} defines the wait time
+             before a MQTT message that expects a response (QoS
+             value of message is > 0, or PUBLISH, PUBREL,
+             SUBSCRIBE, UNSUBSCRIBE message) is resent, because
+             the response is not received (see
+             {{bibref|MQTT31|4.2}} and {{bibref|MQTT311|4.4}}).";
+        }
+        leaf ConnectRetryTime {
+          type uint32 {
+            range "1..max";
+          }
+          default "30";
+          description
+            "Connect retry time in {{units}} defines the wait time
+             before a failed MQTT broker connection is retried.
+          
+             A failure can either be on the connection level (the
+             TCP/IP or TLS can not be established) or on the
+             Protocol level, the MQTT client does not receive a
+             MQTT CONNACK message on a MQTT CONNECT message sent.";
+        }
+        leaf KeepAliveTime {
+          type uint32 {
+            range "min..65535";
+          }
+          default "60";
+          description
+            "Keep Alive Time in {{units}} defines the maximum wait
+             time after which a message has to be sent to the
+             MQTT broker (see {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.10}}).  If no regular
+             messages can be sent a MQTT PINGREQ is sent.
+          
+             A value of zero (0) means no keep alive message are
+             sent and the MQTT client is not disconnected by the
+             server.
+          
+             A change of this parameter is only effective after
+             the next MQTT CONNECT message to the MQTT broker.
+             If the change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
+        }
+        leaf ForceReconnect {
+          type boolean;
+          description
+            "Disconnects the MQTT client from the MQTT broker and
+             reconnects it again (toggle connection).  It is only
+             effective if the MQTT client is currently connected
+             to the MQTT broker (Parameter {{param|Status|}} is
+             {{enum|Connected|Status}}).
+          
+             If the MQTT client is in a different state, the
+             parameter has no effect.
+          
+             This action parameter may be used to immediately
+             apply changes in the MQTT connection settings.";
         }
         leaf BrokerAddress {
           type string {
@@ -43625,224 +43718,174 @@ module Device {
           description
             "Port number of the MQTT broker.";
         }
-        leaf ClientID {
-          type string {
-            length "1..23";
-          }
-          description
-            "The client identifier used in the CONNECT message.
-             This parameter may not be {{empty}}, the client has
-             to provide a default value for the parameter, which
-             may be changed by the ACS.
-          
-             A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change shall be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
-        }
-        leaf Username {
-          type string {
-            length "0..256";
-          }
-          description
-            "Username used to authenticate the CPE when making a
-             connection to the MQTT broker.  According to
-             {{bibref|MQTT31}} the username should be 12
-             characters or fewer, but this is not required.
-          
-             If this parameter is {{empty}} no authentication
-             parameters are send in the MQTT CONNECT message.";
-        }
-        leaf Password {
-          type string {
-            length "0..256";
-          }
-          description
-            "Password used to authenticate the CPE when making a
-             connection to the MQTT broker.
-          
-             This password is only send in the MQTT CONNECT
-             message if {{param|Username}} is not {{empty}}";
-        }
-        leaf TransportProtocol {
-          type string;
-          default "TCP/IP";
-          description
-            "Indicates the transport protocol to be used for the
-             broker connection.";
-        }
-        leaf CleanSession {
-          type boolean;
-          default "true";
-          description
-            "The value of the MQTT clean session flag in the MQTT
-             Connect message.  If this flag is set to {{true}}
-             (default), the broker will delete all subscription
-             information after a Disconnect.
-          
-             A change of this parameter is only effective after
-             the next MQTT CONNECT message to the broker.  If the
-             change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
-        }
-        leaf MessageRetryTime {
-          type uint32 {
-            range "1..max";
-          }
-          default "5";
-          description
-            "Message retry time in {{units}} defines the wait time
-             before a MQTT message that expects a response (QoS >
-             0 PUBLISH, PUBREL, SUBSCRIBE, UNSUBSCRIBE) is
-             resend, because the response is not received.
-          
-             The sender should set the DUP flag on the resend
-             message.";
-        }
-        leaf ConnectRetryTime {
-          type uint32 {
-            range "1..max";
-          }
-          default "30";
-          description
-            "Connect retry time in {{units}} defines the wait time
-             before a failed broker connection is retired.
-          
-             A failure can either be on the connection level (the
-             TCP/IP or TLS can not be established) or on the
-             Protocol level, the client does not receive a MQTT
-             CONNACK message on a MQTT CONNECT message send.";
-        }
-        leaf KeepAliveTime {
-          type uint32 {
-            range "min..65535";
-          }
-          default "60";
-          description
-            "Keep Alive Time in {{units}} defines the max after
-             which the client has to send a message to the
-             broker.  If no regular messages can be send a MQTT
-             PINGREQ is send.
-          
-             A value of zero (0) means no keep alive message are
-             send and the client is not disconnected by the
-             server.
-          
-             A change of this parameter is only effective after
-             the next MQTT CONNECT message to the broker.  If the
-             change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
-        }
-        leaf ProtocolVersion {
-          type string;
-          description
-            "Specifies the MQTT protocol version used in the
-             communication with the broker.";
-        }
-        leaf ForceReconnect {
-          type boolean;
-          description
-            "Disconnects the client from the broker and reconnects
-             it again (toogle connection).  It is only effective
-             if the client is currently connected to the broker
-             (Parameter {{param|Status|}} is
-             {{enum|Connected|Status}}).
-          
-             If the client is in a different state, the parameter
-             has no effect.
-          
-             This parameter may be used to apply changes in the
-             MQTT connection settings.";
-        }
         leaf WillEnable {
           type boolean;
           description
-            "Enables or disables the will handling.  Changing this
-             parameter while the client is connected will cause
-             the client to disconnect and reconnect.
+            "Enables or disables the will handling (see
+             {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.5}})..  Changing this
+             parameter while the MQTT client is connected will
+             cause the client to disconnect and reconnect.
           
-             A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
+             If the connection gets enabled and this parameter is
+             set to {{true}} and either the parameter
+             {{param|WillTopic}} or {{param|WillValue}} are
+             {{empty}}, the CPE MUST set the {{param|Status}} to
+             {{enum|Error_Misconfigured|Status}} (see
+             {{bibref|MQTT311|3.1.2.5}}).";
         }
         leaf WillTopic {
           type string;
           description
-            "The Topic send in the Will Message.  This parameter is
-             only used if {{param|WillEnable}} is set to
-             {{true}}.
+            "The Topic sent in the Will Message (see
+             {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.5}}).  This parameter is only
+             used if {{param|WillEnable}} is set to {{true}}.
           
              A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
+             the MQTT broker with the next MQTT CONNECT message.
+          
+             If the will handling is enabled (Paramter
+             {{param|WillEnable}} is set to {{true}}) and the
+             change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
         }
         leaf WillValue {
           type string;
           description
-            "The value send in the Will Message.  This parameter is
-             only used if {{param|WillEnable}} is set to
-             {{true}}.
+            "The value sent in the Will Message (see
+             {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.5}}).  This parameter is only
+             used if {{param|WillEnable}} is set to {{true}}.
           
              A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
+             the MQTT broker with the next MQTT CONNECT message.
+          
+             If the will handling is enabled (Paramter
+             {{param|WillEnable}} is set to {{true}}) and the
+             change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
         }
         leaf WillQoS {
           type uint32 {
             range "0..2";
           }
           description
-            "The MQTT QoS level assigned with the will message.
-             This parameter is only used if {{param|WillEnable}}
-             is set to {{true}}.
+            "The MQTT QoS level assigned with the will message (see
+             {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.6}}).  This parameter is only
+             used if {{param|WillEnable}} is set to {{true}}.
           
              A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
+             the MQTT broker with the next MQTT CONNECT message.
+          
+             If the will handling is enabled (Paramter
+             {{param|WillEnable}} is set to {{true}}) and the
+             change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
         }
         leaf WillRetain {
           type boolean;
           description
-            "Indicate to the broker that the Will shall be retained
-             over a Disconnect.  This parameter is only used if
-             {{param|WillEnable}} is set to {{true}}.
+            "Indicate to the MQTT broker to retain the Will over a
+             Disconnect (see {{bibref|MQTT31|3.1}} and
+             {{bibref|MQTT311|3.1.2.7}}).  This parameter is only
+             used if {{param|WillEnable}} is set to {{true}}.
           
              A change of this parameter is only communicated to
-             the broker with the next MQTT CONNECT message.  If
-             the change should be applied immediately, the
-             {{param|ForceReconnect}} has to be set, too.";
+             the MQTT broker with the next MQTT CONNECT message.
+          
+             If the will handling is enabled (Paramter
+             {{param|WillEnable}} is set to {{true}}) and the
+             change needs to be applied immediately, the
+             parameter {{param|ForceReconnect}} has to be set as
+             well.";
         }
 
         list Subscription {
           key "Alias";
           description
-            "List of MQTT subscriptions handled by the client.";
+            "List of MQTT subscriptions handled by the MQTT client.
+          
+             The MQTT client MUST subscribe with the MQTT broker
+             for all subscription instances, whose parameter
+             {{param|Enable}} is set to {{true}}, when it
+             establishes a new connection to the MQTT broker.
+             Disabled subscription instances with
+             {{param|Enable}} set to {{false}} will be ignored
+             during connection establishment.";
+          leaf Enable {
+            type boolean;
+            description
+              "Setting Enable to {{true}} means the topic is
+               subscribed at the MQTT broker with a MQTT
+               SUBSCRIBE message, setting it to {{false}} will
+               unsubscribe the topic from the MQTT broker with a
+               MQTT UNSUBSCRIBE message.  If the MQTT client is
+               already connected with the Broker
+               ({{param|#.Status}} is
+               {{enum|Connected|#.Status}}), the MQTT SUBSCRIBE
+               or UNSUBSCRIBE message is sent directly, otherwise
+               it is sent after the next successful connect.
+            
+               The actual status of the subscription is indicated
+               with {{param|Status}}.";
+          }
+          leaf Status {
+            type enumeration {
+              enum "Unsubscribed";
+              enum "Subscribed";
+              enum "Subscribing";
+              enum "Unsubscribing";
+              enum "Error";
+            }
+            config false;
+            description
+              "Indicates the status of this subscription.  {{enum}}
+            
+               The {{enum|Subscribed}} value indicates that the
+               topic was successfully subscribed with the MQTT
+               broker, the MQTT client received the SUBACK
+               message for this topic from the server.
+            
+               The {{enum|Subscribing}} value MAY be used by the
+               CPE to indicate that the a SUBSCRIBE message for
+               this topic was sent, and the CPE is waiting for a
+               SUBACK message.
+            
+               The {{enum|Unsubscribed}} value indicates that the
+               topic is not reqistered with the MQTT broker.
+            
+               The {{enum|Unsubscribing}} value MAY be used by
+               the CPE to indicate that the an UNSUBSCRIBE
+               message for this topic was sent, and the CPE is
+               waiting for an UNSUBACK message.
+            
+               If the {{param|Enable}} is set to {{false}} the
+               status MUST be either {{enum|Unsubscribed}} or if
+               the unsubscription failed {{enum|Error}}.";
+          }
           leaf Topic {
             type string {
               length "0..65535";
             }
             description
-              "Name of the Subscribed Topic";
+              "Name of the subscribed topic.  Topic names may
+               contain wildcards according to the rules specified
+               in {{bibref|MQTT31|Appendix A}} and
+               {{bibref|MQTT311|4.7}}.";
           }
           leaf QoS {
             type uint32 {
               range "0..2";
             }
             description
-              "The MQTT QoS level assigned with the subscription";
-          }
-          leaf Enable {
-            type boolean;
-            description
-              "Setting Enable to {{true}} means the topic is
-               subscribed at the broker with a MQTT SUBSCRIBE
-               message, setting it to {{false}} will unsubscribe
-               the topic from the broker with a MQTT UNSUBSCRIBE
-               message.";
+              "The MQTT QoS level assigned with the subscription
+               (see {{bibref|MQTT31|4.1}} and
+               {{bibref|MQTT311|4.3}}).";
           }
         }
 
@@ -43850,66 +43893,75 @@ module Device {
           config false;
           description
             "Contains the MQTT client statistics and usage
-             information";
+             information.
+          
+             The CPE MUST reset the Stats parameters after the
+             MQTT client gets (re-)enabled or if the MQTT client
+             connects with a new MQTT broker (e.g.
+             {{param|#.BrokerAddress}} has changed).  The CPE MAY
+             retain the values across a reboot if it reconnects
+             with the same MQTT broker.";
           leaf BrokerConnectionEstablished {
             type yang:date-and-time;
             description
-              "Time when the broker connection was established.";
+              "Time when the MQTT broker connection was established.";
           }
           leaf LastPublishMessageSent {
             type yang:date-and-time;
             description
-              "Time when the last publish message was send to the
-               broker.";
+              "Time when the last publish message was sent to the
+               MQTT broker.";
           }
           leaf LastPublishMessageReceived {
             type yang:date-and-time;
             description
               "Time when the last publish message was received from
-               the broker.";
+               the MQTT broker.";
           }
           leaf PublishSent {
             type types:StatsCounter64;
             description
-              "Number of publish messages send to the broker.";
+              "Number of publish messages sent to the MQTT broker.";
           }
           leaf PublishReceived {
             type types:StatsCounter64;
             description
-              "Number of publish messages received from to the
+              "Number of publish messages received from to the MQTT
                broker.";
           }
           leaf SubscribeSent {
             type types:StatsCounter64;
             description
-              "Number of subscribe messages send to the broker.";
+              "Number of subscribe messages sent to the MQTT broker.";
           }
           leaf UnSubscribeSent {
             type types:StatsCounter64;
             description
-              "Number of unsubscribe messages send to the broker.";
+              "Number of unsubscribe messages sent to the MQTT
+               broker.";
           }
           leaf MQTTMessagesSent {
             type types:StatsCounter64;
             description
-              "Total number of MQTT messages send to the broker.";
+              "Total number of MQTT messages sent to the MQTT
+               broker.";
           }
           leaf MQTTMessagesReceived {
             type types:StatsCounter64;
             description
-              "Total number of MQTT messages received from the
+              "Total number of MQTT messages received from the MQTT
                broker.";
           }
           leaf ConnectionErrors {
-            type types:StatsCounter64;
+            type types:StatsCounter32;
             description
               "Number of connection errors.";
           }
           leaf PublishErrors {
-            type types:StatsCounter64;
+            type types:StatsCounter32;
             description
-              "Number of errors, which prevented sending publish
-               messages";
+              "Number of errors which prevented sending publish
+               messages.";
           }
         }
       }
@@ -43917,13 +43969,14 @@ module Device {
       list Broker {
         key "Alias";
         description
-          "MQTT Broker related data";
+          "MQTT broker table.  Contains a list of configured MQTT
+           brokers.";
         leaf Name {
           type string {
             length "0..64";
           }
           description
-            "The textual name of the Broker.";
+            "The textual name of the MQTT broker.";
         }
         leaf Enable {
           type boolean;
@@ -43961,23 +44014,16 @@ module Device {
             length "0..256";
           }
           description
-            "{{reference|the IP-layer interface used by the broker}}
-          
-             The value of this parameter MUST be either a valid
-             interface or {{empty}}.  An attempt to set this
-             parameter to a different value MUST be rejected as
-             an invalid parameter value.
-          
-             If {{empty}} is specified, the CPE MUST bind the
-             MQTT broker to all available interfaces.";
+            "If {{empty}} is specified, the CPE MUST bind the MQTT
+             broker to all available interfaces.";
         }
         leaf Username {
           type string {
             length "0..256";
           }
           description
-            "Username used to authenticate the clients, which
-             connect to the broker.
+            "Username used to authenticate the MQTT clients, which
+             connect to the MQTT broker.
           
              If this parameter is {{empty}} no authentication is
              used.";
@@ -43987,24 +44033,25 @@ module Device {
             length "0..256";
           }
           description
-            "Password used used to authenticate the clients, which
-             connect to the broker.
+            "Password used used to authenticate the MQTT clients,
+             which connect to the MQTT broker.
           
              This password is only used if {{param|Username}} is
-             not {{empty}}";
+             not {{empty}}.";
         }
 
         list Bridge {
-          key "Name";
+          key "Alias";
           description
-            "Configures the bridges, which may be used to
-             communicate with other brokers";
+            "Configures MQTT bridges, which are used to communicate
+             with other MQTT brokers.";
           leaf Name {
             type string {
               length "0..64";
             }
             description
-              "A name of the bridge used for identification.";
+              "The textual name of the MQTT bridge used for
+               identification.";
           }
           leaf Enable {
             type boolean;
@@ -44017,32 +44064,32 @@ module Device {
               enum "Connecting";
               enum "Connected";
               enum "Error_Misconfigured";
-              enum "Error_Broker_Unreachable";
+              enum "Error_BrokerUnreachable";
               enum "Error";
             }
             config false;
             description
               "Indicates the status of this MQTT Bridge.  {{enum}}
             
-               The {{enum|Disabled}} values indicates that the
-               bridge is not in service; parameter
+               The {{enum|Disabled}} value indicates that the
+               MQTT bridge is not in service; parameter
                {{param|Enable}} is set to {{false}}.
             
-               The {{enum|Connecting}} values indicates that the
-               bridge is currently established.
+               The {{enum|Connecting}} value indicates that the
+               MQTT bridge is currently established.
             
-               The {{enum|Connected}} values indicates that the
-               bridge is currently active.
+               The {{enum|Connected}} value indicates that the
+               MQTT bridge is currently active.
             
                The {{enum|Error_Misconfigured}} value indicates
                that a necessary configuration value is undefined
-               or invalid (e.g.  No active Server entry, the
+               or invalid (e.g.  No active Server entry, the MQTT
                broker can not use the defined bridge port,
                because it is blocked)
             
-               The {{enum|Error_Broker_Unreachable}} value
-               indicates that the bridge connection to the remote
-               broker could not be established.
+               The {{enum|Error_BrokerUnreachable}} value
+               indicates that the MQTT bridge connection to the
+               remote MQTT broker could not be established.
             
                The {{enum|Error}} value MAY be used to indicate a
                locally defined error condition.";
@@ -44052,105 +44099,194 @@ module Device {
               length "1..23";
             }
             description
-              "The client identifier used in the bridge connection.";
+              "The MQTT client identifier used in the CONNECT
+               message (see {{bibref|MQTT31|3.1}} and
+               {{bibref|MQTT311|3.1.3.1}}).  This parameter MUST
+               NOT be {{empty}}, the CPE has to provide a default
+               value for the parameter, which may be changed by
+               the ACS.
+            
+               A change of this parameter is only communicated to
+               the remote MQTT broker with the next MQTT CONNECT
+               message.  If the change needs to be applied
+               immediately, the parameter
+               {{param|ForceReconnect}} has to be set as well.";
           }
           leaf Username {
             type string {
               length "0..256";
             }
             description
-              "Username used to authenticate the broker when making
-               a connection over the bridge.
+              "Username used to authenticate the MQTT broker when
+               making a connection over the MQTT bridge (see
+               {{bibref|MQTT31|3.1}} and
+               {{bibref|MQTT311|3.1.3.4}}).
+               {{bibref|MQTT31|3.1}} recommends that the username
+               has 12 characters or fewer, but this is not
+               required.
             
                If this parameter is {{empty}} no authentication
-               is used.";
+               parameters are sent in the MQTT CONNECT message.";
           }
           leaf Password {
             type string {
               length "0..256";
             }
             description
-              "Password used used to authenticate the broker when
-               making a connection over the bridge.
+              "Password used to authenticate the MQTT broker when
+               making a connection over the MQTT bridge (see
+               {{bibref|MQTT31|3.1}} and
+               {{bibref|MQTT311|3.1.3.4}}).
             
-               This password is only send if {{param|Username}}
-               is not {{empty}}";
-          }
-          leaf CleanSession {
-            type boolean;
-            default "true";
-            description
-              "The value of the MQTT clean session flag in the
-               bridge connection.  If this flag is set to
-               {{true}} (default), the broker will delete all
-               subscription information after a Disconnect.";
+               The password is only sent if {{param|Username}} is
+               not {{empty}}.";
           }
           leaf TransportProtocol {
             type string;
             default "TCP/IP";
             description
               "Indicates the transport protocol to be used for the
-               broker connection.";
+               MQTT bridge connection.";
           }
           leaf ProtocolVersion {
             type string;
             description
-              "Specifies the MQTT protocol version used in the
+              "Specifies the MQTT protocol version used in the MQTT
                bridge connection.";
+          }
+          leaf CleanSession {
+            type boolean;
+            default "true";
+            description
+              "The value of the MQTT clean session flag in the MQTT
+               bridge connection (see {{bibref|MQTT31|3.1}} and
+               {{bibref|MQTT311|3.1.2.4}}).  If this flag is set
+               to {{true}} (default), the remote MQTT broker will
+               delete all subscription information after a
+               Disconnect.
+            
+               A change of this parameter is only effective after
+               the next MQTT CONNECT message to the remote MQTT
+               broker.  If the change needs to be applied
+               immediately, the parameter
+               {{param|ForceReconnect}} has to be set as well.";
+          }
+          leaf MessageRetryTime {
+            type uint32 {
+              range "1..max";
+            }
+            default "5";
+            description
+              "Message retry time in {{units}} defines the wait time
+               before a MQTT message that expects a response (QoS
+               value of message is > 0, or PUBLISH, PUBREL,
+               SUBSCRIBE, UNSUBSCRIBE message) is resent, because
+               the response is not received (see
+               {{bibref|MQTT31|4.2}} and {{bibref|MQTT311|4.4}}).";
+          }
+          leaf ConnectRetryTime {
+            type uint32 {
+              range "1..max";
+            }
+            default "30";
+            description
+              "Connect retry time in {{units}} defines the wait time
+               before a failed bridge connection is retried.
+            
+               A failure can either be on the connection level
+               (e.g.  the TCP/IP or TLS conection can not be
+               established) or on the Protocol level, the MQTT
+               client does not receive a MQTT CONNACK message on
+               a MQTT CONNECT message sent.";
+          }
+          leaf KeepAliveTime {
+            type uint32 {
+              range "min..65535";
+            }
+            default "60";
+            description
+              "Keep Alive Time in {{units}} defines the maximum wait
+               time after which a message has to be sent to the
+               remote MQTT broker (see {{bibref|MQTT31|3.1}} and
+               {{bibref|MQTT311|3.1.2.10}}).  If no regular
+               messages can be sent a MQTT PINGREQ is sent.
+            
+               A value of zero (0) means no keep alive message
+               are sent and the bridge is not disconnected by the
+               server.
+            
+               A change of this parameter is only effective after
+               the next MQTT CONNECT message to the remote MQTT
+               broker.  If the change needs to be applied
+               immediately, the parameter
+               {{param|ForceReconnect}} has to be set as well.";
+          }
+          leaf ForceReconnect {
+            type boolean;
+            description
+              "Disconnects the MQTT bridge to the remote MQTT broker
+               and reconnects it again (toggle connection).  It
+               is only effective if the MQTT bridge is currently
+               connected to the remote MQTT broker (Parameter
+               {{param|Status|}} is {{enum|Connected|Status}}).
+            
+               If the MQTT bridge is in a different state, the
+               parameter has no effect.
+            
+               This action parameter may be used to immediately
+               apply changes in the MQTT connection settings.";
           }
           leaf ServerSelectionAlgorithm {
             type enumeration {
-              enum "FirstMatch";
+              enum "Priority";
               enum "RoundRobin";
               enum "Random";
             }
             description
               "The algorithm used to select a server entry from the
-               {{object|#.Bridge.{i}.Server.{i}.}} table";
+               {{object|Server}} table";
           }
           leaf ServerConnection {
             type string;
             config false;
             description
-              "{{reference|the {{object|#.Bridge.{i}.Server.}}
-               instance that is used for this {{object}}, while
-               the {{param|Status}} is {{enum|Connecting|Status}}
-               or {{enum|Connected|Status}}.  If the bridge is
-               not connected the value must be an empty string.}}";
+              "{{reference|the {{object|Server.}} instance that is
+               used for this {{object}}, while the
+               {{param|Status}} is {{enum|Connecting|Status}} or
+               {{enum|Connected|Status}}.  If the MQTT bridge is
+               not connected the value MUST be an empty string}}";
           }
 
           list Server {
             key "Address Port";
             description
-              "The {{object}} represents a MQTT Bridge server to be
-               used for a {{object|##.Bridge}}.  A remote MQTT
-               broker, which is connected by a bridge may be
-               reachable over several host addresses each
-               represented by an own {{object}} table entry.  For
-               an active bridge at least one enabled entry has to
-               exist.
+              "Each {{object}} instance represents a MQTT bridge
+               server to be used for a {{object|##.Bridge}}.  A
+               remote MQTT broker, which is connected by a MQTT
+               bridge can be reachable via several host addresses
+               each represented by its own {{object}} table
+               entry.  For an active MQTT bridge at least one
+               enabled entry has to exist.
             
-               If a bridge gets enabled by setting the parameter
-               {{param|##.Bridge.{i}.Enable}} to {{true}}, which
-               either has an empty {{object}} table or the
-               {{object}} table only contains instances whose
-               {{param|Enable}} is set to {{false}}, the
-               {{param|##.Bridge.{i}.Status}} has to set
+               If a MQTT bridge gets enabled by setting the
+               parameter {{param|##.Bridge.{i}.Enable}} to
+               {{true}}, which either has an empty {{object}}
+               table or the {{object}} table only contains
+               instances whose {{param|Enable}} is set to
+               {{false}}, the {{param|##.Bridge.{i}.Status}} has
+               to be set to
                {{enum|Error_Misconfigured|##.Bridge.{i}.Status}}.
             
-               Any attempt to delete an instance with
-               DeleteObject RPC, which is currently in use
-               ({{param|##.Bridge.{i}.ServerConnection}} referes
-               to the instance to be deleted), has to be rejected
-               with a 9001 error code.";
+               Any attempt to delete an instance, which is
+               currently in use
+               ({{param|##.Bridge.{i}.ServerConnection}} refers
+               to the instance to be deleted), has to be
+               rejected.";
             leaf Enable {
               type boolean;
               default "false";
               description
-                "Enables or disables this {{object}}.
-              
-                 This parameter is based on ''ifAdminStatus''
-                 from {{bibref|RFC2863}}.";
+                "Enables or disables this {{object}}.";
             }
             leaf Priority {
               type uint32 {
@@ -44167,7 +44303,12 @@ module Device {
                  {{object}}s with the same {{param}} value
                  utilizes the {{param|Weight}} parameter to
                  determine which {{object}} is selected by the
-                 {{object|##.Bridge}}.";
+                 {{object|##.Bridge}}.
+              
+                 This value is only used if
+                 {{param|##.Bridge.{i}.ServerSelectionAlgorithm}}
+                 is set to
+                 {{enum|Priority|##.Bridge.{i}.ServerSelectionAlgorithm}}.";
             }
             leaf Weight {
               type int64 {
@@ -44178,7 +44319,12 @@ module Device {
                  entries with the same {{param|Priority}}.  The
                  mechanism is defined in {{bibref|RFC2782}}.  A
                  value of -1 indicates that the implementation of
-                 this parameter is specific to the Vendor.";
+                 this parameter is specific to the Vendor.
+              
+                 This value is only used if
+                 {{param|##.Bridge.{i}.ServerSelectionAlgorithm}}
+                 is set to
+                 {{enum|Priority|##.Bridge.{i}.ServerSelectionAlgorithm}}.";
             }
             leaf Address {
               type string {
@@ -44189,14 +44335,16 @@ module Device {
                  the MQTT broker server this {{object|##.Bridge}}
                  connects to.
               
-                 If the value of this Parameter is a FQDN that
+                 If the value of this parameter is a FQDN that
                  resolves to multiple addresses then each address
                  SHOULD be attempted (in an
                  implementation-specific order) until a
                  connection can be made or all addresses are
                  exhausted, in which case the next {{object}}
-                 instance (based on {{param|Priority}} and
-                 {{param|Weight}}) SHOULD be used.";
+                 instance (based on rules defined over the
+                 selected
+                 {{param|##.Bridge.{i}.ServerSelectionAlgorithm}})
+                 SHOULD be used.";
             }
             leaf Port {
               type uint32 {
@@ -44212,13 +44360,60 @@ module Device {
           list Subscription {
             key "Alias";
             description
-              "List of MQTT subscriptions handled over the bridge";
+              "List of MQTT subscriptions handled over the bridge.";
+            leaf Enable {
+              type boolean;
+              description
+                "Setting Enable to {{true}} activates the handling
+                 of this subscription instance.  In case of
+                 incoming directions ({{param|Direction}} is
+                 either {{enum|in|Direction}} or
+                 {{enum|both|Direction}}) the topic is subscribed
+                 over the bridge at the remote MQTT broker with a
+                 MQTT SUBSCRIBE message if {{param}} is set to
+                 {{true}} or unsubscribed from the remote MQTT
+                 broker with a MQTT UNSUBSCRIBE message if the
+                 value is set to {{false}}.
+              
+                 The actual status of the subscription is
+                 indicated with {{param|Status}}.";
+            }
+            leaf Status {
+              type enumeration {
+                enum "Enabled";
+                enum "Disabled";
+                enum "Error";
+              }
+              config false;
+              description
+                "Indicates the status of this subscription.
+                 {{enum}}
+              
+                 The {{enum|Enabled}} value indicates that the
+                 this subscription is active.  In case of
+                 incoming directions ({{param|Direction}} is
+                 either {{enum|in|Direction}} or
+                 {{enum|both|Direction}}) the topic was
+                 successfully subscribed with the remote MQTT
+                 broker.
+              
+                 The {{enum|Disabled}} value indicates that this
+                 subscription is not used.
+              
+                 The {{enum|Error}} value indicates that an error
+                 occured (e.g.  an subscription could not be made
+                 with the remote MQTT broker) and the
+                 subscription is not in use.";
+            }
             leaf Topic {
               type string {
                 length "0..65535";
               }
               description
-                "Name of the Subscribed Topic";
+                "Name of the subscribed topic.  Topic names may
+                 contain wildcards according to the rules
+                 specified in {{bibref|MQTT31|Appendix A}} and
+                 {{bibref|MQTT311|4.7}}.";
             }
             leaf Direction {
               type enumeration {
@@ -44229,106 +44424,200 @@ module Device {
               description
                 "The direction of the subscription.  {{enum}}.";
             }
-            leaf Enable {
-              type boolean;
-              description
-                "Setting Enable to {{true}} means the topic is
-                 subscribed over the bridge.";
-            }
             leaf QoS {
               type uint32 {
                 range "0..2";
               }
               description
-                "The MQTT QoS level assigned with the subscription";
+                "The MQTT QoS level assigned with the subscription
+                 (see {{bibref|MQTT31|4.1}} and
+                 {{bibref|MQTT311|4.3}}).";
             }
             leaf LocalPrefix {
               type string;
               description
-                "For incoming topics from the bridge, the
-                 LocalPrefix will added in front.
+                "The local prefix is used for remapping received
+                 topics to the local topics of the MQTT broker
+                 and to select the topics to be sent over bridge
+                 to the remote MQTT broker.
               
-                 For outgoing topics, the broker will prepend the
-                 topic with the local prefix for selection.  When
-                 an outgoing message is processed, the
-                 LocalPrefix will be removed from the topic.";
+                 * In incoming direction ({{param|Direction}} is
+                 either {{enum|in|Direction}} or
+                 {{enum|both|Direction}}):
+              
+                 : For remote topics received over the bridge the
+                 MQTT broker adds the LocalPrefix in front of the
+                 received topic, before processing it.
+              
+                 :: '' ''
+              
+                 : ''Example:''
+              
+                 :: Topic is \"/bus/+\", LocalPrefix is
+                 \"/local\", Direction is \"in\"
+              
+                 :: MQTT broker receives message with topic
+                 \"/bus/tr181\" over bridge => MQTT broker uses
+                 topic \"/local/bus/tr181\" for internal
+                 processing
+              
+                 * In outgoing direction ({{param|Direction}} is
+                 either {{enum|out|Direction}} or
+                 {{enum|both|Direction}}):
+              
+                 : For selection of the topics to be sent over
+                 the bridge the MQTT broker uses the combination
+                 of {{param}} and {{param|Topic}} to match the
+                 topics to be sent over bridge, and removes the
+                 {{param}} from the selected topic before sending
+                 it over the bridge.
+              
+                 :: '' ''
+              
+                 : ''Example:''
+              
+                 :: Topic is \"/bus/+\", LocalPrefix is
+                 \"/local\", Direction is \"out\"
+              
+                 :: MQTT broker receives message with topic
+                 \"/local/bus/tr181\" from a MQTT client => MQTT
+                 broker sends topic \"/bus/tr181\" to remote MQTT
+                 broker";
             }
             leaf RemotePrefix {
               type string;
               description
-                "For incoming topics from the bridge, the broker
-                 will prepend the topic with the remote prefix
-                 and subscribe to the resulting topic on the
-                 remote broker.  When a matching incoming message
-                 is received, the remote prefix will be removed
-                 from the topic.
+                "The remote prefix is used for remapping topics to
+                 the remote MQTT broker topic lists.
               
-                 For outgoing topics over the bridge, the
-                 RemotePrefix will be added in front.";
+                 * In incoming direction ({{param|Direction}} is
+                 either {{enum|in|Direction}} or
+                 {{enum|both|Direction}}):
+              
+                 : For remote topics received over the bridge the
+                 MQTT broker removes the remote prefix topic from
+                 the received topic (before handling the
+                 {{param|LocalPrefix}}), before processing it.
+              
+                 :: '' ''
+              
+                 : ''Example:''
+              
+                 :: Topic is \"/bus/+\", LocalPrefix is
+                 \"/local\", RemotePrefix is \"/remote\",
+                 Direction is \"in\"
+              
+                 :: MQTT broker receives message with topic
+                 \"/remote/bus/tr181\" over bridge => MQTT broker
+                 uses topic \"/local/bus/tr181\" for internal
+                 processing
+              
+                 : During activation of the bridge, the MQTT
+                 broker prepends the {{param|Topic}} with
+                 {{param}} topic and subscribes to the remote
+                 MQTT broker with it, in order to receive all
+                 applicable remote topics.
+              
+                 :: '' ''
+              
+                 : ''Example:''
+              
+                 :: Topic is \"/bus/+\", RemotePrefix is
+                 \"/remote\", Direction is \"in\"
+              
+                 :: MQTT broker sends a subscription to the
+                 remote MQTT broker with the topic
+                 \"/remote/bus/+\".
+              
+                 * In outgoing direction ({{param|Direction}} is
+                 either {{enum|out|Direction}} or
+                 {{enum|both|Direction}}):
+              
+                 : For all topics to be sent over the bridge
+                 ({{param|Direction}} is either
+                 {{enum|out|Direction}} or
+                 {{enum|both|Direction}}), the RemotePrefix will
+                 be prepended to the topic after the
+                 {{param|LocalPrefix}} has been processed and
+                 before sending the message over the bridge.
+              
+                 :: '' ''
+              
+                 : ''Example:''
+              
+                 :: Topic is \"/bus/+\", LocalPrefix is
+                 \"/local\", RemotePrefix is \"/remote\"
+                 Direction is \"out\"
+              
+                 :: MQTT broker receives message with topic
+                 \"/local/bus/tr181\" from a MQTT client => MQTT
+                 broker sends topic \"/remote/bus/tr181\" to
+                 remote MQTT broker";
             }
           }
         }
 
         container Stats {
           config false;
+          description
+            "The MQTT broker statistics values.  These will reset
+             with each MQTT broker start, either after reboot or
+             if the MQTT broker gets (re-)enabled.";
           leaf TotalNumberOfClients {
-            type types:StatsCounter64;
+            type uint32;
             description
-              "Total number of clients registered with the broker.";
+              "Total number of MQTT clients registered with the MQTT
+               broker.";
           }
           leaf NumberOfActiveClients {
-            type types:StatsCounter64;
+            type uint32;
             description
-              "Number of clients, which have a connection with the
-               broker established";
+              "Number of MQTT clients, which have a connection with
+               the MQTT broker established.";
           }
-          leaf NumberOfInActiveClients {
-            type types:StatsCounter64;
+          leaf NumberOfInactiveClients {
+            type uint32;
             description
-              "Number of clients, which have no connection with the
-               broker established.";
+              "Number of MQTT clients, which have no connection with
+               the MQTT broker established.";
+          }
+          leaf Subscriptions {
+            type uint32;
+            description
+              "Number of subscriptions held by the MQTT broker.";
           }
           leaf PublishSent {
             type types:StatsCounter64;
             description
-              "Number of publish messages send to the broker.";
+              "Number of publish messages sent by the MQTT broker.";
           }
           leaf PublishReceived {
             type types:StatsCounter64;
             description
-              "Number of publish messages received from to the
+              "Number of publish messages received by the MQTT
                broker.";
-          }
-          leaf SubscribeSent {
-            type types:StatsCounter64;
-            description
-              "Number of subscribe messages send to the broker.";
-          }
-          leaf UnSubscribeSent {
-            type types:StatsCounter64;
-            description
-              "Number of unsubscribe messages send to the broker.";
           }
           leaf MQTTMessagesSent {
             type types:StatsCounter64;
             description
-              "Total number of MQTT messages send to the broker.";
+              "Total number of MQTT messages sent by the MQTT
+               broker.";
           }
           leaf MQTTMessagesReceived {
             type types:StatsCounter64;
             description
-              "Total number of MQTT messages received from the
+              "Total number of MQTT messages received by the MQTT
                broker.";
           }
           leaf ConnectionErrors {
-            type types:StatsCounter64;
+            type types:StatsCounter32;
             description
               "Number of connection errors.";
           }
           leaf PublishErrors {
-            type types:StatsCounter64;
+            type types:StatsCounter32;
             description
-              "Number of errors, which prevented sending publish
+              "Number of errors which prevented sending publish
                messages";
           }
         }
@@ -44351,9 +44640,14 @@ module Device {
         description
           "Client properties for Dynamic DNS.
         
-           A Dynamic DNS Client is responsible for verifying IP
-           address changes and update information from a
-           subscribed account on a Dynamic DNS Server.";
+           A dynamic DNS client is responsible for verifying IP
+           address changes and updating information from a
+           subscribed account on a Dynamic DNS Server.
+        
+           For enabled table entries, if {{param|Server}} is not
+           a valid reference then the table entry is inoperable
+           and the CPE MUST set the {{param|Status}} to
+           {{enum|Error_Misconfigured|Status}}.";
         leaf Enable {
           type boolean;
           description
@@ -44390,16 +44684,6 @@ module Device {
              cause, which MUST use the format defined in
              {{bibref|TR-106}}.";
         }
-        leaf Interface {
-          type string {
-            length "0..256";
-          }
-          description
-            "The IP Interface associated with this Dynamic DNS
-             Client.
-          
-             {{reference}}";
-        }
         leaf Server {
           type string {
             length "0..256";
@@ -44409,6 +44693,20 @@ module Device {
              Client.
           
              {{reference}}";
+        }
+        leaf Interface {
+          type string {
+            length "0..256";
+          }
+          description
+            "The IP interface over which update queries to the
+             server are sent.
+          
+             {{reference}}
+          
+             If an empty string is specified, the CPE MUST use
+             its routing policy (Forwarding table entries), to
+             determine the appropriate interface.";
         }
         leaf Username {
           type string {
@@ -44440,7 +44738,7 @@ module Device {
           leaf Status {
             type enumeration {
               enum "Registered";
-              enum "Update_needed";
+              enum "UpdateNeeded";
               enum "Updating";
               enum "Error";
               enum "Disabled";
@@ -44519,9 +44817,11 @@ module Device {
           }
           config false;
           description
-            "{{list}} Indicates the protocols that are supported by
-             the CPE for sending requests to the Dynamic DNS
-             server.";
+            "Indicates the protocols that are supported by the CPE
+             for sending requests to the Dynamic DNS server.
+             {{list}} This list depends on the Dynamic DNS
+             service defined by the {{param|ServiceName}}
+             parameter.";
         }
         leaf Protocol {
           type string;
@@ -44541,13 +44841,19 @@ module Device {
         leaf RetryInterval {
           type uint32;
           description
-            "Interval (in {{units}}) to retry after a failed
-             request.";
+            "Initial retry interval (in {{units}}) after a failed
+             request.  This parameter can be used as a fixed
+             value or as part of a retry interval calculation.";
         }
         leaf MaxRetries {
-          type int32;
+          type uint32;
           description
-            "Maximum number of retries after a failed request.";
+            "Maximum number of retries after a failed request.  When
+             the maximum number is reached, no further requests
+             are sent until the context changes.
+          
+             A value of 0 means that there are no retries after a
+             failed request.";
         }
       }
     }
