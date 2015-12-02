@@ -30,9 +30,10 @@ urn:broadband-forum-org:example1
           boolean WasOn
       object Dimmer.{i}.
         string Name
-        command On
+        command SetBrightness
           unsignedInt[0:100] Brightness (W) [100]
           unsignedInt[0:100] PreviousBrightness
+        command On
         command Off
       object Operations.
         unsignedInt RequestNumberOfEntries

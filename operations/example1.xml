@@ -300,9 +300,9 @@
         </description>
         <syntax><string/></syntax>
       </parameter>
-      <command name="On">
+      <command name="SetBrightness">
         <description>
-          Switch the light on with the specified brightness.
+          Set the dimmer's brightness.
         </description>
         <parameter name="Brightness" access="readWrite">
           <description>
@@ -328,9 +328,14 @@
           </syntax>
         </parameter>
       </command>
+      <command name="On">
+        <description>
+          Switch the dimmer off. The same as ''SetLevel(100)''.
+        </description>
+      </command>
       <command name="Off">
         <description>
-          Switch the light off.
+          Switch the dimmer off. The same as ''SetLevel(0)''.
         </description>
       </command>
     </object>
