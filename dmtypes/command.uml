@@ -22,6 +22,7 @@
 ' XXX could define more methods, e.g. static create() methods
 
 abstract class Command {
+  commandKey: String
   async: Boolean
   persist: Boolean
   replace: Boolean
