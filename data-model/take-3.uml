@@ -1,7 +1,7 @@
 @startuml
 
 class "Physical Device" as DEVICE
-class "Other\nUPnP etc" as OTHER
+class "Other Agents\nUPnP etc" as OTHER
 class "USP\nAgent" as AGENT
 class "USP\nController" as CONTROLLER
 class "Service" as SERVICE
@@ -20,14 +20,15 @@ class "Execution\nEnvironment" as EE {
 
 DEVICE o--> "1\nroot" EE
 DEVICE o--> "*\nother" EE
+EE o-up-> "*\nvirtual" DEVICE
 EE "root" o--> "1\nlocal" AGENT
 EE o--> "*" OTHER
 EE "*\nchild" --> "1\nparent" EE
 EE o--> "*\nvirtual" AGENT
 AGENT "local" o--> "*" CONTROLLER
 EE "root" o--> "*\nlocalintf" INTF
-EE "root" o--> "*\nvirtualintf" INTF
-EE "root" o--> "*" SERVICE
+EE o--> "*\nvirtualintf" INTF
+EE o--> "*" SERVICE
 WIFI -up-|> INTF
 SENSOR -up-|> SERVICE
 ACTUATOR -up-|> SERVICE
