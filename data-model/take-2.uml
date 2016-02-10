@@ -1,0 +1,46 @@
+@startuml
+
+class "Actuator" as ACTUATOR
+class "Physical\nDevice" as DEVICE
+class "Dimmable\nLight" as DIMMABLE
+class "Dimmer" as DIMMER
+class "Execution\nEnvironment" as EE
+class "Light" as LIGHT
+class "Other\nUPnP etc" as OTHER
+class "Sensor" as SENSOR
+class "Service" as SERVICE
+class "Switch" as SWITCH
+class "USP\nAgent" as AGENT
+class "USP\nController" as CONTROLLER
+class "Zigbee\nSwitch" as ZBSWITCH
+
+DEVICE o--> "*\nloc" AGENT
+DEVICE o--> "*\nloc" CONTROLLER
+
+DEVICE o--> "*\nrem" AGENT
+AGENT o--> "*\nrem" CONTROLLER
+
+DEVICE o--> "1\nroot" EE
+EE "*\nchild" --> "1\nparent" EE
+
+DEVICE o--> "*" SERVICE
+
+DEVICE o--> "*" OTHER
+
+SENSOR --|> SERVICE
+ACTUATOR --|> SERVICE
+
+SWITCH --|> ACTUATOR
+DIMMER --|> ACTUATOR
+LIGHT --|> ACTUATOR
+
+DIMMABLE *--> "1" SWITCH
+DIMMABLE *--> "1" DIMMER
+DIMMABLE *--> "1" LIGHT
+
+ZBSWITCH --|> SWITCH
+
+hide empty fields
+hide empty methods
+
+@enduml
