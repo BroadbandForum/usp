@@ -41,7 +41,7 @@
   </component>
   
   <component name="RebootCommand">
-    <command name="Reboot">
+    <command name="Reboot" async="true">
       <description>
         Reboot the entity represented by the object on which this command is invoked.
       </description>
@@ -57,11 +57,11 @@
   </component>
 
   <component name="DownloadCommandInputs">
-    <object name="Input." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Input.">
       <description>
         Input arguments.
       </description>
-      <parameter name="URL" access="readWrite">
+      <parameter name="URL" mandatory="true">
         <description>
           URL, as defined in {{bibref|REF}}, specifying the source file location...
         </description>
@@ -71,7 +71,7 @@
           </string>
         </syntax>
       </parameter>
-      <parameter name="FileType" access="readWrite">
+      <parameter name="FileType">
         <description>
           An integer followed by a space followed by the file type description. Only the following values are currently defined for the {{param}} argument:
           {{enum}}
@@ -88,10 +88,10 @@
             <enumeration value="4 Tone File"/>
             <enumeration value="5 Ringer File"/>
           </string>
-          <default type="object" value="1 Firmware Upgrade Image"/>
+          <default type="parameter" value="1 Firmware Upgrade Image"/>
         </syntax>
       </parameter>
-      <parameter name="Username" access="readWrite">
+      <parameter name="Username">
         <description>
           Username to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
         </description>
@@ -99,10 +99,10 @@
           <string>
             <size maxLength="256"/>
           </string>
-          <default type="object" value=""/>
+          <default type="parameter" value=""/>
         </syntax>
       </parameter>
-      <parameter name="Password" access="readWrite">
+      <parameter name="Password">
         <description>
           Password to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
         </description>
@@ -110,10 +110,10 @@
           <string>
             <size maxLength="256"/>
           </string>
-          <default type="object" value=""/>
+          <default type="parameter" value=""/>
         </syntax>
       </parameter>
-      <parameter name="FileSize" access="readWrite">
+      <parameter name="FileSize">
         <description>
           The size of the file to be downloaded in bytes.
           The {{param}} argument is intended as a hint to the CPE, which the CPE MAY use to determine if it has sufficient space for the file to be downloaded, or to prepare space to accept the file.
@@ -121,10 +121,10 @@
         </description>
         <syntax>
           <unsignedInt/>
-          <default type="object" value="0"/>
+          <default type="parameter" value="0"/>
         </syntax>
       </parameter>
-      <parameter name="TargetFileName" access="readWrite">
+      <parameter name="TargetFileName">
         <description>
           The name of the file to be used on the target file system...
         </description>
@@ -132,19 +132,19 @@
           <string>
             <size maxLength="256"/>
           </string>
-          <default type="object" value=""/>
+          <default type="parameter" value=""/>
         </syntax>
       </parameter>
-      <parameter name="DelaySeconds" access="readWrite">
+      <parameter name="DelaySeconds">
         <description>
           This argument has different meanings for Unicast and Multicast downloads...
         </description>
         <syntax>
           <unsignedInt/>
-          <default type="object" value="0"/>
+          <default type="parameter" value="0"/>
         </syntax>
       </parameter>
-      <parameter name="SuccessURL" access="readWrite">
+      <parameter name="SuccessURL">
         <description>
           When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download completes successfully...
         </description>
@@ -152,10 +152,10 @@
           <string>
             <size maxLength="256"/>
           </string>
-          <default type="object" value=""/>
+          <default type="parameter" value=""/>
         </syntax>
       </parameter>
-      <parameter name="FailureURL" access="readWrite">
+      <parameter name="FailureURL">
         <description>
           When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download does not complete successfully...
         </description>
@@ -163,18 +163,18 @@
           <string>
             <size maxLength="256"/>
           </string>
-          <default type="object" value=""/>
+          <default type="parameter" value=""/>
         </syntax>
       </parameter>      
     </object>
   </component>
 
   <component name="DownloadCommandOutputs">
-    <object name="Output." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="Output.">
       <description>
         Output arguments.
       </description>
-      <parameter name="Status" access="readOnly">
+      <parameter name="Status">
         <description>
           A successful response to this method returns an integer enumeration defined as follows...
         </description>
@@ -182,32 +182,32 @@
           <int>
             <range minInclusive="0" maxInclusive="1"/>
           </int>
-          <default type="object" value="1"/>
+          <default type="parameter" value="1"/>
         </syntax>
       </parameter>
-      <parameter name="StartTime" access="readOnly">
+      <parameter name="StartTime">
         <description>
           The date and time download was started in UTC...
         </description>
         <syntax>
           <dateTime/>
-          <default type="object" value="0001-01-01T00:00:00Z"/>
+          <default type="parameter" value="0001-01-01T00:00:00Z"/>
         </syntax>
       </parameter>
-      <parameter name="CompleteTime" access="readOnly">
+      <parameter name="CompleteTime">
         <description>
           The date and time the download was fully completed and applied in UTC...
         </description>
         <syntax>
           <dateTime/>
-          <default type="object" value="0001-01-01T00:00:00Z"/>
+          <default type="parameter" value="0001-01-01T00:00:00Z"/>
         </syntax>
       </parameter>    
     </object>
   </component>
 
   <component name="DownloadCommand">
-    <command name="Download">
+    <command name="Download" async="true">
       <description>
         Download a file to the entity represented by the object on which this command is invoked.
         {{issue|Argument names are shown with leading "#" characters as a reminder that they don't exist in the data model.}}
@@ -280,12 +280,17 @@
         <description>
           Toggle the state of the light.
         </description>
-        <parameter name="WasOn" access="readOnly">
+        <object name="Output.">
           <description>
-            Whether the light was on.
+            Output arguments.
           </description>
-          <syntax><boolean/></syntax>
-        </parameter>
+          <parameter name="WasOn">
+            <description>
+              Whether the light was on.
+            </description>
+            <syntax><boolean/></syntax>
+          </parameter>          
+        </object>
       </command>
     </object>
     
@@ -304,38 +309,48 @@
         <description>
           Set the dimmer's brightness.
         </description>
-        <parameter name="Brightness" access="readWrite">
+        <object name="Input.">
           <description>
-            Requested brightness in {{units}}.
+            Input arguments.
           </description>
-          <syntax>
-            <unsignedInt>
-              <range minInclusive="0" maxInclusive="100"/>
-              <units value="percent"/>
-            </unsignedInt>
-            <default type="object" value="100"/>
-          </syntax>
-        </parameter>
-        <parameter name="PreviousBrightness" access="readOnly">
+          <parameter name="Brightness">
+            <description>
+              Requested brightness in {{units}}.
+            </description>
+            <syntax>
+              <unsignedInt>
+                <range minInclusive="0" maxInclusive="100"/>
+                <units value="percent"/>
+              </unsignedInt>
+              <default type="parameter" value="100"/>
+            </syntax>
+          </parameter>
+        </object>
+        <object name="Output.">
           <description>
-            Previous brightness in {{units}}.
+            Output arguments.
           </description>
-          <syntax>
-            <unsignedInt>
-              <range minInclusive="0" maxInclusive="100"/>
-              <units value="percent"/>
-            </unsignedInt>
-          </syntax>
-        </parameter>
+          <parameter name="PreviousBrightness">
+            <description>
+              Previous brightness in {{units}}.
+            </description>
+            <syntax>
+              <unsignedInt>
+                <range minInclusive="0" maxInclusive="100"/>
+                <units value="percent"/>
+              </unsignedInt>
+            </syntax>
+          </parameter>
+        </object>
       </command>
       <command name="On">
         <description>
-          Switch the dimmer off. The same as ''SetLevel(100)''.
+          Switch the dimmer off. The same as ''SetBrightness(100)''.
         </description>
       </command>
       <command name="Off">
         <description>
-          Switch the dimmer off. The same as ''SetLevel(0)''.
+          Switch the dimmer off. The same as ''SetBrightness(0)''.
         </description>
       </command>
     </object>
@@ -437,12 +452,6 @@
         <description>
           Request cancelation of this {{object|#}}'s command.
           This command completes immediately. If successul, {{param|#.State}} will immediately change to {{enum|Canceling|#.State}} and will change to {{enum|Canceled|#.State}} when the cancelation is complete.
-        </description>
-      </command>
-      <command name="Delete">
-        <description>
-          Request deletion of this {{object|#}} instance.
-          This command completes immediately.
         </description>
       </command>
     </object>

@@ -7,7 +7,6 @@ DMDIR = $(HOME)/links/cwmp-ils
 
 REPORT = report.pl
 REPORTFLAGS += --include=$(DMDIR)
-REPORTFLAGS += --nowarnstaticdefault 
 REPORTFLAGS += --quiet 
 
 all: html text

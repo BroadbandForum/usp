@@ -205,6 +205,7 @@ In BBF standards, a data type name MUST NOT include any hyphens.</xs:documentati
           <xs:documentation>Default on object creation.</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="parameter"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="DescriptionAction">
@@ -389,6 +390,7 @@ In BBF standards, a profile name MUST NOT start with an underscore or include an
       <xs:documentation>Read-write access.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
+      <xs:enumeration value="unspecified"/>
       <xs:enumeration value="readOnly"/>
       <xs:enumeration value="readWrite"/>
     </xs:restriction>
@@ -1102,6 +1104,11 @@ MUST be present if and only if defining a new command.</xs:documentation>
         <xs:documentation>MUST be present if and only if modifying an existing command.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="async" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Indicates whether this is an asynchronous (true) or synchronous (false) command.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
     <xs:attribute name="status" type="tns:Status" default="current"/>
     <xs:attribute name="id" type="tns:OpaqueID"/>
     <xs:anyAttribute namespace="##other"/>
@@ -1158,14 +1165,20 @@ If the object is a table (see maxEntries), the final part of the name MUST be "{
         <xs:documentation>MUST be present if and only if modifying an existing object.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="access" type="tns:ReadWriteAccess" use="required"/>
-    <xs:attribute name="minEntries" type="xs:nonNegativeInteger" use="required">
+    <xs:attribute name="access" type="tns:ReadWriteAccess" default="unspecified">
       <xs:annotation>
+        <xs:documentation>XXX made access optional, maybe only for CommandObjects?</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="minEntries" type="xs:nonNegativeInteger" default="1">
+      <xs:annotation>
+        <xs:documentation>XXX made minEntries optional, maybe only for CommandObjects?</xs:documentation>
         <xs:documentation>minEntries MUST be less than or equal to maxEntries (all values are regarded as being less than "unbounded").</xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="maxEntries" type="tns:MaxEntries" use="required">
+    <xs:attribute name="maxEntries" type="tns:MaxEntries" default="1">
       <xs:annotation>
+        <xs:documentation>XXX made maxEntries optional, maybe only for CommandObjects?</xs:documentation>
         <xs:documentation>minEntries and maxEntries indicate whether the object is a table:
 * minEntries=0, maxEntries=1 : single-instance object which might not be allowed to exist, e.g. because only one of it and another object can exist at the same time
 * minEntries=1, maxEntries=1 : single-instance object that is always allowed to exist
@@ -1206,7 +1219,12 @@ MUST be present if and only if defining a new parameter.</xs:documentation>
         <xs:documentation>MUST be present if and only if modifying an existing parameter.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="access" type="tns:ReadWriteAccess" use="required"/>
+    <xs:attribute name="access" type="tns:ReadWriteAccess" default="unspecified">
+      <xs:annotation>
+        <xs:documentation>XXX made access optional, maybe only for CommandParameters?</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="mandatory" type="xs:boolean" default="false"/>
     <xs:attribute name="status" type="tns:Status" default="current"/>
     <xs:attribute name="activeNotify" type="tns:ActiveNotify" default="normal"/>
     <xs:attribute name="forcedInform" type="xs:boolean" default="false"/>

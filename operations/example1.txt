@@ -7,15 +7,15 @@ urn:broadband-forum-org:example1
       command Reboot
       command Download
         object Input.
-          string(256) URL (W)
-          string(64) FileType (W) [1 Firmware Upgrade Image]
-          string(256) Username (W) []
-          string(256) Password (W) []
-          unsignedInt FileSize (W) [0]
-          string(256) TargetFileName (W) []
-          unsignedInt DelaySeconds (W) [0]
-          string(256) SuccessURL (W) []
-          string(256) FailureURL (W) []
+          string(256) URL
+          string(64) FileType [1 Firmware Upgrade Image]
+          string(256) Username []
+          string(256) Password []
+          unsignedInt FileSize [0]
+          string(256) TargetFileName []
+          unsignedInt DelaySeconds [0]
+          string(256) SuccessURL []
+          string(256) FailureURL []
         object Output.
           int[0:1] Status [1]
           dateTime StartTime [0001-01-01T00:00:00Z]
@@ -27,12 +27,15 @@ urn:broadband-forum-org:example1
         command On
         command Off
         command Toggle
-          boolean WasOn
+          object Output.
+            boolean WasOn
       object Dimmer.{i}.
         string Name
         command SetBrightness
-          unsignedInt[0:100] Brightness (W) [100]
-          unsignedInt[0:100] PreviousBrightness
+          object Input.
+            unsignedInt[0:100] Brightness [100]
+          object Output.
+            unsignedInt[0:100] PreviousBrightness
         command On
         command Off
       object Operations.
@@ -45,15 +48,15 @@ urn:broadband-forum-org:example1
           object Download.{i}.
             string Target
             object Input.
-              string(256) URL (W)
-              string(64) FileType (W) [1 Firmware Upgrade Image]
-              string(256) Username (W) []
-              string(256) Password (W) []
-              unsignedInt FileSize (W) [0]
-              string(256) TargetFileName (W) []
-              unsignedInt DelaySeconds (W) [0]
-              string(256) SuccessURL (W) []
-              string(256) FailureURL (W) []
+              string(256) URL
+              string(64) FileType [1 Firmware Upgrade Image]
+              string(256) Username []
+              string(256) Password []
+              unsignedInt FileSize [0]
+              string(256) TargetFileName []
+              unsignedInt DelaySeconds [0]
+              string(256) SuccessURL []
+              string(256) FailureURL []
             object Output.
               int[0:1] Status [1]
               dateTime StartTime [0001-01-01T00:00:00Z]
@@ -65,5 +68,4 @@ urn:broadband-forum-org:example1
           string Message
           string Detail
           command Cancel
-          command Delete
     profile 
