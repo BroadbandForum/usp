@@ -24,10 +24,6 @@
 abstract class Command {
   commandKey: String
   async: Boolean
-  persist: Boolean
-  replace: Boolean
-  sendAck: Boolean
-  maxRequests: Uint
   request(): Request {abstract}
 }
 
@@ -53,12 +49,10 @@ abstract class Request {
   state: RequestState
   message: String
   cancel(): Boolean
-  delete(): Boolean
 }
 
 note bottom
-  Invoke cancel() and delete()
-  to cancel and delete Requests
+  Invoke cancel() to cancel Request
 end note
 
 Request "1" *--> "1\nstate" RequestState
