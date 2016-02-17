@@ -1,0 +1,209 @@
+@startuml
+/' This is not a traditional class diagram, but meant to show 
+how a refined USP data model might be implemented. In this case:
+	1 is a first class object
+	2 is a second class object
+	S is a "structure" object
+	M is a component object
+ *--> means a child object or table.
+ o--> is a branch to an object of an abstract type
+ --> means a reference parameter of type pathRef
+ --|> means that a component is implemented, or that the functionality is fundamentally replicated.
+'/
+
+note "This is not a traditional class diagram, but meant to show how a refined USP data model might be implemented. In this case:\n1 is a first class object\n2 is a second class object\n S is a structure object\n M is a component object\n*--> means a child object or table\no--> is a branch to an object of an abstract type\n--> means a reference parameter of type pathRef\n--|> means that a component is implemented\n" as N1
+
+' Define spots
+!define FIRST <<(1, SkyBlue)>>
+!define SECOND <<(2, Salmon)>>
+!define STRUCTURE <<(S, LightGray)>>
+!define COMPONENT <<(M, BlanchedAlmond)>>
+
+' USP Related elements
+
+class "/" as ROOT
+class "Agent" as AGENT FIRST {
+	+USPID : String
+	+Proxied : Boolean
+	+SupportedMTPs : String
+	}
+class "ThisAgent" as LOCAL FIRST {
+	+USPID : String
+	+SupportedMTPs : String
+	+ParameterKey : String
+	+execenvRef : pathRef
+}
+class "SupportedDT" as DT SECOND {
+	+URL : String
+	+UUID : String
+	+URN : String
+	+Features : String
+}
+class "AccessControlRoles" as ACL SECOND
+class "Controller" as CONTROLLER SECOND {
+	+URL : String
+	+Authority : String
+	+Identity : String
+	+AuthorizedRole : pathRef
+	+SupportedMTPs : String
+	+ConnectionCapabilities : String
+	}
+class "Subscription" as SUB SECOND {
+	+Enable : Boolean
+	+SubscriptionID : String
+	+Type : String
+	+Target : String
+	+Triggers : String
+	+Interval : unsignedInt
+	}
+
+class "Request" as REQUEST SECOND {
+	+cancel()
+	}
+
+'Base elements
+
+class "Device" as DEVICES FIRST
+class "InterfaceStack" as STACK FIRST
+class "Interface" as INTERFACE STRUCTURE
+class "Service" as SERVICE STRUCTURE
+class "ExecEnv" as EE FIRST {
+	+deviceRef : pathRef
+	+reboot()
+	+upgrade()
+	}
+
+'Interfaces
+
+class "Wifi" as WIFI SECOND
+class "Ethernet" as ETH SECOND
+class "IP" as IP SECOND
+
+'Services
+
+interface "Switchable" as SWITCH COMPONENT {
+	+State : Boolean
+	+OnOff()
+	+Toggle()
+}
+interface "Dimmable" as DIMMER COMPONENT {
+	+CurrentLevel
+	+SetLevel()
+}
+interface "Volume" as VOLUME COMPONENT {
+	+CurrentLevel
+	+SetLevel()
+}
+interface "Powerable" as POWER COMPONENT {
+	+Voltage
+	+Amperage
+}
+interface "Power Sensor" as POWERSENSOR COMPONENT {
+	+StartMeasurement()
+	+StopMeasurement()
+}
+class "Smart Meter" as SMARTMETER FIRST
+class "Light" as LIGHT FIRST
+class "Camera" as CAMERA FIRST {
+	+CaptureImage()
+	+StartVideo()
+	+StopVideo()
+}
+class "Switch" as SWITCHES FIRST
+class "Voice Service" as VOICE FIRST
+class "Screen" as SCREEN FIRST
+class "Audio" as SOUND STRUCTURE
+class "AudioOutput" as AMP FIRST
+class "AudioInput" as MIC FIRST
+class "Motor" as MOTOR FIRST
+class "Fan" as FAN FIRST
+class "Sensor" as SENSOR STRUCTURE
+
+'Sensors
+
+class "TempSensor" as TEMP FIRST
+class "MotionSensor" as MOTION FIRST
+class "LightSensor" as LIGHTSENSOR FIRST
+class "WaterSensor" as WATER FIRST
+class "Accelerometer" as ACCEL FIRST
+
+'Build base and USP objects
+ROOT *-right-> "*" DEVICES
+'DEVICES --|> POWER
+ROOT *-up-> "*" STACK
+ROOT *-left-> "*" AGENT
+ROOT *--> "1" LOCAL
+ROOT o-up-> INTERFACE
+ROOT o-up-> SERVICE
+ROOT *-up-> "*" EE
+EE --> "1\npathRef" DEVICES
+LOCAL --> "1\npathRef" EE
+LOCAL *--> "*" ACL
+LOCAL *--> "*" CONTROLLER
+LOCAL *--> "*" REQUEST
+LOCAL *--> "*" DT
+CONTROLLER *--> "*" SUB
+CONTROLLER --> "1\npathRef" ACL
+
+'Build Interfaces
+
+IP "*" <--* INTERFACE
+ETH "*" <--* INTERFACE
+WIFI "*" <--* INTERFACE
+
+'Build Services
+
+VOICE "*" <--* SERVICE
+SENSOR <-down-o SERVICE
+LIGHT "*" <-up-* SERVICE
+SWITCHES "*" <-up-* SERVICE
+CAMERA "*" <-up-* SERVICE
+CAMERA --|> POWER
+SCREEN "*" <-up-* SERVICE
+SOUND "*" <-up-* SERVICE
+MOTOR "*" <-up-* SERVICE
+MOTOR --|> SWITCH
+MOTOR --|> POWER
+MOTOR --|> DIMMER
+LIGHT --|> SWITCH
+LIGHT --|> POWER
+LIGHT --|> DIMMER
+FAN "*" <-up-* SERVICE
+FAN --|> SWITCH
+FAN --|> POWER
+FAN --|> DIMMER
+SWITCHES --|> SWITCH
+SWITCHES --|> POWER
+SWITCHES --|> DIMMER
+AMP "*" <--* SOUND
+MIC "*" <--* SOUND
+AMP --|> VOLUME
+AMP --|> POWER
+POWER --|> POWERSENSOR
+
+'Build Sensors
+
+SENSOR *--> "*" SMARTMETER
+SMARTMETER --|> POWERSENSOR
+SENSOR *--> "*" TEMP
+SENSOR *--> "*" MOTION
+SENSOR *--> "*" LIGHTSENSOR
+SENSOR *--> "*" WATER
+SENSOR *--> "*" ACCEL
+
+' Extra stuff not deleted
+/'
+class "Collection" as COLLECTION {
+	+Name : String
+	}
+class "Item" as ITEM {
+	+elementRef : pathRef
+}
+' interface "Actuator" as ACTR
+' LIGHT -up-|> ACTR
+' SWITCHES -up-|> ACTR
+'/
+
+hide empty fields
+hide empty methods
+@enduml
