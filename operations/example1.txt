@@ -20,6 +20,17 @@ urn:broadband-forum-org:example1
           int[0:1] Status [1]
           dateTime StartTime [0001-01-01T00:00:00Z]
           dateTime CompleteTime [0001-01-01T00:00:00Z]
+      notification TransferComplete
+        string(1024) AnnounceURL []
+        string(1024) TransferURL []
+        boolean IsDownload [true]
+        string(64) FileType [1 Firmware Upgrade Image]
+        unsignedInt FileSize [0]
+        string(256) TargetFileName []
+        unsignedInt FaultCode [0]
+        string(256) FaultString []
+        dateTime StartTime [0001-01-01T00:00:00Z]
+        dateTime CompleteTime [0001-01-01T00:00:00Z]
       object ExecEnv.{i}.
         command Reboot
       object Light.{i}.

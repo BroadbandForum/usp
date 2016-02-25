@@ -275,6 +275,17 @@ In BBF standards, a model name MUST NOT include any hyphens.</xs:documentation>
     </xs:annotation>
     <xs:list itemType="tns:ModelName"/>
   </xs:simpleType>
+  <xs:simpleType name="NotificationName">
+    <xs:annotation>
+      <xs:documentation>Notification name (maximum length 256).  Each component is the same as xs:NCName except that dots are not permitted.  This name MUST in addition follow the vendor-specific notification name requirements of section 3.3 (TBD).
+A notification name component SHOULD NOT start with an underscore or include any hyphens.
+In BBF standards, a notification name component MUST NOT start with an underscore or include any hyphens.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:maxLength value="256"/>
+      <xs:pattern value="(([\i-[:]][\c-[:\.]]*)\.((\{i\})\.)?)*([\i-[:]][\c-[:\.]]*)"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="ObjectName">
     <xs:annotation>
       <xs:documentation>Object name (maximum length 256).  Each component is the same as xs:NCName except that dots are not permitted.  This name MUST in addition follow the vendor-specific object name requirements of section 3.3.
@@ -755,6 +766,12 @@ The units facet MUST NOT be specified for data types that are not numeric, i.e. 
             <xs:field xpath="@name|@base"/>
           </xs:unique>
         </xs:element>
+        <xs:element name="notification" type="tns:ModelNotification">
+          <xs:unique name="componentNotificationParameterNameXXX">
+            <xs:selector xpath="parameter"/>
+            <xs:field xpath="@name|@base"/>
+          </xs:unique>
+        </xs:element>
       </xs:choice>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name="profile" type="tns:Profile"/>
@@ -1054,6 +1071,12 @@ The optional ref attribute MAY be used in order to avoid name conflicts between 
             <xs:field xpath="@name|@base"/>
           </xs:unique>
         </xs:element>
+        <xs:element name="notification" type="tns:ModelNotification">
+          <xs:unique name="notificationObjectName">
+            <xs:selector xpath="object"/>
+            <xs:field xpath="@name|@base"/>
+          </xs:unique>
+        </xs:element>
       </xs:choice>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name="profile" type="tns:Profile"/>
@@ -1107,6 +1130,39 @@ MUST be present if and only if defining a new command.</xs:documentation>
     <xs:attribute name="async" type="xs:boolean" default="false">
       <xs:annotation>
         <xs:documentation>Indicates whether this is an asynchronous (true) or synchronous (false) command.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="status" type="tns:Status" default="current"/>
+    <xs:attribute name="id" type="tns:OpaqueID"/>
+    <xs:anyAttribute namespace="##other"/>
+  </xs:complexType>
+  <xs:complexType name="ModelNotification">
+    <xs:annotation>
+      <xs:documentation>Notification definition and reference.  See A.x.x.x for details of how notifications are represented.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="description" type="tns:Description" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="component" type="tns:ComponentReference"/>
+        <xs:element name="parameter" type="tns:ModelParameter"/>
+        <xs:element name="object" type="tns:ModelObject">
+          <xs:unique name="notificationObjectParameterName">
+            <xs:selector xpath="parameter"/>
+            <xs:field xpath="@name|@base"/>
+          </xs:unique>
+        </xs:element>
+      </xs:choice>
+      <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="tns:NotificationName">
+      <xs:annotation>
+        <xs:documentation>MUST be unique within the component or model (this is checked by schema validation).
+MUST be present if and only if defining a new notification.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="base" type="tns:NotificationName">
+      <xs:annotation>
+        <xs:documentation>MUST be present if and only if modifying an existing notification.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
     <xs:attribute name="status" type="tns:Status" default="current"/>

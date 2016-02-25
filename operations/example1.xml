@@ -9,9 +9,12 @@
                         http://www.broadband-forum.org/cwmp/cwmp-datamodel-report.xsd"
   spec="urn:broadband-forum-org:example1"
   file="example1.xml">
+
   <description>
     DM instance that illustrates USP commands.
   </description>
+
+  <import file="tr-069-biblio.xml"/>
 
   <bibliography>
     <reference id="REF">
@@ -56,153 +59,274 @@
     <component ref="RebootCommandOutputs"/>
   </component>
 
+  <component name="DownloadCommandInputArguments">
+    <parameter name="URL" mandatory="true">
+      <description>
+        URL, as defined in {{bibref|REF}}, specifying the source file location...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+      </syntax>
+    </parameter>
+    <parameter name="FileType">
+      <description>
+        An integer followed by a space followed by the file type description. Only the following values are currently defined for the {{param}} argument:
+        {{enum}}
+        The following format is defined to allow the unique definition of vendor-specific file types:
+        * "X &lt;VENDOR&gt; &lt;Vendor-specific identifier&gt;"
+        ...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="64"/>
+          <enumeration value="1 Firmware Upgrade Image"/>
+          <enumeration value="2 Web Content"/>
+          <enumeration value="3 Vendor Configuration File"/>
+          <enumeration value="4 Tone File"/>
+          <enumeration value="5 Ringer File"/>
+        </string>
+        <default type="parameter" value="1 Firmware Upgrade Image"/>
+      </syntax>
+    </parameter>
+    <parameter name="Username">
+      <description>
+        Username to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="Password">
+      <description>
+        Password to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="FileSize">
+      <description>
+        The size of the file to be downloaded in bytes.
+        The {{param}} argument is intended as a hint to the CPE, which the CPE MAY use to determine if it has sufficient space for the file to be downloaded, or to prepare space to accept the file.
+        ...
+      </description>
+      <syntax>
+        <unsignedInt/>
+        <default type="parameter" value="0"/>
+      </syntax>
+    </parameter>
+    <parameter name="TargetFileName">
+      <description>
+        The name of the file to be used on the target file system...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="DelaySeconds">
+      <description>
+        This argument has different meanings for Unicast and Multicast downloads...
+      </description>
+      <syntax>
+        <unsignedInt/>
+        <default type="parameter" value="0"/>
+      </syntax>
+    </parameter>
+    <parameter name="SuccessURL">
+      <description>
+        When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download completes successfully...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="FailureURL">
+      <description>
+        When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download does not complete successfully...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>      
+  </component>
+
+  <component name="DownloadCommandOutputArguments">
+    <parameter name="Status">
+      <description>
+        A successful response to this method returns an integer enumeration defined as follows...
+      </description>
+      <syntax>
+        <int>
+          <range minInclusive="0" maxInclusive="1"/>
+        </int>
+        <default type="parameter" value="1"/>
+      </syntax>
+    </parameter>
+    <parameter name="StartTime">
+      <description>
+        The date and time download was started in UTC...
+      </description>
+      <syntax>
+        <dateTime/>
+        <default type="parameter" value="0001-01-01T00:00:00Z"/>
+      </syntax>
+    </parameter>
+    <parameter name="CompleteTime">
+      <description>
+        The date and time the download was fully completed and applied in UTC...
+      </description>
+      <syntax>
+        <dateTime/>
+        <default type="parameter" value="0001-01-01T00:00:00Z"/>
+      </syntax>
+    </parameter>    
+  </component>
+
+  <component name="TransferCompleteArguments">
+    <parameter name="AnnounceURL">
+      <description>
+        The URL on which the CPE listened to the announcements that led to this transfer being performed, or an empty string if this transfer was not performed as a result of an announcement, or {{empty}} if no such URL is available.
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="1024"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="TransferURL">
+      <description>
+        The URL from or to which this transfer was performed, or {{empty}} if no such URL is available.
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="1024"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="IsDownload">
+      <description>
+        Indicates whether the autonomous transfer was a download ({{true}}) or an upload ({{false}}).
+      </description>
+      <syntax>
+        <boolean/>
+        <default type="parameter" value="true"/>
+      </syntax>
+    </parameter>
+    <parameter name="FileType">
+      <description>
+        An integer followed by a space followed by the file type description. Only the following values are currently defined for the {{param}} argument:
+        {{enum}}
+        The following format is defined to allow the unique definition of vendor-specific file types:
+        * "X &lt;VENDOR&gt; &lt;Vendor-specific identifier&gt;"
+        ...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="64"/>
+          <enumeration value="1 Firmware Upgrade Image"/>
+          <enumeration value="2 Web Content"/>
+          <enumeration value="3 Vendor Configuration File"/>
+          <enumeration value="4 Tone File"/>
+          <enumeration value="5 Ringer File"/>
+        </string>
+        <default type="parameter" value="1 Firmware Upgrade Image"/>
+      </syntax>
+    </parameter>
+    <parameter name="FileSize">
+      <description>
+        The size of the file in bytes, or zero if this information is not available or if the CPE chooses not to make it available.
+      </description>
+      <syntax>
+        <unsignedInt/>
+        <default type="parameter" value="0"/>
+      </syntax>
+    </parameter>
+    <parameter name="TargetFileName">
+      <description>
+        The name of the file on the target (CPE) file system...
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="FaultCode">
+      <description>
+        The numerical fault code as defined in {{bibref|TR-069a5|Section A.5.1}}...
+      </description>
+      <syntax>
+        <unsignedInt/>
+        <default type="parameter" value="0"/>
+      </syntax>
+    </parameter>
+    <parameter name="FaultString">
+      <description>
+        A human-readable text description of the fault. This field SHOULD be {{empty}} if the {{param|FaultCode}} equals 0 (zero).
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="256"/>
+        </string>
+        <default type="parameter" value=""/>
+      </syntax>
+    </parameter>
+    <parameter name="StartTime">
+      <description>
+        The date and time transfer was started in UTC...
+      </description>
+      <syntax>
+        <dateTime/>
+        <default type="parameter" value="0001-01-01T00:00:00Z"/>
+      </syntax>
+    </parameter>
+    <parameter name="CompleteTime">
+      <description>
+        The date and time the transfer was fully completed and applied in UTC...
+      </description>
+      <syntax>
+        <dateTime/>
+        <default type="parameter" value="0001-01-01T00:00:00Z"/>
+      </syntax>
+    </parameter>    
+    
+  </component>
+
   <component name="DownloadCommandInputs">
     <object name="Input.">
       <description>
         Input arguments.
       </description>
-      <parameter name="URL" mandatory="true">
-        <description>
-          URL, as defined in {{bibref|REF}}, specifying the source file location...
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-        </syntax>
-      </parameter>
-      <parameter name="FileType">
-        <description>
-          An integer followed by a space followed by the file type description. Only the following values are currently defined for the {{param}} argument:
-          {{enum}}
-          The following format is defined to allow the unique definition of vendor-specific file types:
-          * "X &lt;VENDOR&gt; &lt;Vendor-specific identifier&gt;"
-          ...
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="64"/>
-            <enumeration value="1 Firmware Upgrade Image"/>
-            <enumeration value="2 Web Content"/>
-            <enumeration value="3 Vendor Configuration File"/>
-            <enumeration value="4 Tone File"/>
-            <enumeration value="5 Ringer File"/>
-          </string>
-          <default type="parameter" value="1 Firmware Upgrade Image"/>
-        </syntax>
-      </parameter>
-      <parameter name="Username">
-        <description>
-          Username to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-          <default type="parameter" value=""/>
-        </syntax>
-      </parameter>
-      <parameter name="Password">
-        <description>
-          Password to be used by the CPE to authenticate with the file server. This string is set to {{empty}} if no authentication is required.
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-          <default type="parameter" value=""/>
-        </syntax>
-      </parameter>
-      <parameter name="FileSize">
-        <description>
-          The size of the file to be downloaded in bytes.
-          The {{param}} argument is intended as a hint to the CPE, which the CPE MAY use to determine if it has sufficient space for the file to be downloaded, or to prepare space to accept the file.
-          ...
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="parameter" value="0"/>
-        </syntax>
-      </parameter>
-      <parameter name="TargetFileName">
-        <description>
-          The name of the file to be used on the target file system...
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-          <default type="parameter" value=""/>
-        </syntax>
-      </parameter>
-      <parameter name="DelaySeconds">
-        <description>
-          This argument has different meanings for Unicast and Multicast downloads...
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="parameter" value="0"/>
-        </syntax>
-      </parameter>
-      <parameter name="SuccessURL">
-        <description>
-          When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download completes successfully...
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-          <default type="parameter" value=""/>
-        </syntax>
-      </parameter>
-      <parameter name="FailureURL">
-        <description>
-          When applicable, this argument contains the URL, as defined in {{bibref|REF}}, the CPE SHOULD redirect the user’s browser to if the download does not complete successfully...
-        </description>
-        <syntax>
-          <string>
-            <size maxLength="256"/>
-          </string>
-          <default type="parameter" value=""/>
-        </syntax>
-      </parameter>      
+      <component ref="DownloadCommandInputArguments"/>
     </object>
   </component>
-
+  
   <component name="DownloadCommandOutputs">
     <object name="Output.">
       <description>
         Output arguments.
       </description>
-      <parameter name="Status">
-        <description>
-          A successful response to this method returns an integer enumeration defined as follows...
-        </description>
-        <syntax>
-          <int>
-            <range minInclusive="0" maxInclusive="1"/>
-          </int>
-          <default type="parameter" value="1"/>
-        </syntax>
-      </parameter>
-      <parameter name="StartTime">
-        <description>
-          The date and time download was started in UTC...
-        </description>
-        <syntax>
-          <dateTime/>
-          <default type="parameter" value="0001-01-01T00:00:00Z"/>
-        </syntax>
-      </parameter>
-      <parameter name="CompleteTime">
-        <description>
-          The date and time the download was fully completed and applied in UTC...
-        </description>
-        <syntax>
-          <dateTime/>
-          <default type="parameter" value="0001-01-01T00:00:00Z"/>
-        </syntax>
-      </parameter>    
+      <component ref="DownloadCommandOutputArguments"/>
     </object>
   </component>
 
@@ -222,7 +346,17 @@
     <component ref="DownloadCommandInputs"/>
     <component ref="DownloadCommandOutputs"/>
   </component>
-    
+  
+  <component name="TransferCompleteNotification">
+    <notification name="TransferComplete">
+      <description>
+        Inform the ACS of the completion (either successful or unsuccessful) of a file transfer that was not specifically requested by the ACS...
+        {{issue|Argument names are shown with leading "#" characters as a reminder that they don't exist in the data model.}}
+      </description>
+      <component ref="TransferCompleteArguments"/>
+    </notification>
+  </component>
+  
   <model name="Command:1.0">
     <object name="Device." access="readOnly" minEntries="1" maxEntries="1">
       <description>
@@ -245,6 +379,7 @@
     <!-- XXX could reference the components from within Device. but this mucks up the ordering in the report -->
     <component path="Device." ref="RebootCommand"/>
     <component path="Device." ref="DownloadCommand"/>
+    <component path="Device." ref="TransferCompleteNotification"/>
 
     <object name="Device.ExecEnv.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="ExecEnvNumberOfEntries" dmr:noUniqueKeys="true">
