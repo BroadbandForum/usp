@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dm:document
+  xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-6"
+  xmlns:dmr="urn:broadband-forum-org:cwmp:datamodel-report-0-1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-6
+                        ../operations/cwmp-datamodel-1-6.xsd
+                      urn:broadband-forum-org:cwmp:datamodel-report-0-1
+                        http://www.broadband-forum.org/cwmp/cwmp-datamodel-report.xsd"
+  spec="urn:broadband-forum-org:example1"
+  file="example1.xml">
+
+  <description>
+    DM instance that illustrates top-level types and in-place types.
+  </description>
+
+  <import file="tr-069-biblio.xml"/>
+
+  <dataType name="Milliamps">
+    <description>
+      Current measured in milliamps.
+      {{issue|Should be able to use the ''units'' template here.}}
+      {{issue|Maybe needs to be signed?}}
+    </description>
+    <unsignedInt>
+      <units value="milliamps"/>
+    </unsignedInt>
+  </dataType>
+  
+  <dataType name="Millivolts">
+    <description>
+      Voltage measured in millivolts.
+      {{issue|Maybe needs to be signed?}}
+    </description>
+    <unsignedInt>
+      <units value="millivolts"/>
+    </unsignedInt>
+  </dataType>
+  
+  <dataType name="Percentage">
+    <description>
+      Percentage.
+    </description>
+    <unsignedInt>
+      <range minInclusive="0" maxInclusive="100"/>
+      <units value="percent"/>
+    </unsignedInt>
+  </dataType>
+  
+  <component name="ObjectContent">
+    <description>
+      Parameters contained in all object instances.
+      {{issue|Or maybe only in all top-level object instances?}}
+    </description>
+
+    <parameter name="type" access="readOnly">
+      <description>
+        Object type (base type and derived types). {{enum}}
+        {{issue|Note that use of lower-case initial letter guarantees no conflict with other parameter names.}}
+        {{issue|The DM Schema and BBF Report Tool have been modified to allow enumeration values to be appended.}}
+      </description>
+      <syntax>
+        <list/>
+        <string>
+          <size maxLength="64"/>
+        </string>
+      </syntax>
+    </parameter>
+    <parameter name="Name" access="readOnly">
+      <description>
+        Name of this {{object}} instance.
+      </description>
+      <syntax>
+        <string>
+          <size maxLength="64"/>
+        </string>
+      </syntax>
+    </parameter>
+  </component>
+
+  <component name="PowerSensorContent">
+    <description>
+      Parameters and commands that define "PowerSensor" behavior.
+      {{issue|Weird name?}}
+    </description>
+
+    <command name="StartMeasurement">
+      <description>
+        Start taking a power measurement.
+      </description>
+    </command>
+    <command name="StopMeasurement">
+      <description>
+        Stop taking a power measurement.
+      </description>
+    </command>
+  </component>
+  <component name="PowerSensor">
+    <description>
+      Object that defines "PowerSensor" behavior.
+    </description>
+    <parameter base="type">
+      <syntax>
+        <string>
+          <enumeration value="PowerSensor" action="append"/>
+        </string>
+      </syntax>
+    </parameter>
+    <object name="PowerSensor." minEntries="1" maxEntries="1">
+      <description>
+        Power sensor behavior.
+        {{issue|MUST each derived type live in its own separate object? It's a simple rule but it clutters the data model.}}
+      </description>
+      <component ref="PowerSensorContent"/>
+    </object>
+  </component>
+
+  <component name="PowerSensorPowerableContent">
+    <description>
+      Parameters and commands that define "PowerSensor.Powerable" behavior.
+    </description>
+
+    <parameter name="Voltage" access="readOnly">
+      <description>
+        Voltage.
+      </description>
+      <syntax>
+        <dataType ref="Millivolts"/>
+      </syntax>
+    </parameter>
+    <parameter name="Current" access="readOnly">
+      <description>
+        Current.
+      </description>
+        <syntax>
+          <dataType ref="Milliamps"/>
+        </syntax>
+    </parameter>
+  </component>
+  <component name="PowerSensorPowerable">
+    <description>
+      Object that defines "PowerSensor.Powerable" behavior.
+    </description>
+    <parameter base="type">
+      <syntax>
+        <string>
+          <enumeration value="PowerSensor.Powerable" action="append"/>
+        </string>
+      </syntax>
+    </parameter>
+    <object name="PowerSensor.Powerable." minEntries="1" maxEntries="1">
+      <description>
+        Powerable behavior.
+      </description>
+      <component ref="PowerSensorPowerableContent"/>
+    </object>
+  </component>
+  
+  <component name="SwitchableContent">
+    <description>
+      Parameters and commands that define "Switchable" behavior.
+    </description>
+    
+    <parameter name="State" access="readOnly">
+      <description>
+        Whether currently switched on.
+      </description>
+      <syntax>
+        <boolean/>
+      </syntax>
+    </parameter>
+    <command name="On">
+      <description>
+        Switch on.
+      </description>
+    </command>
+    <command name="Off">
+      <description>
+        Switch off.
+      </description>
+    </command>
+    <command name="Toggle">
+      <description>
+        Toggle the on/off state.
+      </description>
+    </command>
+  </component>
+  <component name="Switchable">
+    <description>
+      Object that defines "Switchable" behavior.
+    </description>
+    <parameter base="type">
+      <syntax>
+        <string>
+          <enumeration value="Switchable" action="append"/>
+        </string>
+      </syntax>
+    </parameter>
+    <object name="Switchable." minEntries="1" maxEntries="1">
+      <description>
+        Switchable behavior.
+      </description>
+      <component ref="SwitchableContent"/>
+    </object>
+  </component>
+
+  <component name="DimmableContent">
+    <description>
+      Parameters and commands that define "Dimmable" behavior.
+    </description>
+    
+    <parameter name="CurrentLevel" access="readOnly">
+      <description>
+        Current dimmer level.
+      </description>
+      <syntax>
+        <dataType ref="Percentage"/>
+      </syntax>
+    </parameter>
+    <command name="SetLevel">
+      <description>
+        Set the dimmer level.
+      </description>
+      <object name="Input.">
+        <parameter name="Level">
+          <description>
+            Requested new dimmer level.
+          </description>
+          <syntax>
+            <dataType ref="Percentage"/>
+          </syntax>
+        </parameter>
+      </object>
+    </command>
+  </component>
+  <component name="Dimmable">
+    <description>
+      Object that defines "Dimmable" behavior.
+    </description>
+    <parameter base="type">
+      <syntax>
+        <string>
+          <enumeration value="Dimmable" action="append"/>
+        </string>
+      </syntax>
+    </parameter>
+    <object name="Dimmable." minEntries="0" maxEntries="1">
+      <description>
+        Dimmable behavior.
+        {{issue|Need to change the semantics of min:max = 0:1 (it's no longer union semantics).}}
+      </description>
+      <component ref="DimmableContent"/>
+    </object>
+  </component>
+
+  <component name="InplaceType">
+    <description>
+      Parameters for example in-place type. Component MUST be referenced from within the instance object.
+    </description>
+    <parameter name="type">
+      <description>
+        Object type.
+      </description>
+      <syntax>
+        <string>
+          <enumeration value="InplaceType"/>
+        </string>
+      </syntax>
+    </parameter>
+    <parameter name="Param1" access="readWrite">
+      <description>
+        Param1.
+      </description>
+      <syntax>
+        <unsignedInt/>
+      </syntax>
+    </parameter>
+    <parameter name="Param2" access="readWrite">
+      <description>
+        Param2.
+      </description>
+      <syntax>
+        <unsignedInt/>
+      </syntax>
+    </parameter>
+  </component>
+
+  <model name="TypeHier:1.0">
+    <object name="Device.">
+      <description>
+        Top-level object.
+      </description>
+
+      <parameter name="LightNumberOfEntries" access="readOnly">
+        <description>
+          {{numentries}}
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="Device.Light.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="LightNumberOfEntries">
+      <description>
+        All lights.
+      </description>
+      <uniqueKey functional="false">
+        <parameter ref="Name"/>
+      </uniqueKey>
+
+      <component ref="ObjectContent"/>
+      <parameter base="type">
+        <syntax>
+          <string>
+            <enumeration value="Light" action="append"/>
+          </string>
+        </syntax>
+      </parameter>
+
+      <component ref="PowerSensor"/>
+      <component ref="PowerSensorPowerable"/>
+      <component ref="Switchable"/>
+      <component ref="Dimmable"/>
+    </object>
+
+    <object name="Device.Object1.">
+      <description>
+        Object1.
+      </description>
+      <component ref="InplaceType"/>
+    </object>
+
+    <object name="Device.Object2.">
+      <description>
+        Object2.
+      </description>
+      <component ref="InplaceType"/>
+    </object>
+  </model>
+
+</dm:document>

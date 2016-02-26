@@ -219,6 +219,14 @@ In BBF standards, a data type name MUST NOT include any hyphens.</xs:documentati
       <xs:enumeration value="replace"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="EnumerationAction">
+    <xs:annotation>
+      <xs:documentation>Enumeration action.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="append"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="GlorefId">
     <xs:annotation>
       <xs:documentation>Glossary item ID; SHOULD uniquely identify this item across all instance documents.</xs:documentation>
@@ -899,6 +907,7 @@ Specify "prefix" to prefix to the previous description, "append" to append to th
     <xs:complexContent>
       <xs:extension base="tns:BaseAccessFacet">
         <xs:attribute name="value" type="xs:string" use="required"/>
+        <xs:attribute name="action" type="tns:EnumerationAction"/>
         <xs:attribute name="code" type="xs:integer"/>
       </xs:extension>
     </xs:complexContent>
