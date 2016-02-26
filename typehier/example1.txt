@@ -2,6 +2,8 @@ urn:broadband-forum-org:example1
   model TypeHier:1.0
     object Device.
       unsignedInt LightNumberOfEntries
+      unsignedInt FanNumberOfEntries
+      unsignedInt CeilingFanNumberOfEntries
       object Light.{i}.
         string type #changed: values(Dimmable(added))
         string(64) Name
@@ -21,6 +23,25 @@ urn:broadband-forum-org:example1
           command SetLevel
             object Input.
               unsignedInt[0:100] Level
+      object Fan.{i}.
+        string type #changed: values(Switchable(added))
+        string(64) Name
+        object PowerSensor.
+          command StartMeasurement
+          command StopMeasurement
+          object Powerable.
+            unsignedInt Voltage
+            unsignedInt Current
+        object Switchable.
+          boolean State
+          command On
+          command Off
+          command Toggle
+      object CeilingFan.{i}.
+        string type #changed: description, values(CeilingFan(added))
+        string Light
+        string Fan
+        string(64) Name
       object Object1.
         string type
         unsignedInt Param1 (W)

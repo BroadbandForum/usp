@@ -68,7 +68,7 @@
     </parameter>
     <parameter name="Name" access="readOnly">
       <description>
-        Name of this {{object}} instance.
+        Instance name.
       </description>
       <syntax>
         <string>
@@ -109,7 +109,7 @@
     <object name="PowerSensor." minEntries="1" maxEntries="1">
       <description>
         Power sensor behavior.
-        {{issue|MUST each derived type live in its own separate object? It's a simple rule but it clutters the data model.}}
+        {{issue|MUST each derived type live in its own separate object (it's a simple rule but it clutters the data model)? Also, MUST the object have the same name as the type (type names are not necessarily natural object names)?}}
       </description>
       <component ref="PowerSensorContent"/>
     </object>
@@ -299,8 +299,24 @@
           <unsignedInt/>
         </syntax>
       </parameter>
+      <parameter name="FanNumberOfEntries" access="readOnly">
+        <description>
+          {{numentries}}
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+      <parameter name="CeilingFanNumberOfEntries" access="readOnly">
+        <description>
+          {{numentries}}
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
     </object>
-
+    
     <object name="Device.Light.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
       numEntriesParameter="LightNumberOfEntries">
       <description>
@@ -309,7 +325,7 @@
       <uniqueKey functional="false">
         <parameter ref="Name"/>
       </uniqueKey>
-
+      
       <component ref="ObjectContent"/>
       <parameter base="type">
         <syntax>
@@ -318,13 +334,76 @@
           </string>
         </syntax>
       </parameter>
-
+      
       <component ref="PowerSensor"/>
       <component ref="PowerSensorPowerable"/>
       <component ref="Switchable"/>
       <component ref="Dimmable"/>
     </object>
-
+    
+    <object name="Device.Fan.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="FanNumberOfEntries">
+      <description>
+        All fans.
+      </description>
+      <uniqueKey functional="false">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      
+      <component ref="ObjectContent"/>
+      <parameter base="type">
+        <syntax>
+          <string>
+            <enumeration value="Fan" action="append"/>
+          </string>
+        </syntax>
+      </parameter>
+      
+      <component ref="PowerSensor"/>
+      <component ref="PowerSensorPowerable"/>
+      <component ref="Switchable"/>
+    </object>
+    
+    <object name="Device.CeilingFan.{i}." access="readOnly" minEntries="0" maxEntries="unbounded"
+      numEntriesParameter="CeilingFanNumberOfEntries">
+      <description>
+        All fans.
+      </description>
+      <uniqueKey functional="false">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      
+      <component ref="ObjectContent"/>
+      <parameter base="type">
+        <description action="append">
+          {{issue|Not necessary to have explicit type because don't expect derived types?}}
+        </description>
+        <syntax>
+          <string>
+            <enumeration value="CeilingFan" action="append"/>
+          </string>
+        </syntax>
+      </parameter>
+      
+      <parameter name="Light">
+        <description>
+          {{issue|BBF Report Tool issue? Parameter order isn't preserved. {{param|Name}} comes after {{param}} and {{param|Fan}}.}}
+        </description>
+        <syntax>
+          <string>
+            <pathRef refType="strong" targetType="row" targetParent=".Light."/>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="Fan">
+        <syntax>
+          <string>
+            <pathRef refType="strong" targetType="row" targetParent=".Fan."/>
+          </string>
+        </syntax>
+      </parameter>
+    </object>
+    
     <object name="Device.Object1.">
       <description>
         Object1.
