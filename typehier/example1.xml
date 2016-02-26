@@ -222,6 +222,9 @@
         Set the dimmer level.
       </description>
       <object name="Input.">
+        <description>
+          {{issue|I know we agreed to make ''Input'' and ''Output'' mandatory, but I'm not so sure.}}
+        </description>
         <parameter name="Level">
           <description>
             Requested new dimmer level.
