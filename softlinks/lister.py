@@ -82,6 +82,7 @@ def report_file(parent, file, indent):
 # read value of link (if link) or file (otherwise)
 # XXX reading a link follows multiple levels of soft link, so subverts
 #     maxfollow; should really do this by hand
+# XXX could apply heuristics to decide whether to quote the value
 def readfile(parent, file, islink):
     visited = state['visited']
     
