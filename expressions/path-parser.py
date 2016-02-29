@@ -2,6 +2,8 @@
 
 """Experiment with parsing USP data model paths."""
 
+import sys
+
 class PathError(Exception):
     pass
 
@@ -165,10 +167,9 @@ class PathParser:
 
         comps = []
         while True:
-            comp = self._parse_comp()
-            comps.append(comp)
-
             try:
+                comp = self._parse_comp()
+                comps.append(comp)
                 self._parse_comp_term()
             except EndOfInput:
                 break
@@ -240,43 +241,56 @@ class PathParser:
             (type, token) = self._lexer.next()
             if type != "]":
                 raise ParserError("Expected ']' at '%s'" % self._lexer.rest())
-            
-            (type, token) = self._lexer.peek()
+
+            # XXX it might be better to have an EOI (EndOfInput) token?
+            try:
+                (type, token) = self._lexer.peek()
+            except EndOfInput:
+                break
 
         #print("  exprs", exprs)
         return exprs
 
-    # XXX allowing a bare name introduces an ambiguity and is a bad idea, so
-    #     it's been disabled; this means that existing Alias syntax [ABC]
-    #     isn't supported (must quote strings)
+    # XXX allowing a bare name provides only partial support for the
+    #     existing Alias syntax [ABC]
     def _parse_expr(self):
         """expr : name oper value
-                | name (if not followed by oper)
+                | name
                 | value
         """
 
         (type, token) = self._lexer.peek()
         if type == "name":
             self._lexer.advance()
-            name = ("name", token)
-            oper = self._parse_oper()
-            value = self._parse_value()
-            expr = ("paramtest", (name, oper, value))
-            #try:
-            #    oper = self._parse_oper()
-            #except ParserError:
-            #    oper = None
-            #    expr = ("defkey", name)
-            #if oper is not None:
-            #    value = self._parse_value()
-            #    expr = ("paramtest", (name, oper, value))
+            (type, temp) = self._lexer.peek()
+            if temp == "]":
+                expr = ("alias", token)
+            else:
+                oper = self._parse_oper()
+                value = self._parse_value()
+                expr = ("simple", (token, oper, value))
 
         else:
             value = self._parse_value()
-            expr = ("defkey", value)
+            expr = ("alias", value)
                 
         #print("    expr", expr)
         return expr
+
+    def _parse_oper(self):
+        """oper : '='
+                | '!='
+                | etc
+        """
+
+        (type, oper) = self._lexer.peek()
+        if oper not in self._operators:
+            raise ParserError("Expected operator %s at '%s'" % \
+                              (str(self._operators), self._lexer.rest()))
+        
+        self._lexer.advance()
+
+        return oper
 
     # XXX could permit boolean constants
     def _parse_value(self):
@@ -285,30 +299,13 @@ class PathParser:
                  | boolean?
         """
         
-        (type, token) = self._lexer.peek()
+        (type, value) = self._lexer.peek()
         if type not in ["string", "number"]:
             raise ParserError("Expected value at '%s'" % self._lexer.rest())
         
         self._lexer.advance()
-        value = ("value", token)
 
         return value
-
-    def _parse_oper(self):
-        """oper : '='
-                | '!='
-                | etc
-        """
-
-        (type, value) = self._lexer.peek()
-        if value not in self._operators:
-            raise ParserError("Expected operator %s at '%s'" % \
-                              (str(self._operators), self._lexer.rest()))
-        
-        self._lexer.advance()
-        oper = ("oper", value)
-
-        return oper
 
 tree = {
     "Device": {
@@ -317,24 +314,32 @@ tree = {
                 "{i}": None,
                 1: {
                     "Name": "lan",
-                    "Enable": False
+                    "Enable": 0
                 },
                 2: {
                     "Name": "wan",
-                    "Enable": True
+                    "Enable": 1
+                },
+                3: {
+                    "Name": "ppp",
+                    "Enable": 1
                 },
             },
         },
     },
 }
 
-path = 'Device.IP.Interface.[Name="lan"].Enable'
-path = 'Device.IP.Interface.*.Enable'
+path = 'Device.IP.Interface.[Name="wan"][Enable].Enable'
 
 parser = PathParser(PathLexer(path))
 comps = parser.parse()
 
 print(path)
+#print(comps)
+#sys.exit(0)
+
+# XXX this is just proof of concept; need re-writing as understandble
+#     recursive algorithm
 text = ''
 dict = tree
 for comp in comps:
@@ -344,16 +349,55 @@ for comp in comps:
         if value not in dict:
             print(value, "not in", list(dict.keys()))
         else:
-            #print(" ", value, "found")
             text += value + "."
             dict = dict[value]
     elif type == "inst":
         (type, value) = value
         if "{i}" not in dict:
             print(" ", "not a table")
+            break
+        if type == "number":
+            instnum = value
+            if instnum not in dict:
+                print(" ", "not found")
+                break
+            text += str(instnum) + "."
+            dict = dict[instnum]
+        elif type == "wildcard":
+            instnums = list(set(dict.keys()) - set(["{i}"]))
+            print(" ", "expands to", instnums)
+            text += str(instnums) + "."
+            dict = dict[instnums[0]]
+        elif type == "exprs":
+            instnums = list(set(dict.keys()) - set(["{i}"]))
+            exprs = value
+            for (type, value) in exprs:
+                if type == "simple":
+                    print(" ", value)
+                    (name, oper, value) = value
+                    oper = "==" if oper == "=" else oper
+                    matches = []
+                    for instnum in instnums:
+                        nameval = dict[instnum][name]
+                        # XXX shouldn't use string comparison?
+                        expr = '"%s" %s "%s"' % (nameval, oper, value)
+                        result = eval(expr)
+                        print("   ", instnum, expr, "->", result)
+                        if result:
+                            matches.append(instnum)
+                    if not matches:
+                        break
+                    print("   ", "matches for", matches)
+                else:
+                    print(" ", type, "not supported")
+                    break
+                instnums = matches
+            if not matches:
+                print("   ", "no matches")
+                break
+            text += str(matches[0]) + "."
+            dict = dict[matches[0]]
         else:
-            inst = 2
-            print(" ", "Need to evaluate; assume", inst)
-            text += str(inst) + "."
-            dict = dict[inst]
+            print(" ", type, "not supported")
+            break
 print(text)
