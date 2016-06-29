@@ -2,19 +2,12 @@
 
 """Experiment with parsing USP data model paths."""
 
-import sys
+# XXX add logging controls
 
-class PathError(Exception):
-    pass
-
-class LexerError(PathError):
-    pass
-
-class ParserError(PathError):
-    pass
-
-class EndOfInput(PathError):
-    pass
+class PathError(Exception): pass
+class LexerError(PathError): pass
+class EndOfInput(LexerError): pass
+class ParserError(PathError): pass
 
 class PathLexer:
     """Lexer (tokenizer) that returns tokens from a USP path expression.
@@ -30,6 +23,7 @@ class PathLexer:
     # token is an operator (or punctuation)
     _operator_starts = set([oper[0] for oper in _operators])
 
+    # XXX support options, e.g. no-wildcard
     def __init__(self, text):
         # USP path to process
         self._text = text
@@ -45,6 +39,7 @@ class PathLexer:
         self._current = ("", None)
 
         # the rest of the text starting at the current token
+        # XXX should store this as a cached _start pointer
         self._rest = text
 
     def next(self):
@@ -110,24 +105,25 @@ class PathLexer:
                     found = True
                     break
             if not found:
-                raise LexerError("Invalid operator at '%s'" % \
-                                 self._text[self._start:])
+                raise LexerError("Expected operator %s at '%s'" % \
+                                 (self._operators, self._text[self._start:]))
 
-        # quoted string
+        # quoted string literal
         # XXX could allow quoted quotes?
         elif char in ['"', "'"]:
             ptr += 1
-            string = ""
+            literal = ""
             while ptr < tlen and self._text[ptr] != char:
-                string += self._text[ptr]
+                literal += self._text[ptr]
                 ptr += 1
             if ptr >= tlen:
-                raise LexerError("No closing quote at '%s'" % \
+                raise LexerError("Unterminated string at '%s'" % \
                                  self._text[self._start:])
             self._end = ptr + 1
-            self._current = ("string", string)
+            self._current = ("literal", literal)
 
         # number (unsigned integer)
+        # XXX need both signed and unsigned
         elif char.isdigit():
             number = 0
             while ptr < tlen and self._text[ptr].isdigit():
@@ -167,6 +163,7 @@ class PathParser:
 
         comps = []
         while True:
+            # XXX this is hiding some errors, e.g. ["]"
             try:
                 comp = self._parse_comp()
                 comps.append(comp)
@@ -202,6 +199,8 @@ class PathParser:
         #print("comp", comp)
         return comp
 
+    # XXX need to distinguish unsigned (for instance number) and signed (for
+    #     value)
     def _parse_inst(self):
         """inst : number
                 | '*'
@@ -222,11 +221,12 @@ class PathParser:
             inst = ("exprs", exprs)
             
         else:
-            raise ParserError("Invalid instance at %s", self._lexer.rest())
+            raise ParserError("Invalid instance at %s" % self._lexer.rest())
 
         #print("  inst", inst)
         return inst
 
+    # XXX could introduce a "pred" (predicate) level
     def _parse_exprs(self):
         """exprs : ( '[' expr ']' )...
         """
@@ -253,6 +253,8 @@ class PathParser:
 
     # XXX allowing a bare name provides only partial support for the
     #     existing Alias syntax [ABC]
+    # XXX name here needs to permit the A.B form
+    # XXX should break out "name | value" into "alias" production
     def _parse_expr(self):
         """expr : name oper value
                 | name
@@ -292,22 +294,21 @@ class PathParser:
 
         return oper
 
-    # XXX could permit boolean constants
+    # XXX should try adding comps here (recursion)
     def _parse_value(self):
-        """value : string
+        """value : literal
                  | number
-                 | boolean?
         """
         
         (type, value) = self._lexer.peek()
-        if type not in ["string", "number"]:
+        if type not in ["literal", "number"]:
             raise ParserError("Expected value at '%s'" % self._lexer.rest())
         
         self._lexer.advance()
 
         return value
 
-tree = {
+model = {
     "Device": {
         "IP": {
             "Interface": {
@@ -329,10 +330,20 @@ tree = {
     },
 }
 
-path = 'Device.IP.Interface.[Name="wan"][Enable].Enable'
+# XXX create "proper" main program
+import sys
+for path in sys.argv[1:]:
+    print(path)
+    parser = PathParser(PathLexer(path))
+    try:
+        comps = parser.parse()
+        for (i, comp) in enumerate(comps):
+            print(" ", comp)
+    except PathError as e:
+        sys.stderr.write("%s: %s\n" % (e.__class__.__name__, e))
+sys.exit(0)
 
-parser = PathParser(PathLexer(path))
-comps = parser.parse()
+path = 'Device.IP.Interface.[Name="wan"][Enable].Enable'
 
 print(path)
 #print(comps)
@@ -341,7 +352,7 @@ print(path)
 # XXX this is just proof of concept; need re-writing as understandble
 #     recursive algorithm
 text = ''
-dict = tree
+dict = model
 for comp in comps:
     print(comp)
     (type, value) = comp
