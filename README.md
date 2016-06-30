@@ -1,5 +1,9 @@
-# WT-069i2
-USP - Universal Service Platform
+# WT-369
+Universal Service Platform (USP)
+
+Please note that the WT-369 GitHub repository (this repository) is not currently part of any BBF processes, and is being used only as a scratchpad.  Please don't put anything in this repository that you wouldn't be happy to include as an email attachment on the [usp](https://www.broadband-forum.org/bin/c5i?mid=6&rid=5&k1=1235) mailing list.
+
+Contents:
 
 * collections - examples of collections used in the Data Model document
 * data-model - various data model fragment UML class diagrams, some of them used in the Data Model document
