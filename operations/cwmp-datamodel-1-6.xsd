@@ -1161,6 +1161,15 @@ MUST be present if and only if defining a new command.</xs:documentation>
     </xs:attribute>
     <xs:attribute name="status" type="tns:Status" default="current"/>
     <xs:attribute name="id" type="tns:OpaqueID"/>
+    <xs:attribute default="OperationComplete" name="notify">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Boot"/>
+          <xs:enumeration value="OperationComplete"/>
+          <xs:enumeration value="TransferComplete"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
     <xs:anyAttribute namespace="##other"/>
   </xs:complexType>
   <xs:complexType name="ModelNotification">
