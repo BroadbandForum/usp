@@ -44,7 +44,7 @@
   </component>
   
   <component name="RebootCommand">
-    <command name="Reboot()" async="true">
+    <command name="Reboot()" async="true" notify="Boot">
       <description>
         Reboot the entity represented by the object on which this command is invoked.
       </description>
@@ -329,7 +329,7 @@
   </component>
 
   <component name="DownloadCommand">
-    <command name="Download()" async="true">
+    <command name="Download()" async="true" notify="TransferComplete">
       <description>
         Download a file to the entity represented by the object on which this command is invoked.
         {{issue|Argument names are shown with leading "#" characters as a reminder that they don't exist in the data model.}}
