@@ -161,13 +161,13 @@ The type hierarchy is as for XML Schema, with "any" and "base64" mapping to the 
   </xs:simpleType>
   <xs:simpleType name="CommandName">
     <xs:annotation>
-      <xs:documentation>Command name (maximum length 256).  Each component is the same as xs:NCName except that dots are not permitted.  This name MUST in addition follow the vendor-specific command name requirements of section 3.3 (TBD).
-A command name component SHOULD NOT start with an underscore or include any hyphens.
-In BBF standards, a command name component MUST NOT start with an underscore or include any hyphens.</xs:documentation>
+      <xs:documentation>Command name (maximum length 256); the same as xs:NCName except that dots are not permitted, followed by "()".  This name MUST in addition follow the vendor-specific command name requirements of section 3.3.
+        A command name SHOULD NOT start with an underscore or include any hyphens.
+        In BBF standards, a command name  MUST NOT start with an underscore or include any hyphens.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:maxLength value="256"/>
-      <xs:pattern value="(([\i-[:]][\c-[:\.]]*)\.((\{i\})\.)?)*([\i-[:]][\c-[:\.]]*)"/>
+      <xs:pattern value="(([\i-[:]][\c-[:\.]]*)\(\))"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ComponentName">
@@ -1113,16 +1113,34 @@ The optional ref attribute MAY be used in order to avoid name conflicts between 
     </xs:annotation>
     <xs:sequence>
       <xs:element name="description" type="tns:Description" minOccurs="0"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="component" type="tns:ComponentReference"/>
-        <xs:element name="parameter" type="tns:ModelParameter"/>
-        <xs:element name="object" type="tns:ModelObject">
-          <xs:unique name="commandObjectParameterName">
-            <xs:selector xpath="parameter"/>
-            <xs:field xpath="@name|@base"/>
-          </xs:unique>
-        </xs:element>
-      </xs:choice>
+      <xs:element minOccurs="0" name="input">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="component" type="tns:ComponentReference"/>
+            <xs:element name="parameter" type="tns:ModelParameter"/>
+            <xs:element name="object" type="tns:ModelObject">
+              <xs:unique name="commandInputObjectParameterName">
+                <xs:selector xpath="parameter"/>
+                <xs:field xpath="@name|@base"/>
+              </xs:unique>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="output">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="component" type="tns:ComponentReference"/>
+            <xs:element name="parameter" type="tns:ModelParameter"/>
+            <xs:element name="object" type="tns:ModelObject">
+              <xs:unique name="commandOutputObjectParameterName">
+                <xs:selector xpath="parameter"/>
+                <xs:field xpath="@name|@base"/>
+              </xs:unique>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
       <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="tns:CommandName">
