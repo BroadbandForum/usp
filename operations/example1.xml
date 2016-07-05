@@ -44,12 +44,16 @@
   </component>
   
   <component name="RebootCommand">
-    <command name="Reboot" async="true">
+    <command name="Reboot()" async="true">
       <description>
         Reboot the entity represented by the object on which this command is invoked.
       </description>
-      <component ref="RebootCommandInputs"/>
-      <component ref="RebootCommandOutputs"/>
+      <input>
+        <component ref="RebootCommandInputs"/>
+      </input>
+      <output>
+        <component ref="RebootCommandOutputs"/>
+      </output>
     </command>
   </component>
 
@@ -314,30 +318,28 @@
 
   <component name="DownloadCommandInputs">
     <object name="Input.">
-      <description>
-        Input arguments.
-      </description>
       <component ref="DownloadCommandInputArguments"/>
     </object>
   </component>
   
   <component name="DownloadCommandOutputs">
     <object name="Output.">
-      <description>
-        Output arguments.
-      </description>
       <component ref="DownloadCommandOutputArguments"/>
     </object>
   </component>
 
   <component name="DownloadCommand">
-    <command name="Download" async="true">
+    <command name="Download()" async="true">
       <description>
         Download a file to the entity represented by the object on which this command is invoked.
         {{issue|Argument names are shown with leading "#" characters as a reminder that they don't exist in the data model.}}
       </description>
-      <component ref="DownloadCommandInputs"/>
-      <component ref="DownloadCommandOutputs"/>
+      <input>
+        <component ref="DownloadCommandInputArguments"/>
+      </input>
+      <output>
+        <component ref="DownloadCommandOutputArguments"/>
+      </output>
     </command>
   </component>
   
@@ -401,31 +403,28 @@
         </description>
         <syntax><string/></syntax>
       </parameter>
-      <command name="On">
+      <command name="On()">
         <description>
           Switch the light on.
         </description>
       </command>
-      <command name="Off">
+      <command name="Off()">
         <description>
           Switch the light off.
         </description>
       </command>
-      <command name="Toggle">
+      <command name="Toggle()">
         <description>
           Toggle the state of the light.
         </description>
-        <object name="Output.">
-          <description>
-            Output arguments.
-          </description>
+        <output>
           <parameter name="WasOn">
             <description>
               Whether the light was on.
             </description>
             <syntax><boolean/></syntax>
           </parameter>          
-        </object>
+        </output>
       </command>
     </object>
     
@@ -440,14 +439,11 @@
         </description>
         <syntax><string/></syntax>
       </parameter>
-      <command name="SetBrightness">
+      <command name="SetBrightness()">
         <description>
           Set the dimmer's brightness.
         </description>
-        <object name="Input.">
-          <description>
-            Input arguments.
-          </description>
+        <input>
           <parameter name="Brightness">
             <description>
               Requested brightness in {{units}}.
@@ -460,11 +456,8 @@
               <default type="parameter" value="100"/>
             </syntax>
           </parameter>
-        </object>
-        <object name="Output.">
-          <description>
-            Output arguments.
-          </description>
+        </input>
+        <output>
           <parameter name="PreviousBrightness">
             <description>
               Previous brightness in {{units}}.
@@ -476,14 +469,14 @@
               </unsignedInt>
             </syntax>
           </parameter>
-        </object>
+        </output>
       </command>
-      <command name="On">
+      <command name="On()">
         <description>
           Switch the dimmer off. The same as ''SetBrightness(100)''.
         </description>
       </command>
-      <command name="Off">
+      <command name="Off()">
         <description>
           Switch the dimmer off. The same as ''SetBrightness(0)''.
         </description>
@@ -583,10 +576,10 @@
         </description>
         <syntax><string/></syntax>
       </parameter>
-      <command name="Cancel">
+      <command name="Cancel()">
         <description>
-          Request cancelation of this {{object|#}}'s command.
-          This command completes immediately. If successul, {{param|#.State}} will immediately change to {{enum|Canceling|#.State}} and will change to {{enum|Canceled|#.State}} when the cancelation is complete.
+          Request cancelation of this {{object}}'s command.
+          This command completes immediately. If successul, {{param|State}} will immediately change to {{enum|Canceling|State}} and will change to {{enum|Canceled|State}} when the cancelation is complete.
         </description>
       </command>
     </object>
