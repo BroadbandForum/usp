@@ -7,7 +7,6 @@
 class PathError(Exception): pass
 class LexerError(PathError): pass
 class EndOfInput(LexerError): pass
-class EndOfComps(PathError): pass
 class ParserError(PathError): pass
 
 class PathLexer:
@@ -15,8 +14,8 @@ class PathLexer:
     """
 
     # operators (and punctuation)
-    _operators = [".", "*", "[", ",", "]", "{", "}", "&&", "==", "!=", "<",
-                  "<=", ">", ">=", "::"]
+    _operators = ["=", ".", "+", "*", "[", ",", "]", "{", "}", "()", "&&",
+                  "==", "!=", "<", "<=", ">", ">=", "::"]
 
     # the above sorted by length (longest to shortest)
     _operators = sorted(_operators, key=len, reverse=True)
@@ -82,8 +81,8 @@ class PathLexer:
         
         # skip leading white space
         # XXX maybe shouldn't permit any?
-        while self._text[self._start:self._start+1].isspace():
-            self._start += 1
+        #while self._text[self._start:self._start+1].isspace():
+        #    self._start += 1
 
         # remember the rest of the text starting at the next token
         self._rest = self._text[self._start:]
@@ -93,6 +92,7 @@ class PathLexer:
         char = self._text[ptr:ptr+1]
 
         # anything left in the input string?
+        # XXX it really would be better to handle this as a token type
         if ptr >= tlen:
             raise EndOfInput
 
@@ -111,7 +111,10 @@ class PathLexer:
                                  (self._operators, self._text[self._start:]))
 
         # quoted string literal
-        # XXX could allow quoted quotes?
+        # XXX this allows single quote within double quoted string and vice
+        #     versa, but doesn't allow a string to contain both single and
+        #     double quotes; could allow them to be backslash (?) escaped, or
+        #     else use percent encoding
         elif char in ['"', "'"]:
             ptr += 1
             literal = ""
@@ -124,14 +127,23 @@ class PathLexer:
             self._end = ptr + 1
             self._current = ("literal", literal)
 
-        # number (unsigned integer)
-        # XXX need both signed and unsigned
-        elif char.isdigit():
+        # number
+        elif char == "-" or char.isdigit():
+            if char != "-":
+                negative = False
+            else:
+                negative = True
+                if ptr >= tlen:
+                    raise LexerError("Unterminated number at '%s'" %
+                                     self._text[self._start:])
+                ptr += 1
             number = 0
             while ptr < tlen and self._text[ptr].isdigit():
                 number = 10 * number + int(self._text[ptr])
                 ptr += 1
             self._end = ptr
+            if negative:
+                number = -number
             self._current = ("number", number)
 
         # name (identifier)
@@ -157,15 +169,13 @@ class PathParser:
         return self._parse_path()
 
     def _parse_path(self):
-        """path : comps
-                | comps expr
+        """path : comps expr?
         """
 
         comps = self._parse_comps()
 
         expr = None
         try:
-            (type, token) = self._lexer.peek()
             expr = self._parse_expr()
         except EndOfInput:
             pass
@@ -173,50 +183,39 @@ class PathParser:
         return (comps, expr)
     
     def _parse_comps(self):
-        """comps : ( comp comp_term )...
+        """comps : comp ( '.' comp )* '.'?
         """
 
         comps = []
-        while True:
-            # XXX this is hiding some errors, e.g. ["]"
-            try:
+
+        try:
+            comp = self._parse_comp()
+            comps.append(comp)
+            
+            (type, token) = self._lexer.peek()
+            while type == ".":
+                self._lexer.advance()
+                #comps.append(("namesep", "."))
+                (type, token) = self._lexer.peek()
+                if type == "::":
+                    break
                 comp = self._parse_comp()
                 comps.append(comp)
-                self._parse_comp_term()
-            except EndOfComps:
-                break
-            except EndOfInput:
-                break
+                (type, token) = self._lexer.peek()
+        except EndOfInput:
+            pass
 
         return comps
             
-    def _parse_comp_term(self):
-        """comp_term : EndOfComps ('::'; caught by caller)
-                     | '.'
-                     | EndOfInput (caught by caller)
-        """
-        
-        (type, token) = self._lexer.peek()
-        if type == "::":
-            raise EndOfComps
-        elif type == ".":
-            self._lexer.advance();
-        else:
-            raise ParserError("Expected '.' or '::' at '%s'" %
-                              self._lexer.rest())
-    
     def _parse_comp(self):
-        """comp : EndOfComps ('::'; caught by caller)
-                | name
+        """comp : namemod
                 | inst
         """
         
         (type, token) = self._lexer.peek()
-        if type == "::":
-            raise EndOfComps
-        elif type == "name":
-            self._lexer.advance()
-            comp = ("name", token)
+        if type == "name":
+            namemod = self._parse_namemod()
+            comp = ("namemod", namemod)
         else:
             inst = self._parse_inst()
             comp = ("inst", inst)
@@ -224,9 +223,7 @@ class PathParser:
         #print("comp", comp)
         return comp
 
-    # XXX need to distinguish unsigned (for instance number) and signed (for
-    #     value)
-    # XXX more consistent to use "wildcard" rather than '*'
+    # XXX would be more consistent to use "wildcard" rather than '*'
     def _parse_inst(self):
         """inst : number
                 | keyref
@@ -237,6 +234,9 @@ class PathParser:
         (type, token) = self._lexer.peek()
         if type == "number":
             self._lexer.advance()
+            if token <= 0:
+                raise ParserError("Invalid instance number at %s" %
+                                  self._lexer.rest())
             inst = ("number", token)
             
         elif type == "[":
@@ -258,7 +258,7 @@ class PathParser:
         return inst
 
     def _parse_keyref(self):
-        """keyref : '[' keyexpr ( ',' keyexpr )... ']'
+        """keyref : '[' keyexpr ( ',' keyexpr )* ']'
         """
 
         keyexprs = []
@@ -277,7 +277,7 @@ class PathParser:
 
         self._parse_punct("]")
         
-        return keyexprs
+        return keyexprs[0] if len(keyexprs) == 1 else keyexprs
 
     def _parse_exprvar(self):
         """exprvar : '{' name '}'
@@ -289,17 +289,33 @@ class PathParser:
         
         return name
 
-    # XXX need to restrict operator to "=="
+    # XXX note that this uses "=" rather than "=="
     def _parse_keyexpr(self):
-        """keyexpr : name '==' value
+        """keyexpr : relpath '=' value
         """
 
-        name = self._parse_name()
-        oper = self._parse_oper()
+        relpath = self._parse_relpath()
+        oper = self._parse_punct("=")
         value = self._parse_value()
 
-        return (name, oper, value)
+        return (relpath, oper, value)
         
+    def _parse_relpath(self):
+        """relpath : namemod ( '.' namemod )*
+        """
+        
+        namemods = [self._parse_namemod()]
+
+        (type, token) = self._lexer.peek()
+        while type == ".":
+            self._lexer.advance()
+            namemod = self._parse_namemod()
+            namemods.append(namemod)
+            (type, token) = self._lexer.peek()
+
+        #print("namemods", namemods)
+        return namemods[0] if len(namemods) == 1 else namemods
+
     def _parse_expr(self):
         """expr : '::' exprbody
         """
@@ -310,7 +326,7 @@ class PathParser:
         return exprbody
 
     def _parse_exprbody(self):
-        """exprbody : '{' exprcomp ( '&&' exprcomp )... '}'
+        """exprbody : '{' exprcomp ( '&&' exprcomp )* '}'
         """
 
         exprcomps = []
@@ -329,21 +345,37 @@ class PathParser:
 
         self._parse_punct("}")
         
-        return exprcomps
+        return exprcomps[0] if len(exprcomps) == 1 else exprcomps
 
     def _parse_exprcomp(self):
-        """exprcomp : exprvar oper exprvalue
+        """exprcomp : relpath oper value
         """
 
-        exprvar = self._parse_name()
+        relpath = self._parse_relpath()
         oper = self._parse_oper()
-        exprvalue = self._parse_value()
+        value = self._parse_value()
 
-        return (exprvar, oper, exprvalue)
+        return (relpath, oper, value)
 
-    # XXX name here needs to permit the A.B form
+    def _parse_namemod(self):
+        """namemod : name '+'? '()'?         
+        """
+
+        namemod = [self._parse_name()]
+        
+        (type, token) = self._lexer.peek()
+        if token == "+":
+            self._lexer.advance()
+            namemod.append('deref')
+        (type, token) = self._lexer.peek()
+        if token == "()":
+            self._lexer.advance()
+            namemod.append('command')
+        
+        return namemod[0] if len(namemod) == 1 else tuple(namemod)
+    
     def _parse_name(self):
-        """name : name
+        """name : name                
         """
         
         return self._parse_util("name", ["name"])
@@ -411,15 +443,15 @@ model = {
 # XXX create "proper" main program
 import sys
 for path in sys.argv[1:]:
-    print(path)
+    print("path", path)
     parser = PathParser(PathLexer(path))
     try:
         (comps, expr) = parser.parse()
         for (i, comp) in enumerate(comps):
             print("  comp", comp)
-        print("expr", expr)
+        print("  expr", expr)
     except PathError as e:
-        sys.stderr.write("%s: %s\n" % (e.__class__.__name__, e))
+        sys.stderr.write("# %s: %s\n" % (e.__class__.__name__, e))
 sys.exit(0)
 
 path = 'Device.IP.Interface.[Name="wan"][Enable].Enable'
