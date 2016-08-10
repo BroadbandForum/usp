@@ -14,8 +14,8 @@ class PathLexer:
     """
 
     # operators (and punctuation)
-    _operators = ["=", ".", "+", "*", "[", ",", "]", "{", "}", "()", "&&",
-                  "==", "!=", "<", "<=", ">", ">=", "::"]
+    _operators = ["=", ".", "#", "()", "+", "*", "[", ",", "]", "{", "}",
+                  "&&", "==", "!=", "<", "<=", ">", ">=", "::"]
 
     # the above sorted by length (longest to shortest)
     _operators = sorted(_operators, key=len, reverse=True)
@@ -92,7 +92,9 @@ class PathLexer:
         char = self._text[ptr:ptr+1]
 
         # anything left in the input string?
-        # XXX it really would be better to handle this as a token type
+        # XXX it really would be better to handle this as a token type or else
+        #     return None; currently any lookahead can hit end of input and
+        #     raise an exception (some errors are masked)
         if ptr >= tlen:
             raise EndOfInput
 
@@ -234,9 +236,6 @@ class PathParser:
         (type, token) = self._lexer.peek()
         if type == "number":
             self._lexer.advance()
-            if token <= 0:
-                raise ParserError("Invalid instance number at %s" %
-                                  self._lexer.rest())
             inst = ("number", token)
             
         elif type == "[":
@@ -358,15 +357,22 @@ class PathParser:
         return (relpath, oper, value)
 
     def _parse_namemod(self):
-        """namemod : name '+'? '()'?         
+        """namemod : name ( '#' number) '+'? '()'?         
         """
 
         namemod = [self._parse_name()]
         
         (type, token) = self._lexer.peek()
+        if token == "#":
+            self._lexer.advance()
+            number = self._parse_number()
+            namemod.append(('item', number))
+            
+        (type, token) = self._lexer.peek()
         if token == "+":
             self._lexer.advance()
             namemod.append('deref')
+            
         (type, token) = self._lexer.peek()
         if token == "()":
             self._lexer.advance()
@@ -397,6 +403,12 @@ class PathParser:
         """
 
         return self._parse_util("value", ["literal", "number"])
+
+    def _parse_number(self):
+        """value : number
+        """
+
+        return self._parse_util("number", ["number"])
 
     def _parse_punct(self, punct):
         """token : punct

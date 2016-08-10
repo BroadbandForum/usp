@@ -16,6 +16,5 @@
 'Device.IP.Interface.[Name="eth0"].Reset()' \
 'Device.NAT.PortMapping.1.Interface' \
 'Device.NAT.PortMapping.1.Interface+.Name' \
-'Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::{ap.SSIDReference+.SSID=="MyHome:"&&dev.OperatingStandard=="ac"}'
-
-
+'Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::{ap.SSIDReference+.SSID=="MyHome:"&&dev.OperatingStandard=="ac"}' \
+'Device.IP.Interface.{intf}.LowerLayers#1+.Name::{intf.Name=="eth0"}'
