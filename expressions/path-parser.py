@@ -14,7 +14,7 @@ class PathLexer:
     """
 
     # operators (and punctuation)
-    _operators = ["=", ".", "#", "()", "+", "*", "[", ",", "]", "{", "}",
+    _operators = [".", "#", "()", "+", "*", "[", ",", "]", "{", "}",
                   "&&", "==", "!=", "<", "<=", ">", ">=", "::"]
 
     # the above sorted by length (longest to shortest)
@@ -113,11 +113,9 @@ class PathLexer:
                                  (self._operators, self._text[self._start:]))
 
         # quoted string literal
-        # XXX this allows single quote within double quoted string and vice
-        #     versa, but doesn't allow a string to contain both single and
-        #     double quotes; could allow them to be backslash (?) escaped, or
-        #     else use percent encoding
-        elif char in ['"', "'"]:
+        # XXX previously also allowed single quote; need to support percent
+        #     encoding
+        elif char == '"':
             ptr += 1
             literal = ""
             while ptr < tlen and self._text[ptr] != char:
@@ -288,13 +286,12 @@ class PathParser:
         
         return name
 
-    # XXX note that this uses "=" rather than "=="
     def _parse_keyexpr(self):
         """keyexpr : relpath '=' value
         """
 
         relpath = self._parse_relpath()
-        oper = self._parse_punct("=")
+        oper = self._parse_punct("==")
         value = self._parse_value()
 
         return (relpath, oper, value)
@@ -509,7 +506,6 @@ for comp in comps:
                 if type == "simple":
                     print(" ", value)
                     (name, oper, value) = value
-                    oper = "==" if oper == "=" else oper
                     matches = []
                     for instnum in instnums:
                         nameval = dict[instnum][name]

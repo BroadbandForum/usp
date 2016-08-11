@@ -1,10 +1,10 @@
 ./path-parser.py \
 'Device.IP.Interface.1.' \
-'Device.IP.Interface.[Name="eth0"].' \
+'Device.IP.Interface.[Name=="eth0"].' \
 'Device.IP.Interface.{intf}.::{intf.Status=="Up"&&intf.LastChange>3600}' \
 'Device.IP.Interface.*.' \
-'Device.IP.Interface.[Name="eth0"].IPv4Address.{addr}.IPAddress::{addr.Status=="Enabled"}' \
-'Device.NAT.PortMapping.[RemoteHost="",ExternalPort=0,Protocol="TCP"].' \
+'Device.IP.Interface.[Name=="eth0"].IPv4Address.{addr}.IPAddress::{addr.Status=="Enabled"}' \
+'Device.NAT.PortMapping.[RemoteHost=="",ExternalPort==0,Protocol=="TCP"].' \
 'Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"}' \
 'Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&addr.AddressingType=="Static"}' \
 'Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal:"&&intf.Stats.ErrorsSent>0&&addr.AddressingType=="Static"}' \
@@ -13,7 +13,7 @@
 'Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"&&intf.IPv4Address.*.AddressingType=="Static"}' \
 'Device.IP.Interface.*.' \
 'Device.IP.Interface.*.Type' \
-'Device.IP.Interface.[Name="eth0"].Reset()' \
+'Device.IP.Interface.[Name=="eth0"].Reset()' \
 'Device.NAT.PortMapping.1.Interface' \
 'Device.NAT.PortMapping.1.Interface+.Name' \
 'Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::{ap.SSIDReference+.SSID=="MyHome:"&&dev.OperatingStandard=="ac"}' \
