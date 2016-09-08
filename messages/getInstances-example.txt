@@ -1,0 +1,51 @@
+::Request::
+
+header {
+  msg_id: "1938"
+  msg_type: "GetInstances"
+  proto_version: "1.0"
+  to_id: "usp.agent-1"
+  from_id: "usp.controller-ex"
+  reply_to_id: "usp.controller-ex"
+}
+body {
+  request {
+    get_instances {
+      obj_path: "Device.LocalAgent."
+      obj_path: "Device.WiFi.SSID."
+      obj_path: "Device.NoSuchParam"
+    }
+  }
+}
+
+
+
+::Response::
+
+header {
+  msg_id: "1938"
+  msg_type: "GetInstancesResp"
+  proto_version: "1.0"
+  to_id: "usp.controller-ex"
+  from_id: "usp.agent-1"
+}
+body {
+  response {
+    get_instances_resp {
+      req_path_result {
+        requested_path: "Device.LocalAgent."
+        invalid_path: true
+      }
+      req_path_result {
+        requested_path: "Device.WiFi.SSID."
+        result_path_list: "Device.WiFi.SSID.{My5GHzSSID}."
+        result_path_list: "Device.WiFi.SSID.{MyHouse}."
+      }
+      req_path_result {
+        requested_path: "Device.NoSuchParam"
+        invalid_path: true
+      }
+    }
+  }
+}
+

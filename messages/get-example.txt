@@ -1,0 +1,118 @@
+::Request::
+
+header {
+  msg_id: "9083"
+  msg_type: "Get"
+  proto_version: "1.0"
+  to_id: "usp.agent-1"
+  from_id: "usp.controller-ex"
+  reply_to_id: "usp.controller-ex"
+}
+body {
+  request {
+    get {
+      param_path: "Device.LocalAgent.UpTime"
+      param_path: "Device.LocalAgent.X_ARRIS-COM_IPAddr"
+      param_path: "Device.Time."
+      param_path: "Device.WiFi.SSID.*.Stats.Bytes*"
+      param_path: "Device.WiFi.SSID.{test}.Stats.BytesSent"
+      param_path: "Device.NoSuchParam"
+    }
+  }
+}
+
+
+
+::Response::
+
+header {
+  msg_id: "9083"
+  msg_type: "GetResp"
+  proto_version: "1.0"
+  to_id: "usp.controller-ex"
+  from_id: "usp.agent-1"
+}
+body {
+  response {
+    get_resp {
+      req_path_result {
+        requested_path: "Device.LocalAgent.UpTime"
+        result_param_map {
+          key: "Device.LocalAgent.UpTime"
+          value: "4"
+        }
+      }
+      req_path_result {
+        requested_path: "Device.LocalAgent.X_ARRIS-COM_IPAddr"
+        result_param_map {
+          key: "Device.LocalAgent.X_ARRIS-COM_IPAddr"
+          value: "10.37.6.93"
+        }
+      }
+      req_path_result {
+        requested_path: "Device.Time."
+        result_param_map {
+          key: "Device.Time.CurrentLocalTime"
+          value: "2015-02-07T09:15:44Z"
+        }
+        result_param_map {
+          key: "Device.Time.Enable"
+          value: "True"
+        }
+        result_param_map {
+          key: "Device.Time.LocalTimeZone"
+          value: "EST+5 EDT,M4.1.0/2,M10.5.0/2"
+        }
+        result_param_map {
+          key: "Device.Time.NTPServer1"
+          value: "ntp1.zzz.com"
+        }
+        result_param_map {
+          key: "Device.Time.NTPServer2"
+          value: "ntp2.zzz.com"
+        }
+        result_param_map {
+          key: "Device.Time.NTPServer3"
+          value: "ntp3.zzz.com"
+        }
+        result_param_map {
+          key: "Device.Time.NTPServer4"
+        }
+        result_param_map {
+          key: "Device.Time.NTPServer5"
+        }
+        result_param_map {
+          key: "Device.Time.Status"
+          value: "Synchronized"
+        }
+      }
+      req_path_result {
+        requested_path: "Device.WiFi.SSID.*.Stats.Bytes*"
+        result_param_map {
+          key: "Device.WiFi.SSID.{My5GHzSSID}.Stats.BytesReceived"
+          value: "99324"
+        }
+        result_param_map {
+          key: "Device.WiFi.SSID.{My5GHzSSID}.Stats.BytesSent"
+          value: "33211"
+        }
+        result_param_map {
+          key: "Device.WiFi.SSID.{MyHouse}.Stats.BytesReceived"
+          value: "13241"
+        }
+        result_param_map {
+          key: "Device.WiFi.SSID.{MyHouse}.Stats.BytesSent"
+          value: "15234"
+        }
+      }
+      req_path_result {
+        requested_path: "Device.WiFi.SSID.{test}.Stats.BytesSent"
+      }
+      req_path_result {
+        requested_path: "Device.NoSuchParam"
+        invalid_path: true
+      }
+    }
+  }
+}
+
