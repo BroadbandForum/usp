@@ -1,0 +1,400 @@
+syntax = "proto3";
+
+package usp;
+
+message Msg {
+  Header header = 1;         // Make required in the protocol
+  Body body = 2;             // Make required in the protocol
+}
+
+
+message Header {
+  string msg_id = 1;         // Make required in the protocol
+  MsgType msg_type = 2;      // Make required in the protocol
+  string proto_version = 3;  // Make required in the protocol
+  string to_id = 4;          // Make required in the protocol
+  string from_id = 5;        // Make required in the protocol
+  string reply_to_id = 6;
+
+  enum MsgType {
+    ERROR = 0;
+    GET = 1;
+    GET_RESP = 2;
+    NOTIFY = 3;
+    SET = 4;
+    SET_RESP = 5;
+    OPERATE = 6;
+    OPERATE_RESP = 7;
+    ADD = 8;
+    ADD_RESP = 9;
+    DELETE = 10;
+    DELETE_RESP = 11;
+    GET_INSTANCES = 12;
+    GET_INSTANCES_RESP = 13;
+    GET_IMPL_OBJECTS = 14;
+    GET_IMPL_OBJECTS_RESP = 15;
+    NOTIFY_RESP = 16;
+  }
+}
+
+
+message Body {
+  oneof msg_body {
+    Request request = 1;
+    Response response = 2;
+    Error error = 3;
+  }
+}
+
+
+message Request {
+  oneof request {
+    Get get = 1;
+    GetInstances get_instances = 2;
+    GetImplObjects get_impl_objects = 3;
+    Set set = 4;
+    Add add = 5;
+    Delete delete = 6;
+    Operate operate = 7;
+    Notify notify = 8;
+  }
+}
+
+
+message Response {
+  oneof response {
+    GetResp get_resp = 1;
+    GetInstancesResp get_instances_resp = 2;
+    GetImplObjectsResp get_impl_objects_resp = 3;
+    SetResp set_resp = 4;
+    AddResp add_resp = 5;
+    DeleteResp delete_resp = 6;
+    OperateResp operate_resp = 7;
+    NotifyResp notify_resp = 8;
+  }
+}
+
+
+message Error {
+  fixed32 err_code = 1;
+  string err_msg = 2;
+  repeated ParamError param_err = 3;
+
+  message ParamError {
+    string param_path = 1;
+    fixed32 err_code = 2;
+    string err_msg = 3;
+  }
+}
+
+
+message Get {
+  repeated string param_path = 1;
+}
+
+message GetResp {
+  repeated RequestedPathResult req_path_result = 1;
+
+  message RequestedPathResult {
+    string requested_path = 1;
+    bool invalid_path = 2;
+    map<string, string> result_param_map = 3;
+  }
+}
+
+
+message GetInstances {
+  repeated string obj_path = 1;
+}
+
+message GetInstancesResp {
+  repeated RequestedPathResult req_path_result = 1;
+
+  message RequestedPathResult {
+    string requested_path = 1;
+    bool invalid_path = 2;
+    repeated string result_path_list = 3;
+  }
+}
+
+
+message GetImplObjects {
+  repeated ImplObject impl_obj = 1;
+
+  message ImplObject {
+    string obj_path = 1;
+    bool next_level = 2;
+  }
+}
+
+message GetImplObjectsResp {
+  repeated RequestedPathResult req_path_result = 1;
+
+  message RequestedPathResult {
+    string requested_path = 1;
+    bool invalid_path = 2;
+    repeated string result_path_list = 3;
+  }
+}
+
+
+message Add {
+  bool allow_partial = 1;
+  repeated CreateObject create_obj = 2;
+
+  message CreateObject {
+    string obj_path = 1;
+    repeated CreateParamSetting param_setting = 2;
+  }
+
+  message CreateParamSetting {
+    string param = 1;
+    string value = 2;
+    bool required = 3;
+  }
+}
+
+message AddResp {
+  repeated CreatedObjectResult created_obj_result = 1;
+
+  message CreatedObjectResult {
+    string requested_path = 1;
+    OperationStatus oper_status = 2;
+
+    message OperationStatus {
+      oneof oper_status {
+        OperationFailure oper_failure = 1;
+        OperationSuccess oper_success = 2;
+      }
+
+      message OperationFailure {
+        fixed32 err_code = 1;
+        string err_msg = 2;
+      }
+
+      message OperationSuccess {
+        string instantiated_path = 1;
+        repeated ParameterError param_err = 2;
+        map<string, string> created_param_result_map = 3;
+      }
+    }
+  }
+
+  message ParameterError {
+    string param_path = 1;
+    string param_value = 2;
+    fixed32 err_code = 3;
+    string err_msg = 4;
+  }
+}
+
+
+message Delete {
+  bool allow_partial = 1;
+  repeated string obj_path = 2;
+}
+
+message DeleteResp {
+  repeated DeletedObjectResult deleted_obj_result = 1;
+
+  message DeletedObjectResult {
+    string requested_path = 1;
+    bool invalid_path = 2;
+    bool missing_obj = 3;
+  }
+}
+
+
+message Set {
+  bool allow_partial = 1;
+  repeated UpdateObject update_obj = 2;
+
+  message UpdateObject {
+    string obj_path = 1;
+    bool auto_create = 2;
+    repeated UpdateParamSetting param_setting = 3;
+  }
+
+  message UpdateParamSetting {
+    string param = 1;
+    string value = 2;
+    bool required = 3;
+  }
+}
+
+message SetResp {
+  repeated UpdatedObjectResult updated_obj_result = 1;
+
+  message UpdatedObjectResult {
+    string requested_path = 1;
+    OperationStatus oper_status = 2;
+
+    message OperationStatus {
+      oneof oper_status {
+        OperationFailure oper_failure = 1;
+        OperationSuccess oper_success = 2;
+      }
+
+      message OperationFailure {
+        fixed32 err_code = 1;
+        string err_msg = 2;
+      }
+
+      message OperationSuccess {
+        repeated ParameterError param_err = 1;
+        repeated UpdatedInstanceResult updated_inst_result = 2;
+      }
+    }
+  }
+
+  message ParameterError {
+    string param_path = 1;
+    string param_value = 2;
+    fixed32 err_code = 3;
+    string err_msg = 4;
+  }
+
+  message UpdatedInstanceResult {
+    string affected_path = 1;
+    map<string, string> result_param_map = 2;
+  }
+}
+
+
+message Operate {
+  string command = 1;
+  string command_key = 2;
+  bool send_resp = 3;
+  map<string, string> input_arg_map = 4;
+}
+
+
+message OperateResp {
+  repeated OperationResult operation_result = 1;
+
+  message OperationResult {
+    string executed_command = 1;
+    oneof operation_resp {
+      string req_obj_path = 2;
+      OutputArgs req_output_args = 3;
+    }
+
+    message OutputArgs {
+      map<string, string> output_arg_map = 1;
+      CommandFailure cmd_failure = 2;
+    }
+
+    message CommandFailure {
+      fixed32 err_code = 1;
+      string err_msg = 2;
+    }
+  }
+}
+
+
+message Notify {
+  string subscription_id = 1;
+  bool send_resp = 2;
+  oneof notification {        // NOTE: Bootstrap, Boot, and TransferComplete call all be caused outside of an operation
+    Boot boot = 3;
+    ValueChange value_change = 4;
+    ObjectCreation obj_creation = 5;
+    ObjectDeletion obj_deletion = 6;
+    Periodic periodic = 7;
+    OperationComplete oper_complete = 8;
+    WakeUp wake_up = 9;
+    Timer timer = 10;
+    TransferComplete xfer_complete = 11;
+    OnBoardRequest on_board_req = 12;
+    PassiveValueChange passive_value_change = 13;
+  }
+
+  message Boot {
+    string command_key = 1;
+    enum Cause {
+      LOCAL_REBOOT = 0;
+      REMOTE_REBOOT = 1;
+      LOCAL_FACTORY_RESET = 2;
+      REMOTE_FACTORY_RESET = 3;
+    }
+    Cause cause = 2;
+    string obj_ref = 3;     // Object associated with Boot Notification (LocalAgent,ExecutionEnv, etc.)
+    map<string, string> param_map = 4;
+  }
+
+  message ValueChange {
+    string param_path = 1;
+    string param_value = 2;
+  }
+
+  message ObjectCreation {
+    string obj_path = 1;
+  }
+
+  message ObjectDeletion {
+    string obj_path = 1;
+  }
+
+  message Periodic {
+    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
+  }
+
+  message OperationComplete { // Replaces DiagnosticsComplete and SoftReset
+    string command = 1;
+    string command_key = 2;
+    map<string, string> output_arg_map = 3;
+    CommandFailure cmd_failure = 4;
+
+    message CommandFailure {
+      fixed32 err_code = 1;
+      string err_msg = 2;
+    }
+  }
+
+  message WakeUp {
+    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
+  }
+
+  message Timer {
+    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
+    string command_key = 2;
+  }
+
+  message TransferComplete {
+    string command_key = 1;
+    TransferType xfer_type = 2;
+    string xfer_file_type = 3;
+    string xfer_url = 4;
+    string start_time = 5;
+    string complete_time = 6;
+    string obj_ref = 7;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
+    string operation_source = 8;  // Controller ID that caused the Transfer
+    TransferError xfer_err = 9;
+
+    enum TransferType {
+      DOWNLOAD = 0;
+      UPLOAD = 1;
+      INSTALL = 2;
+      UPDATE = 3;
+      UNINSTALL = 4;
+    }
+
+    message TransferError {
+      fixed32 err_code = 1;
+      string err_msg = 2;
+    }
+  }
+
+  message OnBoardRequest {
+    string obj_ref = 1;     // Controller Object associated with OnBoardRequest Notification (the Controller that caused the Notification)
+  }
+
+  message PassiveValueChange {
+    map<string, string> param_map = 1;
+  }
+}
+
+
+message NotifyResp {
+  string subscription_id = 1;
+}
