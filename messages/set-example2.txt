@@ -1,0 +1,60 @@
+Example of a Valid Parameter
+
+::Request::
+
+header {
+  msg_id: "6565"
+  msg_type: SET
+  proto_version: "1.0"
+  to_id: "usp.00D09E-RPi_Test-T0000000001"
+  from_id: "usp.controller-stomp-johnb"
+  reply_to_id: "usp.controller-stomp-johnb"
+}
+body {
+  request {
+    set {
+      allow_partial: true
+      update_obj {
+        obj_path: "Device.LocalAgent."
+        param_setting {
+          param: "PeriodicInterval"
+          value: "60"
+          required: true
+        }
+      }
+    }
+  }
+}
+
+
+
+::Response::
+
+header {
+  msg_id: "6565"
+  msg_type: SET_RESP
+  proto_version: "1.0"
+  to_id: "usp.controller-stomp-johnb"
+  from_id: "usp.00D09E-RPi_Test-T0000000001"
+}
+body {
+  response {
+    set_resp {
+      updated_obj_result {
+        requested_path: "Device.LocalAgent."
+        oper_status {
+          oper_success {
+            updated_inst_result {
+              affected_path: "Device.LocalAgent."
+              result_param_map {
+                key: "Device.LocalAgent.PeriodicInterval"
+                value: "60"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
