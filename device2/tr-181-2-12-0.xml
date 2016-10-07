@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   STRAW BALLOT
   
@@ -113,7 +113,7 @@
   </import>
   
   <component name="LocalAgent">
-    <object name="Device.LocalAgent." access="readOnly" minEntries="1" maxEntries="1">
+    <object name="LocalAgent." access="readOnly" minEntries="1" maxEntries="1">
       <description>
         This object contains general information about the USP Agent itself.  For information related to the Device that hosts the Agent, please reference the {{object|.DeviceInfo}} object.
         NOTE: The Supported Data Model table ({{object|.DeviceInfo.SupportedDataModel}}) and Vendor Log File table ({{object|.DeviceInfo.VendorLogFile}}) details are located on the {{object|.DeviceInfo}} object.
@@ -162,36 +162,6 @@
           </string>
         </syntax>
       </parameter>
-      <parameter name="ManagementIPAddress" access="readOnly">
-        <description>
-          IP Address that the USP Agent is accessible on (for use in the CoAP and HTTP URLs).
-        </description>
-        <syntax>
-          <dataType ref="IPAddress"></dataType>
-        </syntax>
-      </parameter>
-      <parameter name="CoAPManagementPort" access="readOnly">
-        <description>
-          CoAP Port that the USP Agent is accessible on (for use in the CoAP URL).
-          A value of -1 means that {{param}} is ignored as the CoAP Message Transport Protocol is not supported.
-        </description>
-        <syntax>
-          <int>
-            <range minInclusive="-1"></range>
-          </int>
-        </syntax>
-      </parameter>
-      <parameter name="HTTPManagementPort" access="readOnly">
-        <description>
-          HTTP Port that the USP Agent is accessible on (for use in the HTTP URL).
-          A value of -1 means that {{param}} is ignored as the HTTP Message Transport Protocol is not supported.
-        </description>
-        <syntax>
-          <int>
-            <range minInclusive="-1"></range>
-          </int>
-        </syntax>
-      </parameter>
     </object>
   </component>
 
@@ -209,8 +179,7 @@
         Each instance of this table represents a USP Controller that has access to this USP Agent.
       </description>
       <uniqueKey functional="true">
-        <parameter ref="EndpointId"/>
-        <parameter ref="Protocol"/>
+        <parameter ref="EndpointID"/>
       </uniqueKey>
       
       <parameter name="Enable" access="readWrite">
@@ -223,7 +192,7 @@
           <default type="object" value="false"></default>
         </syntax>
       </parameter>
-      <parameter name="EndpointId" access="readWrite">
+      <parameter name="EndpointID" access="readWrite">
         <description>
           The unique USP identifier for this USP Controller.
         </description>
@@ -232,22 +201,9 @@
           <default type="object" value=""></default>
         </syntax>
       </parameter>
-      <parameter name="Protocol" access="readWrite">
-        <description>
-          The Message Transport Protocol (MTP) to be used for communications with this USP Controller.
-        </description>
-        <syntax>
-          <string>
-            <enumeration value="CoAP"></enumeration>
-            <enumeration value="HTTP"></enumeration>
-            <enumeration value="STOMP"></enumeration>
-          </string>
-          <default type="object" value="HTTP"></default>
-        </syntax>
-      </parameter>
       <parameter name="PeriodicNotifInterval" access="readWrite">
         <description>
-          If a Periodic Notification {{object|Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is the duration in {{units}} of the interval for which the USP Agent MUST attempt to issue a Periodic Notification to the USP Controller.
+          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is the duration in {{units}} of the interval for which the USP Agent MUST attempt to issue a Periodic Notification to the USP Controller.
         </description>
         <syntax>
           <unsignedInt>
@@ -258,7 +214,7 @@
       </parameter>
       <parameter name="PeriodicNotifTime" access="readWrite">
         <description>
-          If a Periodic Notification {{object|Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is an absolute time reference in UTC to determine when the USP Agent will issue a Periodic Notification. Each Periodic Notification MUST occur at this reference time plus or minus an integer multiple of the {{param|PeriodicNotifInterval}}.
+          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is an absolute time reference in UTC to determine when the USP Agent will issue a Periodic Notification. Each Periodic Notification MUST occur at this reference time plus or minus an integer multiple of the {{param|PeriodicNotifInterval}}.
           {{param}} is used only to set the ''phase'' of the Periodic Notifications.  The actual value of {{param}} can be arbitrarily far into the  past or future.
           For example, if {{param|PeriodicNotifInterval}} is 86400 (a day) and if {{param}} is set to UTC midnight on some day (in the past,  present, or future) then Periodic Notifications will be sent every day at UTC midnight.  These MUST begin on the very next midnight, even if {{param}} refers to a day in the future.
           The Unknown Time value defined in {{bibref|TR-106a2|section 3.2}} indicates that no particular time reference is specified.  That is, the USP Agent MAY locally choose the time reference, and needs only to adhere to the specified {{param|PeriodicNotifInterval}}.
@@ -312,136 +268,6 @@
         </description>
         <syntax>
           <unsignedInt/>
-        </syntax>
-      </parameter>
-    </object>
-    
-    <object name="Controller.{i}.CoAP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Controller uses the CoAP Message Transport Protocol (MTP), then this object contains CoAP specific configuration parameters. 
-      </description>
-      
-      <parameter name="Host" access="readWrite">
-        <description>
-          The host name or IP address for the USP Controller's CoAP Server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Port" access="readWrite">
-        <description>
-          The port number for the USP Controller's CoAP Server.
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="object" value="5683"></default>
-        </syntax>
-      </parameter>
-    </object>
-
-    <object name="Controller.{i}.HTTP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Controller uses the HTTP Message Transport Protocol (MTP), then this object contains HTTP specific configuration parameters. 
-      </description>
-      
-      <parameter name="Host" access="readWrite">
-        <description>
-          The host name or IP address for the USP Controller's HTTP Server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Port" access="readWrite">
-        <description>
-          The port number for the USP Controller's HTTP Server.
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="object" value="80"></default>
-        </syntax>
-      </parameter>
-      <parameter name="CompressionSupported" access="readOnly">
-        <description>
-          Indicates the HTTP Compression mechanism(s) supported by this CPE.  Requirements for the use of HTTP Compression for CWMP can be found in {{bibref|TR-069a5|Section 3.4.7}}. {{enum}}
-          Vendors can extend the enumerated values with vendor specific extensions, in which case the rules outlined in {{bibref|TR-106a7|Section 3.3}} MUST be adhered to.
-        </description>
-        <syntax>
-          <list/>
-          <string>
-            <enumeration value="GZIP">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-            <enumeration value="Compress">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-            <enumeration value="Deflate">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-          </string>
-        </syntax>
-      </parameter>
-      <parameter name="Compression" access="readWrite">
-        <description>
-          The value of this parameter represents the HTTP Compression mechanism to be used by the CPE when communicating with the ACS.
-        </description>
-        <syntax>
-          <string>
-            <enumerationRef targetParam="HTTPCompressionSupported" nullValue="Disabled"/>
-          </string>
-          <default type="factory" value="Disabled"/>
-        </syntax>
-      </parameter>
-    </object>
-
-    <object name="Controller.{i}.STOMP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Controller uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters. 
-      </description>
-      
-      <parameter name="Host" access="readWrite">
-        <description>
-          The host name or IP address of the STOMP Server that the USP Controller is connected to.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Port" access="readWrite">
-        <description>
-          The port number of the STOMP Server that the USP Controller is connected to.
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="object" value="61613"></default>
-        </syntax>
-      </parameter>
-      <parameter name="Username" access="readWrite">
-        <description>
-          The value to use in the 'login' header when connecting to the STOMP Server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Password" access="readWrite">
-        <description>
-          The value to use in the 'passcode' header when connecting to the STOMP Server.
-        </description>
-        <syntax hidden="true">
-          <string/>
-          <default type="object" value=""></default>
         </syntax>
       </parameter>
     </object>
@@ -717,6 +543,167 @@
     </object>
   </component>
   
+    <component name="MTPs">
+    <parameter name="MTPNumberOfEntries" access="readOnly">
+      <description>{{numentries}}</description>
+      <syntax>
+        <unsignedInt/>
+      </syntax>
+    </parameter>
+    
+    <object name="MTP.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
+            numEntriesParameter="MTPNumberOfEntries" enableParameter="Enable">
+      <description>
+        Each instance of this table represents a MTP used by a USP Endpoint.
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      
+      <parameter name="Enable" access="readWrite">
+        <description>
+          Enable/Disable this particular MTP.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Name" access="readWrite">
+        <description>
+          The Name Message Transport Protocol (MTP) instance to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Protocol" access="readWrite">
+        <description>
+          The Message Transport Protocol (MTP) to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string>
+            <enumeration value="CoAP"></enumeration>
+            <enumeration value="HTTP"></enumeration>
+            <enumeration value="STOMP"></enumeration>
+          </string>
+          <default type="object" value="HTTP"></default>
+        </syntax>
+      </parameter>
+    </object>
+    
+    <object name="MTP.{i}.CoAP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the CoAP Message Transport Protocol (MTP), then this object contains CoAP specific configuration parameters. 
+      </description>
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's CoAP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="MTP.{i}.HTTP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the HTTP Message Transport Protocol (MTP), then this object contains HTTP specific configuration parameters. 
+      </description>
+      
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's HHTP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="CompressionSupported" access="readOnly">
+        <description>
+          Indicates the HTTP Compression mechanism(s) supported by this CPE.  Requirements for the use of HTTP Compression for CWMP can be found in {{bibref|TR-069a5|Section 3.4.7}}. {{enum}}
+          Vendors can extend the enumerated values with vendor specific extensions, in which case the rules outlined in {{bibref|TR-106a7|Section 3.3}} MUST be adhered to.
+        </description>
+        <syntax>
+          <list/>
+          <string>
+            <enumeration value="GZIP">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+            <enumeration value="Compress">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+            <enumeration value="Deflate">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="Compression" access="readWrite">
+        <description>
+          The value of this parameter represents the HTTP Compression mechanism to be used by the CPE when communicating with the ACS.
+        </description>
+        <syntax>
+          <string>
+            <enumerationRef targetParam="CompressionSupported" nullValue="Disabled"/>
+          </string>
+          <default type="factory" value="Disabled"/>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="MTP.{i}.STOMP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters to which the USP Endpoint would attach. 
+      </description>
+      
+      <parameter name="Host" access="readWrite">
+        <description>
+          The host name or IP address of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Port" access="readWrite">
+        <description>
+          The port number of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <unsignedInt/>
+          <default type="object" value="61613"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Username" access="readWrite">
+        <description>
+          The value to use in the 'login' header when connecting to the STOMP Server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Password" access="readWrite">
+        <description>
+          The value to use in the 'passcode' header when connecting to the STOMP Server.
+        </description>
+        <syntax hidden="true">
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+  </component>
+  
   <component name="Subscriptions">
     <parameter name="SubscriptionNumberOfEntries" access="readOnly">
       <description>{{numentries}}</description>
@@ -732,7 +719,7 @@
       </description>
       <uniqueKey functional="false">
         <parameter ref="SubscriptionID"/>
-        <parameter ref="Receipient"/>
+        <parameter ref="Recipient"/>
       </uniqueKey>
       
       <parameter name="Enable" access="readWrite">
@@ -756,14 +743,14 @@
           <default type="object" value=""/>
         </syntax>
       </parameter>
-      <parameter name="Receipient" access="readOnly">
+      <parameter name="Recipient" access="readOnly">
         <description>
-          A reference to the {{object|.Controller.{i}.}} instance that will receive the Notification associated with this {{object}}.
+          A reference to the {{object|#.Controller.{i}.}} instance that will receive the Notification associated with this {{object}}.
           The value of this parameter is automatically populated by the USP Agent upon {{object}} creation using the reference to the USP Controller that created the instance.
         </description>
         <syntax>
           <string>
-            <pathRef refType="strong" targetParent="Controller." targetType="row"/>
+            <pathRef refType="strong" targetParent="#.Controller." targetType="row"/>
           </string>
         </syntax>
       </parameter>
@@ -778,7 +765,7 @@
       </parameter>
       <parameter name="NotificationType" access="readWrite">
         <description>
-          Type of Notification message that will be sent to the USP Controller specified by {{param|Receipient}} when this {{object}} is triggered.
+          Type of Notification message that will be sent to the USP Controller specified by {{param|Recipient}} when this {{object}} is triggered.
         </description>
         <syntax>
           <string>
@@ -927,10 +914,12 @@
   
   <model name="Device:2.12" base="Device:2.11">
     <component path="Device." ref="LocalAgent"/>
-    <component path="Device." ref="Controllers"/>
-    <component path="Device." ref="Subscriptions"/>
+    <component path="Device.LocalAgent." ref="MTPs"/>
+    <component path="Device.LocalAgent." ref="Controllers"/>
+    <component path="Device.LocalAgent.Controller.{i}." ref="MTPs"/>
+    <component path="Device.LocalAgent." ref="Subscriptions"/>
+    <component path="Device.LocalAgent." ref="Requests"/>
     <component path="Device." ref="AccessControl"/>
-    <component path="Device." ref="Requests"/>
     <component path="Device." ref="ProxiedDevices"/>
     <component path="Device." ref="InternetOfThings"/>
   </model>
