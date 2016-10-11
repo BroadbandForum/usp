@@ -1,0 +1,20 @@
+::Notification::
+
+header {
+  msg_id: "1808"
+  msg_type: NOTIFY
+  proto_version: "1.0"
+  to_id: "usp.controller-stomp-johnb"
+  from_id: "usp.00D09E-RPi_Test-T0000000001"
+}
+body {
+  request {
+    notify {
+      subscription_id: "sub-periodic-stomp"
+      periodic {
+        obj_ref: "Device.LocalAgent."
+      }
+    }
+  }
+}
+
