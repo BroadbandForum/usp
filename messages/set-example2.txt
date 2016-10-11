@@ -47,7 +47,7 @@ body {
             updated_inst_result {
               affected_path: "Device.LocalAgent."
               result_param_map {
-                key: "Device.LocalAgent.PeriodicInterval"
+                key: "PeriodicInterval"
                 value: "60"
               }
             }
