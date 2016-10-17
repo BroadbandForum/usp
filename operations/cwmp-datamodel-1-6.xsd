@@ -283,6 +283,16 @@ In BBF standards, a model name MUST NOT include any hyphens.</xs:documentation>
     </xs:annotation>
     <xs:list itemType="tns:ModelName"/>
   </xs:simpleType>
+  <xs:simpleType name="MountType">
+    <xs:annotation>
+      <xs:documentation>Indicates whether an object is mountable or a mount point.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="mountable"/>
+      <xs:enumeration value="mountpoint"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="NotificationName">
     <xs:annotation>
       <xs:documentation>Notification name (maximum length 256).  Each component is the same as xs:NCName except that dots are not permitted.  This name MUST in addition follow the vendor-specific notification name requirements of section 3.3 (TBD).
@@ -402,6 +412,16 @@ In BBF standards, a profile name MUST NOT start with an underscore or include an
       <xs:enumeration value="create"/>
       <xs:enumeration value="delete"/>
       <xs:enumeration value="createDelete"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Protocol">
+    <xs:annotation>
+      <xs:documentation>Protocol(s) to which a definition applies.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="any"/>
+      <xs:enumeration value="cwmp"/>
+      <xs:enumeration value="usp"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ReadWriteAccess">
@@ -1159,6 +1179,11 @@ MUST be present if and only if defining a new command.</xs:documentation>
         <xs:documentation>Indicates whether this is an asynchronous (true) or synchronous (false) command.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="persist" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation>Indicates whether the command persists across reboots.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
     <xs:attribute name="status" type="tns:Status" default="current"/>
     <xs:attribute name="id" type="tns:OpaqueID"/>
     <xs:attribute default="OperationComplete" name="notify">
@@ -1288,6 +1313,8 @@ If the object is a table (see maxEntries), the final part of the name MUST be "{
       </xs:annotation>
     </xs:attribute>
     <xs:attribute name="status" type="tns:Status" default="current"/>
+    <xs:attribute name="protocol" type="tns:Protocol" default="any"/>
+    <xs:attribute name="mounttype" type="tns:MountType" default="none"/>
     <xs:attribute name="id" type="tns:OpaqueID"/>
     <xs:anyAttribute namespace="##other"/>
   </xs:complexType>
@@ -1318,6 +1345,7 @@ MUST be present if and only if defining a new parameter.</xs:documentation>
     </xs:attribute>
     <xs:attribute name="mandatory" type="xs:boolean" default="false"/>
     <xs:attribute name="status" type="tns:Status" default="current"/>
+    <xs:attribute name="protocol" type="tns:Protocol" default="any"/>
     <xs:attribute name="activeNotify" type="tns:ActiveNotify" default="normal"/>
     <xs:attribute name="forcedInform" type="xs:boolean" default="false"/>
     <xs:attribute name="id" type="tns:OpaqueID"/>

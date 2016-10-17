@@ -11,7 +11,7 @@
   file="example1.xml">
 
   <description>
-    DM instance that illustrates USP commands.
+    DM instance that illustrates USP commands and other USP extensions.
   </description>
 
   <import file="tr-069-biblio.xml"/>
@@ -44,7 +44,7 @@
   </component>
   
   <component name="RebootCommand">
-    <command name="Reboot()" async="true" notify="Boot">
+    <command name="Reboot()" async="true" persist="true" notify="Boot">
       <description>
         Reboot the entity represented by the object on which this command is invoked.
       </description>
@@ -582,6 +582,12 @@
           This command completes immediately. If successul, {{param|State}} will immediately change to {{enum|Canceling|State}} and will change to {{enum|Canceled|State}} when the cancelation is complete.
         </description>
       </command>
+    </object>
+
+    <object name="Device.Other." access="readOnly" minEntries="1" maxEntries="1" protocol="usp" mounttype="mountable">
+      <description>
+        Examples of other USP-inspired extensions.
+      </description>
     </object>
 
   </model>
