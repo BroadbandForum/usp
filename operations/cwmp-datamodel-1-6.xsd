@@ -786,18 +786,21 @@ The units facet MUST NOT be specified for data types that are not numeric, i.e. 
           <xs:unique name="componentObjectParameterName">
             <xs:selector xpath="parameter"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
         <xs:element name="command" type="tns:ModelCommand">
           <xs:unique name="componentCommandParameterNameXXX">
             <xs:selector xpath="parameter"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
         <xs:element name="notification" type="tns:ModelNotification">
           <xs:unique name="componentNotificationParameterNameXXX">
             <xs:selector xpath="parameter"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
       </xs:choice>
@@ -1092,18 +1095,21 @@ The optional ref attribute MAY be used in order to avoid name conflicts between 
           <xs:unique name="objectParameterName">
             <xs:selector xpath="parameter"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
         <xs:element name="command" type="tns:ModelCommand">
           <xs:unique name="commandObjectName">
             <xs:selector xpath="object"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
         <xs:element name="notification" type="tns:ModelNotification">
           <xs:unique name="notificationObjectName">
             <xs:selector xpath="object"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
       </xs:choice>
@@ -1142,6 +1148,7 @@ The optional ref attribute MAY be used in order to avoid name conflicts between 
               <xs:unique name="commandInputObjectParameterName">
                 <xs:selector xpath="parameter"/>
                 <xs:field xpath="@name|@base"/>
+                <xs:field xpath="@protocol"/>
               </xs:unique>
             </xs:element>
           </xs:choice>
@@ -1156,6 +1163,7 @@ The optional ref attribute MAY be used in order to avoid name conflicts between 
               <xs:unique name="commandOutputObjectParameterName">
                 <xs:selector xpath="parameter"/>
                 <xs:field xpath="@name|@base"/>
+                <xs:field xpath="@protocol"/>
               </xs:unique>
             </xs:element>
           </xs:choice>
@@ -1210,6 +1218,7 @@ MUST be present if and only if defining a new command.</xs:documentation>
           <xs:unique name="notificationObjectParameterName">
             <xs:selector xpath="parameter"/>
             <xs:field xpath="@name|@base"/>
+            <xs:field xpath="@protocol"/>
           </xs:unique>
         </xs:element>
       </xs:choice>
@@ -1624,10 +1633,12 @@ BBF standard DM Schema instance documents MUST use UTF-8 encoding and their char
             <xs:unique name="componentParameterName">
               <xs:selector xpath="parameter"/>
               <xs:field xpath="@name|@base"/>
+              <xs:field xpath="@protocol"/>
             </xs:unique>
             <xs:unique name="componentObjectName">
               <xs:selector xpath="object"/>
               <xs:field xpath="@name|@base"/>
+              <xs:field xpath="@protocol"/>
             </xs:unique>
             <xs:unique name="componentProfileName">
               <xs:selector xpath="profile"/>
@@ -1641,10 +1652,12 @@ BBF standard DM Schema instance documents MUST use UTF-8 encoding and their char
             <xs:unique name="modelParameterName">
               <xs:selector xpath="parameter"/>
               <xs:field xpath="@name|@base"/>
+              <xs:field xpath="@protocol"/>
             </xs:unique>
             <xs:unique name="modelObjectName">
               <xs:selector xpath="object"/>
               <xs:field xpath="@name|@base"/>
+              <xs:field xpath="@protocol"/>
             </xs:unique>
             <xs:unique name="modelCommandName">
               <xs:selector xpath="command"/>
@@ -1653,6 +1666,7 @@ BBF standard DM Schema instance documents MUST use UTF-8 encoding and their char
             <xs:unique name="modelCommandObjectName">
               <xs:selector xpath="command/object"/>
               <xs:field xpath="@name|@base"/>
+              <xs:field xpath="@protocol"/>
             </xs:unique>
             <xs:unique name="modelProfileName">
               <xs:selector xpath="profile"/>

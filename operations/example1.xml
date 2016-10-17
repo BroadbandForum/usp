@@ -584,11 +584,33 @@
       </command>
     </object>
 
+    <object name="Device.Other." access="readOnly" minEntries="1" maxEntries="1" protocol="cwmp">
+      <description>
+        Examples of other USP-inspired extensions.
+      </description>
+      <parameter name="Test" access="readOnly" protocol="cwmp">
+        <description>
+          Test parameter that's CWMP-specific.
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+      <parameter name="Test" access="readOnly" protocol="usp">
+        <description>
+          Test parameter that's CWMP-specific.
+        </description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+    </object>
+    
     <object name="Device.Other." access="readOnly" minEntries="1" maxEntries="1" protocol="usp" mounttype="mountable">
       <description>
         Examples of other USP-inspired extensions.
       </description>
     </object>
-
+    
   </model>
 </dm:document>
