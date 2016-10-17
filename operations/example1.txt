@@ -83,4 +83,5 @@ urn:broadband-forum-org:example1
           string Message
           string Detail
           command Cancel()
+      object Other.
     profile 
