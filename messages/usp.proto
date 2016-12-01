@@ -138,6 +138,34 @@ message GetImplObjectsResp {
 }
 
 
+message GetObjects {
+  repeated DiscoverObject discover_obj = 1;
+
+  message DiscoverObject {
+    string obj_path = 1;
+    bool next_level = 2;
+  }
+}
+
+message GetObjectsResp {
+  repeated RequestedObjectResult req_obj_result = 1;
+
+  message RequestedObjectResult {
+    string req_obj_path = 1;
+    bool invalid_path = 2;
+    string data_model_inst_url = 3;
+    repeated ImplObjectResult impl_obj_list = 4;
+  }
+
+  message ImplObjectResult {
+    string impl_obj_path = 1;
+    bool read_write = 2;
+    bool multi_instance = 3;
+    repeated string curr_inst_list = 4;
+  }
+}
+
+
 message Add {
   bool allow_partial = 1;
   repeated CreateObject create_obj = 2;
@@ -181,10 +209,9 @@ message AddResp {
   }
 
   message ParameterError {
-    string param_path = 1;
-    string param_value = 2;
-    fixed32 err_code = 3;
-    string err_msg = 4;
+    string param = 1;
+    fixed32 err_code = 2;
+    string err_msg = 3;
   }
 }
 
@@ -199,8 +226,23 @@ message DeleteResp {
 
   message DeletedObjectResult {
     string requested_path = 1;
-    bool invalid_path = 2;
-    bool missing_obj = 3;
+    OperationStatus oper_status = 2;
+
+    message OperationStatus {
+      oneof oper_status {
+        OperationFailure oper_failure = 1;
+        OperationSuccess oper_success = 2;
+      }
+
+      message OperationFailure {
+        fixed32 err_code = 1;
+        string err_msg = 2;
+      }
+
+      message OperationSuccess {
+        repeated string affected_path_list = 2;
+      }
+    }
   }
 }
 
@@ -248,10 +290,9 @@ message SetResp {
   }
 
   message ParameterError {
-    string param_path = 1;
-    string param_value = 2;
-    fixed32 err_code = 3;
-    string err_msg = 4;
+    string param = 1;
+    fixed32 err_code = 2;
+    string err_msg = 3;
   }
 
   message UpdatedInstanceResult {
@@ -277,11 +318,11 @@ message OperateResp {
     oneof operation_resp {
       string req_obj_path = 2;
       OutputArgs req_output_args = 3;
+      CommandFailure cmd_failure = 4;
     }
 
     message OutputArgs {
       map<string, string> output_arg_map = 1;
-      CommandFailure cmd_failure = 2;
     }
 
     message CommandFailure {
@@ -339,11 +380,17 @@ message Notify {
     string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
   }
 
-  message OperationComplete { // Replaces DiagnosticsComplete and SoftReset
+  message OperationComplete {
     string command = 1;
     string command_key = 2;
-    map<string, string> output_arg_map = 3;
-    CommandFailure cmd_failure = 4;
+    oneof operation_resp {
+      OutputArgs req_output_args = 3;
+      CommandFailure cmd_failure = 4;
+    }
+
+    message OutputArgs {
+      map<string, string> output_arg_map = 1;
+    }
 
     message CommandFailure {
       fixed32 err_code = 1;
