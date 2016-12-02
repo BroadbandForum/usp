@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='usp.proto',
   package='usp',
   syntax='proto3',
-  serialized_pb=_b('\n\tusp.proto\x12\x03usp\";\n\x03Msg\x12\x1b\n\x06header\x18\x01 \x01(\x0b\x32\x0b.usp.Header\x12\x17\n\x04\x62ody\x18\x02 \x01(\x0b\x32\t.usp.Body\"\x9c\x03\n\x06Header\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12%\n\x08msg_type\x18\x02 \x01(\x0e\x32\x13.usp.Header.MsgType\x12\x15\n\rproto_version\x18\x03 \x01(\t\x12\r\n\x05to_id\x18\x04 \x01(\t\x12\x0f\n\x07\x66rom_id\x18\x05 \x01(\t\x12\x13\n\x0breply_to_id\x18\x06 \x01(\t\"\x8e\x02\n\x07MsgType\x12\t\n\x05\x45RROR\x10\x00\x12\x07\n\x03GET\x10\x01\x12\x0c\n\x08GET_RESP\x10\x02\x12\n\n\x06NOTIFY\x10\x03\x12\x07\n\x03SET\x10\x04\x12\x0c\n\x08SET_RESP\x10\x05\x12\x0b\n\x07OPERATE\x10\x06\x12\x10\n\x0cOPERATE_RESP\x10\x07\x12\x07\n\x03\x41\x44\x44\x10\x08\x12\x0c\n\x08\x41\x44\x44_RESP\x10\t\x12\n\n\x06\x44\x45LETE\x10\n\x12\x0f\n\x0b\x44\x45LETE_RESP\x10\x0b\x12\x11\n\rGET_INSTANCES\x10\x0c\x12\x16\n\x12GET_INSTANCES_RESP\x10\r\x12\x14\n\x10GET_IMPL_OBJECTS\x10\x0e\x12\x19\n\x15GET_IMPL_OBJECTS_RESP\x10\x0f\x12\x0f\n\x0bNOTIFY_RESP\x10\x10\"s\n\x04\x42ody\x12\x1f\n\x07request\x18\x01 \x01(\x0b\x32\x0c.usp.RequestH\x00\x12!\n\x08response\x18\x02 \x01(\x0b\x32\r.usp.ResponseH\x00\x12\x1b\n\x05\x65rror\x18\x03 \x01(\x0b\x32\n.usp.ErrorH\x00\x42\n\n\x08msg_body\"\x9b\x02\n\x07Request\x12\x17\n\x03get\x18\x01 \x01(\x0b\x32\x08.usp.GetH\x00\x12*\n\rget_instances\x18\x02 \x01(\x0b\x32\x11.usp.GetInstancesH\x00\x12/\n\x10get_impl_objects\x18\x03 \x01(\x0b\x32\x13.usp.GetImplObjectsH\x00\x12\x17\n\x03set\x18\x04 \x01(\x0b\x32\x08.usp.SetH\x00\x12\x17\n\x03\x61\x64\x64\x18\x05 \x01(\x0b\x32\x08.usp.AddH\x00\x12\x1d\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x0b.usp.DeleteH\x00\x12\x1f\n\x07operate\x18\x07 \x01(\x0b\x32\x0c.usp.OperateH\x00\x12\x1d\n\x06notify\x18\x08 \x01(\x0b\x32\x0b.usp.NotifyH\x00\x42\t\n\x07request\"\xe5\x02\n\x08Response\x12 \n\x08get_resp\x18\x01 \x01(\x0b\x32\x0c.usp.GetRespH\x00\x12\x33\n\x12get_instances_resp\x18\x02 \x01(\x0b\x32\x15.usp.GetInstancesRespH\x00\x12\x38\n\x15get_impl_objects_resp\x18\x03 \x01(\x0b\x32\x17.usp.GetImplObjectsRespH\x00\x12 \n\x08set_resp\x18\x04 \x01(\x0b\x32\x0c.usp.SetRespH\x00\x12 \n\x08\x61\x64\x64_resp\x18\x05 \x01(\x0b\x32\x0c.usp.AddRespH\x00\x12&\n\x0b\x64\x65lete_resp\x18\x06 \x01(\x0b\x32\x0f.usp.DeleteRespH\x00\x12(\n\x0coperate_resp\x18\x07 \x01(\x0b\x32\x10.usp.OperateRespH\x00\x12&\n\x0bnotify_resp\x18\x08 \x01(\x0b\x32\x0f.usp.NotifyRespH\x00\x42\n\n\x08response\"\x99\x01\n\x05\x45rror\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x12(\n\tparam_err\x18\x03 \x03(\x0b\x32\x15.usp.Error.ParamError\x1a\x43\n\nParamError\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\x19\n\x03Get\x12\x12\n\nparam_path\x18\x01 \x03(\t\"\x91\x02\n\x07GetResp\x12\x39\n\x0freq_path_result\x18\x01 \x03(\x0b\x32 .usp.GetResp.RequestedPathResult\x1a\xca\x01\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12N\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x34.usp.GetResp.RequestedPathResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\" \n\x0cGetInstances\x12\x10\n\x08obj_path\x18\x01 \x03(\t\"\xb5\x01\n\x10GetInstancesResp\x12\x42\n\x0freq_path_result\x18\x01 \x03(\x0b\x32).usp.GetInstancesResp.RequestedPathResult\x1a]\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x18\n\x10result_path_list\x18\x03 \x03(\t\"v\n\x0eGetImplObjects\x12\x30\n\x08impl_obj\x18\x01 \x03(\x0b\x32\x1e.usp.GetImplObjects.ImplObject\x1a\x32\n\nImplObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x12\n\nnext_level\x18\x02 \x01(\x08\"\xb9\x01\n\x12GetImplObjectsResp\x12\x44\n\x0freq_path_result\x18\x01 \x03(\x0b\x32+.usp.GetImplObjectsResp.RequestedPathResult\x1a]\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x18\n\x10result_path_list\x18\x03 \x03(\t\"z\n\nGetObjects\x12\x34\n\x0c\x64iscover_obj\x18\x01 \x03(\x0b\x32\x1e.usp.GetObjects.DiscoverObject\x1a\x36\n\x0e\x44iscoverObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x12\n\nnext_level\x18\x02 \x01(\x08\"\xe2\x02\n\x0eGetObjectsResp\x12\x41\n\x0ereq_obj_result\x18\x01 \x03(\x0b\x32).usp.GetObjectsResp.RequestedObjectResult\x1a\x9d\x01\n\x15RequestedObjectResult\x12\x14\n\x0creq_obj_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x1b\n\x13\x64\x61ta_model_inst_url\x18\x03 \x01(\t\x12;\n\rimpl_obj_list\x18\x04 \x03(\x0b\x32$.usp.GetObjectsResp.ImplObjectResult\x1am\n\x10ImplObjectResult\x12\x15\n\rimpl_obj_path\x18\x01 \x01(\t\x12\x12\n\nread_write\x18\x02 \x01(\x08\x12\x16\n\x0emulti_instance\x18\x03 \x01(\x08\x12\x16\n\x0e\x63urr_inst_list\x18\x04 \x03(\t\"\xe3\x01\n\x03\x41\x64\x64\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\ncreate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Add.CreateObject\x1aT\n\x0c\x43reateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x32\n\rparam_setting\x18\x02 \x03(\x0b\x32\x1b.usp.Add.CreateParamSetting\x1a\x44\n\x12\x43reateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xb0\x06\n\x07\x41\x64\x64Resp\x12<\n\x12\x63reated_obj_result\x18\x01 \x03(\x0b\x32 .usp.AddResp.CreatedObjectResult\x1a\xa2\x05\n\x13\x43reatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.AddResp.CreatedObjectResult.OperationStatus\x1a\xab\x04\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a\x9b\x02\n\x10OperationSuccess\x12\x19\n\x11instantiated_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.AddResp.ParameterError\x12~\n\x18\x63reated_param_result_map\x18\x03 \x03(\x0b\x32\\.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccess.CreatedParamResultMapEntry\x1a<\n\x1a\x43reatedParamResultMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\r\n\x0boper_status\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"1\n\x06\x44\x65lete\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12\x10\n\x08obj_path\x18\x02 \x03(\t\"\x8d\x04\n\nDeleteResp\x12?\n\x12\x64\x65leted_obj_result\x18\x01 \x03(\x0b\x32#.usp.DeleteResp.DeletedObjectResult\x1a\xbd\x03\n\x13\x44\x65letedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12H\n\x0boper_status\x18\x02 \x01(\x0b\x32\x33.usp.DeleteResp.DeletedObjectResult.OperationStatus\x1a\xc3\x02\n\x0fOperationStatus\x12\\\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationFailureH\x00\x12\\\n\x0coper_success\x18\x02 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a.\n\x10OperationSuccess\x12\x1a\n\x12\x61\x66\x66\x65\x63ted_path_list\x18\x02 \x03(\tB\r\n\x0boper_status\"\xf8\x01\n\x03Set\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\nupdate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Set.UpdateObject\x1ai\n\x0cUpdateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x13\n\x0b\x61uto_create\x18\x02 \x01(\x08\x12\x32\n\rparam_setting\x18\x03 \x03(\x0b\x32\x1b.usp.Set.UpdateParamSetting\x1a\x44\n\x12UpdateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xd2\x06\n\x07SetResp\x12<\n\x12updated_obj_result\x18\x01 \x03(\x0b\x32 .usp.SetResp.UpdatedObjectResult\x1a\x8a\x04\n\x13UpdatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.SetResp.UpdatedObjectResult.OperationStatus\x1a\x93\x03\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a\x83\x01\n\x10OperationSuccess\x12.\n\tparam_err\x18\x01 \x03(\x0b\x32\x1b.usp.SetResp.ParameterError\x12?\n\x13updated_inst_result\x18\x02 \x03(\x0b\x32\".usp.SetResp.UpdatedInstanceResultB\r\n\x0boper_status\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\x1a\xb7\x01\n\x15UpdatedInstanceResult\x12\x15\n\raffected_path\x18\x01 \x01(\t\x12P\n\x10result_param_map\x18\x02 \x03(\x0b\x32\x36.usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xac\x01\n\x07Operate\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x11\n\tsend_resp\x18\x03 \x01(\x08\x12\x34\n\rinput_arg_map\x18\x04 \x03(\x0b\x32\x1d.usp.Operate.InputArgMapEntry\x1a\x32\n\x10InputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x81\x04\n\x0bOperateResp\x12:\n\x10operation_result\x18\x01 \x03(\x0b\x32 .usp.OperateResp.OperationResult\x1a\xb5\x03\n\x0fOperationResult\x12\x18\n\x10\x65xecuted_command\x18\x01 \x01(\t\x12\x16\n\x0creq_obj_path\x18\x02 \x01(\tH\x00\x12\x46\n\x0freq_output_args\x18\x03 \x01(\x0b\x32+.usp.OperateResp.OperationResult.OutputArgsH\x00\x12\x46\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32/.usp.OperateResp.OperationResult.CommandFailureH\x00\x1a\x98\x01\n\nOutputArgs\x12U\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32=.usp.OperateResp.OperationResult.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\"\xd6\x10\n\x06Notify\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\t\x12\x11\n\tsend_resp\x18\x02 \x01(\x08\x12 \n\x04\x62oot\x18\x03 \x01(\x0b\x32\x10.usp.Notify.BootH\x00\x12/\n\x0cvalue_change\x18\x04 \x01(\x0b\x32\x17.usp.Notify.ValueChangeH\x00\x12\x32\n\x0cobj_creation\x18\x05 \x01(\x0b\x32\x1a.usp.Notify.ObjectCreationH\x00\x12\x32\n\x0cobj_deletion\x18\x06 \x01(\x0b\x32\x1a.usp.Notify.ObjectDeletionH\x00\x12(\n\x08periodic\x18\x07 \x01(\x0b\x32\x14.usp.Notify.PeriodicH\x00\x12\x36\n\roper_complete\x18\x08 \x01(\x0b\x32\x1d.usp.Notify.OperationCompleteH\x00\x12%\n\x07wake_up\x18\t \x01(\x0b\x32\x12.usp.Notify.WakeUpH\x00\x12\"\n\x05timer\x18\n \x01(\x0b\x32\x11.usp.Notify.TimerH\x00\x12\x35\n\rxfer_complete\x18\x0b \x01(\x0b\x32\x1c.usp.Notify.TransferCompleteH\x00\x12\x32\n\x0con_board_req\x18\x0c \x01(\x0b\x32\x1a.usp.Notify.OnBoardRequestH\x00\x12>\n\x14passive_value_change\x18\r \x01(\x0b\x32\x1e.usp.Notify.PassiveValueChangeH\x00\x1a\x98\x02\n\x04\x42oot\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12%\n\x05\x63\x61use\x18\x02 \x01(\x0e\x32\x16.usp.Notify.Boot.Cause\x12\x0f\n\x07obj_ref\x18\x03 \x01(\t\x12\x31\n\tparam_map\x18\x04 \x03(\x0b\x32\x1e.usp.Notify.Boot.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"_\n\x05\x43\x61use\x12\x10\n\x0cLOCAL_REBOOT\x10\x00\x12\x11\n\rREMOTE_REBOOT\x10\x01\x12\x17\n\x13LOCAL_FACTORY_RESET\x10\x02\x12\x18\n\x14REMOTE_FACTORY_RESET\x10\x03\x1a\x36\n\x0bValueChange\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x13\n\x0bparam_value\x18\x02 \x01(\t\x1a\"\n\x0eObjectCreation\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\"\n\x0eObjectDeletion\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\x1b\n\x08Periodic\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\xa2\x03\n\x11OperationComplete\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x43\n\x0freq_output_args\x18\x03 \x01(\x0b\x32(.usp.Notify.OperationComplete.OutputArgsH\x00\x12\x43\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32,.usp.Notify.OperationComplete.CommandFailureH\x00\x1a\x95\x01\n\nOutputArgs\x12R\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32:.usp.Notify.OperationComplete.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\x1a\x19\n\x06WakeUp\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a-\n\x05Timer\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x1a\xa9\x03\n\x10TransferComplete\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12<\n\txfer_type\x18\x02 \x01(\x0e\x32).usp.Notify.TransferComplete.TransferType\x12\x16\n\x0exfer_file_type\x18\x03 \x01(\t\x12\x10\n\x08xfer_url\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\x15\n\rcomplete_time\x18\x06 \x01(\t\x12\x0f\n\x07obj_ref\x18\x07 \x01(\t\x12\x18\n\x10operation_source\x18\x08 \x01(\t\x12<\n\x08xfer_err\x18\t \x01(\x0b\x32*.usp.Notify.TransferComplete.TransferError\x1a\x32\n\rTransferError\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\"P\n\x0cTransferType\x12\x0c\n\x08\x44OWNLOAD\x10\x00\x12\n\n\x06UPLOAD\x10\x01\x12\x0b\n\x07INSTALL\x10\x02\x12\n\n\x06UPDATE\x10\x03\x12\r\n\tUNINSTALL\x10\x04\x1a!\n\x0eOnBoardRequest\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\x86\x01\n\x12PassiveValueChange\x12?\n\tparam_map\x18\x01 \x03(\x0b\x32,.usp.Notify.PassiveValueChange.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x0e\n\x0cnotification\"%\n\nNotifyResp\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\tb\x06proto3')
+  serialized_pb=_b('\n\tusp.proto\x12\x03usp\";\n\x03Msg\x12\x1b\n\x06header\x18\x01 \x01(\x0b\x32\x0b.usp.Header\x12\x17\n\x04\x62ody\x18\x02 \x01(\x0b\x32\t.usp.Body\"\xe7\x02\n\x06Header\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12%\n\x08msg_type\x18\x02 \x01(\x0e\x32\x13.usp.Header.MsgType\x12\x15\n\rproto_version\x18\x03 \x01(\t\x12\r\n\x05to_id\x18\x04 \x01(\t\x12\x0f\n\x07\x66rom_id\x18\x05 \x01(\t\x12\x13\n\x0breply_to_id\x18\x06 \x01(\t\"\xd9\x01\n\x07MsgType\x12\t\n\x05\x45RROR\x10\x00\x12\x07\n\x03GET\x10\x01\x12\x0c\n\x08GET_RESP\x10\x02\x12\n\n\x06NOTIFY\x10\x03\x12\x07\n\x03SET\x10\x04\x12\x0c\n\x08SET_RESP\x10\x05\x12\x0b\n\x07OPERATE\x10\x06\x12\x10\n\x0cOPERATE_RESP\x10\x07\x12\x07\n\x03\x41\x44\x44\x10\x08\x12\x0c\n\x08\x41\x44\x44_RESP\x10\t\x12\n\n\x06\x44\x45LETE\x10\n\x12\x0f\n\x0b\x44\x45LETE_RESP\x10\x0b\x12\x0f\n\x0bGET_OBJECTS\x10\x0c\x12\x14\n\x10GET_OBJECTS_RESP\x10\r\x12\x0f\n\x0bNOTIFY_RESP\x10\x10\"s\n\x04\x42ody\x12\x1f\n\x07request\x18\x01 \x01(\x0b\x32\x0c.usp.RequestH\x00\x12!\n\x08response\x18\x02 \x01(\x0b\x32\r.usp.ResponseH\x00\x12\x1b\n\x05\x65rror\x18\x03 \x01(\x0b\x32\n.usp.ErrorH\x00\x42\n\n\x08msg_body\"\xe6\x01\n\x07Request\x12\x17\n\x03get\x18\x01 \x01(\x0b\x32\x08.usp.GetH\x00\x12&\n\x0bget_objects\x18\x02 \x01(\x0b\x32\x0f.usp.GetObjectsH\x00\x12\x17\n\x03set\x18\x04 \x01(\x0b\x32\x08.usp.SetH\x00\x12\x17\n\x03\x61\x64\x64\x18\x05 \x01(\x0b\x32\x08.usp.AddH\x00\x12\x1d\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x0b.usp.DeleteH\x00\x12\x1f\n\x07operate\x18\x07 \x01(\x0b\x32\x0c.usp.OperateH\x00\x12\x1d\n\x06notify\x18\x08 \x01(\x0b\x32\x0b.usp.NotifyH\x00\x42\t\n\x07request\"\xa7\x02\n\x08Response\x12 \n\x08get_resp\x18\x01 \x01(\x0b\x32\x0c.usp.GetRespH\x00\x12/\n\x10get_objects_resp\x18\x02 \x01(\x0b\x32\x13.usp.GetObjectsRespH\x00\x12 \n\x08set_resp\x18\x04 \x01(\x0b\x32\x0c.usp.SetRespH\x00\x12 \n\x08\x61\x64\x64_resp\x18\x05 \x01(\x0b\x32\x0c.usp.AddRespH\x00\x12&\n\x0b\x64\x65lete_resp\x18\x06 \x01(\x0b\x32\x0f.usp.DeleteRespH\x00\x12(\n\x0coperate_resp\x18\x07 \x01(\x0b\x32\x10.usp.OperateRespH\x00\x12&\n\x0bnotify_resp\x18\x08 \x01(\x0b\x32\x0f.usp.NotifyRespH\x00\x42\n\n\x08response\"\x99\x01\n\x05\x45rror\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x12(\n\tparam_err\x18\x03 \x03(\x0b\x32\x15.usp.Error.ParamError\x1a\x43\n\nParamError\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\x19\n\x03Get\x12\x12\n\nparam_path\x18\x01 \x03(\t\"\x91\x02\n\x07GetResp\x12\x39\n\x0freq_path_result\x18\x01 \x03(\x0b\x32 .usp.GetResp.RequestedPathResult\x1a\xca\x01\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12N\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x34.usp.GetResp.RequestedPathResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"z\n\nGetObjects\x12\x34\n\x0c\x64iscover_obj\x18\x01 \x03(\x0b\x32\x1e.usp.GetObjects.DiscoverObject\x1a\x36\n\x0e\x44iscoverObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x12\n\nnext_level\x18\x02 \x01(\x08\"\xe2\x02\n\x0eGetObjectsResp\x12\x41\n\x0ereq_obj_result\x18\x01 \x03(\x0b\x32).usp.GetObjectsResp.RequestedObjectResult\x1a\x9d\x01\n\x15RequestedObjectResult\x12\x14\n\x0creq_obj_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x1b\n\x13\x64\x61ta_model_inst_url\x18\x03 \x01(\t\x12;\n\rimpl_obj_list\x18\x04 \x03(\x0b\x32$.usp.GetObjectsResp.ImplObjectResult\x1am\n\x10ImplObjectResult\x12\x15\n\rimpl_obj_path\x18\x01 \x01(\t\x12\x12\n\nread_write\x18\x02 \x01(\x08\x12\x16\n\x0emulti_instance\x18\x03 \x01(\x08\x12\x16\n\x0e\x63urr_inst_list\x18\x04 \x03(\t\"\xe3\x01\n\x03\x41\x64\x64\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\ncreate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Add.CreateObject\x1aT\n\x0c\x43reateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x32\n\rparam_setting\x18\x02 \x03(\x0b\x32\x1b.usp.Add.CreateParamSetting\x1a\x44\n\x12\x43reateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xb0\x06\n\x07\x41\x64\x64Resp\x12<\n\x12\x63reated_obj_result\x18\x01 \x03(\x0b\x32 .usp.AddResp.CreatedObjectResult\x1a\xa2\x05\n\x13\x43reatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.AddResp.CreatedObjectResult.OperationStatus\x1a\xab\x04\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a\x9b\x02\n\x10OperationSuccess\x12\x19\n\x11instantiated_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.AddResp.ParameterError\x12~\n\x18\x63reated_param_result_map\x18\x03 \x03(\x0b\x32\\.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccess.CreatedParamResultMapEntry\x1a<\n\x1a\x43reatedParamResultMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\r\n\x0boper_status\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"1\n\x06\x44\x65lete\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12\x10\n\x08obj_path\x18\x02 \x03(\t\"\x8d\x04\n\nDeleteResp\x12?\n\x12\x64\x65leted_obj_result\x18\x01 \x03(\x0b\x32#.usp.DeleteResp.DeletedObjectResult\x1a\xbd\x03\n\x13\x44\x65letedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12H\n\x0boper_status\x18\x02 \x01(\x0b\x32\x33.usp.DeleteResp.DeletedObjectResult.OperationStatus\x1a\xc3\x02\n\x0fOperationStatus\x12\\\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationFailureH\x00\x12\\\n\x0coper_success\x18\x02 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a.\n\x10OperationSuccess\x12\x1a\n\x12\x61\x66\x66\x65\x63ted_path_list\x18\x02 \x03(\tB\r\n\x0boper_status\"\xf8\x01\n\x03Set\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\nupdate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Set.UpdateObject\x1ai\n\x0cUpdateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x13\n\x0b\x61uto_create\x18\x02 \x01(\x08\x12\x32\n\rparam_setting\x18\x03 \x03(\x0b\x32\x1b.usp.Set.UpdateParamSetting\x1a\x44\n\x12UpdateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xd1\x06\n\x07SetResp\x12<\n\x12updated_obj_result\x18\x01 \x03(\x0b\x32 .usp.SetResp.UpdatedObjectResult\x1a\xd9\x03\n\x13UpdatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.SetResp.UpdatedObjectResult.OperationStatus\x1a\xe2\x02\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1aS\n\x10OperationSuccess\x12?\n\x13updated_inst_result\x18\x01 \x03(\x0b\x32\".usp.SetResp.UpdatedInstanceResultB\r\n\x0boper_status\x1a\xe7\x01\n\x15UpdatedInstanceResult\x12\x15\n\raffected_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.SetResp.ParameterError\x12P\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x36.usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\xac\x01\n\x07Operate\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x11\n\tsend_resp\x18\x03 \x01(\x08\x12\x34\n\rinput_arg_map\x18\x04 \x03(\x0b\x32\x1d.usp.Operate.InputArgMapEntry\x1a\x32\n\x10InputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x81\x04\n\x0bOperateResp\x12:\n\x10operation_result\x18\x01 \x03(\x0b\x32 .usp.OperateResp.OperationResult\x1a\xb5\x03\n\x0fOperationResult\x12\x18\n\x10\x65xecuted_command\x18\x01 \x01(\t\x12\x16\n\x0creq_obj_path\x18\x02 \x01(\tH\x00\x12\x46\n\x0freq_output_args\x18\x03 \x01(\x0b\x32+.usp.OperateResp.OperationResult.OutputArgsH\x00\x12\x46\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32/.usp.OperateResp.OperationResult.CommandFailureH\x00\x1a\x98\x01\n\nOutputArgs\x12U\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32=.usp.OperateResp.OperationResult.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\"\xd6\x10\n\x06Notify\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\t\x12\x11\n\tsend_resp\x18\x02 \x01(\x08\x12 \n\x04\x62oot\x18\x03 \x01(\x0b\x32\x10.usp.Notify.BootH\x00\x12/\n\x0cvalue_change\x18\x04 \x01(\x0b\x32\x17.usp.Notify.ValueChangeH\x00\x12\x32\n\x0cobj_creation\x18\x05 \x01(\x0b\x32\x1a.usp.Notify.ObjectCreationH\x00\x12\x32\n\x0cobj_deletion\x18\x06 \x01(\x0b\x32\x1a.usp.Notify.ObjectDeletionH\x00\x12(\n\x08periodic\x18\x07 \x01(\x0b\x32\x14.usp.Notify.PeriodicH\x00\x12\x36\n\roper_complete\x18\x08 \x01(\x0b\x32\x1d.usp.Notify.OperationCompleteH\x00\x12%\n\x07wake_up\x18\t \x01(\x0b\x32\x12.usp.Notify.WakeUpH\x00\x12\"\n\x05timer\x18\n \x01(\x0b\x32\x11.usp.Notify.TimerH\x00\x12\x35\n\rxfer_complete\x18\x0b \x01(\x0b\x32\x1c.usp.Notify.TransferCompleteH\x00\x12\x32\n\x0con_board_req\x18\x0c \x01(\x0b\x32\x1a.usp.Notify.OnBoardRequestH\x00\x12>\n\x14passive_value_change\x18\r \x01(\x0b\x32\x1e.usp.Notify.PassiveValueChangeH\x00\x1a\x98\x02\n\x04\x42oot\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12%\n\x05\x63\x61use\x18\x02 \x01(\x0e\x32\x16.usp.Notify.Boot.Cause\x12\x0f\n\x07obj_ref\x18\x03 \x01(\t\x12\x31\n\tparam_map\x18\x04 \x03(\x0b\x32\x1e.usp.Notify.Boot.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"_\n\x05\x43\x61use\x12\x10\n\x0cLOCAL_REBOOT\x10\x00\x12\x11\n\rREMOTE_REBOOT\x10\x01\x12\x17\n\x13LOCAL_FACTORY_RESET\x10\x02\x12\x18\n\x14REMOTE_FACTORY_RESET\x10\x03\x1a\x36\n\x0bValueChange\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x13\n\x0bparam_value\x18\x02 \x01(\t\x1a\"\n\x0eObjectCreation\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\"\n\x0eObjectDeletion\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\x1b\n\x08Periodic\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\xa2\x03\n\x11OperationComplete\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x43\n\x0freq_output_args\x18\x03 \x01(\x0b\x32(.usp.Notify.OperationComplete.OutputArgsH\x00\x12\x43\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32,.usp.Notify.OperationComplete.CommandFailureH\x00\x1a\x95\x01\n\nOutputArgs\x12R\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32:.usp.Notify.OperationComplete.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\x1a\x19\n\x06WakeUp\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a-\n\x05Timer\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x1a\xa9\x03\n\x10TransferComplete\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12<\n\txfer_type\x18\x02 \x01(\x0e\x32).usp.Notify.TransferComplete.TransferType\x12\x16\n\x0exfer_file_type\x18\x03 \x01(\t\x12\x10\n\x08xfer_url\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\x15\n\rcomplete_time\x18\x06 \x01(\t\x12\x0f\n\x07obj_ref\x18\x07 \x01(\t\x12\x18\n\x10operation_source\x18\x08 \x01(\t\x12<\n\x08xfer_err\x18\t \x01(\x0b\x32*.usp.Notify.TransferComplete.TransferError\x1a\x32\n\rTransferError\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\"P\n\x0cTransferType\x12\x0c\n\x08\x44OWNLOAD\x10\x00\x12\n\n\x06UPLOAD\x10\x01\x12\x0b\n\x07INSTALL\x10\x02\x12\n\n\x06UPDATE\x10\x03\x12\r\n\tUNINSTALL\x10\x04\x1a!\n\x0eOnBoardRequest\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\x86\x01\n\x12PassiveValueChange\x12?\n\tparam_map\x18\x01 \x03(\x0b\x32,.usp.Notify.PassiveValueChange.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x0e\n\x0cnotification\"%\n\nNotifyResp\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\tb\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -80,30 +80,22 @@ _HEADER_MSGTYPE = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET_INSTANCES', index=12, number=12,
+      name='GET_OBJECTS', index=12, number=12,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET_INSTANCES_RESP', index=13, number=13,
+      name='GET_OBJECTS_RESP', index=13, number=13,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET_IMPL_OBJECTS', index=14, number=14,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='GET_IMPL_OBJECTS_RESP', index=15, number=15,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='NOTIFY_RESP', index=16, number=16,
+      name='NOTIFY_RESP', index=14, number=16,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=222,
-  serialized_end=492,
+  serialized_end=439,
 )
 _sym_db.RegisterEnumDescriptor(_HEADER_MSGTYPE)
 
@@ -132,8 +124,8 @@ _NOTIFY_BOOT_CAUSE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=6918,
-  serialized_end=7013,
+  serialized_start=6223,
+  serialized_end=6318,
 )
 _sym_db.RegisterEnumDescriptor(_NOTIFY_BOOT_CAUSE)
 
@@ -166,8 +158,8 @@ _NOTIFY_TRANSFERCOMPLETE_TRANSFERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=8013,
-  serialized_end=8093,
+  serialized_start=7318,
+  serialized_end=7398,
 )
 _sym_db.RegisterEnumDescriptor(_NOTIFY_TRANSFERCOMPLETE_TRANSFERTYPE)
 
@@ -273,7 +265,7 @@ _HEADER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=80,
-  serialized_end=492,
+  serialized_end=439,
 )
 
 
@@ -320,8 +312,8 @@ _BODY = _descriptor.Descriptor(
       name='msg_body', full_name='usp.Body.msg_body',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=494,
-  serialized_end=609,
+  serialized_start=441,
+  serialized_end=556,
 )
 
 
@@ -340,49 +332,42 @@ _REQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='get_instances', full_name='usp.Request.get_instances', index=1,
+      name='get_objects', full_name='usp.Request.get_objects', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='get_impl_objects', full_name='usp.Request.get_impl_objects', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='set', full_name='usp.Request.set', index=3,
+      name='set', full_name='usp.Request.set', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='add', full_name='usp.Request.add', index=4,
+      name='add', full_name='usp.Request.add', index=3,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='delete', full_name='usp.Request.delete', index=5,
+      name='delete', full_name='usp.Request.delete', index=4,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='operate', full_name='usp.Request.operate', index=6,
+      name='operate', full_name='usp.Request.operate', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='notify', full_name='usp.Request.notify', index=7,
+      name='notify', full_name='usp.Request.notify', index=6,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -403,8 +388,8 @@ _REQUEST = _descriptor.Descriptor(
       name='request', full_name='usp.Request.request',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=612,
-  serialized_end=895,
+  serialized_start=559,
+  serialized_end=789,
 )
 
 
@@ -423,49 +408,42 @@ _RESPONSE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='get_instances_resp', full_name='usp.Response.get_instances_resp', index=1,
+      name='get_objects_resp', full_name='usp.Response.get_objects_resp', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='get_impl_objects_resp', full_name='usp.Response.get_impl_objects_resp', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='set_resp', full_name='usp.Response.set_resp', index=3,
+      name='set_resp', full_name='usp.Response.set_resp', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='add_resp', full_name='usp.Response.add_resp', index=4,
+      name='add_resp', full_name='usp.Response.add_resp', index=3,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='delete_resp', full_name='usp.Response.delete_resp', index=5,
+      name='delete_resp', full_name='usp.Response.delete_resp', index=4,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='operate_resp', full_name='usp.Response.operate_resp', index=6,
+      name='operate_resp', full_name='usp.Response.operate_resp', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='notify_resp', full_name='usp.Response.notify_resp', index=7,
+      name='notify_resp', full_name='usp.Response.notify_resp', index=6,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -486,8 +464,8 @@ _RESPONSE = _descriptor.Descriptor(
       name='response', full_name='usp.Response.response',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=898,
-  serialized_end=1255,
+  serialized_start=792,
+  serialized_end=1087,
 )
 
 
@@ -531,8 +509,8 @@ _ERROR_PARAMERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1344,
-  serialized_end=1411,
+  serialized_start=1176,
+  serialized_end=1243,
 )
 
 _ERROR = _descriptor.Descriptor(
@@ -575,8 +553,8 @@ _ERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1258,
-  serialized_end=1411,
+  serialized_start=1090,
+  serialized_end=1243,
 )
 
 
@@ -606,8 +584,8 @@ _GET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1413,
-  serialized_end=1438,
+  serialized_start=1245,
+  serialized_end=1270,
 )
 
 
@@ -644,8 +622,8 @@ _GETRESP_REQUESTEDPATHRESULT_RESULTPARAMMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1661,
-  serialized_end=1714,
+  serialized_start=1493,
+  serialized_end=1546,
 )
 
 _GETRESP_REQUESTEDPATHRESULT = _descriptor.Descriptor(
@@ -688,8 +666,8 @@ _GETRESP_REQUESTEDPATHRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1512,
-  serialized_end=1714,
+  serialized_start=1344,
+  serialized_end=1546,
 )
 
 _GETRESP = _descriptor.Descriptor(
@@ -718,257 +696,8 @@ _GETRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1441,
-  serialized_end=1714,
-)
-
-
-_GETINSTANCES = _descriptor.Descriptor(
-  name='GetInstances',
-  full_name='usp.GetInstances',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='obj_path', full_name='usp.GetInstances.obj_path', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1716,
-  serialized_end=1748,
-)
-
-
-_GETINSTANCESRESP_REQUESTEDPATHRESULT = _descriptor.Descriptor(
-  name='RequestedPathResult',
-  full_name='usp.GetInstancesResp.RequestedPathResult',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='requested_path', full_name='usp.GetInstancesResp.RequestedPathResult.requested_path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='invalid_path', full_name='usp.GetInstancesResp.RequestedPathResult.invalid_path', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='result_path_list', full_name='usp.GetInstancesResp.RequestedPathResult.result_path_list', index=2,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1839,
-  serialized_end=1932,
-)
-
-_GETINSTANCESRESP = _descriptor.Descriptor(
-  name='GetInstancesResp',
-  full_name='usp.GetInstancesResp',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='req_path_result', full_name='usp.GetInstancesResp.req_path_result', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETINSTANCESRESP_REQUESTEDPATHRESULT, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1751,
-  serialized_end=1932,
-)
-
-
-_GETIMPLOBJECTS_IMPLOBJECT = _descriptor.Descriptor(
-  name='ImplObject',
-  full_name='usp.GetImplObjects.ImplObject',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='obj_path', full_name='usp.GetImplObjects.ImplObject.obj_path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='next_level', full_name='usp.GetImplObjects.ImplObject.next_level', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2002,
-  serialized_end=2052,
-)
-
-_GETIMPLOBJECTS = _descriptor.Descriptor(
-  name='GetImplObjects',
-  full_name='usp.GetImplObjects',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='impl_obj', full_name='usp.GetImplObjects.impl_obj', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETIMPLOBJECTS_IMPLOBJECT, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1934,
-  serialized_end=2052,
-)
-
-
-_GETIMPLOBJECTSRESP_REQUESTEDPATHRESULT = _descriptor.Descriptor(
-  name='RequestedPathResult',
-  full_name='usp.GetImplObjectsResp.RequestedPathResult',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='requested_path', full_name='usp.GetImplObjectsResp.RequestedPathResult.requested_path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='invalid_path', full_name='usp.GetImplObjectsResp.RequestedPathResult.invalid_path', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='result_path_list', full_name='usp.GetImplObjectsResp.RequestedPathResult.result_path_list', index=2,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1839,
-  serialized_end=1932,
-)
-
-_GETIMPLOBJECTSRESP = _descriptor.Descriptor(
-  name='GetImplObjectsResp',
-  full_name='usp.GetImplObjectsResp',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='req_path_result', full_name='usp.GetImplObjectsResp.req_path_result', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETIMPLOBJECTSRESP_REQUESTEDPATHRESULT, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2055,
-  serialized_end=2240,
+  serialized_start=1273,
+  serialized_end=1546,
 )
 
 
@@ -1005,8 +734,8 @@ _GETOBJECTS_DISCOVEROBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2310,
-  serialized_end=2364,
+  serialized_start=1616,
+  serialized_end=1670,
 )
 
 _GETOBJECTS = _descriptor.Descriptor(
@@ -1035,8 +764,8 @@ _GETOBJECTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2242,
-  serialized_end=2364,
+  serialized_start=1548,
+  serialized_end=1670,
 )
 
 
@@ -1087,8 +816,8 @@ _GETOBJECTSRESP_REQUESTEDOBJECTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2453,
-  serialized_end=2610,
+  serialized_start=1759,
+  serialized_end=1916,
 )
 
 _GETOBJECTSRESP_IMPLOBJECTRESULT = _descriptor.Descriptor(
@@ -1138,8 +867,8 @@ _GETOBJECTSRESP_IMPLOBJECTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2612,
-  serialized_end=2721,
+  serialized_start=1918,
+  serialized_end=2027,
 )
 
 _GETOBJECTSRESP = _descriptor.Descriptor(
@@ -1168,8 +897,8 @@ _GETOBJECTSRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2367,
-  serialized_end=2721,
+  serialized_start=1673,
+  serialized_end=2027,
 )
 
 
@@ -1206,8 +935,8 @@ _ADD_CREATEOBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2797,
-  serialized_end=2881,
+  serialized_start=2103,
+  serialized_end=2187,
 )
 
 _ADD_CREATEPARAMSETTING = _descriptor.Descriptor(
@@ -1250,8 +979,8 @@ _ADD_CREATEPARAMSETTING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2883,
-  serialized_end=2951,
+  serialized_start=2189,
+  serialized_end=2257,
 )
 
 _ADD = _descriptor.Descriptor(
@@ -1287,8 +1016,8 @@ _ADD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2724,
-  serialized_end=2951,
+  serialized_start=2030,
+  serialized_end=2257,
 )
 
 
@@ -1325,8 +1054,8 @@ _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONFAILURE = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3348,
-  serialized_end=3401,
+  serialized_start=2654,
+  serialized_end=2707,
 )
 
 _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS_CREATEDPARAMRESULTMAPENTRY = _descriptor.Descriptor(
@@ -1362,8 +1091,8 @@ _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS_CREATEDPARAMRESULT
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3627,
-  serialized_end=3687,
+  serialized_start=2933,
+  serialized_end=2993,
 )
 
 _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Descriptor(
@@ -1406,8 +1135,8 @@ _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3404,
-  serialized_end=3687,
+  serialized_start=2710,
+  serialized_end=2993,
 )
 
 _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
@@ -1446,8 +1175,8 @@ _ADDRESP_CREATEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
       name='oper_status', full_name='usp.AddResp.CreatedObjectResult.OperationStatus.oper_status',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3147,
-  serialized_end=3702,
+  serialized_start=2453,
+  serialized_end=3008,
 )
 
 _ADDRESP_CREATEDOBJECTRESULT = _descriptor.Descriptor(
@@ -1483,8 +1212,8 @@ _ADDRESP_CREATEDOBJECTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3028,
-  serialized_end=3702,
+  serialized_start=2334,
+  serialized_end=3008,
 )
 
 _ADDRESP_PARAMETERERROR = _descriptor.Descriptor(
@@ -1527,8 +1256,8 @@ _ADDRESP_PARAMETERERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3704,
-  serialized_end=3770,
+  serialized_start=3010,
+  serialized_end=3076,
 )
 
 _ADDRESP = _descriptor.Descriptor(
@@ -1557,8 +1286,8 @@ _ADDRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2954,
-  serialized_end=3770,
+  serialized_start=2260,
+  serialized_end=3076,
 )
 
 
@@ -1595,8 +1324,8 @@ _DELETE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3772,
-  serialized_end=3821,
+  serialized_start=3078,
+  serialized_end=3127,
 )
 
 
@@ -1633,8 +1362,8 @@ _DELETERESP_DELETEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONFAILURE = _descriptor.D
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3348,
-  serialized_end=3401,
+  serialized_start=2654,
+  serialized_end=2707,
 )
 
 _DELETERESP_DELETEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Descriptor(
@@ -1663,8 +1392,8 @@ _DELETERESP_DELETEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.D
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4288,
-  serialized_end=4334,
+  serialized_start=3594,
+  serialized_end=3640,
 )
 
 _DELETERESP_DELETEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
@@ -1703,8 +1432,8 @@ _DELETERESP_DELETEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
       name='oper_status', full_name='usp.DeleteResp.DeletedObjectResult.OperationStatus.oper_status',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4026,
-  serialized_end=4349,
+  serialized_start=3332,
+  serialized_end=3655,
 )
 
 _DELETERESP_DELETEDOBJECTRESULT = _descriptor.Descriptor(
@@ -1740,8 +1469,8 @@ _DELETERESP_DELETEDOBJECTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3904,
-  serialized_end=4349,
+  serialized_start=3210,
+  serialized_end=3655,
 )
 
 _DELETERESP = _descriptor.Descriptor(
@@ -1770,8 +1499,8 @@ _DELETERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3824,
-  serialized_end=4349,
+  serialized_start=3130,
+  serialized_end=3655,
 )
 
 
@@ -1815,8 +1544,8 @@ _SET_UPDATEOBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4425,
-  serialized_end=4530,
+  serialized_start=3731,
+  serialized_end=3836,
 )
 
 _SET_UPDATEPARAMSETTING = _descriptor.Descriptor(
@@ -1859,8 +1588,8 @@ _SET_UPDATEPARAMSETTING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4532,
-  serialized_end=4600,
+  serialized_start=3838,
+  serialized_end=3906,
 )
 
 _SET = _descriptor.Descriptor(
@@ -1896,8 +1625,8 @@ _SET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4352,
-  serialized_end=4600,
+  serialized_start=3658,
+  serialized_end=3906,
 )
 
 
@@ -1934,8 +1663,8 @@ _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONFAILURE = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3348,
-  serialized_end=3401,
+  serialized_start=2654,
+  serialized_end=2707,
 )
 
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Descriptor(
@@ -1946,15 +1675,8 @@ _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Desc
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='param_err', full_name='usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccess.param_err', index=0,
+      name='updated_inst_result', full_name='usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccess.updated_inst_result', index=0,
       number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='updated_inst_result', full_name='usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccess.updated_inst_result', index=1,
-      number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1971,8 +1693,8 @@ _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5053,
-  serialized_end=5184,
+  serialized_start=4358,
+  serialized_end=4441,
 )
 
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
@@ -2011,8 +1733,8 @@ _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS = _descriptor.Descriptor(
       name='oper_status', full_name='usp.SetResp.UpdatedObjectResult.OperationStatus.oper_status',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4796,
-  serialized_end=5199,
+  serialized_start=4102,
+  serialized_end=4456,
 )
 
 _SETRESP_UPDATEDOBJECTRESULT = _descriptor.Descriptor(
@@ -2048,8 +1770,89 @@ _SETRESP_UPDATEDOBJECTRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4677,
-  serialized_end=5199,
+  serialized_start=3983,
+  serialized_end=4456,
+)
+
+_SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY = _descriptor.Descriptor(
+  name='ResultParamMapEntry',
+  full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1493,
+  serialized_end=1546,
+)
+
+_SETRESP_UPDATEDINSTANCERESULT = _descriptor.Descriptor(
+  name='UpdatedInstanceResult',
+  full_name='usp.SetResp.UpdatedInstanceResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='affected_path', full_name='usp.SetResp.UpdatedInstanceResult.affected_path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='param_err', full_name='usp.SetResp.UpdatedInstanceResult.param_err', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='result_param_map', full_name='usp.SetResp.UpdatedInstanceResult.result_param_map', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[_SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4459,
+  serialized_end=4690,
 )
 
 _SETRESP_PARAMETERERROR = _descriptor.Descriptor(
@@ -2092,82 +1895,8 @@ _SETRESP_PARAMETERERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3704,
-  serialized_end=3770,
-)
-
-_SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY = _descriptor.Descriptor(
-  name='ResultParamMapEntry',
-  full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1661,
-  serialized_end=1714,
-)
-
-_SETRESP_UPDATEDINSTANCERESULT = _descriptor.Descriptor(
-  name='UpdatedInstanceResult',
-  full_name='usp.SetResp.UpdatedInstanceResult',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='affected_path', full_name='usp.SetResp.UpdatedInstanceResult.affected_path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='result_param_map', full_name='usp.SetResp.UpdatedInstanceResult.result_param_map', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5270,
-  serialized_end=5453,
+  serialized_start=3010,
+  serialized_end=3076,
 )
 
 _SETRESP = _descriptor.Descriptor(
@@ -2187,7 +1916,7 @@ _SETRESP = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_SETRESP_UPDATEDOBJECTRESULT, _SETRESP_PARAMETERERROR, _SETRESP_UPDATEDINSTANCERESULT, ],
+  nested_types=[_SETRESP_UPDATEDOBJECTRESULT, _SETRESP_UPDATEDINSTANCERESULT, _SETRESP_PARAMETERERROR, ],
   enum_types=[
   ],
   options=None,
@@ -2196,8 +1925,8 @@ _SETRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4603,
-  serialized_end=5453,
+  serialized_start=3909,
+  serialized_end=4758,
 )
 
 
@@ -2234,8 +1963,8 @@ _OPERATE_INPUTARGMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5578,
-  serialized_end=5628,
+  serialized_start=4883,
+  serialized_end=4933,
 )
 
 _OPERATE = _descriptor.Descriptor(
@@ -2285,8 +2014,8 @@ _OPERATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5456,
-  serialized_end=5628,
+  serialized_start=4761,
+  serialized_end=4933,
 )
 
 
@@ -2323,8 +2052,8 @@ _OPERATERESP_OPERATIONRESULT_OUTPUTARGS_OUTPUTARGMAPENTRY = _descriptor.Descript
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6022,
-  serialized_end=6073,
+  serialized_start=5327,
+  serialized_end=5378,
 )
 
 _OPERATERESP_OPERATIONRESULT_OUTPUTARGS = _descriptor.Descriptor(
@@ -2353,8 +2082,8 @@ _OPERATERESP_OPERATIONRESULT_OUTPUTARGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5921,
-  serialized_end=6073,
+  serialized_start=5226,
+  serialized_end=5378,
 )
 
 _OPERATERESP_OPERATIONRESULT_COMMANDFAILURE = _descriptor.Descriptor(
@@ -2390,8 +2119,8 @@ _OPERATERESP_OPERATIONRESULT_COMMANDFAILURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6075,
-  serialized_end=6126,
+  serialized_start=5380,
+  serialized_end=5431,
 )
 
 _OPERATERESP_OPERATIONRESULT = _descriptor.Descriptor(
@@ -2444,8 +2173,8 @@ _OPERATERESP_OPERATIONRESULT = _descriptor.Descriptor(
       name='operation_resp', full_name='usp.OperateResp.OperationResult.operation_resp',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=5707,
-  serialized_end=6144,
+  serialized_start=5012,
+  serialized_end=5449,
 )
 
 _OPERATERESP = _descriptor.Descriptor(
@@ -2474,8 +2203,8 @@ _OPERATERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5631,
-  serialized_end=6144,
+  serialized_start=4936,
+  serialized_end=5449,
 )
 
 
@@ -2512,8 +2241,8 @@ _NOTIFY_BOOT_PARAMMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6869,
-  serialized_end=6916,
+  serialized_start=6174,
+  serialized_end=6221,
 )
 
 _NOTIFY_BOOT = _descriptor.Descriptor(
@@ -2564,8 +2293,8 @@ _NOTIFY_BOOT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6733,
-  serialized_end=7013,
+  serialized_start=6038,
+  serialized_end=6318,
 )
 
 _NOTIFY_VALUECHANGE = _descriptor.Descriptor(
@@ -2601,8 +2330,8 @@ _NOTIFY_VALUECHANGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7015,
-  serialized_end=7069,
+  serialized_start=6320,
+  serialized_end=6374,
 )
 
 _NOTIFY_OBJECTCREATION = _descriptor.Descriptor(
@@ -2631,8 +2360,8 @@ _NOTIFY_OBJECTCREATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7071,
-  serialized_end=7105,
+  serialized_start=6376,
+  serialized_end=6410,
 )
 
 _NOTIFY_OBJECTDELETION = _descriptor.Descriptor(
@@ -2661,8 +2390,8 @@ _NOTIFY_OBJECTDELETION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7107,
-  serialized_end=7141,
+  serialized_start=6412,
+  serialized_end=6446,
 )
 
 _NOTIFY_PERIODIC = _descriptor.Descriptor(
@@ -2691,8 +2420,8 @@ _NOTIFY_PERIODIC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7143,
-  serialized_end=7170,
+  serialized_start=6448,
+  serialized_end=6475,
 )
 
 _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS_OUTPUTARGMAPENTRY = _descriptor.Descriptor(
@@ -2728,8 +2457,8 @@ _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS_OUTPUTARGMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6022,
-  serialized_end=6073,
+  serialized_start=5327,
+  serialized_end=5378,
 )
 
 _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS = _descriptor.Descriptor(
@@ -2758,8 +2487,8 @@ _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7371,
-  serialized_end=7520,
+  serialized_start=6676,
+  serialized_end=6825,
 )
 
 _NOTIFY_OPERATIONCOMPLETE_COMMANDFAILURE = _descriptor.Descriptor(
@@ -2795,8 +2524,8 @@ _NOTIFY_OPERATIONCOMPLETE_COMMANDFAILURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6075,
-  serialized_end=6126,
+  serialized_start=5380,
+  serialized_end=5431,
 )
 
 _NOTIFY_OPERATIONCOMPLETE = _descriptor.Descriptor(
@@ -2849,8 +2578,8 @@ _NOTIFY_OPERATIONCOMPLETE = _descriptor.Descriptor(
       name='operation_resp', full_name='usp.Notify.OperationComplete.operation_resp',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=7173,
-  serialized_end=7591,
+  serialized_start=6478,
+  serialized_end=6896,
 )
 
 _NOTIFY_WAKEUP = _descriptor.Descriptor(
@@ -2879,8 +2608,8 @@ _NOTIFY_WAKEUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7593,
-  serialized_end=7618,
+  serialized_start=6898,
+  serialized_end=6923,
 )
 
 _NOTIFY_TIMER = _descriptor.Descriptor(
@@ -2916,8 +2645,8 @@ _NOTIFY_TIMER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7620,
-  serialized_end=7665,
+  serialized_start=6925,
+  serialized_end=6970,
 )
 
 _NOTIFY_TRANSFERCOMPLETE_TRANSFERERROR = _descriptor.Descriptor(
@@ -2953,8 +2682,8 @@ _NOTIFY_TRANSFERCOMPLETE_TRANSFERERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7961,
-  serialized_end=8011,
+  serialized_start=7266,
+  serialized_end=7316,
 )
 
 _NOTIFY_TRANSFERCOMPLETE = _descriptor.Descriptor(
@@ -3040,8 +2769,8 @@ _NOTIFY_TRANSFERCOMPLETE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7668,
-  serialized_end=8093,
+  serialized_start=6973,
+  serialized_end=7398,
 )
 
 _NOTIFY_ONBOARDREQUEST = _descriptor.Descriptor(
@@ -3070,8 +2799,8 @@ _NOTIFY_ONBOARDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8095,
-  serialized_end=8128,
+  serialized_start=7400,
+  serialized_end=7433,
 )
 
 _NOTIFY_PASSIVEVALUECHANGE_PARAMMAPENTRY = _descriptor.Descriptor(
@@ -3107,8 +2836,8 @@ _NOTIFY_PASSIVEVALUECHANGE_PARAMMAPENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6869,
-  serialized_end=6916,
+  serialized_start=6174,
+  serialized_end=6221,
 )
 
 _NOTIFY_PASSIVEVALUECHANGE = _descriptor.Descriptor(
@@ -3137,8 +2866,8 @@ _NOTIFY_PASSIVEVALUECHANGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8131,
-  serialized_end=8265,
+  serialized_start=7436,
+  serialized_end=7570,
 )
 
 _NOTIFY = _descriptor.Descriptor(
@@ -3254,8 +2983,8 @@ _NOTIFY = _descriptor.Descriptor(
       name='notification', full_name='usp.Notify.notification',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=6147,
-  serialized_end=8281,
+  serialized_start=5452,
+  serialized_end=7586,
 )
 
 
@@ -3285,8 +3014,8 @@ _NOTIFYRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8283,
-  serialized_end=8320,
+  serialized_start=7588,
+  serialized_end=7625,
 )
 
 _MSG.fields_by_name['header'].message_type = _HEADER
@@ -3306,8 +3035,7 @@ _BODY.oneofs_by_name['msg_body'].fields.append(
   _BODY.fields_by_name['error'])
 _BODY.fields_by_name['error'].containing_oneof = _BODY.oneofs_by_name['msg_body']
 _REQUEST.fields_by_name['get'].message_type = _GET
-_REQUEST.fields_by_name['get_instances'].message_type = _GETINSTANCES
-_REQUEST.fields_by_name['get_impl_objects'].message_type = _GETIMPLOBJECTS
+_REQUEST.fields_by_name['get_objects'].message_type = _GETOBJECTS
 _REQUEST.fields_by_name['set'].message_type = _SET
 _REQUEST.fields_by_name['add'].message_type = _ADD
 _REQUEST.fields_by_name['delete'].message_type = _DELETE
@@ -3317,11 +3045,8 @@ _REQUEST.oneofs_by_name['request'].fields.append(
   _REQUEST.fields_by_name['get'])
 _REQUEST.fields_by_name['get'].containing_oneof = _REQUEST.oneofs_by_name['request']
 _REQUEST.oneofs_by_name['request'].fields.append(
-  _REQUEST.fields_by_name['get_instances'])
-_REQUEST.fields_by_name['get_instances'].containing_oneof = _REQUEST.oneofs_by_name['request']
-_REQUEST.oneofs_by_name['request'].fields.append(
-  _REQUEST.fields_by_name['get_impl_objects'])
-_REQUEST.fields_by_name['get_impl_objects'].containing_oneof = _REQUEST.oneofs_by_name['request']
+  _REQUEST.fields_by_name['get_objects'])
+_REQUEST.fields_by_name['get_objects'].containing_oneof = _REQUEST.oneofs_by_name['request']
 _REQUEST.oneofs_by_name['request'].fields.append(
   _REQUEST.fields_by_name['set'])
 _REQUEST.fields_by_name['set'].containing_oneof = _REQUEST.oneofs_by_name['request']
@@ -3338,8 +3063,7 @@ _REQUEST.oneofs_by_name['request'].fields.append(
   _REQUEST.fields_by_name['notify'])
 _REQUEST.fields_by_name['notify'].containing_oneof = _REQUEST.oneofs_by_name['request']
 _RESPONSE.fields_by_name['get_resp'].message_type = _GETRESP
-_RESPONSE.fields_by_name['get_instances_resp'].message_type = _GETINSTANCESRESP
-_RESPONSE.fields_by_name['get_impl_objects_resp'].message_type = _GETIMPLOBJECTSRESP
+_RESPONSE.fields_by_name['get_objects_resp'].message_type = _GETOBJECTSRESP
 _RESPONSE.fields_by_name['set_resp'].message_type = _SETRESP
 _RESPONSE.fields_by_name['add_resp'].message_type = _ADDRESP
 _RESPONSE.fields_by_name['delete_resp'].message_type = _DELETERESP
@@ -3349,11 +3073,8 @@ _RESPONSE.oneofs_by_name['response'].fields.append(
   _RESPONSE.fields_by_name['get_resp'])
 _RESPONSE.fields_by_name['get_resp'].containing_oneof = _RESPONSE.oneofs_by_name['response']
 _RESPONSE.oneofs_by_name['response'].fields.append(
-  _RESPONSE.fields_by_name['get_instances_resp'])
-_RESPONSE.fields_by_name['get_instances_resp'].containing_oneof = _RESPONSE.oneofs_by_name['response']
-_RESPONSE.oneofs_by_name['response'].fields.append(
-  _RESPONSE.fields_by_name['get_impl_objects_resp'])
-_RESPONSE.fields_by_name['get_impl_objects_resp'].containing_oneof = _RESPONSE.oneofs_by_name['response']
+  _RESPONSE.fields_by_name['get_objects_resp'])
+_RESPONSE.fields_by_name['get_objects_resp'].containing_oneof = _RESPONSE.oneofs_by_name['response']
 _RESPONSE.oneofs_by_name['response'].fields.append(
   _RESPONSE.fields_by_name['set_resp'])
 _RESPONSE.fields_by_name['set_resp'].containing_oneof = _RESPONSE.oneofs_by_name['response']
@@ -3375,12 +3096,6 @@ _GETRESP_REQUESTEDPATHRESULT_RESULTPARAMMAPENTRY.containing_type = _GETRESP_REQU
 _GETRESP_REQUESTEDPATHRESULT.fields_by_name['result_param_map'].message_type = _GETRESP_REQUESTEDPATHRESULT_RESULTPARAMMAPENTRY
 _GETRESP_REQUESTEDPATHRESULT.containing_type = _GETRESP
 _GETRESP.fields_by_name['req_path_result'].message_type = _GETRESP_REQUESTEDPATHRESULT
-_GETINSTANCESRESP_REQUESTEDPATHRESULT.containing_type = _GETINSTANCESRESP
-_GETINSTANCESRESP.fields_by_name['req_path_result'].message_type = _GETINSTANCESRESP_REQUESTEDPATHRESULT
-_GETIMPLOBJECTS_IMPLOBJECT.containing_type = _GETIMPLOBJECTS
-_GETIMPLOBJECTS.fields_by_name['impl_obj'].message_type = _GETIMPLOBJECTS_IMPLOBJECT
-_GETIMPLOBJECTSRESP_REQUESTEDPATHRESULT.containing_type = _GETIMPLOBJECTSRESP
-_GETIMPLOBJECTSRESP.fields_by_name['req_path_result'].message_type = _GETIMPLOBJECTSRESP_REQUESTEDPATHRESULT
 _GETOBJECTS_DISCOVEROBJECT.containing_type = _GETOBJECTS
 _GETOBJECTS.fields_by_name['discover_obj'].message_type = _GETOBJECTS_DISCOVEROBJECT
 _GETOBJECTSRESP_REQUESTEDOBJECTRESULT.fields_by_name['impl_obj_list'].message_type = _GETOBJECTSRESP_IMPLOBJECTRESULT
@@ -3428,7 +3143,6 @@ _SET_UPDATEOBJECT.containing_type = _SET
 _SET_UPDATEPARAMSETTING.containing_type = _SET
 _SET.fields_by_name['update_obj'].message_type = _SET_UPDATEOBJECT
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONFAILURE.containing_type = _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS
-_SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS.fields_by_name['param_err'].message_type = _SETRESP_PARAMETERERROR
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS.fields_by_name['updated_inst_result'].message_type = _SETRESP_UPDATEDINSTANCERESULT
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONSUCCESS.containing_type = _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS.fields_by_name['oper_failure'].message_type = _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS_OPERATIONFAILURE
@@ -3442,10 +3156,11 @@ _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS.oneofs_by_name['oper_status'].field
 _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS.fields_by_name['oper_success'].containing_oneof = _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS.oneofs_by_name['oper_status']
 _SETRESP_UPDATEDOBJECTRESULT.fields_by_name['oper_status'].message_type = _SETRESP_UPDATEDOBJECTRESULT_OPERATIONSTATUS
 _SETRESP_UPDATEDOBJECTRESULT.containing_type = _SETRESP
-_SETRESP_PARAMETERERROR.containing_type = _SETRESP
 _SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY.containing_type = _SETRESP_UPDATEDINSTANCERESULT
+_SETRESP_UPDATEDINSTANCERESULT.fields_by_name['param_err'].message_type = _SETRESP_PARAMETERERROR
 _SETRESP_UPDATEDINSTANCERESULT.fields_by_name['result_param_map'].message_type = _SETRESP_UPDATEDINSTANCERESULT_RESULTPARAMMAPENTRY
 _SETRESP_UPDATEDINSTANCERESULT.containing_type = _SETRESP
+_SETRESP_PARAMETERERROR.containing_type = _SETRESP
 _SETRESP.fields_by_name['updated_obj_result'].message_type = _SETRESP_UPDATEDOBJECTRESULT
 _OPERATE_INPUTARGMAPENTRY.containing_type = _OPERATE
 _OPERATE.fields_by_name['input_arg_map'].message_type = _OPERATE_INPUTARGMAPENTRY
@@ -3551,10 +3266,6 @@ DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
 DESCRIPTOR.message_types_by_name['Error'] = _ERROR
 DESCRIPTOR.message_types_by_name['Get'] = _GET
 DESCRIPTOR.message_types_by_name['GetResp'] = _GETRESP
-DESCRIPTOR.message_types_by_name['GetInstances'] = _GETINSTANCES
-DESCRIPTOR.message_types_by_name['GetInstancesResp'] = _GETINSTANCESRESP
-DESCRIPTOR.message_types_by_name['GetImplObjects'] = _GETIMPLOBJECTS
-DESCRIPTOR.message_types_by_name['GetImplObjectsResp'] = _GETIMPLOBJECTSRESP
 DESCRIPTOR.message_types_by_name['GetObjects'] = _GETOBJECTS
 DESCRIPTOR.message_types_by_name['GetObjectsResp'] = _GETOBJECTSRESP
 DESCRIPTOR.message_types_by_name['Add'] = _ADD
@@ -3647,58 +3358,6 @@ GetResp = _reflection.GeneratedProtocolMessageType('GetResp', (_message.Message,
 _sym_db.RegisterMessage(GetResp)
 _sym_db.RegisterMessage(GetResp.RequestedPathResult)
 _sym_db.RegisterMessage(GetResp.RequestedPathResult.ResultParamMapEntry)
-
-GetInstances = _reflection.GeneratedProtocolMessageType('GetInstances', (_message.Message,), dict(
-  DESCRIPTOR = _GETINSTANCES,
-  __module__ = 'usp_pb2'
-  # @@protoc_insertion_point(class_scope:usp.GetInstances)
-  ))
-_sym_db.RegisterMessage(GetInstances)
-
-GetInstancesResp = _reflection.GeneratedProtocolMessageType('GetInstancesResp', (_message.Message,), dict(
-
-  RequestedPathResult = _reflection.GeneratedProtocolMessageType('RequestedPathResult', (_message.Message,), dict(
-    DESCRIPTOR = _GETINSTANCESRESP_REQUESTEDPATHRESULT,
-    __module__ = 'usp_pb2'
-    # @@protoc_insertion_point(class_scope:usp.GetInstancesResp.RequestedPathResult)
-    ))
-  ,
-  DESCRIPTOR = _GETINSTANCESRESP,
-  __module__ = 'usp_pb2'
-  # @@protoc_insertion_point(class_scope:usp.GetInstancesResp)
-  ))
-_sym_db.RegisterMessage(GetInstancesResp)
-_sym_db.RegisterMessage(GetInstancesResp.RequestedPathResult)
-
-GetImplObjects = _reflection.GeneratedProtocolMessageType('GetImplObjects', (_message.Message,), dict(
-
-  ImplObject = _reflection.GeneratedProtocolMessageType('ImplObject', (_message.Message,), dict(
-    DESCRIPTOR = _GETIMPLOBJECTS_IMPLOBJECT,
-    __module__ = 'usp_pb2'
-    # @@protoc_insertion_point(class_scope:usp.GetImplObjects.ImplObject)
-    ))
-  ,
-  DESCRIPTOR = _GETIMPLOBJECTS,
-  __module__ = 'usp_pb2'
-  # @@protoc_insertion_point(class_scope:usp.GetImplObjects)
-  ))
-_sym_db.RegisterMessage(GetImplObjects)
-_sym_db.RegisterMessage(GetImplObjects.ImplObject)
-
-GetImplObjectsResp = _reflection.GeneratedProtocolMessageType('GetImplObjectsResp', (_message.Message,), dict(
-
-  RequestedPathResult = _reflection.GeneratedProtocolMessageType('RequestedPathResult', (_message.Message,), dict(
-    DESCRIPTOR = _GETIMPLOBJECTSRESP_REQUESTEDPATHRESULT,
-    __module__ = 'usp_pb2'
-    # @@protoc_insertion_point(class_scope:usp.GetImplObjectsResp.RequestedPathResult)
-    ))
-  ,
-  DESCRIPTOR = _GETIMPLOBJECTSRESP,
-  __module__ = 'usp_pb2'
-  # @@protoc_insertion_point(class_scope:usp.GetImplObjectsResp)
-  ))
-_sym_db.RegisterMessage(GetImplObjectsResp)
-_sym_db.RegisterMessage(GetImplObjectsResp.RequestedPathResult)
 
 GetObjects = _reflection.GeneratedProtocolMessageType('GetObjects', (_message.Message,), dict(
 
@@ -3915,13 +3574,6 @@ SetResp = _reflection.GeneratedProtocolMessageType('SetResp', (_message.Message,
     ))
   ,
 
-  ParameterError = _reflection.GeneratedProtocolMessageType('ParameterError', (_message.Message,), dict(
-    DESCRIPTOR = _SETRESP_PARAMETERERROR,
-    __module__ = 'usp_pb2'
-    # @@protoc_insertion_point(class_scope:usp.SetResp.ParameterError)
-    ))
-  ,
-
   UpdatedInstanceResult = _reflection.GeneratedProtocolMessageType('UpdatedInstanceResult', (_message.Message,), dict(
 
     ResultParamMapEntry = _reflection.GeneratedProtocolMessageType('ResultParamMapEntry', (_message.Message,), dict(
@@ -3935,6 +3587,13 @@ SetResp = _reflection.GeneratedProtocolMessageType('SetResp', (_message.Message,
     # @@protoc_insertion_point(class_scope:usp.SetResp.UpdatedInstanceResult)
     ))
   ,
+
+  ParameterError = _reflection.GeneratedProtocolMessageType('ParameterError', (_message.Message,), dict(
+    DESCRIPTOR = _SETRESP_PARAMETERERROR,
+    __module__ = 'usp_pb2'
+    # @@protoc_insertion_point(class_scope:usp.SetResp.ParameterError)
+    ))
+  ,
   DESCRIPTOR = _SETRESP,
   __module__ = 'usp_pb2'
   # @@protoc_insertion_point(class_scope:usp.SetResp)
@@ -3944,9 +3603,9 @@ _sym_db.RegisterMessage(SetResp.UpdatedObjectResult)
 _sym_db.RegisterMessage(SetResp.UpdatedObjectResult.OperationStatus)
 _sym_db.RegisterMessage(SetResp.UpdatedObjectResult.OperationStatus.OperationFailure)
 _sym_db.RegisterMessage(SetResp.UpdatedObjectResult.OperationStatus.OperationSuccess)
-_sym_db.RegisterMessage(SetResp.ParameterError)
 _sym_db.RegisterMessage(SetResp.UpdatedInstanceResult)
 _sym_db.RegisterMessage(SetResp.UpdatedInstanceResult.ResultParamMapEntry)
+_sym_db.RegisterMessage(SetResp.ParameterError)
 
 Operate = _reflection.GeneratedProtocolMessageType('Operate', (_message.Message,), dict(
 

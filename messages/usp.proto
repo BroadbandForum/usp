@@ -29,10 +29,10 @@ message Header {
     ADD_RESP = 9;
     DELETE = 10;
     DELETE_RESP = 11;
-    GET_INSTANCES = 12;
-    GET_INSTANCES_RESP = 13;
-    GET_IMPL_OBJECTS = 14;
-    GET_IMPL_OBJECTS_RESP = 15;
+    GET_OBJECTS = 12;
+    GET_OBJECTS_RESP = 13;
+    //GET_COMMANDS = 14;
+    //GET_COMMANDS_RESP = 15;
     NOTIFY_RESP = 16;
   }
 }
@@ -50,8 +50,8 @@ message Body {
 message Request {
   oneof request {
     Get get = 1;
-    GetInstances get_instances = 2;
-    GetImplObjects get_impl_objects = 3;
+    GetObjects get_objects = 2;
+    //GetCommands get_commands = 3;
     Set set = 4;
     Add add = 5;
     Delete delete = 6;
@@ -64,8 +64,8 @@ message Request {
 message Response {
   oneof response {
     GetResp get_resp = 1;
-    GetInstancesResp get_instances_resp = 2;
-    GetImplObjectsResp get_impl_objects_resp = 3;
+    GetObjectsResp get_objects_resp = 2;
+    //GetCommandsResp get_commands_resp = 3;
     SetResp set_resp = 4;
     AddResp add_resp = 5;
     DeleteResp delete_resp = 6;
@@ -99,41 +99,6 @@ message GetResp {
     string requested_path = 1;
     bool invalid_path = 2;
     map<string, string> result_param_map = 3;
-  }
-}
-
-
-message GetInstances {
-  repeated string obj_path = 1;
-}
-
-message GetInstancesResp {
-  repeated RequestedPathResult req_path_result = 1;
-
-  message RequestedPathResult {
-    string requested_path = 1;
-    bool invalid_path = 2;
-    repeated string result_path_list = 3;
-  }
-}
-
-
-message GetImplObjects {
-  repeated ImplObject impl_obj = 1;
-
-  message ImplObject {
-    string obj_path = 1;
-    bool next_level = 2;
-  }
-}
-
-message GetImplObjectsResp {
-  repeated RequestedPathResult req_path_result = 1;
-
-  message RequestedPathResult {
-    string requested_path = 1;
-    bool invalid_path = 2;
-    repeated string result_path_list = 3;
   }
 }
 
@@ -283,21 +248,21 @@ message SetResp {
       }
 
       message OperationSuccess {
-        repeated ParameterError param_err = 1;
-        repeated UpdatedInstanceResult updated_inst_result = 2;
+        repeated UpdatedInstanceResult updated_inst_result = 1;
       }
     }
+  }
+
+  message UpdatedInstanceResult {
+    string affected_path = 1;
+    repeated ParameterError param_err = 2;
+    map<string, string> result_param_map = 3;
   }
 
   message ParameterError {
     string param = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
-  }
-
-  message UpdatedInstanceResult {
-    string affected_path = 1;
-    map<string, string> result_param_map = 2;
   }
 }
 
