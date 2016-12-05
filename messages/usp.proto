@@ -118,7 +118,7 @@ message GetObjectsResp {
   message RequestedObjectResult {
     string req_obj_path = 1;
     bool invalid_path = 2;
-    string data_model_inst_url = 3;
+    string data_model_inst_uri = 3;
     repeated ImplObjectResult impl_obj_list = 4;
   }
 
