@@ -335,6 +335,7 @@ message Notify {
 
   message ObjectCreation {
     string obj_path = 1;
+    map<string, string> unique_key_map = 2;
   }
 
   message ObjectDeletion {

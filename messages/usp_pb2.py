@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='usp.proto',
   package='usp',
   syntax='proto3',
-  serialized_pb=_b('\n\tusp.proto\x12\x03usp\";\n\x03Msg\x12\x1b\n\x06header\x18\x01 \x01(\x0b\x32\x0b.usp.Header\x12\x17\n\x04\x62ody\x18\x02 \x01(\x0b\x32\t.usp.Body\"\xe7\x02\n\x06Header\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12%\n\x08msg_type\x18\x02 \x01(\x0e\x32\x13.usp.Header.MsgType\x12\x15\n\rproto_version\x18\x03 \x01(\t\x12\r\n\x05to_id\x18\x04 \x01(\t\x12\x0f\n\x07\x66rom_id\x18\x05 \x01(\t\x12\x13\n\x0breply_to_id\x18\x06 \x01(\t\"\xd9\x01\n\x07MsgType\x12\t\n\x05\x45RROR\x10\x00\x12\x07\n\x03GET\x10\x01\x12\x0c\n\x08GET_RESP\x10\x02\x12\n\n\x06NOTIFY\x10\x03\x12\x07\n\x03SET\x10\x04\x12\x0c\n\x08SET_RESP\x10\x05\x12\x0b\n\x07OPERATE\x10\x06\x12\x10\n\x0cOPERATE_RESP\x10\x07\x12\x07\n\x03\x41\x44\x44\x10\x08\x12\x0c\n\x08\x41\x44\x44_RESP\x10\t\x12\n\n\x06\x44\x45LETE\x10\n\x12\x0f\n\x0b\x44\x45LETE_RESP\x10\x0b\x12\x0f\n\x0bGET_OBJECTS\x10\x0c\x12\x14\n\x10GET_OBJECTS_RESP\x10\r\x12\x0f\n\x0bNOTIFY_RESP\x10\x10\"s\n\x04\x42ody\x12\x1f\n\x07request\x18\x01 \x01(\x0b\x32\x0c.usp.RequestH\x00\x12!\n\x08response\x18\x02 \x01(\x0b\x32\r.usp.ResponseH\x00\x12\x1b\n\x05\x65rror\x18\x03 \x01(\x0b\x32\n.usp.ErrorH\x00\x42\n\n\x08msg_body\"\xe6\x01\n\x07Request\x12\x17\n\x03get\x18\x01 \x01(\x0b\x32\x08.usp.GetH\x00\x12&\n\x0bget_objects\x18\x02 \x01(\x0b\x32\x0f.usp.GetObjectsH\x00\x12\x17\n\x03set\x18\x04 \x01(\x0b\x32\x08.usp.SetH\x00\x12\x17\n\x03\x61\x64\x64\x18\x05 \x01(\x0b\x32\x08.usp.AddH\x00\x12\x1d\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x0b.usp.DeleteH\x00\x12\x1f\n\x07operate\x18\x07 \x01(\x0b\x32\x0c.usp.OperateH\x00\x12\x1d\n\x06notify\x18\x08 \x01(\x0b\x32\x0b.usp.NotifyH\x00\x42\t\n\x07request\"\xa7\x02\n\x08Response\x12 \n\x08get_resp\x18\x01 \x01(\x0b\x32\x0c.usp.GetRespH\x00\x12/\n\x10get_objects_resp\x18\x02 \x01(\x0b\x32\x13.usp.GetObjectsRespH\x00\x12 \n\x08set_resp\x18\x04 \x01(\x0b\x32\x0c.usp.SetRespH\x00\x12 \n\x08\x61\x64\x64_resp\x18\x05 \x01(\x0b\x32\x0c.usp.AddRespH\x00\x12&\n\x0b\x64\x65lete_resp\x18\x06 \x01(\x0b\x32\x0f.usp.DeleteRespH\x00\x12(\n\x0coperate_resp\x18\x07 \x01(\x0b\x32\x10.usp.OperateRespH\x00\x12&\n\x0bnotify_resp\x18\x08 \x01(\x0b\x32\x0f.usp.NotifyRespH\x00\x42\n\n\x08response\"\x99\x01\n\x05\x45rror\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x12(\n\tparam_err\x18\x03 \x03(\x0b\x32\x15.usp.Error.ParamError\x1a\x43\n\nParamError\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\x19\n\x03Get\x12\x12\n\nparam_path\x18\x01 \x03(\t\"\x91\x02\n\x07GetResp\x12\x39\n\x0freq_path_result\x18\x01 \x03(\x0b\x32 .usp.GetResp.RequestedPathResult\x1a\xca\x01\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12N\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x34.usp.GetResp.RequestedPathResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"z\n\nGetObjects\x12\x34\n\x0c\x64iscover_obj\x18\x01 \x03(\x0b\x32\x1e.usp.GetObjects.DiscoverObject\x1a\x36\n\x0e\x44iscoverObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x12\n\nnext_level\x18\x02 \x01(\x08\"\xe2\x02\n\x0eGetObjectsResp\x12\x41\n\x0ereq_obj_result\x18\x01 \x03(\x0b\x32).usp.GetObjectsResp.RequestedObjectResult\x1a\x9d\x01\n\x15RequestedObjectResult\x12\x14\n\x0creq_obj_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x1b\n\x13\x64\x61ta_model_inst_uri\x18\x03 \x01(\t\x12;\n\rimpl_obj_list\x18\x04 \x03(\x0b\x32$.usp.GetObjectsResp.ImplObjectResult\x1am\n\x10ImplObjectResult\x12\x15\n\rimpl_obj_path\x18\x01 \x01(\t\x12\x12\n\nread_write\x18\x02 \x01(\x08\x12\x16\n\x0emulti_instance\x18\x03 \x01(\x08\x12\x16\n\x0e\x63urr_inst_list\x18\x04 \x03(\t\"\xe3\x01\n\x03\x41\x64\x64\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\ncreate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Add.CreateObject\x1aT\n\x0c\x43reateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x32\n\rparam_setting\x18\x02 \x03(\x0b\x32\x1b.usp.Add.CreateParamSetting\x1a\x44\n\x12\x43reateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xb0\x06\n\x07\x41\x64\x64Resp\x12<\n\x12\x63reated_obj_result\x18\x01 \x03(\x0b\x32 .usp.AddResp.CreatedObjectResult\x1a\xa2\x05\n\x13\x43reatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.AddResp.CreatedObjectResult.OperationStatus\x1a\xab\x04\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a\x9b\x02\n\x10OperationSuccess\x12\x19\n\x11instantiated_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.AddResp.ParameterError\x12~\n\x18\x63reated_param_result_map\x18\x03 \x03(\x0b\x32\\.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccess.CreatedParamResultMapEntry\x1a<\n\x1a\x43reatedParamResultMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\r\n\x0boper_status\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"1\n\x06\x44\x65lete\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12\x10\n\x08obj_path\x18\x02 \x03(\t\"\x8d\x04\n\nDeleteResp\x12?\n\x12\x64\x65leted_obj_result\x18\x01 \x03(\x0b\x32#.usp.DeleteResp.DeletedObjectResult\x1a\xbd\x03\n\x13\x44\x65letedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12H\n\x0boper_status\x18\x02 \x01(\x0b\x32\x33.usp.DeleteResp.DeletedObjectResult.OperationStatus\x1a\xc3\x02\n\x0fOperationStatus\x12\\\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationFailureH\x00\x12\\\n\x0coper_success\x18\x02 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a.\n\x10OperationSuccess\x12\x1a\n\x12\x61\x66\x66\x65\x63ted_path_list\x18\x02 \x03(\tB\r\n\x0boper_status\"\xf8\x01\n\x03Set\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\nupdate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Set.UpdateObject\x1ai\n\x0cUpdateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x13\n\x0b\x61uto_create\x18\x02 \x01(\x08\x12\x32\n\rparam_setting\x18\x03 \x03(\x0b\x32\x1b.usp.Set.UpdateParamSetting\x1a\x44\n\x12UpdateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xd1\x06\n\x07SetResp\x12<\n\x12updated_obj_result\x18\x01 \x03(\x0b\x32 .usp.SetResp.UpdatedObjectResult\x1a\xd9\x03\n\x13UpdatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.SetResp.UpdatedObjectResult.OperationStatus\x1a\xe2\x02\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1aS\n\x10OperationSuccess\x12?\n\x13updated_inst_result\x18\x01 \x03(\x0b\x32\".usp.SetResp.UpdatedInstanceResultB\r\n\x0boper_status\x1a\xe7\x01\n\x15UpdatedInstanceResult\x12\x15\n\raffected_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.SetResp.ParameterError\x12P\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x36.usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\xac\x01\n\x07Operate\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x11\n\tsend_resp\x18\x03 \x01(\x08\x12\x34\n\rinput_arg_map\x18\x04 \x03(\x0b\x32\x1d.usp.Operate.InputArgMapEntry\x1a\x32\n\x10InputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x81\x04\n\x0bOperateResp\x12:\n\x10operation_result\x18\x01 \x03(\x0b\x32 .usp.OperateResp.OperationResult\x1a\xb5\x03\n\x0fOperationResult\x12\x18\n\x10\x65xecuted_command\x18\x01 \x01(\t\x12\x16\n\x0creq_obj_path\x18\x02 \x01(\tH\x00\x12\x46\n\x0freq_output_args\x18\x03 \x01(\x0b\x32+.usp.OperateResp.OperationResult.OutputArgsH\x00\x12\x46\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32/.usp.OperateResp.OperationResult.CommandFailureH\x00\x1a\x98\x01\n\nOutputArgs\x12U\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32=.usp.OperateResp.OperationResult.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\"\xd6\x10\n\x06Notify\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\t\x12\x11\n\tsend_resp\x18\x02 \x01(\x08\x12 \n\x04\x62oot\x18\x03 \x01(\x0b\x32\x10.usp.Notify.BootH\x00\x12/\n\x0cvalue_change\x18\x04 \x01(\x0b\x32\x17.usp.Notify.ValueChangeH\x00\x12\x32\n\x0cobj_creation\x18\x05 \x01(\x0b\x32\x1a.usp.Notify.ObjectCreationH\x00\x12\x32\n\x0cobj_deletion\x18\x06 \x01(\x0b\x32\x1a.usp.Notify.ObjectDeletionH\x00\x12(\n\x08periodic\x18\x07 \x01(\x0b\x32\x14.usp.Notify.PeriodicH\x00\x12\x36\n\roper_complete\x18\x08 \x01(\x0b\x32\x1d.usp.Notify.OperationCompleteH\x00\x12%\n\x07wake_up\x18\t \x01(\x0b\x32\x12.usp.Notify.WakeUpH\x00\x12\"\n\x05timer\x18\n \x01(\x0b\x32\x11.usp.Notify.TimerH\x00\x12\x35\n\rxfer_complete\x18\x0b \x01(\x0b\x32\x1c.usp.Notify.TransferCompleteH\x00\x12\x32\n\x0con_board_req\x18\x0c \x01(\x0b\x32\x1a.usp.Notify.OnBoardRequestH\x00\x12>\n\x14passive_value_change\x18\r \x01(\x0b\x32\x1e.usp.Notify.PassiveValueChangeH\x00\x1a\x98\x02\n\x04\x42oot\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12%\n\x05\x63\x61use\x18\x02 \x01(\x0e\x32\x16.usp.Notify.Boot.Cause\x12\x0f\n\x07obj_ref\x18\x03 \x01(\t\x12\x31\n\tparam_map\x18\x04 \x03(\x0b\x32\x1e.usp.Notify.Boot.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"_\n\x05\x43\x61use\x12\x10\n\x0cLOCAL_REBOOT\x10\x00\x12\x11\n\rREMOTE_REBOOT\x10\x01\x12\x17\n\x13LOCAL_FACTORY_RESET\x10\x02\x12\x18\n\x14REMOTE_FACTORY_RESET\x10\x03\x1a\x36\n\x0bValueChange\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x13\n\x0bparam_value\x18\x02 \x01(\t\x1a\"\n\x0eObjectCreation\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\"\n\x0eObjectDeletion\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\x1b\n\x08Periodic\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\xa2\x03\n\x11OperationComplete\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x43\n\x0freq_output_args\x18\x03 \x01(\x0b\x32(.usp.Notify.OperationComplete.OutputArgsH\x00\x12\x43\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32,.usp.Notify.OperationComplete.CommandFailureH\x00\x1a\x95\x01\n\nOutputArgs\x12R\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32:.usp.Notify.OperationComplete.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\x1a\x19\n\x06WakeUp\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a-\n\x05Timer\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x1a\xa9\x03\n\x10TransferComplete\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12<\n\txfer_type\x18\x02 \x01(\x0e\x32).usp.Notify.TransferComplete.TransferType\x12\x16\n\x0exfer_file_type\x18\x03 \x01(\t\x12\x10\n\x08xfer_url\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\x15\n\rcomplete_time\x18\x06 \x01(\t\x12\x0f\n\x07obj_ref\x18\x07 \x01(\t\x12\x18\n\x10operation_source\x18\x08 \x01(\t\x12<\n\x08xfer_err\x18\t \x01(\x0b\x32*.usp.Notify.TransferComplete.TransferError\x1a\x32\n\rTransferError\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\"P\n\x0cTransferType\x12\x0c\n\x08\x44OWNLOAD\x10\x00\x12\n\n\x06UPLOAD\x10\x01\x12\x0b\n\x07INSTALL\x10\x02\x12\n\n\x06UPDATE\x10\x03\x12\r\n\tUNINSTALL\x10\x04\x1a!\n\x0eOnBoardRequest\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\x86\x01\n\x12PassiveValueChange\x12?\n\tparam_map\x18\x01 \x03(\x0b\x32,.usp.Notify.PassiveValueChange.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x0e\n\x0cnotification\"%\n\nNotifyResp\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\tb\x06proto3')
+  serialized_pb=_b('\n\tusp.proto\x12\x03usp\";\n\x03Msg\x12\x1b\n\x06header\x18\x01 \x01(\x0b\x32\x0b.usp.Header\x12\x17\n\x04\x62ody\x18\x02 \x01(\x0b\x32\t.usp.Body\"\xe7\x02\n\x06Header\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12%\n\x08msg_type\x18\x02 \x01(\x0e\x32\x13.usp.Header.MsgType\x12\x15\n\rproto_version\x18\x03 \x01(\t\x12\r\n\x05to_id\x18\x04 \x01(\t\x12\x0f\n\x07\x66rom_id\x18\x05 \x01(\t\x12\x13\n\x0breply_to_id\x18\x06 \x01(\t\"\xd9\x01\n\x07MsgType\x12\t\n\x05\x45RROR\x10\x00\x12\x07\n\x03GET\x10\x01\x12\x0c\n\x08GET_RESP\x10\x02\x12\n\n\x06NOTIFY\x10\x03\x12\x07\n\x03SET\x10\x04\x12\x0c\n\x08SET_RESP\x10\x05\x12\x0b\n\x07OPERATE\x10\x06\x12\x10\n\x0cOPERATE_RESP\x10\x07\x12\x07\n\x03\x41\x44\x44\x10\x08\x12\x0c\n\x08\x41\x44\x44_RESP\x10\t\x12\n\n\x06\x44\x45LETE\x10\n\x12\x0f\n\x0b\x44\x45LETE_RESP\x10\x0b\x12\x0f\n\x0bGET_OBJECTS\x10\x0c\x12\x14\n\x10GET_OBJECTS_RESP\x10\r\x12\x0f\n\x0bNOTIFY_RESP\x10\x10\"s\n\x04\x42ody\x12\x1f\n\x07request\x18\x01 \x01(\x0b\x32\x0c.usp.RequestH\x00\x12!\n\x08response\x18\x02 \x01(\x0b\x32\r.usp.ResponseH\x00\x12\x1b\n\x05\x65rror\x18\x03 \x01(\x0b\x32\n.usp.ErrorH\x00\x42\n\n\x08msg_body\"\xe6\x01\n\x07Request\x12\x17\n\x03get\x18\x01 \x01(\x0b\x32\x08.usp.GetH\x00\x12&\n\x0bget_objects\x18\x02 \x01(\x0b\x32\x0f.usp.GetObjectsH\x00\x12\x17\n\x03set\x18\x04 \x01(\x0b\x32\x08.usp.SetH\x00\x12\x17\n\x03\x61\x64\x64\x18\x05 \x01(\x0b\x32\x08.usp.AddH\x00\x12\x1d\n\x06\x64\x65lete\x18\x06 \x01(\x0b\x32\x0b.usp.DeleteH\x00\x12\x1f\n\x07operate\x18\x07 \x01(\x0b\x32\x0c.usp.OperateH\x00\x12\x1d\n\x06notify\x18\x08 \x01(\x0b\x32\x0b.usp.NotifyH\x00\x42\t\n\x07request\"\xa7\x02\n\x08Response\x12 \n\x08get_resp\x18\x01 \x01(\x0b\x32\x0c.usp.GetRespH\x00\x12/\n\x10get_objects_resp\x18\x02 \x01(\x0b\x32\x13.usp.GetObjectsRespH\x00\x12 \n\x08set_resp\x18\x04 \x01(\x0b\x32\x0c.usp.SetRespH\x00\x12 \n\x08\x61\x64\x64_resp\x18\x05 \x01(\x0b\x32\x0c.usp.AddRespH\x00\x12&\n\x0b\x64\x65lete_resp\x18\x06 \x01(\x0b\x32\x0f.usp.DeleteRespH\x00\x12(\n\x0coperate_resp\x18\x07 \x01(\x0b\x32\x10.usp.OperateRespH\x00\x12&\n\x0bnotify_resp\x18\x08 \x01(\x0b\x32\x0f.usp.NotifyRespH\x00\x42\n\n\x08response\"\x99\x01\n\x05\x45rror\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x12(\n\tparam_err\x18\x03 \x03(\x0b\x32\x15.usp.Error.ParamError\x1a\x43\n\nParamError\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\x19\n\x03Get\x12\x12\n\nparam_path\x18\x01 \x03(\t\"\x91\x02\n\x07GetResp\x12\x39\n\x0freq_path_result\x18\x01 \x03(\x0b\x32 .usp.GetResp.RequestedPathResult\x1a\xca\x01\n\x13RequestedPathResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12N\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x34.usp.GetResp.RequestedPathResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"z\n\nGetObjects\x12\x34\n\x0c\x64iscover_obj\x18\x01 \x03(\x0b\x32\x1e.usp.GetObjects.DiscoverObject\x1a\x36\n\x0e\x44iscoverObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x12\n\nnext_level\x18\x02 \x01(\x08\"\xe2\x02\n\x0eGetObjectsResp\x12\x41\n\x0ereq_obj_result\x18\x01 \x03(\x0b\x32).usp.GetObjectsResp.RequestedObjectResult\x1a\x9d\x01\n\x15RequestedObjectResult\x12\x14\n\x0creq_obj_path\x18\x01 \x01(\t\x12\x14\n\x0cinvalid_path\x18\x02 \x01(\x08\x12\x1b\n\x13\x64\x61ta_model_inst_uri\x18\x03 \x01(\t\x12;\n\rimpl_obj_list\x18\x04 \x03(\x0b\x32$.usp.GetObjectsResp.ImplObjectResult\x1am\n\x10ImplObjectResult\x12\x15\n\rimpl_obj_path\x18\x01 \x01(\t\x12\x12\n\nread_write\x18\x02 \x01(\x08\x12\x16\n\x0emulti_instance\x18\x03 \x01(\x08\x12\x16\n\x0e\x63urr_inst_list\x18\x04 \x03(\t\"\xe3\x01\n\x03\x41\x64\x64\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\ncreate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Add.CreateObject\x1aT\n\x0c\x43reateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x32\n\rparam_setting\x18\x02 \x03(\x0b\x32\x1b.usp.Add.CreateParamSetting\x1a\x44\n\x12\x43reateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xb0\x06\n\x07\x41\x64\x64Resp\x12<\n\x12\x63reated_obj_result\x18\x01 \x03(\x0b\x32 .usp.AddResp.CreatedObjectResult\x1a\xa2\x05\n\x13\x43reatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.AddResp.CreatedObjectResult.OperationStatus\x1a\xab\x04\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a\x9b\x02\n\x10OperationSuccess\x12\x19\n\x11instantiated_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.AddResp.ParameterError\x12~\n\x18\x63reated_param_result_map\x18\x03 \x03(\x0b\x32\\.usp.AddResp.CreatedObjectResult.OperationStatus.OperationSuccess.CreatedParamResultMapEntry\x1a<\n\x1a\x43reatedParamResultMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\r\n\x0boper_status\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"1\n\x06\x44\x65lete\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12\x10\n\x08obj_path\x18\x02 \x03(\t\"\x8d\x04\n\nDeleteResp\x12?\n\x12\x64\x65leted_obj_result\x18\x01 \x03(\x0b\x32#.usp.DeleteResp.DeletedObjectResult\x1a\xbd\x03\n\x13\x44\x65letedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12H\n\x0boper_status\x18\x02 \x01(\x0b\x32\x33.usp.DeleteResp.DeletedObjectResult.OperationStatus\x1a\xc3\x02\n\x0fOperationStatus\x12\\\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationFailureH\x00\x12\\\n\x0coper_success\x18\x02 \x01(\x0b\x32\x44.usp.DeleteResp.DeletedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1a.\n\x10OperationSuccess\x12\x1a\n\x12\x61\x66\x66\x65\x63ted_path_list\x18\x02 \x03(\tB\r\n\x0boper_status\"\xf8\x01\n\x03Set\x12\x15\n\rallow_partial\x18\x01 \x01(\x08\x12)\n\nupdate_obj\x18\x02 \x03(\x0b\x32\x15.usp.Set.UpdateObject\x1ai\n\x0cUpdateObject\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x13\n\x0b\x61uto_create\x18\x02 \x01(\x08\x12\x32\n\rparam_setting\x18\x03 \x03(\x0b\x32\x1b.usp.Set.UpdateParamSetting\x1a\x44\n\x12UpdateParamSetting\x12\r\n\x05param\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x10\n\x08required\x18\x03 \x01(\x08\"\xd1\x06\n\x07SetResp\x12<\n\x12updated_obj_result\x18\x01 \x03(\x0b\x32 .usp.SetResp.UpdatedObjectResult\x1a\xd9\x03\n\x13UpdatedObjectResult\x12\x16\n\x0erequested_path\x18\x01 \x01(\t\x12\x45\n\x0boper_status\x18\x02 \x01(\x0b\x32\x30.usp.SetResp.UpdatedObjectResult.OperationStatus\x1a\xe2\x02\n\x0fOperationStatus\x12Y\n\x0coper_failure\x18\x01 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationFailureH\x00\x12Y\n\x0coper_success\x18\x02 \x01(\x0b\x32\x41.usp.SetResp.UpdatedObjectResult.OperationStatus.OperationSuccessH\x00\x1a\x35\n\x10OperationFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\x1aS\n\x10OperationSuccess\x12?\n\x13updated_inst_result\x18\x01 \x03(\x0b\x32\".usp.SetResp.UpdatedInstanceResultB\r\n\x0boper_status\x1a\xe7\x01\n\x15UpdatedInstanceResult\x12\x15\n\raffected_path\x18\x01 \x01(\t\x12.\n\tparam_err\x18\x02 \x03(\x0b\x32\x1b.usp.SetResp.ParameterError\x12P\n\x10result_param_map\x18\x03 \x03(\x0b\x32\x36.usp.SetResp.UpdatedInstanceResult.ResultParamMapEntry\x1a\x35\n\x13ResultParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x42\n\x0eParameterError\x12\r\n\x05param\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x03 \x01(\t\"\xac\x01\n\x07Operate\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x11\n\tsend_resp\x18\x03 \x01(\x08\x12\x34\n\rinput_arg_map\x18\x04 \x03(\x0b\x32\x1d.usp.Operate.InputArgMapEntry\x1a\x32\n\x10InputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x81\x04\n\x0bOperateResp\x12:\n\x10operation_result\x18\x01 \x03(\x0b\x32 .usp.OperateResp.OperationResult\x1a\xb5\x03\n\x0fOperationResult\x12\x18\n\x10\x65xecuted_command\x18\x01 \x01(\t\x12\x16\n\x0creq_obj_path\x18\x02 \x01(\tH\x00\x12\x46\n\x0freq_output_args\x18\x03 \x01(\x0b\x32+.usp.OperateResp.OperationResult.OutputArgsH\x00\x12\x46\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32/.usp.OperateResp.OperationResult.CommandFailureH\x00\x1a\x98\x01\n\nOutputArgs\x12U\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32=.usp.OperateResp.OperationResult.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\"\xd2\x11\n\x06Notify\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\t\x12\x11\n\tsend_resp\x18\x02 \x01(\x08\x12 \n\x04\x62oot\x18\x03 \x01(\x0b\x32\x10.usp.Notify.BootH\x00\x12/\n\x0cvalue_change\x18\x04 \x01(\x0b\x32\x17.usp.Notify.ValueChangeH\x00\x12\x32\n\x0cobj_creation\x18\x05 \x01(\x0b\x32\x1a.usp.Notify.ObjectCreationH\x00\x12\x32\n\x0cobj_deletion\x18\x06 \x01(\x0b\x32\x1a.usp.Notify.ObjectDeletionH\x00\x12(\n\x08periodic\x18\x07 \x01(\x0b\x32\x14.usp.Notify.PeriodicH\x00\x12\x36\n\roper_complete\x18\x08 \x01(\x0b\x32\x1d.usp.Notify.OperationCompleteH\x00\x12%\n\x07wake_up\x18\t \x01(\x0b\x32\x12.usp.Notify.WakeUpH\x00\x12\"\n\x05timer\x18\n \x01(\x0b\x32\x11.usp.Notify.TimerH\x00\x12\x35\n\rxfer_complete\x18\x0b \x01(\x0b\x32\x1c.usp.Notify.TransferCompleteH\x00\x12\x32\n\x0con_board_req\x18\x0c \x01(\x0b\x32\x1a.usp.Notify.OnBoardRequestH\x00\x12>\n\x14passive_value_change\x18\r \x01(\x0b\x32\x1e.usp.Notify.PassiveValueChangeH\x00\x1a\x98\x02\n\x04\x42oot\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12%\n\x05\x63\x61use\x18\x02 \x01(\x0e\x32\x16.usp.Notify.Boot.Cause\x12\x0f\n\x07obj_ref\x18\x03 \x01(\t\x12\x31\n\tparam_map\x18\x04 \x03(\x0b\x32\x1e.usp.Notify.Boot.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"_\n\x05\x43\x61use\x12\x10\n\x0cLOCAL_REBOOT\x10\x00\x12\x11\n\rREMOTE_REBOOT\x10\x01\x12\x17\n\x13LOCAL_FACTORY_RESET\x10\x02\x12\x18\n\x14REMOTE_FACTORY_RESET\x10\x03\x1a\x36\n\x0bValueChange\x12\x12\n\nparam_path\x18\x01 \x01(\t\x12\x13\n\x0bparam_value\x18\x02 \x01(\t\x1a\x9d\x01\n\x0eObjectCreation\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x12\x44\n\x0eunique_key_map\x18\x02 \x03(\x0b\x32,.usp.Notify.ObjectCreation.UniqueKeyMapEntry\x1a\x33\n\x11UniqueKeyMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\"\n\x0eObjectDeletion\x12\x10\n\x08obj_path\x18\x01 \x01(\t\x1a\x1b\n\x08Periodic\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\xa2\x03\n\x11OperationComplete\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x12\x43\n\x0freq_output_args\x18\x03 \x01(\x0b\x32(.usp.Notify.OperationComplete.OutputArgsH\x00\x12\x43\n\x0b\x63md_failure\x18\x04 \x01(\x0b\x32,.usp.Notify.OperationComplete.CommandFailureH\x00\x1a\x95\x01\n\nOutputArgs\x12R\n\x0eoutput_arg_map\x18\x01 \x03(\x0b\x32:.usp.Notify.OperationComplete.OutputArgs.OutputArgMapEntry\x1a\x33\n\x11OutputArgMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x33\n\x0e\x43ommandFailure\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\tB\x10\n\x0eoperation_resp\x1a\x19\n\x06WakeUp\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a-\n\x05Timer\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x12\x13\n\x0b\x63ommand_key\x18\x02 \x01(\t\x1a\xa9\x03\n\x10TransferComplete\x12\x13\n\x0b\x63ommand_key\x18\x01 \x01(\t\x12<\n\txfer_type\x18\x02 \x01(\x0e\x32).usp.Notify.TransferComplete.TransferType\x12\x16\n\x0exfer_file_type\x18\x03 \x01(\t\x12\x10\n\x08xfer_url\x18\x04 \x01(\t\x12\x12\n\nstart_time\x18\x05 \x01(\t\x12\x15\n\rcomplete_time\x18\x06 \x01(\t\x12\x0f\n\x07obj_ref\x18\x07 \x01(\t\x12\x18\n\x10operation_source\x18\x08 \x01(\t\x12<\n\x08xfer_err\x18\t \x01(\x0b\x32*.usp.Notify.TransferComplete.TransferError\x1a\x32\n\rTransferError\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x07\x12\x0f\n\x07\x65rr_msg\x18\x02 \x01(\t\"P\n\x0cTransferType\x12\x0c\n\x08\x44OWNLOAD\x10\x00\x12\n\n\x06UPLOAD\x10\x01\x12\x0b\n\x07INSTALL\x10\x02\x12\n\n\x06UPDATE\x10\x03\x12\r\n\tUNINSTALL\x10\x04\x1a!\n\x0eOnBoardRequest\x12\x0f\n\x07obj_ref\x18\x01 \x01(\t\x1a\x86\x01\n\x12PassiveValueChange\x12?\n\tparam_map\x18\x01 \x03(\x0b\x32,.usp.Notify.PassiveValueChange.ParamMapEntry\x1a/\n\rParamMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x0e\n\x0cnotification\"%\n\nNotifyResp\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\tb\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -158,8 +158,8 @@ _NOTIFY_TRANSFERCOMPLETE_TRANSFERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=7318,
-  serialized_end=7398,
+  serialized_start=7442,
+  serialized_end=7522,
 )
 _sym_db.RegisterEnumDescriptor(_NOTIFY_TRANSFERCOMPLETE_TRANSFERTYPE)
 
@@ -2334,6 +2334,43 @@ _NOTIFY_VALUECHANGE = _descriptor.Descriptor(
   serialized_end=6374,
 )
 
+_NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY = _descriptor.Descriptor(
+  name='UniqueKeyMapEntry',
+  full_name='usp.Notify.ObjectCreation.UniqueKeyMapEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='usp.Notify.ObjectCreation.UniqueKeyMapEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='usp.Notify.ObjectCreation.UniqueKeyMapEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6483,
+  serialized_end=6534,
+)
+
 _NOTIFY_OBJECTCREATION = _descriptor.Descriptor(
   name='ObjectCreation',
   full_name='usp.Notify.ObjectCreation',
@@ -2348,10 +2385,17 @@ _NOTIFY_OBJECTCREATION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='unique_key_map', full_name='usp.Notify.ObjectCreation.unique_key_map', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY, ],
   enum_types=[
   ],
   options=None,
@@ -2360,8 +2404,8 @@ _NOTIFY_OBJECTCREATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6376,
-  serialized_end=6410,
+  serialized_start=6377,
+  serialized_end=6534,
 )
 
 _NOTIFY_OBJECTDELETION = _descriptor.Descriptor(
@@ -2390,8 +2434,8 @@ _NOTIFY_OBJECTDELETION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6412,
-  serialized_end=6446,
+  serialized_start=6536,
+  serialized_end=6570,
 )
 
 _NOTIFY_PERIODIC = _descriptor.Descriptor(
@@ -2420,8 +2464,8 @@ _NOTIFY_PERIODIC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6448,
-  serialized_end=6475,
+  serialized_start=6572,
+  serialized_end=6599,
 )
 
 _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS_OUTPUTARGMAPENTRY = _descriptor.Descriptor(
@@ -2487,8 +2531,8 @@ _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6676,
-  serialized_end=6825,
+  serialized_start=6800,
+  serialized_end=6949,
 )
 
 _NOTIFY_OPERATIONCOMPLETE_COMMANDFAILURE = _descriptor.Descriptor(
@@ -2578,8 +2622,8 @@ _NOTIFY_OPERATIONCOMPLETE = _descriptor.Descriptor(
       name='operation_resp', full_name='usp.Notify.OperationComplete.operation_resp',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=6478,
-  serialized_end=6896,
+  serialized_start=6602,
+  serialized_end=7020,
 )
 
 _NOTIFY_WAKEUP = _descriptor.Descriptor(
@@ -2608,8 +2652,8 @@ _NOTIFY_WAKEUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6898,
-  serialized_end=6923,
+  serialized_start=7022,
+  serialized_end=7047,
 )
 
 _NOTIFY_TIMER = _descriptor.Descriptor(
@@ -2645,8 +2689,8 @@ _NOTIFY_TIMER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6925,
-  serialized_end=6970,
+  serialized_start=7049,
+  serialized_end=7094,
 )
 
 _NOTIFY_TRANSFERCOMPLETE_TRANSFERERROR = _descriptor.Descriptor(
@@ -2682,8 +2726,8 @@ _NOTIFY_TRANSFERCOMPLETE_TRANSFERERROR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7266,
-  serialized_end=7316,
+  serialized_start=7390,
+  serialized_end=7440,
 )
 
 _NOTIFY_TRANSFERCOMPLETE = _descriptor.Descriptor(
@@ -2769,8 +2813,8 @@ _NOTIFY_TRANSFERCOMPLETE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6973,
-  serialized_end=7398,
+  serialized_start=7097,
+  serialized_end=7522,
 )
 
 _NOTIFY_ONBOARDREQUEST = _descriptor.Descriptor(
@@ -2799,8 +2843,8 @@ _NOTIFY_ONBOARDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7400,
-  serialized_end=7433,
+  serialized_start=7524,
+  serialized_end=7557,
 )
 
 _NOTIFY_PASSIVEVALUECHANGE_PARAMMAPENTRY = _descriptor.Descriptor(
@@ -2866,8 +2910,8 @@ _NOTIFY_PASSIVEVALUECHANGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7436,
-  serialized_end=7570,
+  serialized_start=7560,
+  serialized_end=7694,
 )
 
 _NOTIFY = _descriptor.Descriptor(
@@ -2984,7 +3028,7 @@ _NOTIFY = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=5452,
-  serialized_end=7586,
+  serialized_end=7710,
 )
 
 
@@ -3014,8 +3058,8 @@ _NOTIFYRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7588,
-  serialized_end=7625,
+  serialized_start=7712,
+  serialized_end=7749,
 )
 
 _MSG.fields_by_name['header'].message_type = _HEADER
@@ -3187,6 +3231,8 @@ _NOTIFY_BOOT.fields_by_name['param_map'].message_type = _NOTIFY_BOOT_PARAMMAPENT
 _NOTIFY_BOOT.containing_type = _NOTIFY
 _NOTIFY_BOOT_CAUSE.containing_type = _NOTIFY_BOOT
 _NOTIFY_VALUECHANGE.containing_type = _NOTIFY
+_NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY.containing_type = _NOTIFY_OBJECTCREATION
+_NOTIFY_OBJECTCREATION.fields_by_name['unique_key_map'].message_type = _NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY
 _NOTIFY_OBJECTCREATION.containing_type = _NOTIFY
 _NOTIFY_OBJECTDELETION.containing_type = _NOTIFY
 _NOTIFY_PERIODIC.containing_type = _NOTIFY
@@ -3685,6 +3731,13 @@ Notify = _reflection.GeneratedProtocolMessageType('Notify', (_message.Message,),
   ,
 
   ObjectCreation = _reflection.GeneratedProtocolMessageType('ObjectCreation', (_message.Message,), dict(
+
+    UniqueKeyMapEntry = _reflection.GeneratedProtocolMessageType('UniqueKeyMapEntry', (_message.Message,), dict(
+      DESCRIPTOR = _NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY,
+      __module__ = 'usp_pb2'
+      # @@protoc_insertion_point(class_scope:usp.Notify.ObjectCreation.UniqueKeyMapEntry)
+      ))
+    ,
     DESCRIPTOR = _NOTIFY_OBJECTCREATION,
     __module__ = 'usp_pb2'
     # @@protoc_insertion_point(class_scope:usp.Notify.ObjectCreation)
@@ -3790,6 +3843,7 @@ _sym_db.RegisterMessage(Notify.Boot)
 _sym_db.RegisterMessage(Notify.Boot.ParamMapEntry)
 _sym_db.RegisterMessage(Notify.ValueChange)
 _sym_db.RegisterMessage(Notify.ObjectCreation)
+_sym_db.RegisterMessage(Notify.ObjectCreation.UniqueKeyMapEntry)
 _sym_db.RegisterMessage(Notify.ObjectDeletion)
 _sym_db.RegisterMessage(Notify.Periodic)
 _sym_db.RegisterMessage(Notify.OperationComplete)
@@ -3824,6 +3878,8 @@ _OPERATERESP_OPERATIONRESULT_OUTPUTARGS_OUTPUTARGMAPENTRY.has_options = True
 _OPERATERESP_OPERATIONRESULT_OUTPUTARGS_OUTPUTARGMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 _NOTIFY_BOOT_PARAMMAPENTRY.has_options = True
 _NOTIFY_BOOT_PARAMMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY.has_options = True
+_NOTIFY_OBJECTCREATION_UNIQUEKEYMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS_OUTPUTARGMAPENTRY.has_options = True
 _NOTIFY_OPERATIONCOMPLETE_OUTPUTARGS_OUTPUTARGMAPENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 _NOTIFY_PASSIVEVALUECHANGE_PARAMMAPENTRY.has_options = True
