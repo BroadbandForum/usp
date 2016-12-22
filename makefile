@@ -2,6 +2,6 @@ TOPDIR = .
 
 include $(TOPDIR)/defs.mk
 
-SUBDIRS = collections data-model dm2yang dmtypes protobuf
+SUBDIRS = schema device2 specification
 
 include $(TOPDIR)/rules.mk
