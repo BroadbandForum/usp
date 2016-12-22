@@ -1199,6 +1199,7 @@ MUST be present if and only if defining a new command.</xs:documentation>
         <xs:restriction base="xs:string">
           <xs:enumeration value="Boot"/>
           <xs:enumeration value="OperationComplete"/>
+          <xs:enumeration value="Timer"/>
           <xs:enumeration value="TransferComplete"/>
         </xs:restriction>
       </xs:simpleType>
