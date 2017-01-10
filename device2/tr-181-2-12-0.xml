@@ -111,14 +111,38 @@
   <import file="tr-181-2-11.xml" spec="urn:broadband-forum-org:tr-181-2-11">
     <model name="Device:2.11"/>
   </import>
-  
+
+  <bibliography>
+    <reference id="RFC6762">
+      <name>RFC 6762</name>
+      <title>Multicast DNS</title>
+      <organization>IETF</organization>
+      <category>RFC</category>
+      <date>February 2013</date>
+    </reference>
+    <reference id="TR-369">
+      <name>WT-369</name>
+      <title>User Services Platform</title>
+      <organization>Broadband Forum</organization>
+      <category>Technical Report</category>
+      <date>December 2016</date>
+    </reference>
+  </bibliography>
+
   <component name="LocalAgent">
+    <object base="DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+      <parameter name="FriendlyName" access="readWrite">
+        <description>The friendly name of the device.</description>
+        <syntax>
+          <string><size maxLength="63"></size></string>
+        </syntax>
+      </parameter>
+    </object>
     <object name="LocalAgent." access="readOnly" minEntries="1" maxEntries="1">
       <description>
         This object contains general information about the USP Agent itself.  For information related to the Device that hosts the Agent, please reference the {{object|.DeviceInfo}} object.
         NOTE: The Supported Data Model table ({{object|.DeviceInfo.SupportedDataModel}}) and Vendor Log File table ({{object|.DeviceInfo.VendorLogFile}}) details are located on the {{object|.DeviceInfo}} object.
       </description>
-      
       <parameter name="EndpointID" access="readOnly">
         <description>
           The unique USP identifier for this USP Agent.
@@ -151,7 +175,6 @@
       <parameter name="SupportedProtocols" access="readOnly">
         <description>
           USP Message Transfer Protocols supported by this USP Agent.  The USP Agent MUST support at least one Protocol.
-          {{issue|Should we have an EnabledProtocol parameter that the Controller can configure}}
         </description>
         <syntax>
           <list minItems="1"/>
@@ -160,6 +183,315 @@
             <enumeration value="HTTP"></enumeration>
             <enumeration value="STOMP"></enumeration>
           </string>
+        </syntax>
+      </parameter>
+      <parameter name="AdvertisedDeviceSubtypes" access="readWrite">
+        <description>{{list|each entry is a subtype component of the service type that is advertised for the device using mDNS as defined in {{bibref|RFC6762}}}}
+        </description>
+        <syntax>
+          <list/>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="RoleNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+      <parameter name="CredentialNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+      <parameter name="MTPNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="LocalAgent.Role.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
+            numEntriesParameter="RoleNumberOfEntries" enableParameter="Enable">
+      <description>
+        Each instance of this table represents a Role used by the USP Endpoint.
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      <parameter name="Name" access="readWrite">
+        <description>
+          The name of this {{object}} instance.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Enable" access="readWrite">
+        <description>
+          Enable/Disable this {{object}} instance.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Role" access="readWrite">
+        <description>
+          The Role assigned to this {{object}} instance.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Targets" access="readWrite">
+        <description>{{list|each entry is a target to which the value of the {{param|Permissions}} parameter is assigned}}
+An entry is a value of a Search Path as defined in {{bibref|TR-369}} that resolves to zero or more Parameter Paths.
+All Parameter Paths that result from the evaluation of the Search Path are subject to the permissions assigned by this {{object}} instance.
+When the value of an entry is an Object instance then the value of the {{param|Permissions}} parameter is used for all parameters of the Object instance.
+When the value of an entry starts with a ".", then the value assumes the root object of the LocalAgent.
+{{issue| We don't have a concept of no root path in USP}}
+        </description>
+        <syntax>
+          <list></list>
+          <string>
+          </string>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Permissions" access="readWrite">
+        <description>
+          {{issue|Still be considered how to define}}
+        </description>
+        <syntax>
+          <string>
+          </string>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="LocalAgent.Credential.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
+            numEntriesParameter="CredentialNumberOfEntries" enableParameter="Enable">
+      <description>
+        Each instance of this table represents a credential to be used when authenticating the Controller.
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Name"/>
+      </uniqueKey>
+      <parameter name="Name" access="readWrite">
+        <description>
+          The name of this {{object}} instance.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Enable" access="readWrite">
+        <description>
+          Enable/Disable this {{object}} instance.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Role" access="readWrite">
+        <description>{{list|each entry is a Role of the Controller to which this {{object}} instance can be used in the authentication of the Controller}}
+        </description>
+        <syntax>
+          <list/>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Credential" access="readOnly">
+        <description>
+          A reference to the {{object|##.Security.Certificate.{i}.}} instance for use in the authentication of the Controller.
+        </description>
+        <syntax>
+          <string>
+            <pathRef refType="strong" targetParent="##.Security.Certificate." targetType="row"/>
+          </string>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="LocalAgent.MTP.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
+            numEntriesParameter="MTPNumberOfEntries" enableParameter="Enable">
+      <description>
+        Each instance of this table represents a MTP used by a USP Endpoint.
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Name"/>
+      </uniqueKey>
+
+      <parameter name="Name" access="readWrite">
+        <description>
+          The name of the Message Transport Protocol (MTP) instance to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Enable" access="readWrite">
+        <description>
+          Enable/Disable this {{object}} instance.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Status" access="readOnly">
+        <description>
+          The current operational state of the {{object}} instance.
+        </description>
+        <syntax>
+          <string>
+            <enumeration value="Up"/>
+            <enumeration value="Down">
+              <description>Value when this {{object}} instance cannot establish communication.</description>
+            </enumeration>
+            <enumeration value="Error" optional="true">
+              <description>Value when this {{object}} instance is misconfigured.</description>
+            </enumeration>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="Protocol" access="readWrite">
+        <description>
+          The Message Transport Protocol (MTP) to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string>
+            <enumeration value="CoAP"></enumeration>
+            <enumeration value="HTTP"></enumeration>
+            <enumeration value="STOMP"></enumeration>
+          </string>
+          <default type="object" value="HTTP"></default>
+        </syntax>
+      </parameter>
+      <parameter name="EnableMDNS" access="readWrite">
+        <description>This parameter, when {{true}}, enables the advertisement of DNS-SD services using mDNS as defined in {{bibref|RFC6762}}.
+This parameter cannot be set to {{true}} if there are multiple {{object}} instances with the same value of the {{param|Protocol}} parameter.
+When {{true}}, the hostname advertised in the SRV record MUST be a Fully Qualified Domain Name (FQDN).
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="true"></default>
+        </syntax>
+      </parameter>
+    </object>
+    
+    <object name="LocalAgent.MTP.{i}.CoAP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the CoAP Message Transport Protocol (MTP), then this object contains CoAP specific configuration parameters. 
+      </description>
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's CoAP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="LocalAgent.MTP.{i}.HTTP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the HTTP Message Transport Protocol (MTP), then this object contains HTTP specific configuration parameters. 
+      </description>
+      
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's HTTP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="CompressionSupported" access="readOnly">
+        <description>
+          Indicates the HTTP Compression mechanism(s) supported by this CPE.  Requirements for the use of HTTP Compression for CWMP can be found in {{bibref|TR-069a5|Section 3.4.7}}. {{enum}}
+          Vendors can extend the enumerated values with vendor specific extensions, in which case the rules outlined in {{bibref|TR-106a7|Section 3.3}} MUST be adhered to.
+        </description>
+        <syntax>
+          <list/>
+          <string>
+            <enumeration value="GZIP">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+            <enumeration value="Compress">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+            <enumeration value="Deflate">
+              <description>
+                As defined in {{bibref|RFC2616|Section 3.5}}
+              </description>
+            </enumeration>
+          </string>
+        </syntax>
+      </parameter>
+      <parameter name="Compression" access="readWrite">
+        <description>
+          The value of this parameter represents the HTTP Compression mechanism to be used by the CPE when communicating with the ACS.
+        </description>
+        <syntax>
+          <string>
+            <enumerationRef targetParam="CompressionSupported" nullValue="Disabled"/>
+          </string>
+          <default type="factory" value="Disabled"/>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="LocalAgent.MTP.{i}.STOMP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters to which the USP Endpoint would attach. 
+      </description>
+      
+      <parameter name="Host" access="readWrite">
+        <description>
+          The host name or IP address of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Port" access="readWrite">
+        <description>
+          The port number of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <unsignedInt/>
+          <default type="object" value="61613"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Username" access="readWrite">
+        <description>
+          The value to use in the 'login' header when connecting to the STOMP Server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Password" access="readWrite">
+        <description>
+          The value to use in the 'passcode' header when connecting to the STOMP Server.
+        </description>
+        <syntax hidden="true">
+          <string/>
+          <default type="object" value=""></default>
         </syntax>
       </parameter>
     </object>
@@ -181,17 +513,6 @@
       <uniqueKey functional="true">
         <parameter ref="EndpointID"/>
       </uniqueKey>
-      
-      <parameter name="Enable" access="readWrite">
-        <description>
-          Enable/Disable this particular USP Controller.
-          A disabled USP Controller will not receive any Notifications from this USP Agent (even if Subscriptions exist).  Also, a disabled USP Controller will only have default Access Control permissions (even if specific Access Control permissions have been granted).
-        </description>
-        <syntax>
-          <boolean/>
-          <default type="object" value="false"></default>
-        </syntax>
-      </parameter>
       <parameter name="EndpointID" access="readWrite">
         <description>
           The unique USP identifier for this USP Controller.
@@ -199,6 +520,23 @@
         <syntax>
           <string/>
           <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Enable" access="readWrite">
+        <description>Enable/Disable this {{object}} instance.
+When {{false}}, messages (notifications) are not sent to the remote endpoint represented by this {{object}} instance.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Role" access="readWrite">
+        <description>{{list|each entry is a Role that is associated with this {{object}} instance}}
+        </description>
+        <syntax>
+          <list/>
+          <string/>
         </syntax>
       </parameter>
       <parameter name="PeriodicNotifInterval" access="readWrite">
@@ -268,6 +606,109 @@
         </description>
         <syntax>
           <unsignedInt/>
+        </syntax>
+      </parameter>
+      <parameter name="MTPNumberOfEntries" access="readOnly">
+        <description>{{numentries}}</description>
+        <syntax>
+          <unsignedInt/>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="Controller.{i}.MTP.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
+            numEntriesParameter="MTPNumberOfEntries" enableParameter="Enable">
+      <description>
+        Each instance of this table represents a MTP used by a USP Endpoint.
+      </description>
+      <uniqueKey functional="true">
+        <parameter ref="Name"/>
+      </uniqueKey>
+
+      <parameter name="Name" access="readWrite">
+        <description>
+          The name of the Message Transport Protocol (MTP) instance to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
+      <parameter name="Enable" access="readWrite">
+        <description>
+          Enable/Disable this {{object}} instance.
+        </description>
+        <syntax>
+          <boolean/>
+          <default type="object" value="false"></default>
+        </syntax>
+      </parameter>
+      <parameter name="Protocol" access="readWrite">
+        <description>
+          The Message Transport Protocol (MTP) to be used for communications by a USP Endpoint.
+        </description>
+        <syntax>
+          <string>
+            <enumeration value="CoAP"></enumeration>
+            <enumeration value="HTTP"></enumeration>
+            <enumeration value="STOMP"></enumeration>
+          </string>
+          <default type="object" value="HTTP"></default>
+        </syntax>
+      </parameter>
+    </object>
+    
+    <object name="Controller.{i}.MTP.{i}.CoAP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the CoAP Message Transport Protocol (MTP), then this object contains CoAP specific configuration parameters. 
+      </description>
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's CoAP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="Controller.{i}.MTP.{i}.HTTP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the HTTP Message Transport Protocol (MTP), then this object contains HTTP specific configuration parameters. 
+      </description>
+      
+      <parameter name="URL" access="readWrite">
+        <description>
+          The URL for the USP Endpoint's HTTP server.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+    </object>
+
+    <object name="Controller.{i}.MTP.{i}.STOMP." access="readOnly" minEntries="1" maxEntries="1">
+      <description>
+        If the USP Endpoint uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters to which the USP Endpoint would attach. 
+      </description>
+      
+      <parameter name="Host" access="readWrite">
+        <description>
+          The host name or IP address of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <string/>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
+      <parameter name="Port" access="readWrite">
+        <description>
+          The port number of the STOMP Server that the USP Controller is connected to.
+        </description>
+        <syntax>
+          <unsignedInt/>
+          <default type="object" value="61613"></default>
         </syntax>
       </parameter>
     </object>
@@ -543,167 +984,6 @@
     </object>
   </component>
   
-    <component name="MTPs">
-    <parameter name="MTPNumberOfEntries" access="readOnly">
-      <description>{{numentries}}</description>
-      <syntax>
-        <unsignedInt/>
-      </syntax>
-    </parameter>
-    
-    <object name="MTP.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
-            numEntriesParameter="MTPNumberOfEntries" enableParameter="Enable">
-      <description>
-        Each instance of this table represents a MTP used by a USP Endpoint.
-      </description>
-      <uniqueKey functional="true">
-        <parameter ref="Name"/>
-      </uniqueKey>
-      
-      <parameter name="Enable" access="readWrite">
-        <description>
-          Enable/Disable this particular MTP.
-        </description>
-        <syntax>
-          <boolean/>
-          <default type="object" value="false"></default>
-        </syntax>
-      </parameter>
-      <parameter name="Name" access="readWrite">
-        <description>
-          The Name Message Transport Protocol (MTP) instance to be used for communications by a USP Endpoint.
-        </description>
-        <syntax>
-          <string/>
-        </syntax>
-      </parameter>
-      <parameter name="Protocol" access="readWrite">
-        <description>
-          The Message Transport Protocol (MTP) to be used for communications by a USP Endpoint.
-        </description>
-        <syntax>
-          <string>
-            <enumeration value="CoAP"></enumeration>
-            <enumeration value="HTTP"></enumeration>
-            <enumeration value="STOMP"></enumeration>
-          </string>
-          <default type="object" value="HTTP"></default>
-        </syntax>
-      </parameter>
-    </object>
-    
-    <object name="MTP.{i}.CoAP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Endpoint uses the CoAP Message Transport Protocol (MTP), then this object contains CoAP specific configuration parameters. 
-      </description>
-      <parameter name="URL" access="readWrite">
-        <description>
-          The URL for the USP Endpoint's CoAP server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-    </object>
-
-    <object name="MTP.{i}.HTTP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Endpoint uses the HTTP Message Transport Protocol (MTP), then this object contains HTTP specific configuration parameters. 
-      </description>
-      
-      <parameter name="URL" access="readWrite">
-        <description>
-          The URL for the USP Endpoint's HHTP server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="CompressionSupported" access="readOnly">
-        <description>
-          Indicates the HTTP Compression mechanism(s) supported by this CPE.  Requirements for the use of HTTP Compression for CWMP can be found in {{bibref|TR-069a5|Section 3.4.7}}. {{enum}}
-          Vendors can extend the enumerated values with vendor specific extensions, in which case the rules outlined in {{bibref|TR-106a7|Section 3.3}} MUST be adhered to.
-        </description>
-        <syntax>
-          <list/>
-          <string>
-            <enumeration value="GZIP">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-            <enumeration value="Compress">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-            <enumeration value="Deflate">
-              <description>
-                As defined in {{bibref|RFC2616|Section 3.5}}
-              </description>
-            </enumeration>
-          </string>
-        </syntax>
-      </parameter>
-      <parameter name="Compression" access="readWrite">
-        <description>
-          The value of this parameter represents the HTTP Compression mechanism to be used by the CPE when communicating with the ACS.
-        </description>
-        <syntax>
-          <string>
-            <enumerationRef targetParam="CompressionSupported" nullValue="Disabled"/>
-          </string>
-          <default type="factory" value="Disabled"/>
-        </syntax>
-      </parameter>
-    </object>
-
-    <object name="MTP.{i}.STOMP." access="readOnly" minEntries="1" maxEntries="1">
-      <description>
-        If the USP Endpoint uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters to which the USP Endpoint would attach. 
-      </description>
-      
-      <parameter name="Host" access="readWrite">
-        <description>
-          The host name or IP address of the STOMP Server that the USP Controller is connected to.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Port" access="readWrite">
-        <description>
-          The port number of the STOMP Server that the USP Controller is connected to.
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="object" value="61613"></default>
-        </syntax>
-      </parameter>
-      <parameter name="Username" access="readWrite">
-        <description>
-          The value to use in the 'login' header when connecting to the STOMP Server.
-        </description>
-        <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Password" access="readWrite">
-        <description>
-          The value to use in the 'passcode' header when connecting to the STOMP Server.
-        </description>
-        <syntax hidden="true">
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-    </object>
-  </component>
-  
   <component name="Subscriptions">
     <parameter name="SubscriptionNumberOfEntries" access="readOnly">
       <description>{{numentries}}</description>
@@ -851,7 +1131,8 @@
     </object>
   </component>
   
-  <component name="AccessControl"></component>
+  <component name="AccessControl">
+  </component>
   
   <component name="Requests">
     <parameter name="RequestNumberOfEntries" access="readOnly">
@@ -906,7 +1187,7 @@
       </parameter>
     </object>
   </component>
-  
+
   <component name="ProxiedDevices"></component>
   
   <component name="InternetOfThings"></component>
@@ -914,9 +1195,7 @@
   
   <model name="Device:2.12" base="Device:2.11">
     <component path="Device." ref="LocalAgent"/>
-    <component path="Device.LocalAgent." ref="MTPs"/>
     <component path="Device.LocalAgent." ref="Controllers"/>
-    <component path="Device.LocalAgent.Controller.{i}." ref="MTPs"/>
     <component path="Device.LocalAgent." ref="Subscriptions"/>
     <component path="Device.LocalAgent." ref="Requests"/>
     <component path="Device." ref="AccessControl"/>
