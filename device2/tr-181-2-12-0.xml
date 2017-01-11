@@ -85,11 +85,11 @@
          ProxiedDevice, and Thing)
     
 -->
-<dm:document xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-5"
+<dm:document xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-6"
              xmlns:dmr="urn:broadband-forum-org:cwmp:datamodel-report-0-1"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-5
-                           http://www.broadband-forum.org/cwmp/cwmp-datamodel-1-5.xsd
+             xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-6
+                           http://www.broadband-forum.org/cwmp/cwmp-datamodel-1-6.xsd
                         urn:broadband-forum-org:cwmp:datamodel-report-0-1
                            http://www.broadband-forum.org/cwmp/cwmp-datamodel-report.xsd"
              spec="urn:broadband-forum-org:tr-181-2-12-0" file="tr-181-2-12-0.xml">
@@ -216,7 +216,10 @@
     <object name="LocalAgent.Role.{i}." access="readWrite" minEntries="0" maxEntries="unbounded"
             numEntriesParameter="RoleNumberOfEntries" enableParameter="Enable">
       <description>
-        Each instance of this table represents a Role used by the USP Endpoint.
+        Each instance of this table represents the permissions that are extended to a set of Targets for a specified Role.
+        Permissions are additive, meaning that each entry in this table for a specific Role is contained to the specified Targets of the Role and implies no permissions for any Object/Parameter outside of those Targets.
+        If there are multiple entries in the this table for a specific Role where the Targets overlap, the permissions for the more specific path overrides the permissions for the less specific path (e.g. Device.LocalAgent. is a more specific path than Device.; so if Device. gave Read and Write permissions, but Device.LocalAgent. gave only Read permissions then everything under Device. has both Read and Write permissions except for everything under Device.LocalAgent. which only has Read permissions).
+        If multiple entries in this talbe contain a Target that evaluates to the same instantiated Object/Parameter for the same Role, then the permissions to be used are a union of the identified permissions.
       </description>
       <uniqueKey functional="true">
         <parameter ref="Name"/>
@@ -247,12 +250,11 @@
         </syntax>
       </parameter>
       <parameter name="Targets" access="readWrite">
-        <description>{{list|each entry is a target to which the value of the {{param|Permissions}} parameter is assigned}}
-An entry is a value of a Search Path as defined in {{bibref|TR-369}} that resolves to zero or more Parameter Paths.
-All Parameter Paths that result from the evaluation of the Search Path are subject to the permissions assigned by this {{object}} instance.
-When the value of an entry is an Object instance then the value of the {{param|Permissions}} parameter is used for all parameters of the Object instance.
-When the value of an entry starts with a ".", then the value assumes the root object of the LocalAgent.
-{{issue| We don't have a concept of no root path in USP}}
+        <description>
+          {{list|each entry is a target to which the value of the {{param|Permissions}} parameter is assigned}}
+          When an entry is a value of a Partial Path, the permissions are associated to that Object and any child Object/Parameter.
+          When the value of an entry is an Object instance then the permissions are associated to all Parameters of the Object instance.
+          When an entry is a value of a Search Path as defined in {{bibref|TR-369}} that resolves to zero or more Parameter Paths, then all Parameter Paths that result from the evaluation of the Search Path are subject to the permissions assigned by this {{object}} instance.
         </description>
         <syntax>
           <list></list>
@@ -263,12 +265,36 @@ When the value of an entry starts with a ".", then the value assumes the root ob
       </parameter>
       <parameter name="Permissions" access="readWrite">
         <description>
-          {{issue|Still be considered how to define}}
+The permissions of a Role for the specified Targets.
+A string of 4 characters where each character represents a permission ("r" for Read, "w" for Write, "x" for Execute", and "n" for Notify).
+The string is always in the same order (rwxn) and the lack of a permission is signified by a "-" character (e.g., r--n).
+The meaning of the permissions is based on the type of Target (e.g., Parameter, Object, Instantiated Object or Command). The following describes the meaning of the permissions for each type of Target:
+* Parameter Access Mode:
+## Read: Grants the capability to read the value of the Parameter via Get.
+## Write: Grants the capability to update the value of the Parameter via Add or Set.
+## Execute: Grants no capabilities; Parameters can not be executed.
+## Notify: Grants the capability to use this Parameter in a ValueChange Subscription.
+* Object Access Mode:
+## Read: Grants the capability to read the meta-information of the Object via GetObjects.
+## Write: Grants no capabilities for Static Objects. Grants the capability to create a new instance of a Multi-Instanced Object via Add (e.g. Device.LocalAgent.Controller.).
+## Execute: Grants the capability to execute Commands contained in this Object via Operate (this is a "traverse" permission).
+## Notify: Grants the capability to use this Object in an ObjectCreation (for multi-instance objects only), Boot, Periodic, and Wakeup Subscriptions.
+* Instantiated Object Access Mode:
+## Read: Grants the capability to read the meta-information of the Instantiated Object via GetObjects.
+## Write: Grants the capability to remove an existing instance of an Instantiated Object via Delete (e.g. Device.LocalAgent.Controller.1.).
+## Execute: Grants the capability to execute Commands contained in this Instantiated Object via Operate (this is a "traverse" permission).
+## Notify: Grants the capability to use this Instantiated Object in an ObjectDeletion, Boot, Periodic, and Wakeup Subscriptions.
+* Command Access Mode
+## Read: Grants the capability to read the meta-information of the Command via GetCommands.
+## Write: Grants no capabilities; Commands are executed instead of written to.
+## Execute: Grants the capability to execute the Command via Operate.
+## Notify: Grants the capability to use this Command in an Boot, OperationComplete, Timer, or TransferComplete Subscription.
         </description>
         <syntax>
           <string>
+            <size minLength="4" maxLength="4"/>
           </string>
-          <default type="object" value=""></default>
+          <default type="object" value="----"></default>
         </syntax>
       </parameter>
     </object>
@@ -374,9 +400,10 @@ When the value of an entry starts with a ".", then the value assumes the root ob
         </syntax>
       </parameter>
       <parameter name="EnableMDNS" access="readWrite">
-        <description>This parameter, when {{true}}, enables the advertisement of DNS-SD services using mDNS as defined in {{bibref|RFC6762}}.
-This parameter cannot be set to {{true}} if there are multiple {{object}} instances with the same value of the {{param|Protocol}} parameter.
-When {{true}}, the hostname advertised in the SRV record MUST be a Fully Qualified Domain Name (FQDN).
+        <description>
+          This parameter, when {{true}}, enables the advertisement of DNS-SD services using mDNS as defined in {{bibref|RFC6762}}.
+          This parameter cannot be set to {{true}} if there are multiple {{object}} instances with the same value of the {{param|Protocol}} parameter.
+          When {{true}}, the hostname advertised in the SRV record MUST be a Fully Qualified Domain Name (FQDN).
         </description>
         <syntax>
           <boolean/>
@@ -522,9 +549,19 @@ When {{true}}, the hostname advertised in the SRV record MUST be a Fully Qualifi
           <default type="object" value=""></default>
         </syntax>
       </parameter>
+      <parameter name="ProvisioningCode" access="readWrite">
+        <description>
+          Identifying information which MAY be used by the {{object}} instance to determine {{object}} instance specific customization and provisioning parameters.
+        </description>
+        <syntax>
+          <string><size maxLength="64"/></string>
+          <default type="object" value=""></default>
+        </syntax>
+      </parameter>
       <parameter name="Enable" access="readWrite">
-        <description>Enable/Disable this {{object}} instance.
-When {{false}}, messages (notifications) are not sent to the remote endpoint represented by this {{object}} instance.
+        <description>
+          Enable/Disable this {{object}} instance.
+          When {{false}}, messages (notifications) are not sent to the remote endpoint represented by this {{object}} instance.
         </description>
         <syntax>
           <boolean/>
@@ -541,7 +578,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
       </parameter>
       <parameter name="PeriodicNotifInterval" access="readWrite">
         <description>
-          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is the duration in {{units}} of the interval for which the USP Agent MUST attempt to issue a Periodic Notification to the USP Controller.
+          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotifType parameter is set to Periodic) is associated with this USP Controller, then this is the duration in {{units}} of the interval for which the USP Agent MUST attempt to issue a Periodic Notification to the USP Controller.
         </description>
         <syntax>
           <unsignedInt>
@@ -552,7 +589,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
       </parameter>
       <parameter name="PeriodicNotifTime" access="readWrite">
         <description>
-          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotificationType parameter is set to Periodic) is associated with this USP Controller, then this is an absolute time reference in UTC to determine when the USP Agent will issue a Periodic Notification. Each Periodic Notification MUST occur at this reference time plus or minus an integer multiple of the {{param|PeriodicNotifInterval}}.
+          If a Periodic Notification {{object|#.Subscription.}} instance (one where the NotifType parameter is set to Periodic) is associated with this USP Controller, then this is an absolute time reference in UTC to determine when the USP Agent will issue a Periodic Notification. Each Periodic Notification MUST occur at this reference time plus or minus an integer multiple of the {{param|PeriodicNotifInterval}}.
           {{param}} is used only to set the ''phase'' of the Periodic Notifications.  The actual value of {{param}} can be arbitrarily far into the  past or future.
           For example, if {{param|PeriodicNotifInterval}} is 86400 (a day) and if {{param}} is set to UTC midnight on some day (in the past,  present, or future) then Periodic Notifications will be sent every day at UTC midnight.  These MUST begin on the very next midnight, even if {{param}} refers to a day in the future.
           The Unknown Time value defined in {{bibref|TR-106a2|section 3.2}} indicates that no particular time reference is specified.  That is, the USP Agent MAY locally choose the time reference, and needs only to adhere to the specified {{param|PeriodicNotifInterval}}.
@@ -693,22 +730,15 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
         If the USP Endpoint uses the STOMP Message Transport Protocol (MTP), then this object contains STOMP specific configuration parameters to which the USP Endpoint would attach. 
       </description>
       
-      <parameter name="Host" access="readWrite">
-        <description>
-          The host name or IP address of the STOMP Server that the USP Controller is connected to.
+      <parameter name="Reference" access="readWrite">
+        <description>{{noreference}}
+A reference to the {{object|####.LocalAgent.MTP.{i}.STOMP.}} object that is used to communicate with this {{object|###.Controller.{i}}} instance.
+If the referenced object is deleted, the parameter value MUST be set to an empty string.
         </description>
         <syntax>
-          <string/>
-          <default type="object" value=""></default>
-        </syntax>
-      </parameter>
-      <parameter name="Port" access="readWrite">
-        <description>
-          The port number of the STOMP Server that the USP Controller is connected to.
-        </description>
-        <syntax>
-          <unsignedInt/>
-          <default type="object" value="61613"></default>
+          <string>
+            <pathRef refType="strong" targetParent="####.LocalAgent.MTP.{i}.STOMP." targetType="object"/>
+          </string>
         </syntax>
       </parameter>
     </object>
@@ -998,7 +1028,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
         A Subscription dictates how a USP Agent issues USP Notification Messages to a USP Controller.
       </description>
       <uniqueKey functional="false">
-        <parameter ref="SubscriptionID"/>
+        <parameter ref="ID"/>
         <parameter ref="Recipient"/>
       </uniqueKey>
       
@@ -1011,7 +1041,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
           <default type="object" value="false"/>
         </syntax>
       </parameter>
-      <parameter name="SubscriptionID" access="readWrite">
+      <parameter name="ID" access="readWrite">
         <description>
           Unique identifier of the {{object}} itself, which is specific to the USP Controller that creates the instance of the {{object}}.
           This value is also populated in the subscription_id element of every Notification message sent from a USP Agent to a USP Controller.
@@ -1043,7 +1073,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
           <dateTime/>
         </syntax>
       </parameter>
-      <parameter name="NotificationType" access="readWrite">
+      <parameter name="NotifType" access="readWrite">
         <description>
           Type of Notification message that will be sent to the USP Controller specified by {{param|Recipient}} when this {{object}} is triggered.
         </description>
@@ -1066,7 +1096,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
       <parameter name="ReferenceList" access="readWrite">
         <description>
           Each entry in the list is a parameter path that determines the element of the data model that the {{object}} is applicable to.
-          Different values of the {{param|NotificationType}} parameter will cause the {{object}} to interact with {{param}} differently.  For example, an instance of {{object}} with {{enum|ValueChange|NotificationType}} will utilize the value of this parameter differently than an instance with {{enum|Boot|NotificationType}}.
+          Different values of the {{param|NotifType}} parameter will cause the {{object}} to interact with {{param}} differently.  For example, an instance of {{object}} with {{enum|ValueChange|NotifType}} will utilize the value of this parameter differently than an instance with {{enum|Boot|NotifType}}.
           Expressions are allowed in the list items, but in some cases could cause a dynamic set of instances to be monitored in order to fulfill the Subscription's requirements.
           {{issue|There is a real concern about expressions causing some issues for the Agent due to the dynamic set of instances that could constantly change}}
         </description>
@@ -1102,7 +1132,7 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
           <default type="object" value="0"/>
         </syntax>
       </parameter>
-      <parameter name="NotificationRetry" access="readWrite">
+      <parameter name="NotifRetry" access="readWrite">
         <description>
           Specifies whether or not the USP Agent attempts to re-deliver the Notification in the event that it could not be delivered to the USP Controller.
           When {{param}} is {{true}}, the USP Agent MUST retry the delivery of the Notification.  This implies that the Notification MUST be generated with the "send_resp" flag set to {{true}} such that they USP Agent knows when the Notification has been successfully delivered.
@@ -1114,12 +1144,12 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
           <default type="object" value="false"/>
         </syntax>
       </parameter>
-      <parameter name="NotificationExpiration" access="readWrite">
+      <parameter name="NotifExpiration" access="readWrite">
         <description>
           Specifies the duration of time (in {{units}}) that the Notification associated with this {{object}} will continue to be retried.  After {{param}} has expired, if the Notification has still not been successfully delivered then the USP Agent MUST stop attempting to re-deliver the Notification.
-          If {{param|NotificationRetry}} is set to {{false}} then this parameter is ignored.
-          If {{param|NotificationRetry}} is set to {{true}} and the value of {{param}} is 0, then the USP Agent will attempt to re-deliver the Notification until it has been successfully delivered or until the USP Agent is restarted (either via a reset of the software or reboot of the underlying device).
-          If {{param|NotificationRetry}} is set to {{true}} and the value of {{param}} is greater than 0, then the USP Agent will attempt to re-deliver the Notification until either it has been successfully delivered, until the length of time (from the time tha the Notification was initially attempted to be delivered) specified in this parameter expires, or until the USP Agent is restarted (either via a reset of the software or reboot of the underlying device).
+          If {{param|NotifRetry}} is set to {{false}} then this parameter is ignored.
+          If {{param|NotifRetry}} is set to {{true}} and the value of {{param}} is 0, then the USP Agent will attempt to re-deliver the Notification until it has been successfully delivered or until the USP Agent is restarted (either via a reset of the software or reboot of the underlying device).
+          If {{param|NotifRetry}} is set to {{true}} and the value of {{param}} is greater than 0, then the USP Agent will attempt to re-deliver the Notification until either it has been successfully delivered, until the length of time (from the time tha the Notification was initially attempted to be delivered) specified in this parameter expires, or until the USP Agent is restarted (either via a reset of the software or reboot of the underlying device).
           NOTE: This paramater does not count down as time moves forward; it will always read back with the same value that it was last set to.        </description>
         <syntax>
           <unsignedInt>
@@ -1146,19 +1176,27 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
             numEntriesParameter="RequestNumberOfEntries">
       <description>
         {{object}} instances are created using USP ''Operate'' messages. Only ''Operate'' messages with ''async''=''true'' will create a {{object}} instance in the data model.
-        An ''Operate'' message is associated with a command; commands are declared using the DM ''command'' element (a legacy CWMPv1 command parameter is a parameterless USP command).
-        {{issue|Need to describe the life cycle of a Request instance}}
-        {{issue|Need to add the Cancel() command}}
+        When the command of the ''Operate'' completes, then this {{object}} instance is removed from this table.
       </description>
       
       <uniqueKey functional="true">
+        <parameter ref="Originator"/>
         <parameter ref="Command"/>
         <parameter ref="CommandKey"/>
       </uniqueKey>
       
+      <parameter name="Originator" access="readOnly">
+        <description>
+          The USP Endpoint Identifier that originated the command.
+        </description>
+        <syntax>
+          <string/>
+        </syntax>
+      </parameter>
       <parameter name="Command" access="readOnly">
         <description>
-          {{issue|Need description here}}
+          The command to be executed. This parameter is Path Name that address a Command of an Object or Object Instance.
+          The command is an result of the evaluation of the ''command'' argument of an ''Operate'' message.
         </description>
         <syntax>
           <string/>
@@ -1172,19 +1210,25 @@ When {{false}}, messages (notifications) are not sent to the remote endpoint rep
       </parameter>
       <parameter name="Status" access="readOnly">
         <description>
-          {{issue|Need description here}}
+          The operational status of the request to execute the command.
         </description>
         <syntax>
           <string>
-            <enumeration value="Requested"/>
-            <enumeration value="Active"/>
-            <enumeration value="Canceling"/>
-            <enumeration value="Canceled"/>
-            <enumeration value="Success"/>
-            <enumeration value="Error"/>
+            <enumeration value="Requested"><description>The command has been requested but is currently not executing.</description></enumeration>
+            <enumeration value="Active"><description>The command is currently executing.</description></enumeration>
+            <enumeration value="Canceling"><description>The command has been requested to be cancelled.</description></enumeration>
+            <enumeration value="Canceled"><description>The command has successfully been cancelled.</description></enumeration>
+            <enumeration value="Success"><description>The command has successfully been completed its execution.</description></enumeration>
+            <enumeration value="Error"><description>The command has unsuccessfully completed its execution or has unsuccessfully been cancelled.</description></enumeration>
           </string>
         </syntax>
       </parameter>
+      <command name="Cancel()">
+        <description>
+          Request cancellation of this {{object}}'s command.
+          This command completes immediately. If successful, {{param|Status}} will immediately change to {{enum|Canceling|Status}} and will change to {{enum|Canceled|Status}} when the cancelation is complete.
+        </description>
+      </command>
     </object>
   </component>
 
