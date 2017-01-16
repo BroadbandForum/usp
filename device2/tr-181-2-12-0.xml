@@ -130,14 +130,6 @@
   </bibliography>
 
   <component name="LocalAgent">
-    <object base="DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
-      <parameter name="FriendlyName" access="readWrite">
-        <description>The friendly name of the device.</description>
-        <syntax>
-          <string><size maxLength="63"></size></string>
-        </syntax>
-      </parameter>
-    </object>
     <object name="LocalAgent." access="readOnly" minEntries="1" maxEntries="1">
       <description>
         This object contains general information about the USP Agent itself.  For information related to the Device that hosts the Agent, please reference the {{object|.DeviceInfo}} object.
@@ -1245,5 +1237,15 @@ If the referenced object is deleted, the parameter value MUST be set to an empty
     <component path="Device." ref="AccessControl"/>
     <component path="Device." ref="ProxiedDevices"/>
     <component path="Device." ref="InternetOfThings"/>
+
+  <!-- Update the DeviceInfo Component for the Device:2 data model -->
+    <object base="Device.DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+      <parameter name="FriendlyName" access="readWrite">
+        <description>The friendly name of the device.</description>
+        <syntax>
+          <string><size maxLength="63"></size></string>
+        </syntax>
+      </parameter>
+    </object>
   </model>
 </dm:document>
