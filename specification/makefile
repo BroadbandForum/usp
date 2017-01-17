@@ -1,5 +1,9 @@
 # Copyright 2017 ARRIS Enterprises, LLC.
 
+PIP = pip		# or sudo python3 -m pip or ...
+PYTHON = python		# or python2 or python3 or ...
+PROTOC = protoc
+
 PROTO = $(wildcard *.proto)
 
 PROTOPY = $(PROTO:%.proto=%_pb2.py)
@@ -7,17 +11,16 @@ PROTOPY = $(PROTO:%.proto=%_pb2.py)
 all: $(PROTOPY)
 
 init:
-	pip install --upgrade pip
-	pip install -r requirements.txt
+	$(PIP) install --upgrade pip
+	$(PIP) install -r requirements.txt
 
-schema:
-	protoc --proto_path=. --python_out=. usp.proto
+schema: $(PROTOPY)
 
 test:
-	python test.py
+	$(PYTHON) test.py
 
 %_pb2.py: %.proto
-	protoc --python_out=. $<
+	$(PROTOC) --proto_path=. --python_out=. $<
 
 clean:
 	$(RM) $(PROTOPY)
