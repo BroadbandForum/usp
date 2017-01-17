@@ -312,7 +312,6 @@ message Notify {
     Timer timer = 10;
     TransferComplete xfer_complete = 11;
     OnBoardRequest on_board_req = 12;
-    PassiveValueChange passive_value_change = 13;
   }
 
   message Boot {
@@ -400,10 +399,6 @@ message Notify {
 
   message OnBoardRequest {
     string obj_ref = 1;     // Controller Object associated with OnBoardRequest Notification (the Controller that caused the Notification)
-  }
-
-  message PassiveValueChange {
-    map<string, string> param_map = 1;
   }
 }
 
