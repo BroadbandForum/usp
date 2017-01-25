@@ -1,0 +1,22 @@
+@startuml
+hide footbox
+
+participant "Controller" as C #8888FF
+participant "Agent" as A #cc9999
+
+activate C
+|||
+
+C -> A: USP Message(\n\tHeader(msg_id: <id>, msg_type <request>, proto_version: 1.0,\n\t to_id: <agent_id>, from_id: <controller_id>),\n\tBody(Request(arguments)) 
+
+activate A
+A-->A: Parse Message
+A-->A: Parse Body
+A-->A: Process Request with arguments
+hnote over A : ** Ok **
+A-->A: Generate **return arguments**
+
+A -> C: USP Message(\n\tHeader(msg_id: <id>, msg_type: <request-resp>, proto_version: 1.0,\n\t to_id: <controller_id>, from_id: <agent_id>),\n\t Body(Response(return arguments)\n)
+deactivate A
+|||
+@enduml
