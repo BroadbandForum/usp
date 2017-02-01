@@ -84,4 +84,5 @@ urn:broadband-forum-org:example1
           string Detail
           command Cancel()
       object Other.
+        unsignedInt Test
     profile 

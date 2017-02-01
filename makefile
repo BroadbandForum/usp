@@ -2,6 +2,6 @@ TOPDIR = .
 
 include $(TOPDIR)/defs.mk
 
-SUBDIRS = schema device2 specification
+SUBDIRS = schema specification
 
 include $(TOPDIR)/rules.mk

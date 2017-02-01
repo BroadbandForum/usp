@@ -1,27 +1,12 @@
-XML = $(wildcard *.xml)
+TOPDIR = ..
 
-HTML = $(XML:%.xml=%.html)
-TEXT = $(XML:%.xml=%.txt)
+include $(TOPDIR)/defs.mk
 
-DMDIR = $(HOME)/links/cwmp-ils
+DMXML = $(wildcard example*.xml)
 
-REPORT = report.pl
-REPORTFLAGS += --include=$(DMDIR)
-REPORTFLAGS += --quiet 
+DMHTML = $(DMXML:%.xml=%.html)
+DMTEXT = $(DMXML:%.xml=%.txt)
 
-all: html text
+TARGETDIR =
 
-html: $(HTML)
-
-text: $(TEXT)
-
-clean:
-	$(RM) $(HTML) $(TEXT)
-
-%.html: %.xml
-	$(REPORT) $(REPORTFLAGS) --report=html $< --outfile=$@
-
-%.txt: %.xml
-	$(REPORT) $(REPORTFLAGS) --report=text $< --outfile=$@
-
-.DELETE_ON_ERROR:
+include $(TOPDIR)/rules.mk
