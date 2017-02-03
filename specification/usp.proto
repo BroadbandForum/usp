@@ -168,7 +168,7 @@ message AddResp {
       message OperationSuccess {
         string instantiated_path = 1;
         repeated ParameterError param_err = 2;
-        map<string, string> created_param_result_map = 3;
+        map<string, string> unique_key_map = 3;
       }
     }
   }
@@ -245,6 +245,7 @@ message SetResp {
       message OperationFailure {
         fixed32 err_code = 1;
         string err_msg = 2;
+        repeated UpdatedInstanceFailure updated_inst_failure = 3;
       }
 
       message OperationSuccess {
@@ -253,10 +254,15 @@ message SetResp {
     }
   }
 
+  message UpdatedInstanceFailure {
+    string affected_path = 1;
+    repeated ParameterError param_err = 2;
+  }
+
   message UpdatedInstanceResult {
     string affected_path = 1;
     repeated ParameterError param_err = 2;
-    map<string, string> result_param_map = 3;
+    map<string, string> updated_param_map = 3;
   }
 
   message ParameterError {
