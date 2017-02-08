@@ -226,9 +226,16 @@ message DeleteResp {
       }
 
       message OperationSuccess {
-        repeated string affected_path_list = 2;
+        repeated string affected_path_list = 1;
+        repeated UnaffectedPathError unaffected_path_err_list = 2;
       }
     }
+  }
+
+  message UnaffectedPathError {
+    string unaffected_path = 1;
+    fixed32 err_code = 2;
+    string err_msg = 3;
   }
 }
 
