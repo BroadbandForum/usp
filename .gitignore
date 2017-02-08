@@ -1,3 +1,6 @@
 *.pyc
 __pycache__
 specification/*pb2.py
+
+# Ignore MAC Special Files
+.DS_Store
