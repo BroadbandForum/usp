@@ -97,8 +97,9 @@ message GetResp {
 
   message RequestedPathResult {
     string requested_path = 1;
-    bool invalid_path = 2;
-    map<string, string> result_param_map = 3;
+    fixed32 err_code = 2;
+    string err_msg = 3;
+    map<string, string> result_param_map = 4;
   }
 }
 
@@ -119,9 +120,10 @@ message GetObjectsResp {
 
   message RequestedObjectResult {
     string req_obj_path = 1;
-    bool invalid_path = 2;
-    string data_model_inst_uri = 3;
-    repeated SupportedObjectResult supported_obj_list = 4;
+    fixed32 err_code = 2;
+    string err_msg = 3;
+    string data_model_inst_uri = 4;
+    repeated SupportedObjectResult supported_obj_list = 5;
   }
 
   message SupportedObjectResult {
@@ -246,8 +248,7 @@ message Set {
 
   message UpdateObject {
     string obj_path = 1;
-    bool auto_create = 2;
-    repeated UpdateParamSetting param_setting = 3;
+    repeated UpdateParamSetting param_setting = 2;
   }
 
   message UpdateParamSetting {
