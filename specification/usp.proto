@@ -337,16 +337,17 @@ message Notify {
   string subscription_id = 1;
   bool send_resp = 2;
   oneof notification {        // NOTE: Bootstrap, Boot, and TransferComplete call all be caused outside of an operation
-    Boot boot = 3;
+    Boot boot = 3;                        // To be removed
     ValueChange value_change = 4;
     ObjectCreation obj_creation = 5;
     ObjectDeletion obj_deletion = 6;
-    Periodic periodic = 7;
+    Periodic periodic = 7;                // To be removed
     OperationComplete oper_complete = 8;
-    WakeUp wake_up = 9;
-    Timer timer = 10;
-    TransferComplete xfer_complete = 11;
-    OnBoardRequest on_board_req = 12;
+    WakeUp wake_up = 9;                   // To be removed
+    Timer timer = 10;                     // To be removed
+    TransferComplete xfer_complete = 11;  // To be removed
+    OnBoardRequest on_board_req = 12;     // To be removed
+    Event event = 13;
   }
 
   message Boot {
@@ -434,6 +435,12 @@ message Notify {
 
   message OnBoardRequest {
     string obj_ref = 1;     // Controller Object associated with OnBoardRequest Notification (the Controller that caused the Notification)
+  }
+
+  message Event {
+    string event_name = 1;
+    string event_path = 2;
+    map<string, string> param_map = 3;
   }
 }
 
