@@ -48,7 +48,7 @@ message Body {
 
 
 message Request {
-  oneof request {
+  oneof req_type {
     Get get = 1;
     GetObjects get_objects = 2;
     //GetCommands get_commands = 3;
@@ -62,7 +62,7 @@ message Request {
 
 
 message Response {
-  oneof response {
+  oneof resp_type {
     GetResp get_resp = 1;
     GetObjectsResp get_objects_resp = 2;
     //GetCommandsResp get_commands_resp = 3;
