@@ -99,7 +99,12 @@ message GetResp {
     string requested_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
-    map<string, string> result_param_map = 4;
+    repeated ResolvedPathResult resolved_path_result_list = 4;
+  }
+
+  message ResolvedPathResult {
+    string resolved_path = 1;
+    map<string, string> result_param_map = 2;
   }
 }
 
