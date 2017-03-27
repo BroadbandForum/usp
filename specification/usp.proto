@@ -372,31 +372,19 @@ message OperateResp {
 message Notify {
   string subscription_id = 1;
   bool send_resp = 2;
-  oneof notification {        // NOTE: Bootstrap, Boot, and TransferComplete call all be caused outside of an operation
-    Boot boot = 3;                        // To be removed
+  oneof notification {
+    Event event = 3;
     ValueChange value_change = 4;
     ObjectCreation obj_creation = 5;
     ObjectDeletion obj_deletion = 6;
-    Periodic periodic = 7;                // To be removed
-    OperationComplete oper_complete = 8;
-    WakeUp wake_up = 9;                   // To be removed
-    Timer timer = 10;                     // To be removed
-    TransferComplete xfer_complete = 11;  // To be removed
-    OnBoardRequest on_board_req = 12;     // To be removed
-    Event event = 13;
+    OperationComplete oper_complete = 7;
+    OnBoardRequest on_board_req = 8;
   }
 
-  message Boot {
-    string command_key = 1;
-    enum Cause {
-      LOCAL_REBOOT = 0;
-      REMOTE_REBOOT = 1;
-      LOCAL_FACTORY_RESET = 2;
-      REMOTE_FACTORY_RESET = 3;
-    }
-    Cause cause = 2;
-    string obj_ref = 3;     // Object associated with Boot Notification (LocalAgent,ExecutionEnv, etc.)
-    map<string, string> param_map = 4;
+  message Event {
+    string obj_path = 1;
+    string event_name = 2;
+    map<string, string> param_map = 3;
   }
 
   message ValueChange {
@@ -413,16 +401,13 @@ message Notify {
     string obj_path = 1;
   }
 
-  message Periodic {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-  }
-
   message OperationComplete {
-    string command = 1;
-    string command_key = 2;
+    string obj_path = 1;
+    string command_name = 2;
+    string command_key = 3;
     oneof operation_resp {
-      OutputArgs req_output_args = 3;
-      CommandFailure cmd_failure = 4;
+      OutputArgs req_output_args = 4;
+      CommandFailure cmd_failure = 5;
     }
 
     message OutputArgs {
@@ -435,48 +420,8 @@ message Notify {
     }
   }
 
-  message WakeUp {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-  }
-
-  message Timer {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-    string command_key = 2;
-  }
-
-  message TransferComplete {
-    string command_key = 1;
-    TransferType xfer_type = 2;
-    string xfer_file_type = 3;
-    string xfer_url = 4;
-    string start_time = 5;
-    string complete_time = 6;
-    string obj_ref = 7;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-    string operation_source = 8;  // Controller ID that caused the Transfer
-    TransferError xfer_err = 9;
-
-    enum TransferType {
-      DOWNLOAD = 0;
-      UPLOAD = 1;
-      INSTALL = 2;
-      UPDATE = 3;
-      UNINSTALL = 4;
-    }
-
-    message TransferError {
-      fixed32 err_code = 1;
-      string err_msg = 2;
-    }
-  }
-
   message OnBoardRequest {
-    string obj_ref = 1;     // Controller Object associated with OnBoardRequest Notification (the Controller that caused the Notification)
-  }
-
-  message Event {
-    string event_name = 1;
-    string event_path = 2;
-    map<string, string> param_map = 3;
+    string obj_path = 1;
   }
 }
 
