@@ -378,7 +378,6 @@ message Notify {
     ObjectCreation obj_creation = 5;
     ObjectDeletion obj_deletion = 6;
     OperationComplete oper_complete = 7;
-    OnBoardRequest on_board_req = 8;
   }
 
   message Event {
@@ -418,10 +417,6 @@ message Notify {
       fixed32 err_code = 1;
       string err_msg = 2;
     }
-  }
-
-  message OnBoardRequest {
-    string obj_path = 1;
   }
 }
 
