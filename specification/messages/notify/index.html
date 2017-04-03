@@ -3,7 +3,7 @@
 <p><a id="notify" /></p>
 <h3 id="using-subscription-objects">Using Subscription Objects</h3>
 <p>Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for <code>Device.Subscription.{i}.</code> in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
-<p><strong>R-x.y</strong> – The Agent and Controller MUST follow the normative requirements defined in the <code>Device.Subscription.{i}.</code> Object specified in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
+<p><strong>R-NOT.0</strong> – The Agent and Controller MUST follow the normative requirements defined in the <code>Device.Subscription.{i}.</code> Object specified in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
 <p><em>Note: Those familiar with Broadband Forum <a href="https://www.broadband-forum.org/technical/download/TR-069.pdf" title="TR-069 Amendment 6 CPE WAN Management Protocol">TR-069</a> will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.</em></p>
 <h4 id="referencelist-parameter">ReferenceList Parameter</h4>
 <p>All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the <code>ReferenceList</code> parameter. The <code>ReferenceList</code> parameter may have different meaning depending on the nature of the notification subscribed to.</p>
@@ -12,7 +12,7 @@
 <h4 id="responses-to-notifications-and-notification-retry">Responses to Notifications and Notification Retry</h4>
 <p>The Notify request contains a flag, <code>send_resp</code>, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the <code>NotificationRetry</code> parameter in the subscription Object – if <code>NotificationRetry</code> is <code>true</code>, then the Agent sends its Notify requests with <code>send_resp : true</code>, and the Agent considers the notification delivered when it receives a response from the Controller. If <code>NotificationRetry</code> is <code>false</code>, the Agent does not need to use the <code>send_resp</code> flag and should ignore the delivery state of the notification.</p>
 <p>If <code>NotificationRetry</code> is <code>true</code>, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a <code>NotificationExpiration</code> parameter to specify when this retry should end if no success is ever achieved.</p>
-<p><strong>R-x.y</strong> – When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.</p>
+<p><strong>R-NOT.1</strong> – When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.</p>
 <p>The retry interval range is controlled by two Parameters, the minimum wait interval and the interval multiplier, each of which corresponds to a data model Parameter, and which are described in the table below. The factory default values of these Parameters MUST be the default values listed in the Default column. They MAY be changed by a Controller with the appropriate permissions at any time.</p>
 <table style="width:58%;">
 <colgroup>
@@ -110,9 +110,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>R-x.y</strong> - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the <code>NotificationExpiration</code> time is reached.</p>
-<p><strong>R-x.y</strong> – Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.</p>
-<p><strong>R-x.y</strong> – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.</p>
+<p><strong>R-NOT.2</strong> - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the <code>NotificationExpiration</code> time is reached.</p>
+<p><strong>R-NOT.3</strong> – Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.</p>
+<p><strong>R-NOT.4</strong> – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.</p>
 <h4 id="notification-types">Notification Types</h4>
 <p>There are several types events that can cause a Notify request. These include those that deal with changes to the Agent’s Instantiated Data Model (<code>ValueChange</code>, <code>ObjectCreation</code>, <code>ObjectDeletion</code>), the completion of an asynchronous Object-defined operation (<code>OperationComplete</code>), a policy-defined <code>OnBoardRequest</code>, and a generic <code>Event</code> for use with Object-defined events.</p>
 <h5 id="valuechange">ValueChange</h5>
@@ -127,10 +127,10 @@
 <h2 id="notify-request-elements">Notify Request Elements</h2>
 <p><code>string subscription_id</code></p>
 <p>This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.</p>
-<p><strong>R-x.y</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification.</p>
+<p><strong>R-NOT.5</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification.</p>
 <p><code>bool send_resp</code></p>
 <p>This element lets the Agent indicate to the Controller whether or not it expects a response in association with the Notify request.</p>
-<p><strong>R-x.y</strong> - When <code>send_response</code> is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.</p>
+<p><strong>R-NOT.6</strong> - When <code>send_response</code> is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.</p>
 <p><code>oneof notification</code></p>
 <p>Contains one of the following Notification messages:</p>
 <pre><code>Event   event
@@ -145,7 +145,7 @@ OperationComplete oper_complete</code></pre>
 <p>This element contains the Object or Object Instance Path of the Object that caused this event (for example, <code>Device.LocalAgent.</code>).</p>
 <p><code>map&lt;string, string&gt; parameter_map</code></p>
 <p>This element contains a set of key/value pairs of parameters associated with this event.</p>
-<p><strong>R-x.y</strong> – Any values in this set whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.</p>
+<p><strong>R-NOT.7</strong> – Any values in <code>parameter_map</code> whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.</p>
 <h3 id="valuechange-elements">ValueChange Elements</h3>
 <p><code>string param_name</code></p>
 <p>This element contains the Path Name of the changed parameter.</p>
@@ -173,7 +173,7 @@ CommandFailure cmd_failure</code></pre>
 <h4 id="outputargs-elements">OutputArgs Elements</h4>
 <p><code>map&lt;string, string&gt; output_arg_map</code></p>
 <p>This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command</code> element) returned by the method invoked in the Operate message.</p>
-<p><strong>R-x.y</strong> – Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
+<p><strong>R-NOT.8</strong> – Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
 <h4 id="commandfailure-elements">CommandFailure Elements</h4>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains the <a href="/messages/error-codes">error code</a> of the error that caused the operation to fail. Appropriate error codes for CommandFailure include <code>7002-7008</code>, <code>7016</code>, <code>7022</code>, <code>7023</code>, and <code>7800-7999</code>.</p>
@@ -182,6 +182,6 @@ CommandFailure cmd_failure</code></pre>
 <h2 id="notify-response-elements">Notify Response Elements</h2>
 <p><code>string subscription_id</code></p>
 <p>This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.</p>
-<p><strong>R-x.y</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the <code>subscription_id</code> element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.</p>
+<p><strong>R-NOT.9</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the <code>subscription_id</code> element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.</p>
 <h2 id="notify-error-codes">Notify Error Codes</h2>
 <p>Appropriate error codes for the Notify message include the entire <code>6000</code> series.</p>

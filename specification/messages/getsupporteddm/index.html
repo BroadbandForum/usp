@@ -129,7 +129,7 @@
 <p>This element contains one of the Path Names given in <code>obj_path</code> of the associated GetSupportedDM Request.</p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.</p>
-<p><strong>R-x.y</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
+<p><strong>R-GSP.0</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>string data_model_inst_uri</code></p>
@@ -166,16 +166,16 @@ WRITE_ONLY (2)</code></pre>
 <p>This element contains the local name of the Command.</p>
 <p><code>repeated string input_arg_name_list</code></p>
 <p>This element contains a repeated set of local names for the input arguments of the Command.</p>
-<p><strong>R-x.y</strong> - If any input arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
+<p><strong>R-GSP.1</strong> - If any input arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
 <p><code>repeated string output_arg_name_list</code></p>
 <p>This element contains a repeated set of local names for the output arguments of the Command.</p>
-<p><strong>R-x.y</strong> - If any output arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
+<p><strong>R-GSP.2</strong> - If any output arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
 <h5 id="supportedeventresult">SupportedEventResult</h5>
 <p><code>string event_name</code></p>
 <p>This element contains the local name of the Event.</p>
 <p><code>repeated string arg_name_list</code></p>
 <p>This element contains a repeated set of local names for the arguments of the Event.</p>
-<p><strong>R-x.y</strong> - If any arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
+<p><strong>R-GPS.3</strong> - If any arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
 <h2 id="getsupporteddm-error-codes">GetSupportedDM Error Codes</h2>
 <p>Appropriate error codes for the GetSupportedDM message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, and <code>7800-7999</code>.</p>
 <p><em>Note - when using error <code>7016</code> (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.</em></p>

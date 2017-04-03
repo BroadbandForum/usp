@@ -7,9 +7,6 @@
 <p><a id="endpoints" /></p>
 <p>A USP endpoint can act as Agent or a Controller. Controllers only messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.</p>
 <p><img src="usp_architecture.png"> Figure 2: USP Agent and Controller Architecture</p>
-<p>Endpoints are identified by an Endpoint Identifier. The Endpoint Identifier is a string that is unique among other Endpoints of the same type (i.e., Agents or Controllers) within a given USP ecosystem. While there is no hard definition of a USP ecosystem, it can generally be considered those Endpoints that are likely to communicate with each other (i.e., within an end user’s network, plus those Controllers or Agents on the Internet that are accessible to enable a given service).</p>
-<p><strong>R-x.y</strong> – An Agent’s Endpoint Identifier MUST be unique among other Agents in a given USP ecosystem.R-x.y – A Controller’s Endpoint Identifier MUST be unique among other Controllers in a given USP ecosystem.</p>
-<p>It should be noted that this can allow for an Agent and a Controller within a given ecosystem to have the same Endpoint Identifier. This can be useful when using an Agent to model a Controller, creating a <a href="/proxy/">USP proxy</a>.</p>
 <h3 id="agents">Agents</h3>
 <p><a id="agents" /></p>
 <p>A USP Agent exposes (to Controllers) one or more Service Elements that are represented in its data model. It contains or references both an Instantiated Data Model (representing the current state of Service Elements it represents) and a Supported Data Model.</p>
@@ -17,7 +14,7 @@
 <p><a id="controllers" /></p>
 <p>A USP Controller manipulates (through Agents) a set of Service Elements that are represented in Agent data models. It may maintain a database of Agents, their capabilities, and their states, in any combination. A Controller usually acts as an interface to a user application or policy engine that uses the User Services Platform to address particular use cases.</p>
 <h3 id="endpoint-identifier">Endpoint Identifier</h3>
-<p><a id="endpoint-id" /></p>
+<p><a id="endpoint-id" /> Endpoints are identified by an Endpoint Identifier.</p>
 <p>The Endpoint Identifier is a locally or globally unique USP layer identifier of an Endpoint. Whether it is globally or locally unique depends on the scheme used for assignment.</p>
 <p>The Endpoint Identifier (ID) is used in Message Headers and various Parameters to uniquely identify Controller and Agent Endpoints. It can be globally or locally unique, either among all Endpoints or among all Controllers or all Agents, depending on the scheme used for assignment.</p>
 <p>The Endpoint ID is comprised of two mandatory and one optionally mandatory components: <code>authority-scheme</code>, <code>authority-id</code>, and <code>instance-id</code>.</p>
@@ -31,9 +28,9 @@
 <p><code>authority-scheme = &quot;oui&quot; | &quot;cid&quot; | &quot;pen&quot; | &quot;self&quot;  | &quot;user&quot; | &quot;os&quot; | &quot;ops&quot; | &quot;uuid&quot; | &quot;imei&quot; | &quot;proto&quot; | &quot;doc&quot;</code></p>
 <p>How these authority-scheme values impact the format and values of authority-id and instance-id is described below.</p>
 <p>The authority defined by an OUI, CID, or Private Enterprise Number (including OUI used in &quot;ops&quot; and &quot;os&quot; authority scheme) is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the &quot;user&quot; authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the &quot;self&quot; authority scheme, the Endpoint is responsible for ensuring uniqueness.</p>
-<p><strong>R-x.y</strong> - A Controller and Agent within the same ecosystem MAY use the same Endpoint ID.</p>
-<p><strong>R-x.y</strong> - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same ecosystem.</p>
-<p><strong>R-x.y</strong> - Endpoints that share the same Endpoint ID MUST NOT communicate with each other via USP.</p>
+<p><strong>R-ARC.0</strong> - A Controller and Agent within the same ecosystem MAY use the same Endpoint ID.</p>
+<p><strong>R-ARC.1</strong> - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same ecosystem.</p>
+<p><strong>R-ARC.2</strong> - Endpoints that share the same Endpoint ID MUST NOT communicate with each other via USP.</p>
 <p>No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever ecosystem it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.</p>
 <p>Unless the authority responsible for assigning an Endpoint ID assigns meaning to an Agent and Controller having the same Endpoint ID, no meaning can be construed. That is, unless the assigning authority specifically states that an Agent and Controller with the same Endpoint ID are somehow related, no relationship can be assumed to exist.</p>
 <table style="width:50%;">
@@ -90,16 +87,16 @@
 </tr>
 </tbody>
 </table>
-<p><strong>R-x.y</strong> - BBF OUI (<code>00256D</code>) and Private Enterprise Number (<code>3561</code>) are reserved for use in BBF documentation and BBF prototyping and MUST NOT be used by any entity other than BBF.</p>
-<p><strong>R-x.y</strong> - The &quot;<code>proto</code>&quot; and &quot;<code>doc</code>&quot; authority-scheme values MUST NOT be used in production environments.</p>
+<p><strong>R-ARC.3</strong> - BBF OUI (<code>00256D</code>) and Private Enterprise Number (<code>3561</code>) are reserved for use in BBF documentation and BBF prototyping and MUST NOT be used by any entity other than BBF.</p>
+<p><strong>R-ARC.4</strong> - The &quot;<code>proto</code>&quot; and &quot;<code>doc</code>&quot; authority-scheme values MUST NOT be used in production environments.</p>
 <p>The &quot;<code>proto</code>&quot; and &quot;<code>doc</code>&quot; values are intended only for prototyping and documentation (tutorials, examples, etc.), respectively.</p>
 <h4 id="instance-id">instance-id</h4>
-<p><strong>R-x.y</strong> - <code>instance-id</code> MUST be encoded using only the following characters:</p>
+<p><strong>R-ARC.5</strong> - <code>instance-id</code> MUST be encoded using only the following characters:</p>
 <pre><code>    instance-id = unreserved / pct-encoded
     unreserved = ALPHA / DIGIT / &quot;-&quot; / &quot;.&quot; / &quot;_&quot;
     pct-encoded = &quot;%&quot; HEXDIG HEXDIG</code></pre>
 <p>The above expression uses the Augmented Backus-Naur Form (ABNF) notation of <a href="https://www.ietf.org/rfc/rfc2234.txt">RFC2234</a>, including the following core ABNF syntax rules defined by that specification: ALPHA (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken from <a href="https://www.ietf.org/rfc/rfc3986.txt">RFC3986</a> as the set of unreserved characters and percent-encoded characters that are acceptable for all components of a URI. This set is also allowed for use in URNs <a href="https://www.ietf.org/rfc/rfc2141.txt">RFC2141</a>, and all MTP headers.</p>
-<p><strong>R-x.y</strong> - An instance-id value MUST be no more than 128 characters in length.</p>
+<p><strong>R-ARC.6</strong> - An instance-id value MUST be no more than 128 characters in length.</p>
 <p>Shorter values are preferred, as end users could be exposed to Endpoint IDs. Long values tend to create a poor user experience when users are exposed to them.</p>
 <h2 id="service-elements">Service Elements</h2>
 <p><a id="service_elements" /></p>
@@ -141,7 +138,7 @@
 <h4 id="path-names">Path Names</h4>
 <p><a id="path_names" /></p>
 <p>A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. The syntax for Path Names is defined in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>.</p>
-<p><strong>R-x.y</strong> – All USP endpoints MUST support the Path Name syntax as defined in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>.</p>
+<p><strong>R-ARC.7</strong> – All USP endpoints MUST support the Path Name syntax as defined in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>.</p>
 <p>Path Names are represented by a hierarchy of Objects (“parents”) and sub-Objects (“children”), separated by the dot “.” Character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:</p>
 <ol style="list-style-type: decimal">
 <li><p>Object Path – This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>), except when used in a <a href="#reference_following">reference parameter</a>. When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the <a href="/messages/getsupportedDM/">GetSupportedDM message</a>).</p></li>
@@ -174,7 +171,7 @@
 <h5 id="addressing-by-instance-number">Addressing by Instance Number</h5>
 <p><a id="addressing_by_instance_number" /></p>
 <p>Instance Number Addressing allows an Object Instance to be addressed by using its Instance Number in the Path Name. An Instance Number is expressed in the Path Name as a positive integer (&gt;=1) with no additional surrounding characters. The Instance Number assigned by the Agent is arbitrary.</p>
-<p><strong>R-x.y</strong> – The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.</p>
+<p><strong>R-ARC.8</strong> – The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.</p>
 <p>For example, the <code>Device.IP.Interface</code> table with an Instance Number of 3 would be addressed with the following Path Name: <code>Device.IP.Interface.3</code>.</p>
 <h5 id="addressing-by-unique-key">Addressing by Unique Key</h5>
 <p><a id="addressing_by_unique_key" /></p>
@@ -187,8 +184,8 @@
 <h5 id="searching-with-expressions">Searching with Expressions</h5>
 <p><a id="search" /></p>
 <p>Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Search Paths use an Expression Variable enclosed in curly braces as the Instance Identifier within a Path Name and then appends a “::” to the end of the Path Name, followed by an Expression enclosed in another set of curly braces.</p>
-<p><strong>R-x.y</strong> – An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.</p>
-<p><strong>R-x.y</strong> – An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>.</p>
+<p><strong>R-ARC.9</strong> – An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.</p>
+<p><strong>R-ARC.10</strong> – An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in <a href="https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf" title="TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices">TR-106</a>.</p>
 <p>The basic format of a Search Path is:</p>
 <p><code>Device.IP.Interface.{&lt;expression variable&gt;}.Status::{&lt;expression&gt;}</code></p>
 <p>An Expression consists of one or more Expression Components that are separated by the AND (&amp;&amp;) logical operator (NOTE: the OR logical operator is not supported).</p>
@@ -237,7 +234,7 @@
 <h4 id="searching-by-wildcard">Searching by Wildcard</h4>
 <p><a id="searching_by_wildcard" /></p>
 <p>Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character “*” in place of the Instance Identifier.</p>
-<p><strong>R-x.y</strong> – An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.</p>
+<p><strong>R-ARC.11</strong> – An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.</p>
 <p>Examples:</p>
 <p>All parameters for all IP Interfaces that currently exist</p>
 <p><code>Device.IP.Interface.*.</code></p>

@@ -104,7 +104,7 @@
 <p>This element contains one of the Path Names or Search Paths given in the <code>param_path</code> element of the associated Get Request.</p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.</p>
-<p><strong>R-x.y</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
+<p><strong>R-GET.0</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>repeated ResolvedPathResult resolved_path_result_list</code></p>
@@ -112,11 +112,11 @@
 <h4 id="resolvedpathresult-elements">ResolvedPathResult Elements</h4>
 <p><code>string resolved_path</code></p>
 <p>This element contains a Path Name to an Object or Object Instance that was resolved from the Path Name or Search Path given in <code>requested_path</code>.</p>
-<p><strong>R-x.y</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, the <code>resolved_path</code> MUST contain only the Path Name to the parent Object or Object Instance of that parameter.</p>
+<p><strong>R-GET.1</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, the <code>resolved_path</code> MUST contain only the Path Name to the parent Object or Object Instance of that parameter.</p>
 <p><code>map&lt;string, string&gt; result_param_map</code></p>
 <p>This element contains a set of mapped key/value pairs listing a Parameter Path (relative to the Path Name in <code>resolved_path</code>) to each of the parameters and their values, plus sub-objects and their values, of the Object given in <code>resolved_path</code>.</p>
-<p><strong>R-x.y</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, <code>result_param_map</code> MUST contain only the Parameter included in that path.</p>
-<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>result_param_map</code>, these parameters MUST NOT be returned in this element.</p>
-<p><strong>R-x.y</strong> – Path Names containing Object Instance Paths in the keys of <code>result_param_map</code> MUST be addressed using Instance Number Addressing.</p>
+<p><strong>R-GET.2</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, <code>result_param_map</code> MUST contain only the Parameter included in that path.</p>
+<p><strong>R-GET.3</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>result_param_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-GET.4</strong> – Path Names containing Object Instance Paths in the keys of <code>result_param_map</code> MUST be addressed using Instance Number Addressing.</p>
 <h4 id="get-message-supported-error-codes">Get Message Supported Error Codes</h4>
 <p>Appropriate error codes for the Get message include <code>7000-7006</code>, <code>7008</code>, <code>7010</code>, and <code>7800-7999</code>.</p>

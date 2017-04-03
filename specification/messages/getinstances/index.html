@@ -115,7 +115,7 @@
 <p>This element contains one of the Path Names or Search Paths given in <code>obj_path</code> of the associated GetInstances Request.</p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.</p>
-<p><strong>R-x.y</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
+<p><strong>R-GIN.0</strong> – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>repeated CurrInstance curr_inst_list</code></p>
@@ -125,6 +125,6 @@
 <p>This element contains the Instance Number of the Object Instance.</p>
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
 <p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
-<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-GIN.1</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
 <h2 id="getinstances-error-codes">GetInstances Error Codes</h2>
 <p>Appropriate error codes for the GetInstances message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, <code>7018</code> and <code>7800-7999</code>.</p>

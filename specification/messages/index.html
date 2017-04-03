@@ -17,13 +17,13 @@
 <p><a id="requests_responses_and_errors" /></p>
 <p>The three types of USP messages are Request, Response, and Error.</p>
 <p>A request is a message sent from a source USP endpoint to a target USP endpoint that includes elements to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify message follows the same format as a request but is sent from an Agent to a Controller.</p>
-<p><strong>R-x.y</strong> – The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see Operate and Notify messages).</p>
-<p><strong>R-x.y</strong> – The target USP endpoint MUST ignore or send an error message in response to messages it does not understand.</p>
-<p><strong>R-x.y</strong> – When the target USP endpoint is not required to send a response, the MTP endpoint that received the message MUST gracefully end the MTP message exchange. How the MTP gracefully ends the MTP message exchange is dependent on the type of MTP.</p>
+<p><strong>R-MSG.0</strong> – The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see Operate and Notify messages).</p>
+<p><strong>R-MSG.1</strong> – The target USP endpoint MUST ignore or send an error message in response to messages it does not understand.</p>
+<p><strong>R-MSG.2</strong> – When the target USP endpoint is not required to send a response, the MTP endpoint that received the message MUST gracefully end the MTP message exchange. How the MTP gracefully ends the MTP message exchange is dependent on the type of MTP.</p>
 <h3 id="handling-duplicate-messages">Handling Duplicate Messages</h3>
 <p><a id="handling_duplicate_messages" /></p>
 <p>Circumstances may arise (such as multiple Message Transfer Protocols) that cause duplicate messages (those with an identical message ID) to arrive at the target USP endpoint.</p>
-<p><strong>R-x.y</strong> – If a target USP endpoint receives a message with a duplicate message ID before it has processed and sent a Response or Error to the original message, it MUST gracefully ignore the duplicate message.</p>
+<p><strong>R-MSG.3</strong> – If a target USP endpoint receives a message with a duplicate message ID before it has processed and sent a Response or Error to the original message, it MUST gracefully ignore the duplicate message.</p>
 <p>For messages that require no response, it is up to the target endpoint implementation when to allow the same message ID to be re-used by the same source USP endpoint.</p>
 <h3 id="example-message-flows">Example Message Flows</h3>
 <p><a id="example_message_flows" /></p>
@@ -33,17 +33,17 @@
 <p><img src="error_response.png" /> Figure 2 – A failed request/response sequence</p>
 <h2 id="message-structure">Message Structure</h2>
 <p>A Message consists of a header and body. When using <a href="https://developers.google.com/protocol-buffers/docs/proto3" title="Protocol Buffers v3 Protocol Buffers Mechanism for Serializing Structured Data Version 3">protocol buffers</a>, the elements of the header and body for different messages are defined in a schema and sent in an encoded format from one USP endpoint to another.</p>
-<p><strong>R-x.y</strong> – A Message MUST conform to the schemas defined in <a href="usp.proto" class="uri">usp.proto</a>.</p>
+<p><strong>R-MSG.4</strong> – A Message MUST conform to the schemas defined in <a href="usp.proto" class="uri">usp.proto</a>.</p>
 <p><em>Note: When using protocol buffers for message encoding, default values (when elements are missing) are described in <a href="https://developers.google.com/protocol-buffers/docs/proto3#default">Protcol Buffers v3</a>.</em></p>
 <p>Every USP message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.</p>
 <p>Each of the message types and elements below are described with the element type according to <a href="https://developers.google.com/protocol-buffers/docs/proto3" title="Protocol Buffers v3 Protocol Buffers Mechanism for Serializing Structured Data Version 3">Protocol Buffers version 3</a>, followed by its name.</p>
 <h3 id="the-usp-message">The USP Message</h3>
 <p><a href="message_container" /></p>
 <p><code>Header header</code></p>
-<p><strong>R-x.y</strong> – A Message MUST contain exactly one header element.</p>
+<p><strong>R-MSG.5</strong> – A Message MUST contain exactly one header element.</p>
 <p><code>Body body</code></p>
 <p>The Message Body that must be present in every Message. The Body element contains either a Request, Response, or Error element.</p>
-<p><strong>R-x.y</strong> – A Message MUST contain exactly one body element.</p>
+<p><strong>R-MSG.6</strong> – A Message MUST contain exactly one body element.</p>
 <h3 id="message-header">Message Header</h3>
 <p><a id="header" /></p>
 <p>The message header contains information on source and target of the message, as well as useful coordination information. Its elements include a message ID, the endpoint identifiers for the source and target endpoints, an optional reply-to identifier, and a field indicating the type of message.</p>
@@ -51,8 +51,8 @@
 <h4 id="message-header-elements">Message Header Elements</h4>
 <p><code>string msg_id</code></p>
 <p>A locally unique opaque identifier assigned by the Endpoint that generated this message.</p>
-<p><strong>R-x.y</strong> – The msg_id element MUST be present in every Header.</p>
-<p><strong>R-x.y</strong> – The msg_id element in the Message Header for a Response or Error that is associated with a Request MUST contain the message ID of the associated request. If the msg_id element in the Response or Error does not contain the message ID of the associated Request, the response or error MUST be ignored.</p>
+<p><strong>R-MSG.7</strong> – The msg_id element MUST be present in every Header.</p>
+<p><strong>R-MSG.8</strong> – The msg_id element in the Message Header for a Response or Error that is associated with a Request MUST contain the message ID of the associated request. If the msg_id element in the Response or Error does not contain the message ID of the associated Request, the response or error MUST be ignored.</p>
 <p><code>enum MsgType msg_type</code></p>
 <p>This element contains an enumeration indicating the type of message contained in the message body. It is an enumeration of:</p>
 <pre><code>ERROR (0)
@@ -70,26 +70,26 @@ DELETE_RESP (11)
 GET_OBJECTS (12)
 GET_OBJECTS_RESP (13)
 NOTIFY_RESP (14)</code></pre>
-<p><strong>R-x.y</strong> – The <code>msg_type</code> element MUST be present in every Header.</p>
+<p><strong>R-MSG.9</strong> – The <code>msg_type</code> element MUST be present in every Header.</p>
 <p><code>string proto_version</code></p>
 <p>The version of the USP protocol.</p>
-<p><strong>R-x.y</strong> – The proto_version element MUST be present in every Header.</p>
-<p><strong>R-x.y</strong> – The proto_version element MUST be set to a value of “<code>1.0</code>”.</p>
+<p><strong>R-MSG.10</strong> – The proto_version element MUST be present in every Header.</p>
+<p><strong>R-MSG.11</strong> – The proto_version element MUST be set to a value of “<code>1.0</code>”.</p>
 <p><code>string to_id</code></p>
 <p>The value of this header argument is the Endpoint Identifier of the target Endpoint.</p>
-<p><strong>R-x.y</strong> – The <code>to_id</code> element MUST be present in every Header.</p>
-<p><strong>R-x.y</strong> – The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.</p>
+<p><strong>R-MSG.12</strong> – The <code>to_id</code> element MUST be present in every Header.</p>
+<p><strong>R-MSG.13</strong> – The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.</p>
 <p><code>string from_id</code></p>
 <p>The value of this header argument is the Endpoint Identifier of the source Endpoint.</p>
-<p><strong>R-x.y</strong> – The <code>from_id</code> element MUST be present in every Header.</p>
+<p><strong>R-MSG.14</strong> – The <code>from_id</code> element MUST be present in every Header.</p>
 <p><code>string reply_to_id</code></p>
 <p>The value of this header argument is the Endpoint Identifier to which responses associated with this message should be targeted.</p>
-<p><strong>R-x.y</strong> – The <code>reply_to_id</code> MAY be used to send Response or Error to a USP Endpoint other than the from-to-id in the Request.</p>
+<p><strong>R-MSG.15</strong> – The <code>reply_to_id</code> MAY be used to send Response or Error to a USP Endpoint other than the from-to-id in the Request.</p>
 <p><em>Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response or Error.</em></p>
-<p><strong>R-x.y</strong> – The Source Endpoint MUST ignore a Response or Error message from a Target Endpoint when the Source Endpoint does not expect the Response or Error.</p>
+<p><strong>R-MSG.16</strong> – The Source Endpoint MUST ignore a Response or Error message from a Target Endpoint when the Source Endpoint does not expect the Response or Error.</p>
 <p><em>Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response.</em></p>
-<p><strong>R-x.y</strong> – The <code>reply_to_id</code> element is optional, and MUST NOT be present in a Message that contains either a Response or Error in the Body element.</p>
-<p><strong>R-x.y</strong> – If the <code>reply_to_id</code> is omitted from a Message that contains a Request in the Body element, the response or Error MUST be sent to the Endpoint identified in the <code>from_id</code> element in the request’s Header element.</p>
+<p><strong>R-MSG.17</strong> – The <code>reply_to_id</code> element is optional, and MUST NOT be present in a Message that contains either a Response or Error in the Body element.</p>
+<p><strong>R-MSG.18</strong> – If the <code>reply_to_id</code> is omitted from a Message that contains a Request in the Body element, the response or Error MUST be sent to the Endpoint identified in the <code>from_id</code> element in the request’s Header element.</p>
 <h3 id="message-body">Message Body</h3>
 <p><a id="body" /></p>
 <p>The message body contains the intended message and the appropriate elements for the message type.</p>

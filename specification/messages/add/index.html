@@ -133,14 +133,14 @@ create_obj_list {
 <h2 id="add-request-elements">Add Request Elements</h2>
 <p><code>bool allow_partial</code></p>
 <p>This element tells the Agent how to process the message in the event that one or more of the Objects specified in the create_obj_list argument fails creation.</p>
-<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to <code>true</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
-<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to <code>false</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> holistically. A failure to create any one Object MUST cause the Add message to fail and return an <code>Error</code> Message (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><strong>R-ADD.0</strong> - If the <code>allow_partial</code> element is set to <code>true</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><strong>R-ADD.1</strong> - If the <code>allow_partial</code> element is set to <code>false</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> holistically. A failure to create any one Object MUST cause the Add message to fail and return an <code>Error</code> Message (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><code>repeated CreateObject create_obj_list</code></p>
 <p>This element contains a repeated set of CreateObject elements.</p>
 <h3 id="createobject-elements">CreateObject Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.</p>
-<p><strong>R-x.y</strong> – The <code>obj_path_list</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
+<p><strong>R-ADD.2</strong> – The <code>obj_path_list</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
 <p><code>repeated CreateParamSetting param_setting_list</code></p>
 <p>This element contains a repeated set of CreateParamSetting elements.</p>
 <h4 id="createparamsetting-elements">CreateParamSetting Elements</h4>
@@ -150,7 +150,7 @@ create_obj_list {
 <p>This element contains the value of the parameter specified in the <code>param</code> element that the Controller would like to configure as part of the creation of this Object.</p>
 <p><code>bool required</code></p>
 <p>This element specifies whether the Agent should treat the creation of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this parameter (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
-<p><strong>R-x.y</strong> - If the <code>required</code> element is set to true, a failure to update this parameter MUST result in a failure to create the Object.</p>
+<p><strong>R-ADD.3</strong> - If the <code>required</code> element is set to true, a failure to update this parameter MUST result in a failure to create the Object.</p>
 <h2 id="add-response-elements">Add Response Elements</h2>
 <p><code>repeated CreatedObjectResult created_obj_result_list</code></p>
 <p>A repeated set of <code>CreatedObjectResult</code> elements for each <code>CreateObject</code> element in the Add message.</p>
@@ -175,11 +175,11 @@ create_obj_list {
 <p>This element contains the Object Instance Path (using Instance Number Addressing) of the created Object.</p>
 <p><code>repeated ParameterError param_err_list</code></p>
 <p>This element returns a repeated set of ParameterError messages.</p>
-<p><strong>R-x.y</strong> - If any of the parameters and values specified in the <code>param_setting_list</code> element fail to configure upon creation, this set MUST include one element describing each of the failed parameters and the reason for their failure.</p>
+<p><strong>R-ADD.4</strong> - If any of the parameters and values specified in the <code>param_setting_list</code> element fail to configure upon creation, this set MUST include one element describing each of the failed parameters and the reason for their failure.</p>
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
 <p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
-<p><strong>R-x.y</strong> - If the Controller did not include some or all of a unique key that the Agent supports in the <code>param_setting_list</code> element, the Agent MUST assign values to the unique key(s) and return them in the <code>unique_key_map</code>.</p>
-<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-ADD.5</strong> - If the Controller did not include some or all of a unique key that the Agent supports in the <code>param_setting_list</code> element, the Agent MUST assign values to the unique key(s) and return them in the <code>unique_key_map</code>.</p>
+<p><strong>R-ADD.6</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
 <h6 id="parametererror-elements">ParameterError Elements</h6>
 <p><code>string param</code></p>
 <p>This element contains the Parameter Path to the parameter that failed to be set.</p>

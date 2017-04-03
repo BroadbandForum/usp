@@ -4,8 +4,8 @@
 <h2 id="delete-request-elements">Delete Request Elements</h2>
 <p><code>bool allow_partial</code></p>
 <p>This element tells the Agent how to process the message in the event that one or more of the Objects specified in the <code>obj_path</code> argument fails deletion.</p>
-<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to true, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
-<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to false, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><strong>R-DEL.0</strong> - If the <code>allow_partial</code> element is set to true, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><strong>R-DEL.1</strong> - If the <code>allow_partial</code> element is set to false, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><code>repeated string obj_path_list</code></p>
 <p>This element contains a repeated set of Object Instance Paths or Search Paths.</p>
 <h2 id="delete-response-elements">Delete Response Elements</h2>
@@ -31,16 +31,16 @@
 <h5 id="operationsuccess-elements">OperationSuccess Elements</h5>
 <p><code>repeated string affected_path_list</code></p>
 <p>This element returns a repeated set of Path Names to Object Instances.</p>
-<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the Objects specified in <code>affected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
-<p><strong>R-x.y</strong> – The Path Names to Object Instances in <code>affected_path_list</code> MUST be addressed using Instance Number Addressing.</p>
+<p><strong>R-DEL.2</strong> – If the Controller does not have Read permission on any of the Objects specified in <code>affected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
+<p><strong>R-DEL.3</strong> – The Path Names to Object Instances in <code>affected_path_list</code> MUST be addressed using Instance Number Addressing.</p>
 <p><code>repeated UnaffectedPathError unaffected_path_err_list</code></p>
 <p>This element contains a repeated set of messages of type <code>UnaffectedPathError</code>.</p>
-<p><strong>R-x.y</strong> - If any of the Object Instances specified in the <code>obj_path</code> element fail to delete, this set MUST include one <code>UnaffectedPathError</code> message for each of the Object Instances that failed to Delete.</p>
-<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the Objects specified in <code>unaffected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
+<p><strong>R-DEL.4</strong> - If any of the Object Instances specified in the <code>obj_path</code> element fail to delete, this set MUST include one <code>UnaffectedPathError</code> message for each of the Object Instances that failed to Delete.</p>
+<p><strong>R-DEL.5</strong> – If the Controller does not have Read permission on any of the Objects specified in <code>unaffected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
 <h6 id="unaffectedpatherror-elements">UnaffectedPathError Elements</h6>
 <p><code>string unaffected_path</code></p>
 <p>This element returns the Path Name to the Object Instance that failed to be deleted.</p>
-<p><strong>R-x.y</strong> – The Path Names to Object Instances in <code>unaffected_path</code> MUST be addressed using Instance Number Addressing.</p>
+<p><strong>R-DEL.6</strong> – The Path Names to Object Instances in <code>unaffected_path</code> MUST be addressed using Instance Number Addressing.</p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains the error code of the error that caused the deletion of this object to fail.</p>
 <p><code>string err_msg</code></p>
