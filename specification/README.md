@@ -72,6 +72,7 @@ The text of this notice must be included in all copies of this Broadband Forum W
 * Updated reference list language to explain wildcards (USP-100)
 * Updated expression language to restrict operators for strings, bools, and enums (USP-139)
 * Added brief explanation of using vendor defined error codes. (USP-181)
+* Added requirement labels
 
 # Acknowledgements
 
