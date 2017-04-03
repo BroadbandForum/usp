@@ -402,7 +402,7 @@ The steps that are executed by the Agent when following the reference in this ex
 * When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*
 
 ##### List of References
-<a id="list_of_references"
+<a id="list_of_references" />
 
 The USP data models have Parameters whose values contain a list of references to other Parameters or Objects.  This section explains how the Reference Following mechanism allows those references to be followed from inside a single Path Name.  The Reference Following syntax as defined above still applies, but it is preceded by a means of referencing a specific instance within the list.  The additional syntax consists of a “`#`” character followed by list item number (1-indexed), which is placed between the name of the Parameter that contains the list of references and the “`+`” that indicates that the reference should be followed. To follow *all* references in the list, the endpoint can specify a "`#`" character followed by a wildcard ("`*`") character and the "`+`" character to follow the reference (i.e., "`ReferenceParameter#*+`").
 
