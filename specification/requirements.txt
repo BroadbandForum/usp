@@ -1,2 +1,0 @@
-py3-protobuffers==3.0.0a4
-six==1.10.0

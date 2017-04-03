@@ -1,0 +1,201 @@
+<!-- Reference Links -->
+<h1 id="set">Set</h1>
+<p><a id="set" /></p>
+<h2 id="selecting-objects-and-parameters-for-cud-operations">Selecting Objects and Parameters for CUD Operations</h2>
+<p><a id="selecting_objects_and_parameters_CUD" /></p>
+<p>Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.</p>
+<p>For Add and Set requests, each Object address or search is conveyed in an element that also contains a sub-element listing the parameters to update in the matched Objects.</p>
+<p>example, a Controller wants to disable all of the Wifi networks on an Agent. It could use a Set message with the following elements:</p>
+<pre><code>    allow_partial: true
+    update_obj_list {
+      obj_path: Device.Wifi.SSID.*.
+      param_setting {
+        param: Enable
+        value: False
+        required: False
+    }</code></pre>
+<p>Assuming the Agent had three Wifi SSIDs in its associated data model, it would return:</p>
+<pre><code>    updated_obj_result_list{
+      requested_path: Device.Wifi.SSID.*.
+      oper_status {
+        oper_success {
+          updated_inst_result {
+            affected path: Device.WIfi.SSID.1.
+            result_param_map:
+            key: Enable
+            value: False
+          }
+          updated_inst_result {
+            affected path: Device.WIfi.SSID.2.
+            result_param_map:
+            key: Enable
+            value: False
+          }
+          updated_inst_result {
+            affected path: Device.WIfi.SSID.3.
+            result_param_map:
+            key: Enable:
+            value: False
+          }
+      }</code></pre>
+<h3 id="using-allow-partial-and-required-parameters">Using Allow Partial and Required Parameters</h3>
+<p><a id="allow_partial_and_required_parameters" /></p>
+<p>The Add, Set, and Delete requests contain an element called “<code>allow_partial</code>”. This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.</p>
+<p>For Delete, this is straightforward - if <code>allow_partial</code> is <code>true</code>, the Agent should return a Response message with <code>affected_path_list</code> and <code>unaffected_path_err_list</code> containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If <code>allow_partial</code> is <code>false</code>, the Agent should return an Error message if any Objects fail to be deleted.</p>
+<p>For the Add and Set messages, parameter updates contain an element called “<code>required</code>”. This details whether or not the update or creation of the Object should fail if a required parameter fails.</p>
+<p>This creates a hierarchy of error conditions for the Add and Set requests, such as:</p>
+<p>Parameter Error -&gt; Object Error -&gt; Message Error</p>
+<p>If <code>allow_partial</code> is true, but one or more required parameters fail to be updated or configured, the creation or update of an individual Object fails. This results in an <code>oper_failure</code> in the <code>oper_status</code> element and <code>updated_obj_result</code> or <code>created_obj_result</code> returned in the Add or Set response.</p>
+<p>If <code>allow_partial</code> is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.</p>
+<p>Both the <code>oper_failure</code> elements and Error messages contain an element called <code>param_error</code>, which contains elements of type <code>ParamError</code>. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.</p>
+<p>The logic can be described as follows:</p>
+<table style="width:75%;">
+<colgroup>
+<col width="9%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right"><code>allow_partial</code></th>
+<th align="center">Required Parameters</th>
+<th align="center">Required Parameter Failed</th>
+<th align="center">Other Parameter Failed</th>
+<th align="center">Response/Error</th>
+<th align="center">Oper_status of Object</th>
+<th align="left">Contains param_error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><code>True</code>/<code>False</code></td>
+<td align="center">No</td>
+<td align="center">-</td>
+<td align="center">No</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="right"><code>True</code>/<code>False</code></td>
+<td align="center">No</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>True</code>/<code>False</code></td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="right"><code>True</code>/<code>False</code></td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">Response</td>
+<td align="center">oper_success</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>True</code></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">-</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_failure</code></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="right"><code>False</code></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">-</td>
+<td align="center">Error</td>
+<td align="center"><code>oper_failure</code></td>
+<td align="left">Yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="set-request-elements">Set Request Elements</h2>
+<p><code>bool allow_partial</code></p>
+<p>This element tells the Agent how to process the message in the event that one or more of the Objects matched in the <code>obj_path</code> fails to update.</p>
+<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to true, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><em>Note: This may cause some counterintuitive behavior if there are no required parameters to be updated. The Set Request can still result in a Set Response (rather than an Error Message) if <code>allow_partial</code> is set to true.</em></p>
+<p><strong>R-x.y</strong> - If the <code>allow_partial</code> element is set to false, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><code>repeated UpdateObject update_obj_list</code></p>
+<p>This element contains a repeated set of UpdateObject messages.</p>
+<h3 id="updateobject-elements">UpdateObject Elements</h3>
+<p><code>string obj_path</code></p>
+<p>This element contains an Object Path, Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.</p>
+<p><code>repeated UpdateParamSetting param_setting_list</code></p>
+<p>The element contains a repeated set of <code>UpdatedParamSetting</code> messages.</p>
+<h4 id="updateparamsetting-elements">UpdateParamSetting Elements</h4>
+<p><code>string param</code></p>
+<p>This element contains the local name of a parameter of the Object specified in <code>obj_path</code>.</p>
+<p><code>string value</code></p>
+<p>This element contains the value of the parameter specified in the <code>param</code> element that the Controller would like to configure.</p>
+<p><code>bool required</code></p>
+<p>This element specifies whether the Agent should treat the update of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this parameter.</p>
+<p><strong>R-x.y</strong> – If the <code>required</code> element is set to <code>true</code>, a failure to update this parameter MUST result in a failure to update the Object (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<h2 id="set-response">Set Response</h2>
+<p><code>repeated UpdatedObjectResult updated_obj_result_list</code></p>
+<p>This element contains a repeated set of <code>UpdatedObjectResult</code> messages for each <code>UpdateObject</code> message in the associated Set Request.</p>
+<h3 id="updatedobjectresult-elements">UpdatedObjectResult Elements</h3>
+<p><code>string requested_path</code></p>
+<p>This element returns the value of <code>obj_path_list</code> in the <code>UpdateObject</code> message associated with this <code>UpdatedObjectResult</code>.</p>
+<p><code>OperationStatus oper_status</code></p>
+<p>The element contains a message of type <code>OperationStatus</code> that specifies the overall status for the update of the Object specified in <code>requested_path</code>.</p>
+<h4 id="operationstatus-elements">OperationStatus Elements</h4>
+<p><code>oneof oper_status</code></p>
+<p>This element contains a message of one of the following types.</p>
+<p><code>OperationFailure oper_failure</code></p>
+<p>Used when the Object specified in <code>requested_path</code> failed to be updated.</p>
+<p><code>OperationSuccess oper_success</code></p>
+<h5 id="operationfailure-elements">OperationFailure Elements</h5>
+<p><code>fixed32 err_code</code></p>
+<p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Object update to fail.</p>
+<p><code>string err_msg</code></p>
+<p>This element contains additional information about the reason behind the error.</p>
+<p><code>repeated UpdatedInstanceFailure updated_inst_failure_list</code></p>
+<p>This element contains a repeated set of messages of type <code>UpdatedInstanceFailure</code>.</p>
+<h6 id="updatedinstancefailure-elements">UpdatedInstanceFailure Elements</h6>
+<p><code>string affected_path</code></p>
+<p>This element returns the Object Path or Object Instance Path of the Object that failed to update.</p>
+<p><code>repeated ParameterError param_err_list</code></p>
+<p>This element contains a repeated set of <code>ParameterError</code> messages.</p>
+<h6 id="parametererror-elements">ParameterError Elements</h6>
+<p><code>string param</code></p>
+<p>This element contains the Parameter Path (relative to <code>affected_path</code>) to the parameter that failed to update.</p>
+<h5 id="operationsuccess-elements">OperationSuccess Elements</h5>
+<p><code>repeated UpdatedInstanceResult updated_inst_result_list</code></p>
+<p>This element contains a repeated set of <code>UpdatedInstanceResult</code> messages.</p>
+<h6 id="updatedinstanceresult-elements">UpdatedInstanceResult Elements</h6>
+<p><code>string affected_path</code></p>
+<p>This element returns the Object Path or Object Instance Path (using Instance Number Addressing) of the updated Object.</p>
+<p><code>repeated ParameterError param_err_list</code></p>
+<p>This element contains a repeated set of <code>ParameterError</code> messages.</p>
+<p><code>map&lt;string, string&gt; updated_param_map</code></p>
+<p>This element returns a set of key/value pairs containing a path (relative to the <code>affected_path</code>) to each of the updated Object’s parameters, their values, plus sub-Objects and their values that were updated by the Set Request.</p>
+<p><strong>R-x.y</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>updated_param_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-x.y</strong> – Object Instance Paths in the keys of <code>updated_param_map</code> MUST use Instance Number Addressing.</p>
+<p><em>Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the <code>updated_param_map</code>.</em></p>
+<h6 id="parametererror-elements-1">ParameterError Elements</h6>
+<p><code>string param</code></p>
+<p>This element contains the Parameter Path to the parameter that failed to be set.</p>
+<p><code>fixed32 err_code</code></p>
+<p>This element contains the <a href="/messages/error-codes/">error code</a> of the error that caused the parameter set to fail.</p>
+<p><code>string err_msg</code></p>
+<p>This element contains text related to the error specified by <code>err_code</code>.</p>
+<h2 id="set-message-supported-error-codes">Set Message Supported Error Codes</h2>
+<p>Appropriate error codes for the Set message include <code>7000-7016</code>, <code>7020</code>, <code>7021</code>, and <code>7800-7999</code>.</p>
