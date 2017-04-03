@@ -27,7 +27,7 @@ In addition to the USP Requests that are exchanged between USP Controllers and A
 <img src="usp-notify-over-coap.png" />
 Figure 2 – USP Notifications over CoAP
 
-##	Mapping USP Endpoints to CoAP URIs
+## Mapping USP Endpoints to CoAP URIs
 <a id="mapping_usp_endpoints_to_coap_uri" />
 
 Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resources and provides a means of locating the resource.  These resources are organized hierarchically and governed by a CoAP server listening for CoAP requests on a given port. USP Endpoints are one type of CoAP resource that is identified and discovered.
@@ -41,7 +41,7 @@ Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resour
 
 The identifier within the CoAP server is used to deliver messages to the USP Endpoint. When this identifier is used to deliver messages to the USP Endpoint, this identifier is a uri-path that represents the the USP Endpoint Identifier. For example: “`/e/{endpointId}`”
 
-##	Mapping USP Messages to CoAP Messages
+## Mapping USP Messages to CoAP Messages
 <a id="mapping_usp_messages_to_coap_messages" />
 
 **R-COAP.2** - In order for USP Messages to be transferred between a USP Controller and Agent using CoAP, the USP Message MUST be encapsulated within the CoAP message as defined in [RFC 7252][9].
@@ -52,7 +52,7 @@ USP Messages are transferred using the CoAP resource that represents the receivi
 
 **R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/mtp).
 
-###	Handling CoAP Request Success
+### Handling CoAP Request Success
 <a id="handling_coap_request_success" />
 
 **R-COAP.5** - Upon successful reception of the CoAP message using POST, the CoAP server MUST respond with a response code of `2.04 (Changed)`.
@@ -82,7 +82,7 @@ When a CoAP client sends a CoAP request, the CoAP client can provide incorrect o
 
 **R-COAP.12** - When a CoAP server receives a CoAP request and the receiving USP Endpoint cannot interpret or decode the USP Message for processing, the CoAP server MUST respond with a `4.00` response code.
 
-##	Mapping USP Notification Message to CoAP Message
+## Mapping USP Notification Message to CoAP Message
 <a id="mapping_usp_notification_message_to_coap_message" />
 
 The USP Notify Request is the only message of the Request type that is sent from an Agent to a Controller. In these cases, the Agent functions as a CoAP client rather than a CoAP server in the POST/Response sequence.

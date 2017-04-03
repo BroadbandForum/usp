@@ -14,6 +14,7 @@
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 # Delete
+
 <a id="delete" />
 
 ## Delete Request Elements

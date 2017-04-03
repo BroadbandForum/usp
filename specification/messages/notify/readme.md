@@ -13,10 +13,11 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-#	The Notify Message
+# The Notify Message
+
 <a id="notify" />
 
-###	Using Subscription Objects
+### Using Subscription Objects
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.Subscription.{i}.` in [Device:2][1].
 
@@ -24,7 +25,7 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
-####	ReferenceList Parameter
+#### ReferenceList Parameter
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
@@ -32,7 +33,7 @@ For example, a Controller wants to be notified when a new Wifi station joins the
 
 In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wifi network. It uses the Add message to create a subscription Object instance with `Device.Wifi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
-####	Responses to Notifications and Notification Retry
+#### Responses to Notifications and Notification Retry
 
 The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotificationRetry` parameter in the subscription Object – if `NotificationRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotificationRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
 
@@ -66,11 +67,11 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 **R-NOT.4** – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.
 
-####	Notification Types
+#### Notification Types
 
 There are several types events that can cause a Notify request. These include those that deal with changes to the Agent’s Instantiated Data Model (`ValueChange`, `ObjectCreation`, `ObjectDeletion`), the completion of an asynchronous Object-defined operation (`OperationComplete`), a policy-defined `OnBoardRequest`, and a generic `Event` for use with Object-defined events.
 
-#####	ValueChange
+##### ValueChange
 
 The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription, and then each time it changes from then on for the life of the subscription. It is triggered when this change occurs, even if it is caused by the originating Controller.
 
@@ -79,11 +80,11 @@ These notifications are used for when an instance of the subscribed to Multi-Ins
 
 The `ObjectCreation` notification also includes the Object’s unique keys and their values as data in the notification.
 
-#####	 OperationComplete
+##### OperationComplete
 
 The `OperationComplete` notification is used to indicate that an asynchronous Object-defined operation finished (either successfully or unsuccessfully). These operations may also trigger other Events defined in the data model (see below).
 
-#####	 Event
+##### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what parameters, if any, are returned as part of the notification.
 
 
@@ -192,7 +193,7 @@ This element contains the [error code](/messages/error-codes) of the error that 
 
 This element contains additional (human readable) information about the reason behind the error.
 
-##	Notify Response Elements
+## Notify Response Elements
 
 `string subscription_id`
 

@@ -30,7 +30,8 @@ These sections describes the types of USP messages and the normative requirement
 
 USP contains messages to create, read, update, and delete Objects, perform Object-defined operations, and allow agents to notify controllers of events. This is often referred to as CRUD with the addition of O (operate) and N (notify), or CRUD-ON.
 
-##	Requests, Responses and Errors
+## Requests, Responses and Errors
+
 <a id="requests_responses_and_errors" />
 
 The three types of USP messages are Request, Response, and Error.
@@ -43,7 +44,8 @@ A request is a message sent from a source USP endpoint to a target USP endpoint 
 
 **R-MSG.2** – When the target USP endpoint is not required to send a response, the MTP endpoint that received the message MUST gracefully end the MTP message exchange. How the MTP gracefully ends the MTP message exchange is dependent on the type of MTP.
 
-###	Handling Duplicate Messages
+### Handling Duplicate Messages
+
 <a id="handling_duplicate_messages" />
 
 Circumstances may arise (such as multiple Message Transfer Protocols) that cause duplicate messages (those with an identical message ID) to arrive at the target USP endpoint.
@@ -52,7 +54,8 @@ Circumstances may arise (such as multiple Message Transfer Protocols) that cause
 
 For messages that require no response, it is up to the target endpoint implementation when to allow the same message ID to be re-used by the same source USP endpoint.
 
-###	Example Message Flows
+### Example Message Flows
+
 <a id="example_message_flows" />
 
 Successful request/response: In this successful message sequence, a Controller sends an Agent a request. The message header and body are parsed and the request is processed, and the Agent sends a response with the relevant information in the body.
@@ -65,7 +68,8 @@ Failed request/response: In this failed message sequence, a Controller sends an 
 <img src="error_response.png" />
 Figure 2 – A failed request/response sequence
 
-##	Message Structure
+## Message Structure
+
 A Message consists of a header and body. When using [protocol buffers][12], the elements of the header and body for different messages are defined in a schema and sent in an encoded format from one USP endpoint to another.
 
 **R-MSG.4** – A Message MUST conform to the schemas defined in [usp.proto](usp.proto).
@@ -77,6 +81,7 @@ Every USP message contains a header and a body. The header contains basic destin
 Each of the message types and elements below are described with the element type according to [Protocol Buffers version 3][12], followed by its name.
 
 ### The USP Message
+
 <a href="message_container" />
 
 `Header header`
@@ -89,7 +94,8 @@ The Message Body that must be present in every Message.  The Body element contai
 
 **R-MSG.6** – A Message MUST contain exactly one body element.
 
-###	Message Header
+### Message Header
+
 <a id="header" />
 
 The message header contains information on source and target of the message, as well as useful coordination information. Its elements include a message ID, the endpoint identifiers for the source and target endpoints, an optional reply-to identifier, and a field indicating the type of message.
@@ -166,7 +172,8 @@ The value of this header argument is the Endpoint Identifier to which responses 
 
 **R-MSG.18** – If the `reply_to_id` is omitted from a Message that contains a Request in the Body element, the response or Error MUST be sent to the Endpoint identified in the `from_id` element in the request’s Header element.
 
-###	Message Body
+### Message Body
+
 <a id="body" />
 
 The message body contains the intended message and the appropriate elements for the message type.
@@ -192,6 +199,7 @@ This element indicates that the Message contains a response of a type given in t
 This element indicates that the Message contains an Error Message.
 
 #### Request Elements
+
 <a id="request" />
 
 `oneof req_type`
@@ -207,6 +215,7 @@ This element contains one of the types given below. Each indicates that the Mess
     Notify notify
 
 #### Response Elements
+
 <a id="response" />
 
 `oneof resp_type`
@@ -250,15 +259,15 @@ This element contains a [numeric code](/messages/error-codes/) indicating the ty
 
 This element contains additional information about the reason behind the error.
 
-##	Creating, Updating, and Deleting Objects
+## Creating, Updating, and Deleting Objects
 
 The [Add](./add), [Set](./set), and [Delete](./delete) requests are used to create, configure and remove Objects that comprise Service Elements.
 
-##	Reading an Agent’s State and Capabilities
+## Reading an Agent’s State and Capabilities
 
 An Agent’s current state and capabilities are represented in its data model. The current state is referred to as its Instantiated Data Model, while the data model that represents its set of capabilities is referred to as its Supported Data Model. Messages exist to retrieve data from both the instantiated and Supported Data Models.
 
-###	Getting the current state
+### Getting the Current State
 
 A Controller that wishes to learn the current state of an Agent usually wants to know one of two things: the current object instances that exist (and their unique keys for use in addressing), or the actual state of the Objects and Parameters represented by the Agent. These are handled by the [GetInstances](getinstances/) message, and the [Get](get/) message, respectively.
 
@@ -266,11 +275,11 @@ A Controller that wishes to learn the current state of an Agent usually wants to
 
 USP allows an Agent to specify which Objects, Parameters, Commands, and Events it supports in its Supported Data Model. The [GetSupportedDM](getsupporteddm/) message allows a Controller to retrieve information about the Supported Data Model as part of a USP message. While the Device Type documents and the definitions therein still hold, this message lets the Controller and Agent synchronize on the Supported Data Model as part of USP operation.
 
-##	Notifications and Subscription Mechanism
+## Notifications and Subscription Mechanism
 <a id="notifications" />
 
 A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify message](notify/) to the Controller.
 
-##	Defined Operations Mechanism
+## Defined Operations Mechanism
 
 Additional methods (operations) are and can be defined in the USP data model. Operations are generally defined on an Object, using the “command” attribute, as defined in [TR-106][3]. The mechanism is controlled using the [Operate message](operate/) in conjunction with the Multi-Instance Request Object.

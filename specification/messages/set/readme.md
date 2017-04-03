@@ -13,10 +13,12 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-#	Set
+# Set
+
 <a id="set" />
 
-##	Selecting Objects and Parameters for CUD Operations
+## Selecting Objects and Parameters for CUD Operations
+
 <a id="selecting_objects_and_parameters_CUD" />
 
 Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
@@ -64,7 +66,8 @@ Assuming the Agent had three Wifi SSIDs in its associated data model, it would r
       }
 ```
 
-###	Using Allow Partial and Required Parameters
+### Using Allow Partial and Required Parameters
+
 <a id="allow_partial_and_required_parameters" />
 
 The Add, Set, and Delete requests contain an element called “`allow_partial`”. This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
@@ -136,7 +139,7 @@ This element specifies whether the Agent should treat the update of the Object s
 
 **R-SET.2** – If the `required` element is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
 
-##	Set Response
+## Set Response
 
 `repeated UpdatedObjectResult updated_obj_result_list`
 

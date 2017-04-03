@@ -14,33 +14,41 @@
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 # Architecture
+
 <a id="architecture" />
 
 The User Services Platform consists of a collection of Endpoints (Agents and Controllers) that allow applications to manipulate Service Elements. These Service Elements are made up of a set of Objects and parameters that model a given service, such as network interfaces, software modules, device firmware, remote elements proxied through another interface, virtual elements, or other managed services.
 
 <img src="./usp_stack.png" title="Figure 1">
+
 Figure 1: Architecture Layers of the User Services Platform
 
 ## Endpoints  
+
 <a id="endpoints" />
 
 A USP endpoint can act as Agent or a Controller. Controllers only messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.
 
 <img src="usp_architecture.png">
+
 Figure 2: USP Agent and Controller Architecture
 
 ### Agents
+
 <a id="agents" />
 
 A USP Agent exposes (to Controllers) one or more Service Elements that are represented in its data model. It contains or references both an Instantiated Data Model (representing the current state of Service Elements it represents) and a Supported Data Model.
 
 ### Controllers
+
 <a id="controllers" />
 
 A USP Controller manipulates (through Agents) a set of Service Elements that are represented in Agent data models. It may maintain a database of Agents, their capabilities, and their states, in any combination. A Controller usually acts as an interface to a user application or policy engine that uses the User Services Platform to address particular use cases.
 
 ### Endpoint Identifier
+
 <a id="endpoint-id" />
+
 Endpoints are identified by an Endpoint Identifier.
 
 The Endpoint Identifier is a locally or globally unique USP layer identifier of an Endpoint. Whether it is globally or locally unique depends on the scheme used for assignment.
@@ -137,42 +145,42 @@ The use of USP with any of the above data models creates some dependencies on sp
 
 An Agent’s Instantiated Data Model represents the Service Elements (and their state) that are currently represented by the Agent. The Instantiated Data Model includes a set of Objects, and the sub-Objects (“children”), Parameters, Events, and Commands associated with those objects.
 
-####	Supported Data Model
+#### Supported Data Model
 <a id="supported_data_model" />
 
 An Agent’s Support Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents. A Supported Data Model consists of the union of all Device Type Definitions used by the Agent.
 
-####	Objects
+#### Objects
 <a id="objects" />
 
 Objects are data structures that are defined by their sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be static (single-instance) or dynamic (a multi-instance Object, or “table”).
 
-#####	Single-Instance Objects
+##### Single-Instance Objects
 <a id="single-instance_objects" />
 
 Static Objects, or “single instance” Objects, are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.
 
-#####	Multi-Instance Objects
+##### Multi-Instance Objects
 <a id="multi-instance_objects" />
 
 Dynamic Objects, or “multi-instance” Objects, are those Objects that can be the subject of “create” and “delete” operations (using the Add and Delete messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a “Table”, with each instance of the Object referred to as a “Row”. Multi-Instance Objects can be also the subject of a [search][#search].
 
-####	Parameters
+#### Parameters
 <a id="parameters" />
 
 Parameters define the attributes or variables of an Object. They’re retrieved by a Controller using the read operations of USP and configured using the update operations of USP (the Get and Set messages, respectively). Parameters have data types and are used to store values.
 
-####	Commands
+#### Commands
 <a id="commands" />
 
 Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the “Operate” message in USP (i.e., the Operate message). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.
 
-####	Events
+#### Events
 <a id="events" />
 
 Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](). Events may also have information associated with them that are delivered in the Notify Request – this information is defined with the Event in the Data Model.
 
-####	Path Names
+#### Path Names
 <a id="path_names" />
 
 A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. The syntax for Path Names is defined in [TR-106][3].
@@ -203,7 +211,8 @@ For example, the following Path Name uses Unique Key Addressing for the Interfac
 
 `Device.IP.Interface.[Name==“eth0”].Ipv4Address.{addr}.IPAddres::{addr.Status==“Enabled”}`
 
-####	Relative Paths
+#### Relative Paths
+
 <a id="relative_paths" />
 
 Several USP messages make use of relative paths to address Objects or Parameters. A relative path is used to address the child Objects and parameters of a given Object Path or Object Instance Path. To build a Path Name using a Relative Path, a USP endpoint uses a specified Object Path or Object Instance Path, and concatenates the Relative Path. This allows some efficiency in Requests and Responses when passing large numbers of repetitive Path Names. This relative path may include [instance identifiers](#using_instance_identifiers_in_path_names) to Multi-Instance Objects.
@@ -228,10 +237,10 @@ Etc., as well as the following sub-Object and its parameters:
 
 Etc.
 
-####	Using Instance Identifiers in Path Names
+#### Using Instance Identifiers in Path Names
 <a id="using_instance_identifiers_in_path_names" />
 
-#####	Addressing by Instance Number
+##### Addressing by Instance Number
 <a id="addressing_by_instance_number" />
 
 Instance Number Addressing allows an Object Instance to be addressed by using its Instance Number in the Path Name. An Instance Number is expressed in the Path Name as a positive integer (>=1) with no additional surrounding characters. The Instance Number assigned by the Agent is arbitrary.
@@ -240,7 +249,8 @@ Instance Number Addressing allows an Object Instance to be addressed by using it
 
 For example, the `Device.IP.Interface` table with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
 
-#####	Addressing by Unique Key
+##### Addressing by Unique Key
+
 <a id="addressing_by_unique_key" />
 
 Key-based addressing allows an Object Instance to be addressed by using a Unique Key (as defined in [Device:2][1]) in the Path Name. This is possible since once a Parameter that is part of a unique key has its value set, then that value is immutable for the life of the Object that contains the Parameter.
@@ -255,7 +265,8 @@ For example, the `Device.NAT.PortMapping` table has a compound unique key consis
 
 `Device.NAT.PortMapping.[RemoteHost==““,ExternalPort==0,Protocol==“TCP”].`
 
-#####	Searching with Expressions
+##### Searching with Expressions
+
 <a id="search" />
 
 Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object.   Search Paths use an Expression Variable enclosed in curly braces as the Instance Identifier within a Path Name and then appends a “::” to the end of the Path Name, followed by an Expression enclosed in another set of curly braces.
@@ -312,7 +323,8 @@ Expressed as a Backus-Naur Form (BNF) for context-free grammars, the Search Expr
     value    : literal | number`
 ```
 
-#####	Search Examples
+##### Search Examples
+
 <a id="search_examples" />
 
 Valid Searches:
@@ -343,7 +355,8 @@ Invalid because the Expression Component has an Expression Parameter that descen
 
 `Device.IP.Interface.{intf}.Status::{intf.Type==“Normal”&&intf.Ipv4Address.*.AddressingType==“Static”}`
 
-####	Searching by Wildcard
+#### Searching by Wildcard
+
 <a id="searching_by_wildcard" />
 
 Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character “\*” in place of the Instance Identifier.
@@ -360,10 +373,10 @@ Type of each IP Interface that currently exists
 
 `Device.IP.Interface.*.Type`
 
-####	Other Path Decorators
+#### Other Path Decorators
 <a id="other_path_decorators" />
 
-#####	Reference Following
+##### Reference Following
 <a id="reference_following" />
 
 [Device:2][1] contains Parameters that reference other Parameters or Objects. The Reference Following mechanism allows references to Objects (not Parameters) to be followed from inside a single Path Name. Reference Following is indicated by a “+” character after the name of the Parameter that is referencing the Object followed by a “.”, followed by Objects or Parameters that are children of the Referenced Object.
@@ -388,7 +401,7 @@ The steps that are executed by the Agent when following the reference in this ex
 * When configured, can be configured using Path Names using Instance Number Addressing or Unique-Key Addressing, however:
 * When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*
 
-#####	List of References
+##### List of References
 <a id="list_of_references"
 
 The USP data models have Parameters whose values contain a list of references to other Parameters or Objects.  This section explains how the Reference Following mechanism allows those references to be followed from inside a single Path Name.  The Reference Following syntax as defined above still applies, but it is preceded by a means of referencing a specific instance within the list.  The additional syntax consists of a “`#`” character followed by list item number (1-indexed), which is placed between the name of the Parameter that contains the list of references and the “`+`” that indicates that the reference should be followed. To follow *all* references in the list, the endpoint can specify a "`#`" character followed by a wildcard ("`*`") character and the "`+`" character to follow the reference (i.e., "`ReferenceParameter#*+`").
@@ -409,7 +422,7 @@ The steps that are executed by the Agent when following the reference in this ex
 
 6.	Use `Device.WiFi.Radio.1.Name` as the Path Name for the action
 
-#####	Search Expressions and Reference Following
+##### Search Expressions and Reference Following
 <a id="search_expressions_and_reference_following" />
 
 The Reference Following and Search Expression mechanisms can be combined.
@@ -419,14 +432,14 @@ For example, reference the Signal Strength of all WiFi Associated Devices using 
 `Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::
 {ap.SSIDReference+.SSID==“MyHome”&&dev.OperatingStandard==“ac”}`
 
-#####	Operations/Commands
+##### Operations/Commands
 <a id="operation_command_path_names" />
 
 The [Operate message](/messages/#operate) allows a USP Controller to execute Commands defined in the USP data models.  Commands are synchronous or asynchronous operations that don’t fall into the typical REST-based concepts of CRUD-N that have been incorporated into the protocol as specific messages. Commands are addressed like Parameter Paths that end with parentheses “()” to symbolize that it is a Command.  
 
 For example: `Device.IP.Interface.[Name==“eth0”].Reset()`
 
-#####	Events
+##### Events
 <a id="event_path_names" />
 
 The Notify request allows a type of generic event (called Event) message that allows a USP Agent to emit events defined in the USP data models. Events are defined in and related to Objects in the USP data models like commands. Events are addressed like Parameter Paths that end with an exclamation point “!” to symbolize that it is an Event.

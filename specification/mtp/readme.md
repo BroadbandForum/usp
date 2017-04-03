@@ -23,7 +23,7 @@ The requirements for each individual Message Transfer Protocol is covered in an 
 
 *	The [Constrained Application Protocol (CoAP)](./coap/).
 
-##	Securing MTPs
+## Securing MTPs
 <a id="securing_mtps" />
 
 USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios. USP recommends the following requirement on use of MTP security:

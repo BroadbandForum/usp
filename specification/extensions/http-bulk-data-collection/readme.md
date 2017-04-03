@@ -26,7 +26,7 @@ This section discusses the Theory of Operation for the collection and transfer o
 
 The Agent configuration that enables the collection of bulk data using HTTP is defined using the BulkData component objects explained here. During this explanation, there will be references to data model objects specific to [Device:2][1]; that specification should be used for reference.
 
-##	Enabling HTTP/HTTPS Bulk Data Communication
+## Enabling HTTP/HTTPS Bulk Data Communication
 
 HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/messages/add/) message. For example:
 
@@ -47,7 +47,7 @@ Once the communication session is established between the Agent and Bulk Data Co
 
 **R-BULK.0** - In many scenarios Agents will utilize "chunked" transfer encoding. As such, the Bulk Data Collector MUST support the HTTP transfer-coding value of "chunked".
 
-###	Use of the URI Query Parameters
+### Use of the URI Query Parameters
 
 The HTTP Bulk Data transfer mechanism allows parameters to be used as HTTP URI query parameters. This is useful when Bulk Data Collector utilizes the specific parameters that the Agent reports for processing (e.g., logging, locating directories) without the need for the Bulk Data Collector to parse the data being transferred.
 
@@ -72,11 +72,11 @@ By setting the following parameters using the Add message as follows:
     .BulkData.Profile.1.HTTP.RequestURIParameter 1.Name ="ct"
     .BulkData.Profile.1.HTTP.RequestURIParameter.1.Reference ="Device.Time.CurrentLocalTime"
 
-###	Use of HTTP Status Codes
+### Use of HTTP Status Codes
 
 The Bulk Data Collector uses standard HTTP status codes, defined in the HTTP specification, to inform the Agent whether a bulk data transfer was successful.  The HTTP status code is set in the response header by the Bulk Data Collector.  For example, "`200 OK`" status code indicates an upload was processed successfully, "`202 Accepted`" status code indicates that the request has been accepted for processing, but the processing has not been completed, "`401 Unauthorized`" status code indicates user authentication failed and a "`500 Internal Server Error`" status code indicates there is an unexpected system error.
 
-####	HTTP Retry Mechanism
+#### HTTP Retry Mechanism
 
 **R-BULK.2** - When the Agent receives an unsuccessful HTTP status code and the HTTP retry behavior is enabled, the Agent MUST try to redeliver the data. The retry mechanism employed for the transfer of bulk data using HTTP uses the same algorithm as is used for [USP Notify retries](/messages/#notifications).
 
@@ -106,7 +106,7 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 **R-BULK.5** – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next bulk data transfer.
 
-###	Use of TLS and TCP
+### Use of TLS and TCP
 
 The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the protocol MAY be used directly over a TCP connection instead. If TLS is not used, some aspects of security are sacrificed. Specifically, TLS provides confidentiality and data integrity, and allows certificate-based authentication in lieu of shared secret-based authentication.
 
@@ -130,7 +130,7 @@ The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the prot
 *	A Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the Collection Server. If a Agent for any reason is unable to obtain absolute time, it can contact the Collection Server without waiting for accurate absolute time. If a Agent chooses to contact the Collection Server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Collection Server certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 *	Support for Agent authentication using client-side certificates is NOT RECOMMENDED.  Instead, the Collection Server SHOULD authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.
 
-##	Encoding of Bulk Data
+## Encoding of Bulk Data
 Bulk Data that is transferred to the Bulk Data Collector from the Agent using HTTP/HTTPS is encoded using a specified encoding type. For HTTP/HTTPS the supported encoding types are CSV and JSON. The encoding type is sent a media type with the report format used for the encoding. For CSV the media type is `text/csv` as specified in [RFC 4180](https://tools.ietf.org/html/rfc4180) and for JSON the media type is `application/json` as specified in [RFC 7159](https://tools.ietf.org/html/rfc7159). For example, a CSV encoded report using `charset=UTF-8` would have the following Content-Type header:
 
     Content-Type: text/csv; charset=UTF-8
@@ -149,7 +149,7 @@ For example a CSV encoded report using a ReportFormat for ParameterPerRow would 
 
 **R-BULK.8** - The BBF-Report-Format custom header MUST be present when transferring data to the Bulk Data Collector from the Agent using HTTP/HTTPS.
 
-###	Using Wildcards to Reference Object Instances in the Report
+### Using Wildcards to Reference Object Instances in the Report
 
 When the Agent supports the use of the Wildcard value "\*"  in place of instance identifiers for the Reference parameter, then all object instances of the referenced parameter are encoded. For example to encode the "`BroadPktSent`" parameter for all object instances of the MoCA Interface object the following will be configured:
 
@@ -158,7 +158,7 @@ When the Agent supports the use of the Wildcard value "\*"  in place of instance
     .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.*.Stats.BroadPktSent"
 ```  
 
-###	Using Alternative Names in the Report
+### Using Alternative Names in the Report
 
 Alternative names can be defined for the parameter name in order to shorten the name of the parameter. For example instead of encoding the full parameter name "`Device.MoCA.Interface.1.Stats.BroadPktSent`" could be encoded with a shorter name "`BroadPktSent`". This allows the encoded data to be represented using the shorter name. This would be configured as:
 
@@ -167,7 +167,7 @@ Alternative names can be defined for the parameter name in order to shorten the 
 
 In the scenario where there are multiple instances of a parameter (e.g., "`Device.MoCA.Interface.1.Stats.BroadPktSent`", "`Device.MoCA.Interface.2.Stats.BroadPktSent`") in a Report, the content of the Name parameter SHOULD be unique (e.g., `BroadPktSent1`, `BroadPktSent2`).
 
-####	Using Object Instance Wildcards and Parameter Partial Paths with Alternative Names
+#### Using Object Instance Wildcards and Parameter Partial Paths with Alternative Names
 
 Wildcards for Object Instances can be used in conjunction with the use of alternative names by reflecting object hierarchy of the value of the Reference parameter in the value of the Name parameter.
 
@@ -232,7 +232,7 @@ Using this configuration a device that has 1 WiFi Access Point (with instance id
     WiFi_AP_Assoc.1.11.RetryCount
     WiFi_AP_Assoc.1.11.MultipleRetryCount
 
-###	Processing of Content for Failed Report Transmissions
+### Processing of Content for Failed Report Transmissions
 When the content (report) cannot be successfully transmitted, including retries, to the data collector, the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance defines how the content should be disposed based on the following rules:
 
 *	When the value of the `NumberOfRetainedFailedReports` parameter is greater than `0`, then the report for the current reporting interval is appended to the list of failed reports. How the content is appended is dependent on the type of encoding (e.g., CSV, JSON) and is described further in corresponding encoding section.
@@ -241,7 +241,7 @@ When the content (report) cannot be successfully transmitted, including retries,
 *	If the Agent cannot retain the number of failed reports from previous reporting intervals while transmitting the report of the current reporting interval, then the oldest failed reports are deleted until the Agent is able to transmit the report from the current reporting interval.
 *	If the value `BulkData.Profile` object instance’s `EncodingType` parameter is modified any outstanding failed reports are deleted.
 
-###	Encoding of CSV Bulk Data
+### Encoding of CSV Bulk Data
 
 **R-BULK.11** - CSV Bulk Data SHOULD be encoded as per [RFC 4180](https://tools.ietf.org/html/rfc4180), MUST contain a header line (column headers), and the media type MUST indicate the presence of the header line.
 
@@ -256,7 +256,7 @@ Using the HTTP example above, the following configures the Agent to transfer dat
     .BulkData.Profile.1.CSVEncoding.RowSeparator="&#13;&#10;"
     .BulkData.Profile.1.CSVEncoding.EscapeCharacter="&quot;"  
 
-####	Defining the Report Layout of the Encoded Bulk Data
+#### Defining the Report Layout of the Encoded Bulk Data
 
 The layout of the data in the reports associated with the profiles allows parameters to be formatted either as part of a column (`ParameterPerColumn`) or as a distinct row (`ParameterPerRow`) as defined below. In addition, the report layout allows rows of data to be inserted with a timestamp stating when the data is collected.
 
@@ -267,17 +267,17 @@ Using the HTTP example above, the following configures the Agent to format the d
 
 The report format of "`ParameterPerRow`" MUST format each parameter using the `ParameterName`, `ParameterValue` and `ParameterType` in that order. The `ParameterType` MUST be the parameter's base data type as described in [TR-106][3].
 
-####	Layout of Content for Failed Report Transmissions
+#### Layout of Content for Failed Report Transmissions
 
 When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For CSV Encoded data the content of new reporting interval is added onto the existing content without any header data.
 
-###	Encoding of JSON Bulk Data
+### Encoding of JSON Bulk Data
 
 Using the HTTP example above, the Set message is used to configure the Agent to transfer data to the Bulk Data Collector using JSON encoding as follows:
 
     .BulkData.Profile.1.EncodingType =  "JSON"
 
-####	Defining the Report Layout of the Encoded Bulk Data
+#### Defining the Report Layout of the Encoded Bulk Data
 
 Reports that are encoded with JSON Bulk Data are able to utilize different report format(s) defined by the `JSONEncoding` object’s `ReportFormat` parameter as defined below.
 
@@ -295,7 +295,7 @@ Reports are defined as an Array of Report instances encoded as:
 
 *Note: Multiple instances of Report instances may exist when previous reports have failed to be transmitted.*
 
-####	Layout of Content for Failed Report Transmissions
+#### Layout of Content for Failed Report Transmissions
 
 When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For JSON Encoded data the report for the current reporting interval is added onto the existing appended as a new "Data" object array instance as shown below:
 
@@ -304,7 +304,7 @@ When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData
     {Report from the current reporting interval}
     ]
 
-####	Using the ObjectHierarchy Report Format
+#### Using the ObjectHierarchy Report Format
 
 When a BulkData profile utilizes the JSON encoding type and has a `JSONEncoding.ReportFormat` parameter value of "`ObjectHierarchy`", then the JSON objects are encoded such that each object in the object hierarchy of the data model is encoded as a corresponding hierarchy of JSON Objects with the parameters (i.e., parameterName, parameterValue) of the object specified as name/value pairs of the JSON Object.
 
@@ -343,7 +343,7 @@ For example the translation for the leaf object "`Device.MoCA.Interface.*.Stats.
 
 *Note: The translated JSON Object name does not contain the trailing period "." of the leaf object.*
 
-####	Using the NameValuePair Report Format
+#### Using the NameValuePair Report Format
 
 When a BulkData profile utilizes the JSON encoding type and has a `JSONEncoding.ReportFormat` parameter value of "`NameValuePair`", then the JSON objects are encoded such that each parameter of the data model is encoded as an array instance with the parameterName representing JSON name token and parameterValue as the JSON value token.
 
@@ -366,7 +366,7 @@ For example the translation for the leaf object "`Device.MoCA.Interface.*.Stats.
 
 *Note: The translated JSON Object name does not contain the trailing period "." of the leaf object.*
 
-####	Translating Data Types
+#### Translating Data Types
 JSON has a number of basic data types that are translated from the base data types defined in [TR-106][3]. The encoding of JSON Data Types MUST adhere to [RFC 7159](https://tools.ietf.org/html/rfc7159).
 
 TR-106 named data types are translated into the underlying base TR-106 data types. Lists based on TR-106 base data types utilize the JSON String data type.
@@ -380,12 +380,12 @@ TR-106 named data types are translated into the underlying base TR-106 data type
 | int, long, unsignedInt, unsignedLong | Number |
 | string | String |
 
-##	Report Examples
+## Report Examples
 This section provides example report configurations along with the examples of how the resulting encoded data would look as it is transferred to the Bulk Data Collector.
 
-###	CSV Encoded Report Examples
+### CSV Encoded Report Examples
 
-####	CSV Encoded Reporting Using ParameterPerRow Report Format
+#### CSV Encoded Reporting Using ParameterPerRow Report Format
 
 Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerRow` report format:
 
@@ -424,7 +424,7 @@ The resulting CSV encoded data would look like:
     1364529149, Device.MoCA.Interface.1.Stats.Stats.BytesSent,7682161,unsignedLong
     1364529149,Device.MoCA.Interface.1.Stats.MultiPktReceived,890682272,unsignedLong
 
-####	CSV Encoded Reporting Using ParameterPerColumn Report Format
+#### CSV Encoded Reporting Using ParameterPerColumn Report Format
 
 Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerColumn` report format:
 
@@ -463,7 +463,7 @@ The resulting CSV encoded data with transmission of the last 3 reports failed to
     1564749151,25255,200559350,7684133,910682272
     1664859152,25252,200653267,7685167,9705982277
 
-###	JSON Encoded Report Example
+### JSON Encoded Report Example
 
 Using the configuration examples provided in the previous sections the configuration for a JSON encoded HTTP report:
 

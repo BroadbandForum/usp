@@ -88,6 +88,7 @@ The text of this notice must be included in all copies of this Broadband Forum W
 | Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
 
 # Executive Summary
+
 <a id="executive_summary" />
 
 This document describes the architecture, protocol, and data model that builds an intelligent User Services Platform. It is targeted towards application developers, application service providers, CPE vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user’s network connection and their connected devices.
@@ -112,6 +113,7 @@ This new world of the connected user as a platform provides the perfect opportun
 This User Services Platform provides a scalable, interoperable, and efficient mechanism to meet the needs of the connected user and their application and network providers.
 
 # Purpose and Scope
+
 <a id="purpose_scope" />
 
 ## Purpose
@@ -143,9 +145,11 @@ For the proxy of Service Elements, this document defines the proxy mechanisms bu
 Lastly, USP makes use of and expands the Device:2 Data Model for TR-069 Devices [1][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
 
 # References and Terminology
+
 <a id="references_terminology" />
 
 ## Conventions
+
 <a id="conventions" />
 
 In this specification, several words are used to signify the requirements of the specification. These words are always capitalized. More information can be found be in [RFC 2119][Conventions].
@@ -171,6 +175,7 @@ This phrase, or the phrase “NOT RECOMMENDED” means that there could exist va
 This word, or the term “OPTIONAL”, means that this item is one of an allowed set of alternatives. An implementation that does not include this option MUST be prepared to inter-operate with another implementation that does include the option.
 
 ## References
+
 <a id="references" />
 
 The following references are of relevance to this Working Text. At the time of publication, the editions indicated were valid. All references are subject to revision; users of this Working Text are therefore encouraged to investigate the possibility of applying the most recent edition of the references listed below.
@@ -192,6 +197,7 @@ A list of currently valid Broadband Forum Technical Reports is published at
 12.	[*Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3*][12]
 
 # Definitions
+
 <a id="definitions" />
 
 The following terminology is used throughout this specification.

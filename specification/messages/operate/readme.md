@@ -15,15 +15,15 @@
 
 # The Operate Message
 
-###	Synchronous Operations
+### Synchronous Operations
 
 A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the send_resp flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.
 
 <img src="synchronous_operation.png" />
 
-Figure 3 – Operate Message Flow for Synchronous Operations
+Figure 1 – Operate Message Flow for Synchronous Operations
 
-###	Asynchronous Operations
+### Asynchronous Operations
 
 An asynchronous operation expects to take some processing on the system the Agent represents and will return results at a later time. When complete, the output arguments are sent in a `Notify` (`OperationComplete`) request to any Controllers that have an active subscription to the operation and Object(s) to which it applies.
 
@@ -37,7 +37,7 @@ If any Controller wants a notification that an operation has completed, it creat
 
 <img src="asynchronous_operation.png" />
 
-Figure 4 – Operate Message Flow for Asynchronous Operations
+Figure 2 – Operate Message Flow for Asynchronous Operations
 
 ### Operate Requests on Multiple Objects
 
@@ -47,7 +47,7 @@ Since the Operate request can take a path expression as a value for the command 
 
 **R-OPR.2** – For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command element.
 
-###	Event Notifications for Operations
+### Event Notifications for Operations
 
 When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions
 
@@ -61,7 +61,7 @@ If an asynchronous operation is triggered multiple times by one or more Controll
 
 **R-OPR.3** - When handling concurrently invoked operations, an Agent MUST NOT cancel an operation already in progress unless explicitly told to do so by a Controller with permission to do so.
 
-##	Operate Request Elements
+## Operate Request Elements
 `string command`
 
 This element contains a Command Path or Search Path to an Object defined Operation in one or more Objects.

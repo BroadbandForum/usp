@@ -17,10 +17,11 @@
 
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship. Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints. Agents may also be pre-configured with some or all information about certain Controllers.
 
-##	Configuration
+## Configuration
+
 <a id="configuration" />
 
-###	Agent Configuration
+### Agent Configuration
 
 **R-DIS.0** – An Agent that has a USP relationship with a Controller MUST be configured with that Controller’s Endpoint Identifier, credentials, and authorized Role.
 
@@ -39,13 +40,14 @@ Example mechanisms for configuration include but are not limited to:
 
 The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.
 
-###	Controller Configuration
+### Controller Configuration
 
 **R-DIS.3** – A Controller that has a relationship with an Agent MUST have the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
 
 Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.
 
-##	DHCP Options for Acquiring Controller Information
+## DHCP Options for Acquiring Controller Information
+
 <a id="dhcp" />
 
 DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 Vendor-Identifying Vendor-Specific Information Option [RFC 3925](https://tools.ietf.org/html/rfc3925) (option code 125) and DHCPv6 Vendor-specific Information Option [RFC 3315](https://tools.ietf.org/html/rfc3315) (option code 17) can be used to provide information to Agents about a single Controller. The options that may be returned by DNS are shown below. Description of these options can be found in [Device:2][1].
@@ -70,7 +72,8 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 | USP retry mini¬mum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
 | USP retry interval multiplier | `28` | `28` |	`Device.Controller.{i}.USPRetryIntervalMultiplier` |
 
-##	mDNS
+## mDNS
+
 <a id="mdns" />
 
 **R-DIS.8** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in [RFC 6762][8].
@@ -79,7 +82,8 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.10** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “`.local.`”.
 
-###	DNS
+### DNS
+
 <a id="dns" />
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
@@ -88,7 +92,8 @@ Requirements for implementation of a DNS client and configuration of the DNS cli
 
 **R-DIS.12** - If the Agent is resolving an FQDN for a Controller, and the MTP or resource path are unknown, the Agent MUST request DNS-SD information (PTR, SRV and TXT resource records) in addition to A, AAAA or other resource records it is programmatically set to request.
 
-###	DNS-SD Records
+### DNS-SD Records
+
 <a id="dns-sd" />
 
 DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about “services”, and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
@@ -99,6 +104,7 @@ The format of a DNS-SD Service Instance Name (which is the resource record (RR) 
 Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments]) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as “`_<Service Name>._<Transport Protocol>`” (e.g., “`_usp-agt-coap._udp`”).
 
 #### IANA-Registered USP Service Names
+
 | Service Name | Transport Protocol | MTP | Type of USP Endpoint |
 | ---------: | :-----: | :----: | :----------- |
 | `usp-agt-coap` | udp | CoAP | Agent |
@@ -107,7 +113,6 @@ Service Name values [registered by BBF with IANA](http://www.broadband-forum.org
 | `usp-ctr-http` | tcp | HTTP | Controller |
 | `usp-agt-stomp` | tcp | STOMP | Agent |
 | `usp-ctr-stomp` | tcp | STOMP | Controller |
-
 
 DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-coap._udp.<Domain>`) in the RR can be used to provide searchable simple (single layer) functional groupings of USP Agents. The registry of subtypes for Service Names registered by BBF is listed at http://www.broadband-forum.org/assignments. DNS SRV and TXT records can be pointed to by multiple PTR records, which allow a USP Endpoint to potentially be discoverable as belonging to various functional groupings.
 
@@ -125,7 +130,7 @@ The TXT record can include other attributes defined in the TXT record attribute 
 
 Whether a particular USP Endpoint respond to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.
 
-###	Example Controller Unicast DNS-SD Resource Records
+### Example Controller Unicast DNS-SD Resource Records
 ```
     ; One PTR record for each supported MTP
     _usp-ctr-http._tcp.host.example.com      PTR <Controller USP ID>._usp-ctr-http._tcp.example.com.
@@ -138,7 +143,7 @@ Whether a particular USP Endpoint respond to DNS or mDNS queries or populates (t
     host.example.com.  A      192.0.2.200
     host.example.com.  AAAA   2001:db8::200
 ```
-###	Example Agent Multicast DNS-SD Resource Records
+### Example Agent Multicast DNS-SD Resource Records
 ```
     ; One PTR record (DNS-SD Service) for each supported MTP
     _usp-agt-http._tcp                 PTR <USP ID>._usp-agt-http._tcp.local.
@@ -161,7 +166,7 @@ Whether a particular USP Endpoint respond to DNS or mDNS queries or populates (t
     <USP ID>.local.  AAAA   2001:db8::100
 ```
 
-###	Example Controller Multicast DNS-SD Resource Records
+### Example Controller Multicast DNS-SD Resource Records
 
 LAN Controllers do not need to have PTR records, as they will only be queried using the DNS-SD instance identifier of the Controller.
 ```
@@ -174,7 +179,7 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
     <USP ID>.local.  AAAA   2001:db8::200
 ```
 
-###	Example DNS-SD Discovery Message Flow
+### Example DNS-SD Discovery Message Flow
 
 The example below shows simple LAN-based mDNS discovery. In this example, the Controller is initiating the discovery process, looking for either a specific Agent it wants to communicate with or for previously unknown Agents in the LAN (to determine if there are any it would like to communicate with).
 

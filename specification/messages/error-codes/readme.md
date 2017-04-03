@@ -13,12 +13,14 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-#	Error Codes
+# Error Codes
+
 <a id="error_codes" />
 
 USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7999 for Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
 
 ## Controller Error Codes
+
 <a id="controller_error_codes" />
 
 *Note: The 6000 series of errors applies entirely to Error messages sent in reply to Notify Requests from an Agent.*
@@ -34,7 +36,8 @@ USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7
 | `6006` | Permission denied | This error indicates that the source endpoint does not have the authorization to use this message on the target endpoint. |
 | `6800-6999` | Vendor defined error codes | These errors are vendor defined(#vendor_defined_error_codes). |
 
-##	Agent Error Codes
+## Agent Error Codes
+
 <a id="agent_error_codes" />
 
 *Note: The 7000 series of errors applies entirely to Error messages sent in reply to Requests from a Controller.*
@@ -70,6 +73,7 @@ USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7
 | `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes).
 
 ## Vendor Defined Error Codes
+
 <a id="vendor_defined_error_codes" />
 
 Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use either the `6800-6999` series for Controller errors, or the `7800-7999` series for Agent errors, respectively. There are no requirements on the content of these errors.

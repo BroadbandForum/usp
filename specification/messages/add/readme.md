@@ -14,9 +14,10 @@
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 # Add
+
 <a id="add" />
 
-##	Selecting Objects and Parameters for CUD Operations
+## Selecting Objects and Parameters for CUD Operations
 
 Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
 
@@ -64,7 +65,8 @@ The Agent’s response would include the successful Object update and the list o
         }
     }
 
-###	Using Allow Partial and Required Parameters
+### Using Allow Partial and Required Parameters
+
 <a id="allow_partial_and_required_parameters" />
 
 The Add, Set, and Delete requests contain an element called “`allow_partial`”. This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
@@ -136,7 +138,7 @@ This element specifies whether the Agent should treat the creation of the Object
 
 **R-ADD.3** - If the `required` element is set to true, a failure to update this parameter MUST result in a failure to create the Object.
 
-##	Add Response Elements
+## Add Response Elements
 
 `repeated CreatedObjectResult created_obj_result_list`
 
