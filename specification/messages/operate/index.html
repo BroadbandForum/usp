@@ -1,0 +1,64 @@
+<!-- Reference Links -->
+<h1 id="the-operate-message">The Operate Message</h1>
+<h3 id="synchronous-operations">Synchronous Operations</h3>
+<p>A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the send_resp flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.</p>
+<p><img src="synchronous_operation.png" /></p>
+<p>Figure 3 – Operate Message Flow for Synchronous Operations</p>
+<h3 id="asynchronous-operations">Asynchronous Operations</h3>
+<p>An asynchronous operation expects to take some processing on the system the Agent represents and will return results at a later time. When complete, the output arguments are sent in a <code>Notify</code> (<code>OperationComplete</code>) request to any Controllers that have an active subscription to the operation and Object(s) to which it applies.</p>
+<p>When a Controller using the Operate request specifies an operation that is defined as asynchronous, the Agent creates an instance of the Request Object in its data model, and includes a reference to the created Object in the Operate response. If the <code>send_resp</code> flag is <code>false</code>, the Controller doesn’t need the Request details, and intends to ignore it.</p>
+<p>The lifetime of a Request Object expires when the operation is complete (either by success or failure). An expired Request Object is removed from the Instantiated Data Model.</p>
+<p><strong>R-OPR.0</strong> – When an Agent receives an Operate Request that addresses an asynchronous operation, it MUST create a Request Object in the Request table of its Instantiated Data Model (see <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>). When the Operation is complete (either success or failure), it MUST remove this Object from the Request table.</p>
+<p>If any Controller wants a notification that an operation has completed, it creates a Subscription Object with the <code>NotificationType</code> set to <code>OperationComplete</code> and with the <code>ReferenceList</code> parameter including a path to the specified command. The Agent processes this Subscription when the operation completes and sends a Notify message, including the <code>command_key</code> value that the Controller assigned when making the Operate request.</p>
+<p><img src="asynchronous_operation.png" /></p>
+<p>Figure 4 – Operate Message Flow for Asynchronous Operations</p>
+<h3 id="operate-requests-on-multiple-objects">Operate Requests on Multiple Objects</h3>
+<p>Since the Operate request can take a path expression as a value for the command element, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the <code>OperationResult</code> element type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different <code>OperationResult</code> entry. For this reason, operation failures are never conveyed in an Error message – in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.</p>
+<p><strong>R-OPR.1</strong> – When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error message due to a failed operation. It MUST instead include the failure in the <code>cmd_failure</code> element of the Operate response.</p>
+<p><strong>R-OPR.2</strong> – For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command element.</p>
+<h3 id="event-notifications-for-operations">Event Notifications for Operations</h3>
+<p>When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions</p>
+<h3 id="concurrent-operations">Concurrent Operations</h3>
+<p>If an asynchronous operation is triggered multiple times by one or more Controllers, the Agent has the following options:</p>
+<ol style="list-style-type: decimal">
+<li>Deny the new operation (with, for example, <code>7005 Resources Exceeded</code> )</li>
+<li>The operations are performed in parallel and independently.</li>
+<li>The operations are queued and completed in order.</li>
+</ol>
+<p><strong>R-OPR.3</strong> - When handling concurrently invoked operations, an Agent MUST NOT cancel an operation already in progress unless explicitly told to do so by a Controller with permission to do so.</p>
+<h2 id="operate-request-elements">Operate Request Elements</h2>
+<p><code>string command</code></p>
+<p>This element contains a Command Path or Search Path to an Object defined Operation in one or more Objects.</p>
+<p><code>string command_key</code></p>
+<p>This element contains a string used as a reference by the Controller to match the operation with notifications.</p>
+<p><code>bool send_resp</code></p>
+<p>This element lets the Controller indicate to Agent whether or not it expects a response in association with the operation request.</p>
+<p><strong>R-OPR.4</strong> - When <code>send_resp</code> is set to <code>false</code>, the target Endpoint SHOULD NOT send a response or error to the source Endpoint. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.</p>
+<p><code>map&lt;string, string&gt; input_arg_map</code></p>
+<p>This element contains a map of key/value pairs indicating the input arguments (relative to the command path in the command element) to be passed to the method indicated in the command element.</p>
+<p><strong>R-OPR.5</strong> – Any key in the <code>input_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing. This element contains a map of name/value pairs indicating the input arguments (relative to the Object that is the subject of this command) to be passed to the method invoked indicated in the command element.</p>
+<h2 id="operate-response-elements">Operate Response Elements</h2>
+<p><code>repeated OperationResult operation_result_list</code></p>
+<p>This element contains a repeated set of <code>OperationResult</code> messages.</p>
+<h3 id="operationresult-elements">OperationResult Elements</h3>
+<p><code>string executed_command</code></p>
+<p>This element contains a Command Path to the Object defined Operation that is the subject of this <code>OperateResp</code> message.</p>
+<p><code>oneof operate_resp</code></p>
+<p>This element contains a message of one of the following types.</p>
+<p><code>string req_object_path</code></p>
+<p>This element contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.</p>
+<p><strong>R-OPR.6</strong> – Path Names in the <code>req_object_path</code> MUST use Instance Number Addressing.</p>
+<pre><code>OutputArgs req_output_args
+CommandFailure cmd_failure</code></pre>
+<p>This element contains one message of type <code>CommandFailure</code>. It is used when at synchronous operation is not successful.</p>
+<h4 id="outputargs-elements">OutputArgs Elements</h4>
+<p><code>map&lt;string, string&gt; output_arg_map</code></p>
+<p>This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command</code> element) returned by the method invoked in the Operate message.</p>
+<p><strong>R-OPR.7</strong> – Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
+<h4 id="commandfailure-elements">CommandFailure elements</h4>
+<p><code>fixed32 err_code</code></p>
+<p>This element contains the <a href="/messages/error-codes/">error code</a> of the error that caused the operation to fail.</p>
+<p><code>string err_msg</code></p>
+<p>This element contains additional (human readable) information about the reason behind the error.</p>
+<h2 id="operate-message-error-codes">Operate Message Error Codes</h2>
+<p>Appropriate error codes for the Operate message include <code>7000-7008</code>, <code>7015</code>, <code>7016</code>, <code>7022</code>, and <code>7800-7999</code>.</p>

@@ -1,0 +1,220 @@
+<!-- Reference Links -->
+<h1 id="error-codes">Error Codes</h1>
+<p><a id="error_codes" /></p>
+<p>USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7999 for Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.</p>
+<h2 id="controller-error-codes">Controller Error Codes</h2>
+<p><a id="controller_error_codes" /></p>
+<p><em>Note: The 6000 series of errors applies entirely to Error messages sent in reply to Notify Requests from an Agent.</em></p>
+<table style="width:64%;">
+<colgroup>
+<col width="9%" />
+<col width="20%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Code</th>
+<th align="center">Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><code>6000</code></td>
+<td align="center">Message failed</td>
+<td align="left">This error indicates a general failure that is described in an err_msg element.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>6001</code></td>
+<td align="center">Message not supported</td>
+<td align="left">This error indicates that the attempted message was not understood by the target endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>6002</code></td>
+<td align="center">Request denied (no reason specified)</td>
+<td align="left">This error indicates that the target endpoint cannot or will not process the message.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>6003</code></td>
+<td align="center">Internal error</td>
+<td align="left">This error indicates that the message failed due to internal hardware or software reasons.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>6004</code></td>
+<td align="center">Invalid arguments</td>
+<td align="left">This error indicates that the message failed due to invalid values in the Request elements and/or the failure to update one or more parameters during an Add or Set message.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>6005</code></td>
+<td align="center">Resources exceeded</td>
+<td align="left">This error indicates that the message failed due to memory or processing limitations on the target endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>6006</code></td>
+<td align="center">Permission denied</td>
+<td align="left">This error indicates that the source endpoint does not have the authorization to use this message on the target endpoint.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>6800-6999</code></td>
+<td align="center">Vendor defined error codes</td>
+<td align="left">These errors are vendor defined(#vendor_defined_error_codes).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="agent-error-codes">Agent Error Codes</h2>
+<p><a id="agent_error_codes" /></p>
+<p><em>Note: The 7000 series of errors applies entirely to Error messages sent in reply to Requests from a Controller.</em></p>
+<table style="width:64%;">
+<colgroup>
+<col width="9%" />
+<col width="20%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Code</th>
+<th align="center">Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><code>7000</code></td>
+<td align="center">Message failed</td>
+<td align="left">This error indicates a general failure that is described in an err_msg element.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7001</code></td>
+<td align="center">Message not supported</td>
+<td align="left">This error indicates that the attempted message was not understood by the target endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7002</code></td>
+<td align="center">Request denied (no reason specified)</td>
+<td align="left">This error indicates that the target endpoint cannot or will not process the message.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7003</code></td>
+<td align="center">Internal error</td>
+<td align="left">This error indicates that the message failed due to internal hardware or software reasons.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7004</code></td>
+<td align="center">Invalid arguments</td>
+<td align="left">This error indicates that the message failed due to invalid values in the Request elements and/or the failure to update one or more parameters during an Add or Set message.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7005</code></td>
+<td align="center">Resources exceeded</td>
+<td align="left">This error indicates that the message failed due to memory or processing limitations on the target endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7006</code></td>
+<td align="center">Permission denied</td>
+<td align="left">This error indicates that the source endpoint does not have the authorization for this action.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7007</code></td>
+<td align="center">Invalid configuration</td>
+<td align="left">This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7008</code></td>
+<td align="center">Invalid path syntax</td>
+<td align="left">This error indicates that the Path Name used was not understood by the target endpoint.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7009</code></td>
+<td align="center">Parameter action failed</td>
+<td align="left">This error indicates that the parameter failed to update for a general reason described in an err_msg element.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7010</code></td>
+<td align="center">Unsupported parameter</td>
+<td align="left">This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7011</code></td>
+<td align="center">Invalid type</td>
+<td align="left">This error indicates that the requested value was not of the correct data type for the parameter.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7012</code></td>
+<td align="center">Invalid value</td>
+<td align="left">This error indicates that the requested value was not within the acceptable values for the parameter.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7013</code></td>
+<td align="center">Attempt to update non-writeable parameter.</td>
+<td align="left">This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7014</code></td>
+<td align="center">Value conflict</td>
+<td align="left">This error indicates that the requested value would result in an invalid configuration based on other parameter values.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7015</code></td>
+<td align="center">Operation error</td>
+<td align="left">This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg element.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7016</code></td>
+<td align="center">Object does not exist</td>
+<td align="left">This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7017</code></td>
+<td align="center">Object could not be created</td>
+<td align="left">This error indicates that the operation failed to create an instance of the specified Object.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7018</code></td>
+<td align="center">Object is not a table</td>
+<td align="left">This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7019</code></td>
+<td align="center">Attempt to create non-creatable Object</td>
+<td align="left">This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7020</code></td>
+<td align="center">Object could not be updated</td>
+<td align="left">This error indicates that the requested Object in a Set request failed to update.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7021</code></td>
+<td align="center">Required parameter failed</td>
+<td align="left">This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7022</code></td>
+<td align="center">Command failure</td>
+<td align="left">This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg element.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7023</code></td>
+<td align="center">Command canceled</td>
+<td align="left">This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7024</code></td>
+<td align="center">Delete failure</td>
+<td align="left">This error indicates that this Object Instance failed to be deleted.</td>
+</tr>
+<tr class="even">
+<td align="right"><code>7025</code></td>
+<td align="center">Object exists with duplicate key</td>
+<td align="left">This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist.</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>7800-7999</code></td>
+<td align="center">Vendor defined error codes</td>
+<td align="left">These errors are <a href="#vendor_defined_error_codes">vendor defined</a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vendor-defined-error-codes">Vendor Defined Error Codes</h2>
+<p><a id="vendor_defined_error_codes" /></p>
+<p>Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use either the <code>6800-6999</code> series for Controller errors, or the <code>7800-7999</code> series for Agent errors, respectively. There are no requirements on the content of these errors.</p>
