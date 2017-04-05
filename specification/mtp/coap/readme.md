@@ -104,7 +104,7 @@ In section 9 of [RFC 7252][9], CoAP messages are secured using one of three mode
 
 While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further guidance related to DTLS implementations for the Internet of Things is provided by [RFC 7925](https://tools.ietf.org/html/rfc7925).
 
-**R-x.y** - CoAP clients and servers MUST implement the mandatory statements of [RFC 7925](https://tools.ietf.org/html/rfc7925) with the exception that:
+**R-COAP.15** - CoAP clients and servers MUST implement the mandatory statements of [RFC 7925](https://tools.ietf.org/html/rfc7925) with the exception that:
 
 * Section 4.4.1 USP Controller certificates can contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
 * Section 4.4.2 Client certificate identifiers do not use EUI-64 identifier but instead use the identifier defined for Client certificates in this Working Text.
