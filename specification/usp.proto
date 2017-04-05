@@ -1,5 +1,52 @@
 syntax = "proto3";
 
+//**************************************************************************
+//
+// WT-369 USP Message Protocol Buffer Schema
+//
+// Copyright (c) 2017, Broadband Forum
+// Copyright (c) 2017 ARRIS Enterprises, LLC.
+//
+// Redistribution and use in source and binary forms, with or
+//  without modification, are permitted provided that the following
+//  conditions are met:
+//
+//  1. Redistributions of source code must retain the above copyright
+//     notice, this list of conditions and the following disclaimer.
+//
+//  2. Redistributions in binary form must reproduce the above
+//     copyright notice, this list of conditions and the following
+//     disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//
+//  3. Neither the name of the copyright holder nor the names of its
+//     contributors may be used to endorse or promote products
+//     derived from this software without specific prior written
+//     permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+//  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+//  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+//  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+//  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+//  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+//  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+//  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+//  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+//  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//  The above license is used as a license under copyright only.
+//  Please reference the Forum IPR Policy for patent licensing terms
+//  <https://www.broadband-forum.org/ipr-policy>.
+//
+//  Any moral rights which are necessary to exercise under the above
+//  license grant are also deemed granted under this license.
+//
+//**************************************************************************
+
 package usp;
 
 message Msg {
@@ -29,10 +76,10 @@ message Header {
     ADD_RESP = 9;
     DELETE = 10;
     DELETE_RESP = 11;
-    GET_OBJECTS = 12;
-    GET_OBJECTS_RESP = 13;
-    //GET_COMMANDS = 14;
-    //GET_COMMANDS_RESP = 15;
+    GET_SUPPORTED_DM = 12;
+    GET_SUPPORTED_DM_RESP = 13;
+    GET_INSTANCES = 14;
+    GET_INSTANCES_RESP = 15;
     NOTIFY_RESP = 16;
   }
 }
@@ -50,8 +97,8 @@ message Body {
 message Request {
   oneof req_type {
     Get get = 1;
-    GetObjects get_objects = 2;
-    //GetCommands get_commands = 3;
+    GetSupportedDM get_supported_dm = 2;
+    GetInstances get_instances = 3;
     Set set = 4;
     Add add = 5;
     Delete delete = 6;
@@ -64,8 +111,8 @@ message Request {
 message Response {
   oneof resp_type {
     GetResp get_resp = 1;
-    GetObjectsResp get_objects_resp = 2;
-    //GetCommandsResp get_commands_resp = 3;
+    GetSupportedDMResp get_supported_dm_resp = 2;
+    GetInstancesResp get_instances_resp = 3;
     SetResp set_resp = 4;
     AddResp add_resp = 5;
     DeleteResp delete_resp = 6;
@@ -78,7 +125,7 @@ message Response {
 message Error {
   fixed32 err_code = 1;
   string err_msg = 2;
-  repeated ParamError param_err = 3;
+  repeated ParamError param_err_list = 3;
 
   message ParamError {
     string param_path = 1;
@@ -89,34 +136,41 @@ message Error {
 
 
 message Get {
-  repeated string param_path = 1;
+  repeated string param_path_list = 1;
 }
 
 message GetResp {
-  repeated RequestedPathResult req_path_result = 1;
+  repeated RequestedPathResult req_path_result_list = 1;
 
   message RequestedPathResult {
     string requested_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
-    map<string, string> result_param_map = 4;
+    repeated ResolvedPathResult resolved_path_result_list = 4;
+  }
+
+  message ResolvedPathResult {
+    string resolved_path = 1;
+    map<string, string> result_param_map = 2;
   }
 }
 
 
-message GetObjects {
-  repeated DiscoverObject discover_obj = 1;
+
+message GetSupportedDM {
+  repeated DiscoverObject discover_obj_list = 1;
 
   message DiscoverObject {
     string obj_path = 1;
     bool next_level = 2;
     bool return_commands = 3;
     bool return_events = 4;
+    bool return_params = 5;
   }
 }
 
-message GetObjectsResp {
-  repeated RequestedObjectResult req_obj_result = 1;
+message GetSupportedDMResp {
+  repeated RequestedObjectResult req_obj_result_list = 1;
 
   message RequestedObjectResult {
     string req_obj_path = 1;
@@ -128,39 +182,68 @@ message GetObjectsResp {
 
   message SupportedObjectResult {
     string supported_obj_path = 1;
-    bool read_write = 2;
-    bool multi_instance = 3;
-    repeated CurrInstance curr_inst_list = 4;
-    repeated SupportedCommandResult supported_command_list = 5;
-    repeated SupportedEventResult supported_event_list = 6;
+    AccessType access = 2;
+    bool is_multi_instance = 3;
+    repeated SupportedCommandResult supported_command_list = 4;
+    repeated SupportedEventResult supported_event_list = 5;
+    repeated SupportedParamResult supported_param_list = 6;
   }
 
-  message CurrInstance {
-    string instantiated_obj_path = 1;
-    map<string, string> unique_key_map = 2;
+  message SupportedParamResult {
+    string param_name = 1;
+    AccessType access = 2;
   }
 
   message SupportedCommandResult {
-    string cmd_name = 1;
-    bool is_async_cmd = 2;
-    repeated string input_arg_names = 3;
-    repeated string output_arg_names = 4;
+    string command_name = 1;
+    repeated string input_arg_name_list = 2;
+    repeated string output_arg_name_list = 3;
   }
 
   message SupportedEventResult {
     string event_name = 1;
-    repeated string arg_names = 2;
+    repeated string arg_name_list = 2;
+  }
+
+  enum AccessType {
+    READ_ONLY = 0;
+    READ_WRITE = 1;
+    WRITE_ONLY = 2;
+  }
+}
+
+
+
+message GetInstances {
+  repeated string obj_path_list = 1;
+  bool next_level = 2;
+}
+
+message GetInstancesResp {
+  repeated RequestedPathResult req_path_result_list = 1;
+
+  message RequestedPathResult {
+    string requested_path = 1;
+    fixed32 err_code = 2;
+    string err_msg = 3;
+    repeated CurrInstance curr_inst_list = 4;
+  }
+
+
+  message CurrInstance {
+    string instantiated_obj_path = 1;
+    map<string, string> unique_key_map = 2;
   }
 }
 
 
 message Add {
   bool allow_partial = 1;
-  repeated CreateObject create_obj = 2;
+  repeated CreateObject create_obj_list = 2;
 
   message CreateObject {
     string obj_path = 1;
-    repeated CreateParamSetting param_setting = 2;
+    repeated CreateParamSetting param_setting_list = 2;
   }
 
   message CreateParamSetting {
@@ -171,7 +254,7 @@ message Add {
 }
 
 message AddResp {
-  repeated CreatedObjectResult created_obj_result = 1;
+  repeated CreatedObjectResult created_obj_result_list = 1;
 
   message CreatedObjectResult {
     string requested_path = 1;
@@ -190,7 +273,7 @@ message AddResp {
 
       message OperationSuccess {
         string instantiated_path = 1;
-        repeated ParameterError param_err = 2;
+        repeated ParameterError param_err_list = 2;
         map<string, string> unique_key_map = 3;
       }
     }
@@ -206,11 +289,11 @@ message AddResp {
 
 message Delete {
   bool allow_partial = 1;
-  repeated string obj_path = 2;
+  repeated string obj_path_list = 2;
 }
 
 message DeleteResp {
-  repeated DeletedObjectResult deleted_obj_result = 1;
+  repeated DeletedObjectResult deleted_obj_result_list = 1;
 
   message DeletedObjectResult {
     string requested_path = 1;
@@ -244,11 +327,11 @@ message DeleteResp {
 
 message Set {
   bool allow_partial = 1;
-  repeated UpdateObject update_obj = 2;
+  repeated UpdateObject update_obj_list = 2;
 
   message UpdateObject {
     string obj_path = 1;
-    repeated UpdateParamSetting param_setting = 2;
+    repeated UpdateParamSetting param_setting_list = 2;
   }
 
   message UpdateParamSetting {
@@ -259,7 +342,7 @@ message Set {
 }
 
 message SetResp {
-  repeated UpdatedObjectResult updated_obj_result = 1;
+  repeated UpdatedObjectResult updated_obj_result_list = 1;
 
   message UpdatedObjectResult {
     string requested_path = 1;
@@ -274,23 +357,23 @@ message SetResp {
       message OperationFailure {
         fixed32 err_code = 1;
         string err_msg = 2;
-        repeated UpdatedInstanceFailure updated_inst_failure = 3;
+        repeated UpdatedInstanceFailure updated_inst_failure_list = 3;
       }
 
       message OperationSuccess {
-        repeated UpdatedInstanceResult updated_inst_result = 1;
+        repeated UpdatedInstanceResult updated_inst_result_list = 1;
       }
     }
   }
 
   message UpdatedInstanceFailure {
     string affected_path = 1;
-    repeated ParameterError param_err = 2;
+    repeated ParameterError param_err_list = 2;
   }
 
   message UpdatedInstanceResult {
     string affected_path = 1;
-    repeated ParameterError param_err = 2;
+    repeated ParameterError param_err_list = 2;
     map<string, string> updated_param_map = 3;
   }
 
@@ -311,7 +394,7 @@ message Operate {
 
 
 message OperateResp {
-  repeated OperationResult operation_result = 1;
+  repeated OperationResult operation_result_list = 1;
 
   message OperationResult {
     string executed_command = 1;
@@ -336,31 +419,18 @@ message OperateResp {
 message Notify {
   string subscription_id = 1;
   bool send_resp = 2;
-  oneof notification {        // NOTE: Bootstrap, Boot, and TransferComplete call all be caused outside of an operation
-    Boot boot = 3;                        // To be removed
+  oneof notification {
+    Event event = 3;
     ValueChange value_change = 4;
     ObjectCreation obj_creation = 5;
     ObjectDeletion obj_deletion = 6;
-    Periodic periodic = 7;                // To be removed
-    OperationComplete oper_complete = 8;
-    WakeUp wake_up = 9;                   // To be removed
-    Timer timer = 10;                     // To be removed
-    TransferComplete xfer_complete = 11;  // To be removed
-    OnBoardRequest on_board_req = 12;     // To be removed
-    Event event = 13;
+    OperationComplete oper_complete = 7;
   }
 
-  message Boot {
-    string command_key = 1;
-    enum Cause {
-      LOCAL_REBOOT = 0;
-      REMOTE_REBOOT = 1;
-      LOCAL_FACTORY_RESET = 2;
-      REMOTE_FACTORY_RESET = 3;
-    }
-    Cause cause = 2;
-    string obj_ref = 3;     // Object associated with Boot Notification (LocalAgent,ExecutionEnv, etc.)
-    map<string, string> param_map = 4;
+  message Event {
+    string obj_path = 1;
+    string event_name = 2;
+    map<string, string> param_map = 3;
   }
 
   message ValueChange {
@@ -377,16 +447,13 @@ message Notify {
     string obj_path = 1;
   }
 
-  message Periodic {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-  }
-
   message OperationComplete {
-    string command = 1;
-    string command_key = 2;
+    string obj_path = 1;
+    string command_name = 2;
+    string command_key = 3;
     oneof operation_resp {
-      OutputArgs req_output_args = 3;
-      CommandFailure cmd_failure = 4;
+      OutputArgs req_output_args = 4;
+      CommandFailure cmd_failure = 5;
     }
 
     message OutputArgs {
@@ -397,50 +464,6 @@ message Notify {
       fixed32 err_code = 1;
       string err_msg = 2;
     }
-  }
-
-  message WakeUp {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-  }
-
-  message Timer {
-    string obj_ref = 1;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-    string command_key = 2;
-  }
-
-  message TransferComplete {
-    string command_key = 1;
-    TransferType xfer_type = 2;
-    string xfer_file_type = 3;
-    string xfer_url = 4;
-    string start_time = 5;
-    string complete_time = 6;
-    string obj_ref = 7;     // Object associated with Command (LocalAgent,ExecutionEnv, etc.)
-    string operation_source = 8;  // Controller ID that caused the Transfer
-    TransferError xfer_err = 9;
-
-    enum TransferType {
-      DOWNLOAD = 0;
-      UPLOAD = 1;
-      INSTALL = 2;
-      UPDATE = 3;
-      UNINSTALL = 4;
-    }
-
-    message TransferError {
-      fixed32 err_code = 1;
-      string err_msg = 2;
-    }
-  }
-
-  message OnBoardRequest {
-    string obj_ref = 1;     // Controller Object associated with OnBoardRequest Notification (the Controller that caused the Notification)
-  }
-
-  message Event {
-    string event_name = 1;
-    string event_path = 2;
-    map<string, string> param_map = 3;
   }
 }
 
