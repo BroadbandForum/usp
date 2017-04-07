@@ -2,11 +2,13 @@
 <h1 id="architecture">Architecture</h1>
 <p><a id="architecture" /></p>
 <p>The User Services Platform consists of a collection of Endpoints (Agents and Controllers) that allow applications to manipulate Service Elements. These Service Elements are made up of a set of Objects and parameters that model a given service, such as network interfaces, software modules, device firmware, remote elements proxied through another interface, virtual elements, or other managed services.</p>
-<p><img src="./usp_stack.png" title="Figure 1"> Figure 1: Architecture Layers of the User Services Platform</p>
+<p><img src="./usp_stack.png" title="Figure 1"></p>
+<p>Figure 1: Architecture Layers of the User Services Platform</p>
 <h2 id="endpoints">Endpoints</h2>
 <p><a id="endpoints" /></p>
 <p>A USP endpoint can act as Agent or a Controller. Controllers only messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.</p>
-<p><img src="usp_architecture.png"> Figure 2: USP Agent and Controller Architecture</p>
+<p><img src="usp_architecture.png"></p>
+<p>Figure 2: USP Agent and Controller Architecture</p>
 <h3 id="agents">Agents</h3>
 <p><a id="agents" /></p>
 <p>A USP Agent exposes (to Controllers) one or more Service Elements that are represented in its data model. It contains or references both an Instantiated Data Model (representing the current state of Service Elements it represents) and a Supported Data Model.</p>
@@ -14,7 +16,8 @@
 <p><a id="controllers" /></p>
 <p>A USP Controller manipulates (through Agents) a set of Service Elements that are represented in Agent data models. It may maintain a database of Agents, their capabilities, and their states, in any combination. A Controller usually acts as an interface to a user application or policy engine that uses the User Services Platform to address particular use cases.</p>
 <h3 id="endpoint-identifier">Endpoint Identifier</h3>
-<p><a id="endpoint-id" /> Endpoints are identified by an Endpoint Identifier.</p>
+<p><a id="endpoint-id" /></p>
+<p>Endpoints are identified by an Endpoint Identifier.</p>
 <p>The Endpoint Identifier is a locally or globally unique USP layer identifier of an Endpoint. Whether it is globally or locally unique depends on the scheme used for assignment.</p>
 <p>The Endpoint Identifier (ID) is used in Message Headers and various Parameters to uniquely identify Controller and Agent Endpoints. It can be globally or locally unique, either among all Endpoints or among all Controllers or all Agents, depending on the scheme used for assignment.</p>
 <p>The Endpoint ID is comprised of two mandatory and one optionally mandatory components: <code>authority-scheme</code>, <code>authority-id</code>, and <code>instance-id</code>.</p>
@@ -261,28 +264,20 @@
 <li>When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*</li>
 </ul>
 <h5 id="list-of-references">List of References</h5>
-<p><a id="list_of_references"
-
-The USP data models have Parameters whose values contain a list of references to other Parameters or Objects.  This section explains how the Reference Following mechanism allows those references to be followed from inside a single Path Name.  The Reference Following syntax as defined above still applies, but it is preceded by a means of referencing a specific instance within the list.  The additional syntax consists of a “`#`” character followed by list item number (1-indexed), which is placed between the name of the Parameter that contains the list of references and the “`+`” that indicates that the reference should be followed. To follow *all* references in the list, the endpoint can specify a "`#`" character followed by a wildcard ("`*`") character and the "`+`" character to follow the reference (i.e., "`ReferenceParameter#*+`").
-
-For example, `Device.WiFi.SSID.{i}.LowerLayers` references a list of WiFi Radio Object (defined as `Device.WiFi.Radio.{i}.`) Instances that are associated with the SSID. This Object has a `Name` Parameter; so when following the first reference in the list of references a Path Name of `Device.WiFi.SSID.1.LowerLayers#1+.Name` references the Name of the WiFi Radio associated with this SSID Object Instance.
-
-The steps that are executed by the Agent when following the reference in this example would be:
-
-1.  Retrieve the appropriate `Device.Wifi.SSID.{i}` instance based on the Instance Number Addressing information
-
-2.  Retrieve the value of the LowerLayers Parameter, which in this case has a value of “`Device.WiFi.Radio.1, Device.WiFi.Radio.2`”
-
-3.  Retrieve the first list item within the value retrieved in Step 2 (i.e., “`Device.WiFi.Radio.1`”)
-
-4.  Replace the preceding path (`Device.WiFi.SSID.1.LowerLayers#1+`) with the value retrieved in Step 3
-
-5.  Append the remainder of the Path Name (`.Name`), resulting in a Path Name of: `Device.WiFi.Radio.1.Name`
-
-6.  Use `Device.WiFi.Radio.1.Name` as the Path Name for the action
-
-#####   Search Expressions and Reference Following
-<a id="search_expressions_and_reference_following" /></p>
+<p><a id="list_of_references" /></p>
+<p>The USP data models have Parameters whose values contain a list of references to other Parameters or Objects. This section explains how the Reference Following mechanism allows those references to be followed from inside a single Path Name. The Reference Following syntax as defined above still applies, but it is preceded by a means of referencing a specific instance within the list. The additional syntax consists of a “<code>#</code>” character followed by list item number (1-indexed), which is placed between the name of the Parameter that contains the list of references and the “<code>+</code>” that indicates that the reference should be followed. To follow <em>all</em> references in the list, the endpoint can specify a &quot;<code>#</code>&quot; character followed by a wildcard (&quot;<code>*</code>&quot;) character and the &quot;<code>+</code>&quot; character to follow the reference (i.e., &quot;<code>ReferenceParameter#*+</code>&quot;).</p>
+<p>For example, <code>Device.WiFi.SSID.{i}.LowerLayers</code> references a list of WiFi Radio Object (defined as <code>Device.WiFi.Radio.{i}.</code>) Instances that are associated with the SSID. This Object has a <code>Name</code> Parameter; so when following the first reference in the list of references a Path Name of <code>Device.WiFi.SSID.1.LowerLayers#1+.Name</code> references the Name of the WiFi Radio associated with this SSID Object Instance.</p>
+<p>The steps that are executed by the Agent when following the reference in this example would be:</p>
+<ol style="list-style-type: decimal">
+<li><p>Retrieve the appropriate <code>Device.Wifi.SSID.{i}</code> instance based on the Instance Number Addressing information</p></li>
+<li><p>Retrieve the value of the LowerLayers Parameter, which in this case has a value of “<code>Device.WiFi.Radio.1, Device.WiFi.Radio.2</code>”</p></li>
+<li><p>Retrieve the first list item within the value retrieved in Step 2 (i.e., “<code>Device.WiFi.Radio.1</code>”)</p></li>
+<li><p>Replace the preceding path (<code>Device.WiFi.SSID.1.LowerLayers#1+</code>) with the value retrieved in Step 3</p></li>
+<li><p>Append the remainder of the Path Name (<code>.Name</code>), resulting in a Path Name of: <code>Device.WiFi.Radio.1.Name</code></p></li>
+<li><p>Use <code>Device.WiFi.Radio.1.Name</code> as the Path Name for the action</p></li>
+</ol>
+<h5 id="search-expressions-and-reference-following">Search Expressions and Reference Following</h5>
+<p><a id="search_expressions_and_reference_following" /></p>
 <p>The Reference Following and Search Expression mechanisms can be combined.</p>
 <p>For example, reference the Signal Strength of all WiFi Associated Devices using the “ac” Operating Standard on the “MyHome” SSID, you would use the Path Name:</p>
 <p><code>Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength:: {ap.SSIDReference+.SSID==“MyHome”&amp;&amp;dev.OperatingStandard==“ac”}</code></p>

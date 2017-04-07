@@ -144,7 +144,7 @@ NotifyResp notify_resp      </code></pre>
 <p>The <a href="./add">Add</a>, <a href="./set">Set</a>, and <a href="./delete">Delete</a> requests are used to create, configure and remove Objects that comprise Service Elements.</p>
 <h2 id="reading-an-agents-state-and-capabilities">Reading an Agent’s State and Capabilities</h2>
 <p>An Agent’s current state and capabilities are represented in its data model. The current state is referred to as its Instantiated Data Model, while the data model that represents its set of capabilities is referred to as its Supported Data Model. Messages exist to retrieve data from both the instantiated and Supported Data Models.</p>
-<h3 id="getting-the-current-state">Getting the current state</h3>
+<h3 id="getting-the-current-state">Getting the Current State</h3>
 <p>A Controller that wishes to learn the current state of an Agent usually wants to know one of two things: the current object instances that exist (and their unique keys for use in addressing), or the actual state of the Objects and Parameters represented by the Agent. These are handled by the <a href="getinstances/">GetInstances</a> message, and the <a href="get/">Get</a> message, respectively.</p>
 <h3 id="getting-the-supported-data-model">Getting the Supported Data Model</h3>
 <p>USP allows an Agent to specify which Objects, Parameters, Commands, and Events it supports in its Supported Data Model. The <a href="getsupporteddm/">GetSupportedDM</a> message allows a Controller to retrieve information about the Supported Data Model as part of a USP message. While the Device Type documents and the definitions therein still hold, this message lets the Controller and Agent synchronize on the Supported Data Model as part of USP operation.</p>
