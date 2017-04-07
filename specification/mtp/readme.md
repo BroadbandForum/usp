@@ -24,6 +24,7 @@ The requirements for each individual Message Transfer Protocol is covered in an 
 *	The [Constrained Application Protocol (CoAP)](./coap/).
 
 ## Securing MTPs
+
 <a id="securing_mtps" />
 
 USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios. USP recommends the following requirement on use of MTP security:
@@ -31,3 +32,34 @@ USP contains its own [application layer security mechanism](/security/). While u
 **R-MTP.0** – The Message Transfer Protocol MUST use secure transport when USP messages cross inter-network boundaries.
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however.
+
+### MTP Message Encryption
+
+In USP, a trust relationship is established between controllers and agents using the end-to-end security mechanism. This section provides additional security functions specific to the transfer of USP messages between USP endpoints which can include intermediate points such as MTP proxies. The purpose of MTP message encryption is to ensure the confidentiality and integrity of the payload that is transferred between USP endpoints. While the protocol (e.g., TLS, DTLS) used by the MTP is dependent on the type of MTP and are further described in the section associated with the MTP, the following requirements in this section are relevant to each type of MTP.
+
+**R-MTP.1** – MTP endpoints MUST implement the capability to provide for the confidentiality and integrity of MTP payloads using MTP message encryption.
+
+**R-MTP.2** – MTP endpoints MUST provide the capability to enable and disable MTP message encryption. The default setting is to enable MTP message encryption.
+
+Because not all MTP endpoints will have MTP message encryption enabled, an MTP that establishes a communication with another MTP endpoint will need to adapt to the MTP message encryption capability of the other MTP endpoint.
+
+**R-MTP.3** – When initiating an MTP session, the initiating MTP endpoint MUST attempt to initiate the session using MTP message encryption unless the MTP message encryption capability has been disabled for the initiating MTP endpoint.
+
+**R-MTP.4** – If the MTP session cannot be initiated using the MTP message encryption, the initiating MTP endpoint MUST attempt to initiate the session without using MTP message encryption unless the capability to communicate with an MTP by not using MTP message encryption has been disabled for the initiating MTP endpoint.
+
+#### Use of Certificate Validation in MTP Message Encryption
+
+For MTP endpoints that use certificates in the establishment of the MTP message encryption function, the certificates that are presented by the MTP endpoints can be validated in order to establish a trust relationship between the MTP endpoints. The validation of the certificate can be performed by the MTP endpoint that initiated the session and/or by the MTP endpoint that is accepting the request for the session.
+
+**R-MTP.5** – When initiating an MTP session that uses certificates, the initiating MTP endpoint MUST validate the certificate presented by the accepting MTP endpoint.
+
+**R-MTP.6** – When initiating an MTP session that uses certificates, the accepting MTP endpoint MUST provide the capability to validate the certificate presented by the initiating MTP endpoint.
+
+**R-MTP.7** – MTP endpoints that accept communication session requests MUST provide the capability to enable and disable MTP certificate validation. The default setting is to disable MTP certificate validation by accepting MTP endpoints of certificates presented by initiating MTP endpoints.
+
+#### Use of Identity Validation in MTP Message Encryption
+
+In some deployment scenarios validation of the identity of MTP endpoints is needed to ensure that the MTP endpoints that are involved in the transfer of messages have been validated. This is especially important when two MTP endpoints communicate across the Wide Area Network or Internet. However, within a Local Area Network or Customer Premises, validation of MTP endpoints is not necessary to provide the MTP message confidentiality and integrity via MTP message encryption.
+
+**R-x.y** – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption.
+**R-x.y** – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.  
