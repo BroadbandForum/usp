@@ -27,12 +27,12 @@ https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 
 ## Authentication
 
-The current discussion on the structure and requirements for trust establishment is available for Broadband Forum members to view on the BBF wiki at:
+Authentication of USP Endpoints to establish trust with each other *at the USP layer* is handled via the information and requirements in the `.ControllerTrust.` object of the data model.
 
-https://wiki.broadband-forum.org/display/BBF/Trust+Model+Discussion
+**R.SEC.2** - USP Agents and Controllers MUST adhere to the Authentication requirements defined for the `.ControllerTrust.` object defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
 
 ## Access Control
 
-The current discussion on the structure and requirements for message and data model access control is available for Broadband Forum members to view on the BBF wiki at:
+Access Control covers the permission scheme that Controllers and Agents apply to each other. Access Control can be applied to single objects or parameters, or a set of object parameters, based on these schemes. The mechanism for adding, removing, and modifying schemes is defined in the USP data model.
 
-https://wiki.broadband-forum.org/display/BBF/Access+Control+List+Discussion
+**R.SEC.3** - USP Agents and Controllers MUST adhere to the Access Control requirements defined for the `.ControllerTrust.` object defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
