@@ -6,8 +6,8 @@
 <p>The current discussion on the structure and requirements for the USP end-to-end security mechanism is available for Broadband Forum members to view on the BBF wiki at:</p>
 <p>https://wiki.broadband-forum.org/display/BBF/Security+Discussion</p>
 <h2 id="authentication">Authentication</h2>
-<p>The current discussion on the structure and requirements for trust establishment is available for Broadband Forum members to view on the BBF wiki at:</p>
-<p>https://wiki.broadband-forum.org/display/BBF/Trust+Model+Discussion</p>
+<p>Authentication of USP Endpoints to establish trust with each other <em>at the USP layer</em> is handled via the information and requirements in the <code>.ControllerTrust.</code> object of the data model.</p>
+<p><strong>R.SEC.2</strong> - USP Agents and Controllers MUST adhere to the Authentication requirements defined for the <code>.ControllerTrust.</code> object defined in the <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2 Data Model for TR-069 Devices and USP Agents</a>.</p>
 <h2 id="access-control">Access Control</h2>
-<p>The current discussion on the structure and requirements for message and data model access control is available for Broadband Forum members to view on the BBF wiki at:</p>
-<p>https://wiki.broadband-forum.org/display/BBF/Access+Control+List+Discussion</p>
+<p>Access Control covers the permission scheme that Controllers and Agents apply to each other. Access Control can be applied to single objects or parameters, or a set of object parameters, based on these schemes. The mechanism for adding, removing, and modifying schemes is defined in the USP data model.</p>
+<p><strong>R.SEC.3</strong> - USP Agents and Controllers MUST adhere to the Access Control requirements defined for the <code>.ControllerTrust.</code> object defined in the <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2 Data Model for TR-069 Devices and USP Agents</a>.</p>
