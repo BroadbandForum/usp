@@ -66,6 +66,7 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 * Added [CoAP encryption requirements](mtp/coap/) based on 04/05/2017 call
 * Updated language for straw ballot initiation
 * Added Authentication, Authorization, and Trust sections to [Security](/security/).
+* Added theory of operations to security
 
 ## REV_08
 
