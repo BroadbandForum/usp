@@ -22,6 +22,7 @@ Note: Message Transfer Protocol was a term adopted to avoid confusion with the t
 The requirements for each individual Message Transfer Protocol is covered in an Annex of this document. This version of the specification includes definitions for:
 
 *	The [Constrained Application Protocol (CoAP)](./coap/).
+* The [Hypertext Transfer Protocol verstion 1.1 (HTTP/1.1)](./http/)
 
 ## Securing MTPs
 
@@ -61,5 +62,6 @@ For MTP endpoints that use certificates in the establishment of the MTP message 
 
 In some deployment scenarios validation of the identity of MTP endpoints is needed to ensure that the MTP endpoints that are involved in the transfer of messages have been validated. This is especially important when two MTP endpoints communicate across the Wide Area Network or Internet. However, within a Local Area Network or Customer Premises, validation of MTP endpoints is not necessary to provide the MTP message confidentiality and integrity via MTP message encryption.
 
-**R-x.y** – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption.
-**R-x.y** – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.  
+**R-MTP.8** – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption.
+
+**R-MTP.9** – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.  

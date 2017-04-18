@@ -5,6 +5,7 @@
 <p>The requirements for each individual Message Transfer Protocol is covered in an Annex of this document. This version of the specification includes definitions for:</p>
 <ul>
 <li>The <a href="./coap/">Constrained Application Protocol (CoAP)</a>.</li>
+<li>The <a href="./http/">Hypertext Transfer Protocol verstion 1.1 (HTTP/1.1)</a></li>
 </ul>
 <h2 id="securing-mtps">Securing MTPs</h2>
 <p><a id="securing_mtps" /></p>
@@ -25,4 +26,5 @@
 <p><strong>R-MTP.7</strong> – MTP endpoints that accept communication session requests MUST provide the capability to enable and disable MTP certificate validation. The default setting is to disable MTP certificate validation by accepting MTP endpoints of certificates presented by initiating MTP endpoints.</p>
 <h4 id="use-of-identity-validation-in-mtp-message-encryption">Use of Identity Validation in MTP Message Encryption</h4>
 <p>In some deployment scenarios validation of the identity of MTP endpoints is needed to ensure that the MTP endpoints that are involved in the transfer of messages have been validated. This is especially important when two MTP endpoints communicate across the Wide Area Network or Internet. However, within a Local Area Network or Customer Premises, validation of MTP endpoints is not necessary to provide the MTP message confidentiality and integrity via MTP message encryption.</p>
-<p><strong>R-x.y</strong> – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption. <strong>R-x.y</strong> – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.</p>
+<p><strong>R-MTP.8</strong> – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption.</p>
+<p><strong>R-MTP.9</strong> – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.</p>
