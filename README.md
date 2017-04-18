@@ -1,4 +1,7 @@
 * [specification](specification): Working Text 369 documentation of USP protocol separated by section, USP protobuf schema, python code generated from it
-* [schema](schema): DM1.6 schema (`cwmp-datamodel-1-6.xsd`) and example XML/HTML data models.
-* [device2](device2): Device:2.12 XML (`tr-181-2-12-0.xml`) and XML/HTML generated from it
-* [to-be-deleted](to-be-deleted): various other experimental sub-directories which will eventually either be moved or deleted
+
+CONSIDERATION FOR STRAW BALLOT:
+
+The sections of WT-369 are contained in individual directories each with their own readme.md files. Each of these has a generated index.html that can be viewed as a functioning website when browsing the documentation.
+
+Each of these sections is a straw ballot candidate for this release.

@@ -29,7 +29,7 @@ In addition to the USP Requests that are exchanged between USP Controllers and A
 <img src="usp-notify-over-http.png" />
 Figure 2 – USP Notify Request over HTTP
 
-##	Mapping USP Endpoints to HTTP URIs
+## Mapping USP Endpoints to HTTP URIs
 
 Section 8.2 of [RFC 7230][13] discusses the URI schemes for identifying HTTP origin servers and their target resources.  These resources are organized hierarchically and governed by an HTTP origin server listening for HTTP requests on a given port. USP Endpoints are one type of HTTP resource that is identified and discovered.
 
@@ -37,7 +37,7 @@ Section 8.2 of [RFC 7230][13] discusses the URI schemes for identifying HTTP ori
 
 **R-HTTP.1** - A USP Endpoint MUST be represented as an HTTP resource using the path component as defined in section 8.2 of [RFC 7230][13].
 
-##	Mapping USP Messages to HTTP Messages
+## Mapping USP Messages to HTTP Messages
 
 **R-HTTP.2** - In order for USP Messages to be transferred between a USP Controller and Agent using HTTP 1.1, the USP Message MUST be encapsulated within the HTTP message as defined in section 2.1 of [RFC 7230][13].
 
@@ -47,11 +47,11 @@ Section 8.2 of [RFC 7230][13] discusses the URI schemes for identifying HTTP ori
 
 **R-HTTP.5** - The HTTP Content-Type header for USP Messages MUST be application/octet-stream media type for the [encoding mechanism](/encoding/) used (i.e., [protocol-buffers][12]).
 
-###	Handling HTTP Request Success
+### Handling HTTP Request Success
 
 **R-HTTP.6** - Upon successful reception of the HTTP message using POST, the HTTP origin server MUST respond with a response code of `204 (No Content)`.
 
-###	Handling HTTP Request Failures
+### Handling HTTP Request Failures
 
 At times HTTP requests fail to complete due to problems in the underlying transport (e.g., timeout) or a failure response code received from the HTTP origin server due to problems in the HTTP request sent by the HTTP client (4xx) or problems with the HTTP origin server implementation (5xx).
 
@@ -73,7 +73,7 @@ When an HTTP client sends an HTTP/1.1 request, the HTTP client can provide incor
 
 **R-HTTP.12** - When an HTTP origin server receives an HTTP/1.1 request and the receiving USP Endpoint cannot interpret or decode the USP Message for processing, the HTTP origin server MUST respond with a `400` response code.
 
-##	Mapping USP Notify Requests to HTTP
+## Mapping USP Notify Requests to HTTP
 
 The USP Notify Request is the only message of the Request type that is sent from an Agent to a Controller. In these cases, the Agent functions as an HTTP client rather than an HTTP server in the POST/Response sequence.
 

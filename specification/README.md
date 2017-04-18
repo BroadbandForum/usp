@@ -13,7 +13,7 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# DRAFT - WT-369 - User Services Platform
+# STRAW BALLOT - WT-369 - User Services Platform
 
 # Table of Contents
 
@@ -40,22 +40,33 @@
 
 # Legal Notice
 
-**Notice**
+## Notice
 
-The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment.  This Broadband Forum Working Text is a draft, and has not been approved by members of the Forum.  Even if approved, this Broadband Forum Working Text is not binding on the Broadband Forum, any of its members, or any developer or service provider.  This Broadband Forum Working Text is subject to change.  This Broadband Forum Working Text is copyrighted by the Broadband Forum, and portions of this Broadband Forum Working Text may be copyrighted by Broadband Forum members. This Working Text is for use by Broadband Forum members only.  Advance written permission by the Broadband Forum is required for distribution of this Broadband Forum Working Text in its entirety or in portions outside the Broadband Forum.
+The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment.  This Working Text is a draft, is subject to change, and has not been approved by members of the Forum.  This Working Text is copyrighted by the Broadband Forum, and portions of this Working Text may be copyrighted by Broadband Forum members.  This Working Text is for use by Broadband Forum members only.  Advance written permission by the Broadband Forum is required for distribution of this Working Text in its entirety or in portions outside the Broadband Forum.
 
-Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of the Specification set forth in this document, and to provide supporting documentation.
+## Intellectual Property
 
-**Confidentiality**
+Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of this Working Text if it were to be adopted as a Technical Report, and to provide supporting documentation.
 
-All materials submitted for possible incorporation into Broadband Forum specifications or other work product shall be regarded as confidential until such time as the specification or other work product in question is publicly released.  In the event that any material, or portion of any material, is not included in the specification or other work product in question, or if such specification or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.
+## Terms of Use
 
-THIS SPECIFICATION IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS SPECIFICATION SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER the Forum, NOR ANY OF ITS MEMBERS OR
-SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS SPECIFICATION.
+This Working Text (i) is made available to non-members for internal study purposes only, (ii) may be implemented by Broadband Forum members in a product or service made commercially available, and (iii) may only be copied and distributed internally for the purpose of exercising Broadband Forum membership rights and benefits.
 
-The text of this notice must be included in all copies of this Broadband Forum Working Text.
+## Confidentiality
+
+All materials submitted for possible incorporation into Technical Reports or other work product shall be regarded as confidential until such time as the Technical Report or other work product in question is publicly released.  In the event that any material, or portion of any material, is not included in the Technical Report or other work product in question, or if such Technical Report or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.
+
+THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.
 
 # Revision History
+
+## REV_09
+
+* Added [MTP encryption requirements](mtp/) based on 04/05/2017 call
+* Added [CoAP encryption requirements](mtp/coap/) based on 04/05/2017 call
+* Updated language for straw ballot initiation
+* Added Authentication, Authorization, and Trust sections to [Security](/security/).
+* Added theory of operations to security
 
 ## REV_08
 
