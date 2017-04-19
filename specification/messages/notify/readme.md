@@ -202,4 +202,5 @@ This element contains the locally unique opaque identifier that was set by the C
 **R-NOT.9** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
 
 ## Notify Error Codes
-Appropriate error codes for the Notify message include the entire `6000` series.
+
+Appropriate error codes for the Notify message include `7000-7006`, and `7800-7999`.

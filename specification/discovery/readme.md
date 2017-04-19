@@ -186,3 +186,14 @@ The example below shows simple LAN-based mDNS discovery. In this example, the Co
 <img src="mdns_sequence.png" />
 
 Figure 1 – Example DNS-SD Discovery Message Flow
+
+## Using the OnBoardRequest() operation and OnBoardRequest! event
+
+OnBoardRequest is used to allow a Controller to specifically instruct an Agent to contact a Controller to begin an on-boarding process (for example, when the Agent first comes online and is aware of the Controller). Its use is meant to be driven by application policy, and is limited to those circumstances. The OnBoardRequest operation and event are defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
+
+**R-DIS.17** – An Agent MUST send an OnBoardRequest! Event in a Notify Request in the following circumstances:
+
+1.	When the OnBoardRequest() command is executed. This sends the notification request to the Controller that is the subject of that operation.
+2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
+
+Further policy defines whether an OnBoardRequest requires a Notify Response. See the OnBoardRequest() command defined in [Device:2][1].

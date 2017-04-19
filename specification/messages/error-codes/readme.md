@@ -17,30 +17,7 @@
 
 <a id="error_codes" />
 
-USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7999 for Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
-
-## Controller Error Codes
-
-<a id="controller_error_codes" />
-
-*Note: The 6000 series of errors applies entirely to Error messages sent in reply to Notify Requests from an Agent.*
-
-| Code | Name | Description
-| -----: | :------------: | :---------------------- |
-|`6000` | Message failed | This error indicates a general failure that is described in an err_msg element. |
-|`6001` | Message not supported | This error indicates that the attempted message was not understood by the target endpoint. |
-|`6002` | Request denied (no reason specified) | This error indicates that the target endpoint cannot or will not process the message. |
-| `6003` | Internal error	| This error indicates that the message failed due to internal hardware or software reasons.|
-| `6004` | Invalid arguments | This error indicates that the message failed due to invalid values in the Request elements and/or the failure to update one or more parameters during an Add or Set message.
-| `6005` |	Resources exceeded | This error indicates that the message failed due to memory or processing limitations on the target endpoint. |
-| `6006` | Permission denied | This error indicates that the source endpoint does not have the authorization to use this message on the target endpoint. |
-| `6800-6999` | Vendor defined error codes | These errors are vendor defined(#vendor_defined_error_codes). |
-
-## Agent Error Codes
-
-<a id="agent_error_codes" />
-
-*Note: The 7000 series of errors applies entirely to Error messages sent in reply to Requests from a Controller.*
+USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
 
 | Code | Name | Description
 | -----: | :------------: | :---------------------- |
@@ -76,4 +53,4 @@ USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7
 
 <a id="vendor_defined_error_codes" />
 
-Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use either the `6800-6999` series for Controller errors, or the `7800-7999` series for Agent errors, respectively. There are no requirements on the content of these errors.
+Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use  the `7800-7999` series. There are no requirements on the content of these errors.

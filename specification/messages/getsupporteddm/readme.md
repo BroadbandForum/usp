@@ -30,6 +30,7 @@ For example, the Controller wishes to learn the Wifi capabilities the Agent repr
     GetSupportedDM {
       discover_obj_list {
         obj_path : Device.Wifi.
+        next_level : false
         return_commands : true
         return_events : true
         return_params : true
@@ -145,6 +146,10 @@ This element contains a repeated set of messages of type `DiscoverObject`.
 
 This element contains a Path Name to an Object (not an Object Instance) in the Agent's Supported Data Model.
 
+`bool next_level`
+
+This element, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects.
+
 `bool return_commands`
 
 This element, if `true`, indicates that the Agent should include a supported_command_list element containing Commands supported by the reported Object(s).
@@ -197,10 +202,10 @@ This element contains the Path Name of the reported Object.
 
 The element contains an enumeration of type ObjAccessType specifying the access permissions that are specified for this Object in the Agent's Supported Data Model. This usually only applies to Multi-Instance Objects. This may be further restricted to the Controller based on rules defined in the Agent's [Access Control List](addref). It is an enumeration of:
 
-    READ_ONLY (0)
-    ADD_DELETE (1)
-    ADD_ONLY (2)
-    DELETE_ONLY (3)
+    OBJ_READ_ONLY (0)
+    OBJ_ADD_DELETE (1)
+    OBJ_ADD_ONLY (2)
+    OBJ_DELETE_ONLY (3)
 
 `bool is_multi_instance`
 
@@ -228,9 +233,9 @@ This element contains the local name of the Parameter.
 
 The element contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's [Access Control List](addref). It is an enumeration of:
 
-    READ_ONLY (0)
-    READ_WRITE (1)
-    WRITE_ONLY (2)
+    PARAM_READ_ONLY (0)
+    PARAM_READ_WRITE (1)
+    PARAM_WRITE_ONLY (2)
 
 ##### SupportedCommandResult Elements
 
