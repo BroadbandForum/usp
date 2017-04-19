@@ -182,7 +182,7 @@ message GetSupportedDMResp {
 
   message SupportedObjectResult {
     string supported_obj_path = 1;
-    AccessType access = 2;
+    ObjAccessType access = 2;
     bool is_multi_instance = 3;
     repeated SupportedCommandResult supported_command_list = 4;
     repeated SupportedEventResult supported_event_list = 5;
@@ -191,7 +191,7 @@ message GetSupportedDMResp {
 
   message SupportedParamResult {
     string param_name = 1;
-    AccessType access = 2;
+    ParamAccessType access = 2;
   }
 
   message SupportedCommandResult {
@@ -205,10 +205,17 @@ message GetSupportedDMResp {
     repeated string arg_name_list = 2;
   }
 
-  enum AccessType {
-    READ_ONLY = 0;
-    READ_WRITE = 1;
-    WRITE_ONLY = 2;
+  enum ParamAccessType {
+    PARAM_READ_ONLY = 0;
+    PARAM_READ_WRITE = 1;
+    PARAM_WRITE_ONLY = 2;
+  }
+
+  enum ObjAccessType {
+    OBJ_READ_ONLY = 0;
+    OBJ_ADD_DELETE = 1;
+    OBJ_ADD_ONLY = 2;
+    OBJ_DELETE_ONLY = 3;
   }
 }
 
