@@ -18,6 +18,9 @@
 
 # Security
 
+*NOTE: Version 1.0 of this protocol will define end-to-end security above the MTP. All Endpoints will be required to implement end-to-end security and use it to secure USP messages at that time.*
+
+<!--
 USP provides an end-to-end security mechanism in addition to any security provided by the Message Transfer Protocol.
 
 **R-SEC.0** – All USP endpoints MUST implement the USP end-to-end security mechanism.
@@ -27,6 +30,7 @@ USP provides an end-to-end security mechanism in addition to any security provid
 The current discussion on the structure and requirements for the USP end-to-end security mechanism is available for Broadband Forum members to view on the BBF wiki at:
 
 https://wiki.broadband-forum.org/display/BBF/Security+Discussion
+-->
 
 ## Authentication and Authorization
 
@@ -56,37 +60,45 @@ This secure means can accomplished through USP (see section below on Data Model 
 
 **R-SEC.6** – Where a CA is trusted to approve a Controller Role, and the Controller does not have a different Role assigned, the Agent MUST either ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, or perform the following validation:
 
+* If the host portion of the Controller URL is a DNS name, this MUST be done according to the principles of [RFC 6125](https://tools.ietf.org/html/rfc6125), using the host portion of the Controller URL as the reference identifier.
+* If the host portion of the Controller URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.
+
+*Note – the terms “reference identifier” and “presented identifier” are defined in [RFC 6125](https://tools.ietf.org/html/rfc6125).*
+Note – wildcard certificates are permitted as described in [RFC 6125](https://tools.ietf.org/html/rfc6125).
+
+**R-SEC.7**   An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting a Controller.  If an Agent for any reason is unable to obtain absolute time, it can contact the Controller without waiting for accurate absolute time. If an Agent chooses to contact a Controller before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Controller certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
+
 ## Self-Signed Certificates
 
-**R-SEC.7** – An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**R-SEC.8** – An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
 Self-signed certificates supplied by Controllers can only be meaningfully used in cases where a person is in a position to provide Authorization (what Role the Controller is trusted to have). Whether or not an Agent allows self-signed certificates from a Controller is a matter of Agent policy.
 
-**R-SEC.8** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an "untrusted" Role on first use.
+**R-SEC.9** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an "untrusted" Role on first use.
 
 That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do.
 
-**R-SEC.9** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
+**R-SEC.10** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
 
-**R-SEC.10** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to Role to each such Controller.
+**R-SEC.11** – If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to Role to each such Controller.
 
 Controller policy related to trust of Agent self-signed certificates is left to the Controller. Controllers may be designed to refuse self-signed certificates (thereby refusing to control the Agent), they may have a means of allowing a person to approve controlling the Agent via the Controller, or they may automatically accept the Agent.
 
-**R-SEC.11** – An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate public keys and Endpoint IDs.
+**R-SEC.12** – An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate public keys and Endpoint IDs.
 
 ## Challenge Strings
 
 It is possible for the Agent to allow an external entity to change a Controller Role by means of a Challenge string. This Challenge string can take various forms, including having a user supply a passphrase or a PIN. Such a string could be printed on the Agent packaging, or supplied by means of a SMS to a phone number associated with the user account. These Challenge strings can be done using USP operations. Independent of how challenges are accomplished, following are some basic requirements related to Challenge strings.
 
-**R-SEC.12** – The Agent MAY have factory-default Challenge string(s) in its configuration.
+**R-SEC.13** – The Agent MAY have factory-default Challenge string(s) in its configuration.
 
-**R-SEC.13** – A factory-default Challenge string MUST be unique to the Agent. Re-using the same passphrase among multiple Agents is not permitted.
+**R-SEC.14** – A factory-default Challenge string MUST be unique to the Agent. Re-using the same passphrase among multiple Agents is not permitted.
 
-**R-SEC.14** – A factory-default Challenge string MUST NOT be derivable from information the Agent communicates about itself using any protocol at any layer.
+**R-SEC.15** – A factory-default Challenge string MUST NOT be derivable from information the Agent communicates about itself using any protocol at any layer.
 
-**R-SEC.15** – The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.
+**R-SEC.16** – The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.
 
-**R-SEC.16** – The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.
+**R-SEC.17** – The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.
 
 ## Theory of operations
 
@@ -208,6 +220,17 @@ Note that it is possible for an Agent to maintain policy of the type described b
   1. If the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent applies the `ControllerTrust.Credential.{i}.Role` to the Controller for the current TLS or DTLS session, but does not permanently modify `Controller.{i}.Role`. Any Role associated with the Controller Endpoint ID is ignored, because the identity of the actual Controller identity has not been validated.
 
   2. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and `ControllerTrust.Credential.{i}.Role` is empty, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
+
+### Agent certificates
+
+**R-SEC.18** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
+
+* the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
+* the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the  the wildcarded Endpoint ID.
+
+**R-SEC.19** - If generic Agent certificates are used, the Controller SHOULD additionally authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.
+
+**R-SEC-20** - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using self-signed certificates.
 
 ### Encryption
 

@@ -60,6 +60,15 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 # Revision History
 
+## Version 0.10
+
+* Using new version naming convention (0.x) for WT revisions
+* Updated security section (USP-192)
+* Consolidated error messages so there aren't separate codes for Controllers and Agents (USP-187)
+* Added back next_level and renamed permission enumerations in GetSupportedDM (USP-180)
+* Added text describing SendOnBoardRequest() and OnBoardRequest! usage in discovery (USP-191)
+
+
 ## REV_09
 
 * Added [MTP encryption requirements](mtp/) based on 04/05/2017 call
