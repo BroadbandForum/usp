@@ -139,7 +139,7 @@ This element contains one of the Path Names or Search Paths given in `obj_path` 
 
 This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GIN.0** – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
 `string err_msg`
 
@@ -159,7 +159,7 @@ This element contains the Instance Number of the Object Instance.
 
 This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.
 
-**R-GIN.1** – If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
+**R-GIN.1** - If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
 
 ## GetInstances Error Codes
 

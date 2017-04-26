@@ -116,7 +116,7 @@ This element contains a repeated set of CreateObject elements.
 
 This element contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.
 
-**R-ADD.2** – The `obj_path_list` element in the `CreateObject` message of an Add Request MUST NOT contain Search Paths.
+**R-ADD.2** - The `obj_path_list` element in the `CreateObject` message of an Add Request MUST NOT contain Search Paths.
 
 `repeated CreateParamSetting param_setting_list`
 
@@ -194,7 +194,7 @@ This element contains a map of key/value pairs for all supported parameters that
 
 **R-ADD.5** - If the Controller did not include some or all of a unique key that the Agent supports in the `param_setting_list` element, the Agent MUST assign values to the unique key(s) and return them in the `unique_key_map`.
 
-**R-ADD.6** – If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
+**R-ADD.6** - If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
 
 ###### ParameterError Elements
 

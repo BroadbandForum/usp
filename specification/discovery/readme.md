@@ -23,11 +23,11 @@ Discovery is the process by which USP Endpoints learn the USP properties and MTP
 
 ### Agent Configuration
 
-**R-DIS.0** – An Agent that has a USP relationship with a Controller MUST be configured with that Controller’s Endpoint Identifier, credentials, and authorized Role.
+**R-DIS.0** - An Agent that has a USP relationship with a Controller MUST be configured with that Controller’s Endpoint Identifier, credentials, and authorized Role.
 
 The authorized role may be a default “Public” Role.
 
-**R-DIS.1** – An Agent that has a USP relationship with a Controller MUST be configured with information that allows it to determine the MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
+**R-DIS.1** - An Agent that has a USP relationship with a Controller MUST be configured with information that allows it to determine the MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
 
 Example mechanisms for configuration include but are not limited to:
 
@@ -36,13 +36,13 @@ Example mechanisms for configuration include but are not limited to:
 *	Configured through a separate bootstrap mechanism such as a user interface or other management interface.
 *	DHCP, DNS, or [mDNS discovery](#mdns).
 
-**R-DIS.2** – An Agent that supports configuration by an already-known-and-trusted Controller MUST implement the Controller Object.
+**R-DIS.2** - An Agent that supports configuration by an already-known-and-trusted Controller MUST implement the Controller Object.
 
 The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.
 
 ### Controller Configuration
 
-**R-DIS.3** – A Controller that has a relationship with an Agent MUST have the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
+**R-DIS.3** - A Controller that has a relationship with an Agent MUST have the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
 
 Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.
 
@@ -78,7 +78,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.8** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in [RFC 6762][8].
 
-**R-DIS.9** – If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
+**R-DIS.9** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
 **R-DIS.10** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “`.local.`”.
 
@@ -100,7 +100,7 @@ DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and struc
 
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is “`<Instance>.<Service>.<Domain>`“. `<Instance>` will be the USP Identifier of the USP Endpoint.
 
-**R-DIS.13** –  USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
+**R-DIS.13** -  USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
 Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments]) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as “`_<Service Name>._<Transport Protocol>`” (e.g., “`_usp-agt-coap._udp`”).
 
 #### IANA-Registered USP Service Names
@@ -118,11 +118,11 @@ DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-c
 
 DNS TXT records allow for a small set of additional information to be included in the reply sent to the querier. This information cannot be used as search criteria. The registry of TXT record attributes for BBF Service Names are listed at http://www.broadband-forum.org/assignments.
 
-**R-DIS.14** –  Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.
+**R-DIS.14** -  Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.
 
-**R-DIS.15** – The “name” attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in [Device:2][1].
+**R-DIS.15** - The “name” attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in [Device:2][1].
 
-**R-DIS.16** – Controller DNS-SD records MUST include a TXT record with the “path” attribute.
+**R-DIS.16** - Controller DNS-SD records MUST include a TXT record with the “path” attribute.
 
 The “path” attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate Annex of this document.
 
@@ -185,19 +185,8 @@ The example below shows simple LAN-based mDNS discovery. In this example, the Co
 
 <img src="mdns_sequence.png" />
 
-Figure 1 – Example DNS-SD Discovery Message Flow
+Figure 1 - Example DNS-SD Discovery Message Flow
 
-## Using the SendOnBoardRequest() operation and OnBoardRequest! event
+## Using the SendOnBoardRequest() operation and OnBoardRequest notification
 
-An "OnBoardRequest" is used to allow a Controller to specifically instruct an Agent to contact a Controller to begin an on-boarding process (for example, when the Agent first comes online and is aware of the Controller). Its use is meant to be driven by application policy, and is limited to those circumstances. The `SendOnBoardRequest*()` operation and `OnBoardRequest!` event are defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
-
-**R-DIS.17** – An Agent MUST send an `OnBoardRequest!` Event in a [Notify Request](/messages/notify/) in the following circumstances:
-
-1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation.
-2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
-
-Further policy defines whether an OnBoardRequest requires a Notify Response.
-
-### OnBoardRequest! event and subscriptions
-
-Since the OnBoardRequest process occurs outside the bounds of the usual mechanism for [subscriptions to notifications](messages/notify/), the OnBoardRequest event is not subject to subscriptions.
+An "OnBoardRequest" is used to allow a Controller to specifically instruct an Agent to contact a Controller to begin an on-boarding process (for example, when the Agent first comes online and is aware of the Controller). Its use is meant to be driven by application policy, and is limited to those circumstances. The `SendOnBoardRequest()` operation is defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1]. See [notifications](/messages/notify/) for information about the OnBoardRequest notification.

@@ -13,7 +13,7 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# STRAW BALLOT - WT-369 - User Services Platform
+# STRAW BALLOT - WT-369 - User Services Platform version 0.10
 
 # Table of Contents
 
@@ -66,7 +66,8 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 * Updated security section (USP-192)
 * Consolidated error messages so there aren't separate codes for Controllers and Agents (USP-187)
 * Added back next_level and renamed permission enumerations in GetSupportedDM (USP-180)
-* Added text describing SendOnBoardRequest() and OnBoardRequest! usage in discovery (USP-191)
+* Added back OnBoardRequest to the Notify types (USP-191)
+* Added stub section for Proxying to contain theory of operations for modelling a USP Controller and requirements on Agent certificates for that purpose.
 
 
 ## REV_09
@@ -75,7 +76,8 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 * Added [CoAP encryption requirements](mtp/coap/) based on 04/05/2017 call
 * Updated language for straw ballot initiation
 * Added Authentication, Authorization, and Trust sections to [Security](/security/).
-* Added theory of operations to securityit
+* Added theory of operations to security
+
 ## REV_08
 
 * New specification build in markdown
@@ -118,7 +120,7 @@ In addition, users of the fixed and mobile broadband network are hungry for adva
 
 These realities have created an opportunity for CE vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
-This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol – commonly known by its document number, “TR-069” – this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.
+This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol - commonly known by its document number, “TR-069” - this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.
 
 This new world of the connected user as a platform provides the perfect opportunity to leverage the expertise and experience gained with CWMP. This allows us to improve on, evolve, and expand the use cases of CWMP including:
 
@@ -433,7 +435,7 @@ This specification uses the following abbreviations:
 |USP	| User Services Platform |
 |CWMP	| CPE WAN Management Protocol|
 |DNS	| Domain Name Service |
-|DNS-SD	| Domain Name Service – Service Definition |
+|DNS-SD	| Domain Name Service - Service Definition |
 |DT	| Device Type Definition |
 |HTTP	| Hypertext Transport Protocol |
 |mDNS	| Multicast Domain Name Service |

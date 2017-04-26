@@ -77,9 +77,9 @@ This element contains additional information about the reason behind the error.
 
 This element returns a repeated set of Path Names to Object Instances.
 
-**R-DEL.2** – If the Controller does not have Read permission on any of the Objects specified in `affected_path_list`, these Objects MUST NOT be returned in this element.
+**R-DEL.2** - If the Controller does not have Read permission on any of the Objects specified in `affected_path_list`, these Objects MUST NOT be returned in this element.
 
-**R-DEL.3** – The Path Names to Object Instances in `affected_path_list` MUST be addressed using Instance Number Addressing.
+**R-DEL.3** - The Path Names to Object Instances in `affected_path_list` MUST be addressed using Instance Number Addressing.
 
 `repeated UnaffectedPathError unaffected_path_err_list`
 
@@ -87,7 +87,7 @@ This element contains a repeated set of messages of type `UnaffectedPathError`.
 
 **R-DEL.4** - If any of the Object Instances specified in the `obj_path` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
-**R-DEL.5** – If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
+**R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
 
 ###### UnaffectedPathError Elements
 
@@ -95,7 +95,7 @@ This element contains a repeated set of messages of type `UnaffectedPathError`.
 
 This element returns the Path Name to the Object Instance that failed to be deleted.
 
-**R-DEL.6** – The Path Names to Object Instances in `unaffected_path` MUST be addressed using Instance Number Addressing.
+**R-DEL.6** - The Path Names to Object Instances in `unaffected_path` MUST be addressed using Instance Number Addressing.
 
 `fixed32 err_code`
 

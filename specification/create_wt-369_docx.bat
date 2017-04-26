@@ -1,2 +1,0 @@
-type readme.md architecture\readme.md discovery\readme.md encoding\readme.md messages\readme.md messages\add\readme.md messages\set\readme.md messages\delete\readme.md messages\get\readme.md messages\getinstances\readme.md messages\getsupporteddm\readme.md messages\notify\readme.md messages\operate\readme.md messages\error-codes\readme.md mtp\readme.md mtp\coap\readme.md mtp\http\readme.md security\readme.md extensions\readme.md extensions\http-bulk-data-collection\readme.md  > WT-369.md
-pandoc --number-sections -o WT-369.docx WT-369.md
