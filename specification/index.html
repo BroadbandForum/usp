@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-<h1 id="draft---wt-369---user-services-platform">DRAFT - WT-369 - User Services Platform</h1>
+<h1 id="straw-ballot---wt-369---user-services-platform-version-0.10">STRAW BALLOT - WT-369 - User Services Platform version 0.10</h1>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ol style="list-style-type: decimal">
 <li>Overview</li>
@@ -25,14 +25,33 @@
 <li><a href="extensions/http-bulk-data-transfer/">HTTP Bulk Data Transfer</a></li>
 </ol>
 <h1 id="legal-notice">Legal Notice</h1>
-<p><strong>Notice</strong></p>
-<p>The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment. This Broadband Forum Working Text is a draft, and has not been approved by members of the Forum. Even if approved, this Broadband Forum Working Text is not binding on the Broadband Forum, any of its members, or any developer or service provider. This Broadband Forum Working Text is subject to change. This Broadband Forum Working Text is copyrighted by the Broadband Forum, and portions of this Broadband Forum Working Text may be copyrighted by Broadband Forum members. This Working Text is for use by Broadband Forum members only. Advance written permission by the Broadband Forum is required for distribution of this Broadband Forum Working Text in its entirety or in portions outside the Broadband Forum.</p>
-<p>Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of the Specification set forth in this document, and to provide supporting documentation.</p>
-<p><strong>Confidentiality</strong></p>
-<p>All materials submitted for possible incorporation into Broadband Forum specifications or other work product shall be regarded as confidential until such time as the specification or other work product in question is publicly released. In the event that any material, or portion of any material, is not included in the specification or other work product in question, or if such specification or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.</p>
-<p>THIS SPECIFICATION IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS SPECIFICATION SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER the Forum, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS SPECIFICATION.</p>
-<p>The text of this notice must be included in all copies of this Broadband Forum Working Text.</p>
+<h2 id="notice">Notice</h2>
+<p>The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment. This Working Text is a draft, is subject to change, and has not been approved by members of the Forum. This Working Text is copyrighted by the Broadband Forum, and portions of this Working Text may be copyrighted by Broadband Forum members. This Working Text is for use by Broadband Forum members only. Advance written permission by the Broadband Forum is required for distribution of this Working Text in its entirety or in portions outside the Broadband Forum.</p>
+<h2 id="intellectual-property">Intellectual Property</h2>
+<p>Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of this Working Text if it were to be adopted as a Technical Report, and to provide supporting documentation.</p>
+<h2 id="terms-of-use">Terms of Use</h2>
+<p>This Working Text (i) is made available to non-members for internal study purposes only, (ii) may be implemented by Broadband Forum members in a product or service made commercially available, and (iii) may only be copied and distributed internally for the purpose of exercising Broadband Forum membership rights and benefits.</p>
+<h2 id="confidentiality">Confidentiality</h2>
+<p>All materials submitted for possible incorporation into Technical Reports or other work product shall be regarded as confidential until such time as the Technical Report or other work product in question is publicly released. In the event that any material, or portion of any material, is not included in the Technical Report or other work product in question, or if such Technical Report or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.</p>
+<p>THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.</p>
 <h1 id="revision-history">Revision History</h1>
+<h2 id="version-0.10">Version 0.10</h2>
+<ul>
+<li>Using new version naming convention (0.x) for WT revisions</li>
+<li>Updated security section (USP-192)</li>
+<li>Consolidated error messages so there aren't separate codes for Controllers and Agents (USP-187)</li>
+<li>Added back next_level and renamed permission enumerations in GetSupportedDM (USP-180)</li>
+<li>Added back OnBoardRequest to the Notify types (USP-191)</li>
+<li>Added stub section for Proxying to contain theory of operations for modelling a USP Controller and requirements on Agent certificates for that purpose.</li>
+</ul>
+<h2 id="rev_09">REV_09</h2>
+<ul>
+<li>Added <a href="mtp/">MTP encryption requirements</a> based on 04/05/2017 call</li>
+<li>Added <a href="mtp/coap/">CoAP encryption requirements</a> based on 04/05/2017 call</li>
+<li>Updated language for straw ballot initiation</li>
+<li>Added Authentication, Authorization, and Trust sections to <a href="/security/">Security</a>.</li>
+<li>Added theory of operations to security</li>
+</ul>
 <h2 id="rev_08">REV_08</h2>
 <ul>
 <li>New specification build in markdown</li>
@@ -48,6 +67,7 @@
 <li>Updated reference list language to explain wildcards (USP-100)</li>
 <li>Updated expression language to restrict operators for strings, bools, and enums (USP-139)</li>
 <li>Added brief explanation of using vendor defined error codes. (USP-181)</li>
+<li>Added requirement labels</li>
 </ul>
 <h1 id="acknowledgements">Acknowledgements</h1>
 <table style="width:36%;">
@@ -122,7 +142,7 @@
 <p>The term “connected device” is a broad one, applying to the vast array of network connected CPE, consumer electronics, and computing resources that today’s consumers are using at an increasing rate. With the advent of “smart” platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.</p>
 <p>In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the entertainment, productivity, and storage applications they want.</p>
 <p>These realities have created an opportunity for CE vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.</p>
-<p>This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol – commonly known by its document number, “TR-069” – this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.</p>
+<p>This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol - commonly known by its document number, “TR-069” - this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.</p>
 <p>This new world of the connected user as a platform provides the perfect opportunity to leverage the expertise and experience gained with CWMP. This allows us to improve on, evolve, and expand the use cases of CWMP including:</p>
 <ul>
 <li>App-store capabilities enabling the connected user to select, purchase, and install applications that utilize their connectivity and devices, and learn of new services that can be made available with suggested hardware.</li>
@@ -321,7 +341,7 @@
 </tr>
 <tr class="odd">
 <td align="right">DNS-SD</td>
-<td align="left">Domain Name Service – Service Definition</td>
+<td align="left">Domain Name Service - Service Definition</td>
 </tr>
 <tr class="even">
 <td align="right">DT</td>

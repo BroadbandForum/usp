@@ -18,14 +18,16 @@
 The Constrained Application Protocol (CoAP) MTP transfers USP messages between USP endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP messages between USP controllers and agents.
 
 <img src="usp-message-over-coap.png" />
-Figure 1 – A USP message over the CoAP MTP
+
+Figure 1 - A USP message over the CoAP MTP
 
 USP messages that originate from USP Controllers are encapsulated within a CoAP request message. When a USP Agent receives the CoAP request message the USP Agent sends a CoAP response message to the USP Controller that indicates receipt of the message. When the USP Agent responds to the USP Controller's request, the Agent encapsulates the USP response in a new CoAP request message. When the USP Controller receives the USP response, the USP Controller sends a CoAP response message that indicates receipt of the message.
 
 In addition to the USP Requests that are exchanged between USP Controllers and Agents, the USP Notify Request from a USP Agent to one or more Controllers utilizes the same message pattern described in [RFC 7252][9] except the roles played by the CoAP endpoint are modified. The USP Agent plays the role of the CoAP client and the USP Controller plays the role of the CoAP server. When a USP Controller subscribes to receive notifications from a USP Agent, the USP Agent transmits the USP notification using the CoAP message as depicted in the following figure.
 
 <img src="usp-notify-over-coap.png" />
-Figure 2 – USP Notifications over CoAP
+
+Figure 2 - USP Notifications over CoAP
 
 ## Mapping USP Endpoints to CoAP URIs
 <a id="mapping_usp_endpoints_to_coap_uri" />
@@ -88,3 +90,24 @@ When a CoAP client sends a CoAP request, the CoAP client can provide incorrect o
 The USP Notify Request is the only message of the Request type that is sent from an Agent to a Controller. In these cases, the Agent functions as a CoAP client rather than a CoAP server in the POST/Response sequence.
 
 **R-COAP.13** - When a CoAP server receives a USP Notify Request, the CoAP server MUST adhere to the requirements defined in [Mapping USP Messages to CoAP Messages](#mapping_usp_messages_to_coap_messages).
+
+## MTP Message Encryption
+
+CoAP MTP message encryption is provided using DTLS as described in Section 9 of [RFC 7252][9].
+
+In section 9 of [RFC 7252][9], CoAP messages are secured using one of three modes:
+
+* NoSec: DTLS is disabled
+* PreSharedKey: DTLS is enabled and the MTP endpoint uses pre-shared keys that are used to validate the identity of CoAP endpoints involved in the message exchange
+* RawPublicKey: DTLS is enabled and the MTP endpoint has an asymmetric key pair without a certificate. The MTP endpoint has an identity calculated from the public key and a list of other MTP endpoints to which it can communicate
+* Certificate: DTLS is enabled and the MTP endpoint has an asymmetric key pair with an X.509 certificate.
+
+**R-COAP.14** - CoAP clients and servers MUST implement the NoSec and Certificate modes of CoAP security as defined in RFC 7252.
+
+While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further guidance related to DTLS implementations for the Internet of Things is provided by [RFC 7925](https://tools.ietf.org/html/rfc7925).
+
+**R-COAP.15** - CoAP clients and servers MUST implement the mandatory statements of [RFC 7925](https://tools.ietf.org/html/rfc7925) with the exception that:
+
+* Section 4.4.1 USP Controller certificates can contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
+* Section 4.4.2 Client certificate identifiers do not use EUI-64 identifier but instead use the identifier defined for Client certificates in this Working Text.
+* Section 4.4.5 Client Certificate URLs are not required to be implemented.

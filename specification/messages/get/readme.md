@@ -150,7 +150,7 @@ This element contains one of the Path Names or Search Paths given in the `param_
 
 This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GET.0** – If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GET.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
 `string err_msg`
 
@@ -174,9 +174,9 @@ This element contains a set of mapped key/value pairs listing a Parameter Path (
 
 **R-GET.2** - If the `requested_path` included a Path Name to a Parameter, `result_param_map` MUST contain only the Parameter included in that path.
 
-**R-GET.3** – If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element.
+**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element.
 
-**R-GET.4** – Path Names containing Object Instance Paths in the keys of `result_param_map` MUST be addressed using Instance Number Addressing.
+**R-GET.4** - Path Names containing Object Instance Paths in the keys of `result_param_map` MUST be addressed using Instance Number Addressing.
 
 #### Get Message Supported Error Codes
 

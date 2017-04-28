@@ -137,7 +137,7 @@ This element contains the value of the parameter specified in the `param` elemen
 
 This element specifies whether the Agent should treat the update of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter.
 
-**R-SET.2** – If the `required` element is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
+**R-SET.2** - If the `required` element is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
 
 ## Set Response
 
@@ -217,9 +217,9 @@ This element contains a repeated set of `ParameterError` messages.
 
 This element returns a set of key/value pairs containing a path (relative to the `affected_path`) to each of the updated Object’s parameters, their values, plus sub-Objects and their values that were updated by the Set Request.
 
-**R-SET.3** – If the Controller does not have Read permission on any of the parameters specified in `updated_param_map`, these parameters MUST NOT be returned in this element.
+**R-SET.3** - If the Controller does not have Read permission on any of the parameters specified in `updated_param_map`, these parameters MUST NOT be returned in this element.
 
-**R-SET.4** – Object Instance Paths in the keys of `updated_param_map` MUST use Instance Number Addressing.
+**R-SET.4** - Object Instance Paths in the keys of `updated_param_map` MUST use Instance Number Addressing.
 
 *Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the `updated_param_map`.*
 

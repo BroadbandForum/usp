@@ -140,7 +140,7 @@ create_obj_list {
 <h3 id="createobject-elements">CreateObject Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.</p>
-<p><strong>R-ADD.2</strong> – The <code>obj_path_list</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
+<p><strong>R-ADD.2</strong> - The <code>obj_path_list</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
 <p><code>repeated CreateParamSetting param_setting_list</code></p>
 <p>This element contains a repeated set of CreateParamSetting elements.</p>
 <h4 id="createparamsetting-elements">CreateParamSetting Elements</h4>
@@ -179,7 +179,7 @@ create_obj_list {
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
 <p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
 <p><strong>R-ADD.5</strong> - If the Controller did not include some or all of a unique key that the Agent supports in the <code>param_setting_list</code> element, the Agent MUST assign values to the unique key(s) and return them in the <code>unique_key_map</code>.</p>
-<p><strong>R-ADD.6</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-ADD.6</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
 <h6 id="parametererror-elements">ParameterError Elements</h6>
 <p><code>string param</code></p>
 <p>This element contains the Parameter Path to the parameter that failed to be set.</p>

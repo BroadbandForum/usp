@@ -147,7 +147,7 @@
 <p>This element contains the value of the parameter specified in the <code>param</code> element that the Controller would like to configure.</p>
 <p><code>bool required</code></p>
 <p>This element specifies whether the Agent should treat the update of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this parameter.</p>
-<p><strong>R-SET.2</strong> – If the <code>required</code> element is set to <code>true</code>, a failure to update this parameter MUST result in a failure to update the Object (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
+<p><strong>R-SET.2</strong> - If the <code>required</code> element is set to <code>true</code>, a failure to update this parameter MUST result in a failure to update the Object (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <h2 id="set-response">Set Response</h2>
 <p><code>repeated UpdatedObjectResult updated_obj_result_list</code></p>
 <p>This element contains a repeated set of <code>UpdatedObjectResult</code> messages for each <code>UpdateObject</code> message in the associated Set Request.</p>
@@ -187,8 +187,8 @@
 <p>This element contains a repeated set of <code>ParameterError</code> messages.</p>
 <p><code>map&lt;string, string&gt; updated_param_map</code></p>
 <p>This element returns a set of key/value pairs containing a path (relative to the <code>affected_path</code>) to each of the updated Object’s parameters, their values, plus sub-Objects and their values that were updated by the Set Request.</p>
-<p><strong>R-SET.3</strong> – If the Controller does not have Read permission on any of the parameters specified in <code>updated_param_map</code>, these parameters MUST NOT be returned in this element.</p>
-<p><strong>R-SET.4</strong> – Object Instance Paths in the keys of <code>updated_param_map</code> MUST use Instance Number Addressing.</p>
+<p><strong>R-SET.3</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>updated_param_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-SET.4</strong> - Object Instance Paths in the keys of <code>updated_param_map</code> MUST use Instance Number Addressing.</p>
 <p><em>Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the <code>updated_param_map</code>.</em></p>
 <h6 id="parametererror-elements-1">ParameterError Elements</h6>
 <p><code>string param</code></p>

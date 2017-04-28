@@ -21,7 +21,7 @@ A synchronous operation is intended to complete immediately following its proces
 
 <img src="synchronous_operation.png" />
 
-Figure 1 – Operate Message Flow for Synchronous Operations
+Figure 1 - Operate Message Flow for Synchronous Operations
 
 ### Asynchronous Operations
 
@@ -31,21 +31,21 @@ When a Controller using the Operate request specifies an operation that is defin
 
 The lifetime of a Request Object expires when the operation is complete (either by success or failure). An expired Request Object is removed from the Instantiated Data Model.
 
-**R-OPR.0** – When an Agent receives an Operate Request that addresses an asynchronous operation, it MUST create a Request Object in the Request table of its Instantiated Data Model (see [Device:2][1]). When the Operation is complete (either success or failure), it MUST remove this Object from the Request table.
+**R-OPR.0** - When an Agent receives an Operate Request that addresses an asynchronous operation, it MUST create a Request Object in the Request table of its Instantiated Data Model (see [Device:2][1]). When the Operation is complete (either success or failure), it MUST remove this Object from the Request table.
 
 If any Controller wants a notification that an operation has completed, it creates a Subscription Object with the `NotificationType` set to `OperationComplete` and with the `ReferenceList` parameter including a path to the specified command. The Agent processes this Subscription when the operation completes and sends a Notify message, including the `command_key` value that the Controller assigned when making the Operate request.
 
 <img src="asynchronous_operation.png" />
 
-Figure 2 – Operate Message Flow for Asynchronous Operations
+Figure 2 - Operate Message Flow for Asynchronous Operations
 
 ### Operate Requests on Multiple Objects
 
-Since the Operate request can take a path expression as a value for the command element, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the `OperationResult` element type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different `OperationResult` entry. For this reason, operation failures are never conveyed in an Error message – in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.
+Since the Operate request can take a path expression as a value for the command element, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the `OperationResult` element type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different `OperationResult` entry. For this reason, operation failures are never conveyed in an Error message - in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.
 
-**R-OPR.1** – When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error message due to a failed operation. It MUST instead include the failure in the `cmd_failure` element of the Operate response.
+**R-OPR.1** - When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error message due to a failed operation. It MUST instead include the failure in the `cmd_failure` element of the Operate response.
 
-**R-OPR.2** – For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command element.
+**R-OPR.2** - For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command element.
 
 ### Event Notifications for Operations
 
@@ -80,7 +80,7 @@ This element lets the Controller indicate to Agent whether or not it expects a r
 
 This element contains a map of key/value pairs indicating the input arguments (relative to the command path in the command element) to be passed to the method indicated in the command element.
 
-**R-OPR.5** – Any key in the `input_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing. This element contains a map of name/value pairs indicating the input arguments (relative to the Object that is the subject of this command) to be passed to the method invoked indicated in the command element.
+**R-OPR.5** - Any key in the `input_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing. This element contains a map of name/value pairs indicating the input arguments (relative to the Object that is the subject of this command) to be passed to the method invoked indicated in the command element.
 
 ## Operate Response Elements
 
@@ -102,7 +102,7 @@ This element contains a message of one of the following types.
 
 This element contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.
 
-**R-OPR.6** – Path Names in the `req_object_path` MUST use Instance Number Addressing.
+**R-OPR.6** - Path Names in the `req_object_path` MUST use Instance Number Addressing.
 
     OutputArgs req_output_args
     CommandFailure cmd_failure
@@ -115,7 +115,7 @@ This element contains one message of type `CommandFailure`. It is used when at s
 
 This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` element) returned by the method invoked in the Operate message.
 
-**R-OPR.7** – Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
+**R-OPR.7** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
 
 #### CommandFailure elements
 

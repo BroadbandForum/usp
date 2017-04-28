@@ -21,7 +21,7 @@
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.Subscription.{i}.` in [Device:2][1].
 
-**R-NOT.0** – The Agent and Controller MUST follow the normative requirements defined in the `Device.Subscription.{i}.` Object specified in [Device:2][1].
+**R-NOT.0** - The Agent and Controller MUST follow the normative requirements defined in the `Device.Subscription.{i}.` Object specified in [Device:2][1].
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
@@ -35,11 +35,11 @@ In another example, a Controller wants to be notified whenever an outside source
 
 #### Responses to Notifications and Notification Retry
 
-The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotificationRetry` parameter in the subscription Object – if `NotificationRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotificationRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
+The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotificationRetry` parameter in the subscription Object - if `NotificationRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotificationRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
 
 If `NotificationRetry` is `true`, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a `NotificationExpiration` parameter to specify when this retry should end if no success is ever achieved.
 
-**R-NOT.1** – When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.
+**R-NOT.1** - When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.
 
 The retry interval range is controlled by two Parameters, the minimum wait interval and the interval multiplier, each of which corresponds to a data model Parameter, and which are described in the table below. The factory default values of these Parameters MUST be the default values listed in the Default column. They MAY be changed by a Controller with the appropriate permissions at any time.
 
@@ -50,22 +50,22 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 | Retry Count | Default Wait Interval Range (min-max seconds) | Actual Wait Interval Range (min-max seconds) |
 | ----------: | :---------: | :-------------- |
-| #1 | 5-10 | m – m.(k/1000) |
-| #2 | 10-20 | m.(k/1000) – m.(k/1000)2 |
-| #3 | 20-40 | m.(k/1000)2 – m.(k/1000)3 |
-| #4 | 40-80 | m.(k/1000)3 – m.(k/1000)4 |
-| #5 | 80-160 | m.(k/1000)4 – m.(k/1000)5 |
-| #6 | 160-320 | m.(k/1000)5 – m.(k/1000)6 |
-| #7 | 320-640 | m.(k/1000)6 – m.(k/1000)7 |
-| #8 | 640-1280 | m.(k/1000)7 – m.(k/1000)8 |
-| #9 | 1280-2560 | m.(k/1000)8 – m.(k/1000)9 |
-| #10 and subsequent | 2560-5120 | m.(k/1000)9 – m.(k/1000)10 |
+| #1 | 5-10 | m - m.(k/1000) |
+| #2 | 10-20 | m.(k/1000) - m.(k/1000)2 |
+| #3 | 20-40 | m.(k/1000)2 - m.(k/1000)3 |
+| #4 | 40-80 | m.(k/1000)3 - m.(k/1000)4 |
+| #5 | 80-160 | m.(k/1000)4 - m.(k/1000)5 |
+| #6 | 160-320 | m.(k/1000)5 - m.(k/1000)6 |
+| #7 | 320-640 | m.(k/1000)6 - m.(k/1000)7 |
+| #8 | 640-1280 | m.(k/1000)7 - m.(k/1000)8 |
+| #9 | 1280-2560 | m.(k/1000)8 - m.(k/1000)9 |
+| #10 and subsequent | 2560-5120 | m.(k/1000)9 - m.(k/1000)10 |
 
 **R-NOT.2** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the `NotificationExpiration` time is reached.
 
-**R-NOT.3** – Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.
+**R-NOT.3** - Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.
 
-**R-NOT.4** – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.
+**R-NOT.4** - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.
 
 #### Notification Types
 
@@ -84,9 +84,22 @@ The `ObjectCreation` notification also includes the Object’s unique keys and t
 
 The `OperationComplete` notification is used to indicate that an asynchronous Object-defined operation finished (either successfully or unsuccessfully). These operations may also trigger other Events defined in the data model (see below).
 
+##### OnBoardRequest
+
+An `OnBoardRequest` notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
+
+**R-NOT.5** - An Agent MUST send an `OnBoardRequest` notify request in the following circumstances:
+
+1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
+
+2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
+
+*Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.*
+
+Further policy defines whether an OnBoardRequest requires a Notify Response.
+
 ##### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what parameters, if any, are returned as part of the notification.
-
 
 ## Notify Request Elements
 
@@ -94,13 +107,13 @@ The `Event` notification is used to indicate that an Object-defined event was tr
 
 This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.5** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification.
+**R-NOT.6** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification.
 
 `bool send_resp`
 
 This element lets the Agent indicate to the Controller whether or not it expects a response in association with the Notify request.
 
-**R-NOT.6** - When `send_response` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
+**R-NOT.7** - When `send_response` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
 
 `oneof notification`
 
@@ -126,7 +139,7 @@ This element contains the Object or Object Instance Path of the Object that caus
 
 This element contains a set of key/value pairs of parameters associated with this event.
 
-**R-NOT.7** – Any values in `parameter_map` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
+**R-NOT.8** - Any values in `parameter_map` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
 
 ### ValueChange Elements
 
@@ -181,7 +194,7 @@ Contains one of the following messages:
 
 This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` element) returned by the method invoked in the Operate message.
 
-**R-NOT.8** – Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
+**R-NOT.9** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
 
 #### CommandFailure Elements
 
@@ -193,13 +206,20 @@ This element contains the [error code](/messages/error-codes) of the error that 
 
 This element contains additional (human readable) information about the reason behind the error.
 
+### OnBoardRequest Elements
+
+`string obj_ref`
+
+This element contains the Path Name of the Object associated with this notification.
+
 ## Notify Response Elements
 
 `string subscription_id`
 
 This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.9** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
+**R-NOT.10** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
 
 ## Notify Error Codes
-Appropriate error codes for the Notify message include the entire `6000` series.
+
+Appropriate error codes for the Notify message include `7000-7006`, and `7800-7999`.
