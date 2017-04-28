@@ -4,9 +4,9 @@
 <h2 id="configuration">Configuration</h2>
 <p><a id="configuration" /></p>
 <h3 id="agent-configuration">Agent Configuration</h3>
-<p><strong>R-DIS.0</strong> – An Agent that has a USP relationship with a Controller MUST be configured with that Controller’s Endpoint Identifier, credentials, and authorized Role.</p>
+<p><strong>R-DIS.0</strong> - An Agent that has a USP relationship with a Controller MUST be configured with that Controller’s Endpoint Identifier, credentials, and authorized Role.</p>
 <p>The authorized role may be a default “Public” Role.</p>
-<p><strong>R-DIS.1</strong> – An Agent that has a USP relationship with a Controller MUST be configured with information that allows it to determine the MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.</p>
+<p><strong>R-DIS.1</strong> - An Agent that has a USP relationship with a Controller MUST be configured with information that allows it to determine the MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.</p>
 <p>Example mechanisms for configuration include but are not limited to:</p>
 <ul>
 <li>Pre-configured in firmware</li>
@@ -14,10 +14,10 @@
 <li>Configured through a separate bootstrap mechanism such as a user interface or other management interface.</li>
 <li>DHCP, DNS, or <a href="#mdns">mDNS discovery</a>.</li>
 </ul>
-<p><strong>R-DIS.2</strong> – An Agent that supports configuration by an already-known-and-trusted Controller MUST implement the Controller Object.</p>
+<p><strong>R-DIS.2</strong> - An Agent that supports configuration by an already-known-and-trusted Controller MUST implement the Controller Object.</p>
 <p>The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.</p>
 <h3 id="controller-configuration">Controller Configuration</h3>
-<p><strong>R-DIS.3</strong> – A Controller that has a relationship with an Agent MUST have the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.</p>
+<p><strong>R-DIS.3</strong> - A Controller that has a relationship with an Agent MUST have the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.</p>
 <p>Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.</p>
 <h2 id="dhcp-options-for-acquiring-controller-information">DHCP Options for Acquiring Controller Information</h2>
 <p><a id="dhcp" /></p>
@@ -74,7 +74,7 @@
 <h2 id="mdns">mDNS</h2>
 <p><a id="mdns" /></p>
 <p><strong>R-DIS.8</strong> - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in <a href="https://tools.ietf.org/html/rfc6762" title="RFC 6762 Multicast DNS">RFC 6762</a>.</p>
-<p><strong>R-DIS.9</strong> – If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.</p>
+<p><strong>R-DIS.9</strong> - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.</p>
 <p><strong>R-DIS.10</strong> - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “<code>.local.</code>”.</p>
 <h3 id="dns">DNS</h3>
 <p><a id="dns" /></p>
@@ -85,7 +85,7 @@
 <p><a id="dns-sd" /></p>
 <p>DNS Service Discovery (DNS-SD) <a href="https://tools.ietf.org/html/rfc6763" title="RFC 6763 DNS-Based Service Discovery">RFC 6763</a> is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries <a href="https://www.ietf.org/rfc/rfc1035.txt">RFC 1035</a> or Multicast DNS (mDNS) <a href="https://tools.ietf.org/html/rfc6762" title="RFC 6762 Multicast DNS">RFC 6762</a>. DNS-SD uses DNS SRV and TXT records to express information about “services”, and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.</p>
 <p>The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is “<code>&lt;Instance&gt;.&lt;Service&gt;.&lt;Domain&gt;</code>“. <code>&lt;Instance&gt;</code> will be the USP Identifier of the USP Endpoint.</p>
-<p><strong>R-DIS.13</strong> – USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name. Service Name values <a href="http://www.broadband-forum.org/assignments%5D">registered by BBF with IANA</a> used by USP are shown below. As described in <a href="https://tools.ietf.org/html/rfc6763" title="RFC 6763 DNS-Based Service Discovery">RFC 6763</a>, the <code>&lt;Service&gt;</code> part of a Service Instance Name is constructed from these values as “<code>_&lt;Service Name&gt;._&lt;Transport Protocol&gt;</code>” (e.g., “<code>_usp-agt-coap._udp</code>”).</p>
+<p><strong>R-DIS.13</strong> - USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name. Service Name values <a href="http://www.broadband-forum.org/assignments%5D">registered by BBF with IANA</a> used by USP are shown below. As described in <a href="https://tools.ietf.org/html/rfc6763" title="RFC 6763 DNS-Based Service Discovery">RFC 6763</a>, the <code>&lt;Service&gt;</code> part of a Service Instance Name is constructed from these values as “<code>_&lt;Service Name&gt;._&lt;Transport Protocol&gt;</code>” (e.g., “<code>_usp-agt-coap._udp</code>”).</p>
 <h4 id="iana-registered-usp-service-names">IANA-Registered USP Service Names</h4>
 <table>
 <thead>
@@ -137,9 +137,9 @@
 </table>
 <p>DNS PTR records with a service subtype identifier (e.g., <code>._&lt;subtype&gt;._usp-agt-coap._udp.&lt;Domain&gt;</code>) in the RR can be used to provide searchable simple (single layer) functional groupings of USP Agents. The registry of subtypes for Service Names registered by BBF is listed at http://www.broadband-forum.org/assignments. DNS SRV and TXT records can be pointed to by multiple PTR records, which allow a USP Endpoint to potentially be discoverable as belonging to various functional groupings.</p>
 <p>DNS TXT records allow for a small set of additional information to be included in the reply sent to the querier. This information cannot be used as search criteria. The registry of TXT record attributes for BBF Service Names are listed at http://www.broadband-forum.org/assignments.</p>
-<p><strong>R-DIS.14</strong> – Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.</p>
-<p><strong>R-DIS.15</strong> – The “name” attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
-<p><strong>R-DIS.16</strong> – Controller DNS-SD records MUST include a TXT record with the “path” attribute.</p>
+<p><strong>R-DIS.14</strong> - Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.</p>
+<p><strong>R-DIS.15</strong> - The “name” attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
+<p><strong>R-DIS.16</strong> - Controller DNS-SD records MUST include a TXT record with the “path” attribute.</p>
 <p>The “path” attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate Annex of this document.</p>
 <p>The TXT record can include other attributes defined in the TXT record attribute registry, as well.</p>
 <p>Whether a particular USP Endpoint respond to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.</p>
@@ -186,4 +186,6 @@
 <h3 id="example-dns-sd-discovery-message-flow">Example DNS-SD Discovery Message Flow</h3>
 <p>The example below shows simple LAN-based mDNS discovery. In this example, the Controller is initiating the discovery process, looking for either a specific Agent it wants to communicate with or for previously unknown Agents in the LAN (to determine if there are any it would like to communicate with).</p>
 <p><img src="mdns_sequence.png" /></p>
-<p>Figure 1 – Example DNS-SD Discovery Message Flow</p>
+<p>Figure 1 - Example DNS-SD Discovery Message Flow</p>
+<h2 id="using-the-sendonboardrequest-operation-and-onboardrequest-notification">Using the SendOnBoardRequest() operation and OnBoardRequest notification</h2>
+<p>An &quot;OnBoardRequest&quot; is used to allow a Controller to specifically instruct an Agent to contact a Controller to begin an on-boarding process (for example, when the Agent first comes online and is aware of the Controller). Its use is meant to be driven by application policy, and is limited to those circumstances. The <code>SendOnBoardRequest()</code> operation is defined in the <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2 Data Model for TR-069 Devices and USP Agents</a>. See <a href="/messages/notify/">notifications</a> for information about the OnBoardRequest notification.</p>

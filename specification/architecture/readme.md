@@ -21,7 +21,7 @@ The User Services Platform consists of a collection of Endpoints (Agents and Con
 
 <img src="./usp_stack.png" title="Figure 1">
 
-Figure 1: Architecture Layers of the User Services Platform
+Figure 1 - Architecture Layers of the User Services Platform
 
 ## Endpoints  
 
@@ -31,7 +31,7 @@ A USP endpoint can act as Agent or a Controller. Controllers only messages to Ag
 
 <img src="usp_architecture.png">
 
-Figure 2: USP Agent and Controller Architecture
+Figure 2 - USP Agent and Controller Architecture
 
 ### Agents
 
@@ -123,7 +123,7 @@ Shorter values are preferred, as end users could be exposed to Endpoint IDs. Lon
 ## Service Elements
 <a id="service_elements" />
 
-"Service Element" is a general term referring to the set of Objects, sub-Objects, commands, events, and parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent’s Service Elements are represented in a Data Model – the data model representing an Agent’s current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. The Supported Data Model is described in a Device Type Definition (DT). An Agent’s Data Model is referenced using Path Names.
+"Service Element" is a general term referring to the set of Objects, sub-Objects, commands, events, and parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent’s Service Elements are represented in a Data Model - the data model representing an Agent’s current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. The Supported Data Model is described in a Device Type Definition (DT). An Agent’s Data Model is referenced using Path Names.
 
 ### Data Models
 <a id="data_models" />
@@ -178,28 +178,28 @@ Commands define Object specific methods within the Data Model. A Controller can 
 #### Events
 <a id="events" />
 
-Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](). Events may also have information associated with them that are delivered in the Notify Request – this information is defined with the Event in the Data Model.
+Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
 
 #### Path Names
 <a id="path_names" />
 
 A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. The syntax for Path Names is defined in [TR-106][3].
 
-**R-ARC.7** – All USP endpoints MUST support the Path Name syntax as defined in [TR-106][3].
+**R-ARC.7** - All USP endpoints MUST support the Path Name syntax as defined in [TR-106][3].
 
 Path Names are represented by a hierarchy of Objects (“parents”) and sub-Objects (“children”), separated by the dot “.” Character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path – This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](/messages/getsupportedDM/)).
+1.	Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](/messages/getsupportedDM/)).
 
-2.	Object Instance Path – This is a Path Name to a Row in a Table in the Agent’s Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following).
+2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent’s Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following).
 
-3.	Parameter Path – This is a Path Name of a particular Parameter of an Object.
+3.	Parameter Path - This is a Path Name of a particular Parameter of an Object.
 
-4.	Command Path – This is a Path Name of an Object defined [Operation](#operation_command_path_names).
+4.	Command Path - This is a Path Name of an Object defined [Operation](#operation_command_path_names).
 
-5.	Event Path – This is a Path Name of an Object defined [Event](#event_path_names).
+5.	Event Path - This is a Path Name of an Object defined [Event](#event_path_names).
 
-6.	Search Path – This is a Path Name that contains search criteria for addressing a set of Multi-Instance Objects and/or their Parameters. A Search Path may contain a Search Expression or Wildcard.
+6.	Search Path - This is a Path Name that contains search criteria for addressing a set of Multi-Instance Objects and/or their Parameters. A Search Path may contain a Search Expression or Wildcard.
 
 This creates two functions of Path Names: Addressing and Searching. The first five paths are used for addressing a particular Object, Parameter, Command, or Event. A Search Path uses Searching to return a set of Object Instances and/or their Parameters. When addressing, the expectation is that the Path Name will resolve to either 0 or 1 instance (and depending on the context, 0 instances could be an error).  When searching, the expectation is that the Search Path will resolve to 0, 1, or many instances (and depending on the context, 0 instances is often not an error).
 
@@ -245,7 +245,7 @@ Etc.
 
 Instance Number Addressing allows an Object Instance to be addressed by using its Instance Number in the Path Name. An Instance Number is expressed in the Path Name as a positive integer (>=1) with no additional surrounding characters. The Instance Number assigned by the Agent is arbitrary.
 
-**R-ARC.8** – The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.
+**R-ARC.8** - The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.
 
 For example, the `Device.IP.Interface` table with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
 
@@ -271,9 +271,9 @@ For example, the `Device.NAT.PortMapping` table has a compound unique key consis
 
 Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object.   Search Paths use an Expression Variable enclosed in curly braces as the Instance Identifier within a Path Name and then appends a “::” to the end of the Path Name, followed by an Expression enclosed in another set of curly braces.
 
-**R-ARC.9** – An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.
+**R-ARC.9** - An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.
 
-**R-ARC.10** – An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in [TR-106][3].
+**R-ARC.10** - An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in [TR-106][3].
 
 The basic format of a Search Path is:
 
@@ -361,7 +361,7 @@ Invalid because the Expression Component has an Expression Parameter that descen
 
 Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character “\*” in place of the Instance Identifier.
 
-**R-ARC.11** – An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
+**R-ARC.11** - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
 
 Examples:
 

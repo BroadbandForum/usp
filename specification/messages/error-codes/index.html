@@ -1,69 +1,7 @@
 <!-- Reference Links -->
 <h1 id="error-codes">Error Codes</h1>
 <p><a id="error_codes" /></p>
-<p>USP uses error codes with a range of 6000-6999 for Controller errors, and 7000-7999 for Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.</p>
-<h2 id="controller-error-codes">Controller Error Codes</h2>
-<p><a id="controller_error_codes" /></p>
-<p><em>Note: The 6000 series of errors applies entirely to Error messages sent in reply to Notify Requests from an Agent.</em></p>
-<table style="width:64%;">
-<colgroup>
-<col width="9%" />
-<col width="20%" />
-<col width="33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="right">Code</th>
-<th align="center">Name</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right"><code>6000</code></td>
-<td align="center">Message failed</td>
-<td align="left">This error indicates a general failure that is described in an err_msg element.</td>
-</tr>
-<tr class="even">
-<td align="right"><code>6001</code></td>
-<td align="center">Message not supported</td>
-<td align="left">This error indicates that the attempted message was not understood by the target endpoint.</td>
-</tr>
-<tr class="odd">
-<td align="right"><code>6002</code></td>
-<td align="center">Request denied (no reason specified)</td>
-<td align="left">This error indicates that the target endpoint cannot or will not process the message.</td>
-</tr>
-<tr class="even">
-<td align="right"><code>6003</code></td>
-<td align="center">Internal error</td>
-<td align="left">This error indicates that the message failed due to internal hardware or software reasons.</td>
-</tr>
-<tr class="odd">
-<td align="right"><code>6004</code></td>
-<td align="center">Invalid arguments</td>
-<td align="left">This error indicates that the message failed due to invalid values in the Request elements and/or the failure to update one or more parameters during an Add or Set message.</td>
-</tr>
-<tr class="even">
-<td align="right"><code>6005</code></td>
-<td align="center">Resources exceeded</td>
-<td align="left">This error indicates that the message failed due to memory or processing limitations on the target endpoint.</td>
-</tr>
-<tr class="odd">
-<td align="right"><code>6006</code></td>
-<td align="center">Permission denied</td>
-<td align="left">This error indicates that the source endpoint does not have the authorization to use this message on the target endpoint.</td>
-</tr>
-<tr class="even">
-<td align="right"><code>6800-6999</code></td>
-<td align="center">Vendor defined error codes</td>
-<td align="left">These errors are vendor defined(#vendor_defined_error_codes).</td>
-</tr>
-</tbody>
-</table>
-<h2 id="agent-error-codes">Agent Error Codes</h2>
-<p><a id="agent_error_codes" /></p>
-<p><em>Note: The 7000 series of errors applies entirely to Error messages sent in reply to Requests from a Controller.</em></p>
+<p>USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.</p>
 <table style="width:64%;">
 <colgroup>
 <col width="9%" />
@@ -217,4 +155,4 @@
 </table>
 <h2 id="vendor-defined-error-codes">Vendor Defined Error Codes</h2>
 <p><a id="vendor_defined_error_codes" /></p>
-<p>Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use either the <code>6800-6999</code> series for Controller errors, or the <code>7800-7999</code> series for Agent errors, respectively. There are no requirements on the content of these errors.</p>
+<p>Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use the <code>7800-7999</code> series. There are no requirements on the content of these errors.</p>

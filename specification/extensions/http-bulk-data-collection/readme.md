@@ -89,22 +89,22 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 | Retry Count | Default Wait Interval Range (min-max seconds) | Actual Wait Interval Range (min-max seconds) |
 | ----------: | :---------: | :-------------- |
-| #1 | 5-10 | m – m.(k/1000) |
-| #2 | 10-20 | m.(k/1000) – m.(k/1000)2 |
-| #3 | 20-40 | m.(k/1000)2 – m.(k/1000)3 |
-| #4 | 40-80 | m.(k/1000)3 – m.(k/1000)4 |
-| #5 | 80-160 | m.(k/1000)4 – m.(k/1000)5 |
-| #6 | 160-320 | m.(k/1000)5 – m.(k/1000)6 |
-| #7 | 320-640 | m.(k/1000)6 – m.(k/1000)7 |
-| #8 | 640-1280 | m.(k/1000)7 – m.(k/1000)8 |
-| #9 | 1280-2560 | m.(k/1000)8 – m.(k/1000)9 |
-| #10 and subsequent | 2560-5120 | m.(k/1000)9 – m.(k/1000)10 |
+| #1 | 5-10 | m - m.(k/1000) |
+| #2 | 10-20 | m.(k/1000) - m.(k/1000)2 |
+| #3 | 20-40 | m.(k/1000)2 - m.(k/1000)3 |
+| #4 | 40-80 | m.(k/1000)3 - m.(k/1000)4 |
+| #5 | 80-160 | m.(k/1000)4 - m.(k/1000)5 |
+| #6 | 160-320 | m.(k/1000)5 - m.(k/1000)6 |
+| #7 | 320-640 | m.(k/1000)6 - m.(k/1000)7 |
+| #8 | 640-1280 | m.(k/1000)7 - m.(k/1000)8 |
+| #9 | 1280-2560 | m.(k/1000)8 - m.(k/1000)9 |
+| #10 and subsequent | 2560-5120 | m.(k/1000)9 - m.(k/1000)10 |
 
 **R-BULK.3** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed bulk data transfer until it is successfully delivered or until the next reporting interval for the data transfer becomes effective.
 
-**R-BULK.4** – Once a bulk data transfer is successfully delivered, the Agent MUST reset the retry count to zero for the next reporting interval.
+**R-BULK.4** - Once a bulk data transfer is successfully delivered, the Agent MUST reset the retry count to zero for the next reporting interval.
 
-**R-BULK.5** – If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next bulk data transfer.
+**R-BULK.5** - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next bulk data transfer.
 
 ### Use of TLS and TCP
 
@@ -115,17 +115,17 @@ The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the prot
 *	The Agent MUST support TLS version 1.2 or later.
 *	If the Collection Server URL has been specified as an HTTPS URL, the Agent MUST establish secure connections to the Collection Server, and MUST start the TLS session negotiation with TLS 1.2 or later.
 
-*Note – If the Collection Server does not support the version with which the Agent establishes the connection, it might be necessary to negotiate an earlier TLS 1.x version, or even SSL 3.0.  This implies that the Agent has to support the mandatory cipher suites for all supported TLS or SSL versions.*
+*Note - If the Collection Server does not support the version with which the Agent establishes the connection, it might be necessary to negotiate an earlier TLS 1.x version, or even SSL 3.0.  This implies that the Agent has to support the mandatory cipher suites for all supported TLS or SSL versions.*
 
-*Note – TLS_RSA_WITH_AES_128_CBC_SHA is the only mandatory TLS 1.2 cipher suite.*
+*Note - TLS_RSA_WITH_AES_128_CBC_SHA is the only mandatory TLS 1.2 cipher suite.*
 
 *	The Agent SHOULD use the [RFC 6066](https://tools.ietf.org/html/rfc6066) Server Name TLS extension to send the host portion of the Collection Server URL as the server name during the TLS handshake.
 *	If TLS 1.2 (or a later version) is used, the Agent MUST authenticate the Collection Server using the certificate provided by the Collection Server. Authentication of the Collection Server requires that the Agent MUST validate the certificate against a root certificate. To validate against a root certificate, the Agent MUST contain one or more trusted root certificates that are either pre-loaded in the Agent or provided to the Agent by a secure means outside the scope of this specification. If as a result of an HTTP redirect, the Agent is attempting to access a Collection Server at a URL different from its pre-configured Collection Server URL, the Agent MUST validate the Collection Server certificate using the redirected Collection Server URL rather than the pre-configured Collection Server URL.
 *	If the host portion of the Collection Server URL is a DNS name, this MUST be done according to the principles of [RFC 6125](https://tools.ietf.org/html/rfc6125), using the host portion of the Collection Server URL as the reference identifier.
 *	If the host portion of the Collection Server URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.
 
-*Note – the terms "reference identifier" and "presented identifier" are defined in [RFC 6125](https://tools.ietf.org/html/rfc6125).*
-*Note – wildcard certificates are permitted as described in [RFC 6125](https://tools.ietf.org/html/rfc6125)*
+*Note - the terms "reference identifier" and "presented identifier" are defined in [RFC 6125](https://tools.ietf.org/html/rfc6125).*
+*Note - wildcard certificates are permitted as described in [RFC 6125](https://tools.ietf.org/html/rfc6125)*
 
 *	A Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the Collection Server. If a Agent for any reason is unable to obtain absolute time, it can contact the Collection Server without waiting for accurate absolute time. If a Agent chooses to contact the Collection Server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Collection Server certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 *	Support for Agent authentication using client-side certificates is NOT RECOMMENDED.  Instead, the Collection Server SHOULD authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.
