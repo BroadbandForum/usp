@@ -438,23 +438,7 @@ message Notify {
   message Event {
     string obj_path = 1;
     string event_name = 2;
-    repeated ParamMapEntity param_map = 3;
-
-    message ParamMapEntity {
-      string key = 1;
-      ParamMapEntityValue value = 2;
-    }
-
-    message ParamMapEntityValue {
-      oneof value_type {
-        string str_value = 1;
-        MapType map_value = 2;
-      }
-
-      message MapType {
-        map<string, string> value = 1;
-      }
-    }
+    map<string, string> param_map = 3;
   }
 
   message ValueChange {
