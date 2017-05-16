@@ -83,36 +83,23 @@ The USP Notify Request is the only message of the Request type that is sent from
 
 ## MTP Message Encryption
 
-HTTP MTP message encryption is provided using certificates in TLS as described in Section 2.7.2 and section 9 of [RFC 7230][13].
+HTTP MTP message encryption is provided using certificates in TLS as described in [RFC 2818](https://tools.ietf.org/html/rfc2818) and the updates to RFC 2818 contained in sections 2.7.2 and 9 of RFC 7230[13].
 
-**R-HTTP.14** - USP Endpoints utilizing HTTP clients and servers for message transport MUST implement the Certificate modes of TLS security as defined in [RFC 7230][13].
+**R-HTTP.14** - USP Endpoints utilizing HTTP clients and servers for message transport MUST implement the Certificate modes of TLS security as defined in [RFC 2818](https://tools.ietf.org/html/rfc2818) and the updates to RFC 2818 contained in sections 2.7.2 and 9 of RFC 7230[13].
 
-**R-HTTP.15** - While section 9 of [RFC 7230][13] provides guidance on securing HTTP, further guidance related to TLS implementations HTTP clients are server are as follows:
+**R-HTTP.15** - While section 9 of [RFC 7230][13] provides guidance on securing HTTP, further guidance related to TLS implementations for HTTP clients and servers are as follows:
 
-*	USP Endpoints that implement an HTTP MTP MUST support TLS 1.2 or later as defined in [RFC 5246](https://tools.ietf.org/html/rfc5246).
-*	USP Endpoints that implement an HTTP MTP MUST support the IETF RFCs that update [TLS 1.2](https://tools.ietf.org/html/rfc5246).
+*	USP Endpoints that implement an HTTP MTP MUST support TLS 1.2 as defined in [RFC 5246](https://tools.ietf.org/html/rfc5246).
 *	USP Endpoints that implement an HTTP MTP SHOULD use the [RFC 6066](https://tools.ietf.org/html/rfc6066) Server Name TLS extension to send the host portion of the USP Endpoint's URL as the server name during the TLS handshake.
 *	USP Endpoints that implement an HTTP MTP MUST support the required (MUST/MUST NOT) recommendations and guidelines defined in the following sections of [RFC 7525](https://tools.ietf.org/html/rfc7525):
-  *	Section 3.1.1 - SSL/TLS Protocol Versions
-
-  *	Section 3.1.3 - Fallback to Lower Versions
-
-  *	Section 3.2 - Strict TLS
-
-  *	Section 3.3 - TLS Compression
-
-  *	Section 3.4 - TLS Session Resumption
-
-  *	Section 3.5 - TLS Renegotiation
-
-  *	Section 4.1 - Cipher Suites: General Guidelines
-
-*	USP Endpoints that implement an HTTP MTP and authenticate the HTTP MTP of a peer USP Endpoint, the USP Endpoint's HTTP MTP MUST authenticate the peer using the peer's HTTP MTP-provided certificate.  Authentication of the peer HTTP MTP requires that the HTTP MTP MUST validate the certificate against a root certificate.
-
-  *	If the host portion of the peer HTTP MTP's URL is a DNS name, this MUST be done per the principles of [RFC 6125](https://tools.ietf.org/html/rfc6125), using the host portion of the peer HTTP's USP URL as the reference identifier.
-
-  *	If the host portion of the peer HTTP MTP's URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.
-
+    *	Section 3.2 - Strict TLS
+    *	Section 3.3 - TLS Compression
+    *	Section 3.4 - TLS Session Resumption
+    *	Section 3.5 - TLS Renegotiation
+    *	Section 4.1 - Cipher Suites: General Guidelines
+*	A USP Endpoint that implements an HTTP MTP authenticates its HTTP MTP peer using the peer’s HTTP MTP-provided certificate. Authentication of the peer HTTP MTP requires that the HTTP MTP MUST validate the certificate against a root certificate.
+    *	If the host portion of the peer HTTP MTP's URL is a DNS name, this MUST be done per the principles of [RFC 6125](https://tools.ietf.org/html/rfc6125), using the host portion of the peer HTTP's USP URL as the reference identifier.
+    *	If the host portion of the peer HTTP MTP's URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.
 * USP Endpoints that implement an HTTP MTP MUST use subjectAltName extensions for validating the certificate.
 
 *Note - the terms "reference identifier" and "presented identifier" are defined in [RFC 6125](https://tools.ietf.org/html/rfc6125).*
@@ -121,4 +108,4 @@ HTTP MTP message encryption is provided using certificates in TLS as described i
 
 **R-HTTP.16** - USP Endpoints capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the peer USP Endpoint.  If a USP Endpoint for any reason is unable to obtain absolute time, it can contact the peer USP Endpoint without waiting for accurate absolute time.  If a USP Endpoint chooses to contact the peer USP Endpoint before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the peer USP Endpoint's HTTP MTP certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
-**R-HTTP.17** -	Support for HTTP MTP authentication using client-side certificates is OPTIONAL for USP Endpoints.  If supported, client-side certificates MUST be signed by an appropriate chain.  When client-side certificates are used to authenticate the HTTP MTP to the peer HTTP MTP, the endpoints MUST use subjectAltName extensions for validating the certificate.
+**R-HTTP.17** -	Support for HTTP MTP authentication using client-side certificates is OPTIONAL for USP Endpoints.  If supported, client-side certificates MUST be signed by a trusted certificate authority.  When client-side certificates are used to authenticate the HTTP MTP to the peer HTTP MTP, the endpoints MUST use subjectAltName extensions for validating the certificate.

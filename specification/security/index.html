@@ -33,6 +33,7 @@ https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 <p><em>Note - the terms “reference identifier” and “presented identifier” are defined in <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>.</em> Note - wildcard certificates are permitted as described in <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>.</p>
 <p><strong>R-SEC.7</strong> An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting a Controller. If an Agent for any reason is unable to obtain absolute time, it can contact the Controller without waiting for accurate absolute time. If an Agent chooses to contact a Controller before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Controller certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.</p>
 <h2 id="self-signed-certificates">Self-Signed Certificates</h2>
+<p><a id='self-signed-certificates'/></p>
 <p><strong>R-SEC.8</strong> - An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate <code>subjectaltName</code> with a type <code>uniformResourceIdentifier</code> attribute.</p>
 <p>Self-signed certificates supplied by Controllers can only be meaningfully used in cases where a person is in a position to provide Authorization (what Role the Controller is trusted to have). Whether or not an Agent allows self-signed certificates from a Controller is a matter of Agent policy.</p>
 <p><strong>R-SEC.9</strong> - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an &quot;untrusted&quot; Role on first use.</p>
@@ -48,6 +49,13 @@ https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 <p><strong>R-SEC.15</strong> - A factory-default Challenge string MUST NOT be derivable from information the Agent communicates about itself using any protocol at any layer.</p>
 <p><strong>R-SEC.16</strong> - The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.</p>
 <p><strong>R-SEC.17</strong> - The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.</p>
+<h3 id="agent-certificates">Agent certificates</h3>
+<p><strong>R-SEC.18</strong> - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:</p>
+<ul>
+<li>the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.</li>
+<li>the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the wildcarded Endpoint ID.</li>
+</ul>
+<p><strong>R-SEC-19</strong> - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using <a href="#self-signed-certificates">self-signed certificates</a>.</p>
 <h2 id="theory-of-operations">Theory of operations</h2>
 <p>The following theory of operations relies on objects, parameters, events, and operations from the <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2 Data Model for TR-069 Devices and USP Agents</a>.</p>
 <h3 id="data-model-elements">Data Model Elements</h3>
@@ -132,14 +140,6 @@ https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 <li>If the Controller has no <code>Controller.{i}.</code> entry or empty <code>Controller.{i}.Role</code>, and <code>ControllerTrust.Credential.{i}.Role</code> is empty, the Agent assigns the <code>Controller.{i}.Role</code> the role listed in <code>UntrustedRole</code>.</li>
 </ol></li>
 </ol>
-<h3 id="agent-certificates">Agent certificates</h3>
-<p><strong>R-SEC.18</strong> - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:</p>
-<ul>
-<li>the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.</li>
-<li>the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the the wildcarded Endpoint ID.</li>
-</ul>
-<p><strong>R-SEC.19</strong> - If generic Agent certificates are used, the Controller SHOULD additionally authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.</p>
-<p><strong>R-SEC-20</strong> - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using self-signed certificates.</p>
 <h3 id="encryption">Encryption</h3>
 <p>The <code>EnableEncryption</code> parameter, if implemented in <code>MTP.{i}.CoAP.</code> or <code>MTP.{i}.HTTP.</code>, allows encryption of the MTP to be enabled or disabled. If this parameter is not implemented, then there is no USP mechanism to toggle encryption. It is recommended that Agents implement the ability to encrypt all MTPs (via TLS 1.2 or DTLS 1.2 insert references, as appropriate), enable it by default, and not implement the ability to disable it.</p>
 <h3 id="challenges">Challenges</h3>

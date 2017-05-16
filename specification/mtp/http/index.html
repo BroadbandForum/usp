@@ -36,25 +36,26 @@
 <p>The USP Notify Request is the only message of the Request type that is sent from an Agent to a Controller. In these cases, the Agent functions as an HTTP client rather than an HTTP server in the POST/Response sequence.</p>
 <p><strong>R-HTTP.13</strong> - When an HTTP client receives a USP Notification, the HTTP client MUST adhere to the requirements defined in the USP <a href="/messages/#notify">Notifications and Subscription Mechanism</a>.</p>
 <h2 id="mtp-message-encryption">MTP Message Encryption</h2>
-<p>HTTP MTP message encryption is provided using certificates in TLS as described in Section 2.7.2 and section 9 of <a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">RFC 7230</a>.</p>
-<p><strong>R-HTTP.14</strong> - USP Endpoints utilizing HTTP clients and servers for message transport MUST implement the Certificate modes of TLS security as defined in <a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">RFC 7230</a>.</p>
-<p><strong>R-HTTP.15</strong> - While section 9 of <a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">RFC 7230</a> provides guidance on securing HTTP, further guidance related to TLS implementations HTTP clients are server are as follows:</p>
+<p>HTTP MTP message encryption is provided using certificates in TLS as described in <a href="https://tools.ietf.org/html/rfc2818">RFC 2818</a> and the updates to RFC 2818 contained in sections 2.7.2 and 9 of RFC 7230<a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">13</a>.</p>
+<p><strong>R-HTTP.14</strong> - USP Endpoints utilizing HTTP clients and servers for message transport MUST implement the Certificate modes of TLS security as defined in <a href="https://tools.ietf.org/html/rfc2818">RFC 2818</a> and the updates to RFC 2818 contained in sections 2.7.2 and 9 of RFC 7230<a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">13</a>.</p>
+<p><strong>R-HTTP.15</strong> - While section 9 of <a href="https://tools.ietf.org/html/rfc7230" title="Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing">RFC 7230</a> provides guidance on securing HTTP, further guidance related to TLS implementations for HTTP clients and servers are as follows:</p>
 <ul>
-<li>USP Endpoints that implement an HTTP MTP MUST support TLS 1.2 or later as defined in <a href="https://tools.ietf.org/html/rfc5246">RFC 5246</a>.</li>
-<li>USP Endpoints that implement an HTTP MTP MUST support the IETF RFCs that update <a href="https://tools.ietf.org/html/rfc5246">TLS 1.2</a>.</li>
+<li>USP Endpoints that implement an HTTP MTP MUST support TLS 1.2 as defined in <a href="https://tools.ietf.org/html/rfc5246">RFC 5246</a>.</li>
 <li>USP Endpoints that implement an HTTP MTP SHOULD use the <a href="https://tools.ietf.org/html/rfc6066">RFC 6066</a> Server Name TLS extension to send the host portion of the USP Endpoint's URL as the server name during the TLS handshake.</li>
-<li>USP Endpoints that implement an HTTP MTP MUST support the required (MUST/MUST NOT) recommendations and guidelines defined in the following sections of <a href="https://tools.ietf.org/html/rfc7525">RFC 7525</a>:</li>
-<li><p>Section 3.1.1 - SSL/TLS Protocol Versions</p></li>
-<li><p>Section 3.1.3 - Fallback to Lower Versions</p></li>
-<li><p>Section 3.2 - Strict TLS</p></li>
-<li><p>Section 3.3 - TLS Compression</p></li>
-<li><p>Section 3.4 - TLS Session Resumption</p></li>
-<li><p>Section 3.5 - TLS Renegotiation</p></li>
-<li><p>Section 4.1 - Cipher Suites: General Guidelines</p></li>
-<li><p>USP Endpoints that implement an HTTP MTP and authenticate the HTTP MTP of a peer USP Endpoint, the USP Endpoint's HTTP MTP MUST authenticate the peer using the peer's HTTP MTP-provided certificate. Authentication of the peer HTTP MTP requires that the HTTP MTP MUST validate the certificate against a root certificate.</p></li>
-<li><p>If the host portion of the peer HTTP MTP's URL is a DNS name, this MUST be done per the principles of <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>, using the host portion of the peer HTTP's USP URL as the reference identifier.</p></li>
-<li><p>If the host portion of the peer HTTP MTP's URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.</p></li>
-<li><p>USP Endpoints that implement an HTTP MTP MUST use subjectAltName extensions for validating the certificate.</p></li>
+<li>USP Endpoints that implement an HTTP MTP MUST support the required (MUST/MUST NOT) recommendations and guidelines defined in the following sections of <a href="https://tools.ietf.org/html/rfc7525">RFC 7525</a>:
+<ul>
+<li>Section 3.2 - Strict TLS</li>
+<li>Section 3.3 - TLS Compression</li>
+<li>Section 3.4 - TLS Session Resumption</li>
+<li>Section 3.5 - TLS Renegotiation</li>
+<li>Section 4.1 - Cipher Suites: General Guidelines</li>
+</ul></li>
+<li>USP Endpoints that implement an HTTP MTP and authenticate the HTTP MTP of a peer USP Endpoint, the USP Endpoint's HTTP MTP MUST authenticate the peer using the peer's HTTP MTP-provided certificate. Authentication of the peer HTTP MTP requires that the HTTP MTP MUST validate the certificate against a root certificate.
+<ul>
+<li>If the host portion of the peer HTTP MTP's URL is a DNS name, this MUST be done per the principles of <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>, using the host portion of the peer HTTP's USP URL as the reference identifier.</li>
+<li>If the host portion of the peer HTTP MTP's URL is an IP address, this MUST be done by comparing the IP address against any presented identifiers that are IP addresses.</li>
+</ul></li>
+<li>USP Endpoints that implement an HTTP MTP MUST use subjectAltName extensions for validating the certificate.</li>
 </ul>
 <p><em>Note - the terms &quot;reference identifier&quot; and &quot;presented identifier&quot; are defined in <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>.</em></p>
 <p><em>Note - wildcard certificates are permitted as described in <a href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>.</em></p>

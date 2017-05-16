@@ -69,6 +69,7 @@ Note - wildcard certificates are permitted as described in [RFC 6125](https://to
 **R-SEC.7**   An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting a Controller.  If an Agent for any reason is unable to obtain absolute time, it can contact the Controller without waiting for accurate absolute time. If an Agent chooses to contact a Controller before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Controller certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
 ## Self-Signed Certificates
+<a id='self-signed-certificates'/>
 
 **R-SEC.8** - An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
@@ -99,6 +100,15 @@ It is possible for the Agent to allow an external entity to change a Controller 
 **R-SEC.16** - The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.
 
 **R-SEC.17** - The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.
+
+### Agent certificates
+
+**R-SEC.18** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
+
+* the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
+* the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the wildcarded Endpoint ID.
+
+**R-SEC-19** - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using [self-signed certificates](#self-signed-certificates).
 
 ## Theory of operations
 
@@ -205,17 +215,6 @@ Note that it is possible for an Agent to maintain policy of the type described b
 6. If the certificate has a chain of trust, the CA indicates the certificate is valid, the CA is in `ControllerTrust.Credential.{i}.`, the CA is reachable, and the certificate does not include the Controller Endpoint ID, but does include the Controller domain, with or without wildcard:
     1. If the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent applies the `ControllerTrust.Credential.{i}.Role` to the Controller for the current TLS or DTLS session, but does not permanently modify `Controller.{i}.Role`. Any Role associated with the Controller Endpoint ID is ignored, because the identity of the actual Controller identity has not been validated.
     2. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and `ControllerTrust.Credential.{i}.Role` is empty, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
-
-### Agent certificates
-
-**R-SEC.18** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
-
-* the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
-* the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the  the wildcarded Endpoint ID.
-
-**R-SEC.19** - If generic Agent certificates are used, the Controller SHOULD additionally authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.
-
-**R-SEC-20** - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using self-signed certificates.
 
 ### Encryption
 
