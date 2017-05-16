@@ -28,15 +28,22 @@ The requirements for each individual Message Transfer Protocol is covered in an 
 
 <a id="securing_mtps" />
 
-USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios. USP recommends the following requirement on use of MTP security:
+<!--
+USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.
+-->
+
+USP recommends the following requirement on use of MTP security:
 
 **R-MTP.0** – The Message Transfer Protocol MUST use secure transport when USP messages cross inter-network boundaries.
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however.
 
-### MTP Message Encryption
+<!--
+### MTP Message Protection
 
-In USP, a trust relationship is established between controllers and agents using the end-to-end security mechanism. This section provides additional security functions specific to the transfer of USP messages between USP endpoints which can include intermediate points such as MTP proxies. The purpose of MTP message encryption is to ensure the confidentiality and integrity of the payload that is transferred between USP endpoints. While the protocol (e.g., TLS, DTLS) used by the MTP is dependent on the type of MTP and are further described in the section associated with the MTP, the following requirements in this section are relevant to each type of MTP.
+In USP, a trust relationship is established between controllers and agents using the end-to-end security mechanism. This section provides additional security functions specific to the transfer of USP messages between USP endpoints which can include intermediate points such as MTP proxies.
+
+The purpose of MTP message protection is to ensure the confidentiality and integrity of the payload that is transferred between USP endpoints. While the protocol (e.g., TLS, DTLS) used by the MTP is dependent on the type of MTP and are further described in the section associated with the MTP, the following requirements in this section are relevant to each type of MTP.
 
 **R-MTP.1** – MTP endpoints MUST implement the capability to provide for the confidentiality and integrity of MTP payloads using MTP message encryption.
 
@@ -65,3 +72,4 @@ In some deployment scenarios validation of the identity of MTP endpoints is need
 **R-MTP.8** – MTP endpoints MUST implement the capability to provide for the validation of identities of the MTP endpoints involved in the transfer of messages using MTP message encryption.
 
 **R-MTP.9** – MTP endpoints MUST provide the capability to enable and disable MTP validation of MTP identities. The default setting is to enable MTP validation of MTP identities.  
+-->

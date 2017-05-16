@@ -17,7 +17,5 @@
 
 These sections define or provide theories of operation for additional, use-case specific functionality for the User Service Platform. These sections rely heavily on protocols external to USP. Included in this version are:
 
-<!--
-* [Proxy guidelines and normative requirements](proxy/)
--->
 * [Bulk data collection over HTTP](http-bulk-data-collection/)
+* [USP Abstraction Proxy](abstraction-proxy/)

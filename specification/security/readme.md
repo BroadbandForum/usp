@@ -188,38 +188,23 @@ When an Agent is presented with a Controller’s certificate, the Agent will alw
 Note that it is possible for an Agent to maintain policy of the type described by the `UntrustedRole`, `BannedRole`, and `MTP.{i}.<MTP>.ValidatePeerCertificate` parameters, and the information described by `ControllerTrust.Credential.{i}.` and `Controller.{i}.Credential` without exposing these through the data model. If the policy concepts and data are maintained but not exposed, the same methods can still be used. It is also possible for an Agent to have policy that is not described by any defined data model element.
 
 1. If the certificate presented by the Controller is self-signed then:
-
-  1. If the certificate is not in `Controller.{i}.Credential`, it includes the Controller Endpoint ID, and `MTP.{i}.<MTP>.ValidatePeerCertificate` is false, the Agent assigns sets `Controller.{i}.Role` to the role in `UntrustedRole`. The Agent stores the certificate information in `Controller.{i}.Credential`.
-
-    1. If the certificate is not in `Controller.{i}.Credential` and either does not include the Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is true, the Agent refuses to establish an encrypted connection with the Controller and does not store the certificate information.
-
-    2. If the certificate is in `Controller.{i}.Credential` and includes the Controller Endpoint ID, the Agent considers the certificate valid for purpose of confirming Controller identity, and allows the Controller use of its `Controller.{i}.Role`.
-
+    1. If the certificate is not in `Controller.{i}.Credential`, it includes the Controller Endpoint ID, and `MTP.{i}.<MTP>.ValidatePeerCertificate` is false, the Agent assigns sets `Controller.{i}.Role` to the role in `UntrustedRole`. The Agent stores the certificate information in `Controller.{i}.Credential`.
+      1. If the certificate is not in `Controller.{i}.Credential` and either does not include the Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is true, the Agent refuses to establish an encrypted connection with the Controller and does not store the certificate information.
+      2. If the certificate is in `Controller.{i}.Credential` and includes the Controller Endpoint ID, the Agent considers the certificate valid for purpose of confirming Controller identity, and allows the Controller use of its `Controller.{i}.Role`.
 2. If the certificate indicates it has a chain of trust leading to a Certificate Authority (CA), and the CA indicates the certificate is not valid or has been revoked, the Agent will assign `Controller.{i}.Role` the role in `BannedRole`.
-
 3. If the certificate indicates it has a chain of trust leading to a Certificate Authority (CA) and the CA indicates the certificate is valid, but the CA is not in `ControllerTrust.Credential.{i}.`, the certificate is treated like a self-signed certificate.
-
 4. If the certificate indicates it has a chain of trust, but the CA is unreachable (e.g., no Internet access or CA not responding for some reason):
-  1. If the Controller certificate is in `Controller.{i}.Credential` and includes the correct Controller Endpoint ID and `MTP.{i}.<MTP>.ValidatePeerCertificate` is `false`, the Agent will consider the certificate valid for purpose of confirming Controller identity, and allow the Controller use of `Controller.{i}.Role`.
-
-  2. If the Controller certificate is in `Controller.{i}.Credential` and either does not include the correct Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is `true`, the Agent refuses to establish an encrypted connection with the Controller.
-
-  3. If the Controller certificate is not in `Controller.{i}.Credential`, the Agent will treat it like a self-signed certificate.
-
+    1. If the Controller certificate is in `Controller.{i}.Credential` and includes the correct Controller Endpoint ID and `MTP.{i}.<MTP>.ValidatePeerCertificate` is `false`, the Agent will consider the certificate valid for purpose of confirming Controller identity, and allow the Controller use of `Controller.{i}.Role`.
+    2. If the Controller certificate is in `Controller.{i}.Credential` and either does not include the correct Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is `true`, the Agent refuses to establish an encrypted connection with the Controller.
+    3. If the Controller certificate is not in `Controller.{i}.Credential`, the Agent will treat it like a self-signed certificate.
 5. If the certificate has a chain of trust, the CA indicates the certificate is valid, the CA is in
- `ControllerTrust.Credential.{i}.`, the CA is reachable, and the certificate includes the Controller Endpoint ID:
-
- 1. If the Controller has a `Controller.{i}.Role` that is not the role in `UntrustedRole`, the Agent considers the certificate valid for purpose of confirming Controller identity, and allows the Controller use of its `Controller.{i}.Role`. This includes the case where `Controller.{i}.Role` is the role in `BannedRole`.
-
- 2. If the Controller has no `Controller.{i}.` entry, empty `Controller.{i}.Role`, or has `Controller.{i}.Role` with the role listed in `UntrustedRole`, *and* the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent assigns `Controller.{i}.Role` this Role.
-
- 3. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and there is no `ControllerTrust.Credential.{i}.Role`, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
-
+`ControllerTrust.Credential.{i}.`, the CA is reachable, and the certificate includes the Controller Endpoint ID:
+    1. If the Controller has a `Controller.{i}.Role` that is not the role in `UntrustedRole`, the Agent considers the certificate valid for purpose of confirming Controller identity, and allows the Controller use of its `Controller.{i}.Role`. This includes the case where `Controller.{i}.Role` is the role in `BannedRole`.
+    2. If the Controller has no `Controller.{i}.` entry, empty `Controller.{i}.Role`, or has `Controller.{i}.Role` with the role listed in `UntrustedRole`, *and* the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent assigns `Controller.{i}.Role` this Role.
+    3. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and there is no `ControllerTrust.Credential.{i}.Role`, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
 6. If the certificate has a chain of trust, the CA indicates the certificate is valid, the CA is in `ControllerTrust.Credential.{i}.`, the CA is reachable, and the certificate does not include the Controller Endpoint ID, but does include the Controller domain, with or without wildcard:
-
-  1. If the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent applies the `ControllerTrust.Credential.{i}.Role` to the Controller for the current TLS or DTLS session, but does not permanently modify `Controller.{i}.Role`. Any Role associated with the Controller Endpoint ID is ignored, because the identity of the actual Controller identity has not been validated.
-
-  2. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and `ControllerTrust.Credential.{i}.Role` is empty, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
+    1. If the CA has a non-empty `ControllerTrust.Credential.{i}.Role`, the Agent applies the `ControllerTrust.Credential.{i}.Role` to the Controller for the current TLS or DTLS session, but does not permanently modify `Controller.{i}.Role`. Any Role associated with the Controller Endpoint ID is ignored, because the identity of the actual Controller identity has not been validated.
+    2. If the Controller has no `Controller.{i}.` entry or empty `Controller.{i}.Role`, and `ControllerTrust.Credential.{i}.Role` is empty, the Agent assigns the `Controller.{i}.Role` the role listed in `UntrustedRole`.
 
 ### Agent certificates
 

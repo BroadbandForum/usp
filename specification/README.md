@@ -60,6 +60,11 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 # Revision History
 
+## Version 1.0-DRAFT-11
+
+* Using new version naming convention (Major.Minor-DRAFT-REV)
+* Changes updated based on contribution bbf2017.488.00
+
 ## Version 0.10
 
 * Using new version naming convention (0.x) for WT revisions

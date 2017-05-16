@@ -15,19 +15,15 @@
 
 # CoAP Binding
 
-The Constrained Application Protocol (CoAP) MTP transfers USP messages between USP endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP messages between USP controllers and agents.
+The Constrained Application Protocol (CoAP) MTP transfers USP Messages between USP Endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP messages between USP Endpoints.
 
-<img src="usp-message-over-coap.png" />
+usp-request-response-over-coap.png
 
-Figure 1 - A USP message over the CoAP MTP
+Figure 1 - A USP Message over the CoAP MTP
 
-USP messages that originate from USP Controllers are encapsulated within a CoAP request message. When a USP Agent receives the CoAP request message the USP Agent sends a CoAP response message to the USP Controller that indicates receipt of the message. When the USP Agent responds to the USP Controller's request, the Agent encapsulates the USP response in a new CoAP request message. When the USP Controller receives the USP response, the USP Controller sends a CoAP response message that indicates receipt of the message.
+USP Requests are encapsulated within a CoAP request message. When a USP Endpoint receives the CoAP request message the USP Endpoint immediately sends a CoAP response message (with no USP Message) to indicate receipt of the message. A USP Response is encapsulated in a new CoAP request message. When a USP Endpoint receives a USP Response, it sends a CoAP response message that indicates receipt of the message. Therefore, all Endpoints supporting CoAP will implement both CoAP client and server.
 
-In addition to the USP Requests that are exchanged between USP Controllers and Agents, the USP Notify Request from a USP Agent to one or more Controllers utilizes the same message pattern described in [RFC 7252][9] except the roles played by the CoAP endpoint are modified. The USP Agent plays the role of the CoAP client and the USP Controller plays the role of the CoAP server. When a USP Controller subscribes to receive notifications from a USP Agent, the USP Agent transmits the USP notification using the CoAP message as depicted in the following figure.
-
-<img src="usp-notify-over-coap.png" />
-
-Figure 2 - USP Notifications over CoAP
+As noted in the definition of a USP Request, this USP Message either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications from the Agent to the Controller. Notifications will only cause a USP Response to be generated if specified in the Notification Request. However, the CoAP response will always be sent.
 
 ## Mapping USP Endpoints to CoAP URIs
 <a id="mapping_usp_endpoints_to_coap_uri" />
