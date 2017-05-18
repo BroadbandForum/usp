@@ -15,6 +15,6 @@
 
 # Message Encoding
 
-USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in an Annex of this document and/or in the referenced specification. This version of the specification includes support for:
+USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
 
 * [Protocol Buffers Version 3][12]

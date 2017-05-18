@@ -41,7 +41,7 @@ This element contains a repeated set of `DeletedObjectResult` messages.
 
 `string requested_path`
 
-This element returns the value of the entry of `obj_path` (in the Delete Request) associated with this `DeleteObjectResult`.
+This element returns the value of the entry of `obj_path_list` (in the Delete Request) associated with this `DeleteObjectResult`.
 
 `OperationStatus oper_status`
 
@@ -85,7 +85,7 @@ This element returns a repeated set of Path Names to Object Instances.
 
 This element contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.4** - If any of the Object Instances specified in the `obj_path` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
+**R-DEL.4** - If any of the Object Instances specified in the `obj_path_list` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
 **R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
 

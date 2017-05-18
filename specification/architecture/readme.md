@@ -176,7 +176,7 @@ Dynamic Objects, or “multi-instance” Objects, are those Objects that can be 
 #### Parameters
 <a id="parameters" />
 
-Parameters define the attributes or variables of an Object. They’re retrieved by a Controller using the read operations of USP and configured using the update operations of USP (the Get and Set messages, respectively). Parameters have data types and are used to store values.
+Parameters define the attributes or variables of an Object. They are retrieved by a Controller using the read operations of USP and configured using the update operations of USP (the Get and Set messages, respectively). Parameters have data types and are used to store values.
 
 #### Commands
 <a id="commands" />
@@ -186,7 +186,7 @@ Commands define Object specific methods within the Data Model. A Controller can 
 #### Events
 <a id="events" />
 
-Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
+Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](../messages/notify/). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
 
 #### Path Names
 <a id="path_names" />
@@ -195,9 +195,9 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 **R-ARC.7** - All USP endpoints MUST support the Path Name syntax as defined in [TR-106][3].
 
-Path Names are represented by a hierarchy of Objects (“parents”) and sub-Objects (“children”), separated by the dot “.” Character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
+Path Names are represented by a hierarchy of Objects (“parents”) and sub-Objects (“children”), separated by the dot “.” character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](/messages/getsupportedDM/)).
+1.	Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](../messages/getsupportedDM/)).
 
 2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent’s Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following).
 

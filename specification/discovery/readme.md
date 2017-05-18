@@ -123,11 +123,11 @@ DNS TXT records allow for a small set of additional information to be included i
 
 **R-DIS.11** - Controller DNS-SD records MUST include a TXT record with the “path” attribute.
 
-The “path” attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate Annex of this document.
+The “path” attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate section of this document.
 
 The TXT record can include other attributes defined in the TXT record attribute registry, as well.
 
-Whether a particular USP Endpoint respond to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.
+Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.
 
 ### Example Controller Unicast DNS-SD Resource Records
 ```

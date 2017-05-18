@@ -1,43 +1,43 @@
 <!-- Reference Links -->
-<h1 id="delete">Delete</h1>
+<h1 id="delete"><span class="header-section-number">1</span> Delete</h1>
 <p><a id="delete" /></p>
-<h2 id="delete-request-elements">Delete Request Elements</h2>
+<h2 id="delete-request-elements"><span class="header-section-number">1.1</span> Delete Request Elements</h2>
 <p><code>bool allow_partial</code></p>
 <p>This element tells the Agent how to process the message in the event that one or more of the Objects specified in the <code>obj_path</code> argument fails deletion.</p>
 <p><strong>R-DEL.0</strong> - If the <code>allow_partial</code> element is set to true, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><strong>R-DEL.1</strong> - If the <code>allow_partial</code> element is set to false, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see <a href="/messages/add/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><code>repeated string obj_path_list</code></p>
 <p>This element contains a repeated set of Object Instance Paths or Search Paths.</p>
-<h2 id="delete-response-elements">Delete Response Elements</h2>
+<h2 id="delete-response-elements"><span class="header-section-number">1.2</span> Delete Response Elements</h2>
 <p><code>repeated DeletedObjectResult deleted_obj_result_list</code></p>
 <p>This element contains a repeated set of <code>DeletedObjectResult</code> messages.</p>
-<h3 id="deletedobjectresult-elements">DeletedObjectResult Elements</h3>
+<h3 id="deletedobjectresult-elements"><span class="header-section-number">1.2.1</span> DeletedObjectResult Elements</h3>
 <p><code>string requested_path</code></p>
-<p>This element returns the value of the entry of <code>obj_path</code> (in the Delete Request) associated with this <code>DeleteObjectResult</code>.</p>
+<p>This element returns the value of the entry of <code>obj_path_list</code> (in the Delete Request) associated with this <code>DeleteObjectResult</code>.</p>
 <p><code>OperationStatus oper_status</code></p>
 <p>This element contains a message of type <code>OperationStatus</code>.</p>
-<h4 id="operationstatus-elements">OperationStatus Elements</h4>
+<h4 id="operationstatus-elements"><span class="header-section-number">1.2.1.1</span> OperationStatus Elements</h4>
 <p><code>oneof oper_status</code></p>
 <p>This element contains a message of one of the following types.</p>
 <p><code>OperationFailure oper_failure</code></p>
 <p>Used when the Object specified in <code>requested_path</code> failed to be deleted.</p>
 <p><code>OperationSuccess oper_success</code></p>
-<h5 id="operationfailure-elements">OperationFailure Elements</h5>
+<h5 id="operationfailure-elements"><span class="header-section-number">1.2.1.1.1</span> OperationFailure Elements</h5>
 <p><em>Note: Since the <code>OperationSuccess</code> message of the Delete Response contains an <code>unaffected_path_err_list</code>, the <code>OperationStatus</code> will only contain an <code>OperationFailure</code> message if the <code>requested_path</code> was did not match any existing Objects (error <code>7016</code>) or was syntactically incorrect (error <code>7008</code>).</em></p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the delete to fail. A value of 0 indicates the Object was deleted successfully.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
-<h5 id="operationsuccess-elements">OperationSuccess Elements</h5>
+<h5 id="operationsuccess-elements"><span class="header-section-number">1.2.1.1.2</span> OperationSuccess Elements</h5>
 <p><code>repeated string affected_path_list</code></p>
 <p>This element returns a repeated set of Path Names to Object Instances.</p>
 <p><strong>R-DEL.2</strong> - If the Controller does not have Read permission on any of the Objects specified in <code>affected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
 <p><strong>R-DEL.3</strong> - The Path Names to Object Instances in <code>affected_path_list</code> MUST be addressed using Instance Number Addressing.</p>
 <p><code>repeated UnaffectedPathError unaffected_path_err_list</code></p>
 <p>This element contains a repeated set of messages of type <code>UnaffectedPathError</code>.</p>
-<p><strong>R-DEL.4</strong> - If any of the Object Instances specified in the <code>obj_path</code> element fail to delete, this set MUST include one <code>UnaffectedPathError</code> message for each of the Object Instances that failed to Delete.</p>
+<p><strong>R-DEL.4</strong> - If any of the Object Instances specified in the <code>obj_path_list</code> element fail to delete, this set MUST include one <code>UnaffectedPathError</code> message for each of the Object Instances that failed to Delete.</p>
 <p><strong>R-DEL.5</strong> - If the Controller does not have Read permission on any of the Objects specified in <code>unaffected_path_list</code>, these Objects MUST NOT be returned in this element.</p>
-<h6 id="unaffectedpatherror-elements">UnaffectedPathError Elements</h6>
+<h6 id="unaffectedpatherror-elements"><span class="header-section-number">1.2.1.1.2.1</span> UnaffectedPathError Elements</h6>
 <p><code>string unaffected_path</code></p>
 <p>This element returns the Path Name to the Object Instance that failed to be deleted.</p>
 <p><strong>R-DEL.6</strong> - The Path Names to Object Instances in <code>unaffected_path</code> MUST be addressed using Instance Number Addressing.</p>
@@ -45,5 +45,5 @@
 <p>This element contains the error code of the error that caused the deletion of this object to fail.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains text related to the error specified by <code>err_code</code>.</p>
-<h2 id="delete-message-supported-error-codes">Delete Message Supported Error Codes</h2>
+<h2 id="delete-message-supported-error-codes"><span class="header-section-number">1.3</span> Delete Message Supported Error Codes</h2>
 <p>Appropriate error codes for the Delete message include <code>7000-7008</code>, <code>7015</code>, <code>7016</code>, <code>7018</code>, <code>7024</code>, and <code>7800-7999</code>.</p>

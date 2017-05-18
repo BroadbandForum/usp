@@ -1,13 +1,14 @@
 <!-- Reference Links -->
-<h1 id="message-transfer-protocols">Message Transfer Protocols</h1>
+<h1 id="message-transfer-protocols"><span class="header-section-number">1</span> Message Transfer Protocols</h1>
 <p>USP messages are sent between Endpoints over one or more Message Transfer Protocols.</p>
 <p>Note: Message Transfer Protocol was a term adopted to avoid confusion with the term “Transport”, which is often overloaded to include both application layer (i.e. HTTP) and the actual OSI Transport layer (i.e. TCP). Throughout this document, Message Transfer Protocol (MTP) refers to application layer transport.</p>
-<p>The requirements for each individual Message Transfer Protocol is covered in an Annex of this document. This version of the specification includes definitions for:</p>
+<p>The requirements for each individual Message Transfer Protocol is covered in a section of this document. This version of the specification includes definitions for:</p>
 <ul>
 <li>The <a href="./coap/">Constrained Application Protocol (CoAP)</a>.</li>
-<li>The <a href="./http/">Hypertext Transfer Protocol verstion 1.1 (HTTP/1.1)</a></li>
+<li>WebSockets</li>
 </ul>
-<h2 id="securing-mtps">Securing MTPs</h2>
+<p><em>Note: In this DRAFT version of the specification, the binding definition for WebSockets is TBD. It will be fully defined in the final 1.0 release.</em></p>
+<h2 id="securing-mtps"><span class="header-section-number">1.1</span> Securing MTPs</h2>
 <p><a id="securing_mtps" /></p>
 <!--
 USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.

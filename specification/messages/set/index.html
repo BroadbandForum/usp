@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-<h1 id="set">Set</h1>
+<h1 id="set"><span class="header-section-number">1</span> Set</h1>
 <p><a id="set" /></p>
-<h2 id="selecting-objects-and-parameters-for-cud-operations">Selecting Objects and Parameters for CUD Operations</h2>
+<h2 id="selecting-objects-and-parameters-for-cud-operations"><span class="header-section-number">1.1</span> Selecting Objects and Parameters for CUD Operations</h2>
 <p><a id="selecting_objects_and_parameters_CUD" /></p>
 <p>Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.</p>
 <p>For Add and Set requests, each Object address or search is conveyed in an element that also contains a sub-element listing the parameters to update in the matched Objects.</p>
@@ -9,7 +9,7 @@
 <pre><code>    allow_partial: true
     update_obj_list {
       obj_path: Device.Wifi.SSID.*.
-      param_setting {
+      param_setting_list {
         param: Enable
         value: False
         required: False
@@ -38,7 +38,7 @@
             value: False
           }
       }</code></pre>
-<h3 id="using-allow-partial-and-required-parameters">Using Allow Partial and Required Parameters</h3>
+<h3 id="using-allow-partial-and-required-parameters"><span class="header-section-number">1.1.1</span> Using Allow Partial and Required Parameters</h3>
 <p><a id="allow_partial_and_required_parameters" /></p>
 <p>The Add, Set, and Delete requests contain an element called “<code>allow_partial</code>”. This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.</p>
 <p>For Delete, this is straightforward - if <code>allow_partial</code> is <code>true</code>, the Agent should return a Response message with <code>affected_path_list</code> and <code>unaffected_path_err_list</code> containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If <code>allow_partial</code> is <code>false</code>, the Agent should return an Error message if any Objects fail to be deleted.</p>
@@ -127,7 +127,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="set-request-elements">Set Request Elements</h2>
+<h2 id="set-request-elements"><span class="header-section-number">1.2</span> Set Request Elements</h2>
 <p><code>bool allow_partial</code></p>
 <p>This element tells the Agent how to process the message in the event that one or more of the Objects matched in the <code>obj_path</code> fails to update.</p>
 <p><strong>R-SET.0</strong> - If the <code>allow_partial</code> element is set to true, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
@@ -135,12 +135,12 @@
 <p><strong>R-SET.1</strong> - If the <code>allow_partial</code> element is set to false, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><code>repeated UpdateObject update_obj_list</code></p>
 <p>This element contains a repeated set of UpdateObject messages.</p>
-<h3 id="updateobject-elements">UpdateObject Elements</h3>
+<h3 id="updateobject-elements"><span class="header-section-number">1.2.1</span> UpdateObject Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains an Object Path, Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.</p>
 <p><code>repeated UpdateParamSetting param_setting_list</code></p>
 <p>The element contains a repeated set of <code>UpdatedParamSetting</code> messages.</p>
-<h4 id="updateparamsetting-elements">UpdateParamSetting Elements</h4>
+<h4 id="updateparamsetting-elements"><span class="header-section-number">1.2.1.1</span> UpdateParamSetting Elements</h4>
 <p><code>string param</code></p>
 <p>This element contains the local name of a parameter of the Object specified in <code>obj_path</code>.</p>
 <p><code>string value</code></p>
@@ -148,39 +148,39 @@
 <p><code>bool required</code></p>
 <p>This element specifies whether the Agent should treat the update of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this parameter.</p>
 <p><strong>R-SET.2</strong> - If the <code>required</code> element is set to <code>true</code>, a failure to update this parameter MUST result in a failure to update the Object (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
-<h2 id="set-response">Set Response</h2>
+<h2 id="set-response"><span class="header-section-number">1.3</span> Set Response</h2>
 <p><code>repeated UpdatedObjectResult updated_obj_result_list</code></p>
 <p>This element contains a repeated set of <code>UpdatedObjectResult</code> messages for each <code>UpdateObject</code> message in the associated Set Request.</p>
-<h3 id="updatedobjectresult-elements">UpdatedObjectResult Elements</h3>
+<h3 id="updatedobjectresult-elements"><span class="header-section-number">1.3.1</span> UpdatedObjectResult Elements</h3>
 <p><code>string requested_path</code></p>
-<p>This element returns the value of <code>obj_path_list</code> in the <code>UpdateObject</code> message associated with this <code>UpdatedObjectResult</code>.</p>
+<p>This element returns the value of <code>updated_obj_result_list</code> in the <code>UpdateObject</code> message associated with this <code>UpdatedObjectResult</code>.</p>
 <p><code>OperationStatus oper_status</code></p>
 <p>The element contains a message of type <code>OperationStatus</code> that specifies the overall status for the update of the Object specified in <code>requested_path</code>.</p>
-<h4 id="operationstatus-elements">OperationStatus Elements</h4>
+<h4 id="operationstatus-elements"><span class="header-section-number">1.3.1.1</span> OperationStatus Elements</h4>
 <p><code>oneof oper_status</code></p>
 <p>This element contains a message of one of the following types.</p>
 <p><code>OperationFailure oper_failure</code></p>
 <p>Used when the Object specified in <code>requested_path</code> failed to be updated.</p>
 <p><code>OperationSuccess oper_success</code></p>
-<h5 id="operationfailure-elements">OperationFailure Elements</h5>
+<h5 id="operationfailure-elements"><span class="header-section-number">1.3.1.1.1</span> OperationFailure Elements</h5>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Object update to fail.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>repeated UpdatedInstanceFailure updated_inst_failure_list</code></p>
 <p>This element contains a repeated set of messages of type <code>UpdatedInstanceFailure</code>.</p>
-<h6 id="updatedinstancefailure-elements">UpdatedInstanceFailure Elements</h6>
+<h6 id="updatedinstancefailure-elements"><span class="header-section-number">1.3.1.1.1.1</span> UpdatedInstanceFailure Elements</h6>
 <p><code>string affected_path</code></p>
 <p>This element returns the Object Path or Object Instance Path of the Object that failed to update.</p>
 <p><code>repeated ParameterError param_err_list</code></p>
 <p>This element contains a repeated set of <code>ParameterError</code> messages.</p>
-<h6 id="parametererror-elements">ParameterError Elements</h6>
+<h6 id="parametererror-elements"><span class="header-section-number">1.3.1.1.1.2</span> ParameterError Elements</h6>
 <p><code>string param</code></p>
 <p>This element contains the Parameter Path (relative to <code>affected_path</code>) to the parameter that failed to update.</p>
-<h5 id="operationsuccess-elements">OperationSuccess Elements</h5>
+<h5 id="operationsuccess-elements"><span class="header-section-number">1.3.1.1.2</span> OperationSuccess Elements</h5>
 <p><code>repeated UpdatedInstanceResult updated_inst_result_list</code></p>
 <p>This element contains a repeated set of <code>UpdatedInstanceResult</code> messages.</p>
-<h6 id="updatedinstanceresult-elements">UpdatedInstanceResult Elements</h6>
+<h6 id="updatedinstanceresult-elements"><span class="header-section-number">1.3.1.1.2.1</span> UpdatedInstanceResult Elements</h6>
 <p><code>string affected_path</code></p>
 <p>This element returns the Object Path or Object Instance Path (using Instance Number Addressing) of the updated Object.</p>
 <p><code>repeated ParameterError param_err_list</code></p>
@@ -190,12 +190,12 @@
 <p><strong>R-SET.3</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>updated_param_map</code>, these parameters MUST NOT be returned in this element.</p>
 <p><strong>R-SET.4</strong> - Object Instance Paths in the keys of <code>updated_param_map</code> MUST use Instance Number Addressing.</p>
 <p><em>Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the <code>updated_param_map</code>.</em></p>
-<h6 id="parametererror-elements-1">ParameterError Elements</h6>
+<h6 id="parametererror-elements-1"><span class="header-section-number">1.3.1.1.2.2</span> ParameterError Elements</h6>
 <p><code>string param</code></p>
 <p>This element contains the Parameter Path to the parameter that failed to be set.</p>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains the <a href="/messages/error-codes/">error code</a> of the error that caused the parameter set to fail.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains text related to the error specified by <code>err_code</code>.</p>
-<h2 id="set-message-supported-error-codes">Set Message Supported Error Codes</h2>
+<h2 id="set-message-supported-error-codes"><span class="header-section-number">1.4</span> Set Message Supported Error Codes</h2>
 <p>Appropriate error codes for the Set message include <code>7000-7016</code>, <code>7020</code>, <code>7021</code>, and <code>7800-7999</code>.</p>

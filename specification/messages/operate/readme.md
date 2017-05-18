@@ -39,6 +39,10 @@ If any Controller wants a notification that an operation has completed, it creat
 
 Figure 2 - Operate Message Flow for Asynchronous Operations
 
+#### Persistance of Asynchronous Operations
+
+Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that  Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.
+
 ### Operate Requests on Multiple Objects
 
 Since the Operate request can take a path expression as a value for the command element, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the `OperationResult` element type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different `OperationResult` entry. For this reason, operation failures are never conveyed in an Error message - in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.

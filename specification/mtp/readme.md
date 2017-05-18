@@ -19,10 +19,12 @@ USP messages are sent between Endpoints over one or more Message Transfer Protoc
 
 Note: Message Transfer Protocol was a term adopted to avoid confusion with the term “Transport”, which is often overloaded to include both application layer (i.e. HTTP) and the actual OSI Transport layer (i.e. TCP). Throughout this document, Message Transfer Protocol (MTP) refers to application layer transport.
 
-The requirements for each individual Message Transfer Protocol is covered in an Annex of this document. This version of the specification includes definitions for:
+The requirements for each individual Message Transfer Protocol is covered in a section of this document. This version of the specification includes definitions for:
 
 *	The [Constrained Application Protocol (CoAP)](./coap/).
-* The [Hypertext Transfer Protocol verstion 1.1 (HTTP/1.1)](./http/)
+* WebSockets
+
+*Note: In this DRAFT version of the specification, the binding definition for WebSockets is TBD. It will be fully defined in the final 1.0 release.*
 
 ## Securing MTPs
 

@@ -211,15 +211,15 @@ The element contains an enumeration of type ObjAccessType specifying the access 
 
 This element, if `true`, indicates that the reported Object is a Multi-Instance Object.
 
-`repeated SupportedParamResult`
+`repeated SupportedParamResult supported_param_list`
 
 The element contains a message of type `SupportedParamResult` for each Parameter supported by the reported Object.
 
-`repeated SupportedCommandResult`
+`repeated SupportedCommandResult supported_command_list`
 
 The element contains a message of type `SupportedCommandResult` for each Command supported by the reported Object.
 
-`repeated SupportedEventResult`
+`repeated SupportedEventResult supported_event_list`
 
 The element contains a message of type `SupportedEventResult` for each Event supported by the reported Object.
 

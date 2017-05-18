@@ -13,7 +13,7 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# STRAW BALLOT - WT-369 - User Services Platform version 0.10
+# STRAW BALLOT - WT-369 - User Services Platform version 1.0-DRAFT-11
 
 # Table of Contents
 
@@ -64,6 +64,17 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 * Using new version naming convention (Major.Minor-DRAFT-REV)
 * Changes updated based on contribution bbf2017.488.00
+* Changes updated based on contribution bbf2017.404.00
+* Changes updated based on contribution bbf2017.403.00
+* Removed reference to RFC 7228 in the Introduction (USP-200)
+* Revised text to align with decisions on OnBoardRequest (USP-191, 2017.488)
+* Resolved editorial comments based on [Pull Request 31](https://code.broadband-forum.org/projects/USP/repos/wt-369/pull-requests/31/)
+* Removed HTTP binding and added placeholder for WebSockets (USP-209)
+* Added text about operation persistence to the asynchronous operation section (USP-213)
+* Updated language around ValueChange to talk about expression/thresholds (USP-220)
+* Removed requirement R-SEC-11 and renumbered (USP-201)
+* Fixed numbering in markdown in security ToO (USP-203)
+
 
 ## Version 0.10
 
@@ -159,12 +170,7 @@ This document describes:
 
 While the original CWMP was targeted toward remote gateways, it expanded to manage software modules, VoIP devices, set top boxes, network attached storage, etc. In the new connected world enabled by the virtualization of network functions and the “Internet of things”, USP has an opportunity to apply to “virtual agents” as well as push out to more device types.
 
-IETF RFC 7228, “Terminology for Constrained-Node Networks” [4][4], provides a useful definition of several classes of devices and their memory requirements. This document makes use of this same terminology to describe the scope of USP and to provide different requirements for different classes of devices. As such, USP’s support scope includes any and all Controller applications and the following types of Agents:
-
-*	All C2 devices defined by [4][4]
-*	C1 devices defined by [4][4] wherever possible
-*	C0 devices defined by [4][4] via Service Element proxy
-*	Virtualized USP Agents that may represent Service Elements that reside on hardware or execution environments other than that of the Agent
+USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 For the proxy of Service Elements, this document defines the proxy mechanisms but refrains from detailing the specific procedures for proxy of a particular third-party protocol or technology.
 

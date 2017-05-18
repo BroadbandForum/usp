@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-<h1 id="the-getsupporteddm-message">The GetSupportedDM Message</h1>
+<h1 id="the-getsupporteddm-message"><span class="header-section-number">1</span> The GetSupportedDM Message</h1>
 <p>GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.</p>
 <p>The GetSupportedDM is different from other USP messages in that it deals exclusively with the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance objects in the Path use the <code>{i}</code> identifier to indicate their place in the Path Name.</p>
 <p>For example, a Path Name to the <code>AssociatedDevice</code> Object (a child of the <code>.Wifi.AccessPoint</code> Object) would be addressed in the Supported Data Model as:</p>
@@ -110,10 +110,10 @@
 // And continued, for Objects such as Device.Wifi.SSID.{i}.Stats., Device.Wifi.Radio.{i}, Device.Wifi.AccessPoint.{i}, Device.Wifi.AccessPoint.{i}.AssociatedDevice.{i}, etc.
   }
 }</code></pre>
-<h2 id="getsupporteddm-request-elements">GetSupportedDM Request Elements</h2>
+<h2 id="getsupporteddm-request-elements"><span class="header-section-number">1.1</span> GetSupportedDM Request Elements</h2>
 <p><code>repeated DiscoverObject discover_obj_list</code></p>
 <p>This element contains a repeated set of messages of type <code>DiscoverObject</code>.</p>
-<h3 id="discoverobject-elements">DiscoverObject Elements</h3>
+<h3 id="discoverobject-elements"><span class="header-section-number">1.1.1</span> DiscoverObject Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains a Path Name to an Object (not an Object Instance) in the Agent's Supported Data Model.</p>
 <p><code>bool next_level</code></p>
@@ -124,10 +124,10 @@
 <p>This element, if <code>true</code>, indicates that the Agent should include a supported_event_list element containing Events supported by the reported Object(s).</p>
 <p><code>bool return_params</code></p>
 <p>This element, if <code>true</code>, indicates that the Agent should include a supported_param_list element containing Parameters supported by the reported Object(s).</p>
-<h2 id="getsupporteddmresp-elements">GetSupportedDMResp Elements</h2>
+<h2 id="getsupporteddmresp-elements"><span class="header-section-number">1.2</span> GetSupportedDMResp Elements</h2>
 <p><code>repeated RequestedObjectResult req_obj_result_list</code></p>
 <p>This element contains a repeated set of messages of type <code>RequestedObjectResult</code>.</p>
-<h3 id="requestedobjectresult-elements">RequestedObjectResult Elements</h3>
+<h3 id="requestedobjectresult-elements"><span class="header-section-number">1.2.1</span> RequestedObjectResult Elements</h3>
 <p><code>string req_obj_path</code></p>
 <p>This element contains one of the Path Names given in <code>obj_path</code> of the associated GetSupportedDM Request.</p>
 <p><code>fixed32 err_code</code></p>
@@ -139,7 +139,7 @@
 <p>This element contains a Uniform Resource Identifier (URI) to the Data Model associated with the Object specified in <code>obj_path</code>.</p>
 <p><code>repeated SupportedObjectResult supported_obj_list</code></p>
 <p>The element contains a message of type <code>SupportedObjectResult</code> for each reported Object.</p>
-<h4 id="supportedobjectresult-elements">SupportedObjectResult Elements</h4>
+<h4 id="supportedobjectresult-elements"><span class="header-section-number">1.2.1.1</span> SupportedObjectResult Elements</h4>
 <p><code>string supported_obj_path</code></p>
 <p>This element contains the Path Name of the reported Object.</p>
 <p><code>ObjAccessType access</code></p>
@@ -150,13 +150,13 @@ OBJ_ADD_ONLY (2)
 OBJ_DELETE_ONLY (3)</code></pre>
 <p><code>bool is_multi_instance</code></p>
 <p>This element, if <code>true</code>, indicates that the reported Object is a Multi-Instance Object.</p>
-<p><code>repeated SupportedParamResult</code></p>
+<p><code>repeated SupportedParamResult supported_param_list</code></p>
 <p>The element contains a message of type <code>SupportedParamResult</code> for each Parameter supported by the reported Object.</p>
-<p><code>repeated SupportedCommandResult</code></p>
+<p><code>repeated SupportedCommandResult supported_command_list</code></p>
 <p>The element contains a message of type <code>SupportedCommandResult</code> for each Command supported by the reported Object.</p>
-<p><code>repeated SupportedEventResult</code></p>
+<p><code>repeated SupportedEventResult supported_event_list</code></p>
 <p>The element contains a message of type <code>SupportedEventResult</code> for each Event supported by the reported Object.</p>
-<h5 id="supportedparamresult-elements">SupportedParamResult Elements</h5>
+<h5 id="supportedparamresult-elements"><span class="header-section-number">1.2.1.1.1</span> SupportedParamResult Elements</h5>
 <p><code>string param_name</code></p>
 <p>This element contains the local name of the Parameter.</p>
 <p><code>ParamAccessType access</code></p>
@@ -164,7 +164,7 @@ OBJ_DELETE_ONLY (3)</code></pre>
 <pre><code>PARAM_READ_ONLY (0)
 PARAM_READ_WRITE (1)
 PARAM_WRITE_ONLY (2)</code></pre>
-<h5 id="supportedcommandresult-elements">SupportedCommandResult Elements</h5>
+<h5 id="supportedcommandresult-elements"><span class="header-section-number">1.2.1.1.2</span> SupportedCommandResult Elements</h5>
 <p><code>string command_name</code></p>
 <p>This element contains the local name of the Command.</p>
 <p><code>repeated string input_arg_name_list</code></p>
@@ -173,12 +173,12 @@ PARAM_WRITE_ONLY (2)</code></pre>
 <p><code>repeated string output_arg_name_list</code></p>
 <p>This element contains a repeated set of local names for the output arguments of the Command.</p>
 <p><strong>R-GSP.2</strong> - If any output arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
-<h5 id="supportedeventresult">SupportedEventResult</h5>
+<h5 id="supportedeventresult"><span class="header-section-number">1.2.1.1.3</span> SupportedEventResult</h5>
 <p><code>string event_name</code></p>
 <p>This element contains the local name of the Event.</p>
 <p><code>repeated string arg_name_list</code></p>
 <p>This element contains a repeated set of local names for the arguments of the Event.</p>
 <p><strong>R-GPS.3</strong> - If any arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.</p>
-<h2 id="getsupporteddm-error-codes">GetSupportedDM Error Codes</h2>
+<h2 id="getsupporteddm-error-codes"><span class="header-section-number">1.3</span> GetSupportedDM Error Codes</h2>
 <p>Appropriate error codes for the GetSupportedDM message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, and <code>7800-7999</code>.</p>
 <p><em>Note - when using error <code>7016</code> (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.</em></p>

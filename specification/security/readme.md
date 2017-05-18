@@ -16,7 +16,7 @@
 
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# Security
+# USP Layer Security
 
 *NOTE: Version 1.0 of this protocol will define end-to-end security above the MTP. All Endpoints will be required to implement end-to-end security and use it to secure USP messages at that time.*
 
@@ -32,17 +32,17 @@ The current discussion on the structure and requirements for the USP end-to-end 
 https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 -->
 
-## Authentication and Authorization
+## Authentication
 
 Authentication of Endpoints is done using X.509 certificates as defined in [RFC 5280][15] and [RFC 6818][16]. These certificates, at a minimum, need to be usable for [MTP security](/mtp/#securing_mtps) with TLS or DTLS protocols.
 
 In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that Endpoint is a member of a trusted domain as verified by a trusted Certificate Authority), this Working Text provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or just certificates of trusted CAs.
 
-**R-SEC.2** - The Agent MUST have a Controller's certificate information prior to establishing an encrypted connection.
+**R-SEC.2** - The Agent MUST have a Controller's certificate information prior to establishing a cryptographically protected connection.
 
 TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information.
 
-## Access Control List
+## Authentication with RBAC (Role Based Access Control)
 
 It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This Working Text refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
 
@@ -56,7 +56,7 @@ This secure means can accomplished through USP (see section below on Data Model 
 
 **R-SEC.4** - Where a CA is only trusted to validate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
-**R-SEC.5** - Where a CA is trusted to approve a Controller Role, but the Role the Agent has assigned to the Controller is different than te CA-identified Role, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**R-SEC.5** - Where a CA is trusted to approve a Controller Role, but the Role the Agent has assigned to the Controller is different than the CA-identified Role, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with the type `uniformResourceIdentifier` attribute.
 
 **R-SEC.6** - Where a CA is trusted to approve a Controller Role, and the Controller does not have a different Role assigned, the Agent MUST either ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, or perform the following validation:
 
@@ -81,34 +81,34 @@ That is, the Agent will trust the certificate for purpose of encryption, but wil
 
 **R-SEC.10** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
 
-**R-SEC.11** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to Role to each such Controller.
-
 Controller policy related to trust of Agent self-signed certificates is left to the Controller. Controllers may be designed to refuse self-signed certificates (thereby refusing to control the Agent), they may have a means of allowing a person to approve controlling the Agent via the Controller, or they may automatically accept the Agent.
 
-**R-SEC.12** - An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate public keys and Endpoint IDs.
+**R-SEC.11** - An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate public keys and Endpoint IDs.
+
+### Agent certificates
+
+**R-SEC.12** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
+
+* the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
+* the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the wildcarded Endpoint ID.
+
+**R-SEC.13** - If Certificates with wild-carded Endpoint IDs are used, the Controller SHOULD additionally authenticate the Agent using TBD to establish the identity of a specific Agent.
+
+**R-SEC-14** - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using [self-signed certificates](#self-signed-certificates).
 
 ## Challenge Strings
 
 It is possible for the Agent to allow an external entity to change a Controller Role by means of a Challenge string. This Challenge string can take various forms, including having a user supply a passphrase or a PIN. Such a string could be printed on the Agent packaging, or supplied by means of a SMS to a phone number associated with the user account. These Challenge strings can be done using USP operations. Independent of how challenges are accomplished, following are some basic requirements related to Challenge strings.
 
-**R-SEC.13** - The Agent MAY have factory-default Challenge string(s) in its configuration.
+**R-SEC.15** - The Agent MAY have factory-default Challenge string(s) in its configuration.
 
-**R-SEC.14** - A factory-default Challenge string MUST be unique to the Agent. Re-using the same passphrase among multiple Agents is not permitted.
+**R-SEC.16** - A factory-default Challenge string MUST be unique to the Agent. Re-using the same passphrase among multiple Agents is not permitted.
 
-**R-SEC.15** - A factory-default Challenge string MUST NOT be derivable from information the Agent communicates about itself using any protocol at any layer.
+**R-SEC.17** - A factory-default Challenge string MUST NOT be derivable from information the Agent communicates about itself using any protocol at any layer.
 
-**R-SEC.16** - The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.
+**R-SEC.18** - The Agent MUST limit the number of tries for the Challenge string to be supplied successfully.
 
-**R-SEC.17** - The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.
-
-### Agent certificates
-
-**R-SEC.18** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
-
-* the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
-* the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the wildcarded Endpoint ID.
-
-**R-SEC-19** - If the Agent does not have a CA-issued cetificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using [self-signed certificates](#self-signed-certificates).
+**R-SEC.19** - The Agent SHOULD have policy to lock out all use of Challenge strings for some time, or indefinitely, if the number of tries limit is exceeded.
 
 ## Theory of operations
 
@@ -185,7 +185,7 @@ In the case of a Controller that has not previously been assigned a Role or who 
 
 * If the Controller’s certificate is validated by credentials in a `ControllerTrust.Credential.{i}.Credential` parameter but there is no associated `ControllerTrust.Credential.{i}.Role` parameter (or the value is empty), then the Controller is assigned the role in `UntrustedRole`. Note that assigning `UntrustedRole` means there needs to be some implemented way to elevate the Controller’s Role, either by another Controller manipulating the Role, implementing Challenges, or some non-USP method.
 
-* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRol`e. This policy can be influenced by the `MTP.{i}.<MTP>.ValidatePeerCertificate` parameter, if implemented, as described in the next section.
+* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRole`. This policy can be influenced by the `MTP.{i}.<MTP>.ValidatePeerCertificate` parameter, if implemented, as described in the next section.
 
 * If the Agent implements the `RequestChallenge()` and `ChallengeResponse()` commands, a Controller assigned the role in `UntrustedRole` can have permission to read one or more `ControllerTrust.Challenge.{i}.Alias` and `Description` values and issue the commands. Higher Roles can have permission to read additional `ControllerTrust.Challenge.{i}.Alias` and `Description` values. A successful Challenge results in the Controller being assigned the associated Role value.
 
@@ -218,7 +218,7 @@ Note that it is possible for an Agent to maintain policy of the type described b
 
 ### Encryption
 
-The `EnableEncryption` parameter, if implemented in `MTP.{i}.CoAP.` or `MTP.{i}.HTTP.`, allows encryption of the MTP to be enabled or disabled. If this parameter is not implemented, then there is no USP mechanism to toggle encryption. It is recommended that Agents implement the ability to encrypt all MTPs (via TLS 1.2 or DTLS 1.2 insert references, as appropriate), enable it by default, and not implement the ability to disable it.
+It is recommended that Agents implement the ability to encrypt all MTPs (via TLS 1.2 or DTLS 1.2 insert references, as appropriate), enable it by default, and not implement the ability to disable it.
 
 ### Challenges
 

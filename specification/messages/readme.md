@@ -58,12 +58,12 @@ For messages that require no response, it is up to the target endpoint implement
 
 <a id="example_message_flows" />
 
-Successful request/response: In this successful message sequence, a Controller sends an Agent a request. The message header and body are parsed and the request is processed, and the Agent sends a response with the relevant information in the body.
+Successful request/response: In this successful message sequence, a Controller sends an Agent a request. The message header and body are parsed, the message is understood, and the Agent sends a response with the relevant information in the body.
 
 <img src="successful_response.png" />
 Figure 1 - A successful request/response sequence
 
-Failed request/response: In this failed message sequence, a Controller sends an Agent a request. The message header and body are parsed and the request is processed, but throws an error. The error arguments are generated and sent in an error message.
+Failed request/response: In this failed message sequence, a Controller sends an Agent a request. The message header and body are parsed, but the Agent throws an error. The error arguments are generated and sent in an error message.
 
 <img src="error_response.png" />
 Figure 2 - A failed request/response sequence
@@ -250,6 +250,8 @@ This element is present in an Error Message in response to an Add or Set message
 `string param_path`
 
 This element contains a Path Name to the Object or parameter that caused the error.
+
+**R-MSG.19** - Path Names containing Object Instances in the `param_path` element of ParamError MUST be addressed using Instance Number Addressing.
 
 `fixed32 err_code`
 

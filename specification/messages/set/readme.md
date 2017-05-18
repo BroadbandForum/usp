@@ -31,7 +31,7 @@ example, a Controller wants to disable all of the Wifi networks on an Agent. It 
     allow_partial: true
     update_obj_list {
       obj_path: Device.Wifi.SSID.*.
-      param_setting {
+      param_setting_list {
         param: Enable
         value: False
         required: False
@@ -149,7 +149,7 @@ This element contains a repeated set of `UpdatedObjectResult` messages for each 
 
 `string requested_path`
 
-This element returns the value of `obj_path_list` in the `UpdateObject` message associated with this `UpdatedObjectResult`.
+This element returns the value of `updated_obj_result_list` in the `UpdateObject` message associated with this `UpdatedObjectResult`.
 
 `OperationStatus oper_status`
 

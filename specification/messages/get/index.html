@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-<h1 id="the-get-message">The Get Message</h1>
+<h1 id="the-get-message"><span class="header-section-number">1</span> The Get Message</h1>
 <p>The basic Get message is used to retrieve the values of a set of Object’s parameters in order to learn an Agent’s current state. It takes a set of search paths as an input and returns the complete tree of parameters, plus the parameters of all sub-Objects, of any Object matched by the specified expressions. The search paths specified in a Get request can also target individual parameters within Objects to be returned.</p>
 <p><em>Note: Those familiar with Broadband Forum <a href="https://www.broadband-forum.org/technical/download/TR-069.pdf" title="TR-069 Amendment 6 CPE WAN Management Protocol">TR-069</a> will recognize this behavior as the difference between “partial paths” and “complete paths”. This behavior is replicated in USP for the Get message for each path that is matched by the expression(s) supplied in the request.</em></p>
 <p><em>Note: Each search path is intended to be evaluated separately, and the results from a given search path are returned in an element dedicated to that path. As such, it is possible that the same information may be returned from more than one search path. This is intended, and the Agent should treat each search path atomically.</em></p>
@@ -93,13 +93,13 @@
         }
       }
     }</code></pre>
-<h2 id="get-request-elements">Get Request Elements</h2>
+<h2 id="get-request-elements"><span class="header-section-number">1.1</span> Get Request Elements</h2>
 <p><code>repeated string param_path_list</code></p>
 <p>This element is a set of Object Paths, Instance Paths, Parameter Paths, or Search Paths to Objects, Object Instances, and Parameters in an Agent’s Instantiated Data Model.</p>
-<h2 id="get-response-elements">Get Response Elements</h2>
-<p>repeated RequestedPathResult req_path_result</p>
+<h2 id="get-response-elements"><span class="header-section-number">1.2</span> Get Response Elements</h2>
+<p><code>repeated RequestedPathResult req_path_result_list</code></p>
 <p>A repeated set of <code>RequestedPathResult</code> messages for each of the Path Names given in the associated Get request.</p>
-<h3 id="requestedpathresult-element">RequestedPathResult Element</h3>
+<h3 id="requestedpathresult-element"><span class="header-section-number">1.2.1</span> RequestedPathResult Element</h3>
 <p><code>string requested_path</code></p>
 <p>This element contains one of the Path Names or Search Paths given in the <code>param_path</code> element of the associated Get Request.</p>
 <p><code>fixed32 err_code</code></p>
@@ -109,14 +109,14 @@
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>repeated ResolvedPathResult resolved_path_result_list</code></p>
 <p>This element contains one message of type ResolvedPathResult for each path resolved by the Path Name or Search Path given by <code>requested_path</code>.</p>
-<h4 id="resolvedpathresult-elements">ResolvedPathResult Elements</h4>
+<h4 id="resolvedpathresult-elements"><span class="header-section-number">1.2.1.1</span> ResolvedPathResult Elements</h4>
 <p><code>string resolved_path</code></p>
 <p>This element contains a Path Name to an Object or Object Instance that was resolved from the Path Name or Search Path given in <code>requested_path</code>.</p>
 <p><strong>R-GET.1</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, the <code>resolved_path</code> MUST contain only the Path Name to the parent Object or Object Instance of that parameter.</p>
 <p><code>map&lt;string, string&gt; result_param_map</code></p>
 <p>This element contains a set of mapped key/value pairs listing a Parameter Path (relative to the Path Name in <code>resolved_path</code>) to each of the parameters and their values, plus sub-objects and their values, of the Object given in <code>resolved_path</code>.</p>
 <p><strong>R-GET.2</strong> - If the <code>requested_path</code> included a Path Name to a Parameter, <code>result_param_map</code> MUST contain only the Parameter included in that path.</p>
-<p><strong>R-GET.3</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>result_param_map</code>, these parameters MUST NOT be returned in this element.</p>
+<p><strong>R-GET.3</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>result_param_map</code>, these parameters MUST NOT be returned in this element. This MAY result in this element being empty.</p>
 <p><strong>R-GET.4</strong> - Path Names containing Object Instance Paths in the keys of <code>result_param_map</code> MUST be addressed using Instance Number Addressing.</p>
-<h4 id="get-message-supported-error-codes">Get Message Supported Error Codes</h4>
+<h4 id="get-message-supported-error-codes"><span class="header-section-number">1.2.1.2</span> Get Message Supported Error Codes</h4>
 <p>Appropriate error codes for the Get message include <code>7000-7006</code>, <code>7008</code>, <code>7010</code>, and <code>7800-7999</code>.</p>

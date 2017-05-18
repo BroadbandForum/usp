@@ -17,9 +17,9 @@
 
 The Constrained Application Protocol (CoAP) MTP transfers USP Messages between USP Endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP messages between USP Endpoints.
 
-usp-request-response-over-coap.png
+<img src=`usp-request-response-over-coap.png`/>
 
-Figure 1 - A USP Message over the CoAP MTP
+Figure 1 - USP Request/Response over the CoAP MTP
 
 USP Requests are encapsulated within a CoAP request message. When a USP Endpoint receives the CoAP request message the USP Endpoint immediately sends a CoAP response message (with no USP Message) to indicate receipt of the message. A USP Response is encapsulated in a new CoAP request message. When a USP Endpoint receives a USP Response, it sends a CoAP response message that indicates receipt of the message. Therefore, all Endpoints supporting CoAP will implement both CoAP client and server.
 
@@ -48,7 +48,7 @@ The identifier within the CoAP server is used to deliver messages to the USP End
 
 USP Messages are transferred using the CoAP resource that represents the receiving USP Endpoint using the CoAP POST method as defined in [RFC 7252][9].
 
-**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/mtp).
+**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/encoding).
 
 ### Handling CoAP Request Success
 <a id="handling_coap_request_success" />

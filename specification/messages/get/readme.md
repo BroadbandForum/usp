@@ -136,7 +136,7 @@ This element is a set of Object Paths, Instance Paths, Parameter Paths, or Searc
 
 ## Get Response Elements
 
-repeated RequestedPathResult req_path_result
+`repeated RequestedPathResult req_path_result_list`
 
 A repeated set of `RequestedPathResult` messages for each of the Path Names given in the associated Get request.
 
@@ -174,7 +174,7 @@ This element contains a set of mapped key/value pairs listing a Parameter Path (
 
 **R-GET.2** - If the `requested_path` included a Path Name to a Parameter, `result_param_map` MUST contain only the Parameter included in that path.
 
-**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element.
+**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element. This MAY result in this element being empty.
 
 **R-GET.4** - Path Names containing Object Instance Paths in the keys of `result_param_map` MUST be addressed using Instance Number Addressing.
 

@@ -1,4 +1,4 @@
-<h1 id="the-getinstances-message">The GetInstances Message</h1>
+<h1 id="the-getinstances-message"><span class="header-section-number">1</span> The GetInstances Message</h1>
 <p>The GetInstances message takes a Path Name to an Object and requests that the Agent return the Instances of that Object that exist and <em>possibly</em> any Multi-Instance sub-Objects that exist as well as their Instances. This is used for getting a quick map of the Mutli-Instance Objects (i.e., tables) the Agent currently represents, and their unique keys, so that they can be addressed and manipulated later.</p>
 <p>GetInstances takes one or more Path Names to Multi-Instance Objects in a Request to an Agent. In addition, both GetInstances and GetSupportedDM (below) make use of a flag called <code>next_level</code>, which determines whether or not the Response should include all of the sub-Objects that are children of the Object specified in <code>obj_path</code>. A value of <code>true</code> means that the Response should return data <em>only</em> for the Object specified. A value of false means that all sub-Objects should be resolved and returned.</p>
 <p>For example, if a Controller wanted to know <em>only</em> the current instances of Wifi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:</p>
@@ -103,12 +103,12 @@
     }
   }</code></pre>
 <p>Or more, if more Object Instances exist.</p>
-<h2 id="getinstances-request-elements">GetInstances Request Elements</h2>
+<h2 id="getinstances-request-elements"><span class="header-section-number">1.1</span> GetInstances Request Elements</h2>
 <p><code>repeated string obj_path_list</code></p>
 <p>This element contains a repeated set of Path Names or Search Paths to Multi-Instance Objects in the Agent's Instantiated Data Model.</p>
 <p><code>bool next_level</code></p>
 <p>This element, if <code>true</code>, indicates that the Agent should return only those instances in the Object(s) matched by the Path Name or Search Path in <code>obj_path</code>, and not return any child objects.</p>
-<h2 id="getinstances-response-elements">GetInstances Response Elements</h2>
+<h2 id="getinstances-response-elements"><span class="header-section-number">1.2</span> GetInstances Response Elements</h2>
 <p><code>repeated RequestedPathResult req_path_result_list</code></p>
 <p>This element contains a RequestedPathResult message for each Path Name or Search</p>
 <p><code>string requested_path</code></p>
@@ -120,11 +120,11 @@
 <p>This element contains additional information about the reason behind the error.</p>
 <p><code>repeated CurrInstance curr_inst_list</code></p>
 <p>This element contains a message of type <code>CurrInstance</code> for each Instance of <em>all</em> of the Objects matched by <code>requested_path</code> that exists in the Agent's Instantiated Data Model.</p>
-<h4 id="currinstance-elements">CurrInstance Elements</h4>
+<h4 id="currinstance-elements"><span class="header-section-number">1.2.0.1</span> CurrInstance Elements</h4>
 <p><code>string instantiated_obj_path</code></p>
 <p>This element contains the Instance Number of the Object Instance.</p>
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
 <p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
 <p><strong>R-GIN.1</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
-<h2 id="getinstances-error-codes">GetInstances Error Codes</h2>
+<h2 id="getinstances-error-codes"><span class="header-section-number">1.3</span> GetInstances Error Codes</h2>
 <p>Appropriate error codes for the GetInstances message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, <code>7018</code> and <code>7800-7999</code>.</p>
