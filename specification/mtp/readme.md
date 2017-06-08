@@ -31,7 +31,7 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 <a id="securing_mtps" />
 
 <!--
-USP contains its own [application layer security mechanism](/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.
+USP contains its own [application layer security mechanism](/security/index.html). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.
 -->
 
 USP recommends the following requirement on use of MTP security:

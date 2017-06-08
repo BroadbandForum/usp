@@ -148,7 +148,7 @@ This element contains one of the Path Names or Search Paths given in the `param_
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
 **R-GET.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 

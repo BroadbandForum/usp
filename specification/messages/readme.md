@@ -235,7 +235,7 @@ This element contains one of the types given below. Each indicates that the Mess
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the overall message to fail.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the overall message to fail.
 
 `string err_msg`
 
@@ -255,7 +255,7 @@ This element contains a Path Name to the Object or parameter that caused the err
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the message to fail.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the message to fail.
 
 `string err_msg`
 

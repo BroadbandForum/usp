@@ -171,7 +171,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Object update to fail.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the Object update to fail.
 
 `string err_msg`
 
@@ -231,7 +231,7 @@ This element contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This element contains the [error code](/messages/error-codes/) of the error that caused the parameter set to fail.
+This element contains the [error code](/message/error-codes/index.html) of the error that caused the parameter set to fail.
 
 `string err_msg`
 

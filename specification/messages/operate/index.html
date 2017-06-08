@@ -13,7 +13,7 @@
 <p><img src="asynchronous_operation.png" /></p>
 <p>Figure 2 - Operate Message Flow for Asynchronous Operations</p>
 <h4 id="persistance-of-asynchronous-operations"><span class="header-section-number">1.0.2.1</span> Persistance of Asynchronous Operations</h4>
-<p>Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.</p>
+<p>Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table, and is considered to have failed. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.</p>
 <h3 id="operate-requests-on-multiple-objects"><span class="header-section-number">1.0.3</span> Operate Requests on Multiple Objects</h3>
 <p>Since the Operate request can take a path expression as a value for the command element, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the <code>OperationResult</code> element type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different <code>OperationResult</code> entry. For this reason, operation failures are never conveyed in an Error message - in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.</p>
 <p><strong>R-OPR.1</strong> - When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error message due to a failed operation. It MUST instead include the failure in the <code>cmd_failure</code> element of the Operate response.</p>
@@ -59,7 +59,7 @@ CommandFailure cmd_failure</code></pre>
 <p><strong>R-OPR.7</strong> - Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
 <h4 id="commandfailure-elements"><span class="header-section-number">1.2.1.2</span> CommandFailure elements</h4>
 <p><code>fixed32 err_code</code></p>
-<p>This element contains the <a href="/messages/error-codes/">error code</a> of the error that caused the operation to fail.</p>
+<p>This element contains the <a href="/message/error-codes/index.html">error code</a> of the error that caused the operation to fail.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional (human readable) information about the reason behind the error.</p>
 <h2 id="operate-message-error-codes"><span class="header-section-number">1.3</span> Operate Message Error Codes</h2>

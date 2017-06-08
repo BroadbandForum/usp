@@ -170,7 +170,7 @@ This message is used when the object given in `requested_path` failed to be crea
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.
 
 `string err_msg`
 
@@ -204,7 +204,7 @@ This element contains the Relative Parameter Path to the parameter that failed t
 
 `fixed32 err_code`
 
-This element contains the [error code](/messages/error-codes/) of the error that caused the parameter set to fail.
+This element contains the [error code](/message/error-codes/index.html) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
