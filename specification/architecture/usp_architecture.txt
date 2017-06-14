@@ -1,0 +1,46 @@
+@startuml
+cloud "Agent" {
+() "Message Transfer\nProtocol(s) (MTP)" as M1
+() "Agent\nEndpoint" as A
+[Instantiated\nData Model (IDM)] as IDM
+[Supported\nData Model (SDM)] as SDM
+node "Service Elements" {
+() "Managed\nServices" as MS
+() "Software\nModules" as SM
+() "Network\nInterfaces" as NI
+() "Proxied\nElements" as PE
+() "Proxied\nController" as PC
+}
+}
+cloud "Controller A" {
+() "Controller\nEndpoint" as C1
+() "Message Transfer\nProtocol(s) (MTP)" as M2
+[Agent\nDatabase] as AgentDB
+[Application/Policy\nLogic] as App
+}
+cloud "Controller B" {
+() "Message Transfer\nProtocol(s) (MTP)" as M3
+() "Controller\nEndpoint" as C2
+}
+cloud "Controller C" {
+() "Message Transfer\nProtocol(s) (MTP)" as M4
+() "Controller\nEndpoint" as C3
+}
+A--IDM
+A-right-SDM
+IDM--MS
+IDM--SM
+IDM--NI
+IDM--PE
+IDM--PC
+C1-up-App
+C1-up-AgentDB
+A-up-M1
+M1-up-M2
+M1-up-M3
+M1-up-M4
+M2-up-C1
+M3-up-C2
+M4-up-C3
+
+@enduml

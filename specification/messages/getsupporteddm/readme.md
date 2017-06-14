@@ -176,7 +176,7 @@ This element contains one of the Path Names given in `obj_path` of the associate
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
 **R-GSP.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
@@ -211,15 +211,15 @@ The element contains an enumeration of type ObjAccessType specifying the access 
 
 This element, if `true`, indicates that the reported Object is a Multi-Instance Object.
 
-`repeated SupportedParamResult`
+`repeated SupportedParamResult supported_param_list`
 
 The element contains a message of type `SupportedParamResult` for each Parameter supported by the reported Object.
 
-`repeated SupportedCommandResult`
+`repeated SupportedCommandResult supported_command_list`
 
 The element contains a message of type `SupportedCommandResult` for each Command supported by the reported Object.
 
-`repeated SupportedEventResult`
+`repeated SupportedEventResult supported_event_list`
 
 The element contains a message of type `SupportedEventResult` for each Event supported by the reported Object.
 

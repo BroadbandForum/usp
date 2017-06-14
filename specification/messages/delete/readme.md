@@ -23,9 +23,9 @@
 
 This element tells the Agent how to process the message in the event that one or more of the Objects specified in the `obj_path` argument fails deletion.
 
-**R-DEL.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](/messages/add/#allow_partial_and_required_parameters)).
+**R-DEL.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](/message/add/index.html#allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](/messages/add/#allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](/message/add/index.html#allow_partial_and_required_parameters)).
 
 `repeated string obj_path_list`
 
@@ -41,7 +41,7 @@ This element contains a repeated set of `DeletedObjectResult` messages.
 
 `string requested_path`
 
-This element returns the value of the entry of `obj_path` (in the Delete Request) associated with this `DeleteObjectResult`.
+This element returns the value of the entry of `obj_path_list` (in the Delete Request) associated with this `DeleteObjectResult`.
 
 `OperationStatus oper_status`
 
@@ -65,7 +65,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the delete to fail. A value of 0 indicates the Object was deleted successfully.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the delete to fail. A value of 0 indicates the Object was deleted successfully.
 
 `string err_msg`
 
@@ -85,7 +85,7 @@ This element returns a repeated set of Path Names to Object Instances.
 
 This element contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.4** - If any of the Object Instances specified in the `obj_path` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
+**R-DEL.4** - If any of the Object Instances specified in the `obj_path_list` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
 **R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
 

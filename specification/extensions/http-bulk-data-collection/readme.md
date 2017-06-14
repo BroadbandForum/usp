@@ -28,7 +28,7 @@ The Agent configuration that enables the collection of bulk data using HTTP is d
 
 ## Enabling HTTP/HTTPS Bulk Data Communication
 
-HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/messages/add/) message. For example:
+HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/message/add/index.html) message. For example:
 
     .BulkData.Profile.1
     .BulkData.Profile.1.Enable=true
