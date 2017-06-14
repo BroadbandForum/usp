@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-<h1 id="add">Add</h1>
+<h1 id="add"><span class="header-section-number">1</span> Add</h1>
 <p><a id="add" /></p>
-<h2 id="selecting-objects-and-parameters-for-cud-operations">Selecting Objects and Parameters for CUD Operations</h2>
+<h2 id="selecting-objects-and-parameters-for-cud-operations"><span class="header-section-number">1.1</span> Selecting Objects and Parameters for CUD Operations</h2>
 <p>Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.</p>
 <p>For Add and Set requests, each Object address or search is conveyed in an element that also contains a sub-element listing the parameters to update in the matched Objects.</p>
 <p>The Add response contains details about the success or failure of the creation of the Object and the parameters set during its creation. In addition, it also returns those parameters that were set by the Agent upon creation of the Object.</p>
@@ -41,7 +41,7 @@ create_obj_list {
       value: NewSSIDName: NewSSIDName               
     }
 }</code></pre>
-<h3 id="using-allow-partial-and-required-parameters">Using Allow Partial and Required Parameters</h3>
+<h3 id="using-allow-partial-and-required-parameters"><span class="header-section-number">1.1.1</span> Using Allow Partial and Required Parameters</h3>
 <p><a id="allow_partial_and_required_parameters" /></p>
 <p>The Add, Set, and Delete requests contain an element called “<code>allow_partial</code>”. This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.</p>
 <p>For Delete, this is straightforward - if <code>allow_partial</code> is <code>true</code>, the Agent should return a Response message with <code>affected_path_list</code> and <code>unaffected_path_err_list</code> containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If <code>allow_partial</code> is <code>false</code>, the Agent should return an Error message if any Objects fail to be deleted.</p>
@@ -130,20 +130,20 @@ create_obj_list {
 </tr>
 </tbody>
 </table>
-<h2 id="add-request-elements">Add Request Elements</h2>
+<h2 id="add-request-elements"><span class="header-section-number">1.2</span> Add Request Elements</h2>
 <p><code>bool allow_partial</code></p>
 <p>This element tells the Agent how to process the message in the event that one or more of the Objects specified in the create_obj_list argument fails creation.</p>
 <p><strong>R-ADD.0</strong> - If the <code>allow_partial</code> element is set to <code>true</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><strong>R-ADD.1</strong> - If the <code>allow_partial</code> element is set to <code>false</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> holistically. A failure to create any one Object MUST cause the Add message to fail and return an <code>Error</code> Message (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><code>repeated CreateObject create_obj_list</code></p>
 <p>This element contains a repeated set of CreateObject elements.</p>
-<h3 id="createobject-elements">CreateObject Elements</h3>
+<h3 id="createobject-elements"><span class="header-section-number">1.2.1</span> CreateObject Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.</p>
-<p><strong>R-ADD.2</strong> - The <code>obj_path_list</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
+<p><strong>R-ADD.2</strong> - The <code>obj_path</code> element in the <code>CreateObject</code> message of an Add Request MUST NOT contain Search Paths.</p>
 <p><code>repeated CreateParamSetting param_setting_list</code></p>
 <p>This element contains a repeated set of CreateParamSetting elements.</p>
-<h4 id="createparamsetting-elements">CreateParamSetting Elements</h4>
+<h4 id="createparamsetting-elements"><span class="header-section-number">1.2.1.1</span> CreateParamSetting Elements</h4>
 <p><code>string param</code></p>
 <p>This element contains a relative path to a parameter of the Object specified in <code>obj_path</code>, or a parameter of a single instance sub-object of the Object specified in <code>obj_path</code>.</p>
 <p><code>string value</code></p>
@@ -151,41 +151,41 @@ create_obj_list {
 <p><code>bool required</code></p>
 <p>This element specifies whether the Agent should treat the creation of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this parameter (see <a href="/messages/#allow_partial_and_required_parameters">allow partial and required parameters</a>).</p>
 <p><strong>R-ADD.3</strong> - If the <code>required</code> element is set to true, a failure to update this parameter MUST result in a failure to create the Object.</p>
-<h2 id="add-response-elements">Add Response Elements</h2>
+<h2 id="add-response-elements"><span class="header-section-number">1.3</span> Add Response Elements</h2>
 <p><code>repeated CreatedObjectResult created_obj_result_list</code></p>
 <p>A repeated set of <code>CreatedObjectResult</code> elements for each <code>CreateObject</code> element in the Add message.</p>
-<h3 id="createdobjectresult-elements">CreatedObjectResult Elements</h3>
+<h3 id="createdobjectresult-elements"><span class="header-section-number">1.3.1</span> CreatedObjectResult Elements</h3>
 <p><code>string requested_path</code></p>
 <p>This element returns the value of <code>obj_path_list</code> in the <code>CreateObject</code> message associated with this <code>CreatedObjectResult</code>.</p>
 <p><code>OperationStatus oper_status</code></p>
 <p>The element contains a message of type <code>OperationStatus</code> that specifies the overall status for the creation of the Object specified in <code>requested_path</code>.</p>
-<h4 id="operationstatus-elements">OperationStatus Elements</h4>
+<h4 id="operationstatus-elements"><span class="header-section-number">1.3.1.1</span> OperationStatus Elements</h4>
 <p><code>oneof oper_status</code></p>
 <p>This element contains one of the types given below. Each indicates that the element contains a message of the given type.</p>
 <p><code>OperationFailure oper_failure</code></p>
 <p>This message is used when the object given in <code>requested_path</code> failed to be created.</p>
 <p><code>OperationSuccess oper_success</code></p>
-<h5 id="operationfailure-elements">OperationFailure Elements</h5>
+<h5 id="operationfailure-elements"><span class="header-section-number">1.3.1.1.1</span> OperationFailure Elements</h5>
 <p><code>fixed32 err_code</code></p>
-<p>This element contains a <a href="/messages/error-codes/">numeric code</a> indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.</p>
+<p>This element contains a <a href="/message/error-codes/index.html">numeric code</a> indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional information about the reason behind the error.</p>
-<h5 id="operation-success-elements">Operation Success Elements</h5>
+<h5 id="operation-success-elements"><span class="header-section-number">1.3.1.1.2</span> Operation Success Elements</h5>
 <p><code>string instantiated_path</code></p>
 <p>This element contains the Object Instance Path (using Instance Number Addressing) of the created Object.</p>
 <p><code>repeated ParameterError param_err_list</code></p>
 <p>This element returns a repeated set of ParameterError messages.</p>
 <p><strong>R-ADD.4</strong> - If any of the parameters and values specified in the <code>param_setting_list</code> element fail to configure upon creation, this set MUST include one element describing each of the failed parameters and the reason for their failure.</p>
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
-<p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
+<p>This element contains a map of the local name and value for each supported parameter that is part of any of this Object's unique keys.</p>
 <p><strong>R-ADD.5</strong> - If the Controller did not include some or all of a unique key that the Agent supports in the <code>param_setting_list</code> element, the Agent MUST assign values to the unique key(s) and return them in the <code>unique_key_map</code>.</p>
 <p><strong>R-ADD.6</strong> - If the Controller does not have Read permission on any of the parameters specified in <code>unique_key_map</code>, these parameters MUST NOT be returned in this element.</p>
-<h6 id="parametererror-elements">ParameterError Elements</h6>
+<h6 id="parametererror-elements"><span class="header-section-number">1.3.1.1.2.1</span> ParameterError Elements</h6>
 <p><code>string param</code></p>
-<p>This element contains the Parameter Path to the parameter that failed to be set.</p>
+<p>This element contains the Relative Parameter Path to the parameter that failed to be set.</p>
 <p><code>fixed32 err_code</code></p>
-<p>This element contains the <a href="/messages/error-codes/">error code</a> of the error that caused the parameter set to fail.</p>
+<p>This element contains the <a href="/message/error-codes/index.html">error code</a> of the error that caused the parameter set to fail.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains text related to the error specified by <code>err_code</code>.</p>
-<h2 id="add-message-supported-error-codes">Add Message Supported Error Codes</h2>
+<h2 id="add-message-supported-error-codes"><span class="header-section-number">1.4</span> Add Message Supported Error Codes</h2>
 <p>Appropriate error codes for the Add message include <code>7000-7019</code> and <code>7800-7999</code>.</p>

@@ -1,6 +1,8 @@
-# Proxy Guidelines
+# USP Message Abstraction Proxy
 
-There are several ways that the term "Proxy" is used in reference to USP. Naturally, proxying at the MTP layer is covered by many technologies, and additional requirements for doing so (will be) provided in this section. Other forms of proxy include an Agent modeling service elements that are access through other network interfaces, and Agents who directly model a USP Controller.
+The USP Message Abstraction Proxy presents an abstracted view of Agents to Controllers via a proxying device that has both Agent and Controller. The proxy’s Agent supports a data model for the proxy’s Controller function, including representations of proxied Agents.
+
+This sort of proxying allows the proxy to present an abstracted view of a group of Agents as being represented by a single Agent. A Controller could send a single USP Message to the proxy’s Agent, and the proxy would in turn send individual USP Messages to each of the proxied Agents.
 
 ## Agent Modelling of a USP Controller
 

@@ -13,30 +13,30 @@
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# STRAW BALLOT - WT-369 - User Services Platform version 0.10
+STRAW BALLOT - WT-369 - User Services Platform version 1.0-DRAFT-11
 
-# Table of Contents
+Table of Contents
 
 1. Overview
-2. [Architecture](architecture/)
-3. [Discovery](discovery/)
-4. [Message Transfer Protocols](mtp/)
-  1. [CoAP](mtp/coap/)
+2. [Architecture](architecture/index.html)
+3. [Discovery](discovery/index.html)
+4. [Message Transfer Protocols](mtp/index.html)
+  1. [CoAP](mtp/coap/index.html)
   2. [HTTP](mtp/http/)
-5. [Message Encoding](encoding/)
+5. [Message Encoding](encoding/index.html)
 6. [Messages](messages/)
-  1. [Add](messages/add/)
-  2. [Set](messages/set/)
-  3. [Delete](messages/delete/)
-  4. [Get](messages/get/)
-  5. [GetInstances](messages/getinstances/)
-  6. [GetSupportedDM](messages/getsupporteddm/)
-  7. [Operate](messages/operate/)
-  8. [Notify](messages/notify/)
-  9. [Error Codes](messages/error-codes/)  
-7. [Security](security/)
-8. [Extensions](extensions/)
-  1. [HTTP Bulk Data Transfer](extensions/http-bulk-data-transfer/)
+  1. [Add](message/add/index.html)
+  2. [Set](message/set/index.html)
+  3. [Delete](message/delete/index.html)
+  4. [Get](message/get/index.html)
+  5. [GetInstances](message/getinstances/index.html)
+  6. [GetSupportedDM](messages/getsupporteddm/index.html)
+  7. [Operate](message/operate/index.html)
+  8. [Notify](message/notify/index.html)
+  9. [Error Codes](message/error-codes/index.html)  
+7. [Security](security/index.html)
+8. [Extensions](extensions/index.html)
+  1. [HTTP Bulk Data Transfer](extensions/http-bulk-data-transfer/index.html)
 
 # Legal Notice
 
@@ -60,6 +60,29 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 # Revision History
 
+## Version 1.0-DRAFT-11
+
+* Using new version naming convention (Major.Minor-DRAFT-REV)
+* Changes updated based on contribution bbf2017.488.00
+* Changes updated based on contribution bbf2017.404.00
+* Changes updated based on contribution bbf2017.403.00
+* Removed reference to RFC 7228 in the Introduction (USP-200)
+* Revised text to align with decisions on OnBoardRequest (USP-191, 2017.488)
+* Resolved editorial comments based on [Pull Request 31](https://code.broadband-forum.org/projects/USP/repos/wt-369/pull-requests/31/)
+* Removed HTTP binding and added placeholder for WebSockets (USP-209)
+* Added text about operation persistence to the asynchronous operation section (USP-213)
+* Updated language around ValueChange to talk about expression/thresholds (USP-220)
+* Removed requirement R-SEC-11 and renumbered (USP-201)
+* Fixed numbering in markdown in security ToO (USP-203)
+* Fixed links to point directly to index.html files
+* Fixed typo in BNF description (USP-230)
+* Added self-signed cert clarification text (USP-202)
+* Corrected typos outlined in pull request 31 (USP-210)
+* Added requirement R-SEC.3 (USP-226)
+* Updated BNF expressions and added link to Backus-Naur form on Wikipedia (USP-153)
+
+
+
 ## Version 0.10
 
 * Using new version naming convention (0.x) for WT revisions
@@ -73,20 +96,20 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 ## REV_09
 
 * Added [MTP encryption requirements](mtp/) based on 04/05/2017 call
-* Added [CoAP encryption requirements](mtp/coap/) based on 04/05/2017 call
+* Added [CoAP encryption requirements](mtp/coap/index.html) based on 04/05/2017 call
 * Updated language for straw ballot initiation
-* Added Authentication, Authorization, and Trust sections to [Security](/security/).
+* Added Authentication, Authorization, and Trust sections to [Security](security/index.html).
 * Added theory of operations to security
 
 ## REV_08
 
 * New specification build in markdown
-* Updated text in architecture [search expressions](architecture/#searching_with_expressions) to clarify that Expression Parameters function as the underlying data type and therefore only appropriate operators apply (USP-137, USP-139)
+* Updated text in architecture [search expressions](architecture/index.html#searching_with_expressions) to clarify that Expression Parameters function as the underlying data type and therefore only appropriate operators apply (USP-137, USP-139)
 * Added duplicate object (by unique_keys) [error code](messages/#error_codes) (7025) (USP-161)
 * Added description in explanation of [allow partial and required parameters](#allow_partial_and_required_parameters) on using `allow_partial` in Delete (USP-152)
 * Added requirement of what an Agent must do on Object creation if the Controller did not supply the unique keys (USP-135)
 * Added explanation of the use of path names in reference parameters (USP-159)
-* Updated [CoAP](/mtp/coap/) diagrams (USP-172)
+* Updated [CoAP](mtp/coap/index.html) diagrams (USP-172)
 * Added HTTP bulk data collection to extensions[/extensions/].
 * Updated Get message to utilize relative paths (USP-140)
 * Updates to message element names for consistency (USP-179)
@@ -107,6 +130,7 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 | Timothy Carey | Nokia | timothy.carey@nokia.com | Contributor
 | Steven Nikolai | Arris | Steven.Nicolai@arris.com | Contributor
 | Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
+| Mark Tabry  | Google | mtab@google.com | Contributor
 
 # Executive Summary
 
@@ -154,12 +178,7 @@ This document describes:
 
 While the original CWMP was targeted toward remote gateways, it expanded to manage software modules, VoIP devices, set top boxes, network attached storage, etc. In the new connected world enabled by the virtualization of network functions and the “Internet of things”, USP has an opportunity to apply to “virtual agents” as well as push out to more device types.
 
-IETF RFC 7228, “Terminology for Constrained-Node Networks” [4][4], provides a useful definition of several classes of devices and their memory requirements. This document makes use of this same terminology to describe the scope of USP and to provide different requirements for different classes of devices. As such, USP’s support scope includes any and all Controller applications and the following types of Agents:
-
-*	All C2 devices defined by [4][4]
-*	C1 devices defined by [4][4] wherever possible
-*	C0 devices defined by [4][4] via Service Element proxy
-*	Virtualized USP Agents that may represent Service Elements that reside on hardware or execution environments other than that of the Agent
+USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 For the proxy of Service Elements, this document defines the proxy mechanisms but refrains from detailing the specific procedures for proxy of a particular third-party protocol or technology.
 

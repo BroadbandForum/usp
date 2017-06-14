@@ -73,7 +73,7 @@ There are several types events that can cause a Notify request. These include th
 
 ##### ValueChange
 
-The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription, and then each time it changes from then on for the life of the subscription. It is triggered when this change occurs, even if it is caused by the originating Controller.
+The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.
 
 #####	 ObjectCreation and ObjectDeletion
 These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.
@@ -124,28 +124,33 @@ Contains one of the following Notification messages:
     ObjectCreation obj_creation
     ObjectDeletion obj_deletion
     OperationComplete oper_complete
+    OnBoardRequest on_board_req
 
 ### Event Elements
+
+`string obj_path`
+
+This element contains the Object or Object Instance Path of the Object that caused this event (for example, `Device.LocalAgent.`).
+
+**R-NOT.8** - Path Names containing Object Instances in the `obj_path` element of the Event notification MUST be addressed using Instance Number Addressing.
 
 `string event_name`
 
 This element contains the name of the Object defined event that caused this notification (for example, `Boot!`).
 
-`string event_path`
-
-This element contains the Object or Object Instance Path of the Object that caused this event (for example, `Device.LocalAgent.`).
-
 `map<string, string> parameter_map`
 
 This element contains a set of key/value pairs of parameters associated with this event.
 
-**R-NOT.8** - Any values in `parameter_map` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
+**R-NOT.9** - Any values in `parameter_map` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
 
 ### ValueChange Elements
 
-`string param_name`
+`string param_path`
 
 This element contains the Path Name of the changed parameter.
+
+**R-NOT.10** - Path Names containing Object Instances in the `param_path` element of the ValueChange notification MUST be addressed using Instance Number Addressing.
 
 `string param_value`
 
@@ -157,6 +162,8 @@ This element contains the value of the parameter specified in `param_path`.
 
 This element contains the Path Name of the created Object instance.
 
+**R-NOT.11** - Path Names containing Object Instances in the `obj_path` element of the ObjectCreation notification MUST be addressed using Instance Number Addressing.
+
 `map<string, string> unique_key_map`
 
 This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.
@@ -167,15 +174,19 @@ This element contains a map of key/value pairs for all supported parameters that
 
 This element contains the Path Name of the deleted Object instance.
 
+**R-NOT.12** - Path Names containing Object Instances in the `obj_path` element of the ObjectDeletion notification MUST be addressed using Instance Number Addressing.
+
 ### OperationComplete Elements
 
-`string command`
+`string command_name`
 
 This element contains the local name l of the Object defined command that caused this notification (i.e., `Download()`).
 
-`string obj_ref`
+`string obj_path`
 
 This element contains the Object or Object Instance Path to the Object that contains this operation.
+
+**R-NOT.13** - Path Names containing Object Instances in the `obj_path` element of the OperationComplete notification MUST be addressed using Instance Number Addressing.
 
 `string command_key`
 
@@ -192,9 +203,9 @@ Contains one of the following messages:
 
 `map<string, string> output_arg_map`
 
-This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` element) returned by the method invoked in the Operate message.
+This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command_name` element) returned by the method invoked in the Operate message.
 
-**R-NOT.9** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
+**R-NOT.14** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
 
 #### CommandFailure Elements
 
@@ -208,9 +219,11 @@ This element contains additional (human readable) information about the reason b
 
 ### OnBoardRequest Elements
 
-`string obj_ref`
+`string obj_path`
 
 This element contains the Path Name of the Object associated with this notification.
+
+**R-NOT.15** - Path Names containing Object Instances in the `obj_path` element of the OnBoardRequest notification MUST be addressed using Instance Number Addressing.
 
 ## Notify Response Elements
 
@@ -218,7 +231,7 @@ This element contains the Path Name of the Object associated with this notificat
 
 This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.10** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
+**R-NOT.16** - The `subscription_id` element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
 
 ## Notify Error Codes
 

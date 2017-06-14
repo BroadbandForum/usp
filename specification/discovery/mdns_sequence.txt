@@ -1,9 +1,0 @@
-@startuml
-participant Controller #LightBlue
-participant Agent #DarkSalmon
-
-Controller -> Agent : mDNS Query
-Agent -> Controller : DNS Response
-Controller -[#DarkOrange]-> Agent : USP Message
-
-@enduml

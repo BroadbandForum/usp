@@ -1,15 +1,15 @@
 <!-- Reference Links -->
-<h1 id="the-notify-message">The Notify Message</h1>
+<h1 id="the-notify-message"><span class="header-section-number">1</span> The Notify Message</h1>
 <p><a id="notify" /></p>
-<h3 id="using-subscription-objects">Using Subscription Objects</h3>
+<h3 id="using-subscription-objects"><span class="header-section-number">1.0.1</span> Using Subscription Objects</h3>
 <p>Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for <code>Device.Subscription.{i}.</code> in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
 <p><strong>R-NOT.0</strong> - The Agent and Controller MUST follow the normative requirements defined in the <code>Device.Subscription.{i}.</code> Object specified in <a href="https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf" title="TR-181 Issue 2 Device Data Model for TR-069">Device:2</a>.</p>
 <p><em>Note: Those familiar with Broadband Forum <a href="https://www.broadband-forum.org/technical/download/TR-069.pdf" title="TR-069 Amendment 6 CPE WAN Management Protocol">TR-069</a> will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.</em></p>
-<h4 id="referencelist-parameter">ReferenceList Parameter</h4>
+<h4 id="referencelist-parameter"><span class="header-section-number">1.0.1.1</span> ReferenceList Parameter</h4>
 <p>All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the <code>ReferenceList</code> parameter. The <code>ReferenceList</code> parameter may have different meaning depending on the nature of the notification subscribed to.</p>
 <p>For example, a Controller wants to be notified when a new Wifi station joins the Wifi network. It uses the Add message to create a subscription Object instance with <code>Device.WiFi.AccessPoint.1.AssociatedDevice.</code> specified in the <code>ReferenceList</code> parameter and <code>ObjectCreation</code> as the <code>NotificationType</code>.</p>
 <p>In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wifi network. It uses the Add message to create a subscription Object instance with <code>Device.Wifi.SSID.1.SSID</code> specified in the <code>ReferenceList</code> and <code>ValueChange</code> as the <code>NotificationType</code>.</p>
-<h4 id="responses-to-notifications-and-notification-retry">Responses to Notifications and Notification Retry</h4>
+<h4 id="responses-to-notifications-and-notification-retry"><span class="header-section-number">1.0.1.2</span> Responses to Notifications and Notification Retry</h4>
 <p>The Notify request contains a flag, <code>send_resp</code>, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the <code>NotificationRetry</code> parameter in the subscription Object - if <code>NotificationRetry</code> is <code>true</code>, then the Agent sends its Notify requests with <code>send_resp : true</code>, and the Agent considers the notification delivered when it receives a response from the Controller. If <code>NotificationRetry</code> is <code>false</code>, the Agent does not need to use the <code>send_resp</code> flag and should ignore the delivery state of the notification.</p>
 <p>If <code>NotificationRetry</code> is <code>true</code>, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a <code>NotificationExpiration</code> parameter to specify when this retry should end if no success is ever achieved.</p>
 <p><strong>R-NOT.1</strong> - When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.</p>
@@ -113,16 +113,16 @@
 <p><strong>R-NOT.2</strong> - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the <code>NotificationExpiration</code> time is reached.</p>
 <p><strong>R-NOT.3</strong> - Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.</p>
 <p><strong>R-NOT.4</strong> - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.</p>
-<h4 id="notification-types">Notification Types</h4>
+<h4 id="notification-types"><span class="header-section-number">1.0.1.3</span> Notification Types</h4>
 <p>There are several types events that can cause a Notify request. These include those that deal with changes to the Agent’s Instantiated Data Model (<code>ValueChange</code>, <code>ObjectCreation</code>, <code>ObjectDeletion</code>), the completion of an asynchronous Object-defined operation (<code>OperationComplete</code>), a policy-defined <code>OnBoardRequest</code>, and a generic <code>Event</code> for use with Object-defined events.</p>
-<h5 id="valuechange">ValueChange</h5>
-<p>The <code>ValueChange</code> notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription, and then each time it changes from then on for the life of the subscription. It is triggered when this change occurs, even if it is caused by the originating Controller.</p>
-<h5 id="objectcreation-and-objectdeletion">ObjectCreation and ObjectDeletion</h5>
+<h5 id="valuechange"><span class="header-section-number">1.0.1.3.1</span> ValueChange</h5>
+<p>The <code>ValueChange</code> notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.</p>
+<h5 id="objectcreation-and-objectdeletion"><span class="header-section-number">1.0.1.3.2</span> ObjectCreation and ObjectDeletion</h5>
 <p>These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like <code>ValueChange</code>, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.</p>
 <p>The <code>ObjectCreation</code> notification also includes the Object’s unique keys and their values as data in the notification.</p>
-<h5 id="operationcomplete">OperationComplete</h5>
+<h5 id="operationcomplete"><span class="header-section-number">1.0.1.3.3</span> OperationComplete</h5>
 <p>The <code>OperationComplete</code> notification is used to indicate that an asynchronous Object-defined operation finished (either successfully or unsuccessfully). These operations may also trigger other Events defined in the data model (see below).</p>
-<h5 id="onboardrequest">OnBoardRequest</h5>
+<h5 id="onboardrequest"><span class="header-section-number">1.0.1.3.4</span> OnBoardRequest</h5>
 <p>An <code>OnBoardRequest</code> notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).</p>
 <p><strong>R-NOT.5</strong> - An Agent MUST send an <code>OnBoardRequest</code> notify request in the following circumstances:</p>
 <ol style="list-style-type: decimal">
@@ -131,9 +131,9 @@
 </ol>
 <p><em>Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.</em></p>
 <p>Further policy defines whether an OnBoardRequest requires a Notify Response.</p>
-<h5 id="event">Event</h5>
+<h5 id="event"><span class="header-section-number">1.0.1.3.5</span> Event</h5>
 <p>The <code>Event</code> notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what parameters, if any, are returned as part of the notification.</p>
-<h2 id="notify-request-elements">Notify Request Elements</h2>
+<h2 id="notify-request-elements"><span class="header-section-number">1.1</span> Notify Request Elements</h2>
 <p><code>string subscription_id</code></p>
 <p>This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.</p>
 <p><strong>R-NOT.6</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification.</p>
@@ -146,54 +146,61 @@
 ValueChange value_change
 ObjectCreation obj_creation
 ObjectDeletion obj_deletion
-OperationComplete oper_complete</code></pre>
-<h3 id="event-elements">Event Elements</h3>
+OperationComplete oper_complete
+OnBoardRequest on_board_req</code></pre>
+<h3 id="event-elements"><span class="header-section-number">1.1.1</span> Event Elements</h3>
+<p><code>string obj_path</code></p>
+<p>This element contains the Object or Object Instance Path of the Object that caused this event (for example, <code>Device.LocalAgent.</code>).</p>
+<p><strong>R-NOT.8</strong> - Path Names containing Object Instances in the <code>obj_path</code> element of the Event notification MUST be addressed using Instance Number Addressing.</p>
 <p><code>string event_name</code></p>
 <p>This element contains the name of the Object defined event that caused this notification (for example, <code>Boot!</code>).</p>
-<p><code>string event_path</code></p>
-<p>This element contains the Object or Object Instance Path of the Object that caused this event (for example, <code>Device.LocalAgent.</code>).</p>
 <p><code>map&lt;string, string&gt; parameter_map</code></p>
 <p>This element contains a set of key/value pairs of parameters associated with this event.</p>
-<p><strong>R-NOT.8</strong> - Any values in <code>parameter_map</code> whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.</p>
-<h3 id="valuechange-elements">ValueChange Elements</h3>
-<p><code>string param_name</code></p>
+<p><strong>R-NOT.9</strong> - Any values in <code>parameter_map</code> whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.</p>
+<h3 id="valuechange-elements"><span class="header-section-number">1.1.2</span> ValueChange Elements</h3>
+<p><code>string param_path</code></p>
 <p>This element contains the Path Name of the changed parameter.</p>
+<p><strong>R-NOT.10</strong> - Path Names containing Object Instances in the <code>param_path</code> element of the ValueChange notification MUST be addressed using Instance Number Addressing.</p>
 <p><code>string param_value</code></p>
 <p>This element contains the value of the parameter specified in <code>param_path</code>.</p>
-<h3 id="objectcreation-elements">ObjectCreation Elements</h3>
+<h3 id="objectcreation-elements"><span class="header-section-number">1.1.3</span> ObjectCreation Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains the Path Name of the created Object instance.</p>
+<p><strong>R-NOT.11</strong> - Path Names containing Object Instances in the <code>obj_path</code> element of the ObjectCreation notification MUST be addressed using Instance Number Addressing.</p>
 <p><code>map&lt;string, string&gt; unique_key_map</code></p>
 <p>This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.</p>
-<h3 id="objectdeletion-elements">ObjectDeletion Elements</h3>
+<h3 id="objectdeletion-elements"><span class="header-section-number">1.1.4</span> ObjectDeletion Elements</h3>
 <p><code>string obj_path</code></p>
 <p>This element contains the Path Name of the deleted Object instance.</p>
-<h3 id="operationcomplete-elements">OperationComplete Elements</h3>
-<p><code>string command</code></p>
+<p><strong>R-NOT.12</strong> - Path Names containing Object Instances in the <code>obj_path</code> element of the ObjectDeletion notification MUST be addressed using Instance Number Addressing.</p>
+<h3 id="operationcomplete-elements"><span class="header-section-number">1.1.5</span> OperationComplete Elements</h3>
+<p><code>string command_name</code></p>
 <p>This element contains the local name l of the Object defined command that caused this notification (i.e., <code>Download()</code>).</p>
-<p><code>string obj_ref</code></p>
+<p><code>string obj_path</code></p>
 <p>This element contains the Object or Object Instance Path to the Object that contains this operation.</p>
+<p><strong>R-NOT.13</strong> - Path Names containing Object Instances in the <code>obj_path</code> element of the OperationComplete notification MUST be addressed using Instance Number Addressing.</p>
 <p><code>string command_key</code></p>
 <p>This element contains the command key set during an Object defined Operation that caused this notification.</p>
 <p><code>oneof operation_resp</code></p>
 <p>Contains one of the following messages:</p>
 <pre><code>OutputArgs req_output_args
 CommandFailure cmd_failure</code></pre>
-<h4 id="outputargs-elements">OutputArgs Elements</h4>
+<h4 id="outputargs-elements"><span class="header-section-number">1.1.5.1</span> OutputArgs Elements</h4>
 <p><code>map&lt;string, string&gt; output_arg_map</code></p>
-<p>This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command</code> element) returned by the method invoked in the Operate message.</p>
-<p><strong>R-NOT.9</strong> - Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
-<h4 id="commandfailure-elements">CommandFailure Elements</h4>
+<p>This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command_name</code> element) returned by the method invoked in the Operate message.</p>
+<p><strong>R-NOT.14</strong> - Any key in the <code>output_arg_map</code> that contains multi-instance arguments MUST use Instance Number Addressing.</p>
+<h4 id="commandfailure-elements"><span class="header-section-number">1.1.5.2</span> CommandFailure Elements</h4>
 <p><code>fixed32 err_code</code></p>
 <p>This element contains the <a href="/messages/error-codes">error code</a> of the error that caused the operation to fail. Appropriate error codes for CommandFailure include <code>7002-7008</code>, <code>7016</code>, <code>7022</code>, <code>7023</code>, and <code>7800-7999</code>.</p>
 <p><code>string err_msg</code></p>
 <p>This element contains additional (human readable) information about the reason behind the error.</p>
-<h3 id="onboardrequest-elements">OnBoardRequest Elements</h3>
-<p><code>string obj_ref</code></p>
+<h3 id="onboardrequest-elements"><span class="header-section-number">1.1.6</span> OnBoardRequest Elements</h3>
+<p><code>string obj_path</code></p>
 <p>This element contains the Path Name of the Object associated with this notification.</p>
-<h2 id="notify-response-elements">Notify Response Elements</h2>
+<p><strong>R-NOT.15</strong> - Path Names containing Object Instances in the <code>obj_path</code> element of the OnBoardRequest notification MUST be addressed using Instance Number Addressing.</p>
+<h2 id="notify-response-elements"><span class="header-section-number">1.2</span> Notify Response Elements</h2>
 <p><code>string subscription_id</code></p>
 <p>This element contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.</p>
-<p><strong>R-NOT.10</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the <code>subscription_id</code> element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.</p>
-<h2 id="notify-error-codes">Notify Error Codes</h2>
+<p><strong>R-NOT.16</strong> - The <code>subscription_id</code> element MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the <code>subscription_id</code> element does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.</p>
+<h2 id="notify-error-codes"><span class="header-section-number">1.3</span> Notify Error Codes</h2>
 <p>Appropriate error codes for the Notify message include <code>7000-7006</code>, and <code>7800-7999</code>.</p>

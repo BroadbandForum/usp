@@ -136,7 +136,7 @@ This element is a set of Object Paths, Instance Paths, Parameter Paths, or Searc
 
 ## Get Response Elements
 
-repeated RequestedPathResult req_path_result
+`repeated RequestedPathResult req_path_result_list`
 
 A repeated set of `RequestedPathResult` messages for each of the Path Names given in the associated Get request.
 
@@ -148,7 +148,7 @@ This element contains one of the Path Names or Search Paths given in the `param_
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/messages/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
+This element contains a [numeric code](/message/error-codes/index.html) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
 **R-GET.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
@@ -174,7 +174,7 @@ This element contains a set of mapped key/value pairs listing a Parameter Path (
 
 **R-GET.2** - If the `requested_path` included a Path Name to a Parameter, `result_param_map` MUST contain only the Parameter included in that path.
 
-**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element.
+**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element. This MAY result in this element being empty.
 
 **R-GET.4** - Path Names containing Object Instance Paths in the keys of `result_param_map` MUST be addressed using Instance Number Addressing.
 
