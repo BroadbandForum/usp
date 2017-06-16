@@ -15,9 +15,8 @@
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# USP extensions
+# Message Encoding
 
-These sections define or provide theories of operation for additional, use-case specific functionality for the User Service Platform. These sections rely heavily on protocols external to USP. Included in this version are:
+USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
 
-* [Bulk data collection over HTTP](http-bulk-data-collection/)
-* [USP Abstraction Proxy](abstraction-abstraction-proxy/)
+* [Protocol Buffers Version 3][12]

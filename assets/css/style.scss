@@ -1,0 +1,18 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+a.button {
+background: -webkit-linear-gradient(top, #8dc26f, #76b852);
+padding: 2ex;
+margin: 1ex;
+color: white;
+text-decoration:none;
+}
+
+section.main {
+ margin-left: 20%;
+ margin-right: 20%;
+ margin-top: 5ex;
+}
