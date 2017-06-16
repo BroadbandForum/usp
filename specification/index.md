@@ -68,6 +68,7 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 * Fixed [Get](messages/get/) examples (USP-236)
 * Removed extraneous references to http
 * Restructured links, file names, etc. to work with GitHub pages. All readme.md are now index.md.
+* Removed abstraction-proxy extension for beta release (USP-240)
 
 ## Version 1.0-DRAFT-11
 

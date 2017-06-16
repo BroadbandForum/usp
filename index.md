@@ -3,7 +3,7 @@
 
     <h2>What is USP?</h2>
 
-    The <strong>User Services Platform</strong> is the <a href="http://www.broadband-forum.org/">Broadband Forum's</a> standardized <strong>protocol for managing, monitoring, upgrading, and controlling connected devices</strong>. USP allows service providers, consumer electronics manufacturers, and end users to:
+    <p>The <strong>User Services Platform</strong> is the <a href="http://www.broadband-forum.org/">Broadband Forum's</a> standardized <strong>protocol for managing, monitoring, upgrading, and controlling connected devices</strong>. USP allows service providers, consumer electronics manufacturers, and end users to:</p>
 
     <ul>
     <li>Perform <strong>lifecycle management</strong> of consumer connected devices</li>
@@ -15,7 +15,7 @@
     <li><strong>Enable multi-tenant</strong> (i.e., multi-stakeholder) management and control</li>
     </ul>
 
-    USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the <a href="">Device:2 Data Model for TR-069 Devices</a> to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).
+    <p>USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the <a href="">Device:2 Data Model for TR-069 Devices</a> to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).</p>
 
     <h2>How to use this site:</h2>
 
@@ -33,7 +33,7 @@
 
     <h4>About this version:</h4>
 
-    This DRAFT version is for <strong>BETA TESTING ONLY</strong> in order to allow development to begin and feedback given to the BBF. It is NOT intended for deployment. It includes:
+    <p>This DRAFT version is for <strong>BETA TESTING ONLY</strong> in order to allow development to begin and feedback given to the BBF. It is NOT intended for deployment. It includes:</p>
 
     <ul>
     <li>Architectural overview</li>

@@ -11,8 +11,11 @@ color: white;
 text-decoration:none;
 }
 
-section.main {
- margin-left: 20%;
- margin-right: 20%;
- margin-top: 5ex;
+section.main-content {
+  max-width: 80rem;
+}
+
+section.page-header {
+  background-color: #333333;
+  background-image: linear-gradient(120deg, #333333, #333333);
 }
