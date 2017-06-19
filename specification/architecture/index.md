@@ -331,7 +331,7 @@ Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%
 
 The Search Expression lexical rules for referencing the Instantiated Data Model are:
 
-````
+```
 [1] idmpath ::= objinstpath | parampath | cmdpath | evntpath | searchpath
 [2] objinstpath ::= comps '.' expr?
 [3] parampath ::= comps '.' namemod

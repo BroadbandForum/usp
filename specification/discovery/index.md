@@ -134,11 +134,11 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 ### Example Controller Unicast DNS-SD Resource Records
 ```
     ; One PTR record for each supported MTP
-    _usp-ctr-http._tcp.host.example.com      PTR <Controller USP ID>._usp-ctr-http._tcp.example.com.
+    _usp-ctr-coap._udp.host.example.com      PTR <Controller USP ID>._usp-ctr-coap._udp.example.com.
 
     ; One SRV+TXT (DNS-SD Service Instance) record for each supported MTP
-    <USP ID>._usp-ctr-http._tcp.example.com.   SRV 0 1 443 host.example.com.
-    <USP ID>._usp-ctr-http._tcp.example.com.   TXT “path=<pathname>“
+    <USP ID>._usp-ctr-coap._udp.example.com.   SRV 0 1 443 host.example.com.
+    <USP ID>._usp-ctr-coap._udp.example.com.   TXT “path=<pathname>“
 
     ; Controller A and AAAA records
     host.example.com.  A      192.0.2.200
@@ -146,19 +146,14 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 ```
 ### Example Agent Multicast DNS-SD Resource Records
 ```
-    ; One PTR record (DNS-SD Service) for each supported MTP
-    _usp-agt-http._tcp                 PTR <USP ID>._usp-agt-http._tcp.local.
+    ; One PTR record (DNS-SD Service) for each supported MTP    
     _usp-agt-coap._udp                 PTR <USP ID>._usp-agt-coap._udp.local.
 
     ; One PTR record (DNS-SD Service Subtype) for each supported MTP per device type
-    _iot-device._sub._usp-agt-http._tcp    PTR <USP ID>._usp-agt-http._tcp.local.
-    _gateway._sub._usp-agt-http._tcp       PTR <USP ID>._usp-agt-http._tcp.local.
     _iot-device._sub._usp-agt-coap._udp    PTR <USP ID>._usp-agt-coap._udp.local.
     _gateway._sub._usp-agt-coap._udp       PTR <USP ID>._usp-agt-coap._udp.local.
 
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
-    <USP ID>._usp-agt-http._tcp.local.    SRV 0 1 443 <USP ID>.local.
-    <USP ID>._usp-agt-http._tcp.local.    TXT “path=<pathname>“ “name=kitchen light”
     <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5694 <Agent USP ID>.local.
     <USP ID>._usp-agt-coap._udp.local.    TXT “path=<pathname>“ “name=kitchen light”
 
