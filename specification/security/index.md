@@ -115,7 +115,7 @@ It is possible for the Agent to allow an external entity to change a Controller 
 
 ## Theory of operations
 
-The following theory of operations relies on objects, parameters, events, and operations from the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
+The following theory of operations relies on objects, parameters, events, and operations from the `LocalAgent` Object of the [Device:2 Data Model for TR-069 Devices and USP Agents][1].
 
 ### Data Model Elements
 
@@ -161,7 +161,7 @@ An even simpler Agent might not implement `ControllerTrust.Role.{i}.` at all, if
 
 Two special Roles are identified by the `UntrustedRole` and `BannedRole` parameters under the `ControllerTrust.` object. An Agent can expose these parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
 
-The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.Role`, or through some other external means) and that allows “unknown” Controllers to attach will need to have an “untrusted” Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` parameter.
+The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.AssignedRole`, or through some other external means) and that allows “unknown” Controllers to attach will need to have an “untrusted” Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` parameter.
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates are invalid or have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
 
@@ -169,7 +169,7 @@ If the `ControllerTrust.Role.{i}.` object is implemented, it is good practice to
 
 #### A Controller’s Role
 
-A Controller’s assigned Roles can be conveyed by the `Controller.{i}.AssignedRole` parameter. This parameter is a list of all Role values assigned to the Controller through means other than `ControllerTrust.Credential.{i}.Role`. A Controller’s inherited Roles (those inherited from C`ontrollerTrust.Credential.{i}.Role` as described in the next section) need to be maintained separately from assigned Roles and can be conveyed by the `Controller.{i}.InheritedRole` parameter. Where multiple assigned and inherited Roles have overlapping `Target` entries, the resulting permission is the union of all assigned and inherited permissions. For example, if two Roles have the same `Target` with one Role assigning `ParameterPermissions` a value of `r---` and the other Role assigning `ParameterPermissions` a value of `---n`, the resulting permission will be `r--n`. This is done after determining which ControllerTrust.Role.{i}. entry to apply for each Role for specific Targets, in the case where a Role has overlapping `Target` entries for the same Role.
+A Controller’s assigned Roles can be conveyed by the `Controller.{i}.AssignedRole` parameter. This parameter is a list of all Role values assigned to the Controller through means other than `ControllerTrust.Credential.{i}.Role`. A Controller’s inherited Roles (those inherited from `ControllerTrust.Credential.{i}.Role` as described in the next section) need to be maintained separately from assigned Roles and can be conveyed by the `Controller.{i}.InheritedRole` parameter. Where multiple assigned and inherited Roles have overlapping `Target` entries, the resulting permission is the union of all assigned and inherited permissions. For example, if two Roles have the same `Target` with one Role assigning `ParameterPermissions` a value of `r---` and the other Role assigning `ParameterPermissions` a value of `---n`, the resulting permission will be `r--n`. This is done after determining which ControllerTrust.Role.{i}. entry to apply for each Role for specific Targets, in the case where a Role has overlapping `Target` entries for the same Role.
 
 For example,
  Given the following `ControllerTrust.Role.{i}.` entries:
@@ -188,9 +188,13 @@ It is strongly recommended that Agents implement the Controller object with the 
 
 #### Role Associated with a Credential or Challenge
 
-The `ControllerTrust.Credential.{i}.Role` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
+The `ControllerTrust.Credential.{i}.AssignedRole` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
 
-The `ControllerTrust.Challenge.{i}.Role` parameter is a default Role that is assigned to Controllers that send a successful `ChallengeResponse()` command. For more information on use of challenges for assigning Controller Roles, see the sections below. ## Assigning Controller Roles As mentioned above, the `Controller.{i}.Role` parameter can be used to expose the Controller’s assigned Role via the data model.
+The `ControllerTrust.Challenge.{i}.Role` parameter is a default Role that is assigned to Controllers that send a successful `ChallengeResponse()` command. For more information on use of challenges for assigning Controller Roles, see the sections below.
+
+### Assigning Controller Roles
+
+As mentioned above, the `Controller.{i}.AssignedRole` parameter can be used to expose the Controller’s assigned Role via the data model.
 
 *Note: Even if it is not exposed through the data model, the Agent is expected to maintain knowledge of the permissions assigned to each known Controller.*
 
@@ -253,7 +257,7 @@ The Controller can display the value of `Description` to the user and allow the 
 
 When the user indicates to the Controller which challenge they want, the Controller sends `RequestChallenge()` with the `Alias` associated with the selected `Description`. The Agent replies with the associated `Instruction`, `InstructionType`, and an auto-generated `ChallengeID`. The Controller presents the value of `Instruction` to the user (in a manner appropriate for `InstructionType`). Examples of an instruction might be “Enter passphrase printed on bottom of device” or “Enter PIN sent to registered email address”. The user enters a string per the instructions, and the Controller sends this value together with the `ChallengeID` in `ChallengeResponse()`.
 
-If the returned value matches `Value`, the Agent gives a successful response - otherwise it returns an unsuccessful response. If successful, the `ControllerTrust.Challenge.{i}.Role` replaces an `UntrustedRole` in `Controller.{i}.Role` or is appended to any other `Controller.{i}.Role` value.
+If the returned value matches `Value`, the Agent gives a successful response - otherwise it returns an unsuccessful response. If successful, the `ControllerTrust.Challenge.{i}.Role` replaces an `UntrustedRole` in `Controller.{i}.AssignedRole` or is appended to any other `Controller.{i}.AssignedRole` value.
 
 The number of times a `ControllerTrust.Challenge.{i}.` entry can be consecutively failed (across all Controllers, without intermediate success) is defined by `Retries`. Once the number of failed consecutive attempts equals `Retries`, the `ControllerTrust.Challenge.{i}.` cannot be retried until after `LockoutPeriod` has expired.
 

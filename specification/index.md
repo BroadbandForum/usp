@@ -22,7 +22,7 @@ Table of Contents
 
 1. Overview
 2. [Architecture](architecture/)
-3. [Discovery](discovery/)
+3. [Discovery and Advertisement](discovery/)
 4. [Message Transfer Protocols](mtp/)
     1. [CoAP](mtp/coap/)
 5. [Message Encoding](encoding/)
