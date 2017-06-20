@@ -3,7 +3,7 @@
 
     <h2>What is USP?</h2>
 
-    <p>The <strong>User Services Platform</strong> is the <a href="http://www.broadband-forum.org/">Broadband Forum's</a> standardized <strong>protocol for managing, monitoring, upgrading, and controlling connected devices</strong>. USP allows service providers, consumer electronics manufacturers, and end users to:</p>
+    <p>The <strong>User Services Platform</strong> is a standardized <strong>protocol for managing, monitoring, upgrading, and controlling connected devices</strong>. USP allows service providers, consumer electronics manufacturers, and end users to:</p>
 
     <ul>
     <li>Perform <strong>lifecycle management</strong> of consumer connected devices</li>

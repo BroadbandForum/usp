@@ -123,6 +123,7 @@ These data model elements play a role in reporting on and allowing control of tr
 
 * `LocalAgent.Controller.{i}.AssignedRole` parameter
 * `LocalAgent.Controller.{i}.InheritedRole` parameter
+* `LocalAgent.Controller.{i}.Credential` parameter
 
 From component `CoAP`:
 
@@ -132,14 +133,13 @@ From component `CoAP`:
 From component `ControllerTrust`:
 
 * Object `LocalAgent.ControllerTrust.`
-* Parameter `UntrustedRole`
+* Parameters `UntrustedRole`, `BannedRole`
+* Commands `RequestChallenge()`, `ChallengeResponse()`
 * Object `LocalAgent.ControllerTrust.Role.{i}.`
 * Object `LocalAgent.ControllerTrust.Credential.{i}.`
 * Object `LocalAgent.ControllerTrust.Challenge.{i}.`
-* Parameter `LocalAgent.Controller.{i}.Credential`
 
 For brevity, `Device.LocalAgent` is not placed in front of all further object references in this Security section. However, all objects references are under `Device.LocalAgent`. This section does not describe use of parameters under other top level components (e.g., it does not describe parameters under `Device.RemoteAgent`).
-
 
 ### Roles (Access Control)
 
@@ -202,7 +202,7 @@ Controllers can be assigned Roles through a variety of methods, depending on the
 
 * Another Controller (with appropriate permission) can insert a Controller (including the `AssignedRole` parameter value) into the `Controller.{i}.` table, or can modify the `AssignedRole` parameter of an existing `Controller.{i}.` entry. The `InheritedRole` value cannot be modified by another Controller.
 
-* If credentials in an entry in a `ControllerTrust.Credential.{i}.Credential` parameter with an associated `ControllerTrust.Credential.{i}.Role` parameter are used to successfully validate the certificate presented by the Controller, the Controller inherets the Role from the associated `ControllerTrust.Credential.{i}.Role`. The Agent writes this value to the `Controller.{i}.InheritedRole` parameter.
+* If credentials in an entry in a `ControllerTrust.Credential.{i}.Credential` parameter with an associated `ControllerTrust.Credential.{i}.Role` parameter are used to successfully validate the certificate presented by the Controller, the Controller inherits the Role from the associated `ControllerTrust.Credential.{i}.Role`. The Agent writes this value to the `Controller.{i}.InheritedRole` parameter.
 
 * A Controller whose associated certificate is revoked or invalidated by a CA will be assigned the role in `BannedRole`, if this parameter or policy is implemented. In this case, the value of `BannedRole` must be the only value in `Controller.{i}.AssignedRole` (all other entries are removed) and `Controller.{i}.InheritedRole` must be empty (all entries are removed).
 
