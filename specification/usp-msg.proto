@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 //**************************************************************************
+// WT-369 USP Message Protocol Buffer Schema
 //Copyright (c) 2017, Broadband Forum
 //
 //  The undersigned members have elected to grant the copyright to their contributed material used in this software:
