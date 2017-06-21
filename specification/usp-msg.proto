@@ -1,50 +1,21 @@
 syntax = "proto3";
 
 //**************************************************************************
+//Copyright (c) 2017, Broadband Forum
 //
-// WT-369 USP Message Protocol Buffer Schema
+//  The undersigned members have elected to grant the copyright to their contributed material used in this software:
+//  Copyright (c) 2017 ARRIS Enterprises, LLC.
 //
-// Copyright (c) 2017, Broadband Forum
-// Copyright (c) 2017 ARRIS Enterprises, LLC.
+//This is draft software, is subject to change, and has not been approved by members of the Broadband Forum. It is made available to non-members for internal study purposes only. For such study purposes, you have the right to make copies and modifications only for distributing this software internally within your organization among those who are working on it (redistribution outside of your organization for other than study purposes of the original or modified works is not permitted). For the avoidance of doubt, no patent rights are conferred by this license.
 //
-// Redistribution and use in source and binary forms, with or
-//  without modification, are permitted provided that the following
-//  conditions are met:
+//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-//  1. Redistributions of source code must retain the above copyright
-//     notice, this list of conditions and the following disclaimer.
+//Unless a different date is specified upon issuance of a draft software release, all member and non-member license rights under the draft software release will expire on the earliest to occur of (i) nine months from the date of issuance, (ii) the issuance of another version of the same software release, or (iii) the adoption of the draft software release as final.
 //
-//  2. Redistributions in binary form must reproduce the above
-//     copyright notice, this list of conditions and the following
-//     disclaimer in the documentation and/or other materials
-//     provided with the distribution.
 //
-//  3. Neither the name of the copyright holder nor the names of its
-//     contributors may be used to endorse or promote products
-//     derived from this software without specific prior written
-//     permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-//  CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
-//  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-//  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-//  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-//  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-//  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-//  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-//  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-//  STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-//  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-//  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//  The above license is used as a license under copyright only.
-//  Please reference the Forum IPR Policy for patent licensing terms
-//  <https://www.broadband-forum.org/ipr-policy>.
-//
-//  Any moral rights which are necessary to exercise under the above
-//  license grant are also deemed granted under this license.
-//
+// | Unique Identifier | Name | Type | Date | Expiry |
+// | WT-369_draft1 | User Services Platform | Draft | June 21, 2017 | March 21, 2018 |
+// BBF software release registry: http://www.broadband-forum.org/software
 //**************************************************************************
 
 package usp;
@@ -182,7 +153,7 @@ message GetSupportedDMResp {
 
   message SupportedObjectResult {
     string supported_obj_path = 1;
-    AccessType access = 2;
+    ObjAccessType access = 2;
     bool is_multi_instance = 3;
     repeated SupportedCommandResult supported_command_list = 4;
     repeated SupportedEventResult supported_event_list = 5;
@@ -191,7 +162,7 @@ message GetSupportedDMResp {
 
   message SupportedParamResult {
     string param_name = 1;
-    AccessType access = 2;
+    ParamAccessType access = 2;
   }
 
   message SupportedCommandResult {
@@ -205,10 +176,17 @@ message GetSupportedDMResp {
     repeated string arg_name_list = 2;
   }
 
-  enum AccessType {
-    READ_ONLY = 0;
-    READ_WRITE = 1;
-    WRITE_ONLY = 2;
+  enum ParamAccessType {
+    PARAM_READ_ONLY = 0;
+    PARAM_READ_WRITE = 1;
+    PARAM_WRITE_ONLY = 2;
+  }
+
+  enum ObjAccessType {
+    OBJ_READ_ONLY = 0;
+    OBJ_ADD_DELETE = 1;
+    OBJ_ADD_ONLY = 2;
+    OBJ_DELETE_ONLY = 3;
   }
 }
 
@@ -384,14 +362,12 @@ message SetResp {
   }
 }
 
-
 message Operate {
   string command = 1;
   string command_key = 2;
   bool send_resp = 3;
   map<string, string> input_arg_map = 4;
 }
-
 
 message OperateResp {
   repeated OperationResult operation_result_list = 1;
@@ -415,7 +391,6 @@ message OperateResp {
   }
 }
 
-
 message Notify {
   string subscription_id = 1;
   bool send_resp = 2;
@@ -425,6 +400,7 @@ message Notify {
     ObjectCreation obj_creation = 5;
     ObjectDeletion obj_deletion = 6;
     OperationComplete oper_complete = 7;
+    OnBoardRequest on_board_req = 8;
   }
 
   message Event {
@@ -465,8 +441,11 @@ message Notify {
       string err_msg = 2;
     }
   }
-}
 
+  message OnBoardRequest {
+    string obj_path = 1;
+  }
+}
 
 message NotifyResp {
   string subscription_id = 1;

@@ -46,7 +46,9 @@
     <li>Extensions for bulk data collection</li>
     </ul>
 
-    <h4>Upcoming version:</h4>
+    <h4>Upcoming versions:</h4>
+
+    <p>Additional versions of this DRAFT may be released prior to the 1.0 release.</p>
 
     <p>Version 1.0 will include additional MTPs (used for crossing NAT/Firewalls), proxy mechanisms, and the USP end-to-end security layer.</p>
 

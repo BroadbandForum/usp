@@ -74,7 +74,7 @@ Figure 2 - A failed request/response sequence
 
 A Message consists of a header and body. When using [protocol buffers][12], the elements of the header and body for different messages are defined in a schema and sent in an encoded format from one USP endpoint to another.
 
-**R-MSG.4** - A Message MUST conform to the schemas defined in [usp.proto](usp.proto).
+**R-MSG.4** - A Message MUST conform to the schemas defined in [usp-msg.proto](usp-msg.proto).
 
 *Note: When using protocol buffers for message encoding, default values (when elements are missing) are described in [Protcol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 

@@ -16,7 +16,8 @@
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 
-<h1>User Services Platform version 1.0-DRAFT-12</h2>
+<h1>WT-369: User Services Platform</h1>
+<h2>Version 1.0-DRAFT-12</h2>
 
 Table of Contents
 
