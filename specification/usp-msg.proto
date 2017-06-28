@@ -442,14 +442,6 @@ message Notify {
       string err_msg = 2;
     }
   }
-<<<<<<< HEAD:specification/usp-msg.proto
-=======
-
-  message OnBoardRequest {
-    string obj_path = 1;
-  }
-}
->>>>>>> origin/release/1.0:specification/usp-msg.proto
 
   message OnBoardRequest {
     string obj_path = 1;
