@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -33,7 +33,7 @@ https://wiki.broadband-forum.org/display/BBF/Security+Discussion
 
 ## Authentication
 
-Authentication of Endpoints is done using X.509 certificates as defined in [RFC 5280][15] and [RFC 6818][16]. These certificates, at a minimum, need to be usable for [MTP security](/mtp/#securing_mtps) with TLS or DTLS protocols.
+Authentication of Endpoints is done using X.509 certificates as defined in [RFC 5280][15] and [RFC 6818][16]. These certificates, at a minimum, need to be usable for [MTP security](/usp/specification/mtp/#securing_mtps) with TLS or DTLS protocols.
 
 In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that Endpoint is a member of a trusted domain as verified by a trusted Certificate Authority), this Working Text provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or just certificates of trusted CAs.
 
@@ -262,3 +262,6 @@ If the returned value matches `Value`, the Agent gives a successful response - o
 The number of times a `ControllerTrust.Challenge.{i}.` entry can be consecutively failed (across all Controllers, without intermediate success) is defined by `Retries`. Once the number of failed consecutive attempts equals `Retries`, the `ControllerTrust.Challenge.{i}.` cannot be retried until after `LockoutPeriod` has expired.
 
 Type values other than `Passphrase` can be used and defined to trigger custom mechanisms, such as requests for emailed or SMS-provided PINs.
+
+[<-- Messages](/usp/specification/messages/)
+[Extensions -->](/usp/specification/extensions/)

@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -54,13 +54,14 @@ DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 
 
 **R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string “`usp`” (all lower case) in a vendor-class-data instance associated with this enterprise-number.
 
-The Role to associate with DHCP-discovered Controller is programmatically determined (see (Security)[../security]).
+The Role to associate with DHCP-discovered Controller is programmatically determined (see [Security](/usp/specification/security/)).
 
 **R-DIS.2** - If the URL provided by DHCP includes the FQDN of a Controller, the Agent MUST use [DNS](#dns) to retrieve additional Controller information.
 
 ISPs are advised to limit the use of DHCP for configuration of a Controller to situations in which the security of the link between the DHCP server and the Agent can be assured by the service provider.  Since DHCP does not itself incorporate a security mechanism, it is a good idea to use pre-configured certificates or other means of establishing trust between the Agent and a Controller discovered by DHCP.
 
 ### DHCP Options for Controller Discovery
+
 |Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in [Device:2][1] |
 | ----------: | :---------: | :----------: | :-------- |
 | URL of the Controller | `25` | `25` | `Device.LocalAgent.Controller.{i}.MTP.{i}.*.URL` |
@@ -76,9 +77,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.4** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
-*/Barbara to update this/*
-
-**R-DIS.10** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “`.local.`”.
+**R-DIS.5** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “`.local.`”.
 
 ### DNS
 
@@ -99,7 +98,7 @@ DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and struc
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is “`<Instance>.<Service>.<Domain>`“. `<Instance>` will be the USP Identifier of the USP Endpoint.
 
 **R-DIS.8** -  USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
-Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments]) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as “`_<Service Name>._<Transport Protocol>`” (e.g., “`_usp-agt-coap._udp`”).
+Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as “`_<Service Name>._<Transport Protocol>`” (e.g., “`_usp-agt-coap._udp`”).
 
 #### IANA-Registered USP Service Names
 
@@ -115,9 +114,9 @@ Service Name values [registered by BBF with IANA](http://www.broadband-forum.org
 | `usp-ctr-stomp` | tcp | STOMP | Controller |
 -->
 
-DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-coap._udp.<Domain>`) in the RR can be used to provide searchable simple (single layer) functional groupings of USP Agents. The registry of subtypes for Service Names registered by BBF is listed at http://www.broadband-forum.org/assignments. DNS SRV and TXT records can be pointed to by multiple PTR records, which allow a USP Endpoint to potentially be discoverable as belonging to various functional groupings.
+DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-coap._udp.<Domain>`) in the RR can be used to provide searchable simple (single layer) functional groupings of USP Agents. The registry of subtypes for Service Names registered by BBF is listed at [www.broadband-forum.org/assignments](http://www.broadband-forum.org/assignments). DNS SRV and TXT records can be pointed to by multiple PTR records, which allow a USP Endpoint to potentially be discoverable as belonging to various functional groupings.
 
-DNS TXT records allow for a small set of additional information to be included in the reply sent to the querier. This information cannot be used as search criteria. The registry of TXT record attributes for BBF Service Names are listed at http://www.broadband-forum.org/assignments.
+DNS TXT records allow for a small set of additional information to be included in the reply sent to the querier. This information cannot be used as search criteria. The registry of TXT record attributes for BBF Service Names are listed at [www.broadband-forum.org/assignments](http://www.broadband-forum.org/assignments).
 
 **R-DIS.9** -  Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.
 
@@ -134,7 +133,7 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 ### Example Controller Unicast DNS-SD Resource Records
 ```
     ; One PTR record for each supported MTP
-    _usp-ctr-coap._udp.host.example.com      PTR <Controller USP ID>._usp-ctr-coap._udp.example.com.
+    _usp-ctr-coap._udp.host.example.com      PTR <USP ID>._usp-ctr-coap._udp.example.com.
 
     ; One SRV+TXT (DNS-SD Service Instance) record for each supported MTP
     <USP ID>._usp-ctr-coap._udp.example.com.   SRV 0 1 443 host.example.com.
@@ -154,7 +153,7 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
     _gateway._sub._usp-agt-coap._udp       PTR <USP ID>._usp-agt-coap._udp.local.
 
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
-    <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5694 <Agent USP ID>.local.
+    <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5694 <USP ID>.local.
     <USP ID>._usp-agt-coap._udp.local.    TXT “path=<pathname>“ “name=kitchen light”
 
     ; Agent A and AAAA records
@@ -178,3 +177,6 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
 ## Using the SendOnBoardRequest() operation and OnBoardRequest notification
 
 An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on notify messages for additional information about the OnBoardRequest notification.
+
+[<-- Architecture](/usp/specification/architecture/)
+[Message Transfer Protocols -->](/usp/specification/mtp/)

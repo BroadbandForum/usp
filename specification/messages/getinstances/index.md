@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -181,3 +181,6 @@ This element contains a map of key/value pairs for all supported parameters that
 ## GetInstances Error Codes
 
 Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018` and `7800-7999`.
+
+[<-- The Get Message](/usp/specification/messages/get/)
+[The GetSupportedDM Message -->](/usp/specification/messages/getsupporteddm/)

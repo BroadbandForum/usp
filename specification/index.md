@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -17,7 +17,7 @@
 
 
 <h1>WT-369: User Services Platform</h1>
-<h2>Version 1.0-DRAFT-12</h2>
+<h2>Version 1.0-DRAFT-01</h2>
 
 Table of Contents
 
@@ -39,7 +39,7 @@ Table of Contents
     9. [Error Codes](messages/error-codes/)  
 7. [Security](security/)
 8. [Extensions](extensions/)
-    1. [HTTP Bulk Data Transfer](extensions/http-bulk-data-transfer/)
+    1. [HTTP Bulk Data Transfer](extensions/http-bulk-data-collection/)
 
 # Legal Notice
 
@@ -63,71 +63,13 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 # Revision History
 
-## Version 1.0-DRAFT-12
+## Version 1.0-DRAFT-02
 
-* Updated [security section](security/) (USP-222) (USP-243)
-* Fixed [Get](messages/get/) examples (USP-236)
-* Removed extraneous references to http
-* Restructured links, file names, etc. to work with GitHub pages. All readme.md are now index.md.
-* Removed abstraction-proxy extension for beta release (USP-240)
+* Editorial updates
 
-## Version 1.0-DRAFT-11
+## Version 1.0-DRAFT-01
 
-* Using new version naming convention (Major.Minor-DRAFT-REV)
-* Changes updated based on contribution bbf2017.488.00
-* Changes updated based on contribution bbf2017.404.00
-* Changes updated based on contribution bbf2017.403.00
-* Removed reference to RFC 7228 in the Introduction (USP-200)
-* Revised text to align with decisions on OnBoardRequest (USP-191, 2017.488)
-* Resolved editorial comments based on [Pull Request 31](https://code.broadband-forum.org/projects/USP/repos/wt-369/pull-requests/31/)
-* Removed HTTP binding and added placeholder for WebSockets (USP-209)
-* Added text about operation persistence to the asynchronous operation section (USP-213)
-* Updated language around ValueChange to talk about expression/thresholds (USP-220)
-* Removed requirement R-SEC-11 and renumbered (USP-201)
-* Fixed numbering in markdown in security ToO (USP-203)
-* Fixed links to point directly to  files
-* Fixed typo in BNF description (USP-230)
-* Added self-signed cert clarification text (USP-202)
-* Corrected typos outlined in pull request 31 (USP-210)
-* Added requirement R-SEC.3 (USP-226)
-* Updated BNF expressions and added link to Backus-Naur form on Wikipedia (USP-153)
-
-
-
-## Version 0.10
-
-* Using new version naming convention (0.x) for WT revisions
-* Updated security section (USP-192)
-* Consolidated error messages so there aren't separate codes for Controllers and Agents (USP-187)
-* Added back next_level and renamed permission enumerations in GetSupportedDM (USP-180)
-* Added back OnBoardRequest to the Notify types (USP-191)
-* Added stub section for Proxying to contain theory of operations for modelling a USP Controller and requirements on Agent certificates for that purpose.
-
-
-## REV_09
-
-* Added [MTP encryption requirements](mtp/) based on 04/05/2017 call
-* Added [CoAP encryption requirements](mtp/coap/) based on 04/05/2017 call
-* Updated language for straw ballot initiation
-* Added Authentication, Authorization, and Trust sections to [Security](security/).
-* Added theory of operations to security
-
-## REV_08
-
-* New specification build in markdown
-* Updated text in architecture [search expressions](architecture/#searching_with_expressions) to clarify that Expression Parameters function as the underlying data type and therefore only appropriate operators apply (USP-137, USP-139)
-* Added duplicate object (by unique_keys) [error code](messages/#error_codes) (7025) (USP-161)
-* Added description in explanation of [allow partial and required parameters](#allow_partial_and_required_parameters) on using `allow_partial` in Delete (USP-152)
-* Added requirement of what an Agent must do on Object creation if the Controller did not supply the unique keys (USP-135)
-* Added explanation of the use of path names in reference parameters (USP-159)
-* Updated [CoAP](mtp/coap/) diagrams (USP-172)
-* Added HTTP bulk data collection to extensions[/extensions/].
-* Updated Get message to utilize relative paths (USP-140)
-* Updates to message element names for consistency (USP-179)
-* Updated reference list language to explain wildcards (USP-100)
-* Updated expression language to restrict operators for strings, bools, and enums (USP-139)
-* Added brief explanation of using vendor defined error codes. (USP-181)
-* Added requirement labels
+* Initial public draft
 
 # Acknowledgements
 
@@ -139,9 +81,10 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 | John Blackford | Arris | john.blackford@arris.com | Editor/Broadband User Services Work Area Director
 | William Lupton | Broadband Forum | wlupton@broadband-forum.org | BBF Software Architect
 | Timothy Carey | Nokia | timothy.carey@nokia.com | Contributor
-| Steven Nikolai | Arris | Steven.Nicolai@arris.com | Contributor
+| Steven Nicolai | Arris | Steven.Nicolai@arris.com | Contributor
 | Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
 | Mark Tabry  | Google | mtab@google.com | Contributor
+| Klaus Wich | Huawei | klaus.wich@huawei.com | Contributor
 
 # Executive Summary
 
@@ -234,7 +177,7 @@ The following references are of relevance to this Working Text. At the time of p
 A list of currently valid Broadband Forum Technical Reports is published at
 [www.broadband-forum.org](https://www.broadband-forum.org).
 
-1. [Broadband Forum TR-181 Issue 2: *Device Data Model for TR-069*][1]
+1. [Broadband Forum TR-181 Issue 2: *Device Data Model for TR-069 Endpoints and USP Agents*][1]
 2. [Broadband Forum TR-069 Amendment 6:	*CPE WAN Management Protocol*][2]
 3. [Broadband Forum TR-106 Amendment 8: *Data Model Template for TR-069 Enabled Devices*][3]
 4. [IETF RFC 7228:	*Terminology for Constrained-Node Networks*][4]
@@ -503,3 +446,5 @@ However reliable the security of communications protocols, in a platform that en
 **Assurance of privacy** depends on whether stakeholders expect, or are legally required, to have information protected or controlled from certain uses. As with security, the ability for users to control who has access to their data is of primary importance in the world of the connected user, made clear by users as well as regulators.
 
 USP contains rigorous access control and authorization mechanisms to ensure that data is only used by those that have been enabled by the user.
+
+[Architecture -->](/usp/specification/architecture/)

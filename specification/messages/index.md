@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -19,14 +19,14 @@
 
 *Note: This version of the specification defines its messages in [Protocol Buffers v3][12]. This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
-These sections describes the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual elements of the schema are outlined below:
+These sections describe the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual elements of the schema are outlined below:
 
 * [Add](add/)
 * [Set](set/)
 * [Delete](delete/)
 * [Get](get/)
 * [GetInstances](getinstances/)
-* [GetSupportedDM](getsupoprteddm/)
+* [GetSupportedDM](getsupporteddm/)
 * [Notify](notify/)
 * [Operate](operate/)
 
@@ -74,7 +74,7 @@ Figure 2 - A failed request/response sequence
 
 A Message consists of a header and body. When using [protocol buffers][12], the elements of the header and body for different messages are defined in a schema and sent in an encoded format from one USP endpoint to another.
 
-**R-MSG.4** - A Message MUST conform to the schemas defined in [usp-msg.proto](usp-msg.proto).
+**R-MSG.4** - A Message MUST conform to the schemas defined in [usp-msg.proto](/usp/specification/usp-msg.proto).
 
 *Note: When using protocol buffers for message encoding, default values (when elements are missing) are described in [Protcol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 
@@ -84,7 +84,7 @@ Each of the message types and elements below are described with the element type
 
 ### The USP Message
 
-<a href="message_container" />
+<a id="message_container" />
 
 `Header header`
 
@@ -237,7 +237,7 @@ This element contains one of the types given below. Each indicates that the Mess
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the overall message to fail.
+This element contains a [numeric code](/usp/specification/messages/error-codes/) indicating the type of error that caused the overall message to fail.
 
 `string err_msg`
 
@@ -257,7 +257,7 @@ This element contains a Path Name to the Object or parameter that caused the err
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the message to fail.
+This element contains a [numeric code](/usp/specification/messages/error-codes/) indicating the type of error that caused the message to fail.
 
 `string err_msg`
 
@@ -287,3 +287,6 @@ A Controller can use the Subscription mechanism to subscribe to certain events t
 ## Defined Operations Mechanism
 
 Additional methods (operations) are and can be defined in the USP data model. Operations are generally defined on an Object, using the “command” attribute, as defined in [TR-106][3]. The mechanism is controlled using the [Operate message](operate/) in conjunction with the Multi-Instance Request Object.
+
+[<-- Message Encoding](/usp/specification/encoding/)
+[The Add Message -->](/usp/specification/messages/add/)

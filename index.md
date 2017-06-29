@@ -29,7 +29,7 @@
 
     <h2>Current Version:</h2>
 
-    <h3>1.0-DRAFT-12</h3>
+    <h3>1.0-DRAFT-01</h3>
 
     <h4>About this version:</h4>
 

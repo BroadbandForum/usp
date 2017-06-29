@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -19,7 +19,7 @@
 
 The Constrained Application Protocol (CoAP) MTP transfers USP Messages between USP Endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP messages between USP Endpoints.
 
-<img src=`usp-request-response-over-coap.png`/>
+<img src="usp-request-response-over-coap.png"/>
 
 Figure 1 - USP Request/Response over the CoAP MTP
 
@@ -28,6 +28,7 @@ USP Requests are encapsulated within a CoAP request message. When a USP Endpoint
 As noted in the definition of a USP Request, this USP Message either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications from the Agent to the Controller. Notifications will only cause a USP Response to be generated if specified in the Notification Request. However, the CoAP response will always be sent.
 
 ## Mapping USP Endpoints to CoAP URIs
+
 <a id="mapping_usp_endpoints_to_coap_uri" />
 
 Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resources and provides a means of locating the resource.  These resources are organized hierarchically and governed by a CoAP server listening for CoAP requests on a given port. USP Endpoints are one type of CoAP resource that is identified and discovered.
@@ -42,22 +43,25 @@ Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resour
 The identifier within the CoAP server is used to deliver messages to the USP Endpoint. When this identifier is used to deliver messages to the USP Endpoint, this identifier is a uri-path that represents the the USP Endpoint Identifier. For example: “`/e/{endpointId}`”
 
 ## Mapping USP Messages to CoAP Messages
+
 <a id="mapping_usp_messages_to_coap_messages" />
 
 **R-COAP.2** - In order for USP Messages to be transferred between a USP Controller and Agent using CoAP, the USP Message MUST be encapsulated within the CoAP message as defined in [RFC 7252][9].
 
-**R-COAP.3** - USP Messages that exceed the CoAP message size MUST be block encapsulated in accordance with [draft-ietf-core-block](https://www.rfc-editor.org/rfc/rfc7959.txt).
+**R-COAP.3** - USP Messages that exceed the CoAP message size MUST be block encapsulated in accordance with [RFC 7959](https://www.rfc-editor.org/rfc/rfc7959.txt).
 
 USP Messages are transferred using the CoAP resource that represents the receiving USP Endpoint using the CoAP POST method as defined in [RFC 7252][9].
 
-**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/encoding).
+**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/usp/specification/encoding).
 
 ### Handling CoAP Request Success
+
 <a id="handling_coap_request_success" />
 
 **R-COAP.5** - Upon successful reception of the CoAP message using POST, the CoAP server MUST respond with a response code of `2.04 (Changed)`.
 
 ### Handling CoAP Request Failures
+
 <a id="handling_coap_request_failures" />
 
 At times CoAP requests fail to complete due to problems in the underlying transport (e.g., timeout) or a failure response code received from the CoAP server due to problems in the CoAP request sent by the CoAP client (4.xx) or problems with the CoAP server implementation (5.xx).
@@ -81,6 +85,7 @@ When a CoAP client sends a CoAP request, the CoAP client can provide incorrect o
 **R-COAP.11** - When a CoAP server receives a CoAP request and the receiving USP Endpoint cannot interpret or decode the USP Message for processing, the CoAP server MUST respond with a `4.00` response code.
 
 ## Mapping USP Notification Message to CoAP Message
+
 <a id="mapping_usp_notification_message_to_coap_message" />
 
 The USP Notify Request is the only message of the Request type that is sent from an Agent to a Controller. In these cases, the Agent functions as a CoAP client rather than a CoAP server in the POST/Response sequence.
@@ -107,3 +112,6 @@ While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further gui
 * Section 4.4.1 USP Controller certificates can contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
 * Section 4.4.2 Client certificate identifiers do not use EUI-64 identifier but instead use the identifier defined for Client certificates in this Working Text.
 * Section 4.4.5 Client Certificate URLs are not required to be implemented.
+
+[<-- Message Transfer Protocols](/usp/specification/mtp/)
+[--> Message Encoding](/usp/specification/encoding/)

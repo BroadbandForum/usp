@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -20,3 +20,6 @@
 USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
 
 * [Protocol Buffers Version 3][12]
+
+[<-- Message Transfer Protocols](/usp/specification/mtp/)
+[Messages -->](/usp/specification/messages/)
