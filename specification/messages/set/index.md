@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -105,11 +105,11 @@ The logic can be described as follows:
 
 This element tells the Agent how to process the message in the event that one or more of the Objects matched in the `obj_path` fails to update.
 
-**R-SET.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](/usp/messages/#allow_partial_and_required_parameters)).
+**R-SET.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
 
 *Note: This may cause some counterintuitive behavior if there are no required parameters to be updated. The Set Request can still result in a Set Response (rather than an Error Message) if `allow_partial` is set to true.*
 
-**R-SET.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](/usp/messages/#allow_partial_and_required_parameters)).
+**R-SET.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
 
 `repeated UpdateObject update_obj_list`
 
@@ -139,7 +139,7 @@ This element contains the value of the parameter specified in the `param` elemen
 
 This element specifies whether the Agent should treat the update of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter.
 
-**R-SET.2** - If the `required` element is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](/usp/messages/#allow_partial_and_required_parameters)).
+**R-SET.2** - If the `required` element is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](/messages/#allow_partial_and_required_parameters)).
 
 ## Set Response
 
@@ -173,7 +173,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/messages/error-codes/) indicating the type of error that caused the Object update to fail.
+This element contains a [numeric code](/specification/messages/error-codes/) indicating the type of error that caused the Object update to fail.
 
 `string err_msg`
 
@@ -233,7 +233,7 @@ This element contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This element contains the [error code](/usp/specification/messages/error-codes/) of the error that caused the parameter set to fail.
+This element contains the [error code](/specification/messages/error-codes/) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -242,5 +242,5 @@ This element contains text related to the error specified by `err_code`.
 ## Set Message Supported Error Codes
 Appropriate error codes for the Set message include `7000-7016`, `7020`, `7021`, and `7800-7999`.
 
-[<-- The Set Message](/usp/specification/messages/set/)
-[The Get Message -->](/usp/specification/messages/get/)
+[<-- The Add Message](/specification/messages/add/)
+[The Delete Message -->](/specification/messages/delete/)

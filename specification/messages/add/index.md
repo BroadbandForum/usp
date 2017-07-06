@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,7 +15,7 @@
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# Add
+# The Add Message
 
 <a id="add" />
 
@@ -172,7 +172,7 @@ This message is used when the object given in `requested_path` failed to be crea
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/messages/error-codes/) indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.
+This element contains a [numeric code](/specification/messages/error-codes/) indicating the type of error that caused the Object creation to fail. A value of 0 indicates the Object was created successfully.
 
 `string err_msg`
 
@@ -206,7 +206,7 @@ This element contains the Relative Parameter Path to the parameter that failed t
 
 `fixed32 err_code`
 
-This element contains the [error code](/usp/specification/error-codes/) of the error that caused the parameter set to fail.
+This element contains the [error code](/specification/error-codes/) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -216,5 +216,5 @@ This element contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Add message include `7000-7019` and `7800-7999`.
 
-[<-- Messages](/usp/specification/messages/)
-[The Delete Message -->](/usp/specification/messages/delete/)
+[<-- Messages](/specification/messages/)
+[The Delete Message -->](/specification/messages/delete/)

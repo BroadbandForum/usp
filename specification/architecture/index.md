@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -189,7 +189,7 @@ Commands define Object specific methods within the Data Model. A Controller can 
 #### Events
 <a id="events" />
 
-Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](/usp/specification/messages/notify/). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
+Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](/specification/messages/notify/). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
 
 #### Path Names
 <a id="path_names" />
@@ -200,7 +200,7 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 Path Names are represented by a hierarchy of Objects (“parents”) and sub-Objects (“children”), separated by the dot “.” character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](/usp/specification/messages/getsupporteddm/)).
+1.	Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see the [GetSupportedDM message](/specification/messages/getsupporteddm/)).
 
 2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent’s Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a “.” Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following).
 
@@ -469,7 +469,7 @@ For example, reference the Signal Strength of all WiFi Associated Devices using 
 ##### Operations/Commands
 <a id="operation_command_path_names" />
 
-The [Operate message](/usp/messages/operate/) allows a USP Controller to execute Commands defined in the USP data models.  Commands are synchronous or asynchronous operations that don’t fall into the typical REST-based concepts of CRUD-N that have been incorporated into the protocol as specific messages. Commands are addressed like Parameter Paths that end with parentheses “()” to symbolize that it is a Command.  
+The [Operate message](/messages/operate/) allows a USP Controller to execute Commands defined in the USP data models.  Commands are synchronous or asynchronous operations that don’t fall into the typical REST-based concepts of CRUD-N that have been incorporated into the protocol as specific messages. Commands are addressed like Parameter Paths that end with parentheses “()” to symbolize that it is a Command.  
 
 For example: `Device.IP.Interface.[Name==“eth0”].Reset()`
 
@@ -480,5 +480,5 @@ The Notify request allows a type of generic event (called Event) message that al
 
 For example: `Device.LocalAgent.Boot!`
 
-[<-- Overview](/usp/specification/)
-[--> Discovery](/usp/specification/discovery/)
+[<-- Overview](/specification/)
+[Discovery -->](/specification/discovery/)

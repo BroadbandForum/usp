@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,7 +15,7 @@
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# Delete
+# The Delete Message
 
 <a id="delete" />
 
@@ -25,9 +25,9 @@
 
 This element tells the Agent how to process the message in the event that one or more of the Objects specified in the `obj_path` argument fails deletion.
 
-**R-DEL.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](/usp/specification/messages/add/#allow_partial_and_required_parameters)).
+**R-DEL.0** - If the `allow_partial` element is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](/specification/messages/add/#allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](/usp/specification/messages/add/#allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](/specification/messages/add/#allow_partial_and_required_parameters)).
 
 `repeated string obj_path_list`
 
@@ -67,7 +67,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the delete to fail. A value of 0 indicates the Object was deleted successfully.
+This element contains a [numeric code](/specification/error-codes/) indicating the type of error that caused the delete to fail. A value of 0 indicates the Object was deleted successfully.
 
 `string err_msg`
 
@@ -111,5 +111,5 @@ This element contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, and `7800-7999`.
 
-[<-- The Delete Message](/usp/specification/messages/delete/)
-[The Set Message -->](/usp/specification/messages/set/)
+[<-- The Set Message](/specification/messages/set/)
+[The Get Message -->](/specification/messages/get/)

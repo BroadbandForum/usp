@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -54,7 +54,7 @@ DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 
 
 **R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string “`usp`” (all lower case) in a vendor-class-data instance associated with this enterprise-number.
 
-The Role to associate with DHCP-discovered Controller is programmatically determined (see [Security](/usp/specification/security/)).
+The Role to associate with DHCP-discovered Controller is programmatically determined (see [Security](/specification/security/)).
 
 **R-DIS.2** - If the URL provided by DHCP includes the FQDN of a Controller, the Agent MUST use [DNS](#dns) to retrieve additional Controller information.
 
@@ -178,5 +178,5 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
 
 An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on notify messages for additional information about the OnBoardRequest notification.
 
-[<-- Architecture](/usp/specification/architecture/)
-[Message Transfer Protocols -->](/usp/specification/mtp/)
+[<-- Architecture](/specification/architecture/)
+[Message Transfer Protocols -->](/specification/mtp/)

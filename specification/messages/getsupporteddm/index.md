@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -178,7 +178,7 @@ This element contains one of the Path Names given in `obj_path` of the associate
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
+This element contains a [numeric code](/specification/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
 **R-GSP.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
@@ -275,5 +275,5 @@ Appropriate error codes for the GetSupportedDM message include `7000-7006`, `700
 
 *Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
-[<-- The GetInstances Message](/usp/specification/messages/getinstances/)
-[The Operate Message -->](/usp/specification/messages/operate/)
+[<-- The GetInstances Message](/specification/messages/getinstances/)
+[The Operate Message -->](/specification/messages/operate/)

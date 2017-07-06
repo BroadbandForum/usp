@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	Agent WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -28,7 +28,7 @@ The Agent configuration that enables the collection of bulk data using HTTP is d
 
 ## Enabling HTTP/HTTPS Bulk Data Communication
 
-HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/usp/specification/messages/add/) message. For example:
+HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/specification/messages/add/) message. For example:
 
     .BulkData.Profile.1
     .BulkData.Profile.1.Enable=true

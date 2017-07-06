@@ -20,9 +20,9 @@
     <h2>How to use this site:</h2>
 
     <ul>
-    <li>The <a href="/usp/specification/"><em>specification</em></a> directory contains the full text of the current version of the protocol, and the schema (currently in Protocol Buffers) for the syntax of USP messages. Use this section when developing your USP protocol stack.</li>
-    <li>The <a href="/usp/data-model/"><em>data models</em></a> link will take you to the generated versions of the Device:2 data model (also known as "TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents") specific to USP. The raw xml used in development can be found in this directory. Use these to find the objects necessary to the USP protocol stack, and when developing the objects, interfaces, services, etc. that you want to manage and control with USP.</li>
-    <li>The <a href="/usp/resources/"><em>resources</em></a> page gives information about upcoming test events, access to training resources, and our frequently asked questions. Use this section to learn more about USP and getting involved in its ongoing development.</li>
+    <li>The <a href="/specification/"><em>specification</em></a> directory contains the full text of the current version of the protocol, and the schema (currently in Protocol Buffers) for the syntax of USP messages. Use this section when developing your USP protocol stack.</li>
+    <li>The <a href="/data-model/"><em>data models</em></a> link will take you to the generated versions of the Device:2 data model (also known as "TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents") specific to USP. The raw xml used in development can be found in this directory. Use these to find the objects necessary to the USP protocol stack, and when developing the objects, interfaces, services, etc. that you want to manage and control with USP.</li>
+    <li>The <a href="/resources/"><em>resources</em></a> page gives information about upcoming test events, access to training resources, and our frequently asked questions. Use this section to learn more about USP and getting involved in its ongoing development.</li>
     </ul>
   </div>
   <div style="width:45%; float:right;">
@@ -52,7 +52,7 @@
 
     <p>Version 1.0 will include additional MTPs (used for crossing NAT/Firewalls), proxy mechanisms, and the USP end-to-end security layer.</p>
 
-    <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/usp/assets/img/broadband-forum-logo.png"></a></p>
+    <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>
     <p style="text-align:center;">USP is developed by the Broadband Forum. For more information, visit <a href="http://www.broadband-forum.org">http://www.broadband-forum.org</a></p>
 
   </div>

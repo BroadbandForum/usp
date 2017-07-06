@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -52,7 +52,7 @@ The identifier within the CoAP server is used to deliver messages to the USP End
 
 USP Messages are transferred using the CoAP resource that represents the receiving USP Endpoint using the CoAP POST method as defined in [RFC 7252][9].
 
-**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/usp/specification/encoding).
+**R-COAP.4** - The CoAP Content-Format for USP Messages MUST be `application/octet-stream (ID=42)` for [protobuf encoding](/specification/encoding).
 
 ### Handling CoAP Request Success
 
@@ -113,5 +113,5 @@ While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further gui
 * Section 4.4.2 Client certificate identifiers do not use EUI-64 identifier but instead use the identifier defined for Client certificates in this Working Text.
 * Section 4.4.5 Client Certificate URLs are not required to be implemented.
 
-[<-- Message Transfer Protocols](/usp/specification/mtp/)
-[--> Message Encoding](/usp/specification/encoding/)
+[<-- Message Transfer Protocols](/specification/mtp/)
+[--> Message Encoding](/specification/encoding/)

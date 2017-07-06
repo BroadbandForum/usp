@@ -15,11 +15,11 @@ These data models are based off of the [Broadband Forum](http://www.broadband-fo
 
 ## Data Model Repository
 
-<a href="https://github.com/BroadbandForum/usp/tree/master/data-model" class="btn-success">Data Models for USP (repository)</a>
+<a href="https://github.com/BroadbandForum/tree/master/data-model" class="btn-success">Data Models for USP (repository)</a>
 
 ## Root Data Model Documentation
 
-<a href="/usp/data-model/tr-181-2-12-usp-full.html" class="btn-success">Device:2 Data Model for USP (HTML)</a>
+<a href="/data-model/tr-181-2-12-usp-full.html" class="btn-success">Device:2 Data Model for USP (HTML)</a>
 
 ## Service Data Model Documentation
 
