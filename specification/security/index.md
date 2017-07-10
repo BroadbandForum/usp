@@ -43,7 +43,7 @@ TLS and DTLS both have handshake mechanisms that allow for exchange of certifica
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
 
-## Authentication with RBAC (Role Based Access Control)
+### Authentication with RBAC (Role Based Access Control)
 
 It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This Working Text refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
 
