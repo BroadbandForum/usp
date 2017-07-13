@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -222,7 +222,7 @@ Note that it is possible for an Agent to maintain policy of the type described b
 
 1.	If the certificate presented by the Controller is self-signed then:
     1.	If the certificate Endpoint ID is in `subjectaltName` but is not in `Controller.{i}.EndpointID`, and `MTP.{i}.<MTP>.ValidatePeerCertificate` is `false`, the Agent creates a `Controller.{i}.` entry and assigns `Controller.{i}.AssignedRole` the role in `UntrustedRole`. The Agent stores the certificate information in `Controller.{i}.Credential`.
-    2.	If the certificate is not in `Controller.{i}.Credential` and either does not include the Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is true, the Agent refuses to establish an encrypted connection with the Controller and does not store the certificate information.
+    2.	If the certificate is not in any `Controller.{i}.Credential` entry and either does not include the Controller Endpoint ID or `MTP.{i}.<MTP>.ValidatePeerCertificate` is true, the Agent refuses to establish an encrypted connection with the Controller and does not store the certificate information.
     3.	If the certificate Endpoint ID is in `subjectaltName` and is in `Controller.{i}.EndpointID` with this certificate referenced by that same table entry’s `Controller.{i}.Credential`, the Agent considers the certificate valid for purpose of confirming Controller identity, and allows the Controller use of its `Controller.{i}.AssignedRole`.
     4.	If the certificate Endpoint ID is in `subjectaltName` and is in `Controller.{i}.EndpointID` but this certificate is not referenced by the same table entry’s `Controller.{i}.Credential`, the Agent considers the certificate invalid and will not establish an encrypted connection.
 2.	If the certificate indicates it has a chain of trust leading to a Certificate Authority (CA), and the CA indicates the certificate is not valid or has been revoked:

@@ -15,7 +15,7 @@ These data models are based off of the [Broadband Forum](http://www.broadband-fo
 
 ## Data Model Repository
 
-<a href="https://github.com/BroadbandForum/tree/master/data-model" class="btn-success">Data Models for USP (repository)</a>
+<a href="https://github.com/BroadbandForum/usp/tree/master/data-model" class="btn-success">Data Models for USP (repository)</a>
 
 ## Root Data Model Documentation
 
