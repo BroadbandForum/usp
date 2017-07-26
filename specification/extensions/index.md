@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -20,4 +20,5 @@
 These sections define or provide theories of operation for additional, use-case specific functionality for the User Service Platform. These sections rely heavily on protocols external to USP. Included in this version are:
 
 * [Bulk data collection over HTTP](http-bulk-data-collection/)
-* [USP Abstraction Proxy](abstraction-abstraction-proxy/)
+
+[<-- Security](/specification/security/)

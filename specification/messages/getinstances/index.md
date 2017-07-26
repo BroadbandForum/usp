@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -154,7 +154,7 @@ This element contains one of the Path Names or Search Paths given in `obj_path` 
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
+This element contains a [numeric code](/specification/error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
 **R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
@@ -181,3 +181,6 @@ This element contains a map of key/value pairs for all supported parameters that
 ## GetInstances Error Codes
 
 Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018` and `7800-7999`.
+
+[<-- The Get Message](/specification/messages/get/)
+[The GetSupportedDM Message -->](/specification/messages/getsupporteddm/)

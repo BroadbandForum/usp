@@ -15,12 +15,17 @@ These data models are based off of the [Broadband Forum](http://www.broadband-fo
 
 ## Data Model Repository
 
-<a href="" class="btn-success">Data Models for USP (repository)</a>
+<a href="https://github.com/BroadbandForum/usp/tree/master/data-model" class="btn-success">Data Models for USP (repository)</a>
 
 ## Root Data Model Documentation
 
-<a href="/usp/data-model/tr-181-2-12-usp-full.html" class="btn-success">Device:2 Data Model for USP (HTML)</a>
+<a href="/data-model/tr-181-2-12-usp-full.html" class="btn-success">Device:2 Data Model for USP (HTML)</a>
 
 ## Service Data Model Documentation
 
-Coming soon. You can find the versions of these data models developed for CWMP [here](http://www.broadband-forum.org/cwmp).
+The service data models defined for CWMP are compatible with USP. These include Objects and Paramters for set-top-box functions, VoIP functions, network attached storage functions, and femto/small cell functions. These data models may be optimized for USP in the future (taking advantage of DM defined operations, event, etc.).
+
+* [STBService:1.4 Data Model](tr-135-1-4-0.html)
+* [VoiceService:2.0 Data Model](tr-104-2-0-0.html)
+* [StorageService:1.3 Data Model](tr-140-1-3-0.html)
+* [FAPService:2.1 Data Model](tr-196-2-1-0.html)
