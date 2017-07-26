@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -56,3 +56,6 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 <a id="vendor_defined_error_codes" />
 
 Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use  the `7800-7999` series. There are no requirements on the content of these errors.
+
+[<-- The Notify Message](/specification/messages/notify/)
+[Security -->](/specification/security/)

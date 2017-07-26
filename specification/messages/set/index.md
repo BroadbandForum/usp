@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -173,7 +173,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `fixed32 err_code`
 
-This element contains a [numeric code](/usp/specification/error-codes/) indicating the type of error that caused the Object update to fail.
+This element contains a [numeric code](/specification/messages/error-codes/) indicating the type of error that caused the Object update to fail.
 
 `string err_msg`
 
@@ -233,7 +233,7 @@ This element contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This element contains the [error code](/usp/specification/error-codes/) of the error that caused the parameter set to fail.
+This element contains the [error code](/specification/messages/error-codes/) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -241,3 +241,6 @@ This element contains text related to the error specified by `err_code`.
 
 ## Set Message Supported Error Codes
 Appropriate error codes for the Set message include `7000-7016`, `7020`, `7021`, and `7800-7999`.
+
+[<-- The Add Message](/specification/messages/add/)
+[The Delete Message -->](/specification/messages/delete/)

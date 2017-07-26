@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://www.broadband-forum.org/technical/download/TR-181_Issue-2_Amendment-12.pdf "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -33,7 +33,7 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 <a id="securing_mtps" />
 
 <!--
-USP contains its own [application layer security mechanism](/usp/specification/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.
+USP contains its own [application layer security mechanism](/specification/security/). While use of this security is necessary, it may not always be sufficient for certain deployment scenarios.
 -->
 
 USP recommends the following requirement on use of MTP security:
@@ -41,6 +41,9 @@ USP recommends the following requirement on use of MTP security:
 **R-MTP.0** – The Message Transfer Protocol MUST use secure transport when USP messages cross inter-network boundaries.
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however.
+
+[<-- Discovery](/specification/discovery/)
+[--> CoAP as a Message Transfer Protocol](/specification/mtp/coap/)
 
 <!--
 ### MTP Message Protection

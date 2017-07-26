@@ -1,0 +1,29 @@
+@startuml
+
+hide footbox
+
+box "USP Controller" #8888FF
+
+participant "Controller" as C
+participant "CoAP" as CC
+
+end box
+
+box "USP Agent" #cc9999
+
+participant "CoAP" as CA
+participant "Agent" as A
+
+end box
+
+C->CC : CRUD-O request
+CC->CA: CON[0x2607](POST[CRUD-O request], Token 0x26)
+CC<--CA: ACK[0x2607](2.04, Token 0x26)
+CA->A : CRUD-O request
+...
+CA<-A: CRUD-O response
+CC<-CA: CON[0xaabb](POST[CRUD-O response], Token 0x07)
+CC-->CA: ACK[0xaabb](2.04, Token 0x07)
+C<-CC: CRUD-O response
+
+@enduml
