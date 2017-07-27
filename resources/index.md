@@ -1,6 +1,34 @@
-# Upcoming Events
+# First User Services Platform "Plugfest"
 
-* [Broadband Forum Q3 Meeting](https://www.broadband-forum.org/what-s-happening/meetings-events-webinars/current-meeting) - we'll be discussing the remaining comments leading up to Version 1.0 of USP.
+A "plugfest", also known as a "hackfest" in the software community, is a live event
+where engineers building solutions for a given protocol interact with each other
+to vet the protocol and build interoperable solutions.
+
+## Logistics
+
+The date of the plugfest is tentatively set for November 28-30, 2017. Location TBD.
+
+## What will be tested?
+
+The first plugfest will focus on the USP Discovery process, authentication and authorization,
+message interoperability, and use cases such as firmware updates of the device represented
+by a USP Agent.
+
+## Data Model Profiles for the Plugfest
+
+The BBF has identified the set of objects, parameters, commands, and notifications
+to be tested at the plugfest. This set represents a baseline level of functionality
+for USP in order to build interoperable endpoints. These profiles include:
+
+* [DRAFT-Challenge:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-Challenge:1 Profile)
+* [DRAFT-Controllers:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-Controllers:1 Profile)
+* [DRAFT-DeviceInfo:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-DeviceInfo:1 Profile)
+* [DRAFT-Firmware:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-Firmware:1 Profile)
+* [DRAFT-LocalAgent:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-LocalAgent:1 Profile)
+* [DRAFT-Reboot:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-Reboot:1 Profile)
+* [DRAFT-Subscriptions:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT-Subscriptions:1 Profile)
+
+If you are using tools that utilize these profiles, the profiles are unified under the [DRAFT:1 Profile](http://usp.technology/data-model/tr-181-2-12-usp-full.html#H.Device:2.DRAFT:1 Profile).
 
 # Resources
 
