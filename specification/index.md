@@ -17,7 +17,7 @@
 
 
 <h1>WT-369: User Services Platform</h1>
-<h2>Version 1.0-DRAFT-01</h2>
+<h2>Version 1.0-DRAFT-02</h2>
 
 Table of Contents
 
@@ -66,6 +66,7 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 ## Version 1.0-DRAFT-02
 
 * Editorial updates
+* Added requirement for OnBoardRequest retry mechanism
 
 ## Version 1.0-DRAFT-01
 
