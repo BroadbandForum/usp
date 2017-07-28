@@ -17,7 +17,7 @@
 
 # Protocol Messages Overview
 
-*Note: This version of the specification defines its messages in [Protocol Buffers v3][12]. This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
+*Note: This version of the specification defines its messages in Protocol Buffers v3 (see [encoding](/specification/encoding/)). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
 These sections describe the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual elements of the schema are outlined below:
 

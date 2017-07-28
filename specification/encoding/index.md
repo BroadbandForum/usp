@@ -21,5 +21,7 @@ USP requires a mechanism to serialize data to be sent over a message transfer pr
 
 * [Protocol Buffers Version 3][12]
 
+**R-ENC.0** - An implementation using protocol buffers encoding MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
+
 [<-- Message Transfer Protocols](/specification/mtp/)
 [Messages -->](/specification/messages/)
