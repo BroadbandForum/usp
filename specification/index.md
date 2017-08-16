@@ -11,68 +11,77 @@
 [10]:	https://tools.ietf.org/html/rfc7390	"RFC 7390 Group Communication for the Constrained Application Protocol (CoAP)"
 [11]:	https://tools.ietf.org/html/rfc4033	"RFC 4033 DNS Security Introduction and Requirements"
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
+[13]: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries "IEEE Registration Authority"
+[14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
+[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 
 <h1>WT-369: User Services Platform</h1>
-<h2>Version 1.0-DRAFT-02</h2>
+<h2>Version 1.0-DRAFT-03</h2>
 
-Table of Contents
+**Table of Contents**
 
-1. Overview
-2. [Architecture](architecture/)
-3. [Discovery and Advertisement](discovery/)
-4. [Message Transfer Protocols](mtp/)
-    1. [CoAP](mtp/coap/)
-5. [Message Encoding](encoding/)
-6. [Messages](messages/)
-    1. [Add](messages/add/)
-    2. [Set](messages/set/)
-    3. [Delete](messages/delete/)
-    4. [Get](messages/get/)
-    5. [GetInstances](messages/getinstances/)
-    6. [GetSupportedDM](messages/getsupporteddm/)
-    7. [Operate](messages/operate/)
-    8. [Notify](messages/notify/)
-    9. [Error Codes](messages/error-codes/)  
-7. [Security](security/)
-8. [Extensions](extensions/)
-    1. [HTTP Bulk Data Transfer](extensions/http-bulk-data-collection/)
+Main Specification
 
-# Legal Notice
+1. [Introduction](#introduction)
+2. [Architecture](./architecture)
+3. [Discovery and Advertisement](./discovery)
+4. [Message Transfer Protocols](./mtp)
+5. [Message Encoding](./encoding)
+6. [End to End Message Exchange](./e2e-message-exchange)
+7. [Messages](./messages)
+8. [Security](./security)
 
-## Notice
+Extensions
+
+Annex A. [HTTP Bulk Data Transfer](./extensions/http-bulk-data-collection)
+Annex B. [Software Module Management](./extensions/software-module-management)
+
+# Introduction
+
+<a id="introduction">
+
+## Legal Notice
+
+### Notice
 
 The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment.  This Working Text is a draft, is subject to change, and has not been approved by members of the Forum.  This Working Text is copyrighted by the Broadband Forum, and portions of this Working Text may be copyrighted by Broadband Forum members.  This Working Text is for use by Broadband Forum members only.  Advance written permission by the Broadband Forum is required for distribution of this Working Text in its entirety or in portions outside the Broadband Forum.
 
-## Intellectual Property
+### Intellectual Property
 
 Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of this Working Text if it were to be adopted as a Technical Report, and to provide supporting documentation.
 
-## Terms of Use
+### Terms of Use
 
 This Working Text (i) is made available to non-members for internal study purposes only, (ii) may be implemented by Broadband Forum members in a product or service made commercially available, and (iii) may only be copied and distributed internally for the purpose of exercising Broadband Forum membership rights and benefits.
 
-## Confidentiality
+### Confidentiality
 
 All materials submitted for possible incorporation into Technical Reports or other work product shall be regarded as confidential until such time as the Technical Report or other work product in question is publicly released.  In the event that any material, or portion of any material, is not included in the Technical Report or other work product in question, or if such Technical Report or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.
 
 THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.
 
-# Revision History
+## Revision History
 
-## Version 1.0-DRAFT-02
+### Version 1.0-DRAFT-03
+
+* Single document format
+
+### Version 1.0-DRAFT-02
 
 * Editorial updates
 * Added requirement for OnBoardRequest retry mechanism
 
-## Version 1.0-DRAFT-01
+### Version 1.0-DRAFT-01
 
 * Initial public draft
 
-# Acknowledgements
+## Acknowledgements
 
 | Name  | Company | Email | Role |
 | ------ | :-----: | :---: | :--- |
@@ -87,19 +96,19 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 | Mark Tabry  | Google | mtab@google.com | Contributor
 | Klaus Wich | Huawei | klaus.wich@huawei.com | Contributor
 
-# Executive Summary
+## Executive Summary
 
 <a id="executive_summary" />
 
 This document describes the architecture, protocol, and data model that builds an intelligent User Services Platform. It is targeted towards application developers, application service providers, CPE vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user’s network connection and their connected devices.
 
-The term “connected device” is a broad one, applying to the vast array of network connected CPE, consumer electronics, and computing resources that today’s consumers are using at an increasing rate. With the advent of “smart” platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
+The term "connected device" is a broad one, applying to the vast array of network connected CPE, consumer electronics, and computing resources that today’s consumers are using at an increasing rate. With the advent of "smart" platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
 
 In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the entertainment, productivity, and storage applications they want.
 
 These realities have created an opportunity for CE vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
-This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol - commonly known by its document number, “TR-069” - this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.
+This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol - commonly known by its document number, "TR-069" - this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.
 
 This new world of the connected user as a platform provides the perfect opportunity to leverage the expertise and experience gained with CWMP. This allows us to improve on, evolve, and expand the use cases of CWMP including:
 
@@ -112,11 +121,11 @@ This new world of the connected user as a platform provides the perfect opportun
 
 This User Services Platform provides a scalable, interoperable, and efficient mechanism to meet the needs of the connected user and their application and network providers.
 
-# Purpose and Scope
+## Purpose and Scope
 
 <a id="purpose_scope" />
 
-## Purpose
+### Purpose
 
 This document provides the normative requirements and operational description of the User Services Platform (USP). It is meant to be consumed by remote gateway, home network, and consumer electronics vendors; cloud and smart application developers and providers; and network service providers to help build and deploy USP Agents, Controllers, and the applications and devices which make use of them.
 
@@ -129,9 +138,9 @@ This document describes:
 *	The protocol requirements for discovery, end-to-end security, authentication, and authorization
 *	An explanation of the data model and how it is used to enable USP, Service Elements, proxying, and Object defined operations
 
-## Scope
+### Scope
 
-While the original CWMP was targeted toward remote gateways, it expanded to manage software modules, VoIP devices, set top boxes, network attached storage, etc. In the new connected world enabled by the virtualization of network functions and the “Internet of things”, USP has an opportunity to apply to “virtual agents” as well as push out to more device types.
+While the original CWMP was targeted toward remote gateways, it expanded to manage software modules, VoIP devices, set top boxes, network attached storage, etc. In the new connected world enabled by the virtualization of network functions and the "Internet of things", USP has an opportunity to apply to "virtual agents" as well as push out to more device types.
 
 USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
@@ -139,11 +148,11 @@ For the proxy of Service Elements, this document defines the proxy mechanisms bu
 
 Lastly, USP makes use of and expands the Device:2 Data Model for TR-069 Devices [1][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
 
-# References and Terminology
+## References and Terminology
 
 <a id="references_terminology" />
 
-## Conventions
+### Conventions
 
 <a id="conventions" />
 
@@ -151,7 +160,7 @@ In this specification, several words are used to signify the requirements of the
 
 **MUST**
 
-This word, or the term “REQUIRED”, means that the definition is an absolute requirement of the specification.
+This word, or the term "REQUIRED", means that the definition is an absolute requirement of the specification.
 
 **MUST NOT**
 
@@ -159,17 +168,17 @@ This phrase means that the definition is an absolute prohibition of the specific
 
 **SHOULD**
 
-This word, or the term “RECOMMENDED”, means that there could exist valid reasons in particular circumstances to ignore this item, but the full implications need to be understood and carefully weighed before choosing a different course.
+This word, or the term "RECOMMENDED", means that there could exist valid reasons in particular circumstances to ignore this item, but the full implications need to be understood and carefully weighed before choosing a different course.
 
 **SHOULD NOT**
 
-This phrase, or the phrase “NOT RECOMMENDED” means that there could exist valid reasons in particular circumstances when the particular behavior is acceptable or even useful, but the full implications need to be understood and the case carefully weighed before implementing any behavior described with this label.
+This phrase, or the phrase "NOT RECOMMENDED" means that there could exist valid reasons in particular circumstances when the particular behavior is acceptable or even useful, but the full implications need to be understood and the case carefully weighed before implementing any behavior described with this label.
 
 **MAY**
 
-This word, or the term “OPTIONAL”, means that this item is one of an allowed set of alternatives. An implementation that does not include this option MUST be prepared to inter-operate with another implementation that does include the option.
+This word, or the term "OPTIONAL", means that this item is one of an allowed set of alternatives. An implementation that does not include this option MUST be prepared to inter-operate with another implementation that does include the option.
 
-## References
+### References
 
 <a id="references" />
 
@@ -190,8 +199,13 @@ A list of currently valid Broadband Forum Technical Reports is published at
 10. [IETF RFC 7390:	*Group Communication for the Constrained Application Protocol (CoAP)*][10]
 11.	[IETF RFC 4033:	*DNS Security Introduction and Requirements*][11]
 12.	[*Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3*][12]
-13. [IETF RFC 5290: *Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile*][15]
-14. [IETF RFC 6818: *Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile*][16]
+13. [IEEE Registration Authority][13]
+14. [IETF RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace][14]
+15. [IETF RFC 5290: *Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile*][15]
+16. [IETF RFC 6818: *Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile*][16]
+17. [IETF RFC 2234 Augmented BNF for Syntax Specifications: ABNF][17]
+18. [IETF RFC 3986 Uniform Resource Identifier (URI): Generic Syntax][18]
+19. [IETF RFC 2141 URN Syntax][19]
 
 # Definitions
 

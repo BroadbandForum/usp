@@ -1,23 +1,28 @@
 <!-- Reference Links -->
 [1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
-[2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	Agent WAN Management Protocol"
+[2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
 [7]:	https://tools.ietf.org/html/rfc6763	"RFC 6763 DNS-Based Service Discovery"
-[8]:	https://tools.ietf.org/html/rfc6762	"RFC 6752 Multicast DNS"
+[8]:	https://tools.ietf.org/html/rfc6762	"RFC 6762 Multicast DNS"
 [9]:	https://tools.ietf.org/html/rfc7252	"RFC 7252 The Constrained Application Protocol (CoAP)"
 [10]:	https://tools.ietf.org/html/rfc7390	"RFC 7390 Group Communication for the Constrained Application Protocol (CoAP)"
 [11]:	https://tools.ietf.org/html/rfc4033	"RFC 4033 DNS Security Introduction and Requirements"
 [12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
-[13]: https://tools.ietf.org/html/rfc7230 "Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing"
-[14]: https://tools.ietf.org/html/rfc7231
+[13]: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries "IEEE Registration Authority"
+[14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
+[15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
+[16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
+[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# HTTP Bulk Data Collection
+# Annex A - HTTP Bulk Data Collection
 
-*Note - This section is a translation from the HTTP Bulk Data Collection mechanism specified in Annex A of [Broadband Forum TR-157](https://www.broadband-forum.org/technical/download/TR-157.pdf), which was carried over into Amendment 6 of [TR-069][2]. The text here has been altered to fit with USP concepts.*
+*Note - This Annex is a translation from the HTTP Bulk Data Collection mechanism specified in Annex A of [Broadband Forum TR-157](https://www.broadband-forum.org/technical/download/TR-157.pdf), which was carried over into Amendment 6 of [TR-069][2]. The text here has been altered to fit with USP concepts.*
 
 This section discusses the Theory of Operation for the collection and transfer of bulk data using USP, HTTP and the BulkData object defined in [Device:2][1], to a Bulk Data Collector utilizing:
 
