@@ -20,7 +20,7 @@
 [19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# Software Module Management
+# Annex B - Software Module Management
 
 This section discusses the Theory of Operation for Software Module Management using USP and the Software Module object defined in the Root data model.
 
