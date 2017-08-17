@@ -68,12 +68,12 @@ For messages that require no response, it is up to the target endpoint implement
 Successful request/response: In this successful message sequence, a Controller sends an Agent a request. The message header and body are parsed, the message is understood, and the Agent sends a response with the relevant information in the body.
 
 <img src="successful_response.png" />
-Figure 1 - A successful request/response sequence
+Figure MSG.1 - A successful request/response sequence
 
 Failed request/response: In this failed message sequence, a Controller sends an Agent a request. The message header and body are parsed, but the Agent throws an error. The error arguments are generated and sent in an error message.
 
 <img src="error_response.png" />
-Figure 2 - A failed request/response sequence
+Figure MSG.2 - A failed request/response sequence
 
 ## Message Structure
 
@@ -2015,7 +2015,7 @@ A synchronous operation is intended to complete immediately following its proces
 
 <img src="synchronous_operation.png" />
 
-Figure 1 - Operate Message Flow for Synchronous Operations
+Figure OPR.1 - Operate Message Flow for Synchronous Operations
 
 ### Asynchronous Operations
 
@@ -2031,7 +2031,7 @@ If any Controller wants a notification that an operation has completed, it creat
 
 <img src="asynchronous_operation.png" />
 
-Figure 2 - Operate Message Flow for Asynchronous Operations
+Figure OPR.2 - Operate Message Flow for Asynchronous Operations
 
 #### Persistance of Asynchronous Operations
 
