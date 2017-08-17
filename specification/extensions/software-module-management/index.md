@@ -168,7 +168,7 @@ As discussed above, an EE is a software platform that supports the dynamic loadi
 
 <img src='smm_concepts.png'>
 
-Figure 3 – Possible Multi-Execution Environment Implementation
+Figure SMM.3 – Possible Multi-Execution Environment Implementation
 
 In this example, the device exposes its Linux Operating System as an EE and has two different OSGi frameworks layered on top of it, all of which are modeled as separate ExecEnv object instances. In order to indicate the layering to a Controller, the two OSGi framework objects (`.ExecEnv.2` and `.ExecEnv.3`) would populate the `Exec.Env.{i}.Parent` parameter with a path reference to the Linux object (`.ExecEnv.1`).  The Linux EE object would populate that parameter with an empty string to indicate that it is not layered on top of any managed EE.
 
