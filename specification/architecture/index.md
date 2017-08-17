@@ -46,7 +46,7 @@ A USP endpoint can act as Agent or a Controller. Controllers only messages to Ag
 
 <img src="usp_architecture.png">
 
-Figure 1 - USP Agent and Controller Architecture
+Figure ARC.1 - USP Agent and Controller Architecture
 
 ### Agents
 

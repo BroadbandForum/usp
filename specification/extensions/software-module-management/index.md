@@ -55,7 +55,7 @@ Below is the state machine diagram[^1] for the lifecycle of DUs.
 
 <img src='du_state.png'>
 
-Figure 1 – Deployment Unit State Diagram
+Figure SMM.1 – Deployment Unit State Diagram
 
 This state machine shows 5 individual states (3 of which are transitory) and 3 explicitly triggered state transitions.
 
@@ -116,7 +116,7 @@ Below is the state machine diagram[^2] for the lifecycle of EUs.
 
 <img src='eu_state.png'>
 
-Figure 2 – Execution Unit State Diagram
+Figure SMM.2 – Execution Unit State Diagram
 
 This state machine shows 4 states (2 of them transitory) and two explicitly triggered state transitions.
 

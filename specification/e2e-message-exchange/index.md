@@ -236,7 +236,7 @@ As USP Records can be received out of order or not at all, the receiving USP End
 
 <img src='processing-received-records.png' />
 
-Figure 1 – Processing of received USP Records
+Figure E2E.1 – Processing of received USP Records
 
 **R-E2E.23** – Incoming USP Records MUST be processed per the following rules:
 
@@ -291,7 +291,7 @@ In many complex deployments, a USP Message will be transferred across Message Tr
 
 <img src='example-e2e-deployment-scenario.png'>
 
-Figure 2 – Example E2E Deployment Scenario
+Figure E2E.2 – Example E2E Deployment Scenario
 
 Since USP can use different types of MTPs, some MTPs place a constraint on the size of the USP Message that it can transport. For example, in the above figure, if the ACS Controller would want to exchange USP Messages with the Smart Home Gateway, the STOMP and CoAP protocols would be used. Since many STOMP server and other broker MTP implementations have a constraint for the size of message that it can transfer, the Controller and Agent implements a mechanism to segment or break up the USP Message into small enough "chunks" that will permit transmission of the USP Message through the STOMP server and then be reassembled at the receiving endpoint. When this Segmentation and Reassembly function is performed by Controller and Agent, it removes the possibly that the message may be blocked (and typically) dropped by the intermediate transport servers. The Segmentation and Reassembly is described in the figure below the where the ACS Controller would segment the USP Message within the USP Record into segments of 64K bytes because in this example, the MTP's STOMP MTP endpoint can handle messages up to 64K bytes. The Smart Home Gateway would then reassemble the segments into the original USP Message.
 
@@ -299,7 +299,7 @@ While the `sequence_id` element identifies the USP Record sequence identifier wi
 
 <img src='segmentation-and-reassembly.png'>
 
-Figure 3 – E2E Segmentation and Reassembly
+Figure E2E.3 – E2E Segmentation and Reassembly
 
 #### SAR function algorithm
 
@@ -349,7 +349,7 @@ When TLS is used as a payload protection mechanism for USP Message, TLS requires
 
 <img src="tls-session-handshake.png">
 
-Figure 4 – TLS session handshake
+Figure E2E.4 – TLS session handshake
 
 If the TLS session cannot be established for any reason, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing a defined in section Failure Handling of Received USP Records.
 

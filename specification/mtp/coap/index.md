@@ -26,7 +26,7 @@ The Constrained Application Protocol (CoAP) MTP transfers USP Messages between U
 
 <img src="usp-request-response-over-coap.png"/>
 
-Figure 1 - USP Request/Response over the CoAP MTP
+Figure COAP.1 - USP Request/Response over the CoAP MTP
 
 USP Requests are encapsulated within a CoAP request message. When a USP Endpoint receives the CoAP request message the USP Endpoint immediately sends a CoAP response message (with no USP Message) to indicate receipt of the message. A USP Response is encapsulated in a new CoAP request message. When a USP Endpoint receives a USP Response, it sends a CoAP response message that indicates receipt of the message. Therefore, all Endpoints supporting CoAP will implement both CoAP client and server.
 
