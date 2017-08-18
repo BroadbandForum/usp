@@ -412,6 +412,10 @@ An Endpoint that was the intended receiver of a message.
 
 The Unique Key of a Multi-Instance Object is a set of Parameters that uniquely identify the instance of an Object in the Agent’s Instantiated Data Model and can be used as an Instance Identifier.
 
+**USP Record Message**
+
+The USP Record message is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for secure and reliable delivery of fragmented USP Messages.
+
 **Wildcard**
 
 A Wildcard is used in a Search Path to address all Object Instances of a Multi-Instance Object.
@@ -421,26 +425,32 @@ A Wildcard is used in a Search Path to address all Object Instances of a Multi-I
 This specification uses the following abbreviations:
 
 | abbreviation | term |
-| -----------: | :-------------- |
+| :----------- | :-------------- |
+|ABNF | Augmented Backus-Naur Form |
 |CoAP |	Constrained Application Protocol |
 |USP	| User Services Platform |
 |CWMP	| CPE WAN Management Protocol|
 |DNS	| Domain Name Service |
 |DNS-SD	| Domain Name Service - Service Definition |
 |DT	| Device Type Definition |
+|E2E | End to End (Message Exchange) |
+|HMAC | Hash Message Authentication Code |
 |HTTP	| Hypertext Transport Protocol |
 |mDNS	| Multicast Domain Name Service |
 |IPv4/v6 |	Internet Protocol (version 4 or version 6) |
-|JID | Jabber Identifier |
 |LAN	| Local Area Network |
+|MAC | Message Authentication Code |
 |MTP	| Message Transfer Protocol |
-|STOMP | Simple Text Oriented Message Protocol |
+|OUI | Organizationally Unique Identifier |
+|PSS | Probabilistic Signature Scheme |
+|SAR | Segmentation And Reassembly |
+|SMM | Software Module Management |
 |TLS | Tranport Layer Security |
 |TR	| Technical Report |
 |URI | Uniform Resource Identifier |
 |URL | Uniform Resource Locator |
+|UUID | Universally Unique Identifier |
 |WAN |	Wide Area Network|
-|XMPP | eXtensible Messaging and Presence Protocol |
 
 # Specification Impact
 
