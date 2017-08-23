@@ -1,3 +1,5 @@
+# User Services Platform Data Models
+
 Several data models are defined for use with the User Services Platform. These data models contain the Objects, Parameters, Commands, and Events that describe the many different functions and capabilities available to devices and services exposed by a USP Agent.  
 
 USP data models are divided into two types: *Root* and *Service*. The root data model, "Device", is used to describe the major functions of a network aware device, including interfaces, Controllers, security, software/firmware, diagnostics, hosts and proxy devices, and the basic information necessary to USP.
