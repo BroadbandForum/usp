@@ -143,7 +143,7 @@ A Role is expressed in the data model through use of the `ControllerTrust.Role.{
 
 The permissions of a Role for the specified `Target` entries are described by `ParameterPermissions`, `ObjectPermissions`, `InstantiatedObjectPermissions`, and `CommandEventPermissions` parameters. Each of these is expressed as a string of 4 characters where each character represents a permission ("`r`" for Read, "`w`" for Write, "`x`" for Execute", and "`n`" for Notify). The string is always in the same `Order` value (`rwxn`) and the lack of a permission is signified by a "`-`" character (e.g., `r--n`). How these permissions are applied to parameters, objects, and various Messages is described in the data model description of these parameters.
 
-An Agent that wants to allow Controllers to define and modify Roles will implement the `ControllerTrust.Role.{i}.` object with all of the parameters listed in the data model. In order for a Controller to define or modify Role entries, it will need to be assigned a Role that gives it the necessary permission. Care should be taken to avoid defining this Role’s permissions such that an Agent with this Role can modify the Role such that it can no longer make future modifications to the `ControllerTrust.Role.{i}.` object.
+An Agent that wants to allow Controllers to define and modify Roles will implement the `ControllerTrust.Role.{i}.` object with all of the parameters listed in the data model. In order for a Controller to define or modify Role entries, it will need to be assigned a Role that gives it the necessary permission. Care should be taken to avoid defining this Role’s permissions such that an Controller with this Role can modify the Role such that it can no longer make future modifications to the `ControllerTrust.Role.{i}.` object.
 
 A simple Agent that only wants to inform Controllers of pre-defined Roles (with no ability to modify or define additional Roles) can implement the `ControllerTrust` object with read-only data model definition for all entries and parameters. A simple Agent could even implement the object with read-only data model definition and just the `Alias` and `Role` parameters, with a single entry per Role; this could be sufficient in a case where the Role names convey enough information (e.g., there are only two pre-defined Roles named `“Untrusted”` and `“FullAccess”`).
 
@@ -172,7 +172,7 @@ For example,
   i=3, Role = “B”, Targets = “Device.LocalAgent.”, Order = 1, ParameterPermissions = “r---“
   i=4, Role = “B”, Targets = “Device.LocalAgent.Controller.”, Order = 101, ParameterPermissions = “rw-n“
 ```
- and `Device.LocalAgent.Controller.1.Role` = “A, B”
+ and `Device.LocalAgent.Controller.1.AssignedRole` = “A, B”
 
  When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for A, both i=1 and i=2 apply to the table, and i=2 takes precedence over i=1 (101 > 1). For B, both i=3 and i=4 apply to the table and i=4 takes precedence over i=3 (101 > 1). The union of i=2 and i=4 is “r-xn” + “rw-n” = “rwxn”.
 
@@ -180,7 +180,7 @@ It is strongly recommended that Agents implement the Controller object with the 
 
 #### Role Associated with a Credential or Challenge
 
-The `ControllerTrust.Credential.{i}.AssignedRole` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
+The `ControllerTrust.Credential.{i}.InheritedRole` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
 
 The `ControllerTrust.Challenge.{i}.Role` parameter is a default Role that is assigned to Controllers that send a successful `ChallengeResponse()` command. For more information on use of challenges for assigning Controller Roles, see the sections below.
 
