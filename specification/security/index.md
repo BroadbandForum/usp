@@ -89,7 +89,7 @@ Self-signed certificates require a “trust on first use” policy when using th
 
 **R-SEC.11** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectaltName` with identical `authority-scheme` and `authority-id`.
 
-**R-SEC-12** - If the Agent does not have a CA-issued certificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using [self-signed certificates](#self-signed-certificates).
+**R-SEC.12** - If the Agent does not have a CA-issued certificate, it MUST support use of a self-signed certificate. See requirements for Endpoints using [self-signed certificates](#self-signed-certificates).
 
 ## Challenge Strings and Images
 
