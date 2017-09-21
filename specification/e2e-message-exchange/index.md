@@ -26,7 +26,7 @@ USP Messages are exchanged between Controllers and Agents. In some deployment sc
 
 ## Message Exchange Capabilities
 
-The E2E message exchange provides capab for:
+The E2E message exchange provides capabilities for:
   * a secure message exchange (confidentiality, integrity and identity authentication) through exchange of USP Messages that are secured by the originating and receiving USP Endpoints.
   * Reliable transmission of secure protected or unprotected USP Messages.
   * Segmentation and reassembly of secure or plaintext USP Messages that would be too large to transfer through the intermediate MTP Proxies.

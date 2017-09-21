@@ -22,7 +22,9 @@
 
 # Discovery and Advertisement
 
-Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship. Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints. Agents may also be pre-configured with some or all information about certain Controllers.
+Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
+
+Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints.
 
 ## Learning Controller and Agent Information
 
@@ -69,7 +71,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 |Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in [Device:2][1] |
 | ----------: | :---------: | :----------: | :-------- |
-| URL of the Controller | `25` | `25` | `Device.LocalAgent.Controller.{i}.MTP.{i}.*.URL` |
+| URL of the Controller | `25` | `25` | `Dependent on MTP URL formation` |
 | Provisioning code | `26` | `26` |	`Device.LocalAgent.Controller.{i}.ProvisioningCode` |
 | USP retry mini¬mum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
 | USP retry interval multiplier | `28` | `28` |	`Device.Controller.{i}.USPRetryIntervalMultiplier` |

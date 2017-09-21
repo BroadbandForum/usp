@@ -133,7 +133,7 @@ The "`proto`" and "`doc`" values are intended only for prototyping and documenta
 ```
 The above expression uses the Augmented Backus-Naur Form (ABNF) notation of [RFC2234](https://www.ietf.org/rfc/rfc2234.txt), including the following core ABNF syntax rules defined by that specification: ALPHA (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken from [RFC3986](https://www.ietf.org/rfc/rfc3986.txt) as the set of unreserved characters and percent-encoded characters that are acceptable for all components of a URI. This set is also allowed for use in URNs [RFC2141](https://www.ietf.org/rfc/rfc2141.txt), and all MTP headers.
 
-**R-ARC.6** - An instance-id value MUST be no more than 128 characters in length.
+**R-ARC.6** - An instance-id value MUST be no more than 50 characters in length.
 
 Shorter values are preferred, as end users could be exposed to Endpoint IDs. Long values tend to create a poor user experience when users are exposed to them.
 

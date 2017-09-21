@@ -22,6 +22,8 @@
 
 # Messages
 
+USP contains messages to create, read, update, and delete Objects, perform Object-defined operations, and allow agents to notify controllers of events. This is often referred to as CRUD with the addition of O (operate) and N (notify), or CRUD-ON.
+
 *Note: This version of the specification defines its messages in Protocol Buffers v3 (see [encoding](/specification/encoding/)). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
 These sections describe the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual elements of the schema are outlined below:
@@ -34,8 +36,6 @@ These sections describe the types of USP messages and the normative requirements
 * [GetSupportedDM](#getsupporteddm)
 * [Notify](#notify)
 * [Operate](#operate)
-
-USP contains messages to create, read, update, and delete Objects, perform Object-defined operations, and allow agents to notify controllers of events. This is often referred to as CRUD with the addition of O (operate) and N (notify), or CRUD-ON, and assist with the following functions:
 
 ## Requests, Responses and Errors
 
@@ -81,7 +81,7 @@ A Message consists of a header and body. When using [protocol buffers][12], the 
 
 **R-MSG.4** - A Message MUST conform to the schemas defined in [usp-msg.proto](/specification/usp-msg.proto).
 
-*Note: When using protocol buffers for message encoding, default values (when elements are missing) are described in [Protcol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
+*Note: When using protocol buffers for message encoding, default values (when elements are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 
 Every USP message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
@@ -125,19 +125,21 @@ This element contains an enumeration indicating the type of message contained in
 
     ERROR (0)
     GET (1)
-    GET_RESP (2)
-    NOTIFY (3)
-    SET (4)
-    SET_RESP (5)
-    OPERATE (6)
-    OPERATE_RESP (7)
-    ADD (8)
-    ADD_RESP (9)
-    DELETE (10)
-    DELETE_RESP (11)
-    GET_OBJECTS (12)
-    GET_OBJECTS_RESP (13)
-    NOTIFY_RESP (14)
+    GET_RESP = (2)
+    NOTIFY = (3)
+    SET = (4)
+    SET_RESP = (5)
+    OPERATE = (6)
+    OPERATE_RESP = (7)
+    ADD = (8)
+    ADD_RESP = (9)
+    DELETE = (10)
+    DELETE_RESP = (11)
+    GET_SUPPORTED_DM = (12)
+    GET_SUPPORTED_DM_RESP = (13)
+    GET_INSTANCES = (14)
+    GET_INSTANCES_RESP = (15)
+    NOTIFY_RESP = (16)
 
 **R-MSG.9** - The `msg_type` element MUST be present in every Header.
 
@@ -171,7 +173,7 @@ The value of this header argument is the Endpoint Identifier to which responses 
 
 *Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response or Error.*
 
-**R-MSG.16** - The Source Endpoint MUST ignore a Response or Error message from a Target Endpoint when the Source Endpoint does not expect the Response or Error.
+**R-MSG.16** - The source Endpoint MUST ignore a Response or Error message from a target Endpoint when the source Endpoint does not expect the Response or Error.
 
 *Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response.*
 
@@ -287,11 +289,11 @@ For example, a Controller wants to create a new Wifi network on an Agent. It cou
     	obj_path: Device.Wifi.SSID.
     	param_setting_list {
 
-    		paramparam: LowerLayers
+    		param: LowerLayers
     		value: Device.Wifi.Radio.1.
     		required: True
 
-    		paramparam: SSID
+    		param: SSID
     		value: NewSSIDName
     		required: True
     		}
@@ -348,7 +350,7 @@ The logic can be described as follows:
 | `True`/`False`	| No | - | Yes | Response | `oper_success` | Yes |
 | `True`/`False` | Yes | No | No | Response | `oper_success` | No |
 | `True`/`False` | Yes | No | Yes | Response | oper_success | Yes |
-| `True` | Yes | Yes | - | Response | `oper_failure` | No |
+| `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `False` | Yes | Yes | - | Error | `oper_failure` | Yes |
 
 ### The Add Message
@@ -367,8 +369,8 @@ header {
   msg_id: "52867"
   msg_type: ADD
   proto_version: "1.0"
-  to_id: "urn:bbf:usp:id:oui:112233:agent"
-  from_id: "urn:bbf:usp:id:oui:112233:controller"
+  to_id: "oui:112233:agent"
+  from_id: "oui:112233:controller"
 }
 body {
   request {
@@ -379,8 +381,7 @@ body {
         param_setting_list {
           param: "Enable"
           value: "True"
-        }
-        param_setting_list {
+
           param: "EndpointID"
           value: "controller-temp"
         }
@@ -394,8 +395,8 @@ header {
   msg_id: "55362"
   msg_type: ADD_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “id:oui:112233:controller”
+  from_id: “id:oui:112233:agent”
 }
 body {
   response {
@@ -487,7 +488,7 @@ This message is used when the object given in `requested_path` failed to be crea
 
 `OperationSuccess oper_success`
 
-####### OperationFailure Elements
+###### OperationFailure Elements
 
 `fixed32 err_code`
 
@@ -497,7 +498,7 @@ This element contains a [numeric code](#error-codes) indicating the type of erro
 
 This element contains additional information about the reason behind the error.
 
-####### Operation Success Elements
+###### Operation Success Elements
 
 `string instantiated_path`
 
@@ -517,7 +518,7 @@ This element contains a map of the local name and value for each supported param
 
 **R-ADD.6** - If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
 
-######## ParameterError Elements
+###### ParameterError Elements
 
 `string param`
 
@@ -551,8 +552,8 @@ header {
   msg_id: "19220"
   msg_type: SET
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -574,8 +575,8 @@ header {
   msg_id: "19220"
   msg_type: SET_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -669,7 +670,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `OperationSuccess oper_success`
 
-####### OperationFailure Elements
+###### OperationFailure Elements
 
 `fixed32 err_code`
 
@@ -683,7 +684,7 @@ This element contains additional information about the reason behind the error.
 
 This element contains a repeated set of messages of type `UpdatedInstanceFailure`.
 
-######## UpdatedInstanceFailure Elements
+###### UpdatedInstanceFailure Elements
 
 `string affected_path`
 
@@ -693,19 +694,19 @@ This element returns the Object Path or Object Instance Path of the Object that 
 
 This element contains a repeated set of `ParameterError` messages.
 
-######## ParameterError Elements
+###### ParameterError Elements
 
 `string param`
 
 This element contains the Parameter Path (relative to `affected_path`) to the parameter that failed to update.
 
-####### OperationSuccess Elements
+###### OperationSuccess Elements
 
 `repeated UpdatedInstanceResult updated_inst_result_list`
 
 This element contains a repeated set of `UpdatedInstanceResult` messages.
 
-######## UpdatedInstanceResult Elements
+###### UpdatedInstanceResult Elements
 
 `string affected_path`
 
@@ -725,7 +726,7 @@ This element returns a set of key/value pairs containing a path (relative to the
 
 *Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the `updated_param_map`.*
 
-######## ParameterError Elements
+###### ParameterError Elements
 
 `string param`
 
@@ -759,8 +760,8 @@ header {
   msg_id: "24799"
   msg_type: DELETE
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -775,8 +776,8 @@ header {
   msg_id: "24799"
   msg_type: DELETE_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -837,7 +838,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 `OperationSuccess oper_success`
 
-####### OperationFailure Elements
+###### OperationFailure Elements
 
 *Note: Since the `OperationSuccess` message of the Delete Response contains an `unaffected_path_err_list`, the `OperationStatus` will only contain an `OperationFailure` message if the `requested_path` was did not match any existing Objects (error `7016`) or was syntactically incorrect (error `7008`).*
 
@@ -849,7 +850,7 @@ This element contains a [numeric code](#error-codes) indicating the type of erro
 
 This element contains additional information about the reason behind the error.
 
-####### OperationSuccess Elements
+###### OperationSuccess Elements
 
 `repeated string affected_path_list`
 
@@ -867,7 +868,7 @@ This element contains a repeated set of messages of type `UnaffectedPathError`.
 
 **R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
 
-######## UnaffectedPathError Elements
+###### UnaffectedPathError Elements
 
 `string unaffected_path`
 
@@ -958,6 +959,7 @@ In another example, the Controller only wants to read the current status of the 
 
 In response to this request the Agent returns only the Status parameter and its value.
 
+```
     GetResp {
       req_path_result_list {
         requested_path: Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status
@@ -972,6 +974,7 @@ In response to this request the Agent returns only the Status parameter and its 
         }
       }
     }
+```
 
 Lastly, using wildcards or another Search Path, the requested path may resolve to more than one resolved path. For example for a Request sent to an Agent with two `Wifi.SSID` instances:
 
@@ -1017,8 +1020,8 @@ header {
   msg_id: "5721"
   msg_type: GET
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -1034,8 +1037,8 @@ header {
   msg_id: "5721"
   msg_type: GET_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -1044,58 +1047,48 @@ body {
         requested_path: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
         resolved_path_result_list {
           resolved_path: "Device.LocalAgent.MTP.5156."
-          result_param_map {
+
             key: "Alias"
             value: "CoAP-MTP1"
-          }
-          result_param_map {
+
             key: "Enable"
             value: "False"
-          }
-          result_param_map {
+
             key: "EnableMDNS"
             value: "True"
-          }
-          result_param_map {
+
             key: "Protocol"
             value: "CoAP"
-          }
-          result_param_map {
+
             key: "Status"
             value: "Inactive"
           }
-        }
+
         resolved_path_result_list {
           resolved_path: "Device.LocalAgent.MTP.5156.XMPP."
           result_param_map {
             key: "Destination"
-          }
-          result_param_map {
+
             key: "Reference"
+
           }
         }
         resolved_path_result_list {
           resolved_path: "Device.LocalAgent.MTP.5156.HTTP."
           result_param_map {
             key: "CheckPeerID"
-          }
-          result_param_map {
+
             key: "EnableEncryption"
-          }
-          result_param_map {
+
             key: "Host"
-          }
-          result_param_map {
+
             key: "IsEncrypted"
             value: "False"
-          }
-          result_param_map {
+
             key: "Path"
-          }
-          result_param_map {
+
             key: "Port"
-          }
-          result_param_map {
+
             key: "ValidatePeerCertificate"
           }
         }
@@ -1103,24 +1096,18 @@ body {
           resolved_path: "Device.LocalAgent.MTP.5156.WS."
           result_param_map {
             key: "CheckPeerID"
-          }
-          result_param_map {
+
             key: "EnableEncryption"
-          }
-          result_param_map {
+
             key: "Host"
-          }
-          result_param_map {
+
             key: "IsEncrypted"
             value: "False"
-          }
-          result_param_map {
+
             key: "Path"
-          }
-          result_param_map {
+
             key: "Port"
-          }
-          result_param_map {
+
             key: "ValidatePeerCertificate"
           }
         }
@@ -1129,28 +1116,22 @@ body {
           result_param_map {
             key: "CheckPeerID"
             value: "False"
-          }
-          result_param_map {
+
             key: "EnableEncryption"
             value: "True"
-          }
-          result_param_map {
+
             key: "Host"
             value: "127.0.0.1"
-          }
-          result_param_map {
+
             key: "IsEncrypted"
             value: "False"
-          }
-          result_param_map {
+
             key: "Path"
             value: "/e/agent"
-          }
-          result_param_map {
+
             key: "Port"
             value: "5684"
-          }
-          result_param_map {
+
             key: "ValidatePeerCertificate"
             value: "True"
           }
@@ -1159,8 +1140,7 @@ body {
           resolved_path: "Device.LocalAgent.MTP.5156.STOMP."
           result_param_map {
             key: "Destination"
-          }
-          result_param_map {
+
             key: "Reference"
           }
         }
@@ -1236,9 +1216,11 @@ Appropriate error codes for the Get message include `7000-7006`, `7008`, `7010`,
 
 ### The GetInstances Message
 
-The GetInstances message takes a Path Name to an Object and requests that the Agent return the Instances of that Object that exist and *possibly* any Multi-Instance sub-Objects that exist as well as their Instances. This is used for getting a quick map of the Mutli-Instance Objects (i.e., tables) the Agent currently represents, and their unique keys, so that they can be addressed and manipulated later.
+<a id="getinstances" />
 
-GetInstances takes one or more Path Names to Multi-Instance Objects in a Request to an Agent. In addition, both GetInstances and GetSupportedDM (below) make use of a flag called `next_level`, which determines whether or not the Response should include all of the sub-Objects that are children of the Object specified in `obj_path`. A value of `true` means that the Response should return data *only* for the Object specified. A value of false means that all sub-Objects should be resolved and returned.
+The GetInstances message takes a Path Name to an Object and requests that the Agent return the Instances of that Object that exist and *possibly* any Multi-Instance sub-Objects that exist as well as their Instances. This is used for getting a quick map of the Multi-Instance Objects (i.e., tables) the Agent currently represents, and their unique keys, so that they can be addressed and manipulated later.
+
+GetInstances takes one or more Path Names to Multi-Instance Objects in a Request to an Agent. In addition, both GetInstances and GetSupportedDM (below) make use of a flag called `first_level_only`, which determines whether or not the Response should include all of the sub-Objects that are children of the Object specified in `obj_path`. A value of `true` means that the Response should return data *only* for the Object specified. A value of false means that all sub-Objects should be resolved and returned.
 
 #### GetInstances Examples
 
@@ -1247,7 +1229,7 @@ For example, if a Controller wanted to know *only* the current instances of Wifi
 ```
     GetInstances {
       obj_path_list : Device.Wifi.SSID.
-      bool next_level : true
+      bool first_level_only : true
     }
 ```
 
@@ -1300,7 +1282,7 @@ In another example, the Controller wants to get all of  the Instances of the `De
 ```
     GetInstances {
       obj_path_list : Device.Wifi.AccessPoint.
-      bool next_level : false
+      bool first_level_only : false
     }
 ```
 
@@ -1367,7 +1349,7 @@ Or more, if more Object Instances exist.
 
 This element contains a repeated set of Path Names or Search Paths to Multi-Instance Objects in the Agent's Instantiated Data Model.
 
-`bool next_level`
+`bool first_level_only`
 
 This element, if `true`, indicates that the Agent should return only those instances in the Object(s) matched by the Path Name or Search Path in `obj_path`, and not return any child objects.
 
@@ -1399,7 +1381,7 @@ This element contains a message of type `CurrInstance` for each Instance of *all
 
 `string instantiated_obj_path`
 
-This element contains the Instance Number of the Object Instance.
+This element contains the Instance Path Name of the Object Instance.
 
 `map<string, string> unique_key_map`
 
@@ -1412,6 +1394,8 @@ This element contains a map of key/value pairs for all supported parameters that
 Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018` and `7800-7999`.
 
 ### The GetSupportedDM Message
+
+<a id="getsupporteddm" />
 
 GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
 
@@ -1429,12 +1413,12 @@ For example, the Controller wishes to learn the Wifi capabilities the Agent repr
 
 ```
     GetSupportedDM {
+      first_level_only : false
+      return_commands : true
+      return_events : true
+      return_params : true
       discover_obj_list {
         obj_path : Device.Wifi.
-        next_level : false
-        return_commands : true
-        return_events : true
-        return_params : true
       }
     }
 ```
@@ -1450,20 +1434,15 @@ The Agent's Response would be:
         data_model_inst_uri : urn:broadband-forum-org:tr-181-2-12-0
         supported_obj_list {
           supported_obj_path : Device.Wifi.
-          access : READ_ONLY (0)
           is_multi_instance : false
           supported_param_list {
-            param_name : RadioNumberOfEntries
-            access : READ_ONLY (0)
+            param_name : RadioNumberOfEntries            
 
-            param_name : SSIDNumberOfEntries
-            access : READ_ONLY (0)
+            param_name : SSIDNumberOfEntries          
 
-            param_name : AccessPointNumberOfEntries
-            access : READ_ONLY (0)
+            param_name : AccessPointNumberOfEntries        
 
-            param_name : EndPointNumberOfEntries
-            access : READ_ONLY (0)
+            param_name : EndPointNumberOfEntries            
           }
           supported_command_list {
             command_name : SomeCommand()
@@ -1488,31 +1467,26 @@ The Agent's Response would be:
           is_multi_instance : true
           supported_param_list {
             param_name : Enable
-            access : READ_WRITE (1)
+            access : PARAM_READ_WRITE (1)
 
-            param_name: Status
-            access : READ_ONLY (0)
+            param_name: Status            
 
             param_name : Alias
-            access : READ_WRITE (1)
+            access : PARAM_READ_WRITE (1)
 
             param_name : Name
-            access : READ_ONLY (0)
 
-            param_name: LastChange
-            access : READ_ONLY (0)
+            param_name: LastChange            
 
             param_name : LowerLayers
-            access : READ_WRITE (1)
+            access : PARAM_READ_WRITE (1)
 
-            param_name : BSSID
-            access : READ_ONLY (0)
+            param_name : BSSID            
 
-            param_name : MACAddress                    
-            access : READ_ONLY (0)
+            param_name : MACAddress                                
 
             param_name : SSID
-            access : READ_WRITE (1)
+            access : PARAM_READ_WRITE (1)
           }
           supported_command_list {
             command_name : SomeCommand()
@@ -1540,6 +1514,22 @@ The Agent's Response would be:
 
 #### GetSupportedDM Request Elements
 
+`bool first_level_only`
+
+This element, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects.
+
+`bool return_commands`
+
+This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_command_list` element containing Commands supported by the reported Object(s).
+
+`bool return_events`
+
+This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_event_list` element containing Events supported by the reported Object(s).
+
+`bool return_params`
+
+This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_param_list` element containing Parameters supported by the reported Object(s).
+
 `repeated DiscoverObject discover_obj_list`
 
 This element contains a repeated set of messages of type `DiscoverObject`.
@@ -1549,22 +1539,6 @@ This element contains a repeated set of messages of type `DiscoverObject`.
 `string obj_path`
 
 This element contains a Path Name to an Object (not an Object Instance) in the Agent's Supported Data Model.
-
-`bool next_level`
-
-This element, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects.
-
-`bool return_commands`
-
-This element, if `true`, indicates that the Agent should include a supported_command_list element containing Commands supported by the reported Object(s).
-
-`bool return_events`
-
-This element, if `true`, indicates that the Agent should include a supported_event_list element containing Events supported by the reported Object(s).
-
-`bool return_params`
-
-This element, if `true`, indicates that the Agent should include a supported_param_list element containing Parameters supported by the reported Object(s).
 
 #### GetSupportedDMResp Elements
 
@@ -1617,17 +1591,17 @@ This element, if `true`, indicates that the reported Object is a Multi-Instance 
 
 `repeated SupportedParamResult supported_param_list`
 
-The element contains a message of type `SupportedParamResult` for each Parameter supported by the reported Object.
+The element contains a message of type `SupportedParamResult` for each Parameter supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
 `repeated SupportedCommandResult supported_command_list`
 
-The element contains a message of type `SupportedCommandResult` for each Command supported by the reported Object.
+The element contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
 `repeated SupportedEventResult supported_event_list`
 
-The element contains a message of type `SupportedEventResult` for each Event supported by the reported Object.
+The element contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
-####### SupportedParamResult Elements
+###### SupportedParamResult Elements
 
 `string param_name`
 
@@ -1641,7 +1615,7 @@ The element contains an enumeration of type ParamAccessType specifying the acces
     PARAM_READ_WRITE (1)
     PARAM_WRITE_ONLY (2)
 
-####### SupportedCommandResult Elements
+###### SupportedCommandResult Elements
 
 `string command_name`
 
@@ -1659,7 +1633,7 @@ This element contains a repeated set of local names for the output arguments of 
 
 **R-GSP.2** - If any output arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.
 
-####### SupportedEventResult
+###### SupportedEventResult
 
 `string event_name`
 
@@ -1677,17 +1651,17 @@ Appropriate error codes for the GetSupportedDM message include `7000-7006`, `700
 
 *Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
+<a id="notify" />
+
 ## Notifications and Subscription Mechanism
 
 A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify message](#notify) to the Controller.
 
 ### The Notify Message
 
-<a id="notify" />
-
 #### Using Subscription Objects
 
-Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.Subscription.{i}.` in [Device:2][1].
+Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.LocalAgent.Subscription.{i}.` in [Device:2][1].
 
 **R-NOT.0** - The Agent and Controller MUST follow the normative requirements defined in the `Device.Subscription.{i}.` Object specified in [Device:2][1].
 
@@ -1779,8 +1753,8 @@ header {
   msg_id: "33936"
   msg_type: NOTIFY
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   request {
@@ -1800,8 +1774,8 @@ header {
   msg_id: "33936"
   msg_type: NOTIFY_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   response {
@@ -1821,8 +1795,8 @@ header {
   msg_id: "26732"
   msg_type: NOTIFY
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   request {
@@ -1835,15 +1809,12 @@ body {
         param_map {
           key: "Cause"
           value: "LocalReboot"
-        }
-        param_map {
+
           key: "CommandKey"
-        }
-        param_map {
+
           key: "Parameter.1.Path"
           value: "Device.LocalAgent.Controller.1.Enable"
-        }
-        param_map {
+
           key: "Parameter.1.Value"
           value: "True"
         }
@@ -1857,8 +1828,8 @@ header {
   msg_id: "26732"
   msg_type: NOTIFY_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   response {
@@ -2005,6 +1976,8 @@ This element contains the locally unique opaque identifier that was set by the C
 
 Appropriate error codes for the Notify message include `7000-7006`, and `7800-7999`.
 
+<a id="operate">
+
 ## Defined Operations Mechanism
 
 Additional methods (operations) are and can be defined in the USP data model. Operations are generally defined on an Object, using the "command" attribute, as defined in [TR-106][3]. The mechanism is controlled using the [Operate message](#operate) in conjunction with the Multi-Instance Request Object.
@@ -2069,8 +2042,8 @@ header {
   msg_id: "42314"
   msg_type: OPERATE
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:agent”
-  from_id: “urn:bbf:usp:id:oui:112233:controller”
+  to_id: “oui:112233:agent”
+  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -2088,8 +2061,8 @@ header {
   msg_id: "42314"
   msg_type: OPERATE_RESP
   proto_version: "1.0"
-  to_id: “urn:bbf:usp:id:oui:112233:controller”
-  from_id: “urn:bbf:usp:id:oui:112233:agent”
+  to_id: “oui:112233:controller”
+  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -2103,8 +2076,6 @@ body {
 ```
 
 ### The Operate Message
-
-<a id="operate">
 
 #### Operate Request Elements
 `string command`

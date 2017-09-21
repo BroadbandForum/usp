@@ -82,7 +82,7 @@ Self-signed certificates require a “trust on first use” policy when using th
 
 ## Agent certificates
 
-**R-SEC.10** - Support for Controller authentication of Agents using certificates signed by an appropriate CA chain is OPTIONAL for both Agents and Controllers. When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
+**R-SEC.10** - When certificates are used to authenticate the Agent to a Controller, the subjectaltName MUST contain either:
 
 * the URN form of the Agent Endpoint ID with a type uniformResourceIdentifier attribute.
 * the URN form of an Endpoint ID with a type uniformResourceIdentifier attribute, and with wildcards such that all Agent Endpoint IDs covered by the certificate fall within the wildcarded Endpoint ID.
