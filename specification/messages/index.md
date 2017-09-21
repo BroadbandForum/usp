@@ -1663,7 +1663,7 @@ A Controller can use the Subscription mechanism to subscribe to certain events t
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.LocalAgent.Subscription.{i}.` in [Device:2][1].
 
-**R-NOT.0** - The Agent and Controller MUST follow the normative requirements defined in the `Device.Subscription.{i}.` Object specified in [Device:2][1].
+**R-NOT.0** - The Agent and Controller MUST follow the normative requirements defined in the `Device.LocalAgent.Subscription.{i}.` Object specified in [Device:2][1].
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
@@ -1677,9 +1677,9 @@ In another example, a Controller wants to be notified whenever an outside source
 
 #### Responses to Notifications and Notification Retry
 
-The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotificationRetry` parameter in the subscription Object - if `NotificationRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotificationRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
+The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotifRetry` parameter in the subscription Object - if `NotifRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotifRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
 
-If `NotificationRetry` is `true`, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a `NotificationExpiration` parameter to specify when this retry should end if no success is ever achieved.
+If `NotifRetry` is `true`, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a `NotifExpiration` parameter to specify when this retry should end if no success is ever achieved.
 
 **R-NOT.1** - When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.
 
@@ -1703,7 +1703,7 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 | #9 | 1280-2560 | m.(k/1000)8 - m.(k/1000)9 |
 | #10 and subsequent | 2560-5120 | m.(k/1000)9 - m.(k/1000)10 |
 
-**R-NOT.2** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the `NotificationExpiration` time is reached.
+**R-NOT.2** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the `NotifExpiration` time is reached.
 
 **R-NOT.3** - Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification message.
 
