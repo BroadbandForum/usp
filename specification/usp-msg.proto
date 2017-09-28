@@ -57,7 +57,6 @@ message Header {
   string proto_version = 3;  // Make required in the protocol
   string to_id = 4;          // Make required in the protocol
   string from_id = 5;        // Make required in the protocol
-  string reply_to_id = 6;
 
   enum MsgType {
     ERROR = 0;
