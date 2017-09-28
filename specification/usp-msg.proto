@@ -54,9 +54,7 @@ message Msg {
 message Header {
   string msg_id = 1;         // Make required in the protocol
   MsgType msg_type = 2;      // Make required in the protocol
-  string proto_version = 3;  // Make required in the protocol
   string to_id = 4;          // Make required in the protocol
-  string from_id = 5;        // Make required in the protocol
 
   enum MsgType {
     ERROR = 0;
