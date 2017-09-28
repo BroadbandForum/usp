@@ -155,7 +155,7 @@ message GetSupportedDM {
 
   message DiscoverObject {
     string obj_path = 1;
-    bool next_level = 2;
+    bool first_level_only = 2;
     bool return_commands = 3;
     bool return_events = 4;
     bool return_params = 5;
@@ -216,7 +216,7 @@ message GetSupportedDMResp {
 
 message GetInstances {
   repeated string obj_path_list = 1;
-  bool next_level = 2;
+  bool first_level_only = 2;
 }
 
 message GetInstancesResp {
