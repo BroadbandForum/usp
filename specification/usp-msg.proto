@@ -468,7 +468,9 @@ message Notify {
   }
 
   message OnBoardRequest {
-    string obj_path = 1;
+    string oui = 1;
+    string product_class = 2;
+    string serial_number = 3;
   }
 }
 
