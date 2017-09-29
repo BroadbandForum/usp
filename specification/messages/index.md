@@ -143,43 +143,13 @@ This element contains an enumeration indicating the type of message contained in
 
 **R-MSG.9** - The `msg_type` element MUST be present in every Header.
 
-`string proto_version`
-
-The version of the USP protocol.
-
-**R-MSG.10** - The proto_version element MUST be present in every Header.
-
-**R-MSG.11** - The proto_version element MUST be set to a value of "`1.0`".
-
 `string to_id`
 
 The value of this header argument is the Endpoint Identifier of the target Endpoint.
 
-**R-MSG.12** - The `to_id` element MUST be present in every Header.
+**R-MSG.10** - The `to_id` element MUST be present in every Header.
 
-**R-MSG.13** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
-
-`string from_id`
-
-The value of this header argument is the Endpoint Identifier of the source Endpoint.
-
-**R-MSG.14** - The `from_id` element MUST be present in every Header.
-
-`string reply_to_id`
-
-The value of this header argument is the Endpoint Identifier to which responses associated with this message should be targeted.
-
-**R-MSG.15** - The `reply_to_id` MAY be used to send Response or Error to a USP Endpoint other than the from-to-id in the Request.
-
-*Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response or Error.*
-
-**R-MSG.16** - The source Endpoint MUST ignore a Response or Error message from a target Endpoint when the source Endpoint does not expect the Response or Error.
-
-*Note: The reply-to endpoint should have prior knowledge of the message and can expect the Response.*
-
-**R-MSG.17** - The `reply_to_id` element is optional, and MUST NOT be present in a Message that contains either a Response or Error in the Body element.
-
-**R-MSG.18** - If the `reply_to_id` is omitted from a Message that contains a Request in the Body element, the response or Error MUST be sent to the Endpoint identified in the `from_id` element in the request’s Header element.
+**R-MSG.11** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
 
 ### Message Body
 
@@ -260,7 +230,7 @@ This element is present in an Error Message in response to an Add or Set message
 
 This element contains a Path Name to the Object or parameter that caused the error.
 
-**R-MSG.19** - Path Names containing Object Instances in the `param_path` element of ParamError MUST be addressed using Instance Number Addressing.
+**R-MSG.12** - Path Names containing Object Instances in the `param_path` element of ParamError MUST be addressed using Instance Number Addressing.
 
 `fixed32 err_code`
 
@@ -1413,13 +1383,13 @@ For example, the Controller wishes to learn the Wifi capabilities the Agent repr
 
 ```
     GetSupportedDM {
+      obj_path_list {
+        obj_path : Device.Wifi.
+      }
       first_level_only : false
       return_commands : true
       return_events : true
       return_params : true
-      discover_obj_list {
-        obj_path : Device.Wifi.
-      }
     }
 ```
 
@@ -1514,6 +1484,10 @@ The Agent's Response would be:
 
 #### GetSupportedDM Request Elements
 
+`repeated obj_path_list`
+
+This element contains a repeated set of Path Names to Objects in the Agent's Supported Data Model.
+
 `bool first_level_only`
 
 This element, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects.
@@ -1529,10 +1503,6 @@ This element, if `true`, indicates that, in the `supported_obj_list`, the Agent 
 `bool return_params`
 
 This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_param_list` element containing Parameters supported by the reported Object(s).
-
-`repeated DiscoverObject discover_obj_list`
-
-This element contains a repeated set of messages of type `DiscoverObject`.
 
 ##### DiscoverObject Elements
 
@@ -1963,6 +1933,18 @@ This element contains additional (human readable) information about the reason b
 This element contains the Path Name of the Object associated with this notification.
 
 **R-NOT.16** - Path Names containing Object Instances in the `obj_path` element of the OnBoardRequest notification MUST be addressed using Instance Number Addressing.
+
+`string oui`
+
+This element contains the Organizationally Unique Identifier associated with the Agent.
+
+`string product_class`
+
+This element contains a string used to provide additional context about the Agent.
+
+`string serial_number`
+
+This element contains a string used to provide additional context about the Agent.
 
 #### Notify Response Elements
 
