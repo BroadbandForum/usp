@@ -151,15 +151,11 @@ message GetResp {
 
 
 message GetSupportedDM {
-  repeated DiscoverObject discover_obj_list = 1;
+  repeated string obj_path_list = 1;
   bool first_level_only = 2;
   bool return_commands = 3;
   bool return_events = 4;
   bool return_params = 5;
-
-  message DiscoverObject {
-    string obj_path = 1;
-  }
 }
 
 message GetSupportedDMResp {
