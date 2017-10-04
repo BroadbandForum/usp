@@ -20,7 +20,7 @@
 [19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-#	End to End Message Exchange
+# End to End Message Exchange
 
 USP Messages are exchanged between Controllers and Agents. In some deployment scenarios, the Controller and Agent have a direct connection. In other deployment scenarios, the messages exchanged by the Controller and Agent  traverse multiple intermediate MTP Proxies. The latter deployment scenario typically occurs when the Agent or Controller is deployed outside the proximal or Local Area Network. In both types of scenarios, the End-to-End (E2E) message exchange capabilities of USP permit the exchange of USP Messages of any size in a secure, reliable manner.
 
@@ -42,7 +42,7 @@ For USP messages to utilize any of the E2E message exchange capabilities, the US
 
 The USP Record message is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for secure and reliable delivery of fragmented USP Messages. Additional metadata elements are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
 
-####	Record Definition
+#### Record Definition
 
 `string version`
 
@@ -180,7 +180,7 @@ USP Endpoints identify the USP Record using the `sequence_id` element. When the 
 
 **R-E2E.12** – When an USP Endpoint transmits a USP Record with a value of the `sequence_id` element that is within 10,000 of the maximum size for the data type of the `sequence_id` element, the USP Endpoint MUST attempt establish a new Session Context with the remote USP Endpoint upon its next contact with the remote USP Endpoint.
 
-#####	Failure Handling in the Session Context
+##### Failure Handling in the Session Context
 
 In some situations, (e.g., TLS negotiation handshake) the failure to handle a received USP Record is persistent causing an infinite cycle of "receive failure/request session/establish session/receive failure" to occur. In these situations, the Agent enforces a policy as defined in this section regarding establishment of failed Session Contexts or failed interactions within a Session Context. The policy is controlled by the `E2ESession` object's `Enable` Parameter.
 
@@ -212,11 +212,11 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 **R-E2E.16** – If a reboot of the Agent occurs, the Agent MUST reset the E2E Session retry count to zero for the next E2E Session establishment.
 
-####	USP Record Exchange
+#### USP Record Exchange
 
 Once a Session Context is established, USP Records are created to exchange payloads in the Session Context. USP Records are uniquely identified by their originating USP Endpoint Identifier (`from_id`), Session Context identifier (`session_id`) and USP Record sequence identifier (`sequence_id`).
 
-#####	USP Record Transmission
+##### USP Record Transmission
 
 When an originating USP Endpoint transmits a USP Record, it creates the USP Record with a monotonically increasing sequence identifier (`sequence_id`).
 
@@ -253,7 +253,7 @@ Figure E2E.1 – Processing of received USP Records
 3.	Any record in the outgoing buffer with sequence identifier less than the value of the `expected_id` element is cleared.
 4.	The `expected_id` element for new outgoing records is set to `sequence_id` element + 1 of this USP Record.
 
-######	Failure Handling of Received USP Records
+###### Failure Handling of Received USP Records
 
 <a id="usp-record-failure" />
 
@@ -289,7 +289,7 @@ This allows keys to be distributed and enabled under the old session keys and th
 
 **R-E2E.25** – USP Records that pass the integrity check but have an invalid value in the `session_id` element MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
 
-###	Segmented Message Exchange
+### Segmented Message Exchange
 
 In many complex deployments, a USP Message will be transferred across Message Transfer Protocol (MTP) proxies that are used to forward the USP Message between Controllers and Agents that use different transport protocols.
 
@@ -329,17 +329,17 @@ For each USP Message reassemble the segmented payload:
 
 If the segmentation and reassembly fails for any reason, the USP Endpoint that received the segmented USP Records will consider the last received USP Record as failed and perform the failure processing a defined in section [Failure Handling of Received USP Records](#usp-record-failure).
 
-###	Handling Duplicate USP Records
+### Handling Duplicate USP Records
 
 Circumstances may arise (such as multiple Message Transfer Protocols, retransmission requests) that cause duplicate USP Records (those with an identical `sequence_id` and `session_id` elements from the same USP Endpoint) to arrive at the target USP endpoint.
 
 **R-E2E.26** - When using the reliable message exchange capability, if a target USP Endpoint receives a USP Record with duplicate `sequence_id` and `session_id` elements from the same originating USP Endpoint, it MUST gracefully ignore the duplicate USP Record.
 
-###	Secure Message Exchange
+### Secure Message Exchange
 
 While message transport bindings implement point-to-point security, the existence of broker-based message transports and transport proxies creates a need for end-to-end security within the USP protocol. End-to-end security is established by securing the payloads prior to segmentation and transmission by the originating USP Endpoint and the decryption of reassembled payloads by the receiving USP Endpoint.  The indication if and how the USP Message has been secured is via the `payload_security` element. This element defines the security protocol or mechanism applied to the USP payload, if any. This section describes the payload security protocols supported by USP.
 
-####	TLS Payload Encapsulation
+#### TLS Payload Encapsulation
 
 USP employs TLS 1.2 as one security mechanism for protection of USP payloads in Agent-Controller message exchanges. While traditionally deployed over reliable streams, TLS is a record-based protocol that can be carried over datagrams, with considerations taken for reliable and in-order delivery. To aid interoperability, USP endpoints are initially limited to a single cipher specification, though future revisions of the protocol may choose to expand cipher support.
 
@@ -347,7 +347,7 @@ USP employs TLS 1.2 as one security mechanism for protection of USP payloads in 
 
 *Note: The cipher listed above requires a USP Endpoint acting as the TLS server to use X.509 certificates signed with ECDSA and Diffie-Hellman key exchange credentials to negotiate the cipher.*
 
-#####	Session Handshake
+##### Session Handshake
 
 When TLS is used as a payload protection mechanism for USP Message, TLS requires the use of the Session Context to negotiate its TLS session. As it is an Agent's responsibility to initiate Session Contexts, the Agents will act in the TLS client role when establishing the security layer. The security layer is constructed using a standard TLS handshake, encapsulated within one or more of the above-defined USP Record payload datagrams. Per the TLS protocol, establishment of a new TLS session requires two round-trips.
 
@@ -361,13 +361,13 @@ TLS provides a mechanism to renegotiate the keys of a TLS session without tearin
 
 **R-E2E.28** – USP Endpoints MUST ignore requests for TLS renegotiation when used for E2E Message exchange.
 
-#####	Authentication
+##### Authentication
 
 USP relies upon peer authentication using X.509 certificates, as provided by TLS. Each USP endpoint identifier is identified within an X.509 certificate.
 
 **R-E2E.29** – USP Endpoints MUST be mutually authenticated using X.509 certificates using the USP Endpoint identifier encoded within the X.509 certificates `subjectAltName` field.
 
-#####	Validating the Integrity of USP Records Using TLS
+##### Validating the Integrity of USP Records Using TLS
 
 When the transmitting and receiving USP Endpoints have established a TLS session between the USP Endpoints, the transmitting USP Endpoint no longer needs to generate a signature or transmit the senders certificate with the USP Record. Instead the transmitting USP Record generates a Message Authentication Code (MAC) that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The key used for the HMAC algorithm uses a Key Derivation Function (KDF) in accordance with [RFC 5869](https://tools.ietf.org/html/rfc5869) and requires the following inputs to be known by the generation and validating USP Endpoints: length of the output MAC, salt, key and application context information. The application context information uses a constant value for all USP implementations ("USP_Record") and the length is fixed at 32 octets. The salt and key inputs are based on the underlying mechanism used to protect the payload of the USP Record. For TLS, the salt and key are taken from the TLS session once TLS negotiation is completed. The input key to the KDF uses the master key of the TLS session. The salt depends on the type of USP Endpoint. For USP Agents, the salt used to generate MACs use the TLS session's client random. For USP Controllers, the salt used to generate MACs use the TLS session's server random.
 
