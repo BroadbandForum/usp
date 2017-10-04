@@ -156,15 +156,15 @@ The signature method is used when:
 
   * A USP Record is transmitted using plaintext to protect the USP Record's payload and the underlying MTP doesn’t protect the payload.
 
-  * Transmitting and receiving USP Endpoints use an encryption protocl (e.g., TLS) to protect the USP Record's payload and the USP Endpoints have not established an encrypted session between them.
+  * Transmitting and receiving USP Endpoints use an encryption protocol (e.g., TLS) to protect the USP Record's payload and the USP Endpoints have not established an encrypted session between them.
 
 **R-E2E.6** – Unless protected by the underlying MTP, when a USP Endpoint transmits a USP Record, the USP Endpoint MUST protect the integrity of the non-payload portion of the USP Record.
 
 **R-E2E.7** – Unless protected by the underlying MTP, when a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the integrity of the non-payload portion of the USP Record.
 
-**R-E2E.8** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use plaintext to protect the USP Record's payload, the transmitting USP Endpoint MUST use a protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public of the transmitted sender's certificate.
+**R-E2E.8** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use plaintext to protect the USP Record's payload, the transmitting USP Endpoint MUST protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
 
-**R-E2E.9** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use TLS to protect the USP Record's payload, the transmitting USP Endpoint MUST use a protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection until the TLS session between the USP Endpoints is established. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public of the transmitted sender's certificate.
+**R-E2E.9** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use TLS to protect the USP Record's payload, the transmitting USP Endpoint MUST protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection until the TLS session between the USP Endpoints is established. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
 
 ##### Session Context Expiration
 
@@ -255,7 +255,7 @@ Figure E2E.1 – Processing of received USP Records
 
 ######	Failure Handling of Received USP Records
 
-<a id="usp-record-failure">
+<a id="usp-record-failure" />
 
 When a receiving USP Endpoint fails to either buffer or successfully process a USP Record, the receiving USP Endpoint  initiates a new Session Context.
 

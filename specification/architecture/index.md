@@ -180,7 +180,7 @@ Static Objects, or “single instance” Objects, are not tables and do not have
 ##### Multi-Instance Objects
 <a id="multi-instance_objects" />
 
-Dynamic Objects, or “multi-instance” Objects, are those Objects that can be the subject of “create” and “delete” operations (using the Add and Delete messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a “Table”, with each instance of the Object referred to as a “Row”. Multi-Instance Objects can be also the subject of a [search][#search].
+Dynamic Objects, or “multi-instance” Objects, are those Objects that can be the subject of “create” and “delete” operations (using the Add and Delete messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a “Table”, with each instance of the Object referred to as a “Row”. Multi-Instance Objects can be also the subject of a search.
 
 #### Parameters
 <a id="parameters" />
@@ -441,7 +441,7 @@ The steps that are executed by the Agent when following the reference in this ex
 * When configured, can be configured using Path Names using Instance Number Addressing or Unique-Key Addressing, however:
 * When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*
 
-**R-ARCH.12** - A USP Agent MUST support the ability to use Key-based addressing (as described in #REF) in reference values.
+**R-ARC.12** - A USP Agent MUST support the ability to use Key-based addressing in reference values.
 
 For example, the following paths might illustrate a reference to the same object (defined as having the KeyParam parameter as unique key) instance using an Instance Number and then a key value:
 
@@ -450,7 +450,7 @@ For example, the following paths might illustrate a reference to the same object
 
 In the first example, the reference points to the FooObject with Instance Number 5. In the second example, the reference points to the FooObject with a KeyParam value of “KeyValueForInstance5”.
 
-**R-ARCH.13** - The following requirements relate to reference types and the associated Agent behavior:
+**R-ARC.13** - The following requirements relate to reference types and the associated Agent behavior:
 
   * An Agent MUST reject an attempt to set a strong reference parameter if the new value does not reference an existing parameter or object.
   * An Agent MUST NOT reject an attempt to set a weak reference parameter because the new value does not reference an existing parameter or object.
