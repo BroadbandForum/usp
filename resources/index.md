@@ -6,7 +6,7 @@ to vet the protocol and build interoperable solutions.
 
 ## Logistics
 
-The date of the plugfest is tentatively set for November 28-30, 2017. Location TBD.
+The date of the plugfest is tentatively set for February 20-22, 2017 in Atlanta, GA USA.
 
 ## What will be tested?
 
