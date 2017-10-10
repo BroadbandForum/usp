@@ -38,6 +38,10 @@ The basic steps for any USP Endpoint that utilizes a STOMP MTP are:
 4. Subscribe to a Destination
 5. Send USP messages
 
+**R-STOMP.0** - USP Endpoints utilizing STOMP clients for message transport MUST support the `STOMPConn:1` and `STOMPController:1` data model profiles.
+
+**R-STOMP.1** - USP Endpoints utilizing STOMP clients for message transport SHOULD support the `STOMPAgent:1` data model profile.
+
 ## Handling of the STOMP Session
 
 When exchanging USP messages across STOMP MTPs, each USP Endpoint establishes a communications session with a STOMP server. These STOMP communications sessions are expected to be long lived and are reused for subsequent exchange of USP messages. A STOMP communications session is established using a handshake procedure as described in "Connecting a USP Endpoint to the STOMP Server" section below. A STOMP communications session is intended to be established as soon as the USP Endpoint becomes network-aware and is capable of sending TCP/IP messages.
@@ -46,29 +50,29 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 
 ### Connecting a USP Endpoint to the STOMP Server
 
-**R-STOMP.0** - USP Endpoints utilizing STOMP clients for message transport MUST send either a `CONNECT` frame or a `STOMP` frame to the STOMP server to initiate the STOMP communications session as defined in the "Connecting" section of the STOMP Spec.
+**R-STOMP.2** - USP Endpoints utilizing STOMP clients for message transport MUST send either a `CONNECT` frame or a `STOMP` frame to the STOMP server to initiate the STOMP communications session as defined in the "Connecting" section of the STOMP Spec.
 
-**R-STOMP.1** - USP Endpoints that DO NOT utilize client certificate authentication MUST use the `STOMP` frame instead of the `CONNECT` frame, and that `STOMP` frame MUST include the `login` and `passcode` STOMP headers. For a USP Agent, the `login` STOMP header MUST include the appropriate `STOMP.Connection.{i}.Username` parameter, and the `passcode` STOMP header MUST include the associated `STOMP.Connection.{i}.Password` parameter.
+**R-STOMP.3** - USP Endpoints that DO NOT utilize client certificate authentication MUST use the `STOMP` frame instead of the `CONNECT` frame, and that `STOMP` frame MUST include the `login` and `passcode` STOMP headers. For a USP Agent, the `login` STOMP header MUST include the appropriate `STOMP.Connection.{i}.Username` parameter, and the `passcode` STOMP header MUST include the associated `STOMP.Connection.{i}.Password` parameter.
 
-**R-STOMP.2** - USP Endpoints sending a `CONNECT` or `STOMP` frame MUST include (in addition to other mandatory STOMP headers) an `endpoint-id` STOMP header containing the Endpoint ID of the USP Endpoint sending the frame.
+**R-STOMP.4** - USP Endpoints sending a `CONNECT` or `STOMP` frame MUST include (in addition to other mandatory STOMP headers) an `endpoint-id` STOMP header containing the Endpoint ID of the USP Endpoint sending the frame.
 
-**R-STOMP.3** - USP Endpoints sending a `CONNECT` or `STOMP` frame MUST include a `host` STOMP header. For a USP Agent the value MUST contain the value from the appropriate `STOMP.Connection.{i}.VirtualHost` parameter.
+**R-STOMP.5** - USP Endpoints sending a `CONNECT` or `STOMP` frame MUST include a `host` STOMP header. For a USP Agent the value MUST contain the value from the appropriate `STOMP.Connection.{i}.VirtualHost` parameter.
 
-**R-STOMP.4** - If the connection to the STOMP server is successful then a `CONNECTED` frame will be sent to the USP Endpoint, and that frame MAY contain a `subscribe-dest` STOMP header that the USP Endpoint MUST use (if included) when Subscribing to its destination (see "Subscribing a USP Endpoint to a STOMP Destination" section for more details).
+**R-STOMP.6** - If the connection to the STOMP server is successful then a `CONNECTED` frame will be sent to the USP Endpoint, and that frame MAY contain a `subscribe-dest` STOMP header that the USP Endpoint MUST use (if included) when Subscribing to its destination (see "Subscribing a USP Endpoint to a STOMP Destination" section for more details).
 
-**R-STOMP.5** - If the connection to the STOMP server is NOT successful then an ERROR frame will be sent to the USP Endpoint, in which case the STOMP server will terminate the connection and the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
+**R-STOMP.7** - If the connection to the STOMP server is NOT successful then an ERROR frame will be sent to the USP Endpoint, in which case the STOMP server will terminate the connection and the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
 ### Handling the STOMP Heart Beat Mechanism
 
 The STOMP Heart Beat mechanism can be used to periodically send data between a STOMP client and a STOMP server to ensure that the underlying TCP connection is still available.  This is an optional STOMP mechanism and is negotiated when establishing the STOMP connection.
 
-**R-STOMP.6** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is `True` then the USP Agent MUST negotiate the STOMP Heart Beat mechanism within the `CONNECT` or `STOMP` frames during the process of establishing the STOMP connection as is defined in the "Heart-beating" section of the STOMP Spec.
+**R-STOMP.8** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is `True` then the USP Agent MUST negotiate the STOMP Heart Beat mechanism within the `CONNECT` or `STOMP` frames during the process of establishing the STOMP connection as is defined in the "Heart-beating" section of the STOMP Spec.
 
-**R-STOMP.7** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is either `False` or not implemented then the USP Agent MUST not send the `heart-beat` STOMP header in the `CONNECT` or `STOMP` frame.
+**R-STOMP.9** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is either `False` or not implemented then the USP Agent MUST not send the `heart-beat` STOMP header in the `CONNECT` or `STOMP` frame.
 
-**R-STOMP.8** - USP Agents negotiating the STOMP Heart Beat mechanism MUST use the `STOMP.Connection.{i}.OutgoingHeartbeat` and `STOMP.Connection.{i}.IncomingHeartbeat` parameter values within the heart-beat STOMP header as defined in the "Heart-beating" section of the STOMP Spec.
+**R-STOMP.10** - USP Agents negotiating the STOMP Heart Beat mechanism MUST use the `STOMP.Connection.{i}.OutgoingHeartbeat` and `STOMP.Connection.{i}.IncomingHeartbeat` parameter values within the heart-beat STOMP header as defined in the "Heart-beating" section of the STOMP Spec.
 
-**R-STOMP.9** - USP Agents that have negotiated a STOMP Heart Beat mechanism with a STOMP server MUST adhere to the heart beat values (as defined in the "Heart-beating" section of the STOMP Spec) as returned in the `CONNECTED` frame.
+**R-STOMP.11** - USP Agents that have negotiated a STOMP Heart Beat mechanism with a STOMP server MUST adhere to the heart beat values (as defined in the "Heart-beating" section of the STOMP Spec) as returned in the `CONNECTED` frame.
 
 ## Mapping USP Endpoints to STOMP Destinations
 
@@ -78,76 +82,80 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 
 ### Subscribing a USP Endpoint to a STOMP Destination
 
-**R-STOMP.10** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination.
+**R-STOMP.12** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination.
 
-**R-STOMP.11** - USP Endpoints utilizing STOMP clients for message transport MUST send a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Spec.
+**R-STOMP.13** - USP Endpoints utilizing STOMP clients for message transport MUST send a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Spec.
 
-**R-STOMP.12** - USP Endpoints sending a `SUBSCRIBE` frame MUST include (in addition to other mandatory STOMP headers) a `destination` STOMP header containing the STOMP destination associated with the USP Endpoint sending the frame.
+**R-STOMP.14** - USP Endpoints sending a `SUBSCRIBE` frame MUST include (in addition to other mandatory STOMP headers) a `destination` STOMP header containing the STOMP destination associated with the USP Endpoint sending the frame.
 
-**R-STOMP.13** - USP Agents that receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame MUST use that STOMP destination in the `destination` STOMP header when sending a `SUBSCRIBE` frame.
+**R-STOMP.15** - USP Agents that receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame MUST use that STOMP destination in the `destination` STOMP header when sending a `SUBSCRIBE` frame.
 
-**R-STOMP.14** - USP Agents that have NOT received a `subscribe-dest` STOMP Header in the `CONNECTED` frame MUST use the STOMP destination found in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter in the `destination` STOMP header when sending a `SUBSCRIBE` frame.
+**R-STOMP.16** - USP Agents that have NOT received a `subscribe-dest` STOMP Header in the `CONNECTED` frame MUST use the STOMP destination found in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter in the `destination` STOMP header when sending a `SUBSCRIBE` frame.
 
-**R-STOMP.15** - USP Agents that have NOT received a `subscribe-dest` STOMP Header in the `CONNECTED` frame and do NOT have a value in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter MUST terminate the STOMP communications session (via the `DISCONNECT` frame) and consider the MTP disabled.
+**R-STOMP.17** - USP Agents that have NOT received a `subscribe-dest` STOMP Header in the `CONNECTED` frame and do NOT have a value in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter MUST terminate the STOMP communications session (via the `DISCONNECT` frame) and consider the MTP disabled.
 
-**R-STOMP.16** - USP Endpoints sending a `SUBSCRIBE` frame MUST include a `ack` STOMP header with a value of "auto".
+**R-STOMP.18** - USP Endpoints sending a `SUBSCRIBE` frame MUST include a `ack` STOMP header with a value of "auto".
 
-**R-STOMP.17** - If the subscription to the destination is NOT successful then an `ERROR` frame will be sent to the USP Endpoint, in which case the STOMP server will terminate the connection and the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
+**R-STOMP.19** - If the subscription to the destination is NOT successful then an `ERROR` frame will be sent to the USP Endpoint, in which case the STOMP server will terminate the connection and the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
 ## Mapping USP Messages to STOMP Frames
 
 A USP message is sent from a USP Endpoint to a STOMP Server within a `SEND` frame. The STOMP Server delivers that USP message to the destination STOMP Endpoint within a `MESSAGE` frame. When a USP Endpoint responds to the USP request, the USP Endpoint sends the USP message to the STOMP Server within a `SEND` frame, and the STOMP Server delivers that USP message to the destination USP Endpoint within a `MESSAGE` frame.
 
-**R-STOMP.18** - USP Endpoints utilizing STOMP clients for message transport MUST send USP messages in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Spec.
+**R-STOMP.20** - USP Endpoints utilizing STOMP clients for message transport MUST send USP messages in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Spec.
 
-**R-STOMP.19** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-length` STOMP header containing the length of the body included in the `SEND` frame.
+**R-STOMP.21** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-length` STOMP header containing the length of the body included in the `SEND` frame.
 
-**R-STOMP.20** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/octet-stream`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
+**R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/octet-stream`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
 
-**R-STOMP.21** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `media-type` STOMP header with a value of "`v1.usp`", which signifies that the body included in the `SEND` frame contains a USP message.
+**R-STOMP.23** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `media-type` STOMP header with a value of "`v1.usp`", which signifies that the body included in the `SEND` frame contains a USP message.
 
-**R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP message should send any response (if required).
+**R-STOMP.24** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP message should send any response (if required).
 
-**R-STOMP.23** - USP Endpoints sending a `SEND` frame MUST include the [Protocol Buffer][12] binary encoding of the USP message as the body of the `SEND` frame.
+**R-STOMP.25** - USP Endpoints sending a `SEND` frame MUST include the [Protocol Buffer][12] binary encoding of the USP message as the body of the `SEND` frame.
 
-**R-STOMP.24** - When a USP Endpoint receives a `MESSAGE` frame it MUST use the `reply-to-dest` included in the STOMP headers as the STOMP destination of the USP response (if a response is required by the incoming USP request).
+**R-STOMP.26** - When a USP Endpoint receives a `MESSAGE` frame it MUST use the `reply-to-dest` included in the STOMP headers as the STOMP destination of the USP response (if a response is required by the incoming USP request).
 
-### Handling an ERROR Frame
+### Handling ERROR Frames
 
-**R-STOMP.25** - If an `ERROR` frame is received by the USP Endpoint, the STOMP server will terminate the connection. In this case the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
+**R-STOMP.27** - If an `ERROR` frame is received by the USP Endpoint, the STOMP server will terminate the connection. In this case the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
 ### Handling other STOMP Frames
 
-**R-STOMP.26** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the transactional STOMP frames including: `BEGIN`, `COMMIT`, and `ABORT`.
+If a USP Endpoint receives a USP message that cannot be processed (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint might be capable of notifying the originating USP Endpoint that an error occurred by sending an `ERROR` frame that causes the STOMP communications session to be terminated.  If the receiving USP Endpoint is not capable of notifying the originating USP Endpoint of the error, then it will simply drop the USP message.
 
-**R-STOMP.27** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the acknowledgement STOMP frames including: `ACK` and `NACK`.
+**R.STOMP.28** - When a USP Endpoint receives a USP message that cannot be processed, the receiving USP Endpoint MAY terminate the STOMP communications sessions between the STOMP server and the originating STOMP client via an `ERROR` frame.  If the implementation prevents such a mechanism from happening, then the receiving USP Endpoint MUST NOT attempt to process the USP message, and MUST ignore the USP message.
 
-**R-STOMP.28** - USP Endpoints utilizing STOMP clients for message transport MAY send the following STOMP frames when shutting down a STOMP connection: `UNSUBSCRIBE` (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and `DISCONNECT` (according to the rules defined in the DISCONNECT section of the STOMP Spec).
+**R-STOMP.29** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the transactional STOMP frames including: `BEGIN`, `COMMIT`, and `ABORT`.
 
-**R-STOMP.29** - USP Endpoint utilizing STOMP clients for message transport MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
+**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the acknowledgement STOMP frames including: `ACK` and `NACK`.
 
-**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Spec.
+**R-STOMP.31** - USP Endpoints utilizing STOMP clients for message transport MAY send the following STOMP frames when shutting down a STOMP connection: `UNSUBSCRIBE` (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and `DISCONNECT` (according to the rules defined in the DISCONNECT section of the STOMP Spec).
+
+**R-STOMP.32** - USP Endpoint utilizing STOMP clients for message transport MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
+
+**R-STOMP.33** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Spec.
 
 ## Discovery Requirements
 
 The USP [discovery section](/specification/discovery) details requirements about the general usage of DNS, mDNS, and DNS-SD records as it pertains to the USP protocol.  This section provides further requirements as to how a USP Endpoint advertises discovery information when a STOMP MTP is being utilized.
 
-**R-STOMP.31** - When creating a DNS-SD record, an Endpoint MUST set the DNS-SD "`path`" attribute equal to the value of the destination that it has subscribed to.
+**R-STOMP.33** - When creating a DNS-SD record, an Endpoint MUST set the DNS-SD "`path`" attribute equal to the value of the destination that it has subscribed to.
 
-**R-STOMP.32** - When creating a DNS-SD record, an Endpoint MUST utilize the STOMP server's address information in the A and AAAA records instead of the USP Endpoint's address information.
+**R-STOMP.34** - When creating a DNS-SD record, an Endpoint MUST utilize the STOMP server's address information in the A and AAAA records instead of the USP Endpoint's address information.
 
 ## STOMP Server Requirements
 
-**R-STOMP.33** - A STOMP server implementation MUST adhere to the requirements defined in the STOMP Spec.
+**R-STOMP.35** - A STOMP server implementation MUST adhere to the requirements defined in the STOMP Spec.
 
-**R-STOMP.34** - A STOMP server implementation MUST perform authentication of the STOMP client and ensure that a Remote USP Endpoint is only allowed to subscribe to the destination that is associated with the USP Endpoint.
+**R-STOMP.36** - A STOMP server implementation MUST perform authentication of the STOMP client and ensure that a Remote USP Endpoint is only allowed to subscribe to the destination that is associated with the USP Endpoint.
 
 ## MTP Message Encryption
 
 STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455(https://tools.ietf.org/html/rfc6455).
 
-**R-STOMP.35** - USP Endpoints utilizing STOMP clients for message transport MUST implement the Certificate modes of TLS security as defined in sections 10.5 and 10.6 of RFC 6455(https://tools.ietf.org/html/rfc6455).
+**R-STOMP.37** - USP Endpoints utilizing STOMP clients for message transport MUST implement the Certificate modes of TLS security as defined in sections 10.5 and 10.6 of RFC 6455(https://tools.ietf.org/html/rfc6455).
 
-**R-STOMP.36** - USP Endpoints capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the STOMP server. If a USP Endpoint for any reason is unable to obtain absolute time, it can contact the STOMP server without waiting for accurate absolute time. If a USP Endpoint chooses to contact the STOMP server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the STOMP server's certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
+**R-STOMP.38** - USP Endpoints capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the STOMP server. If a USP Endpoint for any reason is unable to obtain absolute time, it can contact the STOMP server without waiting for accurate absolute time. If a USP Endpoint chooses to contact the STOMP server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the STOMP server's certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
-**R-STOMP.37** - STOMP server certificates MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
+**R-STOMP.39** - STOMP server certificates MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
