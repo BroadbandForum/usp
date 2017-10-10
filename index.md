@@ -29,7 +29,7 @@
 
     <h2>Current Version:</h2>
 
-    <h3>1.0-DRAFT-03</h3>
+    <h3>1.0-DRAFT-04</h3>
 
     <h4>About this version:</h4>
 
@@ -39,6 +39,7 @@
     <li>Architectural overview</li>
     <li>Discovery mechanisms for Controllers and Agents</li>
     <li>Basic messaging between Controllers and Agents</li>
+    <li>Use of USP Record messages for end to end integrity, security, and privacy</li>
     <li>Data model objects specific to protocol functionality, object defined operations, and notifications/events</li>
     <li>Protocol buffers encoding schema</li>
     <li>Use of CoAP as a message transfer protocols (MTP)</li>
@@ -50,7 +51,7 @@
 
     <p>Additional versions of this DRAFT may be released prior to the 1.0 release.</p>
 
-    <p>Version 1.0 will include additional MTPs (used for crossing NAT/Firewalls), proxy mechanisms, and the USP end-to-end security layer.</p>
+    <p>Version 1.0 will include additional MTPs (used for crossing NAT/Firewalls) and proxy mechanisms.</p>
 
     <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>
     <p style="text-align:center;">USP is developed by the Broadband Forum. For more information, visit <a href="http://www.broadband-forum.org">http://www.broadband-forum.org</a></p>

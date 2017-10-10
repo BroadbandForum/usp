@@ -115,12 +115,12 @@ Service Name values [registered by BBF with IANA](http://www.broadband-forum.org
 | `usp-ctr-coap` | udp | CoAP | Controller |
 | `usp-agt-ws` | tcp | WebSocket | Agent |
 | `usp-ctr-ws` | tcp | WebSocket | Controller |
+| `usp-agt-stomp` | tcp | STOMP | Agent |
+| `usp-ctr-stomp` | tcp | STOMP | Controller |
 
 <!--
 | `usp-agt-http` | tcp | HTTP | Agent |
 | `usp-ctr-http` | tcp | HTTP | Controller |
-| `usp-agt-stomp` | tcp | STOMP | Agent |
-| `usp-ctr-stomp` | tcp | STOMP | Controller |
 -->
 
 DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-coap._udp.<Domain>`) in the RR can be used to provide searchable simple (single layer) functional groupings of USP Agents. The registry of subtypes for Service Names registered by BBF is listed at [www.broadband-forum.org/assignments](http://www.broadband-forum.org/assignments). DNS SRV and TXT records can be pointed to by multiple PTR records, which allow a USP Endpoint to potentially be discoverable as belonging to various functional groupings.
