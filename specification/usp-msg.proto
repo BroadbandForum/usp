@@ -54,10 +54,6 @@ message Msg {
 message Header {
   string msg_id = 1;         // Make required in the protocol
   MsgType msg_type = 2;      // Make required in the protocol
-  string proto_version = 3;  // Make required in the protocol
-  string to_id = 4;          // Make required in the protocol
-  string from_id = 5;        // Make required in the protocol
-  string reply_to_id = 6;
 
   enum MsgType {
     ERROR = 0;
@@ -154,15 +150,11 @@ message GetResp {
 
 
 message GetSupportedDM {
-  repeated DiscoverObject discover_obj_list = 1;
-
-  message DiscoverObject {
-    string obj_path = 1;
-    bool next_level = 2;
-    bool return_commands = 3;
-    bool return_events = 4;
-    bool return_params = 5;
-  }
+  repeated string obj_path_list = 1;
+  bool first_level_only = 2;
+  bool return_commands = 3;
+  bool return_events = 4;
+  bool return_params = 5;
 }
 
 message GetSupportedDMResp {
@@ -219,7 +211,7 @@ message GetSupportedDMResp {
 
 message GetInstances {
   repeated string obj_path_list = 1;
-  bool next_level = 2;
+  bool first_level_only = 2;
 }
 
 message GetInstancesResp {
@@ -468,7 +460,9 @@ message Notify {
   }
 
   message OnBoardRequest {
-    string obj_path = 1;
+    string oui = 1;
+    string product_class = 2;
+    string serial_number = 3;
   }
 }
 
