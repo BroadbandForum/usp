@@ -117,7 +117,7 @@ message Response {
 message Error {
   fixed32 err_code = 1;
   string err_msg = 2;
-  repeated ParamError param_err_list = 3;
+  repeated ParamError param_errs = 3;
 
   message ParamError {
     string param_path = 1;
@@ -128,29 +128,29 @@ message Error {
 
 
 message Get {
-  repeated string param_path_list = 1;
+  repeated string param_paths = 1;
 }
 
 message GetResp {
-  repeated RequestedPathResult req_path_result_list = 1;
+  repeated RequestedPathResult req_path_results = 1;
 
   message RequestedPathResult {
     string requested_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
-    repeated ResolvedPathResult resolved_path_result_list = 4;
+    repeated ResolvedPathResult resolved_path_results = 4;
   }
 
   message ResolvedPathResult {
     string resolved_path = 1;
-    map<string, string> result_param_map = 2;
+    map<string, string> result_params = 2;
   }
 }
 
 
 
 message GetSupportedDM {
-  repeated string obj_path_list = 1;
+  repeated string obj_paths = 1;
   bool first_level_only = 2;
   bool return_commands = 3;
   bool return_events = 4;
@@ -158,23 +158,23 @@ message GetSupportedDM {
 }
 
 message GetSupportedDMResp {
-  repeated RequestedObjectResult req_obj_result_list = 1;
+  repeated RequestedObjectResult req_obj_results = 1;
 
   message RequestedObjectResult {
     string req_obj_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
     string data_model_inst_uri = 4;
-    repeated SupportedObjectResult supported_obj_list = 5;
+    repeated SupportedObjectResult supported_objs = 5;
   }
 
   message SupportedObjectResult {
     string supported_obj_path = 1;
     ObjAccessType access = 2;
     bool is_multi_instance = 3;
-    repeated SupportedCommandResult supported_command_list = 4;
-    repeated SupportedEventResult supported_event_list = 5;
-    repeated SupportedParamResult supported_param_list = 6;
+    repeated SupportedCommandResult supported_commands = 4;
+    repeated SupportedEventResult supported_events = 5;
+    repeated SupportedParamResult supported_params = 6;
   }
 
   message SupportedParamResult {
@@ -184,13 +184,13 @@ message GetSupportedDMResp {
 
   message SupportedCommandResult {
     string command_name = 1;
-    repeated string input_arg_name_list = 2;
-    repeated string output_arg_name_list = 3;
+    repeated string input_arg_names = 2;
+    repeated string output_arg_names = 3;
   }
 
   message SupportedEventResult {
     string event_name = 1;
-    repeated string arg_name_list = 2;
+    repeated string arg_names = 2;
   }
 
   enum ParamAccessType {
@@ -210,35 +210,35 @@ message GetSupportedDMResp {
 
 
 message GetInstances {
-  repeated string obj_path_list = 1;
+  repeated string obj_paths = 1;
   bool first_level_only = 2;
 }
 
 message GetInstancesResp {
-  repeated RequestedPathResult req_path_result_list = 1;
+  repeated RequestedPathResult req_path_results = 1;
 
   message RequestedPathResult {
     string requested_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
-    repeated CurrInstance curr_inst_list = 4;
+    repeated CurrInstance curr_insts = 4;
   }
 
 
   message CurrInstance {
     string instantiated_obj_path = 1;
-    map<string, string> unique_key_map = 2;
+    map<string, string> unique_keys = 2;
   }
 }
 
 
 message Add {
   bool allow_partial = 1;
-  repeated CreateObject create_obj_list = 2;
+  repeated CreateObject create_objs = 2;
 
   message CreateObject {
     string obj_path = 1;
-    repeated CreateParamSetting param_setting_list = 2;
+    repeated CreateParamSetting param_settings = 2;
   }
 
   message CreateParamSetting {
@@ -249,7 +249,7 @@ message Add {
 }
 
 message AddResp {
-  repeated CreatedObjectResult created_obj_result_list = 1;
+  repeated CreatedObjectResult created_obj_results = 1;
 
   message CreatedObjectResult {
     string requested_path = 1;
@@ -268,8 +268,8 @@ message AddResp {
 
       message OperationSuccess {
         string instantiated_path = 1;
-        repeated ParameterError param_err_list = 2;
-        map<string, string> unique_key_map = 3;
+        repeated ParameterError param_errs = 2;
+        map<string, string> unique_keys = 3;
       }
     }
   }
@@ -284,11 +284,11 @@ message AddResp {
 
 message Delete {
   bool allow_partial = 1;
-  repeated string obj_path_list = 2;
+  repeated string obj_paths = 2;
 }
 
 message DeleteResp {
-  repeated DeletedObjectResult deleted_obj_result_list = 1;
+  repeated DeletedObjectResult deleted_obj_results = 1;
 
   message DeletedObjectResult {
     string requested_path = 1;
@@ -306,8 +306,8 @@ message DeleteResp {
       }
 
       message OperationSuccess {
-        repeated string affected_path_list = 1;
-        repeated UnaffectedPathError unaffected_path_err_list = 2;
+        repeated string affected_paths = 1;
+        repeated UnaffectedPathError unaffected_path_errs = 2;
       }
     }
   }
@@ -322,11 +322,11 @@ message DeleteResp {
 
 message Set {
   bool allow_partial = 1;
-  repeated UpdateObject update_obj_list = 2;
+  repeated UpdateObject update_objs = 2;
 
   message UpdateObject {
     string obj_path = 1;
-    repeated UpdateParamSetting param_setting_list = 2;
+    repeated UpdateParamSetting param_settings = 2;
   }
 
   message UpdateParamSetting {
@@ -337,7 +337,7 @@ message Set {
 }
 
 message SetResp {
-  repeated UpdatedObjectResult updated_obj_result_list = 1;
+  repeated UpdatedObjectResult updated_obj_results = 1;
 
   message UpdatedObjectResult {
     string requested_path = 1;
@@ -352,24 +352,24 @@ message SetResp {
       message OperationFailure {
         fixed32 err_code = 1;
         string err_msg = 2;
-        repeated UpdatedInstanceFailure updated_inst_failure_list = 3;
+        repeated UpdatedInstanceFailure updated_inst_failures = 3;
       }
 
       message OperationSuccess {
-        repeated UpdatedInstanceResult updated_inst_result_list = 1;
+        repeated UpdatedInstanceResult updated_inst_results = 1;
       }
     }
   }
 
   message UpdatedInstanceFailure {
     string affected_path = 1;
-    repeated ParameterError param_err_list = 2;
+    repeated ParameterError param_errs = 2;
   }
 
   message UpdatedInstanceResult {
     string affected_path = 1;
-    repeated ParameterError param_err_list = 2;
-    map<string, string> updated_param_map = 3;
+    repeated ParameterError param_errs = 2;
+    map<string, string> updated_params = 3;
   }
 
   message ParameterError {
@@ -383,11 +383,11 @@ message Operate {
   string command = 1;
   string command_key = 2;
   bool send_resp = 3;
-  map<string, string> input_arg_map = 4;
+  map<string, string> input_args = 4;
 }
 
 message OperateResp {
-  repeated OperationResult operation_result_list = 1;
+  repeated OperationResult operation_results = 1;
 
   message OperationResult {
     string executed_command = 1;
@@ -398,7 +398,7 @@ message OperateResp {
     }
 
     message OutputArgs {
-      map<string, string> output_arg_map = 1;
+      map<string, string> output_args = 1;
     }
 
     message CommandFailure {
@@ -423,7 +423,7 @@ message Notify {
   message Event {
     string obj_path = 1;
     string event_name = 2;
-    map<string, string> param_map = 3;
+    map<string, string> params = 3;
   }
 
   message ValueChange {
@@ -433,7 +433,7 @@ message Notify {
 
   message ObjectCreation {
     string obj_path = 1;
-    map<string, string> unique_key_map = 2;
+    map<string, string> unique_keys = 2;
   }
 
   message ObjectDeletion {
@@ -450,7 +450,7 @@ message Notify {
     }
 
     message OutputArgs {
-      map<string, string> output_arg_map = 1;
+      map<string, string> output_args = 1;
     }
 
     message CommandFailure {
