@@ -55,8 +55,8 @@ message SessionRecord {
     ProtoBuf3 = 0;
   }
   enum PayloadSecurity {
-    TLS = 0;
-    PLAINTEXT = 1;
+    PLAINTEXT = 0;
+    TLS = 1;
     COSE = 2;
   }
   enum PayloadSARState {
