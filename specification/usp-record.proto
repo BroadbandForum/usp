@@ -42,8 +42,8 @@ package usp_record;
 
 message SessionRecord {
   string version = 1;
-  string from_id = 2;
-  string to_id = 3;
+  string to_id = 2;
+  string from_id = 3;
   uint64 session_id = 4;
   uint64 sequence_id = 5;
   uint64 expected_id = 6;
