@@ -128,13 +128,11 @@ The diagrams in this section use the database symbol to identify where the descr
 <img src="receive-record.png" />
 
 Figure SEC.1 – Receiving a USP Record
-
 <a id='figure-SEC1'/>
 
 <img src="no-secure-message-exchange.png" />
 
 Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
-
 <a id='figure-SEC2'/>
 
 ### Sending a USP Record
@@ -144,7 +142,6 @@ Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
 <img src="send-record.png" />
 
 Figure SEC.3 – Sending a USP Record
-
 <a id='figure-SEC3'/>
 
 ### Checking a Certificate Containing an Endpoint ID
