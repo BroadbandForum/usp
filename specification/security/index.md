@@ -22,7 +22,7 @@
 
 # Authentication and Authorization 
 
-USP contains mechanisms for Authentication and Authorization, and Encryption. Encryption can be provided at the MTP layer, the USP layer, or both. Where Endpoints can determine (through Authentication) that the termination points of the MTP and USP messages are the same, MTP encryption is sufficient to provide end-to-end encryption and security. Where the termination points are different (because there is a proxy or other intermediate device between the USP Endpoints), USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) *-- need tag to Secure Message Exchange header --* is required, or the intermediate device must be a trusted part of the end-to-end ecosystem.
+USP contains mechanisms for Authentication and Authorization, and Encryption. Encryption can be provided at the MTP layer, the USP layer, or both. Where Endpoints can determine (through Authentication) that the termination points of the MTP and USP messages are the same, MTP encryption is sufficient to provide end-to-end encryption and security. Where the termination points are different (because there is a proxy or other intermediate device between the USP Endpoints), USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) is required, or the intermediate device must be a trusted part of the end-to-end ecosystem.
 
 ## Authentication
 
@@ -32,7 +32,7 @@ In order to support various authentication models (e.g., trust Endpoint identity
 
 **R-SEC.0** - The Agent MUST have a Controller's certificate information and have a cryptographically protected connection between the two Endpoints prior to processing a USP Message from that Controller. 
 
-TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use payload_security “plaintext” encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#) *-- need tag to Secure Message Exchange header --*  
+TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use payload_security “plaintext” encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
 
