@@ -56,7 +56,7 @@ Specific requirements for implementing these are provided in the individual MTP 
 
 **R-MTP.2** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before establishing TLS or DTLS encryption to secure MTP communication.  If an Agent for any reason is unable to obtain absolute time, it can establish TLS or DTLS without waiting for accurate absolute time. If an Agent chooses to establish TLS or DTLS before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the received X.509 certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
-**R-MTP.3** - An Agent that has obtained an absolute time MUST validate those components of the received X.509 certificate that involve absolute time.
+**R-MTP.3** - An Agent that has obtained an accurate absolute time MUST validate those components of the received X.509 certificate that involve absolute time.
 
 **R-MTP.4** - When an Agent receives an X.509 certificate while establishing TLS or DTLS encryption of the MTP, the Agent MUST execute logic that achieves the same results as in the decision flow from Figures [MTP.1](#figure-MTP1).
 

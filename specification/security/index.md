@@ -120,7 +120,7 @@ The diagrams in this section use the database symbol to identify where the descr
 
 **R-SEC.19** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting a Controller.  If an Agent for any reason is unable to obtain absolute time, it can contact the Controller without waiting for accurate absolute time. If an Agent chooses to contact a Controller before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Controller certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
-**R-SEC.20** - An Agent that has obtained absolute time MUST validate those components of the Controller certificate that involve absolute time.
+**R-SEC.20** - An Agent that has obtained accurate absolute time MUST validate those components of the Controller certificate that involve absolute time.
 
 **R-SEC.21** – An Agent MUST clear all cached encryption session and Role authorization information when it reboots.
 
