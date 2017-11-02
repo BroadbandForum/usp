@@ -42,6 +42,8 @@ It is expected that Agents will have some sort of Access Control List (ACL) that
 
 **R-SEC.1** - An Agent MUST confirm a Controller has the necessary permissions to perform the requested actions in a Message prior to performing that action.
 
+**R-SEC.1a** - Agents SHOULD implement the Controller object with the `AssignedRole` parameter (with at least read-only data model definition) and `InheritedRole` parameter (if allowed Roles can come from a trusted CA), so users can see what Controllers have access to the Agent and their permissions. This will help users identify rogue Controllers that may have gained access to the Agent.
+
 ## Trusted Certificate Authorities
 
 An Endpoint can have a configured list of trusted Certificate Authority (CA) certificates. The Agent policy may trust the CA to authorize authenticated Controllers to have a specific default Role, or the policy may only trust the CA to authenticate the Controller identity. The Controller policy may require an Agent certificate to be signed by a trusted CA before the Controller exchanges USP Messages with the Agent.
@@ -50,9 +52,9 @@ An Endpoint can have a configured list of trusted Certificate Authority (CA) cer
 
 This secure means can be accomplished through USP (see [Theory of Operations](./index.md#theory-of-operations)), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
 
-**R-SEC.3** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Header `from_id`.
+**R-SEC.3** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
 
-**R-SEC.4** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure the URN form of the Controller Endpoint ID (that matches the USP Header `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute. 
+**R-SEC.4** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure the URN form of the Controller Endpoint ID (that matches the USP Record `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute. 
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller.
 
@@ -84,7 +86,11 @@ When authentication is done using X.509 certificates, it is up to Controller pol
 
 Note that allowing use of, method for transmitting, and procedure for handling shared secrets is specific to the MTP used, as described in [Message Transfer Protocols](../mtp/index.md). Shared secrets that are not unique per device are not recommended as they leave devices highly vulnerable to various attacks -- especially devices exposed to the Internet.
 
-**R-SEC.10** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**R-SEC.10** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute. 
+
+**R-SEC.10a** - The certificate `subjectaltName` value MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate. 
+
+Agent certificates can be used to secure Records by encrypting at the MTP layer [Message Transfer Protocols](../mtp/index.md) enryption and/or encrypting at the USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#).
 
 Some Controllers implementations may allow multiple Agents to share a single certificate with a wildcarded Endpoint ID.
 
@@ -112,7 +118,7 @@ It is possible for the Agent to allow an external entity to change a Controller 
 
 <a id='analysis-controller-certificates'/>
 
-An Agent will analyze Controller certificates to determine if they are valid, are appropriate for authentication of Controllers, and to determine what permissions (Role) a Controller has. The Agent will also determine whether MTP encryption is sufficient to provide end-to-end protection of the Record and Message, or if USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) *-- need tag to Secure Message Exchange header --* is required.
+An Agent will analyze Controller certificates to determine if they are valid, are appropriate for authentication of Controllers, and to determine what permissions (Role) a Controller has. The Agent will also determine whether MTP encryption is sufficient to provide end-to-end protection of the Record and Message, or if USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) is required.
 
 The diagrams in this section use the database symbol to identify where the described information can be represented in the data model, if an implementation chooses to expose this information through the USP protocol.
 
@@ -191,7 +197,7 @@ From component `ControllerTrust`:
 
 The Object `LocalAgent.Certificate.` can be used to manage Controller and CA certificates, along with the `LocalAgent.AddCertificate()` and `LocalAgent.Controller.{i}.AddMyCertificate()` commands.
 
-For brevity, `Device.LocalAgent` is not placed in front of all further object references in this Security section. However, all objects references are under `Device.LocalAgent`. This section does not describe use of parameters under other top level components (e.g., it does not describe parameters under `Device.RemoteAgent`).
+For brevity, `Device.LocalAgent` is not placed in front of all further object references in this Security section. However, all objects references are under `Device.LocalAgent`. This section does not describe use of parameters under other top level components.
 
 ### Roles (Access Control)
 
@@ -233,11 +239,9 @@ For example,
 
 When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A Permission.2 takes precedence over Permission.1 (55 > 3). For B, Permission.5 takes precedence over Permission.1 (78 > 20). The union of A and B is “r-xn” + “----” = “r-xn”.
 
-**R-SEC.26** - Agents SHOULD implement the Controller object with the `AssignedRole` parameter (with at least read-only data model definition) and `InheritedRole` parameter (if allowed Roles can come from a trusted CA), so users can see what Controllers have access to the Agent and their permissions. This will help users identify rogue Controllers that may have gained access to the Agent.
-
 #### Role Associated with a Credential or Challenge
 
-The `ControllerTrust.Credential.{i}.AssignedRole` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
+The `ControllerTrust.Credential.{i}.Role` parameter value is inherited by Controllers whose credentials have been validated using the credentials in the same entry of the `ControllerTrust.Credential.{i}.` table. Whenever `ControllerTrust.Credential.{i}.` is used to validate a certificate, the Agent writes the current value of the associated `ControllerTrust.Credential.{i}.Role` into the `Controller.{i}.InheritedRole` parameter.  For more information on use of this table for assigning Controller Roles and validating credentials, see the sections below.
 
 The `ControllerTrust.Challenge.{i}.Role` parameter is a Role that is assigned to Controllers that send a successful `ChallengeResponse()` command. For more information on use of challenges for assigning Controller Roles, see the sections below.
 
@@ -273,7 +277,7 @@ Note that it is possible for an Agent to maintain policy of the type described b
 
 An Agent can implement the ability to provide Controllers with challenges via USP, in order to be trusted with certain Roles. It is also possible to use non-USP methods to issue challenges, such as HTTP digest authentication with prompts for login and password.
 
-To use the USP mechanism, the `RequestChallenge()` and `ChallengeResponse()` commands and `ControllerTrust.Challenge.{i}.` object with at least the `Alias` and `Description` parameters must be implemented. The functionality implied by the other `ControllerTrust.Challenge.{i}.` parameters needs to be implemented, but does not have to be exposed through the data model.
+To use the USP mechanism, the `RequestChallenge()` and `ChallengeResponse()` commands and `ControllerTrust.Challenge.{i}.` object with at least the `Alias` and `Description` parameters needs to be implemented. The functionality implied by the other `ControllerTrust.Challenge.{i}.` parameters needs to be implemented, but does not have to be exposed through the data model.
 
 A Controller that sends a Get message on `Device.ControllerTrust.Challenge.{i}.` will receive all entries and parameters that are allowed for its current assigned Role. In the simplest case, this will be a single entry and only Alias and Description will be supplied for that entry. It is important to restrict visibility to all other implemented parameters to highly trusted Roles, if at all.
 
