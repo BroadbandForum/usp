@@ -11,8 +11,8 @@ import google.protobuf as protobuf
 msg = usp.Msg()
 msg.header.msg_id = "1"
 msg.header.msg_type = msg.header.GET
-msg.body.request.get.param_path_list.append("a")
-msg.body.request.get.param_path_list.append("b")
-msg.body.request.get.param_path_list.append("c")
+msg.body.request.get.param_paths.append("a")
+msg.body.request.get.param_paths.append("b")
+msg.body.request.get.param_paths.append("c")
 
 print(msg)

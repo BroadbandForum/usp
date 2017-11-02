@@ -42,15 +42,16 @@ package usp_record;
 
 message SessionRecord {
   string version = 1;
-  string from_id = 2;
-  uint64 session_id = 3;
-  uint64 sequence_id = 4;
-  uint64 expected_id = 5;
-  uint64 retransmit_id = 6;
-  PayloadEncoding payload_encoding = 7;
-  PayloadSecurity payload_security = 8;
-  PayloadSARState payload_sar_state = 9;
-  PayloadSARState payloadrec_sar_state = 10;
+  string to_id = 2;
+  string from_id = 3;
+  uint64 session_id = 4;
+  uint64 sequence_id = 5;
+  uint64 expected_id = 6;
+  uint64 retransmit_id = 7;
+  PayloadEncoding payload_encoding = 8;
+  PayloadSecurity payload_security = 9;
+  PayloadSARState payload_sar_state = 10;
+  PayloadSARState payloadrec_sar_state = 11;
   enum PayloadEncoding {
     ProtoBuf3 = 0;
   }
@@ -65,7 +66,7 @@ message SessionRecord {
     INPROCESS = 2;  //Segmentation in process
     COMPLETE = 3;   //Segmentation is complete
   }
-  repeated bytes payload = 11;
-  bytes mac_signature = 12;  //MAC or Signature
-  bytes sender_cert = 13;
+  repeated bytes payload = 12;
+  bytes mac_signature = 13;  //MAC or Signature
+  bytes sender_cert = 14;
 }

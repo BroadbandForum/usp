@@ -22,15 +22,11 @@
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
-# Message Encoding
+# Appendix I - Firmware Management of Devices with USP Agents
 
-USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
+One of the primary use cases for remote management is the management of firmware
+images. On devices that contain or are represented by a USP Agent, this is done
+with several operations, objects, and parameters in the [Device:2 Data Model for
+USP Agents][1].
 
-* [Protocol Buffers Version 3][12]
-
-**R-ENC.0** - An implementation using protocol buffers encoding MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
-
-**R-ENC.1** - An implementation using protocol buffers encoding MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-record.proto).
-
-[<-- Message Transfer Protocols](/specification/mtp/)
-[End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)
+This Appendix describes a Theory of Operations for firmware management via USP.

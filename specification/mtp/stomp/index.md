@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -18,13 +18,15 @@
 [17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
 [18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
 [19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
 
 # STOMP Binding
 
-The STOMP MTP transfers USP messages between USP endpoints using [version 1.2 of the STOMP protocol](https://stomp.github.io/stomp-specification-1.2.html) (further referred to as "STOMP Spec"), or the Simple Text Oriented Message Protocol. Messages that are transferred between STOMP clients utilize a message bus interaction model where the STOMP server is the messaging broker that routes and delivers messages based on the destination included in the STOMP header.
+The STOMP MTP transfers USP Records between USP endpoints using [version 1.2 of the STOMP protocol](https://stomp.github.io/stomp-specification-1.2.html) (further referred to as "STOMP Spec"), or the Simple Text Oriented Message Protocol. Messages that are transferred between STOMP clients utilize a message bus interaction model where the STOMP server is the messaging broker that routes and delivers messages based on the destination included in the STOMP header.
 
-The following figure  depicts the transfer of the USP messages between USP Agents and Controllers.
+The following figure  depicts the transfer of the USP Records between USP Agents and Controllers.
 
 <img src="STOMP-architecture.jpg"/>
 
@@ -36,7 +38,7 @@ The basic steps for any USP Endpoint that utilizes a STOMP MTP are:
 2. Connect to the STOMP Server
 3. Maintain Heart Beats (if configured)
 4. Subscribe to a Destination
-5. Send USP messages
+5. Send USP Records
 
 **R-STOMP.0** - USP Endpoints utilizing STOMP clients for message transport MUST support the `STOMPConn:1` and `STOMPController:1` data model profiles.
 
@@ -44,7 +46,7 @@ The basic steps for any USP Endpoint that utilizes a STOMP MTP are:
 
 ## Handling of the STOMP Session
 
-When exchanging USP messages across STOMP MTPs, each USP Endpoint establishes a communications session with a STOMP server. These STOMP communications sessions are expected to be long lived and are reused for subsequent exchange of USP messages. A STOMP communications session is established using a handshake procedure as described in "Connecting a USP Endpoint to the STOMP Server" section below. A STOMP communications session is intended to be established as soon as the USP Endpoint becomes network-aware and is capable of sending TCP/IP messages.
+When exchanging USP Records across STOMP MTPs, each USP Endpoint establishes a communications session with a STOMP server. These STOMP communications sessions are expected to be long lived and are reused for subsequent exchange of USP Records. A STOMP communications session is established using a handshake procedure as described in "Connecting a USP Endpoint to the STOMP Server" section below. A STOMP communications session is intended to be established as soon as the USP Endpoint becomes network-aware and is capable of sending TCP/IP messages.
 
 When a STOMP communications session is no longer necessary, the STOMP connection is closed by the STOMP client sending a `DISCONNECT` frame (see "Handling Other STOMP Frames" section below).
 
@@ -78,7 +80,7 @@ The STOMP Heart Beat mechanism can be used to periodically send data between a S
 
 USP Agents will have one STOMP destination per STOMP MTP independent of whether those STOMP MTPs use the same `STOMP.Connection` instance or a different one. The STOMP destination is either configured by the STOMP server via the `subscribe-dest` STOMP Header received in the `CONNECTED` frame (exposed in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter) or taken from the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter if there wasn't a `subscribe-dest` STOMP Header received in the `CONNECTED` frame.
 
-A USP Controller will subscribe to a STOMP destination for each STOMP server that it is associated with. The USP Controller's STOMP destination needs to be known by the USP Agent (this is configured in the `Device.LocalAgent.Controller.{i}.MTP.{i}.STOMP.Destination` parameter) as it is used when sending a USP message containing a Notification or Response for a previously received Request.
+A USP Controller will subscribe to a STOMP destination for each STOMP server that it is associated with. The USP Controller's STOMP destination needs to be known by the USP Agent (this is configured in the `Device.LocalAgent.Controller.{i}.MTP.{i}.STOMP.Destination` parameter) as it is used when sending a USP Record containing a Notification.
 
 ### Subscribing a USP Endpoint to a STOMP Destination
 
@@ -98,21 +100,21 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 
 **R-STOMP.19** - If the subscription to the destination is NOT successful then an `ERROR` frame will be sent to the USP Endpoint, in which case the STOMP server will terminate the connection and the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
-## Mapping USP Messages to STOMP Frames
+## Mapping USP Records to STOMP Frames
 
-A USP message is sent from a USP Endpoint to a STOMP Server within a `SEND` frame. The STOMP Server delivers that USP message to the destination STOMP Endpoint within a `MESSAGE` frame. When a USP Endpoint responds to the USP request, the USP Endpoint sends the USP message to the STOMP Server within a `SEND` frame, and the STOMP Server delivers that USP message to the destination USP Endpoint within a `MESSAGE` frame.
+A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame. The STOMP Server delivers that USP Record to the destination STOMP Endpoint within a `MESSAGE` frame. When a USP Endpoint responds to the USP request, the USP Endpoint sends the USP Record to the STOMP Server within a `SEND` frame, and the STOMP Server delivers that USP Record to the destination USP Endpoint within a `MESSAGE` frame.
 
-**R-STOMP.20** - USP Endpoints utilizing STOMP clients for message transport MUST send USP messages in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Spec.
+**R-STOMP.20** - USP Endpoints utilizing STOMP clients for message transport MUST send USP Records in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Spec.
 
 **R-STOMP.21** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-length` STOMP header containing the length of the body included in the `SEND` frame.
 
 **R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/octet-stream`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
 
-**R-STOMP.23** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `media-type` STOMP header with a value of "`v1.usp`", which signifies that the body included in the `SEND` frame contains a USP message.
+**R-STOMP.23** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `media-type` STOMP header with a value of "`v1.usp`", which signifies that the body included in the `SEND` frame contains a USP Record.
 
-**R-STOMP.24** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP message should send any response (if required).
+**R-STOMP.24** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP Record should send any response (if required).
 
-**R-STOMP.25** - USP Endpoints sending a `SEND` frame MUST include the [Protocol Buffer][12] binary encoding of the USP message as the body of the `SEND` frame.
+**R-STOMP.25** - USP Endpoints sending a `SEND` frame MUST include the [Protocol Buffer][12] binary encoding of the USP Record as the body of the `SEND` frame.
 
 **R-STOMP.26** - When a USP Endpoint receives a `MESSAGE` frame it MUST use the `reply-to-dest` included in the STOMP headers as the STOMP destination of the USP response (if a response is required by the incoming USP request).
 
@@ -122,9 +124,9 @@ A USP message is sent from a USP Endpoint to a STOMP Server within a `SEND` fram
 
 ### Handling other STOMP Frames
 
-If a USP Endpoint receives a USP message that cannot be processed (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint might be capable of notifying the originating USP Endpoint that an error occurred by sending an `ERROR` frame that causes the STOMP communications session to be terminated.  If the receiving USP Endpoint is not capable of notifying the originating USP Endpoint of the error, then it will simply drop the USP message.
+If a USP Endpoint receives a USP Record that cannot be processed (e.g., text frame instead of a binary frame, malformed USP Record or USP Record, bad encoding), the receiving USP Endpoint might be capable of notifying the originating USP Endpoint that an error occurred by sending an `ERROR` frame that causes the STOMP communications session to be terminated.  If the receiving USP Endpoint is not capable of notifying the originating USP Endpoint of the error, then it will simply drop the USP Record.
 
-**R.STOMP.28** - When a USP Endpoint receives a USP message that cannot be processed, the receiving USP Endpoint MAY terminate the STOMP communications sessions between the STOMP server and the originating STOMP client via an `ERROR` frame.  If the implementation prevents such a mechanism from happening, then the receiving USP Endpoint MUST NOT attempt to process the USP message, and MUST ignore the USP message.
+**R.STOMP.28** - When a USP Endpoint receives a USP Record that cannot be processed, the receiving USP Endpoint MAY terminate the STOMP communications session by triggering the STOMP server to send an `ERROR` frame to the originating STOMP client.  If the implementation prevents such a mechanism from happening, then the receiving USP Endpoint MUST NOT attempt to process the USP Record, and MUST ignore the USP Record.
 
 **R-STOMP.29** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the transactional STOMP frames including: `BEGIN`, `COMMIT`, and `ABORT`.
 
@@ -132,7 +134,7 @@ If a USP Endpoint receives a USP message that cannot be processed (e.g., text fr
 
 **R-STOMP.31** - USP Endpoints utilizing STOMP clients for message transport MAY send the following STOMP frames when shutting down a STOMP connection: `UNSUBSCRIBE` (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and `DISCONNECT` (according to the rules defined in the DISCONNECT section of the STOMP Spec).
 
-**R-STOMP.32** - USP Endpoint utilizing STOMP clients for message transport MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
+**R-STOMP.32** - USP Endpoints utilizing STOMP clients for message transport that DID NOT receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame when establishing the STOMP communications session MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
 
 **R-STOMP.33** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Spec.
 
@@ -152,10 +154,13 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 ## MTP Message Encryption
 
-STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455(https://tools.ietf.org/html/rfc6455).
+STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of [RFC 6455][20].
 
-**R-STOMP.37** - USP Endpoints utilizing STOMP clients for message transport MUST implement the Certificate modes of TLS security as defined in sections 10.5 and 10.6 of RFC 6455(https://tools.ietf.org/html/rfc6455).
+**R-STOMP.37** - USP Endpoints utilizing STOMP clients for message transport MUST implement the Certificate modes of TLS security as defined in sections 10.5 and 10.6 of [RFC 6455][20].
 
 **R-STOMP.38** - USP Endpoints capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the STOMP server. If a USP Endpoint for any reason is unable to obtain absolute time, it can contact the STOMP server without waiting for accurate absolute time. If a USP Endpoint chooses to contact the STOMP server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the STOMP server's certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
 **R-STOMP.39** - STOMP server certificates MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
+
+[<-- Message Transfer Protocols](/specification/mtp/)
+[--> Message Encoding](/specification/encoding/)
