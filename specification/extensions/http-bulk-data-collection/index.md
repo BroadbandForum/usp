@@ -20,7 +20,10 @@
 [19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
 [20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
+
 
 # Annex A - HTTP Bulk Data Collection
 

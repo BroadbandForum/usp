@@ -20,6 +20,8 @@
 [19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
 [20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 # Message Transfer Protocols
@@ -45,9 +47,9 @@ This specification places the following requirement for encrypting MTP headers a
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however. If the device implementer can reasonably expect Messages to be transported across the Internet when the device is deployed, then the implementer needs to ensure the device supports encryption of all MTP protocols.
 
-MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [RFC 6347]( https://tools.ietf.org/html/rfc6347).
+MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [RFC 6347][23].
 
-MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [RFC 5246]( https://tools.ietf.org/html/rfc5246).
+MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [RFC 5246][22].
 
 Specific requirements for implementing these are provided in the individual MTP sections.
 

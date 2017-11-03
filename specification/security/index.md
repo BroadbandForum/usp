@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,19 +15,14 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-<<<<<<< HEAD
 [17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
 [18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
 [19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
-=======
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
->>>>>>> c4454d7eecad480930db77e5910a5f0db150e6e1
 
-# Authentication and Authorization 
+# Authentication and Authorization
 
 USP contains mechanisms for Authentication and Authorization, and Encryption. Encryption can be provided at the MTP layer, the USP layer, or both. Where Endpoints can determine (through Authentication) that the termination points of the MTP and USP messages are the same, MTP encryption is sufficient to provide end-to-end encryption and security. Where the termination points are different (because there is a proxy or other intermediate device between the USP Endpoints), USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) is required, or the intermediate device must be a trusted part of the end-to-end ecosystem.
 
@@ -37,7 +32,7 @@ Authentication of Controllers is done using X.509 certificates as defined in [RF
 
 In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that MTP connection is being made to a member of a trusted domain as verified by a trusted Certificate Authority (CA)), this specification provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or certificates of trusted CAs.
 
-**R-SEC.0** - The Agent MUST have a Controller's certificate information and have a cryptographically protected connection between the two Endpoints prior to processing a USP Message from that Controller. 
+**R-SEC.0** - The Agent MUST have a Controller's certificate information and have a cryptographically protected connection between the two Endpoints prior to processing a USP Message from that Controller.
 
 TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use payload_security “plaintext” encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
 
@@ -61,7 +56,7 @@ This secure means can be accomplished through USP (see [Theory of Operations](./
 
 **R-SEC.3** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
 
-**R-SEC.4** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure the URN form of the Controller Endpoint ID (that matches the USP Record `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute. 
+**R-SEC.4** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure the URN form of the Controller Endpoint ID (that matches the USP Record `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller.
 
@@ -87,25 +82,25 @@ Self-signed certificates require a “trust on first use” (TOFU) policy when u
 
 ## Agent authentication
 
-**R-SEC.9** - Controllers MUST authenticate Agents either through X.509 certificates or a shared secret. 
+**R-SEC.9** - Controllers MUST authenticate Agents either through X.509 certificates or a shared secret.
 
-When authentication is done using X.509 certificates, it is up to Controller policy whether to allow for Agents with self-signed certificates or to require Agent certificates be signed by a CA. 
+When authentication is done using X.509 certificates, it is up to Controller policy whether to allow for Agents with self-signed certificates or to require Agent certificates be signed by a CA.
 
 Note that allowing use of, method for transmitting, and procedure for handling shared secrets is specific to the MTP used, as described in [Message Transfer Protocols](../mtp/index.md). Shared secrets that are not unique per device are not recommended as they leave devices highly vulnerable to various attacks -- especially devices exposed to the Internet.
 
-**R-SEC.10** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute. 
+**R-SEC.10** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
-**R-SEC.10a** - The certificate `subjectaltName` value MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate. 
+**R-SEC.10a** - The certificate `subjectaltName` value MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate.
 
 Agent certificates can be used to secure Records by encrypting at the MTP layer [Message Transfer Protocols](../mtp/index.md) enryption and/or encrypting at the USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#).
 
 Some Controllers implementations may allow multiple Agents to share a single certificate with a wildcarded Endpoint ID.
 
-**R-SEC.11** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectaltName` with identical `authority-scheme` and `authority-id`. 
+**R-SEC.11** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectaltName` with identical `authority-scheme` and `authority-id`.
 
 Use of a shared certificate is not recommended, and which portion of the `instance-id` can be wildcarded may be specific to the authorizing CA or to the `authority-id` and `authority-scheme` values of the Endpoint ID. Wildcards can only be allowed in cases where the assigning entity is explicitly identified. Controllers are not required to support wildcarded certificates.
 
-**R-SEC.12** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops”. In the case of "os" and "ops”, the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded. 
+**R-SEC.12** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops”. In the case of "os" and "ops”, the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
 
 ## Challenge Strings and Images
 
@@ -168,12 +163,12 @@ Figure SEC.3 – Sending a USP Record
 **R-SEC.25** - When determining the inherited Role to apply based on Roles associated with a trusted CA, only the first matching CA in the chain will be used.
 
 <img src="check-cert.png" />
- 
+
 Figure SEC.4 – Checking a Certificate Containing an Endpoint ID
 
 <a id='figure-SEC4'/>
 
-<img src="determine-role.png" /> 
+<img src="determine-role.png" />
 
 Figure SEC.5 – Determining the Role
 
@@ -270,13 +265,13 @@ Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in t
 
 * If the Controller’s certificate is validated by credentials in a `ControllerTrust.Credential.{i}.Credential` parameter but there is no associated `ControllerTrust.Credential.{i}.Role` parameter (or the value is empty), then the Controller is assigned the role in `UntrustedRole` (written to the `Controller.{i}.AssignedRole` parameter). This step is shown in Figure [SEC.5](./index.md#figure-SEC5). Note that assigning `UntrustedRole` means there needs to be some implemented way to elevate the Controller’s Role, either by another Controller manipulating the Role, implementing Challenges, or some non-USP method.
 
-* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRole`. The optional policy decision (whether or not to allow Trust on First Use (TOFU), which can be codified in the data model with the ControllerTrust.TOFUAllowed flag) is shown in Figure [SEC.4](./index.md#figure-SEC4); Figure [SEC.5](./index.md#figure-SEC5) shows the Role assignment. 
+* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRole`. The optional policy decision (whether or not to allow Trust on First Use (TOFU), which can be codified in the data model with the ControllerTrust.TOFUAllowed flag) is shown in Figure [SEC.4](./index.md#figure-SEC4); Figure [SEC.5](./index.md#figure-SEC5) shows the Role assignment.
 
 * If the Agent implements the `RequestChallenge()` and `ChallengeResponse()` commands, a Controller assigned the role in `UntrustedRole` can have permission to read one or more `ControllerTrust.Challenge.{i}.Alias` and `Description` values and issue the commands. Roles with more extensive permissions can have permission to read additional `ControllerTrust.Challenge.{i}.Alias` and `Description` values. A successful Challenge results in the Controller being assigned the associated Role value.
 
 ### Controller Certificates and Certificate Validation
 
-When an Agent is presented with a Controller’s certificate, the Agent will always attempt to validate the certificate to whatever extent possible. Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in [Analysis of Controller Certificates](./index.md#analysis-controller-certificates) identify points in the decision logic where data model parameters can be used to influence policy decisions related to Controller certificate analysis. 
+When an Agent is presented with a Controller’s certificate, the Agent will always attempt to validate the certificate to whatever extent possible. Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in [Analysis of Controller Certificates](./index.md#analysis-controller-certificates) identify points in the decision logic where data model parameters can be used to influence policy decisions related to Controller certificate analysis.
 
 Note that it is possible for an Agent to maintain policy of the type described by the `UntrustedRole`, `BannedRole`, and the information described by `ControllerTrust.Credential.{i}.` and `Controller.{i}.Credential` without exposing these through the data model. If the policy concepts and data are maintained but not exposed, the same methods can still be used. It is also possible for an Agent to have policy that is not described by any defined data model element.
 
@@ -302,15 +297,13 @@ Type values other than `Passphrase` can be used and defined to trigger custom me
 
 If an Agent wants to allow certificates associated with Controllers and CAs to be exposed through USP, the Agent can implement the `Controller.{i}.Credential` and `ControllerTrust.Credential.{i}.Credential` parameters, which require implementation of the `LocalAgent.Certificate.` object. Allowing management of these certificates through USP can be accomplished by implementing `LocalAgent.AddCertificate()`, `Controller.{i}.AddMyCertificate()` and `Certificate.{i}.Delete()` commands.
 
-To allow a Controller to check whether the Agent has correct certificates, the `Certificate.{i}.GetFingerprint()` command can be implemented. 
+To allow a Controller to check whether the Agent has correct certificates, the `Certificate.{i}.GetFingerprint()` command can be implemented.
 
 ### Application of Modified Parameters
 
-It is possible that various parameters related to authentication and authorization may change that would impact cached encrypted sessions and Role permissions for Controllers. Example of such parameters include `Controller.{i}.AssignedRole`, `Controller.{i}.Credential`, `ControllerTrust.Role.` definition of a Role, `ControllerTrust,Credential.{i}.Role`. 
+It is possible that various parameters related to authentication and authorization may change that would impact cached encrypted sessions and Role permissions for Controllers. Example of such parameters include `Controller.{i}.AssignedRole`, `Controller.{i}.Credential`, `ControllerTrust.Role.` definition of a Role, `ControllerTrust,Credential.{i}.Role`.
 
 There is no expectation that an Agent will apply these changes to cached sessions. It is up to the Agent to determine whether or not it will detect these changes and flush cached session information. However, it is expected that a reboot will clear all cached session information.
 
 
 [<-- Messages](../messages/index.md) [Extensions -->](../extensions/index.md)
-
-
