@@ -34,8 +34,6 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 * [WebSockets](./websocket/)
 * The [Simple Text-Oriented Messaging Protocol](./stomp/)
 
-*Note: In this DRAFT version of the specification, the binding definition for WebSockets is TBD. It will be fully defined in the final 1.0 release.*
-
 ## Securing MTPs
 
 <a id="securing_mtps" />
