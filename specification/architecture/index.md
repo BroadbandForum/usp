@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,10 +15,15 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
+[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
+
 
 # Architecture
 
@@ -68,7 +73,7 @@ Endpoints are identified by an Endpoint Identifier.
 
 The Endpoint Identifier is a locally or globally unique USP layer identifier of an Endpoint. Whether it is globally or locally unique depends on the scheme used for assignment.
 
-The Endpoint Identifier (ID) is used in Message Headers and various Parameters to uniquely identify Controller and Agent Endpoints. It can be globally or locally unique, either among all Endpoints or among all Controllers or all Agents, depending on the scheme used for assignment.
+The Endpoint Identifier (ID) is used in the USP Record and various Parameters in a USP Message to uniquely identify Controller and Agent Endpoints. It can be globally or locally unique, either among all Endpoints or among all Controllers or all Agents, depending on the scheme used for assignment.
 
 The Endpoint ID is comprised of two mandatory and one optionally mandatory components: `authority-scheme`, `authority-id`, and `instance-id`.
 
@@ -131,7 +136,7 @@ The "`proto`" and "`doc`" values are intended only for prototyping and documenta
     unreserved = ALPHA / DIGIT / "-" / "." / "_"
     pct-encoded = "%" HEXDIG HEXDIG
 ```
-The above expression uses the Augmented Backus-Naur Form (ABNF) notation of [RFC2234](https://www.ietf.org/rfc/rfc2234.txt), including the following core ABNF syntax rules defined by that specification: ALPHA (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken from [RFC3986](https://www.ietf.org/rfc/rfc3986.txt) as the set of unreserved characters and percent-encoded characters that are acceptable for all components of a URI. This set is also allowed for use in URNs [RFC2141](https://www.ietf.org/rfc/rfc2141.txt), and all MTP headers.
+The above expression uses the Augmented Backus-Naur Form (ABNF) notation of [RFC2234](https://tools.ietf.org/html/rfc2234), including the following core ABNF syntax rules defined by that specification: ALPHA (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken from [RFC3986](https://tools.ietf.org/html/rfc3986) as the set of unreserved characters and percent-encoded characters that are acceptable for all components of a URI. This set is also allowed for use in URNs [RFC2141](https://tools.ietf.org/html/rfc2141), and all MTP headers.
 
 **R-ARC.6** - An instance-id value MUST be no more than 50 characters in length.
 
