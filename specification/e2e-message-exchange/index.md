@@ -15,12 +15,12 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
+[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
 [20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
+[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 # End to End Message Exchange
 
@@ -36,7 +36,7 @@ USP Messages are exchanged between Controllers and Agents. In some deployment sc
 
 Protected payloads provide a secure message exchange (confidentiality, integrity and identity authentication) through exchange of USP Messages that are secured by the originating and receiving USP Endpoints.
 
-*Note - the requirements below reference Objects and Parameters used to manage the End to End Session. These are specified in the [Device:2 Data Model for USP Agents][1].*
+*Note - the requirements below reference Objects and Parameters used to manage the E2E Session. These are specified in the [Device:2 Data Model for USP Agents][1].*
 
 ## USP Record Encapsulation
 
@@ -58,33 +58,33 @@ Required. Originating/Source USP Endpoint Identifier.
 
 `uint64 session_id`
 
-Optional. Session Context identifier, used to identify the USP Session Context. If not explicitly set the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
+Optional. Session Context identifier, used to identify the USP Session Context. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
 
 The value 0 is reserved for exchange of USP Records without a E2E Session Context.
 
 `uint64 sequence_id`
 
-Optional. Datagram sequence identifier. If not explicitly set the default value is 0. Used only for exchange of USP Records with a E2E Session Context. When used, the field is initialized to zero and incremented after each sent USP Record.
+Optional. Datagram sequence identifier. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context. When used, the field is initialized to zero and incremented after each sent USP Record.
 
 *Note: Endpoints maintain independent values for sequence_id, based on the number of sent records.*
 
 `uint64 expected_id`
 
-Optional. Next `sequence_id` the sender is expecting to receive. If not explicitly set the default value is 0. Implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.
+Optional. Next `sequence_id` the sender is expecting to receive. If not explicitly set, the default value is 0. Implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.
 
 `uint64 retransmit_id`
 
-Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. If not explicitly set the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
+Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
 
 `enum payload_encoding`
 
-Optional. If not explicitly set the default value is 0. When the payload is present, indicates the encoding protocol used to encode and decode the reassembled payload as the payload was prior to the application of `payload_security`. Valid values are:
+Optional. If not explicitly set, the default value is 0. When the payload is present, indicates the encoding protocol used to encode and decode the reassembled payload as the payload was prior to the application of `payload_security`. Valid values are:
 
 `0 – ProtoBuf3`
 
 `enum payload_security`
 
-Optional. If not explicitly set the default value is 0. When the payload is present, indicates the protocol or mechanism used to secure the USP Message. Valid values are:
+Optional. If not explicitly set, the default value is 0. When the payload is present, indicates the protocol or mechanism used to secure the USP Message. Valid values are:
 
 ```
 0 – TLS
@@ -94,7 +94,7 @@ Optional. If not explicitly set the default value is 0. When the payload is pres
 
 `enum payload_sar_state`
 
-Optional. If not explicitly set the default value is 0. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
+Optional. If not explicitly set, the default value is 0. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
 
 ```
 0 – No segmentation
@@ -105,7 +105,7 @@ Optional. If not explicitly set the default value is 0. When payload is present,
 
 `enum payloadrec_sar_state`
 
-Optional. If not explicitly set the default value is 0. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
+Optional. If not explicitly set, the default value is 0. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
 
 ```
 0 – Reserved (Unused)
@@ -116,15 +116,15 @@ Optional. If not explicitly set the default value is 0. When payload segmentatio
 
 `bytes mac_signature`
 
-Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.  If not explicitly set the default value is an empty byte string.
+Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.  If not explicitly set, the default value is an empty byte string.
 
 `bytes sender_cert`
 
-Optional. The certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`. If not explicitly set the default value is an empty byte string.
+Optional. The certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`. If not explicitly set, the default value is an empty byte string.
 
 `bytes payload`
 
-Optional. Repeating list of one or more datagrams. If not explicitly set the default value is an empty list.
+Optional. Repeating list of one or more datagrams. If not explicitly set, the default value is an empty list.
 
 **R-E2E.1** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
 
