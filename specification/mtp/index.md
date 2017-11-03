@@ -30,8 +30,9 @@ Note: Message Transfer Protocol was a term adopted to avoid confusion with the t
 
 The requirements for each individual Message Transfer Protocol is covered in a section of this document. This version of the specification includes definitions for:
 
-*	The [Constrained Application Protocol (CoAP)](./coap/).
-* WebSockets
+*	The [Constrained Application Protocol (CoAP)](./coap/)
+* [WebSockets](./websocket/)
+* The [Simple Text-Oriented Messaging Protocol](./stomp/)
 
 *Note: In this DRAFT version of the specification, the binding definition for WebSockets is TBD. It will be fully defined in the final 1.0 release.*
 
