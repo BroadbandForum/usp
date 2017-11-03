@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,10 +15,15 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
+[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
+
 
 # Messages
 
@@ -36,6 +41,12 @@ These sections describe the types of USP messages and the normative requirements
 * [GetSupportedDM](#getsupporteddm)
 * [Notify](#notify)
 * [Operate](#operate)
+
+## Encapsulation in a USP Record
+
+All USP messages are encapsulated by a USP record. The definition of the USP record
+portion of a USP message, and the rules for managing transactional integrity, are
+described in [End to End Message Exchange](/specification/e2e-message-exchange/).
 
 ## Requests, Responses and Errors
 
@@ -143,14 +154,6 @@ This element contains an enumeration indicating the type of message contained in
 
 **R-MSG.9** - The `msg_type` element MUST be present in every Header.
 
-`string to_id`
-
-The value of this header argument is the Endpoint Identifier of the target Endpoint.
-
-**R-MSG.10** - The `to_id` element MUST be present in every Header.
-
-**R-MSG.11** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
-
 ### Message Body
 
 <a id="body" />
@@ -220,7 +223,7 @@ This element contains a [numeric code](#error-codes) indicating the type of erro
 
 This element contains additional information about the reason behind the error.
 
-`repeated ParamError param_err_list`
+`repeated ParamError param_errs`
 
 This element is present in an Error Message in response to an Add or Set message when the allow_partial element is false and detailed error information is available for each Object or parameter that have caused the message to report an Error.
 
@@ -230,7 +233,7 @@ This element is present in an Error Message in response to an Add or Set message
 
 This element contains a Path Name to the Object or parameter that caused the error.
 
-**R-MSG.12** - Path Names containing Object Instances in the `param_path` element of ParamError MUST be addressed using Instance Number Addressing.
+**R-MSG.10** - Path Names containing Object Instances in the `param_path` element of ParamError MUST be addressed using Instance Number Addressing.
 
 `fixed32 err_code`
 
@@ -255,9 +258,9 @@ The Add response contains details about the success or failure of the creation o
 For example, a Controller wants to create a new Wifi network on an Agent. It could use an Add message with the following elements:
 
     allow_partial: false
-    create_obj_list {
+    create_objs {
     	obj_path: Device.Wifi.SSID.
-    	param_setting_list {
+    	param_settings {
 
     		param: LowerLayers
     		value: Device.Wifi.Radio.1.
@@ -271,12 +274,12 @@ For example, a Controller wants to create a new Wifi network on an Agent. It cou
 
 The Agent’s response would include the successful Object update and the list of parameters that were set, including the default values for the Enable and Status parameters defined in [Device:2][1]:
 
-    created_obj_result_list {
+    created_obj_results {
       requested_path: Device.Wifi.SSID.
       oper_status {
         oper_success {
           instantiated_path: Device.Wifi.SSID.2.
-          created_param_result_map:
+          created_param_results:
 
           key: Enable
           value: false
@@ -298,7 +301,7 @@ The Agent’s response would include the successful Object update and the list o
 
 The Add, Set, and Delete requests contain an element called "`allow_partial`". This element determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
 
-For Delete, this is straightforward - if `allow_partial` is `true`, the Agent should return a Response message with `affected_path_list` and `unaffected_path_err_list` containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If `allow_partial` is `false`, the Agent should return an Error message if any Objects fail to be deleted.
+For Delete, this is straightforward - if `allow_partial` is `true`, the Agent should return a Response message with `affected_paths` and `unaffected_path_errs` containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If `allow_partial` is `false`, the Agent should return an Error message if any Objects fail to be deleted.
 
 For the Add and Set messages, parameter updates contain an element called "`required`". This details whether or not the update or creation of the Object should fail if a required parameter fails.
 
@@ -346,9 +349,9 @@ body {
   request {
     add {
       allow_partial: true
-      create_obj_list {
+      create_objs {
         obj_path: "Device.LocalAgent.Controller."
-        param_setting_list {
+        param_settings {
           param: "Enable"
           value: "True"
 
@@ -371,12 +374,12 @@ header {
 body {
   response {
     add_resp {
-      created_obj_result_list {
+      created_obj_results {
         requested_path: "Device.LocalAgent.Controller."
         oper_status {
           oper_success {
             instantiated_path: "Device.LocalAgent.Controller.31185."
-            unique_key_map {
+            unique_keys {
               key: "EndpointID"
               value: "controller-temp"
             }
@@ -392,13 +395,13 @@ body {
 
 `bool allow_partial`
 
-This element tells the Agent how to process the message in the event that one or more of the Objects specified in the create_obj_list argument fails creation.
+This element tells the Agent how to process the message in the event that one or more of the Objects specified in the create_objs argument fails creation.
 
 **R-ADD.0** - If the `allow_partial` element is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
 
 **R-ADD.1** - If the `allow_partial` element is set to `false`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` holistically. A failure to create any one Object MUST cause the Add message to fail and return an `Error` Message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
 
-`repeated CreateObject create_obj_list`
+`repeated CreateObject create_objs`
 
 This element contains a repeated set of CreateObject elements.
 
@@ -410,7 +413,7 @@ This element contains an Object Path to a writeable Table in the Agent’s Insta
 
 **R-ADD.2** - The `obj_path` element in the `CreateObject` message of an Add Request MUST NOT contain Search Paths.
 
-`repeated CreateParamSetting param_setting_list`
+`repeated CreateParamSetting param_settings`
 
 This element contains a repeated set of CreateParamSetting elements.
 
@@ -432,7 +435,7 @@ This element specifies whether the Agent should treat the creation of the Object
 
 #### Add Response Elements
 
-`repeated CreatedObjectResult created_obj_result_list`
+`repeated CreatedObjectResult created_obj_results`
 
 A repeated set of `CreatedObjectResult` elements for each `CreateObject` element in the Add message.
 
@@ -440,7 +443,7 @@ A repeated set of `CreatedObjectResult` elements for each `CreateObject` element
 
 `string requested_path`
 
-This element returns the value of `obj_path_list` in the `CreateObject` message associated with this `CreatedObjectResult`.
+This element returns the value of `obj_paths` in the `CreateObject` message associated with this `CreatedObjectResult`.
 
 `OperationStatus oper_status`
 
@@ -474,19 +477,19 @@ This element contains additional information about the reason behind the error.
 
 This element contains the Object Instance Path (using Instance Number Addressing) of the created Object.
 
-`repeated ParameterError param_err_list`
+`repeated ParameterError param_errs`
 
 This element returns a repeated set of ParameterError messages.
 
-**R-ADD.4** - If any of the parameters and values specified in the `param_setting_list` element fail to configure upon creation, this set MUST include one element describing each of the failed parameters and the reason for their failure.
+**R-ADD.4** - If any of the parameters and values specified in the `param_settings` element fail to configure upon creation, this set MUST include one element describing each of the failed parameters and the reason for their failure.
 
-`map<string, string> unique_key_map`
+`map<string, string> unique_keys`
 
 This element contains a map of the local name and value for each supported parameter that is part of any of this Object's unique keys.
 
-**R-ADD.5** - If the Controller did not include some or all of a unique key that the Agent supports in the `param_setting_list` element, the Agent MUST assign values to the unique key(s) and return them in the `unique_key_map`.
+**R-ADD.5** - If the Controller did not include some or all of a unique key that the Agent supports in the `param_settings` element, the Agent MUST assign values to the unique key(s) and return them in the `unique_keys`.
 
-**R-ADD.6** - If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
+**R-ADD.6** - If the Controller does not have Read permission on any of the parameters specified in `unique_keys`, these parameters MUST NOT be returned in this element.
 
 ###### ParameterError Elements
 
@@ -504,7 +507,7 @@ This element contains text related to the error specified by `err_code`.
 
 #### Add Message Supported Error Codes
 
-Appropriate error codes for the Add message include `7000-7019` and `7800-7999`.
+Appropriate error codes for the Add message include `7000-7019`, `7026`, and `7800-7999`.
 
 ### Set
 
@@ -529,9 +532,9 @@ body {
   request {
     set {
       allow_partial: true
-      update_obj_list {
+      update_objs {
         obj_path: "Device.DeviceInfo."
-        param_setting_list {
+        param_settings {
           param: "FriendlyName"
           value: "MyDevicesFriendlyName"
           required: true
@@ -551,13 +554,13 @@ header {
 body {
   response {
     set_resp {
-      updated_obj_result_list {
+      updated_obj_results {
         requested_path: "Device.DeviceInfo."
         oper_status {
           oper_success {
-            updated_inst_result_list {
+            updated_inst_results {
               affected_path: "Device.DeviceInfo."
-              updated_param_map {
+              updated_params {
                 key: "FriendlyName"
                 value: "MyDevicesFriendlyName"
               }
@@ -582,7 +585,7 @@ This element tells the Agent how to process the message in the event that one or
 
 **R-SET.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
 
-`repeated UpdateObject update_obj_list`
+`repeated UpdateObject update_objs`
 
 This element contains a repeated set of UpdateObject messages.
 
@@ -592,7 +595,7 @@ This element contains a repeated set of UpdateObject messages.
 
 This element contains an Object Path, Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.
 
-`repeated UpdateParamSetting param_setting_list`
+`repeated UpdateParamSetting param_settings`
 
 The element contains a repeated set of `UpdatedParamSetting` messages.
 
@@ -614,7 +617,7 @@ This element specifies whether the Agent should treat the update of the Object s
 
 #### Set Response
 
-`repeated UpdatedObjectResult updated_obj_result_list`
+`repeated UpdatedObjectResult updated_obj_results`
 
 This element contains a repeated set of `UpdatedObjectResult` messages for each `UpdateObject` message in the associated Set Request.
 
@@ -622,7 +625,7 @@ This element contains a repeated set of `UpdatedObjectResult` messages for each 
 
 `string requested_path`
 
-This element returns the value of `updated_obj_result_list` in the `UpdateObject` message associated with this `UpdatedObjectResult`.
+This element returns the value of `updated_obj_results` in the `UpdateObject` message associated with this `UpdatedObjectResult`.
 
 `OperationStatus oper_status`
 
@@ -650,7 +653,7 @@ This element contains a [numeric code](#error-codes) indicating the type of erro
 
 This element contains additional information about the reason behind the error.
 
-`repeated UpdatedInstanceFailure updated_inst_failure_list`
+`repeated UpdatedInstanceFailure updated_inst_failures`
 
 This element contains a repeated set of messages of type `UpdatedInstanceFailure`.
 
@@ -660,7 +663,7 @@ This element contains a repeated set of messages of type `UpdatedInstanceFailure
 
 This element returns the Object Path or Object Instance Path of the Object that failed to update.
 
-`repeated ParameterError param_err_list`
+`repeated ParameterError param_errs`
 
 This element contains a repeated set of `ParameterError` messages.
 
@@ -672,7 +675,7 @@ This element contains the Parameter Path (relative to `affected_path`) to the pa
 
 ###### OperationSuccess Elements
 
-`repeated UpdatedInstanceResult updated_inst_result_list`
+`repeated UpdatedInstanceResult updated_inst_results`
 
 This element contains a repeated set of `UpdatedInstanceResult` messages.
 
@@ -682,19 +685,19 @@ This element contains a repeated set of `UpdatedInstanceResult` messages.
 
 This element returns the Object Path or Object Instance Path (using Instance Number Addressing) of the updated Object.
 
-`repeated ParameterError param_err_list`
+`repeated ParameterError param_errs`
 
 This element contains a repeated set of `ParameterError` messages.
 
-`map<string, string> updated_param_map`
+`map<string, string> updated_params`
 
 This element returns a set of key/value pairs containing a path (relative to the `affected_path`) to each of the updated Object’s parameters, their values, plus sub-Objects and their values that were updated by the Set Request.
 
-**R-SET.3** - If the Controller does not have Read permission on any of the parameters specified in `updated_param_map`, these parameters MUST NOT be returned in this element.
+**R-SET.3** - If the Controller does not have Read permission on any of the parameters specified in `updated_params`, these parameters MUST NOT be returned in this element.
 
-**R-SET.4** - Object Instance Paths in the keys of `updated_param_map` MUST use Instance Number Addressing.
+**R-SET.4** - Object Instance Paths in the keys of `updated_params` MUST use Instance Number Addressing.
 
-*Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the `updated_param_map`.*
+*Note: If the Set Request configured a parameter to the same value it already had, this parameter is still returned in the `updated_params`.*
 
 ###### ParameterError Elements
 
@@ -711,7 +714,7 @@ This element contains the [error code](#error-codes) of the error that caused th
 This element contains text related to the error specified by `err_code`.
 
 #### Set Message Supported Error Codes
-Appropriate error codes for the Set message include `7000-7016`, `7020`, `7021`, and `7800-7999`.
+Appropriate error codes for the Set message include `7000-7016`, `7020`, `7021`, `7026`, and `7800-7999`.
 
 ### The Delete Message
 
@@ -736,7 +739,7 @@ header {
 body {
   request {
     delete {
-      obj_path_list: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
+      obj_paths: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
     }
   }
 }
@@ -752,12 +755,12 @@ header {
 body {
   response {
     delete_resp {
-      deleted_obj_result_list {
+      deleted_obj_results {
         requested_path: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
         oper_status {
           oper_success {
-            affected_path_list: "Device.LocalAgent.Controller.31185."
-            affected_path_list: "Device.LocalAgent.Controller.31185.E2ESession."
+            affected_paths: "Device.LocalAgent.Controller.31185."
+            affected_paths: "Device.LocalAgent.Controller.31185.E2ESession."
           }
         }
       }
@@ -776,13 +779,13 @@ This element tells the Agent how to process the message in the event that one or
 
 **R-DEL.1** - If the `allow_partial` element is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
 
-`repeated string obj_path_list`
+`repeated string obj_paths`
 
 This element contains a repeated set of Object Instance Paths or Search Paths.
 
 #### Delete Response Elements
 
-`repeated DeletedObjectResult deleted_obj_result_list`
+`repeated DeletedObjectResult deleted_obj_results`
 
 This element contains a repeated set of `DeletedObjectResult` messages.
 
@@ -790,7 +793,7 @@ This element contains a repeated set of `DeletedObjectResult` messages.
 
 `string requested_path`
 
-This element returns the value of the entry of `obj_path_list` (in the Delete Request) associated with this `DeleteObjectResult`.
+This element returns the value of the entry of `obj_paths` (in the Delete Request) associated with this `DeleteObjectResult`.
 
 `OperationStatus oper_status`
 
@@ -810,7 +813,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 ###### OperationFailure Elements
 
-*Note: Since the `OperationSuccess` message of the Delete Response contains an `unaffected_path_err_list`, the `OperationStatus` will only contain an `OperationFailure` message if the `requested_path` was did not match any existing Objects (error `7016`) or was syntactically incorrect (error `7008`).*
+*Note: Since the `OperationSuccess` message of the Delete Response contains an `unaffected_path_errs`, the `OperationStatus` will only contain an `OperationFailure` message if the `requested_path` was did not match any existing Objects (error `7016`) or was syntactically incorrect (error `7008`).*
 
 `fixed32 err_code`
 
@@ -822,21 +825,21 @@ This element contains additional information about the reason behind the error.
 
 ###### OperationSuccess Elements
 
-`repeated string affected_path_list`
+`repeated string affected_paths`
 
 This element returns a repeated set of Path Names to Object Instances.
 
-**R-DEL.2** - If the Controller does not have Read permission on any of the Objects specified in `affected_path_list`, these Objects MUST NOT be returned in this element.
+**R-DEL.2** - If the Controller does not have Read permission on any of the Objects specified in `affected_paths`, these Objects MUST NOT be returned in this element.
 
-**R-DEL.3** - The Path Names to Object Instances in `affected_path_list` MUST be addressed using Instance Number Addressing.
+**R-DEL.3** - The Path Names to Object Instances in `affected_paths` MUST be addressed using Instance Number Addressing.
 
-`repeated UnaffectedPathError unaffected_path_err_list`
+`repeated UnaffectedPathError unaffected_path_errs`
 
 This element contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.4** - If any of the Object Instances specified in the `obj_path_list` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
+**R-DEL.4** - If any of the Object Instances specified in the `obj_paths` element fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
-**R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_path_list`, these Objects MUST NOT be returned in this element.
+**R-DEL.5** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this element.
 
 ###### UnaffectedPathError Elements
 
@@ -856,7 +859,7 @@ This element contains text related to the error specified by `err_code`.
 
 #### Delete Message Supported Error Codes
 
-Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, and `7800-7999`.
+Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, `7026` and `7800-7999`.
 
 ## Reading an Agent’s State and Capabilities
 
@@ -872,27 +875,27 @@ The basic Get message is used to retrieve the values of a set of Object’s para
 
 The response returns an entry for each Path Name resolved by the path given in `requested_path`. If a path expression specified in the request does not match any valid parameters or Objects, the response will indicate that this expression was an "invalid path", indicating that the Object or parameter does not currently exist in the Agent’s Instantiated Data Model.
 
-For each resolved Path Name, a `ResolvedPathResult` message is given in the Response. This ResolvedPathResult contains the `resolved_path`, followed by a list of parameters of both the resolved_path Object and all of its sub-objects, plus their values. These Parameter Paths are Relative Paths to the `resolved_path`.
+For each resolved Path Name, a `ResolvedPathResult` message is given in the Response. This ResolvedPathResult contains the `resolved_path`, followed by a list of parameters (`result_params`) of both the resolved_path Object and all of its sub-objects, plus their values. If there are no parameters, `result_params` may be empty.  These Parameter Paths are Relative Paths to the `resolved_path`.
 
 #### Get Examples
 
 For example, a Controller wants to read the data model to learn the settings and stats of a single Wifi SSID, "HomeNetwork" with a BSSID of 00:11:22:33:44:55. It could use a Get request with the following elements:
 
     Get {
-      param_path_list {
+      param_paths {
         Device.Wifi.SSID.[SSID="Homenetwork", BSSID=00:11:22:33:44:55].
       }
     }
 In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using an element for each of the requested paths. In this case:
 
     GetResp {
-        req_path_result_list {
+        req_path_results {
         requested_path: Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].
         err_code : 0
         err_msg :
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path : Device.Wifi.SSID.1.
-          result_parm_map {		
+          result_parms {		
             key: Enable
             value: True
 
@@ -922,7 +925,7 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
 In another example, the Controller only wants to read the current status of the Wifi network with the SSID "HomeNetwork" with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following elements:
 
     Get {
-      param_path_list {
+      param_paths {
         Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status
       }
     }
@@ -931,13 +934,13 @@ In response to this request the Agent returns only the Status parameter and its 
 
 ```
     GetResp {
-      req_path_result_list {
+      req_path_results {
         requested_path: Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status
         err_code : 0
         err_msg :
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path : Device.Wifi.SSID.1.
-          result_parm_map {
+          result_parms {
             key: Status
             value: Up
           }
@@ -950,7 +953,7 @@ Lastly, using wildcards or another Search Path, the requested path may resolve t
 
 ```
     Get {
-      param_path_list {
+      param_paths {
         Device.Wifi.SSID.*.Status
       }
     }
@@ -960,19 +963,19 @@ The Agent's GetResponse would be:
 
 ```
     GetResp {
-      req_path_result_list {
+      req_path_results {
         requested_path: Device.Wifi.SSID.*.
         err_code : 0
         err_msg :
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path : Device.Wifi.SSID.1.
-          result_parm_map {
+          result_parms {
             key: Status
             value: Up
           }
 
           resolved_path :Device.Wifi.SSID.2.
-          result_param_map {
+          result_params {
               key: Status
               value: Up
           }
@@ -996,8 +999,8 @@ header {
 body {
   request {
     get {
-      param_path_list: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
-      param_path_list: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
+      param_paths: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
+      param_paths: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
     }
   }
 }
@@ -1013,9 +1016,9 @@ header {
 body {
   response {
     get_resp {
-      req_path_result_list {
+      req_path_results {
         requested_path: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156."
 
             key: "Alias"
@@ -1034,18 +1037,18 @@ body {
             value: "Inactive"
           }
 
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.XMPP."
-          result_param_map {
+          result_params {
             key: "Destination"
 
             key: "Reference"
 
           }
         }
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.HTTP."
-          result_param_map {
+          result_params {
             key: "CheckPeerID"
 
             key: "EnableEncryption"
@@ -1062,9 +1065,9 @@ body {
             key: "ValidatePeerCertificate"
           }
         }
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.WS."
-          result_param_map {
+          result_params {
             key: "CheckPeerID"
 
             key: "EnableEncryption"
@@ -1081,9 +1084,9 @@ body {
             key: "ValidatePeerCertificate"
           }
         }
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.CoAP."
-          result_param_map {
+          result_params {
             key: "CheckPeerID"
             value: "False"
 
@@ -1106,20 +1109,20 @@ body {
             value: "True"
           }
         }
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.STOMP."
-          result_param_map {
+          result_params {
             key: "Destination"
 
             key: "Reference"
           }
         }
       }
-      req_path_result_list {
+      req_path_results {
         requested_path: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
-        resolved_path_result_list {
+        resolved_path_results {
           resolved_path: "Device.LocalAgent.Subscription.6629."
-          result_param_map {
+          result_params {
             key: "Enable"
             value: "True"
           }
@@ -1132,13 +1135,13 @@ body {
 
 #### Get Request Elements
 
-`repeated string param_path_list`
+`repeated string param_paths`
 
 This element is a set of Object Paths, Instance Paths, Parameter Paths, or Search Paths to Objects, Object Instances, and Parameters in an Agent’s Instantiated Data Model.
 
 #### Get Response Elements
 
-`repeated RequestedPathResult req_path_result_list`
+`repeated RequestedPathResult req_path_results`
 
 A repeated set of `RequestedPathResult` messages for each of the Path Names given in the associated Get request.
 
@@ -1152,13 +1155,15 @@ This element contains one of the Path Names or Search Paths given in the `param_
 
 This element contains a [numeric code](#error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GET.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GET-0** - If `requested_path` contains a Path Name that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
+
+**R-GET.1** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` element, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
 
 `string err_msg`
 
 This element contains additional information about the reason behind the error.
 
-`repeated ResolvedPathResult resolved_path_result_list`
+`repeated ResolvedPathResult resolved_path_results`
 
 This element contains one message of type ResolvedPathResult for each path resolved by the Path Name or Search Path given by `requested_path`.
 
@@ -1168,21 +1173,21 @@ This element contains one message of type ResolvedPathResult for each path resol
 
 This element contains a Path Name to an Object or Object Instance that was resolved from the Path Name or Search Path given in `requested_path`.
 
-**R-GET.1** - If the `requested_path` included a Path Name to a Parameter, the `resolved_path` MUST contain only the Path Name to the parent Object or Object Instance of that parameter.
+**R-GET.2** - If the `requested_path` included a Path Name to a Parameter, the `resolved_path` MUST contain only the Path Name to the parent Object or Object Instance of that parameter.
 
-`map<string, string> result_param_map`
+`map<string, string> result_params`
 
 This element contains a set of mapped key/value pairs listing a Parameter Path (relative to the Path Name in `resolved_path`) to each of the parameters and their values, plus sub-objects and their values, of the Object given in `resolved_path`.
 
-**R-GET.2** - If the `requested_path` included a Path Name to a Parameter, `result_param_map` MUST contain only the Parameter included in that path.
+**R-GET.3** - If the `requested_path` included a Path Name to a Parameter, `result_params` MUST contain only the Parameter included in that path.
 
-**R-GET.3** - If the Controller does not have Read permission on any of the parameters specified in `result_param_map`, these parameters MUST NOT be returned in this element. This MAY result in this element being empty.
+**R-GET.4** - If the Controller does not have Read permission on any of the parameters specified in `result_params`, these parameters MUST NOT be returned in this element. This MAY result in this element being empty.
 
-**R-GET.4** - Path Names containing Object Instance Paths in the keys of `result_param_map` MUST be addressed using Instance Number Addressing.
+**R-GET.5** - Path Names containing Object Instance Paths in the keys of `result_params` MUST be addressed using Instance Number Addressing.
 
 ###### Get Message Supported Error Codes
 
-Appropriate error codes for the Get message include `7000-7006`, `7008`, `7010`, and `7800-7999`.
+Appropriate error codes for the Get message include `7000-7006`, `7008`, `7010`, `7026` and `7800-7999`.
 
 ### The GetInstances Message
 
@@ -1198,7 +1203,7 @@ For example, if a Controller wanted to know *only* the current instances of Wifi
 
 ```
     GetInstances {
-      obj_path_list : Device.Wifi.SSID.
+      obj_paths : Device.Wifi.SSID.
       bool first_level_only : true
     }
 ```
@@ -1207,13 +1212,13 @@ The Agent's Response would contain:
 
 ```
     GetInstancesResp {
-      req_path_result_list {
+      req_path_results {
         requested_path : Device.Wifi.SSID.
         err_code : 0
         err_msg :
-        curr_inst_list {
+        curr_insts {
           instantiated_obj_path : Device.Wifi.SSID.1.
-          unique_key_map :
+          unique_keys :
 
             key : Alias
             value : UserWifi1
@@ -1228,7 +1233,7 @@ The Agent's Response would contain:
             value : 00:11:22:33:44:55
 
           instantiated_obj_path : Device.Wifi.SSID.2.
-          unique_key_map :
+          unique_keys :
 
             key : Alias
             value : UserWifi2
@@ -1251,22 +1256,22 @@ In another example, the Controller wants to get all of  the Instances of the `De
 
 ```
     GetInstances {
-      obj_path_list : Device.Wifi.AccessPoint.
+      obj_paths : Device.Wifi.AccessPoint.
       bool first_level_only : false
     }
 ```
 
-The Agent's Response will contain an entry in curr_inst_list for all of the Instances of the `Device.Wifi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
+The Agent's Response will contain an entry in curr_insts for all of the Instances of the `Device.Wifi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
 
 ```
     GetInstancesResp {
-      req_path_result_list {
+      req_path_results {
         requested_path : Device.Wifi.AccessPoint.
         err_code : 0
         err_msg :
-        curr_inst_list {
+        curr_insts {
           instantiated_obj_path : Device.Wifi.AccessPoint.1.
-          unique_key_map :
+          unique_keys :
 
             key : Alias
             value : SomeAlias
@@ -1275,7 +1280,7 @@ The Agent's Response will contain an entry in curr_inst_list for all of the Inst
             value : Device.Wifi.SSID.1
 
           instantiated_obj_path : Device.Wifi.AccessPoint.2.
-          unique_key_map :
+          unique_keys :
 
             key : Alias
             value : SomeAlias
@@ -1284,25 +1289,25 @@ The Agent's Response will contain an entry in curr_inst_list for all of the Inst
             value : Device.Wifi.SSID.2
 
           instantiated_obj_path : Device.Wifi.AccessPoint.1.AssociatedDevice.1.
-          unique_key_map :
+          unique_keys :
 
             key : MACAddress
             value : 11:22:33:44:55:66
 
           instantiated_obj_path : Device.Wifi.AccessPoint.1.AC.1.
-          unique_key_map :
+          unique_keys :
 
             key : AccessCategory
             value : BE
 
           instantiated_obj_path : Device.Wifi.AccessPoint.2.AssociatedDevice.1.
-          unique_key_map :
+          unique_keys :
 
             key : MACAddress
             value : 11:22:33:44:55:66
 
           instantiated_obj_path : Device.Wifi.AccessPoint.2.AC.1.
-          unique_key_map :
+          unique_keys :
 
             key : AccessCategory
             value : BE
@@ -1315,7 +1320,7 @@ Or more, if more Object Instances exist.
 
 #### GetInstances Request Elements
 
-`repeated string obj_path_list`
+`repeated string obj_paths`
 
 This element contains a repeated set of Path Names or Search Paths to Multi-Instance Objects in the Agent's Instantiated Data Model.
 
@@ -1325,7 +1330,7 @@ This element, if `true`, indicates that the Agent should return only those insta
 
 #### GetInstances Response Elements
 
-`repeated RequestedPathResult req_path_result_list`
+`repeated RequestedPathResult req_path_results`
 
 This element contains a RequestedPathResult message for each Path Name or Search
 
@@ -1343,7 +1348,7 @@ This element contains a [numeric code](#error-codes) indicating the type of erro
 
 This element contains additional information about the reason behind the error.
 
-`repeated CurrInstance curr_inst_list`
+`repeated CurrInstance curr_insts`
 
 This element contains a message of type `CurrInstance` for each Instance of *all* of the Objects matched by `requested_path` that exists in the Agent's Instantiated Data Model.
 
@@ -1353,15 +1358,15 @@ This element contains a message of type `CurrInstance` for each Instance of *all
 
 This element contains the Instance Path Name of the Object Instance.
 
-`map<string, string> unique_key_map`
+`map<string, string> unique_keys`
 
 This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.
 
-**R-GIN.1** - If the Controller does not have Read permission on any of the parameters specified in `unique_key_map`, these parameters MUST NOT be returned in this element.
+**R-GIN.1** - If the Controller does not have Read permission on any of the parameters specified in `unique_keys`, these parameters MUST NOT be returned in this element.
 
 #### GetInstances Error Codes
 
-Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018` and `7800-7999`.
+Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018`, `7026` and `7800-7999`.
 
 ### The GetSupportedDM Message
 
@@ -1383,7 +1388,7 @@ For example, the Controller wishes to learn the Wifi capabilities the Agent repr
 
 ```
     GetSupportedDM {
-      obj_path_list {
+      obj_paths {
         obj_path : Device.Wifi.
       }
       first_level_only : false
@@ -1397,15 +1402,15 @@ The Agent's Response would be:
 
 ```
     GetSupportedDMResp {
-      req_obj_result_list {
+      req_obj_results {
         req_obj_path : Device.Wifi.
         err_code : 0
         err_msg :
         data_model_inst_uri : urn:broadband-forum-org:tr-181-2-12-0
-        supported_obj_list {
+        supported_objs {
           supported_obj_path : Device.Wifi.
           is_multi_instance : false
-          supported_param_list {
+          supported_params {
             param_name : RadioNumberOfEntries            
 
             param_name : SSIDNumberOfEntries          
@@ -1414,20 +1419,20 @@ The Agent's Response would be:
 
             param_name : EndPointNumberOfEntries            
           }
-          supported_command_list {
+          supported_commands {
             command_name : SomeCommand()
-            input_arg_name_list {
+            input_arg_names {
               SomeArgument1
               SomeArgument2
             }
-            output_arg_name_list {
+            output_arg_names {
               SomeArgument1
               SomeArgument2
             }
           }
-          supported_event_list {
+          supported_events {
             event_name : SomeEvent!
-            arg_name_list {
+            arg_names {
               SomeArgumentA
               SomeArgumentB
             }
@@ -1435,7 +1440,7 @@ The Agent's Response would be:
           supported_obj_path : Device.Wifi.SSID.{i}.
           access : ADD_DELETE (1)
           is_multi_instance : true
-          supported_param_list {
+          supported_params {
             param_name : Enable
             access : PARAM_READ_WRITE (1)
 
@@ -1458,20 +1463,20 @@ The Agent's Response would be:
             param_name : SSID
             access : PARAM_READ_WRITE (1)
           }
-          supported_command_list {
+          supported_commands {
             command_name : SomeCommand()
-            input_arg_name_list {
+            input_arg_names {
               SomeArgument1
               SomeArgument2
             }
-            output_arg_name_list {
+            output_arg_names {
               SomeArgument1
               SomeArgument2
             }
           }
-          supported_event_list {
+          supported_events {
             event_name : SomeEvent!
-            arg_name_list {
+            arg_names {
               SomeArgumentA
               SomeArgumentB
             }
@@ -1484,7 +1489,7 @@ The Agent's Response would be:
 
 #### GetSupportedDM Request Elements
 
-`repeated obj_path_list`
+`repeated obj_paths`
 
 This element contains a repeated set of Path Names to Objects in the Agent's Supported Data Model.
 
@@ -1494,15 +1499,15 @@ This element, if `true`, indicates that the Agent should return only those objec
 
 `bool return_commands`
 
-This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_command_list` element containing Commands supported by the reported Object(s).
+This element, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_commands` element containing Commands supported by the reported Object(s).
 
 `bool return_events`
 
-This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_event_list` element containing Events supported by the reported Object(s).
+This element, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_events` element containing Events supported by the reported Object(s).
 
 `bool return_params`
 
-This element, if `true`, indicates that, in the `supported_obj_list`, the Agent should include a `supported_param_list` element containing Parameters supported by the reported Object(s).
+This element, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` element containing Parameters supported by the reported Object(s).
 
 ##### DiscoverObject Elements
 
@@ -1512,7 +1517,7 @@ This element contains a Path Name to an Object (not an Object Instance) in the A
 
 #### GetSupportedDMResp Elements
 
-`repeated RequestedObjectResult req_obj_result_list`
+`repeated RequestedObjectResult req_obj_results`
 
 This element contains a repeated set of messages of type `RequestedObjectResult`.
 
@@ -1536,7 +1541,7 @@ This element contains additional information about the reason behind the error.
 
 This element contains a Uniform Resource Identifier (URI) to the Data Model associated with the Object specified in `obj_path`.
 
-`repeated SupportedObjectResult supported_obj_list`
+`repeated SupportedObjectResult supported_objs`
 
 The element contains a message of type `SupportedObjectResult` for each reported Object.
 
@@ -1559,15 +1564,15 @@ The element contains an enumeration of type ObjAccessType specifying the access 
 
 This element, if `true`, indicates that the reported Object is a Multi-Instance Object.
 
-`repeated SupportedParamResult supported_param_list`
+`repeated SupportedParamResult supported_params`
 
 The element contains a message of type `SupportedParamResult` for each Parameter supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
-`repeated SupportedCommandResult supported_command_list`
+`repeated SupportedCommandResult supported_commands`
 
 The element contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
-`repeated SupportedEventResult supported_event_list`
+`repeated SupportedEventResult supported_events`
 
 The element contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
 
@@ -1591,13 +1596,13 @@ The element contains an enumeration of type ParamAccessType specifying the acces
 
 This element contains the local name of the Command.
 
-`repeated string input_arg_name_list`
+`repeated string input_arg_names`
 
 This element contains a repeated set of local names for the input arguments of the Command.
 
 **R-GSP.1** - If any input arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.
 
-`repeated string output_arg_name_list`
+`repeated string output_arg_names`
 
 This element contains a repeated set of local names for the output arguments of the Command.
 
@@ -1609,7 +1614,7 @@ This element contains a repeated set of local names for the output arguments of 
 
 This element contains the local name of the Event.
 
-`repeated string arg_name_list`
+`repeated string arg_names`
 
 This element contains a repeated set of local names for the arguments of the Event.
 
@@ -1617,7 +1622,7 @@ This element contains a repeated set of local names for the arguments of the Eve
 
 #### GetSupportedDM Error Codes
 
-Appropriate error codes for the GetSupportedDM message include `7000-7006`, `7008`, `7016`, and `7800-7999`.
+Appropriate error codes for the GetSupportedDM message include `7000-7006`, `7008`, `7016`, `7026`, and `7800-7999`.
 
 *Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
@@ -1776,7 +1781,7 @@ body {
       event {
         obj_path: "Device.LocalAgent."
         event_name: "Boot!"
-        param_map {
+        params {
           key: "Cause"
           value: "LocalReboot"
 
@@ -1847,11 +1852,11 @@ This element contains the Object or Object Instance Path of the Object that caus
 
 This element contains the name of the Object defined event that caused this notification (for example, `Boot!`).
 
-`map<string, string> parameter_map`
+`map<string, string> parameters`
 
 This element contains a set of key/value pairs of parameters associated with this event.
 
-**R-NOT.10** - Any values in `parameter_map` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
+**R-NOT.10** - Any values in `parameters` whose keys contain Object Paths to Multi-Instance Objects MUST be addressed by Instance Number.
 
 ##### ValueChange Elements
 
@@ -1873,7 +1878,7 @@ This element contains the Path Name of the created Object instance.
 
 **R-NOT.12** - Path Names containing Object Instances in the `obj_path` element of the ObjectCreation notification MUST be addressed using Instance Number Addressing.
 
-`map<string, string> unique_key_map`
+`map<string, string> unique_keys`
 
 This element contains a map of key/value pairs for all supported parameters that are part of any of this Object's unique keys.
 
@@ -1910,11 +1915,11 @@ Contains one of the following messages:
 
 ###### OutputArgs Elements
 
-`map<string, string> output_arg_map`
+`map<string, string> output_args`
 
 This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command_name` element) returned by the method invoked in the Operate message.
 
-**R-NOT.15** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
+**R-NOT.15** - Any key in the `output_args` that contains multi-instance arguments MUST use Instance Number Addressing.
 
 ###### CommandFailure Elements
 
@@ -2049,7 +2054,7 @@ header {
 body {
   response {
     operate_resp {
-      operation_result_list {
+      operation_results {
         executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
       }
     }
@@ -2074,15 +2079,15 @@ This element lets the Controller indicate to Agent whether or not it expects a r
 
 **R-OPR.4** - When `send_resp` is set to `false`, the target Endpoint SHOULD NOT send a response or error to the source Endpoint. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.
 
-`map<string, string> input_arg_map`
+`map<string, string> input_args`
 
 This element contains a map of key/value pairs indicating the input arguments (relative to the command path in the command element) to be passed to the method indicated in the command element.
 
-**R-OPR.5** - Any key in the `input_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing. This element contains a map of name/value pairs indicating the input arguments (relative to the Object that is the subject of this command) to be passed to the method invoked indicated in the command element.
+**R-OPR.5** - Any key in the `input_args` that contains multi-instance arguments MUST use Instance Number Addressing. This element contains a map of name/value pairs indicating the input arguments (relative to the Object that is the subject of this command) to be passed to the method invoked indicated in the command element.
 
 #### Operate Response Elements
 
-`repeated OperationResult operation_result_list`
+`repeated OperationResult operation_results`
 
 This element contains a repeated set of `OperationResult` messages.
 
@@ -2109,11 +2114,11 @@ This element contains one message of type `CommandFailure`. It is used when at s
 
 ###### OutputArgs Elements
 
-`map<string, string> output_arg_map`
+`map<string, string> output_args`
 
 This element contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` element) returned by the method invoked in the Operate message.
 
-**R-OPR.7** - Any key in the `output_arg_map` that contains multi-instance arguments MUST use Instance Number Addressing.
+**R-OPR.7** - Any key in the `output_args` that contains multi-instance arguments MUST use Instance Number Addressing.
 
 ###### CommandFailure elements
 
@@ -2135,7 +2140,7 @@ Appropriate error codes for the Operate message include `7000-7008`, `7012` `701
 USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
 
 | Code | Name | Description
-| -----: | :------------: | :---------------------- |
+| :----- | :------------ | :---------------------- |
 | `7000` | Message failed	| This error indicates a general failure that is described in an err_msg element. |
 | `7001` | Message not supported | This error indicates that the attempted message was not understood by the target endpoint.|
 | `7002` | Request denied (no reason specified) | This error indicates that the target endpoint cannot or will not process the message. |
@@ -2161,8 +2166,9 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7022` | Command failure | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg element. |
 | `7023` | Command canceled | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
 | `7024` | Delete failure | This error indicates that this Object Instance failed to be deleted. |
-| `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist.
-| `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes).
+| `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
+| `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
+| `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
 
 ### Vendor Defined Error Codes
 

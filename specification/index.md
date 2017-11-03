@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,14 +15,18 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
+[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
-<h1>WT-369: User Services Platform</h1>
-<h2>Version 1.0-DRAFT-03</h2>
+<h1>Broadband Forum WT-369: User Services Platform</h1>
+<h2>Version 1.0-DRAFT-04</h2>
 
 **Table of Contents**
 
@@ -40,7 +44,9 @@ Main Specification
 Extensions
 
 Annex A. [HTTP Bulk Data Transfer](./extensions/http-bulk-data-collection)
-Annex B. [Software Module Management](./extensions/software-module-management)
+
+Appendix I. [Software Module Management](./extensions/software-module-management)
+Appendix II. [Firmware Management](./extensions/firmware-management)
 
 # Introduction
 
@@ -67,6 +73,12 @@ All materials submitted for possible incorporation into Technical Reports or oth
 THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.
 
 ## Revision History
+
+### Version-1.0-DRAFT-04
+
+* Added end to end message exchange system using USP record messages
+* Added WebSocket and STOMP bindings
+* Updated protobuf schema for usp messages and added usp record schema
 
 ### Version 1.0-DRAFT-03
 
@@ -206,6 +218,11 @@ A list of currently valid Broadband Forum Technical Reports is published at
 17. [IETF RFC 2234 Augmented BNF for Syntax Specifications: ABNF][17]
 18. [IETF RFC 3986 Uniform Resource Identifier (URI): Generic Syntax][18]
 19. [IETF RFC 2141 URN Syntax][19]
+20. [IETF RFC 6455 The WebSocket Protocol][20]
+21. [Simple Text Oriented Message Protocol][21]
+22. [The Transport Layer Security (TLS) Protocol Version 1.2][22]
+23. [Datagram Transport Layer Security Version 1.2][23]
+
 
 # Definitions
 
@@ -252,6 +269,11 @@ An Endpoint is a termination point for a Message.
 **Endpoint Identifier**
 
 The Endpoint Identifier is a globally unique USP layer identifier of an Endpoint.
+
+**End to End Message Exchange**
+
+USP feature that allows for message integrity protection through the creation of
+a session context.
 
 **Error**
 
@@ -364,6 +386,10 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 **Path Reference**
 
 A Path Reference is a Parameter data type that contains a Path Name to an Object or Parameter that may be automatically followed by using certain Path Name syntax.
+
+**Record**
+
+The Record is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the Message as well as providing additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
 **Relative Path**
 

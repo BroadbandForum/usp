@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device Data Model for TR-069"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -15,12 +15,14 @@
 [14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
 [15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
 [16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://www.ietf.org/rfc/rfc2234.txt "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://www.ietf.org/rfc/rfc3986.txt "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://www.ietf.org/rfc/rfc2141.txt "RFC 2141 URN Syntax"
-[20]: https://www.ietf.org/rfc/rfc5246.txt "The Transport Layer Security (TLS) Protocol Version 1.2"
-[21]: https://www.ietf.org/rfc/rfc6347.txt "Datagram Transport Layer Security Version 1.2"
-[Conventions]: https://www.ietf.org/rfc/rfc2119.txt "Key words for use in RFCs to Indicate Requirement Levels"
+[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
+[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
+[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
+[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
+[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
+[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
+[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 # Message Transfer Protocols
 
@@ -30,10 +32,9 @@ Note: Message Transfer Protocol was a term adopted to avoid confusion with the t
 
 The requirements for each individual Message Transfer Protocol is covered in a section of this document. This version of the specification includes definitions for:
 
-*	The [Constrained Application Protocol (CoAP)](./coap/).
-* WebSockets
-
-*Note: In this DRAFT version of the specification, the binding definition for WebSockets is TBD. It will be fully defined in the final 1.0 release.*
+*	The [Constrained Application Protocol (CoAP)](./coap/)
+* [WebSockets](./websocket/)
+* The [Simple Text-Oriented Messaging Protocol](./stomp/)
 
 ## Securing MTPs
 
@@ -46,9 +47,9 @@ This specification places the following requirement for encrypting MTP headers a
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however. If the device implementer can reasonably expect Messages to be transported across the Internet when the device is deployed, then the implementer needs to ensure the device supports encryption of all MTP protocols.
 
-MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [RFC 6347]( https://tools.ietf.org/html/rfc6347).
+MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [RFC 6347][23].
 
-MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [RFC 5246]( https://tools.ietf.org/html/rfc5246).
+MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [RFC 5246][22].
 
 Specific requirements for implementing these are provided in the individual MTP sections.
 
