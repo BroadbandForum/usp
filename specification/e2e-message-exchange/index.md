@@ -424,4 +424,5 @@ USP relies upon peer authentication using X.509 certificates, as provided by TLS
 
 
 [<-- Message Encoding](/specification/encoding/)
+
 [USP Messages -->](/specification/messages/)
