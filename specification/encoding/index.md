@@ -27,13 +27,13 @@
 
 # Message Encoding
 
-USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
+USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message and the USP Record encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
 
 * [Protocol Buffers Version 3][12]
 
-**R-ENC.0** - An implementation using protocol buffers encoding MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
+**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
 
-**R-ENC.1** - An implementation using protocol buffers encoding MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-record.proto).
+**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-record.proto).
 
 [<-- Message Transfer Protocols](/specification/mtp/)
 [End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)
