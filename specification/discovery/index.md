@@ -64,7 +64,7 @@ Controllers acquires this information upon initial connection by an Agent, thoug
 
 DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 Vendor-Identifying Vendor-Specific Information Option [RFC 3925](https://tools.ietf.org/html/rfc3925) (option code 125) and DHCPv6 Vendor-specific Information Option [RFC 3315](https://tools.ietf.org/html/rfc3315) (option code 17) can be used to provide information to Agents about a single Controller. The options that may be returned by DNS are shown below. Description of these options can be found in [Device:2][1].
 
-**R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string “`usp`” (all lower case) in a vendor-class-data instance associated with this enterprise-number.
+**R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string "`usp`" (all lower case) in a vendor-class-data instance associated with this enterprise-number.
 
 The Role to associate with DHCP-discovered Controller is programmatically determined (see [Security](/specification/security/)).
 
@@ -89,7 +89,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.4** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
-**R-DIS.5** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain “`.local.`”.
+**R-DIS.5** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
 ### DNS
 
@@ -105,12 +105,12 @@ Requirements for implementation of a DNS client and configuration of the DNS cli
 
 <a id="dns-sd" />
 
-DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about “services”, and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
+DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
-The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is “`<Instance>.<Service>.<Domain>`“. `<Instance>` will be the USP Identifier of the USP Endpoint.
+The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is "`<Instance>.<Service>.<Domain>`". `<Instance>` will be the USP Identifier of the USP Endpoint.
 
 **R-DIS.8** -  USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
-Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as “`_<Service Name>._<Transport Protocol>`” (e.g., “`_usp-agt-coap._udp`”).
+Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as "`_<Service Name>._<Transport Protocol>`" (e.g., "`_usp-agt-coap._udp`").
 
 #### IANA-Registered USP Service Names
 
@@ -132,13 +132,13 @@ DNS PTR records with a service subtype identifier (e.g., `._<subtype>._usp-agt-c
 
 DNS TXT records allow for a small set of additional information to be included in the reply sent to the querier. This information cannot be used as search criteria. The registry of TXT record attributes for BBF Service Names are listed at [www.broadband-forum.org/assignments](http://www.broadband-forum.org/assignments).
 
-**R-DIS.9** -  Agent DNS-SD records MUST include a TXT record with the “path” and “name” attributes.
+**R-DIS.9** -  Agent DNS-SD records MUST include a TXT record with the "path" and "name" attributes.
 
-**R-DIS.10** - The “name” attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in [Device:2][1], if the FriendlyName parameter is implemented.
+**R-DIS.10** - The "name" attribute included in the Agent DNS-SD records MUST be identical to the .FriendlyName parameter defined in [Device:2][1], if the FriendlyName parameter is implemented.
 
-**R-DIS.11** - Controller DNS-SD records MUST include a TXT record with the “path” attribute.
+**R-DIS.11** - Controller DNS-SD records MUST include a TXT record with the "path" attribute.
 
-The “path” attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate section of this document.
+The "path" attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate section of this document.
 
 The TXT record can include other attributes defined in the TXT record attribute registry, as well.
 
@@ -151,7 +151,7 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 
     ; One SRV+TXT (DNS-SD Service Instance) record for each supported MTP
     <USP ID>._usp-ctr-coap._udp.example.com.   SRV 0 1 443 host.example.com.
-    <USP ID>._usp-ctr-coap._udp.example.com.   TXT “path=<pathname>“
+    <USP ID>._usp-ctr-coap._udp.example.com.   TXT "path=<pathname>"
 
     ; Controller A and AAAA records
     host.example.com.  A      192.0.2.200
@@ -168,7 +168,7 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
     <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5694 <USP ID>.local.
-    <USP ID>._usp-agt-coap._udp.local.    TXT “path=<pathname>“ “name=kitchen light”
+    <USP ID>._usp-agt-coap._udp.local.    TXT "path=<pathname>" "name=kitchen light"
 
     ; Agent A and AAAA records
     <USP ID>.local.  A      192.0.2.100
@@ -181,7 +181,7 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
 ```
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
     <USP ID>._usp-ctr-coap._tcp.local.    SRV 0 1 443 <USP ID>.local.
-    <USP ID>._usp-ctr-coap._tcp.local.    TXT “path=<pathname>“
+    <USP ID>._usp-ctr-coap._tcp.local.    TXT "path=<pathname>"
 
     ; Controller A and AAAA records
     <USP ID>.local.  A      192.0.2.200

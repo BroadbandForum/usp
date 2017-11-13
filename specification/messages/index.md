@@ -341,9 +341,6 @@ Add Request:
 header {
   msg_id: "52867"
   msg_type: ADD
-  proto_version: "1.0"
-  to_id: "oui:112233:agent"
-  from_id: "oui:112233:controller"
 }
 body {
   request {
@@ -367,9 +364,6 @@ Add Response:
 header {
   msg_id: "55362"
   msg_type: ADD_RESP
-  proto_version: "1.0"
-  to_id: “id:oui:112233:controller”
-  from_id: “id:oui:112233:agent”
 }
 body {
   response {
@@ -524,9 +518,6 @@ Set Request:
 header {
   msg_id: "19220"
   msg_type: SET
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -547,9 +538,6 @@ Set Response:
 header {
   msg_id: "19220"
   msg_type: SET_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -732,9 +720,6 @@ Delete Request:
 header {
   msg_id: "24799"
   msg_type: DELETE
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -748,9 +733,6 @@ Delete Response:
 header {
   msg_id: "24799"
   msg_type: DELETE_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -992,9 +974,6 @@ Get Request:
 header {
   msg_id: "5721"
   msg_type: GET
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -1009,9 +988,6 @@ Get Response:
 header {
   msg_id: "5721"
   msg_type: GET_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   response {
@@ -1618,7 +1594,7 @@ This element contains the local name of the Event.
 
 This element contains a repeated set of local names for the arguments of the Event.
 
-**R-GPS.3** - If any arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.
+**R-GSP.3** - If any arguments are multi-instance, the Agent MUST report them using Instance Number Addressing.
 
 #### GetSupportedDM Error Codes
 
@@ -1727,9 +1703,6 @@ Noify Request:
 header {
   msg_id: "33936"
   msg_type: NOTIFY
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   request {
@@ -1748,9 +1721,6 @@ Notify Response:
 header {
   msg_id: "33936"
   msg_type: NOTIFY_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   response {
@@ -1769,9 +1739,6 @@ Notify Request
 header {
   msg_id: "26732"
   msg_type: NOTIFY
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   request {
@@ -1802,9 +1769,6 @@ Notify Response:
 header {
   msg_id: "26732"
   msg_type: NOTIFY_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   response {
@@ -2028,9 +1992,6 @@ Operate Request:
 header {
   msg_id: "42314"
   msg_type: OPERATE
-  proto_version: "1.0"
-  to_id: “oui:112233:agent”
-  from_id: “oui:112233:controller”
 }
 body {
   request {
@@ -2047,9 +2008,6 @@ Response:
 header {
   msg_id: "42314"
   msg_type: OPERATE_RESP
-  proto_version: "1.0"
-  to_id: “oui:112233:controller”
-  from_id: “oui:112233:agent”
 }
 body {
   response {
