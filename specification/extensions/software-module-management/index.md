@@ -25,7 +25,7 @@
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
-# Annex B - Software Module Management
+# Appendix I - Software Module Management
 
 This section discusses the Theory of Operation for Software Module Management using USP and the Software Module object defined in the Root data model.
 

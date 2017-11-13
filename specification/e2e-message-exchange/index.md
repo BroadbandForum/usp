@@ -47,6 +47,8 @@ The USP Record Message is defined as the transport layer payload, encapsulating 
 
 #### Record Definition
 
+The following elements this section describe the elements contained within a USP Record. When not explicitly set, the elements have a default value based on the type of element. For strings, the default value is an empty byte string. For numbers (uint64) and enumerations, the default value is 0. For repeating lists, the default value is an empty list.
+
 `string version`
 
 Required. Version of the USP Protocol. The only valid value is `1.0`.
@@ -61,43 +63,43 @@ Required. Originating/Source USP Endpoint Identifier.
 
 `uint64 session_id`
 
-Optional. Session Context identifier, used to identify the USP Session Context. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
+Optional. Session Context identifier, used to identify the USP Session Context. Used only for exchange of USP Records with a E2E Session Context.
 
 The value 0 is reserved for exchange of USP Records without a E2E Session Context.
 
 `uint64 sequence_id`
 
-Optional. Datagram sequence identifier. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context. When used, the field is initialized to zero and incremented after each sent USP Record.
+Optional. Datagram sequence identifier. Used only for exchange of USP Records with a E2E Session Context. When used, the field is initialized to zero and incremented after each sent USP Record.
 
-*Note: Endpoints maintain independent values for sequence_id, based on the number of sent records.*
+*Note: Endpoints maintain independent values for `sequence_id`, based on the number of sent records.*
 
 `uint64 expected_id`
 
-Optional. Next `sequence_id` the sender is expecting to receive. If not explicitly set, the default value is 0. Implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.
+Optional. Next `sequence_id` the sender is expecting to receive. Implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.  Used only for exchange of USP Records with a E2E Session Context.
 
 `uint64 retransmit_id`
 
-Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. If not explicitly set, the default value is 0. Used only for exchange of USP Records with a E2E Session Context.
+Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. Used only for exchange of USP Records with a E2E Session Context.
 
 `enum payload_encoding`
 
-Optional. If not explicitly set, the default value is 0. When the payload is present, indicates the encoding protocol used to encode and decode the reassembled payload as the payload was prior to the application of `payload_security`. Valid values are:
+Optional. When the payload is present, indicates the encoding protocol used to encode and decode the reassembled payload as the payload was prior to the application of `payload_security`. Valid values are:
 
 `0 – ProtoBuf3`
 
 `enum payload_security`
 
-Optional. If not explicitly set, the default value is 0. When the payload is present, indicates the protocol or mechanism used to secure the USP Message. Valid values are:
+Optional. When the payload is present, indicates the protocol or mechanism used to secure the USP Message. Valid values are:
 
 ```
-0 – TLS
-1 – PLAINTEXT
+0 – PLAINTEXT
+1 – TLS
 2 – COSE
 ```
 
 `enum payload_sar_state`
 
-Optional. If not explicitly set, the default value is 0. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
+Optional. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
 
 ```
 0 – No segmentation
@@ -108,7 +110,7 @@ Optional. If not explicitly set, the default value is 0. When payload is present
 
 `enum payloadrec_sar_state`
 
-Optional. If not explicitly set, the default value is 0. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
+Optional. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
 
 ```
 0 – Reserved (Unused)
@@ -119,19 +121,19 @@ Optional. If not explicitly set, the default value is 0. When payload segmentati
 
 `bytes mac_signature`
 
-Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.  If not explicitly set, the default value is an empty byte string.
+Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.
 
 `bytes sender_cert`
 
-Optional. The certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`. If not explicitly set, the default value is an empty byte string.
+Optional. The certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`.
 
 `bytes payload`
 
-Optional. Repeating list of one or more datagrams. If not explicitly set, the default value is an empty list.
+Optional. Repeating list of one or more datagrams. When using `TLS` payload security this element can contain multiple entries with each entry containing an encrypted TLS record. When using `PLAINTEXT` payload security this element only has 1 entry in the list.
 
 **R-E2E.1** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
 
-**R-E2E.1a** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
+**R-E2E.2** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
 
 ## Exchange of USP Records within a E2E Session Context
 
@@ -143,15 +145,15 @@ For the exchange of USP Records within a E2E Session Context to happen between t
 
 In USP, either a Controller or an Agent can begin the process of establishing a Session Context. This is done by the Controller or Agent sending a USP Record with a `session_id` element that is not currently associated with the Agent/Controller combination and a `sequence_id` element value of `0`.
 
-**R-E2E.2** – Session Context identifiers MUST be generated by the USP Endpoint that originates the session such that it is greater than 1 and scoped to the remote USP Endpoint.
+**R-E2E.3** – Session Context identifiers MUST be generated by the USP Endpoint that originates the session such that it is greater than 1 and scoped to the remote USP Endpoint.
 
 When a Session Context had been previously established between an Agent and Controller and the remote USP Endpoint receives a USP Record with a different `session_id` element, the remote USP Endpoint will restart the Session Context using the new `session_id` element.
 
-**R-E2E.3** – When a USP Endpoint receives a USP Record from another USP Endpoint with a new Session Context identifier, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint.
+**R-E2E.4** – When a USP Endpoint receives a USP Record from another USP Endpoint with a new Session Context identifier, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint.
 
-**R-E2E.4** – At most one (1) Session Context is established between an Agent and Controller.
+**R-E2E.5** – At most one (1) Session Context is established between an Agent and Controller.
 
-**R-E2E.5** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint.
+**R-E2E.6** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint.
 
 *Note: Implementations need to consider if outstanding USP Messages that have not been transmitted to the remote USP Endpoint need to be transmitted within the newly established Session Context.*
 
@@ -159,28 +161,28 @@ When a Session Context had been previously established between an Agent and Cont
 
 Sessions Contexts have a lifetime and can expire. The expiration of the Session Context is handled by the `Device.Controller.{i}.E2ESession.SessionContextExpiration` Parameter in the Agent. If the Agent does not see activity (an exchange of USP Records) within the Session Context, the Agent considers the Session Context expired and for the next interaction with the Controller a new Session Context is established.
 
-**R-E2E.10** – When a Session Context between a Controller or Agent expires the Agent MUST initiate a new Session Context upon the next interaction with the remote USP Endpoint or from a Session Context request by the remote USP Endpoint.
+**R-E2E.7** – When a Session Context between a Controller or Agent expires the Agent MUST initiate a new Session Context upon the next interaction with the remote USP Endpoint or from a Session Context request by the remote USP Endpoint.
 
 #### Exhaustion of Sequence Identifiers
 
 USP Endpoints identify the USP Record using the `sequence_id` element. When the `sequence_id` element for a USP Record that is received or transmitted by a USP Endpoint nears the maximum value that can be handled by the USP Endpoint, the USP Endpoint will attempt to establish a new Session Context in order to avoid a rollover of the `sequence_id` element.
 
-**R-E2E.11** – When an USP Endpoint receives a USP Record with a value of the `sequence_id` element that is within 10,000 of the maximum size for the data type of the `sequence_id` element, the USP Endpoint MUST establish a new Session Context with the remote USP Endpoint.
+**R-E2E.8** – When an USP Endpoint receives a USP Record with a value of the `sequence_id` element that is within 10,000 of the maximum size for the data type of the `sequence_id` element, the USP Endpoint MUST establish a new Session Context with the remote USP Endpoint.
 
-**R-E2E.12** – When an USP Endpoint transmits a USP Record with a value of the `sequence_id` element that is within 10,000 of the maximum size for the data type of the `sequence_id` element, the USP Endpoint MUST attempt establish a new Session Context with the remote USP Endpoint upon its next contact with the remote USP Endpoint.
+**R-E2E.9** – When an USP Endpoint transmits a USP Record with a value of the `sequence_id` element that is within 10,000 of the maximum size for the data type of the `sequence_id` element, the USP Endpoint MUST attempt establish a new Session Context with the remote USP Endpoint upon its next contact with the remote USP Endpoint.
 
 #### Failure Handling in the Session Context
 
 In some situations, (e.g., TLS negotiation handshake) the failure to handle a received USP Record is persistent, causing an infinite cycle of "receive failure/request->session/establish->session/receive->failure" to occur. In these situations, the Agent enforces a policy as defined in this section regarding establishment of failed Session Contexts or failed interactions within a Session Context. The policy is controlled by the `Device.Controller.{i}.E2ESession.Enable` Parameter.
 
-**R-E2E.13** – When retrying USP Records, the Agent MUST use the following retry algorithm to manage the retransmission Session Context establishment procedure:
+**R-E2E.10** – When retrying USP Records, the Agent MUST use the following retry algorithm to manage the retransmission Session Context establishment procedure:
 
 The retry interval range is controlled by two Parameters, the minimum wait interval and the interval multiplier, each of which corresponds to a data model Parameter, and which are described in the table below. The factory default values of these Parameters MUST be the default values listed in the Default column. They MAY be changed by a Controller with the appropriate permissions at any time.
 
 | Descriptive Name | Symbol | Default | Data Model Parameter Name |
 | ---------: | :-----: | :------: | :------------ |
-|Minimum wait interval | m | 5 seconds |	`Device.Controller.{i}.E2ESession.USPRetryMinimumWaitInterval` |
-| Interval multiplier |	k | 2000 | `Device.Controller.{i}.E2ESession.USPRetryIntervalMultiplier` |
+|Minimum wait interval | m | 5 seconds |	`Device.Controller.{i}.E2ESession.SessionRetryMinimumWaitInterval` |
+| Interval multiplier |	k | 2000 | `Device.Controller.{i}.E2ESession.SessionRetryIntervalMultiplier` |
 
 | Retry Count | Default Wait Interval Range (min-max seconds) | Actual Wait Interval Range (min-max seconds) |
 | ----------: | :---------: | :-------------- |
@@ -195,11 +197,11 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 | #9 | 1280-2560 | m.(k/1000)8 - m.(k/1000)9 |
 | #10 and subsequent | 2560-5120 | m.(k/1000)9 - m.(k/1000)10 |
 
-**R-E2E.14** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed session establishment until a USP message is successfully received by the Agent or until the number of retries specified in `Device.Controller.{i}.E2ESession.MaxRetransmitTries` is reached.
+**R-E2E.11** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed session establishment until a USP message is successfully received by the Agent or until the SessionExpiration time is reached.
 
-**R-E2E.15** – Once a USP Message is successfully received, the Agent MUST reset the Session Context retry count to zero for the next Session Context establishment.
+**R-E2E.12** – Once a USP Record is successfully received, the Agent MUST reset the Session Context retry count to zero for the next Session Context establishment.
 
-**R-E2E.16** – If a reboot of the Agent occurs, the Agent MUST reset the Session Context retry count to zero for the next Session Context establishment.
+**R-E2E.13** – If a reboot of the Agent occurs, the Agent MUST reset the Session Context retry count to zero for the next Session Context establishment.
 
 ### USP Record Exchange
 
@@ -209,21 +211,21 @@ Once a Session Context is established, USP Records are created to exchange paylo
 
 When an originating USP Endpoint transmits a USP Record, it creates the USP Record with a monotonically increasing sequence identifier (`sequence_id`).
 
-**R-E2E.17** – When an originating USP Endpoint transmits a USP Record, it MUST set the sequence identifier of the first transmitted USP Record in the Session Context to zero (0).
+**R-E2E.14** – When an originating USP Endpoint transmits a USP Record, it MUST set the sequence identifier of the first transmitted USP Record in the Session Context to zero (0).
 
-**R-E2E.18** – When an originating USP Endpoint transmits additional USP Records, the originating USP Endpoint MUST monotonically increase the sequence identifier from the last transmitted USP Record in the Session Context by one (1).
+**R-E2E.15** – When an originating USP Endpoint transmits additional USP Records, the originating USP Endpoint MUST monotonically increase the sequence identifier from the last transmitted USP Record in the Session Context by one (1).
 
 To communicate the sequence identifier of the last USP Record received by a receiving USP Endpoint to the originating USP Endpoint, whenever a USP Endpoint transmits a USP Record the originating USP Endpoint communicates the next sequence identifier of a USP Record it expects to receive in the `expected_id` element. The receiving USP Endpoint uses this information to maintain its buffer of outgoing (transmitted) USP Records such that any USP Records with a sequence identifier less than the `expected_id` can be removed from the receiving USP Endpoints buffer of transmitted USP Records for this Session Context.
 
-**R-E2E.19** – When an originating USP Endpoint transmits a USP Record, the originating USP Endpoint MUST preserve it in an outgoing buffer, for fulfilling retransmit requests, until the originating USP Endpoint receives a USP Record from the receiving USP Endpoint with a greater `expected_id`.
+**R-E2E.16** – When an originating USP Endpoint transmits a USP Record, the originating USP Endpoint MUST preserve it in an outgoing buffer, for fulfilling retransmit requests, until the originating USP Endpoint receives a USP Record from the receiving USP Endpoint with a greater `expected_id`.
 
-**R-E2E.20** – When an originating USP Endpoint transmits a USP Record, the originating USP Endpoint MUST inform the receiving USP Endpoint of the next sequence identifier in the Session Context for a USP Record it expects to receive.
+**R-E2E.17** – When an originating USP Endpoint transmits a USP Record, the originating USP Endpoint MUST inform the receiving USP Endpoint of the next sequence identifier in the Session Context for a USP Record it expects to receive.
 
 #### Payload Security within the Session Context
 
 The value of the `payload_security` element defines the type of payload security that is performed in the Session Context. Once a Session Context is established the payload security stays the same throughout the lifetime of the Session Context. If the payload security changes in the USP Record from what payload security in which the Session Context originated, the receiving USP Endpoint fails the USP Record.
 
-**R-E2E.20a** – The originating USP Endpoint MUST use the same value in the payload_security element for all USP Records within a Session Context.
+**R-E2E.18** – The originating USP Endpoint MUST use the same value in the payload_security element for all USP Records within a Session Context.
 
 #### USP Record Reception
 
@@ -239,9 +241,9 @@ As USP Records can be received out of order or not at all, the receiving USP End
 
 Figure E2E.1 – Processing of received USP Records
 
-**R-E2E.20b** – The receiving USP Endpoint MUST ensure that the value in the `payload_security` element for all USP Records within a Session Context is the same and fail the USP Record if the value of the `payload_security` element is different.
+**R-E2E.19** – The receiving USP Endpoint MUST ensure that the value in the `payload_security` element for all USP Records within a Session Context is the same and fail the USP Record if the value of the `payload_security` element is different.
 
-**R-E2E.21** – Incoming USP Records MUST be processed per the following rules:
+**R-E2E.20** – Incoming USP Records MUST be processed per the following rules:
 
 1. If the USP Record does not contain the next expected `sequence_id` element, the USP Record is added to an incoming buffer of unprocessed USP Records.
 2. Otherwise, for the USP Record and any sequential USP Records in the incoming buffer:
@@ -254,7 +256,7 @@ Figure E2E.1 – Processing of received USP Records
 
 When a receiving USP Endpoint fails to either buffer or successfully process a USP Record, the receiving USP Endpoint initiates a new Session Context.
 
-**R-E2E.22** – When a USP Endpoint that receives a USP Record within a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint MUST start a new Session Context.
+**R-E2E.21** – When a USP Endpoint that receives a USP Record within a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint MUST start a new Session Context.
 
 #### USP Record Retransmission
 
@@ -262,9 +264,9 @@ An Agent or Controller can request to receive USP Records that it deems as missi
 
 The receiving USP Endpoint will determine if USP Record exists and then re-send the USP Record to the originating USP Endpoint.
 
-If the USP Record doesn't exist, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing a defined in section Failure Handling of Received USP Records.
+If the USP Record doesn't exist, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
-To guard against excessive requests to retransmit a specific USP Record, the USP Endpoint checks to see if the number of times the USP Record has been retransmitted is greater than or equal to maximum times a USP Record can be retransmitted as defined in the `Device.Controller.{i}.E2ESession.MaxRetransmitTries` Parameter. If this condition is met, then the USP Endpoint that received the USP Record with the retransmit request will consider the USP Record as failed and perform the failure processing a defined in section Failure Handling of Received USP Records.
+To guard against excessive requests to retransmit a specific USP Record, the USP Endpoint checks to see if the number of times the USP Record has been retransmitted is greater than or equal to maximum times a USP Record can be retransmitted as defined in the `Device.Controller.{i}.E2ESession.MaxRetransmitTries` Parameter. If this condition is met, then the USP Endpoint that received the USP Record with the retransmit request will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
 ### Guidelines for Handling Session Context Restarts
 
@@ -272,15 +274,15 @@ A Session Context can be restarted for a number of reasons (e.g., sequence id ex
 
 The originating endpoint is responsible to recovering from USP records that were not transmitted.
 
-**R-E2E.23** – For USP Records that have been received, but the USP Endpoint has not yet processed when the Session Context is restarted, the receiving USP endpoint is not responsible for USP Records that it has not communicated to the originating USP Endpoint via the `expected_id` element but MUST successfully process the USP Record through the `expected_id` element.
+**R-E2E.22** – For USP Records that have been received, but the USP Endpoint has not yet processed when the Session Context is restarted, the receiving USP endpoint is not responsible for USP Records that it has not communicated to the originating USP Endpoint via the `expected_id` element but MUST successfully process the USP Record through the `expected_id` element.
 
 When a USP Endpoint receives a USP Record that cannot pass an integrity check or have a correct value in the `session_id` element, the Session Context is restarted.
 
-**R-E2E.24** – USP Records that do not pass integrity checks MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
+**R-E2E.23** – USP Records that do not pass integrity checks MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
 
 This allows keys to be distributed and enabled under the old session keys and then request a session restarted under the new keys.
 
-**R-E2E.25** – USP Records that pass the integrity check but have an invalid value in the session_id element MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
+**R-E2E.24** – USP Records that pass the integrity check but have an invalid value in the session_id element MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
 
 ### Segmented Message Exchange
 
@@ -320,42 +322,69 @@ For each USP Message reassemble the segmented payload:
 3.	Once the USP Record is received that indicates that the segmentation is complete, reassemble the payload by appending the payloads using the monotonically increasing `sequence_id` element's value from the smaller number to larger sequence numbers. The reassembly keeps the integrity of the instances of the payload element's payload records. To keep the integrity of the payload record, the payload record is reassembled using the `payloadrec_sar_state` values.
 4.	Reassembly of the payload that represents the USP Message is complete.
 
-If the segmentation and reassembly fails for any reason, the USP Endpoint that received the segmented USP Records will consider the last received USP Record as failed and perform the failure processing a defined in section Failure Handling of Received USP Records.
+If the segmentation and reassembly fails for any reason, the USP Endpoint that received the segmented USP Records will consider the last received USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
 ### Handling Duplicate USP Records
 
 Circumstances may arise (such as multiple Message Transfer Protocols, retransmission requests) that cause duplicate USP Records (those with an identical `sequence_id` and `session_id` elements from the same USP Endpoint) to arrive at the target USP endpoint.
 
-**R-E2E.26** - When exchanging USP Records with a E2E Session Context, if a target USP Endpoint receives a USP Record with duplicate `sequence_id` and `session_id` elements from the same originating USP Endpoint, it MUST gracefully ignore the duplicate USP Record.
+**R-E2E.25** - When exchanging USP Records with a E2E Session Context, if a target USP Endpoint receives a USP Record with duplicate `sequence_id` and `session_id` elements from the same originating USP Endpoint, it MUST gracefully ignore the duplicate USP Record.
 
 ## Exchange of USP Records without a E2E Session Context
 
 When the exchange of USP Records without a E2E Session Context is used, each Record contains the `session_id` element with has a value of 0. The `sequence_id`, `expected_id` and retransmit elements are not used.
 
-**R-E2E.2a** – A Session Context identifier with a value of 0 is reserved for exchange of USP Records without a E2E Session Context.
+**R-E2E.26** – A Session Context identifier with a value of 0 is reserved for exchange of USP Records without a E2E Session Context.
 
 ### Failure Handling of Received USP Records Without a Session Context
 
 When a receiving USP Endpoint fails to either buffer or successfully process a USP Record, the receiving USP Endpoint reports a failure.
 
-**R-E2E.22a** – When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint MUST report the failure to the receiving MTP that indicates a “bad request”.
+**R-E2E.27** – When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint MUST report the failure to the receiving MTP that indicates a "bad request".
 
 ## Validating the Integrity of the USP Record
 
-When a USP Record is transmitted to a USP Endpoint, the transmitting USP Endpoint has the capability to protect the integrity of the non-payload fields of the USP Record by signing a hash of the non-payload fields using the private key of the sending USP Endpoint's certificate. The payload field is not part of the generation or verification process, as the expectation is that this field will be secured using one the E2E security protection mechanisms. The receiving USP Endpoint then verifies the integrity using either the public key of the certificate in the USP Record `sender_cert` element or of the certificate used for Secure Message Exchange. When using the signature for protecting the integrity of the non-payload fields, the field's integrity are protected using SHA-256 hash algorithm and generates a signature for the hash using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function.
+When a USP Record is transmitted to a USP Endpoint, the transmitting USP Endpoint has the capability to protect the integrity of the non-payload elements of the USP Record. The payload element is not part of the generation or verification process, as the expectation is that this element will be secured using one the E2E security protection mechanisms.
+The integrity of the USP Record is required to be validated when the USP Record cannot be protected by the underlying MTP.
 
-The signature method is used when:
+**R-E2E.28** - When a USP Record is received or transmitted the following conditions MUST apply for the USP Record to be considered protected by the underlying MTP:
 
-* A USP Record is transmitted using plaintext to protect the USP Record's payload and the underlying MTP doesn’t protect the payload.
-* Transmitting and receiving USP Endpoints use an encryption protocol (e.g., TLS) to protect the USP Record's payload and the USP Endpoints have not established an encrypted session between them.
+* The MTP is encrypted per requirements in the applicable MTP section
+* The peer MTP certificate contains an Endpoint ID and this Endpoint ID is the same as the USP Record `from_id` element.
 
-**R-E2E.6** – Unless protected by the underlying MTP, when a USP Endpoint transmits a USP Record, the USP Endpoint MUST protect the integrity of the non-payload portion of the USP Record.
+**R-E2E.29** – Unless protected by the underlying MTP, when a USP Endpoint transmits a USP Record, the USP Endpoint MUST protect the integrity of the non-payload portion of the USP Record.
 
-**R-E2E.7** – Unless protected by the underlying MTP, when a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the integrity of the non-payload portion of the USP Record.
+**R-E2E.30** – When a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the integrity of the non-payload portion of the USP Record when it receives a USP Record with the mac-signature element or the USP Endpoint is not protected by the underlying MTP.
 
-**R-E2E.8** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use plaintext to protect the USP Record's payload, the transmitting USP Endpoint MUST protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
+The integrity of the non-payload elements is accomplished by the transmitting USP Endpoint generating a Message Authentication Code (MAC) or signature of the non-payload elements which is then placed into the mac-signature element where the receiving USP Endpoint then verifies the MAC or signature as appropriate. The method to generate and validate MAC or signature depends on the value of the `payload_security` element. If the value of the `payload_security` element is PLAINTEXT then the integrity validation method always uses the signature method described in section Using the Signature Method to Validate the Integrity of USP Records. If the value of the `payload_security` element is TLS then the validation method that is used is dependent on whether the TLS handshake has been completed. If the TLS handshake has not been completed, the signature method described in section Using the Signature Method to Validate the Integrity of USP Records is used otherwise the MAC method described in section Using TLS to Validate the Integrity of USP Records is used.
 
-**R-E2E.9** – Unless protected by the underlying MTP, when a USP Endpoint protects the integrity of the non-payload portion of the USP Record and the USP Endpoints use TLS to protect the USP Record's payload, the transmitting USP Endpoint MUST protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection until the TLS session between the USP Endpoints is established at which time the requirements for integrity protection provided by the TLS session apply. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
+### Using the Signature Method to Validate the Integrity of USP Records
+
+When the transmitting USP Endpoint protects the integrity of the non-payload fields of the USP Record using the signature method in this section, the non-payload fields are protected by signing a hash of the non-payload fields using the private key of the sending USP Endpoint's certificate. The receiving USP Endpoint then verifies the integrity using either the public key of the certificate in the USP Record `sender_cert` element or of the certificate used for Secure Message Exchange.
+
+This signature method uses a SHA-256 hash algorithm that generates a signature for the hash using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in RFC 8017(https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function.
+
+**R-E2E.31** – When using the signature method to protect the integrity of the non-payload portion of the USP Record, the transmitting USP Endpoint MUST protect the integrity using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in RFC 8017(https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function where the non-payload fields are protected using the SHA-256 hash algorithm to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
+
+### Using TLS to Validate the Integrity of USP Records
+
+When the transmitting and receiving USP Endpoints have established a TLS session between the USP Endpoints, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Record generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The key used for the HMAC algorithm uses a Key Derivation Function (KDF) in accordance with RFC 5869(https://tools.ietf.org/html/rfc5869) and requires the following inputs to be known by the UPS Endpoints involved in the generation and validation of the MAC: length of the output MAC, salt, key and application context information (i.e., KDF info element). The application context information uses a constant value for all USP implementations ("`USP_Record`") and the length is fixed at 32 octets. The salt and key inputs are based on the underlying mechanism used to protect the payload of the USP Record. For TLS, the salt and key are taken from the TLS session once TLS negotiation is completed. The input key to the KDF uses the master key of the TLS session. The salt depends on role played by the USP Endpoint in the TLS Session (i.e., TLS session’s client or server random).
+
+**R-E2E.32** – If using the TLS MAC method to protect the integrity of a USP Record, a USP Endpoint transmits a USP Record, the USP Endpoint MUST generate a MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
+
+**R-E2E.31** – If using the TLS MAC method to protect the integrity of a USP Record, and a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
+
+**R-E2E.32** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record's protobuf specification proceeding from lowest to highest.
+
+**R-E2E.33** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record, the USP Endpoint MUST derive the key using the KDF as defined in RFC 5869(https://tools.ietf.org/html/rfc5869).
+
+**R-E2E.34** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record, the USP Endpoint MUST use the application context information value of "`USP_Record`".
+
+**R-E2E.35** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record, the USP Endpoint MUST use the MAC length of 32.
+
+**R-E2E.36** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST derive the key from the negotiated TLS session's master key.
+
+**R-E2E.37** – If using the TLS MAC method to protect the integrity of a USP Record, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST use TLS session's client or server random for the salt depending on the role the USP Endpoint plays in the TLS session.
 
 ## Secure Message Exchange
 
@@ -367,7 +396,7 @@ USP employs TLS 1.2 as one security mechanism for protection of USP payloads in 
 
 While traditionally deployed over reliable streams, TLS is a record-based protocol that can be carried over datagrams, with considerations taken for reliable and in-order delivery. To aid interoperability, USP endpoints are initially limited to a single cipher specification, though future revisions of the protocol may choose to expand cipher support.
 
-**R-E2E.27** – When using TLS to protect USP payloads in USP Records, USP Endpoints MUST implement TLS 1.2 with the ECDHE-ECDSA-AES128-GCM-SHA256 cipher and P-256 curve.
+**R-E2E.38** – When using TLS to protect USP payloads in USP Records, USP Endpoints MUST implement TLS 1.2 with the ECDHE-ECDSA-AES128-GCM-SHA256 cipher and P-256 curve.
 
 *Note: The cipher listed above requires a USP Endpoint acting as the TLS server to use X.509 certificates signed with ECDSA and Diffie-Hellman key exchange credentials to negotiate the cipher.*
 
@@ -379,45 +408,21 @@ When TLS is used as a payload protection mechanism for USP Message, TLS requires
 
 Figure E2E.4 – TLS session handshake
 
-**R-E2E.28a** – USP Endpoints that specify TLS in the `payload_security` element MUST exchange USP Records within an E2E Session Context.
+**R-E2E.39** – USP Endpoints that specify TLS in the `payload_security` element MUST exchange USP Records within an E2E Session Context.
 
 If the TLS session cannot be established for any reason, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
 TLS provides a mechanism to renegotiate the keys of a TLS session without tearing down the existing session called TLS renegotiation. However, for E2E Message exchange in USP, TLS renegotiation is ignored.
 
-**R-E2E.28** – USP Endpoints MUST ignore requests for TLS renegotiation when used for E2E Message exchange.
+**R-E2E.40** – USP Endpoints MUST ignore requests for TLS renegotiation when used for E2E Message exchange.
 
 #### Authentication
 
 USP relies upon peer authentication using X.509 certificates, as provided by TLS. Each USP endpoint identifier is identified within an X.509 certificate.
 
-**R-E2E.29** – USP Endpoints MUST be mutually authenticated using X.509 certificates using the USP Endpoint identifier encoded within the X.509 certificates `subjectAltName` field.
+**R-E2E.41** – USP Endpoints MUST be mutually authenticated using X.509 certificates using the USP Endpoint identifier encoded within the X.509 certificates `subjectAltName` field.
 
-#### Validating the Integrity of USP Records Using TLS
-
-When the transmitting and receiving USP Endpoints have established a TLS session between the USP Endpoints, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Record generates a Message Authentication Code (MAC) that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The key used for the HMAC algorithm uses a Key Derivation Function (KDF) in accordance with [RFC 5869](https://tools.ietf.org/html/rfc5869) and requires the following inputs to be known by the UPS Endpoints involved in the generation and validation of the MAC: length of the output MAC, salt, key and application context information (i.e., KDF info element). The application context information uses a constant value for all USP implementations ("`USP_Record`") and the length is fixed at 32 octets. The salt and key inputs are based on the underlying mechanism used to protect the payload of the USP Record. For TLS, the salt and key are taken from the TLS session once TLS negotiation is completed. The input key to the KDF uses the master key of the TLS session. The salt depends on the type of USP Endpoint. For USP Agents, the salt used to generate MACs use the TLS session's client random. For USP Controllers, the salt used to generate MACs use the TLS session's server random.
-
-**R-E2E.30** – When the integrity of the USP Record is protected and a USP Endpoint transmits a USP Record, the USP Endpoint MUST generate a MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
-
-**R-E2E.31** – When the integrity of the USP Record is protected and a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
-
-**R-E2E.32** – When the integrity of the USP Record is protected, when generating or validating the MAC of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record's [protobuf elements](/specification/encoding/) proceeding from lowest to highest.
-
-**R-E2E.33** – When the integrity of the USP Record is protected, when generating or validating the MAC of the USP Record, the USP Endpoint MUST derive the key using the KDF as defined in [RFC 5869](https://tools.ietf.org/html/rfc5869).
-
-**R-E2E.34** – When the integrity of the USP Record is protected, when generating or validating the MAC of the USP Record, the USP Endpoint MUST use the application context information value of "`USP_Record`".
-
-**R-E2E.35** – When the integrity of the USP Record is protected, when generating or validating the MAC of the USP Record, the USP Endpoint MUST use the MAC length of 32.
-
-**R-E2E.36** – When the integrity of the USP Record is protected, when generating or validating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST derive the key from the negotiated TLS session's master key.
-
-**R-E2E.37** – When the integrity of the USP Record is protected, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Agent MUST use TLS session's client random for the salt.
-
-**R-E2E.38** – When the integrity of the USP Record is protected, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Controller MUST use TLS session's server random for the salt.
-
-In certain scenarios (e.g., unprotected payload, prior to establishment of the TLS Session) the key and salt inputs are not available to be used for MAC generation or validation. In these scenarios, the USP Endpoints that establish the Session Context have a pre-shared key and the salt value is left empty.
-
-**R-E2E.39** – When the integrity of the USP Record is protected, when generating the MAC of the USP Record and the USP Endpoint cannot use the key and salt from the TLS Session, the USP Endpoint MUST use a pre-shared key and an empty salt value.
 
 [<-- Message Encoding](/specification/encoding/)
+
 [USP Messages -->](/specification/messages/)

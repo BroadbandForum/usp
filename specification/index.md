@@ -107,6 +107,7 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 | Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
 | Mark Tabry  | Google | mtab@google.com | Contributor
 | Klaus Wich | Huawei | klaus.wich@huawei.com | Contributor
+| Daniel Egger | Axiros | daniel.egger@axiros.com | Contributor
 
 ## Executive Summary
 
@@ -158,7 +159,7 @@ USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi 
 
 For the proxy of Service Elements, this document defines the proxy mechanisms but refrains from detailing the specific procedures for proxy of a particular third-party protocol or technology.
 
-Lastly, USP makes use of and expands the Device:2 Data Model for TR-069 Devices [1][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
+Lastly, USP makes use of and expands the [Device:2 Data Model for TR-069 Devices][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
 
 ## References and Terminology
 

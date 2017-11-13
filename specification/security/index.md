@@ -34,7 +34,7 @@ In order to support various authentication models (e.g., trust Endpoint identity
 
 **R-SEC.0** - The Agent MUST have a Controller's certificate information and have a cryptographically protected connection between the two Endpoints prior to processing a USP Message from that Controller.
 
-TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use payload_security “plaintext” encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
+TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use payload_security "plaintext" encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
 
@@ -78,7 +78,7 @@ Controller policy related to trust of Agent self-signed certificates is left to 
 
 **R-SEC.8** - An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate and Endpoint IDs.
 
-Self-signed certificates require a “trust on first use” (TOFU) policy when using them to authenticate an Endpoint's identity. An external entity (a trusted Controller or user) can then authorize the authenticated Endpoint to have certain permissions. Subsequent to the first use, this same self-signed certificate can be trusted to establish the identity of that Endpoint. However, authentication of the Endpoint can only be subsequently trusted if the association of certificate to identity is remembered (i.e., it is known this is the same certificate that was used previously by that Endpoint). If it is not remembered, then every use is effectively a first use and would need to rely on an external entity to authorize permissions every time.
+Self-signed certificates require a "trust on first use" (TOFU) policy when using them to authenticate an Endpoint's identity. An external entity (a trusted Controller or user) can then authorize the authenticated Endpoint to have certain permissions. Subsequent to the first use, this same self-signed certificate can be trusted to establish the identity of that Endpoint. However, authentication of the Endpoint can only be subsequently trusted if the association of certificate to identity is remembered (i.e., it is known this is the same certificate that was used previously by that Endpoint). If it is not remembered, then every use is effectively a first use and would need to rely on an external entity to authorize permissions every time.
 
 ## Agent authentication
 
@@ -100,7 +100,7 @@ Some Controllers implementations may allow multiple Agents to share a single cer
 
 Use of a shared certificate is not recommended, and which portion of the `instance-id` can be wildcarded may be specific to the authorizing CA or to the `authority-id` and `authority-scheme` values of the Endpoint ID. Wildcards can only be allowed in cases where the assigning entity is explicitly identified. Controllers are not required to support wildcarded certificates.
 
-**R-SEC.12** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops”. In the case of "os" and "ops”, the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
+**R-SEC.12** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
 
 ## Challenge Strings and Images
 
@@ -213,13 +213,13 @@ The permissions of a Role for the specified `Target` entries are described by `P
 
 An Agent that wants to allow Controllers to define and modify Roles will implement the `ControllerTrust.Role.{i}.` object with all of the parameters listed in the data model. In order for a Controller to define or modify Role entries, it will need to be assigned a Role that gives it the necessary permission. Care should be taken to avoid defining this Role’s permissions such that an Agent with this Role can modify the Role and no longer make future modifications to the `ControllerTrust.Role.{i}.` object.
 
-A simple Agent that only wants to inform Controllers of pre-defined Roles (with no ability to modify or define additional Roles) can implement the `ControllerTrust.Role.` object with read-only data model definition for all entries and parameters. A simple Agent could even implement the object with read-only data model definition and just the `Alias` and `Role` parameters, and no `Permission.` sub-object; this could be sufficient in a case where the Role names convey enough information (e.g., there are only two pre-defined Roles named `“Untrusted”` and `“FullAccess”`).
+A simple Agent that only wants to inform Controllers of pre-defined Roles (with no ability to modify or define additional Roles) can implement the `ControllerTrust.Role.` object with read-only data model definition for all entries and parameters. A simple Agent could even implement the object with read-only data model definition and just the `Alias` and `Role` parameters, and no `Permission.` sub-object; this could be sufficient in a case where the Role names convey enough information (e.g., there are only two pre-defined Roles named `"Untrusted"` and `"FullAccess"`).
 
 #### Special Roles
 
 Two special Roles are identified by the `UntrustedRole` and `BannedRole` parameters under the `ControllerTrust.` object. An Agent can expose these parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
 
-The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.AssignedRole`, or through some other external means) and that allows “unknown” Controllers to attach will need to have an “untrusted” Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` parameter.
+The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.AssignedRole`, or through some other external means) and that allows "unknown" Controllers to attach will need to have an "untrusted" Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` parameter.
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
 
@@ -231,15 +231,15 @@ For example,
  Given the following `ControllerTrust.Role.{i}.` entries:
 
 ```
-  i=1, Role = “A”; Permission.1.: Targets = “Device.LocalAgent.”, Order = 3, Param = “r---“
-  i=1, Role = “A”; Permission.2.: Targets = “Device.LocalAgent.Controller.”, Order = 55, Param = “r-xn“
-  i=3, Role = “B”; Permission.1: Targets = “Device.LocalAgent.”, Order = 20, Param = “r---“
-  i=3, Role = “B”; Permission.5: Targets = “Device.LocalAgent.Controller.”, Order = 78, Param = “----“
+  i=1, Role = "A"; Permission.1.: Targets = "Device.LocalAgent.", Order = 3, Param = "r---"
+  i=1, Role = "A"; Permission.2.: Targets = "Device.LocalAgent.Controller.", Order = 55, Param = "r-xn"
+  i=3, Role = "B"; Permission.1: Targets = "Device.LocalAgent.", Order = 20, Param = "r---"
+  i=3, Role = "B"; Permission.5: Targets = "Device.LocalAgent.Controller.", Order = 78, Param = "----"
 ```
 
- and `Device.LocalAgent.Controller.1.AssignedRole` = “Device.LocalAgent. ControllerTrust.Role.1., Device.LocalAgent. ControllerTrust.Role.3.”
+ and `Device.LocalAgent.Controller.1.AssignedRole` = "Device.LocalAgent. ControllerTrust.Role.1., Device.LocalAgent. ControllerTrust.Role.3."
 
-When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A Permission.2 takes precedence over Permission.1 (55 > 3). For B, Permission.5 takes precedence over Permission.1 (78 > 20). The union of A and B is “r-xn” + “----” = “r-xn”.
+When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A Permission.2 takes precedence over Permission.1 (55 > 3). For B, Permission.5 takes precedence over Permission.1 (78 > 20). The union of A and B is "r-xn" + "----" = "r-xn".
 
 #### Role Associated with a Credential or Challenge
 
@@ -283,9 +283,9 @@ To use the USP mechanism, the `RequestChallenge()` and `ChallengeResponse()` com
 
 A Controller that sends a Get message on `Device.ControllerTrust.Challenge.{i}.` will receive all entries and parameters that are allowed for its current assigned Role. In the simplest case, this will be a single entry and only Alias and Description will be supplied for that entry. It is important to restrict visibility to all other implemented parameters to highly trusted Roles, if at all.
 
-The Controller can display the value of `Description` to the user and allow the user to indicate they want to request the described challenge. If multiple entries were returned, the user can be asked to select which challenge they want to request, based on the description. An example of a description might be “Request administrative privileges” or “Request guest privilege”.
+The Controller can display the value of `Description` to the user and allow the user to indicate they want to request the described challenge. If multiple entries were returned, the user can be asked to select which challenge they want to request, based on the description. An example of a description might be "Request administrative privileges" or "Request guest privilege".
 
-When the user indicates to the Controller which challenge they want, the Controller sends `RequestChallenge()` with the path name of the `Challenge` object instance associated with the desired `Description`. The Agent replies with the associated `Instruction`, `InstructionType`, `ValueType` and an auto-generated `ChallengeID`. The Controller presents the value of `Instruction` to the user (in a manner appropriate for `InstructionType`). Examples of an instruction might be “Enter passphrase printed on bottom of device” or “Enter PIN sent to registered email address”. The user enters a string per the instructions, and the Controller sends this value together with the `ChallengeID` in `ChallengeResponse()`.
+When the user indicates to the Controller which challenge they want, the Controller sends `RequestChallenge()` with the path name of the `Challenge` object instance associated with the desired `Description`. The Agent replies with the associated `Instruction`, `InstructionType`, `ValueType` and an auto-generated `ChallengeID`. The Controller presents the value of `Instruction` to the user (in a manner appropriate for `InstructionType`). Examples of an instruction might be "Enter passphrase printed on bottom of device" or "Enter PIN sent to registered email address". The user enters a string per the instructions, and the Controller sends this value together with the `ChallengeID` in `ChallengeResponse()`.
 
 If the returned value matches `Value`, the Agent gives a successful response - otherwise it returns an unsuccessful response. If successful, the `ControllerTrust.Challenge.{i}.Role` replaces an `UntrustedRole` in `Controller.{i}.AssignedRole` or is appended to any other `Controller.{i}.AssignedRole` value.
 
