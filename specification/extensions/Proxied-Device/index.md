@@ -30,10 +30,10 @@
 This Annex describes a Theory of Operations for the ProxiedDevice Table.
 
 A ProxiedDevice table is defined as
-“Each entry in the table is a ProxiedDevice object that is a mountpoint. Each ProxiedDevice represents distinct hardware Devices. ProxiedDevice objects are virtual and abstracted representation of functionality, that exists on hardware other than that which the Agent is running."
+"Each entry in the table is a ProxiedDevice object that is a mountpoint. Each ProxiedDevice represents distinct hardware Devices. ProxiedDevice objects are virtual and abstracted representation of functionality that exists on hardware other than that which the Agent is running."
 
-An implementation of ProxiedDevice may be used in an IoT Gateway that proxies devices that are connected to it via technologies other than USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of ProxiedDevice objects, each defined as a Mount Point, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the ProxiedDevice table instances.
+An implementation of ProxiedDevice may be used in an IoT Gateway that proxies devices that are connected to it via technologies other than USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of ProxiedDevice objects, each defined as a mountpoint, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the ProxiedDevice table instances.
 
 Example:
-If Wifi object and Switch were defined as a components
-The Device.ProxiedDevice.1.Wifi.Radio models a distinctly separate hardware device and has no relationship with Device.Wifi.Radio.  The ProxiedDevice objects may each represent entirely different types of devices each with a different set of objects. The ProxiedDevice.1.Switch has no physical relationship to ProxiedDevice.2.Switch as they represent two separate devices. Also the Mount Point allows ProxiedDevice.1.WifiRadio and ProxiedDevice.1.Switch to represent the full set of capabilities for the Device being proxied by inserting any number of defined objects to matching the Device capabilities. This provides a Controller a distinct path to each ProxiedDevice object.
+If Wifi object and Switch were defined objects
+The Device.ProxiedDevice.1.Wifi.Radio models a distinctly separate hardware device and has no relationship with Device.Wifi.Radio.  The ProxiedDevice objects may each represent entirely different types of devices each with a different set of objects. The ProxiedDevice.1.Switch has no physical relationship to ProxiedDevice.2.Switch as they represent two separate devices. Also the mountpoint allows ProxiedDevice.1.WifiRadio and ProxiedDevice.1.Switch to represent the full set of capabilities for the Device being proxied by inserting any number of defined objects to matching the Device capabilities. This provides a Controller a distinct path to each ProxiedDevice object.
