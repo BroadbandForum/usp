@@ -73,6 +73,8 @@ message Header {
     GET_INSTANCES = 14;
     GET_INSTANCES_RESP = 15;
     NOTIFY_RESP = 16;
+    GET_SUPPORTED_PROTO = 17;
+    GET_SUPPORTED_PROTO_RESP = 18;
   }
 }
 
@@ -208,7 +210,6 @@ message GetSupportedDMResp {
 }
 
 
-
 message GetInstances {
   repeated string obj_paths = 1;
   bool first_level_only = 2;
@@ -229,6 +230,15 @@ message GetInstancesResp {
     string instantiated_obj_path = 1;
     map<string, string> unique_keys = 2;
   }
+}
+
+
+message GetSupportedProtocol {
+  string controller_supported_protocol_versions = 1;
+}
+
+message GetSupportedProtocolResp {
+  string agent_supported_protocol_versions = 1;
 }
 
 
@@ -463,6 +473,7 @@ message Notify {
     string oui = 1;
     string product_class = 2;
     string serial_number = 3;
+    string agent_supported_protocol_versions = 4;
   }
 }
 
