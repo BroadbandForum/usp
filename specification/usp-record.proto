@@ -48,22 +48,23 @@ message Record {
   string version = 1;
   string to_id = 2;
   string from_id = 3;
-  bytes mac_signature = 4;  //MAC or Signature
-  bytes sender_cert = 5;
+  PayloadSecurity payload_security = 4;
+  bytes mac_signature = 5;  //MAC or Signature
+  bytes sender_cert = 6;
 
   oneof record_type {
-    NoSessionContextRecord no_session_context = 6;
-    SessionContextRecord session_context = 7;
+    NoSessionContextRecord no_session_context = 7;
+    SessionContextRecord session_context = 8;
+  }
+
+  enum PayloadSecurity {
+    PLAINTEXT = 0;
+    TLS = 1;
   }
 }
 
 message NoSessionContextRecord {
-  PayloadSecurity payload_security = 1;
   bytes payload = 2;
-
-  enum PayloadSecurity {
-    PLAINTEXT = 0;
-  }
 }
 
 message SessionContextRecord {
@@ -71,14 +72,9 @@ message SessionContextRecord {
   uint64 sequence_id = 2;
   uint64 expected_id = 3;
   uint64 retransmit_id = 4;
-  PayloadSecurity payload_security = 5;
-  PayloadSARState payload_sar_state = 6;
-  PayloadSARState payloadrec_sar_state = 7;
-  repeated bytes payload = 8;
-
-  enum PayloadSecurity {
-    TLS = 0;
-  }
+  PayloadSARState payload_sar_state = 5;
+  PayloadSARState payloadrec_sar_state = 6;
+  repeated bytes payload = 7;
 
   enum PayloadSARState {
     NONE = 0; 	    //No segmentation
