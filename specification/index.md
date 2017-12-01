@@ -46,6 +46,7 @@ Extensions
 Annex A. [HTTP Bulk Data Transfer](./extensions/http-bulk-data-collection)
 
 Appendix I. [Software Module Management](./extensions/software-module-management)
+
 Appendix II. [Firmware Management](./extensions/firmware-management)
 
 # Introduction

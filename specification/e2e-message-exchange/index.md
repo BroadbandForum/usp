@@ -61,11 +61,47 @@ Required. Receiving/Target USP Endpoint Identifier.
 
 Required. Originating/Source USP Endpoint Identifier.
 
+`PayloadSecurity payload_security`
+
+Optional. An enumeration of type PayloadSecurity. When the payload is present,
+this indicates the protocol or mechanism used to secure the USP Message. Valid values are:
+
+```
+PLAINTEXT (0)
+TLS (1)
+```
+
+`bytes mac_signature`
+
+Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.
+
+`bytes sender_cert`
+
+Optional. The PEM encoded certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`.
+
+`oneof record_type`
+
+This element contains one of the types given below:
+
+`NoSessionContextRecord no_session_context`
+
+`SessionContextRecord session_context`
+
+##### NoSessionContextRecord Elements
+
+`bytes payload`
+
+Optional. Repeating list of one or more datagrams. When using `TLS` payload security this element can contain multiple entries with each entry containing an encrypted TLS record. When using `PLAINTEXT` payload security this element only has 1 entry in the list.
+
+**R-E2E.1** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
+
+**R-E2E.2** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
+
+##### SessionContextRecord Elements
+
 `uint64 session_id`
 
 Optional. Session Context identifier, used to identify the USP Session Context. Used only for exchange of USP Records with a E2E Session Context.
-
-The value 0 is reserved for exchange of USP Records without a E2E Session Context.
 
 `uint64 sequence_id`
 
@@ -81,59 +117,27 @@ Optional. Next `sequence_id` the sender is expecting to receive. Implicitly ackn
 
 Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. Used only for exchange of USP Records with a E2E Session Context.
 
-`enum payload_encoding`
+`PayloadSARState payload_sar_state`
 
-Optional. When the payload is present, indicates the encoding protocol used to encode and decode the reassembled payload as the payload was prior to the application of `payload_security`. Valid values are:
-
-`0 – ProtoBuf3`
-
-`enum payload_security`
-
-Optional. When the payload is present, indicates the protocol or mechanism used to secure the USP Message. Valid values are:
+Optional. An enumeration of type PayloadSARState. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
 
 ```
-0 – PLAINTEXT
-1 – TLS
-2 – COSE
-```
-
-`enum payload_sar_state`
-
-Optional. When payload is present, indicates the segmentation and reassembly state represented by the USP Record. Valid values are:
-
-```
-0 – No segmentation
-1 – Begin segmentation
-2 – Segmentation in process
-3 – Complete segmentation
+NONE (0)
+BEGIN (1)
+INPROCESS (2)
+COMPLETE (3)
 ```
 
 `enum payloadrec_sar_state`
 
-Optional. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
+Optional. An enumeration of type PayloadSARState. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
 
 ```
-0 – Reserved (Unused)
-1 – Begin segmentation
-2 – Segmentation in process
-3 – Complete segmentation
+NONE (0)
+BEGIN (1)
+INPROCESS (2)
+COMPLETE (3)
 ```
-
-`bytes mac_signature`
-
-Optional. When integrity protection of non-payload fields is performed, this is the message authentication code or signature used to ensure the integrity of the non-payload fields of the USP Record.
-
-`bytes sender_cert`
-
-Optional. The certificate of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`.
-
-`bytes payload`
-
-Optional. Repeating list of one or more datagrams. When using `TLS` payload security this element can contain multiple entries with each entry containing an encrypted TLS record. When using `PLAINTEXT` payload security this element only has 1 entry in the list.
-
-**R-E2E.1** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
-
-**R-E2E.2** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
 
 ## Exchange of USP Records within a E2E Session Context
 
@@ -310,14 +314,14 @@ For each USP Message segment the Payload:
 
 1.	Prepare the USP Message (e.g., secure the message) where the number of payload datagrams (e.g., TLS Records) + the size of the USP Record doesn't exceed the E2EMTU.
 2.	Indicate the start of the segmentation and transmit the first USP Record using the procedures defined in section USP Record Message Exchange.
-3.	For each instance of the USP Record's payload element's record, segment the payload record indicating the start, in-process and completion status of the payload record in the USP Records's `payloadrec_sar_state` element. The integrity of the payload delineated is retained meaning that all segmentation does not occur across instances of the USP Record's payload element. The USP Record's `payload_sar_state` will either indicate that segmentation has begun or is in process. The `payload_sar_state` element is set to `1 – Begin segmentation` when the first instance of the payload element is segmented. Subsequent USP Record's payload_sar_state is set to `2 – Segmentation` in process unless it is the final USP Record.
+3.	For each instance of the USP Record's payload element's record, segment the payload record indicating the start, in-process and completion status of the payload record in the USP Records's `payloadrec_sar_state` element. The integrity of the payload delineated is retained meaning that all segmentation does not occur across instances of the USP Record's payload element. The USP Record's `payload_sar_state` will either indicate that segmentation has begun or is in process. The `payload_sar_state` element is set to `BEGIN (1)` when the first instance of the payload element is segmented. Subsequent USP Record's payload_sar_state is set to `INPROCESS (2)` in process unless it is the final USP Record.
 4.	The final USP Record indicates that the segmentation is complete.
 
 ##### Receiving Endpoint
 
 For each USP Message reassemble the segmented payload:
 
-1.	When a USP Record that indicates segmentation has started, store the USP Records until a USP Record is indicated to be complete. A completed segmentation is where the USP Record's `payload_sar_state` and `payloadrec_sar_state` have a value of `3 – Complete segmentation`.
+1.	When a USP Record that indicates segmentation has started, store the USP Records until a USP Record is indicated to be complete. A completed segmentation is where the USP Record's `payload_sar_state` and `payloadrec_sar_state` have a value of `COMPLETE (3)`.
 2.	Follow the procedures in USP Record Retransmission to retransmit any USP Records that were not received.
 3.	Once the USP Record is received that indicates that the segmentation is complete, reassemble the payload by appending the payloads using the monotonically increasing `sequence_id` element's value from the smaller number to larger sequence numbers. The reassembly keeps the integrity of the instances of the payload element's payload records. To keep the integrity of the payload record, the payload record is reassembled using the `payloadrec_sar_state` values.
 4.	Reassembly of the payload that represents the USP Message is complete.
