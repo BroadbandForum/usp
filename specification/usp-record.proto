@@ -5,6 +5,10 @@ syntax = "proto3";
 //
 //  Copyright (c) 2017, Broadband Forum
 //
+//  The undersigned members have elected to grant the copyright to
+//  their contributed material used in this software:
+//    Copyright (c) 2017 ARRIS Enterprises, LLC.
+//
 // This is draft software, is subject to change, and has not been approved
 //  by members of the Broadband Forum. It is made available to non-members
 //  for internal study purposes only. For such study purposes, you have the
@@ -40,33 +44,43 @@ syntax = "proto3";
 
 package usp_record;
 
-message SessionRecord {
+message Record {
   string version = 1;
   string to_id = 2;
   string from_id = 3;
-  uint64 session_id = 4;
-  uint64 sequence_id = 5;
-  uint64 expected_id = 6;
-  uint64 retransmit_id = 7;
-  PayloadEncoding payload_encoding = 8;
-  PayloadSecurity payload_security = 9;
-  PayloadSARState payload_sar_state = 10;
-  PayloadSARState payloadrec_sar_state = 11;
-  enum PayloadEncoding {
-    ProtoBuf3 = 0;
+  PayloadSecurity payload_security = 4;
+  bytes mac_signature = 5;  //MAC or Signature
+  bytes sender_cert = 6;
+
+  oneof record_type {
+    NoSessionContextRecord no_session_context = 7;
+    SessionContextRecord session_context = 8;
   }
+
   enum PayloadSecurity {
     PLAINTEXT = 0;
     TLS = 1;
-    COSE = 2;
   }
+}
+
+message NoSessionContextRecord {
+  bytes payload = 2;
+}
+
+message SessionContextRecord {
+  uint64 session_id = 1;
+  uint64 sequence_id = 2;
+  uint64 expected_id = 3;
+  uint64 retransmit_id = 4;
+  PayloadSARState payload_sar_state = 5;
+  PayloadSARState payloadrec_sar_state = 6;
+  repeated bytes payload = 7;
+
   enum PayloadSARState {
     NONE = 0; 	    //No segmentation
     BEGIN = 1;      //Begin segmentation
     INPROCESS = 2;  //Segmentation in process
     COMPLETE = 3;   //Segmentation is complete
   }
-  repeated bytes payload = 12;
-  bytes mac_signature = 13;  //MAC or Signature
-  bytes sender_cert = 14;
 }
+
