@@ -43,11 +43,11 @@ Protected payloads provide a secure message exchange (confidentiality, integrity
 
 ## USP Record Encapsulation
 
-The USP Record Message is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata elements are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
+The USP Record Message is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata elements are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
 
-#### Record Definition
+Following are the elements contained within a USP Record. When not explicitly set or included in the Record, the elements have a default value based on the type of element. For strings, the default value is an empty byte string. For numbers (uint64) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. The term "Optional" means it is not necessary to include the element in a sent Record. The receiving Endpoint will use default values for elements not included in a received Record. "Required" elements are always included. A Record without a "Required" element will fail to be processed by a receiving Endpoint. "Repeated" elements can be included any number of times, including zero.
 
-The following elements this section describe the elements contained within a USP Record. When not explicitly set, the elements have a default value based on the type of element. For strings, the default value is an empty byte string. For numbers (uint64) and enumerations, the default value is 0. For repeating lists, the default value is an empty list.
+### Record Definition
 
 `string version`
 
@@ -56,6 +56,8 @@ Required. Version of the USP Protocol. The only valid value is `1.0`.
 `string to_id`
 
 Required. Receiving/Target USP Endpoint Identifier.
+
+**R-E2E.1** - A receiving USP endpoint MUST ignore any Record that does not contain its own Endpoint Identifier as the `to_id`.
 
 `string from_id`
 
@@ -81,41 +83,39 @@ Optional. The PEM encoded certificate of the sending USP Endpoint used to provid
 
 `oneof record_type`
 
-This element contains one of the types given below:
+Requiired. This element contains one of the types given below:
 
 `NoSessionContextRecord no_session_context`
 
 `SessionContextRecord session_context`
 
-##### NoSessionContextRecord Elements
+#### NoSessionContextRecord Elements
 
 `bytes payload`
 
-Optional. Repeating list of one or more datagrams. When using `TLS` payload security this element can contain multiple entries with each entry containing an encrypted TLS record. When using `PLAINTEXT` payload security this element only has 1 entry in the list.
+Required. The USP Message.
 
-**R-E2E.1** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
-
-**R-E2E.2** - The target USP endpoint MUST ignore any message that does not contain its own Endpoint Identifier.
-
-##### SessionContextRecord Elements
+#### SessionContextRecord Elements
 
 `uint64 session_id`
 
-Optional. Session Context identifier, used to identify the USP Session Context. Used only for exchange of USP Records with a E2E Session Context.
+Required. Session Context identifier, used to identify the USP Session Context.
 
 `uint64 sequence_id`
 
-Optional. Datagram sequence identifier. Used only for exchange of USP Records with a E2E Session Context. When used, the field is initialized to zero and incremented after each sent USP Record.
+Required. Datagram sequence identifier. Used only for exchange of USP Records with a E2E Session Context. The field is initialized to zero when starting a new Session Context and incremented after each sent USP Record.
 
-*Note: Endpoints maintain independent values for `sequence_id`, based on the number of sent records.*
+*Note: Endpoints maintain independent values for received and sent sequence_id for a Session Context, based respectively on the number of received and sent records.*
 
 `uint64 expected_id`
 
-Optional. Next `sequence_id` the sender is expecting to receive. Implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.  Used only for exchange of USP Records with a E2E Session Context.
+Required. This element contains the next `sequence_id` the sender is expecting to receive, which implicitly acknowledges to the recipient all transmitted datagrams less than `expected_id`.  Used only for exchange of USP Records with a E2E Session Context.
 
 `uint64 retransmit_id`
 
 Optional. Used to request a USP Record retransmission by a USP Endpoint to request a missing USP Record using the missing USP Record's anticipated `sequence_id`. Used only for exchange of USP Records with a E2E Session Context.
+
+**R-E2E.2** – When exchanging USP Records between USP Endpoints, a USP Record MUST contain either a `payload`, a `retransmit_id`, or both elements.
 
 `PayloadSARState payload_sar_state`
 
@@ -130,7 +130,7 @@ COMPLETE (3)
 
 `enum payloadrec_sar_state`
 
-Optional. An enumeration of type PayloadSARState. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. Valid values are:
+Optional. An enumeration of type PayloadSARState. When payload segmentation is being performed, indicates the segmentation and reassembly state represented by an instance of the payload datagram. If `payload_sar_state` = `0` (or is not included or not set), then `payloadrec_sar_state` will be `0` (or not included or not set). Valid values are:
 
 ```
 NONE (0)
@@ -138,10 +138,13 @@ BEGIN (1)
 INPROCESS (2)
 COMPLETE (3)
 ```
+`repeated bytes payload`
+
+Optional. This repeated element is a sequence of zero, one, or multiple datagrams. It contains the Message, in either `PLAINTEXT` or encrypted format. When using `TLS` payload security there will be a `payload` element for each encrypted TLS record. When using `PLAINTEXT` payload security there will be a single `payload` element for any Message being sent.
 
 ## Exchange of USP Records within a E2E Session Context
 
-When the exchange of USP Records within a E2E Session Context is used, it contains the `session_id`, `sequence_id` and `expected_id` elements. In addition, when a retransmission is requested, the `retransmit_id` element is also supplied.
+When the exchange of USP Records within an E2E Session Context is used, `record_type` of `session_context` is used, and all required parameters for `record_type` of `session_context` are supplied. In addition, when a retransmission is requested, the `retransmit_id` element is also supplied.
 
 ### Establishing an E2E Session Context
 
@@ -336,9 +339,9 @@ Circumstances may arise (such as multiple Message Transfer Protocols, retransmis
 
 ## Exchange of USP Records without a E2E Session Context
 
-When the exchange of USP Records without a E2E Session Context is used, each Record contains the `session_id` element with has a value of 0. The `sequence_id`, `expected_id` and retransmit elements are not used.
+When the exchange of USP Records without an E2E Session Context is used, the `record_type` is set to `no_session_context`.
 
-**R-E2E.26** – A Session Context identifier with a value of 0 is reserved for exchange of USP Records without a E2E Session Context.
+**R-E2E.26** - A `record_type` of `no_session_context` MUST be used for exchange of USP Records without an E2E Session Context. A non-zero `payload` MUST be included.
 
 ### Failure Handling of Received USP Records Without a Session Context
 
