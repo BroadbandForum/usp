@@ -39,6 +39,7 @@ These sections describe the types of USP messages and the normative requirements
 * [Get](#get)
 * [GetInstances](#getinstances)
 * [GetSupportedDM](#getsupporteddm)
+* [GetSupportedProtocol](#getsupportedprotocol)
 * [Notify](#notify)
 * [Operate](#operate)
 
@@ -136,21 +137,23 @@ This element contains an enumeration indicating the type of message contained in
 
     ERROR (0)
     GET (1)
-    GET_RESP = (2)
-    NOTIFY = (3)
-    SET = (4)
-    SET_RESP = (5)
-    OPERATE = (6)
-    OPERATE_RESP = (7)
-    ADD = (8)
-    ADD_RESP = (9)
-    DELETE = (10)
-    DELETE_RESP = (11)
-    GET_SUPPORTED_DM = (12)
-    GET_SUPPORTED_DM_RESP = (13)
-    GET_INSTANCES = (14)
-    GET_INSTANCES_RESP = (15)
-    NOTIFY_RESP = (16)
+    GET_RESP (2)
+    NOTIFY (3)
+    SET (4)
+    SET_RESP (5)
+    OPERATE (6)
+    OPERATE_RESP (7)
+    ADD (8)
+    ADD_RESP (9)
+    DELETE (10)
+    DELETE_RESP (11)
+    GET_SUPPORTED_DM (12)
+    GET_SUPPORTED_DM_RESP (13)
+    GET_INSTANCES (14)
+    GET_INSTANCES_RESP (15)
+    NOTIFY_RESP (16)
+    GET_SUPPORTED_PROTO (17)
+    GET_SUPPORTED_PROTO_RESP (18)
 
 **R-MSG.9** - The `msg_type` element MUST be present in every Header.
 
@@ -166,7 +169,7 @@ Every message body contains exactly one message and its elements. When an Agent 
 
 `oneof msg_body`
 
-This element contains one of the types given below.
+This element contains one of the types given below:
 
 `Request request`
 
@@ -1604,6 +1607,24 @@ Appropriate error codes for the GetSupportedDM message include `7000-7006`, `700
 
 <a id="notify" />
 
+### GetSupportedProtocol
+
+The GetSupportedProtocol message is used as a simple way for the Controller and Agent to learn
+which versions of USP each supports to aid in interoperability and backwards
+compatibility.
+
+#### GetSupportedProtocol Request Elements
+
+`string controller_supported_protocol_versions`
+
+A comma separated list of USP Protocol Versions (major.minor) supported by this Controller.
+
+#### GetSupportedProtocolResponse Elements
+
+`string agent_supported_protocol_versions`
+
+A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
+
 ## Notifications and Subscription Mechanism
 
 A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify message](#notify) to the Controller.
@@ -1914,6 +1935,10 @@ This element contains a string used to provide additional context about the Agen
 `string serial_number`
 
 This element contains a string used to provide additional context about the Agent.
+
+`string agent_supported_protocol_versions`
+
+A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
 #### Notify Response Elements
 
