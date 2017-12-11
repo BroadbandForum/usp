@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -39,7 +39,7 @@ Main Specification
 5. [Message Encoding](./encoding)
 6. [End to End Message Exchange](./e2e-message-exchange)
 7. [Messages](./messages)
-8. [Security](./security)
+8. [Authentication and Authorization](./security)
 
 Extensions
 
@@ -51,7 +51,7 @@ Appendix II. [Firmware Management](./extensions/firmware-management)
 
 # Introduction
 
-<a id="introduction">
+<a id="introduction" />
 
 ## Legal Notice
 
@@ -74,6 +74,11 @@ All materials submitted for possible incorporation into Technical Reports or oth
 THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.
 
 ## Revision History
+
+### Version-1.0-DRAFT-05
+
+* Reworked Record definition and schema for efficiency
+* Clean-up of requirements and text based on comments from BBF members
 
 ### Version-1.0-DRAFT-04
 
@@ -122,18 +127,14 @@ In addition, users of the fixed and mobile broadband network are hungry for adva
 
 These realities have created an opportunity for CE vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
-This is not the first time this problem has surfaced, however. When the Broadband Forum created the CPE WAN Management Protocol - commonly known by its document number, "TR-069" - this same need existed, focused on managing and deploying the end user’s gateway and other home networking equipment, adding value for the end user and reducing costs for providers. With the advent of CWMP, this created a new market for CPE management. As the protocol matured, it added the ability to extend the capabilities of user’s CPE through software modules, and the ability to manage and monitor any device in the home by its proxy mechanism. Coupled with robust and standardized data model covering a wide variety of domains, this flagship of the Broadband Forum has of the writing of this document reached over 350 million devices world-wide.
+To address this opportunity, use cases supported by USP include:
 
-This new world of the connected user as a platform provides the perfect opportunity to leverage the expertise and experience gained with CWMP. This allows us to improve on, evolve, and expand the use cases of CWMP including:
+* Management of IoT devices through re-usable data model objects.
+* Allowing the user to interact with their devices and services using customer portals or control points on their own smart devices.
+* The ability to have both the application and network service provider manage, troubleshoot, and control different aspects of the services they are responsible for, and enabling provider partnerships.
+* Providing a consistent user experience from mobile to home.
+* Simple migration from the [CPE WAN Management Protocol][2] (CWMP) - commonly known by its document number, "TR-069" - through use of the same data model and data modeling tools.
 
-*	App-store capabilities enabling the connected user to select, purchase, and install applications that utilize their connectivity and devices, and learn of new services that can be made available with suggested hardware.
-*	The ability to quickly and easily activate and provision smart home, voice and video, security, gaming, and energy services.
-*	Allowing the user to interact with their devices and services using customer portals or control points on their own smart devices.
-*	Service provider delivered assured broadband services with dedicated bandwidth or QoS.
-*	The ability to have both the application and network service provider manage, troubleshoot, and control different aspects of the services they are responsible for, and enabling provider partnerships.
-*	Providing a consistent user experience from mobile to home.
-
-This User Services Platform provides a scalable, interoperable, and efficient mechanism to meet the needs of the connected user and their application and network providers.
 
 ## Purpose and Scope
 
@@ -141,26 +142,21 @@ This User Services Platform provides a scalable, interoperable, and efficient me
 
 ### Purpose
 
-This document provides the normative requirements and operational description of the User Services Platform (USP). It is meant to be consumed by remote gateway, home network, and consumer electronics vendors; cloud and smart application developers and providers; and network service providers to help build and deploy USP Agents, Controllers, and the applications and devices which make use of them.
-
-This document describes:
-
-*	The overall architecture of USP Agents, Controllers, and Service Elements
-*	The proxy mechanisms for addressing non-USP Service Elements
-*	Requirements for the transport protocol(s) used to handle USP messages, and defined bindings for specific protocols
-*	The various USP messages, their requirements, and expected behavior patterns, along with on-the-wire encoding of USP messages
-*	The protocol requirements for discovery, end-to-end security, authentication, and authorization
-*	An explanation of the data model and how it is used to enable USP, Service Elements, proxying, and Object defined operations
+This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 ### Scope
 
-While the original CWMP was targeted toward remote gateways, it expanded to manage software modules, VoIP devices, set top boxes, network attached storage, etc. In the new connected world enabled by the virtualization of network functions and the "Internet of things", USP has an opportunity to apply to "virtual agents" as well as push out to more device types.
+This document identifies the USP:
 
-USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
+* Architecture
+* Record structure, syntax, and rules
+* Message structure, syntax, and rules
+* Bindings that allow specific protocols to carry USP Records in their payloads
+* Discovery and advertisement mechanisms
+* Security credentials and logic
+* Encryption mechanisms
 
-For the proxy of Service Elements, this document defines the proxy mechanisms but refrains from detailing the specific procedures for proxy of a particular third-party protocol or technology.
-
-Lastly, USP makes use of and expands the [Device:2 Data Model for TR-069 Devices][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
+Lastly, USP makes use of and expands the [Device:2 Data Model][1]. While particular Objects and parameters necessary to the function of USP are mentioned here, their normative description can be found in that XML document.
 
 ## References and Terminology
 
@@ -309,10 +305,6 @@ The Expression Parameter is a Parameter relative to the path where an Expression
 
 The Expression Variable is an identifier used to allow relative addressing when building an Expression Component.
 
-**Supported Data Model**
-
-The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all of the Device Type Definitions the Agent exposes to the Controller.
-
 **Instantiated Data Model**
 
 The Instantiated Data Model of an Agent represents the current set of Service Elements (and their state) that are exposed to one or more Controllers.
@@ -391,7 +383,7 @@ A Path Reference is a Parameter data type that contains a Path Name to an Object
 
 **Record**
 
-The Record is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the Message as well as providing additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
+The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the Message as well as providing additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
 **Relative Path**
 
@@ -424,9 +416,14 @@ A Service Element represents a piece of service functionality that is exposed by
 **Source Endpoint**
 
 An Endpoint that was the sender of a message.
+
 **Subscription**
 
 A Subscription is a set of logic that tells an Agent which Notifications to send to a particular Controller.
+
+**Supported Data Model**
+
+The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all of the Device Type Definitions the Agent exposes to the Controller.
 
 **Table**
 
@@ -436,13 +433,13 @@ The term Table refers to a Multi-Instance Object in an Agent’s Instantiated or
 
 An Endpoint that was the intended receiver of a message.
 
+**Trusted Broker**
+
+An intermediary that either (1) ensures the Endpoint ID in all brokered Endpoint's USP Record `from_id` matches the Endpoint ID of those Endpoint's certificates or credentials, before sending on a USP Record to another Endpoint, or (2) is part of a closed ecosystem that "knows" (certain) Endpoints can be trusted not to spoof the Endpoint ID.
+
 **Unique Key**
 
 The Unique Key of a Multi-Instance Object is a set of Parameters that uniquely identify the instance of an Object in the Agent’s Instantiated Data Model and can be used as an Instance Identifier.
-
-**USP Record Message**
-
-The USP Record message is defined as the transport layer payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for secure and reliable delivery of fragmented USP Messages.
 
 **Wildcard**
 

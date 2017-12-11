@@ -10,11 +10,14 @@ if (Has ""<retransmit_id>""?) then (yes)
 :Resend requested record;
 endif
 end fork
-:Clear outgoing buffer where\n""<sequence_id> < <expected_id>"";
 if (Unprocessed records?) then (no)
 stop
 endif
 endwhile (no)
+if (""<sequence_id>"" < ""<expected_id>""?) then (yes)
+:Gracefully ignore;
+stop
+else (no)
 :Add to unprocessed records;
 stop
 @enduml
