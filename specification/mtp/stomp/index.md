@@ -45,7 +45,7 @@ The basic steps for any USP Endpoint that utilizes a STOMP MTP are:
 
 **R-STOMP.0** - USP Endpoints utilizing STOMP clients for message transport MUST support the `STOMPConn:1` and `STOMPController:1` data model profiles.
 
-**R-STOMP.1** - USP Endpoints utilizing STOMP clients for message transport SHOULD support the `STOMPAgent:1` data model profile.
+**R-STOMP.1** - USP Endpoints utilizing STOMP clients for message transport SHOULD support the `STOMPAgent:1` and `STOMPHeartbeat:1` data model profile.
 
 ## Handling of the STOMP Session
 
@@ -73,7 +73,7 @@ The STOMP Heart Beat mechanism can be used to periodically send data between a S
 
 **R-STOMP.8** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is `True` then the USP Agent MUST negotiate the STOMP Heart Beat mechanism within the `STOMP` frame during the process of establishing the STOMP connection as is defined in the "Heart-beating" section of the STOMP Spec.
 
-**R-STOMP.9** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is either `False` or not implemented then the USP Agent MUST not send the `heart-beat` STOMP header in the `STOMP` frame.
+**R-STOMP.9** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is either `False` or not implemented then the USP Agent MUST either not send the `heart-beat` STOMP header in the `STOMP` frame or send "0,0" as the value of the `heart-beat` STOMP header in the `STOMP` frame.
 
 **R-STOMP.10** - USP Agents negotiating the STOMP Heart Beat mechanism MUST use the `STOMP.Connection.{i}.OutgoingHeartbeat` and `STOMP.Connection.{i}.IncomingHeartbeat` parameter values within the `heart-beat` STOMP header as defined in the "Heart-beating" section of the STOMP Spec.
 
