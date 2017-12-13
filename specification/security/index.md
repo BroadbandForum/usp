@@ -57,7 +57,7 @@ An Endpoint can have a configured list of trusted Certificate Authority (CA) cer
 
 **R-SEC.2** - To confirm a certificate was signed by a trusted CA, the Endpoint MUST contain information from one or more trusted CA certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. At a minimum, this stored information will include a certificate fingerprint and fingerprint algorithm used to generate the fingerprint. The stored information MAY be the entire certificate.
 
-This secure means can be accomplished through USP (see [Theory of Operations](./index.md#theory-of-operations), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
+This secure means can be accomplished through USP (see [Theory of Operations](./index.md#theory-of-operations), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate` object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
 
 **R-SEC.3** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
 
@@ -157,6 +157,8 @@ Figure SEC.1 – Receiving a USP Record
 
 <a id='figure-SEC1'/>
 
+---
+
 <img src="no-secure-message-exchange.png" />
 
 Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
@@ -185,6 +187,8 @@ Figure SEC.4 – Checking a Certificate Containing an Endpoint ID
 
 <a id='figure-SEC4'/>
 
+---
+
 <img src="determine-role.png" />
 
 Figure SEC.5 – Determining the Role
@@ -195,19 +199,21 @@ Figure SEC.5 – Determining the Role
 
 Support for Trusted Broker logic is optional. 
 
-**R-SEC.26** - If Trusted Brokers are supported, and a Trusted Broker is encountered (from the Optional "Trusted Broker cert?" decision diamonds in Figures SEC.2 or SEC.3), the Agent MUST execute logic that achieves the same results as in the decision flows from Figure [SEC.6](./index.md#figure-SEC6) for a received USP Record and Figure [SEC.7](./index.md#figure-SEC7) for sending a USP Record.
-
-<a id='figure-SEC6'/>
+**R-SEC.26** - If Trusted Brokers are supported, and a Trusted Broker is encountered (from the optional "Trusted Broker cert?" decision diamonds in Figures SEC.2 or SEC.3), the Agent MUST execute logic that achieves the same results as in the decision flows from Figure [SEC.6](./index.md#figure-SEC6) for a received USP Record and Figure [SEC.7](./index.md#figure-SEC7) for sending a USP Record.
 
 <img src="broker-with-received-record.png" />
 
 Figure SEC.6 - Trusted Broker with Received Record
 
-<a id='figure-SEC7'/>
+<a id='figure-SEC6'/>
+
+---
 
 <img src="broker-with-sent-record.png" />
 
 Figure SEC.7 - Trusted Broker Sending a Record
+
+<a id='figure-SEC7'/>
 
 ## Theory of operations
 
