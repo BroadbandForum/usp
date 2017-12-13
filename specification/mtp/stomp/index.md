@@ -111,9 +111,7 @@ A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame
 
 **R-STOMP.21** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-length` STOMP header containing the length of the body included in the `SEND` frame.
 
-**R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/octet-stream`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
-
-**R-STOMP.23** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `media-type` STOMP header with a value of "`vnd.bbf.usp.msg`", which signifies that the body included in the `SEND` frame contains a USP Record.
+**R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/vnd.bbf.usp.msg`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
 
 **R-STOMP.24** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP Record should send any response (if required).
 
