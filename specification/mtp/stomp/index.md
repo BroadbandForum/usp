@@ -57,7 +57,7 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 
 **R-STOMP.2** - USP Endpoints utilizing STOMP clients for message transport MUST send a `STOMP` frame to the STOMP server to initiate the STOMP communications session as defined in the "Connecting" section of the STOMP Specification.
 
-**R-STOMP.3** - USP Endpoints that DO NOT utilize client certificate authentication MUST include the login and passcode STOMP headers in the STOMP frame.  For a USP Agent, if the `.STOMP.Connection.{i}.Username` parameter were implemented then its value would be the source for the `login` STOMP header, and if the `.STOMP.Connection.{i}.Password` parameter were implemented then its value would be the source for the `passcode` STOMP header.
+**R-STOMP.3** - USP Endpoints that DO NOT utilize client certificate authentication MUST include the login and passcode STOMP headers in the STOMP frame.  For a USP Agent, if the `.STOMP.Connection.{i}.Username` parameter is implemented then its value will be the source for the `login` STOMP header, and if the `.STOMP.Connection.{i}.Password` parameter is implemented then its value will be the source for the `passcode` STOMP header.
 
 **R-STOMP.4** - USP Endpoints sending a `STOMP` frame MUST include (in addition to other mandatory STOMP headers) an `endpoint-id` STOMP header containing the Endpoint ID of the USP Endpoint sending the frame.
 
