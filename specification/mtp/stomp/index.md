@@ -27,7 +27,7 @@
 
 # STOMP Binding
 
-The STOMP MTP transfers USP Records between USP endpoints using [version 1.2 of the STOMP protocol](https://stomp.github.io/stomp-specification-1.2.html) (further referred to as "STOMP Spec"), or the Simple Text Oriented Message Protocol. Messages that are transferred between STOMP clients utilize a message bus interaction model where the STOMP server is the messaging broker that routes and delivers messages based on the destination included in the STOMP header.
+The STOMP MTP transfers USP Records between USP endpoints using [version 1.2 of the STOMP protocol](https://stomp.github.io/stomp-specification-1.2.html) (further referred to as "STOMP Specification"), or the Simple Text Oriented Message Protocol. Messages that are transferred between STOMP clients utilize a message bus interaction model where the STOMP server is the messaging broker that routes and delivers messages based on the destination included in the STOMP header.
 
 The following figure  depicts the transfer of the USP Records between USP Agents and Controllers.
 
@@ -55,7 +55,7 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 
 ### Connecting a USP Endpoint to the STOMP Server
 
-**R-STOMP.2** - USP Endpoints utilizing STOMP clients for message transport MUST send a `STOMP` frame to the STOMP server to initiate the STOMP communications session as defined in the "Connecting" section of the STOMP Spec.
+**R-STOMP.2** - USP Endpoints utilizing STOMP clients for message transport MUST send a `STOMP` frame to the STOMP server to initiate the STOMP communications session as defined in the "Connecting" section of the STOMP Specification.
 
 **R-STOMP.3** - USP Endpoints that DO NOT utilize client certificate authentication MUST include the login and passcode STOMP headers in the STOMP frame.  For a USP Agent, if the `.STOMP.Connection.{i}.Username` parameter were implemented then its value would be the source for the `login` STOMP header, and if the `.STOMP.Connection.{i}.Password` parameter were implemented then its value would be the source for the `passcode` STOMP header.
 
@@ -71,13 +71,13 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 
 The STOMP Heart Beat mechanism can be used to periodically send data between a STOMP client and a STOMP server to ensure that the underlying TCP connection is still available.  This is an optional STOMP mechanism and is negotiated when establishing the STOMP connection.
 
-**R-STOMP.8** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is `True` then the USP Agent MUST negotiate the STOMP Heart Beat mechanism within the `STOMP` frame during the process of establishing the STOMP connection as is defined in the "Heart-beating" section of the STOMP Spec.
+**R-STOMP.8** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is `True` then the USP Agent MUST negotiate the STOMP Heart Beat mechanism within the `STOMP` frame during the process of establishing the STOMP connection as is defined in the "Heart-beating" section of the STOMP Specification.
 
 **R-STOMP.9** - If the `STOMP.Connection` instance's `EnableHeartbeats` parameter value is either `False` or not implemented then the USP Agent MUST either not send the `heart-beat` STOMP header in the `STOMP` frame or send "0,0" as the value of the `heart-beat` STOMP header in the `STOMP` frame.
 
-**R-STOMP.10** - USP Agents negotiating the STOMP Heart Beat mechanism MUST use the `STOMP.Connection.{i}.OutgoingHeartbeat` and `STOMP.Connection.{i}.IncomingHeartbeat` parameter values within the `heart-beat` STOMP header as defined in the "Heart-beating" section of the STOMP Spec.
+**R-STOMP.10** - USP Agents negotiating the STOMP Heart Beat mechanism MUST use the `STOMP.Connection.{i}.OutgoingHeartbeat` and `STOMP.Connection.{i}.IncomingHeartbeat` parameter values within the `heart-beat` STOMP header as defined in the "Heart-beating" section of the STOMP Specification.
 
-**R-STOMP.11** - USP Agents that have negotiated a STOMP Heart Beat mechanism with a STOMP server MUST adhere to the heart beat values (as defined in the "Heart-beating" section of the STOMP Spec) as returned in the `CONNECTED` frame.
+**R-STOMP.11** - USP Agents that have negotiated a STOMP Heart Beat mechanism with a STOMP server MUST adhere to the heart beat values (as defined in the "Heart-beating" section of the STOMP Specification) as returned in the `CONNECTED` frame.
 
 ## Mapping USP Endpoints to STOMP Destinations
 
@@ -87,7 +87,7 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 
 ### Subscribing a USP Endpoint to a STOMP Destination
 
-**R-STOMP.12** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination by sending a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Spec..
+**R-STOMP.12** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination by sending a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Specification..
 
 **R-STOMP.13** - USP Endpoints sending a `SUBSCRIBE` frame MUST include (in addition to other mandatory STOMP headers) a `destination` STOMP header containing the STOMP destination associated with the USP Endpoint sending the frame.
 
@@ -103,7 +103,7 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 
 A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame. The STOMP Server delivers that USP Record to the destination STOMP Endpoint within a `MESSAGE` frame. When a USP Endpoint responds to the USP request, the USP Endpoint sends the USP Record to the STOMP Server within a `SEND` frame, and the STOMP Server delivers that USP Record to the destination USP Endpoint within a `MESSAGE` frame.
 
-**R-STOMP.18** - USP Endpoints utilizing STOMP clients for message transport MUST send USP Records in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Spec.
+**R-STOMP.18** - USP Endpoints utilizing STOMP clients for message transport MUST send USP Records in a `SEND` frame to the STOMP server as defined in the "SEND" section of the STOMP Specification.
 
 **R-STOMP.19** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-length` STOMP header containing the length of the body included in the `SEND` frame.
 
@@ -129,11 +129,11 @@ If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot
 
 **R-STOMP.27** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the acknowledgement STOMP frames including: `ACK` and `NACK`.
 
-**R-STOMP.28** - USP Endpoints utilizing STOMP clients for message transport MAY send the following STOMP frames when shutting down a STOMP connection: `UNSUBSCRIBE` (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and `DISCONNECT` (according to the rules defined in the DISCONNECT section of the STOMP Spec).
+**R-STOMP.28** - USP Endpoints utilizing STOMP clients for message transport MAY send the following STOMP frames when shutting down a STOMP connection: `UNSUBSCRIBE` (according to the rules defined in the UNSUBSCRIBE section of the STOMP Specification) and `DISCONNECT` (according to the rules defined in the DISCONNECT section of the STOMP Specification).
 
-**R-STOMP.29** - USP Endpoints utilizing STOMP clients for message transport that DID NOT receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame when establishing the STOMP communications session MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Spec) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
+**R-STOMP.29** - USP Endpoints utilizing STOMP clients for message transport that DID NOT receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame when establishing the STOMP communications session MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Specification) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
 
-**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Spec.
+**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Specification.
 
 ## Discovery Requirements
 
@@ -145,7 +145,7 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 ## STOMP Server Requirements
 
-**R-STOMP.33** - A STOMP server implementation MUST adhere to the requirements defined in the STOMP Spec.
+**R-STOMP.33** - A STOMP server implementation MUST adhere to the requirements defined in the STOMP Specification.
 
 **R-STOMP.34** - A STOMP server implementation MUST perform authentication of the STOMP client and ensure that a Remote USP Endpoint is only allowed to subscribe to the destination that is associated with the USP Endpoint.
 
