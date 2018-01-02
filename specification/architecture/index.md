@@ -459,20 +459,8 @@ The Notify request allows a type of generic event (called Event) message that al
 
 For example: `Device.LocalAgent.Boot!`
 
-#### Path Grammer
-Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the path lexical rules for referencing the Supported Data Model are:
-
-```
-[1] sdmpath ::= sdmobjpath | sdmparampath
-[2] sdmobjpath ::= name sdmcomp* '.'
-[3] sdmparampath::= name sdmcomp* '.' name
-[4] sdmcomp  ::= '.' name ('.' sdminst)?
-[5] sdminst ::= posnum | '{i}'
-[6] name ::= [A-Za-z_] [A-Za-z_0-9]*
-[7] posnum ::= [1-9] [0-9]*
-```
-
-The path lexical rules for referencing the Instantiated Data Model are:
+#### Instantiated Data Model Path Grammer
+Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the path lexical rules for referencing the Instantiated Data Model are:
 
 ```
 idmpath ::= objpath | parampath | cmdpath | evntpath | searchpath
@@ -493,6 +481,14 @@ name ::= [A-Za-z_] [A-Za-z_0-9]*
 literal ::= '"' [^"]* '"'
 posnum ::= [1-9] [0-9]*
 number ::= '0' | ( '-'? posnum )
+```
+
+The path lexical rules for referencing the Supported Data Model are:
+
+```
+sdmpath ::= name ‘.’ ( name ‘.’ ( ( posnum | ‘{i}’ ) ‘.’ )? )* name?
+name ::= [A-Za-z_] [A-Za-z_0-9]*
+posnum ::= [1-9] [0-9]*
 ```
 
 ##### BNF Diagrams for Instantiated Data Model
@@ -791,6 +787,50 @@ referenced by:
 *   [inst](#inst "inst")
 *   [number](#number "number")
 *   [reffollow](#reffollow "reffollow")
+<br><br>
+
+
+##### BNF Diagrams for Supported Data Model
+<a name="sdmpath">**sdmpath**:</a>
+
+![](diagram/sdmpath.png) <map name="sdmpath.map"><area shape="rect" coords="29,17,83,49" href="#name" title="name"> <area shape="rect" coords="187,17,241,49" href="#name" title="name"> <area shape="rect" coords="345,49,413,81" href="#posnum" title="posnum"> <area shape="rect" coords="577,49,631,81" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[sdmpath](#sdmpath "sdmpath")  ::= [name](#name "name") '.' ( [name](#name "name") '.' ( ( [posnum](#posnum "posnum") | '{i}' ) '.' )? )* [name](#name "name")?</code>
+
+</div>
+<br><br>
+
+<a name="name">**name**:</a>
+
+![](diagram/name.png)
+
+<div class="ebnf">
+
+<code>[name](#name "name")     ::= [A-Za-z_] [A-Za-z_0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [sdmpath](#sdmpath "sdmpath")
+<br><br>
+
+<a name="posnum">**posnum**:</a>
+
+![](diagram/posnum.png)
+
+<div class="ebnf">
+
+<code>[posnum](#posnum "posnum")   ::= [1-9] [0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [sdmpath](#sdmpath "sdmpath")
+
 <br><br>
 
 [<-- Overview](/specification/)
