@@ -494,5 +494,304 @@ literal ::= '"' [^"]* '"'
 posnum ::= [1-9] [0-9]*
 number ::= '0' | ( '-'? posnum )
 ```
+
+##### BNF Diagrams for Instantiated Data Model
+<a name="idmpath">**idmpath**:</a>
+
+![](diagram/idmpath.png) <map name="idmpath.map"><area shape="rect" coords="49,1,115,33" href="#objpath" title="objpath"> <area shape="rect" coords="49,45,133,77" href="#parampath" title="parampath"> <area shape="rect" coords="49,89,121,121" href="#cmdpath" title="cmdpath"> <area shape="rect" coords="49,133,121,165" href="#evntpath" title="evntpath"> <area shape="rect" coords="49,177,135,209" href="#searchpath" title="searchpath"></map>
+
+<div class="ebnf">
+
+<code>[idmpath](#idmpath "idmpath")  ::= [objpath](#objpath "objpath")
+           | [parampath](#parampath "parampath")
+           | [cmdpath](#cmdpath "cmdpath")
+           | [evntpath](#evntpath "evntpath")
+           | [searchpath](#searchpath "searchpath")</code>
+
+</div>
+<br><br>
+
+<a name="objpath">**objpath**:</a>
+
+![](diagram/objpath.png) <map name="objpath.map"><area shape="rect" coords="29,121,83,153" href="#name" title="name"> <area shape="rect" coords="143,33,183,65" href="#inst" title="inst"> <area shape="rect" coords="143,77,197,109" href="#name" title="name"> <area shape="rect" coords="261,77,331,109" href="#reffollow" title="reffollow"> <area shape="rect" coords="371,1,425,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[objpath](#objpath "objpath")  ::= [name](#name "name") '.' ( [name](#name "name") ( '.' [inst](#inst "inst") | [reffollow](#reffollow "reffollow") '.' [name](#name "name") )? '.' )*</code>
+
+</div>
+
+referenced by:
+
+*   [cmdpath](#cmdpath "cmdpath")
+*   [evntpath](#evntpath "evntpath")
+*   [idmpath](#idmpath "idmpath")
+*   [parampath](#parampath "parampath")
+<br><br>
+
+
+<a name="parampath">**parampath**:</a>
+
+![](diagram/parampath.png) <map name="parampath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[parampath](#parampath "parampath")
+         ::= [objpath](#objpath "objpath") [name](#name "name")</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+<a name="cmdpath">**cmdpath**:</a>
+
+![](diagram/cmdpath.png) <map name="cmdpath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[cmdpath](#cmdpath "cmdpath")  ::= [objpath](#objpath "objpath") [name](#name "name") '()'</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+
+<a name="evntpath">**evntpath**:</a>
+
+![](diagram/evntpath.png) <map name="evntpath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[evntpath](#evntpath "evntpath") ::= [objpath](#objpath "objpath") [name](#name "name") '!'</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+
+<a name="inst">**inst**:</a>
+
+![](diagram/inst.png) <map name="inst.map"><area shape="rect" coords="49,1,117,33" href="#posnum" title="posnum"> <area shape="rect" coords="49,45,107,77" href="#keyref" title="keyref"> <area shape="rect" coords="49,89,95,121" href="#expr" title="expr"></map>
+
+<div class="ebnf">
+
+<code>[inst](#inst "inst")     ::= [posnum](#posnum "posnum")
+           | [keyref](#keyref "keyref")
+           | [expr](#expr "expr")
+           | '*'</code>
+
+</div>
+
+referenced by:
+
+*   [objpath](#objpath "objpath")
+<br><br>
+
+<a name="keyref">**keyref**:</a>
+
+![](diagram/keyref.png) <map name="keyref.map"><area shape="rect" coords="95,45,163,77" href="#keyexpr" title="keyexpr"></map>
+
+<div class="ebnf">
+
+<code>[keyref](#keyref "keyref")   ::= '[' [keyexpr](#keyexpr "keyexpr") ( ',' [keyexpr](#keyexpr "keyexpr") )* ']'</code>
+
+</div>
+
+referenced by:
+
+*   [inst](#inst "inst")
+<br><br>
+
+<a name="keyexpr">**keyexpr**:</a>
+
+![](diagram/keyexpr.png) <map name="keyexpr.map"><area shape="rect" coords="29,1,89,33" href="#relpath" title="relpath"> <area shape="rect" coords="169,1,219,33" href="#value" title="value"></map>
+
+<div class="ebnf">
+
+<code>[keyexpr](#keyexpr "keyexpr")  ::= [relpath](#relpath "relpath") '==' [value](#value "value")</code>
+
+</div>
+
+referenced by:
+
+*   [keyref](#keyref "keyref")
+<br><br>
+
+<a name="expr">**expr**:</a>
+
+![](diagram/expr.png) <map name="expr.map"><area shape="rect" coords="97,45,177,77" href="#exprcomp" title="exprcomp"></map>
+
+<div class="ebnf">
+
+<code>[expr](#expr "expr")     ::= '{' [exprcomp](#exprcomp "exprcomp") ( '&&' [exprcomp](#exprcomp "exprcomp") )* '}'</code>
+
+</div>
+
+referenced by:
+*   [inst](#inst "inst")
+<br><br>
+
+<a name="exprcomp">**exprcomp**:</a>
+
+![](diagram/exprcomp.png) <map name="exprcomp.map"><area shape="rect" coords="29,1,89,33" href="#relpath" title="relpath"> <area shape="rect" coords="109,1,155,33" href="#oper" title="oper"> <area shape="rect" coords="175,1,225,33" href="#value" title="value"></map>
+
+<div class="ebnf">
+
+<code>[exprcomp](#exprcomp "exprcomp") ::= [relpath](#relpath "relpath") [oper](#oper "oper") [value](#value "value")</code>
+
+</div>
+
+referenced by:
+
+*   [expr](#expr "expr")
+<br><br>
+
+<a name="relpath">**relpath**:</a>
+
+![](diagram/relpath.png) <map name="relpath.map"><area shape="rect" coords="49,77,103,109" href="#name" title="name"> <area shape="rect" coords="113,33,183,65" href="#reffollow" title="reffollow"></map>
+
+<div class="ebnf">
+
+<code>[relpath](#relpath "relpath")  ::= [name](#name "name") ( [reffollow](#reffollow "reffollow")? '.' [name](#name "name") )*</code>
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+*   [keyexpr](#keyexpr "keyexpr")
+<br><br>
+
+
+<a name="reffollow">**reffollow**:</a>
+
+![](diagram/reffollow.png) <map name="reffollow.map"><area shape="rect" coords="119,33,187,65" href="#posnum" title="posnum"></map>
+
+<div class="ebnf">
+
+<code>[reffollow](#reffollow "reffollow")
+         ::= ( '#' ( [posnum](#posnum "posnum") | '*' ) )? '+'<code>
+
+</div>
+
+referenced by:
+
+*   [objpath](#objpath "objpath")
+*   [relpath](#relpath "relpath")
+<br><br>
+
+<a name="oper">**oper**:</a>
+
+![](diagram/oper.png)
+
+<div class="ebnf">
+
+<code>[oper](#oper "oper")     ::= '=='
+           | '!='
+           | '<'
+           | '>'
+           | '<='
+           | '>='</code>
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+<br><br>
+
+<a name="value">**value**:</a>
+
+![](diagram/value.png) <map name="value.map"><area shape="rect" coords="49,1,99,33" href="#literal" title="literal"> <area shape="rect" coords="49,45,115,77" href="#number" title="number"></map>
+
+<div class="ebnf">
+
+<code>[value](#value "value")    ::= [literal](#literal "literal")</code>
+           | [number](#number "number")
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+*   [keyexpr](#keyexpr "keyexpr")
+<br><br>
+
+
+<a name="name">**name**:</a>
+
+![](diagram/name.png)
+
+<div class="ebnf">
+
+<code>[name](#name "name")     ::= [A-Za-z_] [A-Za-z_0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [cmdpath](#cmdpath "cmdpath")
+*   [evntpath](#evntpath "evntpath")
+*   [objpath](#objpath "objpath")
+*   [parampath](#parampath "parampath")
+*   [relpath](#relpath "relpath")
+<br><br>
+
+
+<a name="literal">**literal**:</a>
+
+![](diagram/literal.png)
+
+
+<code>[literal](#literal "literal")  ::= '"' [^"]* '"'</code>
+
+referenced by:
+
+*   [value](#value "value")
+<br><br>
+
+
+<a name="number">**number**:</a>
+
+![](diagram/number.png) <map name="number.map"><area shape="rect" coords="135,45,203,77" href="#posnum" title="posnum"></map>
+
+<div class="ebnf">
+
+<code>[number](#number "number")   ::= '0'
+           | '-'? [posnum](#posnum "posnum")</code>
+
+</div>
+
+referenced by:
+
+*   [value](#value "value")
+<br><br>
+
+<a name="posnum">**posnum**:</a>
+
+![](diagram/posnum.png)
+
+<div class="ebnf">
+
+<code>[posnum](#posnum "posnum")   ::= [1-9] [0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [inst](#inst "inst")
+*   [number](#number "number")
+*   [reffollow](#reffollow "reffollow")
+<br><br>
+
 [<-- Overview](/specification/)
 [Discovery -->](/specification/discovery/)
