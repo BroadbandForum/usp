@@ -206,7 +206,7 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 **R-ARC.7** - All USP endpoints MUST support the Path Name syntax as defined in [TR-106][3].
 
-Path Names are represented by a hierarchy of Objects ("parents") and sub-Objects ("children"), separated by the dot "." character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
+Path Names are represented by a hierarchy of Objects ("parents") and sub-Objects ("children"), separated by the dot "." character, ending with a parameter if referencing a parameter path. There are six different types of Path Names used to address the data model of an Agent:
 
 1.	Object Path - This is a Path Name of either a single-instance ("static") Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a "." Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see the [GetSupportedDM message](/specification/messages/getsupporteddm/)).
 
@@ -228,7 +228,7 @@ This creates two functions of Path Names: Addressing and Searching. The first fi
 
 For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the "eth0" IP Interface:
 
-`.Interface.[Name=="eth0"].IPv4Address.{addr}.IPAddres::{addr.Status=="Enabled"}`
+`Device.IP.Interface.[Name=="eth0"].IPv4Address.{Status=="Enabled"}.IPAddres`
 
 #### Relative Paths
 
@@ -266,7 +266,7 @@ Instance Number Addressing allows an Object Instance to be addressed by using it
 
 **R-ARC.8** - The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.
 
-For example, the `.Interface` table with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
+For example, the `Device.IP.Interface` table entry with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
 
 ##### Addressing by Unique Key
 
@@ -296,23 +296,21 @@ Searching is a means of matching 0, 1 or many instances of a Multi-Instance Obje
 
 The basic format of a Search Path is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression>}`
+`Device.IP.Interface.{expression>}.Status`
 
-An Expression consists of one or more Expression Components that are separated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
+An Expression consists of one or more Expression Components that are concatenated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
 
 The basic format of a Search Path with the Expression element expanded is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression component>&&<expression component>}`
+`Device.IP.Interface.{<expression component>&&<expression component>}.Status`
 
 An Expression Component is a combination of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
 
 The basic format of a Search Path with the Expression Component element expanded is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression parameter><expression operator><expression constant>}`
+`Device.IP.Interface.{<expression parameter><expression operator><expression constant>}.Status`
 
-An Expression Parameter is based on an Expression Variable found in the Path Name, which allows the Expression Component to represent a relative path based on where the Expression Variable is located in the Path Name.
-
-For example, `Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{…}` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
+For example, `Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
 
 Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Expression can and should have their own Expression Variables)*
 
@@ -320,82 +318,39 @@ An Expression Operator dictates how the Expression Component will be evaluated. 
 
 An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in [TR-106][3]. **For string, boolean and enumeration types, only the '==' and '!=' operators are valid.**
 
-The Expression Constant is the value that the Expression Component is being evaluated against; Expression Components must match the type as defined for the associated Parameter in [TR-181][1].
+The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in [TR-181][1].
 
 *NOTE: String values are enclosed in double quotes. In order to allow a string value to contain double quotes, quote characters can be percent-escaped as %22 (double quote). Therefore, a literal percent character has to be quoted as %25.*
 
-Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the Search Expression lexical rules for referencing the Supported Data Model are:
 
-```
-[1] sdmpath ::= objpath | sdmparampath
-[2] sdmparampath::= sdmcomps '.' name
-[3] objpath ::= sdmcomps '.'
-[4] sdmcomps ::= name ( '.' sdmcomp )*
-[5] sdmcomp ::= name | sdminst
-[6] sdminst ::= posnum | '{i}'
-[7] name ::= [A-Za-z_] [A-Za-z_0-9]*
-[8] posnum ::= [1-9] [0-9]*
-```
-
-The Search Expression lexical rules for referencing the Instantiated Data Model are:
-
-```
-[1] idmpath ::= objinstpath | parampath | cmdpath | evntpath | searchpath
-[2] objinstpath ::= comps '.' expr?
-[3] parampath ::= comps '.' namemod
-[4] cmdpath ::= comps '()' expr?
-[5] evntpath ::= comps '!' expr?
-[6] searchpath ::= comps expr
-[7] comps ::= name ( '.' comp )*
-[8] comp ::= namemod | inst
-[9] inst ::= posnum | keyref | exprvar | '*'
-[10] keyref ::= '[' keyexpr ( ',' keyexpr )* ']'
-[11] keyexpr ::= relpath '==' value
-[12] exprvar ::= '{' name '}'
-[13] expr ::= '::' '{' exprcomp ( '&&' exprcomp )* '}'
-[14] exprcomp ::= relpath oper value
-[15] relpath ::= name ( '.' namemod )+
-[16] namemod ::= name ( '#' elem )? '+'?
-[17] oper ::= '==' | '!=' | '<' | '>' | '<=' | '>='
-[18] elem ::= posnum | '*'
-[19] value ::= literal | number
-[20] name ::= [A-Za-z_] [A-Za-z_0-9]*
-[21] literal ::= '"' [^"]* '"'
-[22] posnum ::= [1-9] [0-9]*
-[23] number ::= '0' | ( '-'? posnum )
-```
 
 ##### Search Examples
 
 <a id="search_examples" />
 
-Valid Searches:
+*Valid Searches:*
 
-Status for all IP Interfaces with a "Normal" type:
+- Status for all IP Interfaces with a "Normal" type:
 
-`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"}`
+  `Device.IP.Interface.{Type=="Normal"}.Status`
 
-IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
+- Ipv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
 
-`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&addr.AddressingType=="Static"}`
+  `Device.IP.Interface.{Type=="Normal"}.IPv4Address.{AddressingType=="Static"}.IPAddress`
 
-IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
+- Ipv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&intf.Stats.ErrorsSent>0&&addr.AddressingType=="Static"}`
+  `Device.IP.Interface.{Type=="Normal"&&intf.Stats.ErrorsSent>0}.Ipv4Address.{AddressingType=="Static"}.IPAddress`
 
-Searches that are NOT VALID::
+*Searches that are NOT VALID:*
 
-Invalid because the Expression Component is missing:
+- Invalid because the Expression is empty:
 
-`Device.IP.Interface.{intf}.`
+  `Device.IP.Interface.{}.`
 
-Invalid because the Expression Component is empty:
+- Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance):
 
-`Device.IP.Interface.{intf}.::{}`
-
-Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance)
-
-`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"&&intf.IPv4Address.*.AddressingType=="Static"}`
+  `Device.IP.Interface.{Type=="Normal"&&IPv4Address.*.AddressingType=="Static"}.Status`
 
 #### Searching by Wildcard
 
@@ -488,8 +443,7 @@ The Reference Following and Search Expression mechanisms can be combined.
 
 For example, reference the Signal Strength of all WiFi Associated Devices using the "ac" Operating Standard on the "MyHome" SSID, you would use the Path Name:
 
-`Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::
-{ap.SSIDReference+.SSID=="MyHome"&&dev.OperatingStandard=="ac"}`
+`Device.WiFi.AccessPoint.[SSIDReference+.SSID=="MyHome"].AssociatedDevice.{OperatingStandard=="ac"}.SignalStrength`
 
 ##### Operations/Commands
 <a id="operation_command_path_names" />
@@ -505,5 +459,40 @@ The Notify request allows a type of generic event (called Event) message that al
 
 For example: `Device.LocalAgent.Boot!`
 
+#### Path Grammer
+Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the path lexical rules for referencing the Supported Data Model are:
+
+```
+[1] sdmpath ::= sdmobjpath | sdmparampath
+[2] sdmobjpath ::= name sdmcomp* '.'
+[3] sdmparampath::= name sdmcomp* '.' name
+[4] sdmcomp  ::= '.' name ('.' sdminst)?
+[5] sdminst ::= posnum | '{i}'
+[6] name ::= [A-Za-z_] [A-Za-z_0-9]*
+[7] posnum ::= [1-9] [0-9]*
+```
+
+The path lexical rules for referencing the Instantiated Data Model are:
+
+```
+idmpath ::= objpath | parampath | cmdpath | evntpath | searchpath
+objpath ::= name '.' (name (('.' inst)|(reffollow '.' name) )? '.')*
+parampath ::= objpath name
+cmdpath ::= objpath  name '()'
+evntpath ::= objpath  name '!'
+inst ::= posnum | keyref | expr | '*'
+keyref ::= '[' keyexpr ( ',' keyexpr )* ']'
+keyexpr ::= relpath '==' value
+expr ::= '{' (exprcomp ( '&&' exprcomp )*) '}'
+exprcomp ::= relpath oper value
+relpath ::= name (reffollow? '.' name )*
+reffollow ::=  ( '#' (posnum | '*') '+' )|  '+'
+oper ::= '==' | '!=' | '<' | '>' | '<=' | '>='
+value ::= literal | number
+name ::= [A-Za-z_] [A-Za-z_0-9]*
+literal ::= '"' [^"]* '"'
+posnum ::= [1-9] [0-9]*
+number ::= '0' | ( '-'? posnum )
+```
 [<-- Overview](/specification/)
 [Discovery -->](/specification/discovery/)
