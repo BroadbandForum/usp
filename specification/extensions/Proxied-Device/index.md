@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -32,7 +32,7 @@ This Annex describes a Theory of Operations for the ProxiedDevice Table.
 A ProxiedDevice table is defined as
 "Each entry in the table is a ProxiedDevice object that is a mount point. Each ProxiedDevice represents distinct hardware Devices. ProxiedDevice objects are virtual and abstracted representation of functionality that exists on hardware other than that which the Agent is running."
 
-An implementation of ProxiedDevice may be used in an IoT Gateway that proxies devices that are connected to it via technologies other than USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of ProxiedDevice objects, each defined as a mount point, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the ProxiedDevice table instances.
+An implementation of ProxiedDevice may be used in an IoT Gateway that proxies devices that are connected to it via technologies other tha USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of ProxiedDevice objects, each defined as a mount point, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the ProxiedDevice table instances.
 
 Example:
 If Wifi object and Switch were defined objects

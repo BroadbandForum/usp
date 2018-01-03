@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -153,7 +153,7 @@ USP is designed to allow a Controller to manipulate Service Elements on an Agent
 
 This version of the specification defines support for the following Data Model(s):
 
-* The Device:2 Data Model for CWMP ([1])
+* The [Device:2 Data Model][1]
 
 This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model for [CWMP][1], and for creating Device Type Definitions based on that Data Model, are defined in [Broadband Forum TR-106, "Data Model Template for TR-069 Enabled Devices"][3].
 
@@ -226,9 +226,9 @@ This creates two functions of Path Names: Addressing and Searching. The first fi
 
 *NOTE: Obviously only one form of addressing or searching can be used for a given Instance Identifier in a Path Name, but different forms of addressing can be used if more than one Instance Identifier needs to be specified in a Path Name.*
 
-For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the Ipv4Address table to select Enabled Ipv4 Addresses associated with the "eth0" IP Interface:
+For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the "eth0" IP Interface:
 
-`.Interface.[Name=="eth0"].Ipv4Address.{addr}.IPAddres::{addr.Status=="Enabled"}`
+`.Interface.[Name=="eth0"].IPv4Address.{addr}.IPAddres::{addr.Status=="Enabled"}`
 
 #### Relative Paths
 
@@ -312,7 +312,7 @@ The basic format of a Search Path with the Expression Component element expanded
 
 An Expression Parameter is based on an Expression Variable found in the Path Name, which allows the Expression Component to represent a relative path based on where the Expression Variable is located in the Path Name.
 
-For example, `Device.IP.Interface.{intf}.Ipv4Address.{addr}.IPAddress::{…}` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.Ipv4Address.{i}` Object.
+For example, `Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{…}` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
 
 Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Expression can and should have their own Expression Variables)*
 
@@ -375,13 +375,13 @@ Status for all IP Interfaces with a "Normal" type:
 
 `Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"}`
 
-Ipv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
+IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
 
-`Device.IP.Interface.{intf}.Ipv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&addr.AddressingType=="Static"}`
+`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&addr.AddressingType=="Static"}`
 
-Ipv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
+IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-`Device.IP.Interface.{intf}.Ipv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&intf.Stats.ErrorsSent>0&&addr.AddressingType=="Static"}`
+`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&intf.Stats.ErrorsSent>0&&addr.AddressingType=="Static"}`
 
 Searches that are NOT VALID::
 
@@ -395,7 +395,7 @@ Invalid because the Expression Component is empty:
 
 Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance)
 
-`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"&&intf.Ipv4Address.*.AddressingType=="Static"}`
+`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"&&intf.IPv4Address.*.AddressingType=="Static"}`
 
 #### Searching by Wildcard
 

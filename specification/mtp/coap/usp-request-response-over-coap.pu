@@ -16,14 +16,14 @@ participant "Agent" as A
 
 end box
 
-C->CC : CRUD-O request
-CC->CA: CON[0x2607](POST[CRUD-O request], Token 0x26)
+C->CC : USP Record\n\t(e.g., w/USP Request message)
+CC->CA: CON[0x2607](POST[USP Record], Token 0x26)
 CC<--CA: ACK[0x2607](2.04, Token 0x26)
-CA->A : CRUD-O request
+CA->A : USP Record\n\t(e.g. w/USP Request message)
 ...
-CA<-A: CRUD-O response
-CC<-CA: CON[0xaabb](POST[CRUD-O response], Token 0x07)
+CA<-A: USP Record\n\t(e.g., w/USP Response or Error message)
+CC<-CA: CON[0xaabb](POST[USP Record], Token 0x07)
 CC-->CA: ACK[0xaabb](2.04, Token 0x07)
-C<-CC: CRUD-O response
+C<-CC: USP Record\n\t(e.g., w/USP Response or Error message)
 
 @enduml
