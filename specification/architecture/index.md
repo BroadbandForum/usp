@@ -228,7 +228,7 @@ This creates two functions of Path Names: Addressing and Searching. The first fi
 
 For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the "eth0" IP Interface:
 
-`Device.IP.Interface.[Name=="eth0"].IPv4Address.{Status=="Enabled"}.IPAddres`
+`Device.IP.Interface.[Name=="eth0"].IPv4Address.[Status=="Enabled"].IPAddres`
 
 #### Relative Paths
 
@@ -278,37 +278,37 @@ For example, the `Device.IP.Interface` table has 2 separate unique keys; `Name` 
 
 Unique Keys used for addressing are expressed in the Path Name by using square brackets surrounding a string that contains the name and value of the Unique Key parameter using the equivalence operator (==).
 
-If an Object has a compound unique key (multiple parameters included within the same unique key), then all keys must be present in the Instance Identifier and separated by a comma (,) character (the order of the parameters does not have to follow the order of the parameters as defined in the unique key element as defined in [Device:2][1]).
+If an Object has a compound unique key (multiple parameters included within the same unique key), then all keys must be present in the Instance Identifier and concatenated by the AND (&&) logical operator (the order of the parameters does not have to follow the order of the parameters as defined in the unique key element as defined in [Device:2][1]).
 
 For example, the `Device.NAT.PortMapping` table has a compound unique key consisting of RemoteHost, ExternalPort, and Protocol, which would be addressed with the following Path Name:  
 
-`Device.NAT.PortMapping.[RemoteHost=="",ExternalPort==0,Protocol=="TCP"].`
+`Device.NAT.PortMapping.[RemoteHost==""&&ExternalPort==0&&Protocol=="TCP"].`
 
 ##### Searching with Expressions
 
 <a id="search" />
 
-Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Search Paths use an Expression enclosed in curly braces as the Instance Identifier within a Path Name.
+Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Search Paths use an Expression enclosed in square brackets as the Instance Identifier within a Path Name.
 
 **R-ARC.9** - An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.
 
 The basic format of a Search Path is:
 
-`Device.IP.Interface.{expression>}.Status`
+`Device.IP.Interface.[expression>].Status`
 
 An Expression consists of one or more Expression Components that are concatenated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
 
 The basic format of a Search Path with the Expression element expanded is:
 
-`Device.IP.Interface.{<expression component>&&<expression component>}.Status`
+`Device.IP.Interface.[<expression component>&&<expression component>].Status`
 
 An Expression Component is a combination of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
 
 The basic format of a Search Path with the Expression Component element expanded is:
 
-`Device.IP.Interface.{<expression parameter><expression operator><expression constant>}.Status`
+`Device.IP.Interface.[<expression parameter><expression operator><expression constant>].Status`
 
-For example, `Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
+For example, `Device.IP.Interface.[intf].IPv4Address.[addr].IPAddress` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
 
 Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Expression can and should have their own Expression Variables)*
 
@@ -330,25 +330,30 @@ The Expression Constant is the value that the Expression Parameter is being eval
 
 - Status for all IP Interfaces with a "Normal" type:
 
-  `Device.IP.Interface.{Type=="Normal"}.Status`
+  `Device.IP.Interface.[Type=="Normal"].Status`
 
 - Ipv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
 
-  `Device.IP.Interface.{Type=="Normal"}.IPv4Address.{AddressingType=="Static"}.IPAddress`
+  `Device.IP.Interface.[Type=="Normal"].IPv4Address.[AddressingType=="Static"].IPAddress`
 
 - Ipv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-  `Device.IP.Interface.{Type=="Normal"&&Stats.ErrorsSent>0}.Ipv4Address.{AddressingType=="Static"}.IPAddress`
+  `Device.IP.Interface.[Type=="Normal"&&Stats.ErrorsSent>0].Ipv4Address.[AddressingType=="Static"].IPAddress`
 
 *Searches that are NOT VALID:*
 
 - Invalid because the Expression is empty:
 
-  `Device.IP.Interface.{}.`
+  `Device.IP.Interface.[].`
 
 - Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance):
 
-  `Device.IP.Interface.{Type=="Normal"&&IPv4Address.*.AddressingType=="Static"}.Status`
+  `Device.IP.Interface.[Type=="Normal"&&IPv4Address.*.AddressingType=="Static"].Status`
+
+- Invalid because the search expression uses curly brackets:
+
+  `Device.IP.Interface.{Type=="Normal"}.Status`
+
 
 #### Searching by Wildcard
 
@@ -441,7 +446,7 @@ The Reference Following and Search Expression mechanisms can be combined.
 
 For example, reference the Signal Strength of all WiFi Associated Devices using the "ac" Operating Standard on the "MyHome" SSID, you would use the Path Name:
 
-`Device.WiFi.AccessPoint.[SSIDReference+.SSID=="MyHome"].AssociatedDevice.{OperatingStandard=="ac"}.SignalStrength`
+`Device.WiFi.AccessPoint.[SSIDReference+.SSID=="MyHome"].AssociatedDevice.[OperatingStandard=="ac"].SignalStrength`
 
 ##### Operations/Commands
 <a id="operation_command_path_names" />
@@ -466,10 +471,8 @@ objpath ::= name '.' (name (('.' inst)|(reffollow '.' name) )? '.')*
 parampath ::= objpath name
 cmdpath ::= objpath  name '()'
 evntpath ::= objpath  name '!'
-inst ::= posnum | keyref | expr | '*'
-keyref ::= '[' keyexpr ( ',' keyexpr )* ']'
-keyexpr ::= relpath '==' value
-expr ::= '{' (exprcomp ( '&&' exprcomp )*) '}'
+inst ::= posnum | expr | '*'
+expr ::= '[' (exprcomp ( '&&' exprcomp )*) ']'
 exprcomp ::= relpath oper value
 relpath ::= name (reffollow? '.' name )*
 reffollow ::=  ( '#' (posnum | '*') '+' )|  '+'
@@ -574,12 +577,11 @@ referenced by:
 
 <a name="inst">**inst**:</a>
 
-![](diagram/inst.png) <map name="inst.map"><area shape="rect" coords="49,1,117,33" href="#posnum" title="posnum"> <area shape="rect" coords="49,45,107,77" href="#keyref" title="keyref"> <area shape="rect" coords="49,89,95,121" href="#expr" title="expr"></map>
+![](diagram/inst.png) <map name="inst.map"><area shape="rect" coords="49,1,117,33" href="#posnum" title="posnum">  <area shape="rect" coords="49,45,95,77" href="#expr" title="expr"></map>
 
 <div class="ebnf">
 
 <code>[inst](#inst "inst")     ::= [posnum](#posnum "posnum")
-           | [keyref](#keyref "keyref")
            | [expr](#expr "expr")
            | '*'</code>
 
@@ -590,35 +592,7 @@ referenced by:
 *   [objpath](#objpath "objpath")
 <br><br>
 
-<a name="keyref">**keyref**:</a>
 
-![](diagram/keyref.png) <map name="keyref.map"><area shape="rect" coords="95,45,163,77" href="#keyexpr" title="keyexpr"></map>
-
-<div class="ebnf">
-
-<code>[keyref](#keyref "keyref")   ::= '[' [keyexpr](#keyexpr "keyexpr") ( ',' [keyexpr](#keyexpr "keyexpr") )* ']'</code>
-
-</div>
-
-referenced by:
-
-*   [inst](#inst "inst")
-<br><br>
-
-<a name="keyexpr">**keyexpr**:</a>
-
-![](diagram/keyexpr.png) <map name="keyexpr.map"><area shape="rect" coords="29,1,89,33" href="#relpath" title="relpath"> <area shape="rect" coords="169,1,219,33" href="#value" title="value"></map>
-
-<div class="ebnf">
-
-<code>[keyexpr](#keyexpr "keyexpr")  ::= [relpath](#relpath "relpath") '==' [value](#value "value")</code>
-
-</div>
-
-referenced by:
-
-*   [keyref](#keyref "keyref")
-<br><br>
 
 <a name="expr">**expr**:</a>
 
@@ -626,7 +600,7 @@ referenced by:
 
 <div class="ebnf">
 
-<code>[expr](#expr "expr")     ::= '{' [exprcomp](#exprcomp "exprcomp") ( '&&' [exprcomp](#exprcomp "exprcomp") )* '}'</code>
+<code>[expr](#expr "expr")     ::= '[' [exprcomp](#exprcomp "exprcomp") ( '&&' [exprcomp](#exprcomp "exprcomp") )* ']'</code>
 
 </div>
 
