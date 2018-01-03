@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model for TR-069 Devices and USP Agents"
+[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -48,7 +48,7 @@ Example mechanisms for configuration include but are not limited to:
 *	Configured through a separate bootstrap mechanism such as a user interface or other management interface.
 *	DHCP, DNS, or [mDNS discovery](#mdns).
 
-**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.Localagent.Controller` Object as defined in [The Device:2 Data Model for TR-069 Devices and USP Agents][1].
+**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.Localagent.Controller` Object as defined in [The Device:2 Data Model][1].
 
 The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.
 
@@ -66,7 +66,7 @@ DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 
 
 **R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string "`usp`" (all lower case) in a vendor-class-data instance associated with this enterprise-number.
 
-The Role to associate with DHCP-discovered Controller is programmatically determined (see [Security](/specification/security/)).
+The Role to associate with a DHCP-discovered Controller is programmatically determined (see [Security](/specification/security/)).
 
 **R-DIS.2** - If the URL provided by DHCP includes the FQDN of a Controller, the Agent MUST use [DNS](#dns) to retrieve additional Controller information.
 
@@ -78,7 +78,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 | ----------: | :---------: | :----------: | :-------- |
 | URL of the Controller | `25` | `25` | `Dependent on MTP URL formation` |
 | Provisioning code | `26` | `26` |	`Device.LocalAgent.Controller.{i}.ProvisioningCode` |
-| USP retry mini¬mum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
+| USP retry minimum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
 | USP retry interval multiplier | `28` | `28` |	`Device.Controller.{i}.USPRetryIntervalMultiplier` |
 
 ## mDNS
@@ -89,7 +89,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.4** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
-**R-DIS.5** - If mDNS is enabled, an USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
+**R-DIS.5** - If mDNS is enabled, a USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
 ### DNS
 
@@ -138,7 +138,7 @@ DNS TXT records allow for a small set of additional information to be included i
 
 **R-DIS.11** - Controller DNS-SD records MUST include a TXT record with the "path" attribute.
 
-The "path" attribute is dependent on each Message Transfer Protocol, and the specific requirements are outlined in the appropriate section of this document.
+The "path" attribute is dependent on each [Message Transfer Protocol](/specification/mtp/).
 
 The TXT record can include other attributes defined in the TXT record attribute registry, as well.
 
