@@ -288,11 +288,9 @@ For example, the `Device.NAT.PortMapping` table has a compound unique key consis
 
 <a id="search" />
 
-Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object.   Search Paths use an Expression Variable enclosed in curly braces as the Instance Identifier within a Path Name and then appends a "::" to the end of the Path Name, followed by an Expression enclosed in another set of curly braces.
+Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Search Paths use an Expression enclosed in curly braces as the Instance Identifier within a Path Name.
 
 **R-ARC.9** - An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.
-
-**R-ARC.10** - An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in [TR-106][3].
 
 The basic format of a Search Path is:
 
@@ -340,7 +338,7 @@ The Expression Constant is the value that the Expression Parameter is being eval
 
 - Ipv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-  `Device.IP.Interface.{Type=="Normal"&&intf.Stats.ErrorsSent>0}.Ipv4Address.{AddressingType=="Static"}.IPAddress`
+  `Device.IP.Interface.{Type=="Normal"&&Stats.ErrorsSent>0}.Ipv4Address.{AddressingType=="Static"}.IPAddress`
 
 *Searches that are NOT VALID:*
 
@@ -358,7 +356,7 @@ The Expression Constant is the value that the Expression Parameter is being eval
 
 Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character "\*" in place of the Instance Identifier.
 
-**R-ARC.11** - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
+**R-ARC.10** - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
 
 Examples:
 
@@ -398,7 +396,7 @@ The steps that are executed by the Agent when following the reference in this ex
 * When configured, can be configured using Path Names using Instance Number Addressing or Unique-Key Addressing, however:
 * When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*
 
-**R-ARC.12** - A USP Agent MUST support the ability to use Key-based addressing in reference values.
+**R-ARC.11** - A USP Agent MUST support the ability to use Key-based addressing in reference values.
 
 For example, the following paths might illustrate a reference to the same object (defined as having the KeyParam parameter as unique key) instance using an Instance Number and then a key value:
 
@@ -407,7 +405,7 @@ For example, the following paths might illustrate a reference to the same object
 
 In the first example, the reference points to the FooObject with Instance Number 5. In the second example, the reference points to the FooObject with a KeyParam value of "KeyValueForInstance5".
 
-**R-ARC.13** - The following requirements relate to reference types and the associated Agent behavior:
+**R-ARC.12** - The following requirements relate to reference types and the associated Agent behavior:
 
   * An Agent MUST reject an attempt to set a strong reference parameter if the new value does not reference an existing parameter or object.
   * An Agent MUST NOT reject an attempt to set a weak reference parameter because the new value does not reference an existing parameter or object.
