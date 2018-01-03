@@ -87,7 +87,7 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 
 ### Subscribing a USP Endpoint to a STOMP Destination
 
-**R-STOMP.12** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination by sending a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Specification..
+**R-STOMP.12** - USP Endpoints utilizing STOMP clients for message transport MUST subscribe to their assigned STOMP destination by sending a `SUBSCRIBE` frame to the STOMP server as defined in the "SUBSCRIBE" section of the STOMP Specification.
 
 **R-STOMP.13** - USP Endpoints sending a `SUBSCRIBE` frame MUST include (in addition to other mandatory STOMP headers) a `destination` STOMP header containing the STOMP destination associated with the USP Endpoint sending the frame.
 
