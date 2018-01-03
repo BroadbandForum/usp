@@ -98,6 +98,7 @@ message Request {
     Delete delete = 6;
     Operate operate = 7;
     Notify notify = 8;
+    GetSupportedProtocol get_supported_protocol = 9;
   }
 }
 
@@ -112,6 +113,7 @@ message Response {
     DeleteResp delete_resp = 6;
     OperateResp operate_resp = 7;
     NotifyResp notify_resp = 8;
+    GetSupportedProtocolResp get_supported_protocol_resp = 9;
   }
 }
 
