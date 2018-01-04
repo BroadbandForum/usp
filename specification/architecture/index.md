@@ -228,7 +228,7 @@ This creates two functions of Path Names: Addressing and Searching. The first fi
 
 For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the "eth0" IP Interface:
 
-`Device.IP.Interface.[Name=="eth0"].IPv4Address.[Status=="Enabled"].IPAddres`
+`Device.IP.Interface.[Name=="eth0"].IPv4Address.[Status=="Enabled"].IPAddress`
 
 #### Relative Paths
 
@@ -294,7 +294,7 @@ Searching is a means of matching 0, 1 or many instances of a Multi-Instance Obje
 
 The basic format of a Search Path is:
 
-`Device.IP.Interface.[expression>].Status`
+`Device.IP.Interface.[<expression>].Status`
 
 An Expression consists of one or more Expression Components that are concatenated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
 
@@ -308,9 +308,9 @@ The basic format of a Search Path with the Expression Component element expanded
 
 `Device.IP.Interface.[<expression parameter><expression operator><expression constant>].Status`
 
-For example, `Device.IP.Interface.[intf].IPv4Address.[addr].IPAddress` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
+For example, `Device.IP.Interface.[intf].IPv4Address.[addr].IPAddress` means that the "`intf`" Expression represents the instances of the `Device.IP.Interface.{i}` Object whereas the "`addr`" Expression represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
 
-Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Expression can and should have their own Expression Variables)*
+Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Search Path can and should have their own Expression)*
 
 An Expression Operator dictates how the Expression Component will be evaluated. The supported operators include: equals (==), not equals (!=), less than (<), greater than (>), less than or equal (<=), and greater than or equal (>=).
 
