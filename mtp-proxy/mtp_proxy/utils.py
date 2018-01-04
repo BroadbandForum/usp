@@ -48,12 +48,15 @@
 #    - Used by MTP Bindings that listen for incoming messages
 #  - ExpiringQueueItem(object)
 #    - Used by the GenericReceivingQueue
+#  - IPAddr(object)
+#    - Used by the Proxy to retrieve the local IP Address for the CoAP MTP
 #
 """
 
 
 import time
 import logging
+import subprocess
 import collections
 
 
@@ -120,3 +123,52 @@ class ExpiringQueueItem(object):
     def get_payload(self):
         """Retrieve the Payload"""
         return self._payload
+
+
+class IPAddr:
+    """IP Address Retrieval Tool"""
+    @staticmethod
+    def get_ip_addr(intf=None):
+        """Retrieve the IP Address after determining the underlying OS"""
+        arg = "uname -a"
+        proc = subprocess.Popen(arg, shell=True, stdout=subprocess.PIPE)
+        data = proc.communicate()
+        uname_out = data[0].decode("utf-8")
+
+        if uname_out.startswith("Darwin"):
+            if intf is None:
+                ip_addr = IPAddr._get_mac_ip_address()
+            else:
+                ip_addr = IPAddr._get_mac_ip_address(intf)
+        else:
+            if intf is None:
+                ip_addr = IPAddr._get_rpi_ip_address()
+            else:
+                ip_addr = IPAddr._get_rpi_ip_address(intf)
+
+        return ip_addr
+
+    @staticmethod
+    def _get_rpi_ip_address(netdev='eth0'):
+        """Retrieve the IP Address on Raspberry Pi"""
+        cmd = 'ip addr show ' + netdev
+        return IPAddr._get_ipv4_address(cmd)
+
+    @staticmethod
+    def _get_mac_ip_address(netdev='en0'):
+        """Retrieve the IP Address on Mac OS X"""
+        cmd = 'ifconfig ' + netdev
+        return IPAddr._get_ipv4_address(cmd)
+
+    @staticmethod
+    def _get_ipv4_address(command):
+        """Retrieve the first IPv4 Address based on the provided RPi/MacOS command"""
+        ipaddr = None
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        data = proc.communicate()
+        sdata = data[0].decode("utf-8").split('\n')
+        for line in sdata:
+            if line.strip().startswith("inet "):
+                # Retrieve an IPv4 address (ignore IPv6 addresses)
+                ipaddr = line.strip().split(' ')[1].split('/')[0]
+        return ipaddr

@@ -47,8 +47,10 @@
 import json
 import time
 import logging
+import argparse
 import threading
 
+from mtp_proxy import utils
 from mtp_proxy import coap_mtp
 from mtp_proxy import stomp_mtp
 
@@ -57,6 +59,7 @@ class Proxy(object):
     """A Class for proxying messages between USP MTPs"""
     def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO):
         """Initialize the Proxy Class"""
+        self._my_ip_addr = None
         self._proxy_thr_list = []
         self._cfg_file_contents = None
         self._debug = (log_level == logging.DEBUG)
@@ -64,6 +67,15 @@ class Proxy(object):
         logging.basicConfig(filename=log_file_name, level=log_level,
                             format='%(asctime)-15s %(name)s %(levelname)-8s %(message)s')
         self._logger = logging.getLogger(self.__class__.__name__)
+
+        # Handle Command Line Arguments
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--intf", action="store", nargs="?",
+                            type=str, default=None,
+                            help="specify the network interface to use")
+        args = parser.parse_args()
+
+        self._my_ip_addr = utils.IPAddr.get_ip_addr(args.intf)
 
         self._logger.info("#######################################################")
         self._logger.info("## Starting MTP Proxy")
@@ -81,9 +93,10 @@ class Proxy(object):
                 if "CoAP" in association_dict["Association"]:
                     self._logger.info("Found a CoAP MTP")
                     coap_dict = association_dict["Association"]["CoAP"]
+                    # TODO: Create the proxy_addr here, and send it into the CoapMtp
                     coap_mtp_inst = coap_mtp.CoapMtp(coap_dict["ProxyPort"], coap_dict["ProxyResource"], self._debug)
-                    # TODO: Get the IP Address instead of using "localhost"
-                    proxy_addr = "coap://localhost:" + str(coap_dict["ProxyPort"]) + "/" + coap_dict["ProxyResource"]
+                    proxy_addr = "coap://" + self._my_ip_addr + ":" + str(coap_dict["ProxyPort"]) + \
+                                 "/" + coap_dict["ProxyResource"]
                     endpoint_addr = coap_dict["EndpointURL"]
                     proxy_thr.add_mtp(coap_mtp_inst, proxy_addr, endpoint_addr)
 
