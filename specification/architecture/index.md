@@ -280,6 +280,8 @@ Unique Keys used for addressing are expressed in the Path Name by using square b
 
 If an Object has a compound unique key (multiple parameters included within the same unique key), then all keys must be present in the Instance Identifier and concatenated by the AND (&&) logical operator (the order of the parameters does not have to follow the order of the parameters as defined in the unique key element as defined in [Device:2][1]).
 
+*NOTE: Addressing by Unique Key uses the same format as Searching with Expressions (see below). If for a compound unique key expression a key component is omitted it is no longer addressing by unique key but becomes a search with expressions.*
+
 For example, the `Device.NAT.PortMapping` table has a compound unique key consisting of RemoteHost, ExternalPort, and Protocol, which would be addressed with the following Path Name:  
 
 `Device.NAT.PortMapping.[RemoteHost==""&&ExternalPort==0&&Protocol=="TCP"].`
