@@ -95,19 +95,20 @@ class Proxy(object):
                     coap_dict = association_dict["Association"]["CoAP"]
                     proxy_addr = "coap://" + self._my_ip_addr + ":" + str(coap_dict["ProxyPort"]) + \
                                  "/" + coap_dict["ProxyResource"]
-                    coap_mtp_inst = coap_mtp.CoapMtp(proxy_addr, coap_dict["ProxyPort"],
-                                                     coap_dict["ProxyResource"], self._debug)
+                    coap_mtp_inst = coap_mtp.CoapMtp(coap_dict["ProxyPort"], coap_dict["ProxyResource"],
+                                                     proxy_addr, self._debug)
                     endpoint_addr = coap_dict["EndpointURL"]
-                    proxy_thr.add_mtp(coap_mtp_inst, proxy_addr, endpoint_addr)
+                    proxy_thr.add_mtp(coap_mtp_inst, endpoint_addr)
 
                 if "STOMP" in association_dict["Association"]:
                     self._logger.info("Found a STOMP MTP")
                     stomp_dict = association_dict["Association"]["STOMP"]
-                    stomp_mtp_inst = stomp_mtp.StompMtp(stomp_dict["Host"], stomp_dict["Port"], stomp_dict["Username"],
-                                                        stomp_dict["Password"], stomp_dict["VirtualHost"])
                     proxy_addr = stomp_dict["ProxyDestination"]
+                    stomp_mtp_inst = stomp_mtp.StompMtp(stomp_dict["Host"], stomp_dict["Port"],
+                                                        stomp_dict["Username"], stomp_dict["Password"],
+                                                        stomp_dict["VirtualHost"], proxy_addr)
                     endpoint_addr = stomp_dict["EndpointDestination"]
-                    proxy_thr.add_mtp(stomp_mtp_inst, proxy_addr, endpoint_addr)
+                    proxy_thr.add_mtp(stomp_mtp_inst, endpoint_addr)
 
                 self._proxy_thr_list.append(proxy_thr)
 
@@ -140,24 +141,20 @@ class ProxyThread(threading.Thread):
         """Initialize the Proxy Thread"""
         threading.Thread.__init__(self)
         self._mtp1 = None
-        self._proxy_addr1 = None
         self._endpoint_addr1 = None
         self._mtp2 = None
-        self._proxy_addr2 = None
         self._endpoint_addr2 = None
         self._sleep_time_interval = sleep_time_interval
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def add_mtp(self, mtp, proxy_addr, endpoint_addr):
+    def add_mtp(self, mtp, endpoint_addr):
         """Add an MTP configuration to the Proxy Thread"""
         if self._mtp1 is None:
             self._mtp1 = mtp
-            self._proxy_addr1 = proxy_addr
             self._endpoint_addr1 = endpoint_addr
             self._logger.info("Adding MTP 1")
         elif self._mtp2 is None:
             self._mtp2 = mtp
-            self._proxy_addr2 = proxy_addr
             self._endpoint_addr2 = endpoint_addr
             self._logger.info("Adding MTP 2")
         else:
@@ -165,8 +162,8 @@ class ProxyThread(threading.Thread):
 
     def run(self):
         """Start the thread"""
-        self._mtp1.listen(self._proxy_addr1)
-        self._mtp2.listen(self._proxy_addr2)
+        self._mtp1.listen()
+        self._mtp2.listen()
 
         while True:
             time.sleep(self._sleep_time_interval)

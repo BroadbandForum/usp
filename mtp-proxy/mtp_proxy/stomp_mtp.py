@@ -50,11 +50,12 @@ from mtp_proxy import stomp_client
 
 class StompMtp(abstract_mtp.AbstractMtp):
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
-    def __init__(self, host="127.0.0.1", port=61613, username="admin", password="admin", virtual_host="/",
+    def __init__(self, host, port, username, password, virtual_host, my_addr,
                  outgoing_heartbeats=0, incoming_heartbeats=0):
         """Initialize the STOMP MTP"""
         self._client = stomp_client.StompClient(host, port, username, password, virtual_host,
                                                 outgoing_heartbeats, incoming_heartbeats)
+        self._my_addr = my_addr
 
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve the next incoming message from the Queue"""
@@ -62,8 +63,8 @@ class StompMtp(abstract_mtp.AbstractMtp):
 
     def send_msg(self, payload, to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
-        self._client.send_msg(payload, to_addr)
+        self._client.send_msg(self._my_addr, payload, to_addr)
 
-    def listen(self, my_addr):
+    def listen(self):
         """Listen for incoming messages on the Protocol-specific USP Binding"""
-        self._client.listen(my_addr)
+        self._client.listen(self._my_addr)

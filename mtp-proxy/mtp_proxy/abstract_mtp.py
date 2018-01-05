@@ -54,6 +54,6 @@ class AbstractMtp(object):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
         raise NotImplementedError()
 
-    def listen(self, my_addr):
+    def listen(self):
         """Listen for incoming messages on the Protocol-specific USP Binding"""
         raise NotImplementedError()

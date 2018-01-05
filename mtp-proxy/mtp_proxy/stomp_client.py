@@ -126,10 +126,12 @@ class StompClient(object):
         """Retrieve a message from the queue"""
         return self._queue.get_msg(timeout_in_seconds)
 
-    def send_msg(self, payload, to_addr):
+    def send_msg(self, my_addr, payload, to_addr):
         """Send the ProtoBuf Serialized message to the provided STOMP address"""
         content_type = "application/vnd.bbf.usp.msg"
-        self._conn.send(to_addr, payload, content_type)
+        usp_headers = {"reply-to-dest": my_addr}
+        self._logger.debug("Using [%s] as the value of the reply-to-dest header", my_addr)
+        self._conn.send(to_addr, payload, content_type, usp_headers)
         self._logger.info("Sending a STOMP message to the following address: %s", to_addr)
 
     def clean_up(self):
