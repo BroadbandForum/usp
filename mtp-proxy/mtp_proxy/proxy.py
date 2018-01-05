@@ -93,10 +93,10 @@ class Proxy(object):
                 if "CoAP" in association_dict["Association"]:
                     self._logger.info("Found a CoAP MTP")
                     coap_dict = association_dict["Association"]["CoAP"]
-                    # TODO: Create the proxy_addr here, and send it into the CoapMtp
-                    coap_mtp_inst = coap_mtp.CoapMtp(coap_dict["ProxyPort"], coap_dict["ProxyResource"], self._debug)
                     proxy_addr = "coap://" + self._my_ip_addr + ":" + str(coap_dict["ProxyPort"]) + \
                                  "/" + coap_dict["ProxyResource"]
+                    coap_mtp_inst = coap_mtp.CoapMtp(proxy_addr, coap_dict["ProxyPort"],
+                                                     coap_dict["ProxyResource"], self._debug)
                     endpoint_addr = coap_dict["EndpointURL"]
                     proxy_thr.add_mtp(coap_mtp_inst, proxy_addr, endpoint_addr)
 

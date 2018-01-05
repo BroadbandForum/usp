@@ -54,13 +54,16 @@ import aiocoap.error
 
 class CoapSendingThread(threading.Thread):
     """A Thread that executes the AsyncIO Event Loop Processing to send a single CoAP message"""
-    def __init__(self, payload, to_addr, debug=False):
+    def __init__(self, payload, my_addr, to_addr, debug=False):
         """Initialize the CoAP Sending Thread"""
         threading.Thread.__init__(self, name="CoAP Sending Thread - " + to_addr)
         self._debug = debug
         self._payload = payload
         self._to_addr = to_addr
         self._logger = logging.getLogger(self.__class__.__name__)
+
+        self._reply_to = my_addr.split("://")[1]
+        self._logger.debug("Using [%s] as the value of the reply-to URI Query Option", self._reply_to)
 
     def run(self):
         """Send a CoAP message to the specified address"""
@@ -77,7 +80,7 @@ class CoapSendingThread(threading.Thread):
         """Send the specified payload to the specified CoAP URL via the POST Method"""
         msg = aiocoap.Message(code=aiocoap.Code.POST, payload=payload)
         msg.opt.content_format = 42
-        msg.set_request_uri(to_addr)
+        msg.set_request_uri(to_addr + "?reply-to=" + self._reply_to)
 
         self._logger.debug("Creating a CoAP Client Context")
         context = yield from aiocoap.Context.create_client_context()
@@ -92,9 +95,10 @@ class CoapSendingThread(threading.Thread):
 
 class CoapClient(object):
     """A CoAP Client that sends CoAP Messages as requested"""
-    def __init__(self, to_addr, thr_timeout=10, debug=False):
+    def __init__(self, my_addr, to_addr, thr_timeout=10, debug=False):
         """Initialize the CoAP Client with the address to use when sending messages"""
         self._debug = debug
+        self._my_addr = my_addr
         self._to_addr = to_addr
         self._thr_timeout = thr_timeout
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -102,6 +106,6 @@ class CoapClient(object):
     def send_msg(self, payload):
         """Send a CoAP Message"""
         self._logger.info("Starting a CoAP Sending Thread")
-        coap_send_thr = CoapSendingThread(payload, self._to_addr, self._debug)
+        coap_send_thr = CoapSendingThread(payload, self._my_addr, self._to_addr, self._debug)
         coap_send_thr.start()
         coap_send_thr.join(self._thr_timeout)

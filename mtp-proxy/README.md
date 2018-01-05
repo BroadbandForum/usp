@@ -3,7 +3,7 @@ A Python implementation of a USP MTP Proxy.
 
 
 To Do List:
-1. CoAP reply-to header
+~~1. CoAP reply-to header~~ :: DONE
 2. STOMP reply-to-dest header
 3. WebSockets
 4. More testing

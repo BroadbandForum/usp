@@ -51,9 +51,10 @@ from mtp_proxy import coap_server
 
 class CoapMtp(abstract_mtp.AbstractMtp):
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
-    def __init__(self, listen_port=5683, resource_path='usp', debug=False):
+    def __init__(self, my_addr, listen_port=5683, resource_path='usp', debug=False):
         """Initialize the CoAP MTP"""
         self._debug = debug
+        self._my_addr = my_addr
         self._server = coap_server.CoapServer(listen_port, resource_path, debug=self._debug)
 
     def get_msg(self, timeout_in_seconds=-1):
@@ -62,7 +63,7 @@ class CoapMtp(abstract_mtp.AbstractMtp):
 
     def send_msg(self, payload, to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
-        client = coap_client.CoapClient(to_addr, debug=self._debug)
+        client = coap_client.CoapClient(self._my_addr, to_addr, debug=self._debug)
         client.send_msg(payload)
 
     def listen(self, my_addr):
