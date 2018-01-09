@@ -72,13 +72,17 @@ class MyStompConnListener(stomp.ConnectionListener):
 
         # Validate the STOMP Headers
         if "content-type" in headers:
-            self._logger.debug("Validating the STOMP Headers for 'content-type'")
-            if headers["content-type"].startswith("application/vnd.bbf.usp.msg+json"):
-                self._logger.debug("STOMP Message has an acceptable 'content-type'")
-                self._queue.push(body)
-            elif headers["content-type"].startswith("application/vnd.bbf.usp.msg"):
+            self._logger.debug("Validating the STOMP Headers for 'content-type': %s", headers["content-type"])
+
+            if headers["content-type"].startswith("application/vnd.bbf.usp.msg"):
                 self._logger.debug("STOMP Message has a proper 'content-type'")
-                self._queue.push(body)
+
+                if "reply-to-dest" in headers:
+                    self._logger.debug("Found %s as the 'reply-to-dest' in the STOMP Headers",
+                                       headers["reply-to-dest"])
+                    self._queue.push(body)
+                else:
+                    self._logger.warning("Incoming STOMP message had no 'reply-to-dest' header")
             else:
                 self._logger.warning("Incoming STOMP message contained an Unsupported Content-Type: %s",
                                      headers["content-type"])
