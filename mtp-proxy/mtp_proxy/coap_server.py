@@ -93,23 +93,28 @@ class MyCoapResource(aiocoap.resource.Resource):
         self._logger.debug("Payload received: [%s]", request.payload)
         self._logger.debug("Incoming Request opt.uri_path: [%s]", request.opt.uri_path)
         self._logger.debug("Incoming Request opt.uri_query: [%s]", request.opt.uri_query)
-        self._logger.debug("Incoming Request opt.location_path: [%s]", request.opt.location_path)
-        self._logger.debug("Incoming Request opt.location_query: [%s]", request.opt.location_query)
         self._logger.debug("Incoming Request opt.uri_host: [%s]", request.opt.uri_host)
         self._logger.debug("Incoming Request opt.uri_port: [%s]", request.opt.uri_port)
 
         if request.opt.content_format == 42:
-            self._logger.debug("Pushing the payload of the CoAP Request onto the message queue")
-            asyncio.get_event_loop().call_soon(self._queue.push, request.payload)
-            response = aiocoap.Message(code=aiocoap.Code.CHANGED)
-            self._logger.info("Responding to the CoAP Request with a 2.04 Status Code")
+            self._logger.debug("Incoming CoAP POST Request Content-Format Validated")
+
+            if self._validate_uri_query(request.opt.uri_query):
+                self._logger.debug("Incoming CoAP POST Request URI-Query Validated")
+
+                asyncio.get_event_loop().call_soon(self._queue.push, request.payload)
+                response = aiocoap.Message(code=aiocoap.Code.CHANGED)
+                self._logger.info("Responding to the CoAP Request with a 2.04 Status Code")
+            else:
+                # Failed 'reply-to' URI-Query Validation, respond with 4.00
+                self._logger.warning("The 'reply-to' address on the Incoming CoAP Request is missing")
+                response = aiocoap.Message(code=aiocoap.Code.BAD_REQUEST)
+                self._logger.info("Responding to the CoAP Request with a 4.00 Status Code")
         else:
             # Failed Content Format (expected: application/octet-stream), respond with 4.15
             self._logger.warning("Incoming CoAP Request contained an Unsupported Content-Format")
             response = aiocoap.Message(code=aiocoap.Code.UNSUPPORTED_MEDIA_TYPE)
             self._logger.info("Responding to the CoAP Request with a 4.15 Status Code")
-
-        response.opt.content_format = 42
 
         return response
 
@@ -121,6 +126,20 @@ class MyCoapResource(aiocoap.resource.Resource):
         link['if'] = "usp.c"
 
         return link
+
+    def _validate_uri_query(self, uri_query):
+        """Validate the URI-Query of the incoming CoAP message to retreive the reply-to address"""
+        reply_to_addr = None
+
+        for query_item in uri_query:
+            self._logger.debug("Processing URI-Query Item: %s", query_item)
+            query_item_parts = query_item.split("=")
+
+            if query_item_parts[0] == "reply-to":
+                reply_to_addr = "coap://" + query_item_parts[1]
+                self._logger.debug("Found 'reply-to' URI Query; value altered to: %s", reply_to_addr)
+
+        return reply_to_addr is not None
 
 
 class CoapReceivingThread(threading.Thread):
