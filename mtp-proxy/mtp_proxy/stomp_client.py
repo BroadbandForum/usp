@@ -59,11 +59,25 @@ class MyStompConnListener(stomp.ConnectionListener):
         """Initialize our STOMP Connection Listener"""
         stomp.ConnectionListener.__init__(self)
         self._queue = queue
+        self._subscribe_dest = None
         self._logger = logging.getLogger(self.__class__.__name__)
+
+    def get_subscribe_dest(self):
+        """Retreive the current value of the internal subscribe_dest value"""
+        return self._subscribe_dest
 
     def on_error(self, headers, message):
         """STOMP Connection Listener - handle errors"""
         self._logger.error("Received an error [%s]", message)
+
+    def on_connected(self, headers, body):
+        """STOMP Connection Listener - received CONNECTED frame; look for subscribe-dest header"""
+        if "subscribe-dest" in headers:
+            self._subscribe_dest = headers["subscribe-dest"]
+            self._logger.info("Found 'subscribe-dest' in the headers of the CONNECTED frame with a value of: %s",
+                              self._subscribe_dest)
+        else:
+            self._logger.debug("The 'subscribe-dest' header was NOT found in the CONNECTED frame")
 
     def on_message(self, headers, body):
         """STOMP Connection Listener - record messages to the incoming queue"""
@@ -113,18 +127,20 @@ class StompClient(object):
 
     def listen(self, my_addr):
         """Listen to a STOMP destination for incoming messages"""
+        # Hard-coding the MSG ID to "1" based on the assumption that we will only ever subscribe to 1 destination
+        #  for this instance of the StompClient.  If we need to subscribe to multiple destinations, then this
+        #  needs to change.
         msg_id = 1
 
-        #TODO: Handle the ID Better
-        # Need a unique ID per destination being subscribed to
-        # Need to associate a self-generated (and unique) ID to the destination
-        # Need to store that destination and it's ID in a dictionary
-        # Need a stop_listening(self, dest) method
-        #   - Bulld the full destination: self._build_dest(dest)
-        #   - Retrieve the ID from the dictionary for the destination
-        #   - Unsubscribe: self._conn.unsubscribe(id)
-        self._conn.subscribe(my_addr, id=str(msg_id), ack="auto")
-        self._logger.info("Subscribed to Destination: %s", my_addr)
+        my_dest = self._listener.get_subscribe_dest()
+        if my_dest is None:
+            my_dest = my_addr
+            self._logger.info("Using Destination [%s] as retrieved from configuration", my_dest)
+        else:
+            self._logger.info("Using Destination [%s] as discovered in the CONNECTED frame headers", my_dest)
+
+        self._conn.subscribe(my_dest, id=str(msg_id), ack="auto")
+        self._logger.info("Subscribed to Destination: %s", my_dest)
 
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve a message from the queue"""

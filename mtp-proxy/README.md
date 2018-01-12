@@ -7,7 +7,7 @@ To Do List:
 ~~2. STOMP reply-to-dest header~~ :: DONE
 3. WebSockets
 4. More testing
-5. Handle the STOMP subscribe-dest header
+~~5. Handle the STOMP subscribe-dest header~~ :: DONE
 6. TLS / DTLS
 7. mDNS :: could be used to discover the EndpointURL/EndpointDestination
     instead of using the values from proxy.json, but then we would need
