@@ -334,13 +334,13 @@ The Expression Constant is the value that the Expression Parameter is being eval
 
   `Device.IP.Interface.[Type=="Normal"].Status`
 
-- Ipv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
+- IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
 
   `Device.IP.Interface.[Type=="Normal"].IPv4Address.[AddressingType=="Static"].IPAddress`
 
-- Ipv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
+- IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-  `Device.IP.Interface.[Type=="Normal"&&Stats.ErrorsSent>0].Ipv4Address.[AddressingType=="Static"].IPAddress`
+  `Device.IP.Interface.[Type=="Normal"&&Stats.ErrorsSent>0].IPv4Address.[AddressingType=="Static"].IPAddress`
 
 *Searches that are NOT VALID:*
 
