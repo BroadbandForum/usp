@@ -2,5 +2,14 @@
 __pycache__
 specification/*pb2.py
 
+# Ignore IDE files
+.idea/
+
+# Ignore Coverage Report
+*.coverage
+
+# Ignore the log files
+logs/
+
 # Ignore MAC Special Files
 .DS_Store
