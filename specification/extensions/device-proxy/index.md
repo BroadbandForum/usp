@@ -25,15 +25,15 @@
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
-# Annex C - Proxied Device
+# Appendix III - Device Proxy
 
-This Annex describes a Theory of Operations for the ProxiedDevice Table.
+This Annex describes a Theory of Operations for the `Device.ProxiedDevice.` object
+defined in the [Device:2 Data Model][1].
 
-A ProxiedDevice table is defined as
-"Each entry in the table is a ProxiedDevice object that is a mount point. Each ProxiedDevice represents distinct hardware Devices. ProxiedDevice objects are virtual and abstracted representation of functionality that exists on hardware other than that which the Agent is running."
+The `Device.ProxiedDevice` table is defined as:
 
-An implementation of ProxiedDevice may be used in an IoT Gateway that proxies devices that are connected to it via technologies other tha USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of ProxiedDevice objects, each defined as a mount point, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the ProxiedDevice table instances.
+> "Each entry in the table is a ProxiedDevice object that is a mount point. Each ProxiedDevice represents distinct hardware Devices. ProxiedDevice objects are virtual and abstracted representation of functionality that exists on hardware other than that which the Agent is running."
 
-Example:
-If Wifi object and Switch were defined objects
-The Device.ProxiedDevice.1.Wifi.Radio models a distinctly separate hardware device and has no relationship with Device.Wifi.Radio.  The ProxiedDevice objects may each represent entirely different types of devices each with a different set of objects. The ProxiedDevice.1.Switch has no physical relationship to ProxiedDevice.2.Switch as they represent two separate devices. Also the mount point allows ProxiedDevice.1.WifiRadio and ProxiedDevice.1.Switch to represent the full set of capabilities for the Device being proxied by inserting any number of defined objects to matching the Device capabilities. This provides a Controller a distinct path to each ProxiedDevice object.
+An implementation of the `Device.ProxiedDevice.` object may be used in an IoT Gateway that proxies devices that are connected to it via technologies other tha USP such as Z-Wave, ZigBee, Wi-Fi, etc. By designating a table of `ProxiedDevice` objects, each defined as a mount point, this allows a data model with objects that are mountable to be used to represent the capabilities of each of the `ProxiedDevice` table instances.
+
+For example, if `Device.Wifi.` and `Device.TemperatureSensor.` objects modeled by the Agent, the `Device.ProxiedDevice.1.Wifi.Radio.1.` models a distinctly separate hardware device and has no relationship with `Device.Wifi.Radio.1.`. The `ProxiedDevice` objects may each represent entirely different types of devices each with a different set of objects. The `ProxiedDevice.1.TemperatureSensor.1.` object has no physical relationship to `ProxiedDevice.2.TemperatureSensor.1.` as they represent temperature sensors that exist on separate hardware. The mount point allows `Device.ProxiedDevice.1.WifiRadio.` and `Device.ProxiedDevice.1.TemperatureSensor.` to represent the full set of capabilities for the device being proxied. This provides a Controller a distinct path to each `ProxiedDevice` object.

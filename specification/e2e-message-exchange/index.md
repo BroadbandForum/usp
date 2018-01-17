@@ -328,9 +328,15 @@ For each USP Message segment the Payload:
         1. If the record size of a single TLS record + USP Record header elements is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
         2. If the TLS record size + Record header elements is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
 3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header elements are greater than the maximum allowed USP Record size, the USP Record is segmented.
-4.	Indicate the start of the segmentation and transmit the first USP Record using the procedures defined in section USP Record Message Exchange.
-5.	For each instance of the USP Record's payload field's record, segment the payload record indicating the start, in-process and completion status of the payload record in the USP Records's `payloadrec_sar_state` field. The integrity of the payload delineated is retained meaning that all segmentation does not occur across instances of the USP Record's payload field. The USP Record's `payload_sar_state` will either indicate that segmentation has begun or is in process. The `payload_sar_state` field is set to `BEGIN (1)` when the first instance of the payload field is segmented. Subsequent USP Record's payload_sar_state is set to `INPROCESS (2)` in process unless it is the final USP Record.
-6.	The final USP Record indicates that the segmentation is complete.
+4. Set the `payload_sar_state` field for each transmitted Record.
+    1. If there is only one Record, `payload_sar_state` = `NONE (0)`.
+    2. If there is more than one USP Record, the `payload_sar_state` field is set to `BEGIN (1)` on the first Record, `COMPLETE (3)` on the last Record, and `INPROCESS (2)` on all Records between the two.
+5. Set the `payloadrec_sar_state` field for each transmitted Record.
+    1. If there is only one Record or one Secure Message Exchange TLS record per USP Record, `payloadrec_sar_state` = `NONE (0)`.
+    2. If Secure Message Exchange TLS records or a `PLAINTEXT` payload are segmented across multiple USP Records, `payloadrec_sar_state` = `BEGIN (1)` on a Record that contains the initial segment of a TLS record or `PLAINTEXT` payload, `COMPLETE (3)` on a Record that contains the final segment of a TLS record or `PLAINTEXT` payload, and `INPROCESS (2)` on all Records containing segments between initial and final segments of a TLS record or `PLAINTEXT` payload. 
+6. Each Record is sent (within a Session Context) using the procedures defined in the USP Record Message Exchange section above.
+
+The effect of the above rules for `PLAINTEXT` payloads or for Secure Message Exchange with a single TLS record is that `payloadrec_sar_state` will be the same as `payload_sar_state` for all Records used to communicate the USP Message.
 
 *Note: The maximum allowed USP Record size can be exposed via the data model using the `MaxUSPRecordSize` parameter.*
 
@@ -393,7 +399,7 @@ This signature method uses a SHA-256 hash algorithm that generates a signature f
 
 When the transmitting and receiving USP Endpoints have established a TLS session between the USP Endpoints, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Record generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The key used for the HMAC algorithm uses a Key Derivation Function (KDF) in accordance with RFC 5869(https://tools.ietf.org/html/rfc5869) and requires the following inputs to be known by the USP Endpoints involved in the generation and validation of the MAC: length of the output MAC, salt, key and application context information (i.e., KDF info field). The application context information uses a constant value for all USP implementations ("`USP_Record`") and the length is fixed at 32 octets. The salt and key inputs are based on the underlying mechanism used to protect the payload of the USP Record. For TLS, the salt and key are taken from the TLS session once TLS negotiation is completed. The input key to the KDF uses the master key of the TLS session. The salt depends on role played by the USP Endpoint in the TLS Session (i.e., TLS session’s client or server random).
 
-**R-E2E.32** – If using the TLS MAC method to protect the integrity of a USP Record, a USP Endpoint transmits a USP Record, the USP Endpoint MUST generate a MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
+**R-E2E.32** – When generating or validating the MAC to protect the integrity of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record's protobuf specification proceeding from lowest to highest. The non-payload fields in the Record definition (other than the mac_signature field itself) MUST be used first and then the fields of the SessionContextRecord if applicable.
 
 **R-E2E.31** – If using the TLS MAC method to protect the integrity of a USP Record, and a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
 
