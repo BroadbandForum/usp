@@ -206,7 +206,7 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 **R-ARC.7** - All USP endpoints MUST support the Path Name syntax as defined in [TR-106][3].
 
-Path Names are represented by a hierarchy of Objects ("parents") and sub-Objects ("children"), separated by the dot "." character, ending with a parameter if referencing a parameter path. There are four different types of Path Names used to address the data model of an Agent:
+Path Names are represented by a hierarchy of Objects ("parents") and sub-Objects ("children"), separated by the dot "." character, ending with a parameter if referencing a parameter path. There are six different types of Path Names used to address the data model of an Agent:
 
 1.	Object Path - This is a Path Name of either a single-instance ("static") Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a "." Character (as specified in [TR-106][3]), except when used in a [reference parameter](#reference_following). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see the [GetSupportedDM message](/specification/messages/getsupporteddm/)).
 
@@ -228,7 +228,7 @@ This creates two functions of Path Names: Addressing and Searching. The first fi
 
 For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the "eth0" IP Interface:
 
-`.Interface.[Name=="eth0"].IPv4Address.{addr}.IPAddres::{addr.Status=="Enabled"}`
+`Device.IP.Interface.[Name=="eth0"].IPv4Address.[Status=="Enabled"].IPAddress`
 
 #### Relative Paths
 
@@ -266,7 +266,7 @@ Instance Number Addressing allows an Object Instance to be addressed by using it
 
 **R-ARC.8** - The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.
 
-For example, the `.Interface` table with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
+For example, the `Device.IP.Interface` table entry with an Instance Number of 3 would be addressed with the following Path Name: `Device.IP.Interface.3`.
 
 ##### Addressing by Unique Key
 
@@ -278,124 +278,84 @@ For example, the `Device.IP.Interface` table has 2 separate unique keys; `Name` 
 
 Unique Keys used for addressing are expressed in the Path Name by using square brackets surrounding a string that contains the name and value of the Unique Key parameter using the equivalence operator (==).
 
-If an Object has a compound unique key (multiple parameters included within the same unique key), then all keys must be present in the Instance Identifier and separated by a comma (,) character (the order of the parameters does not have to follow the order of the parameters as defined in the unique key element as defined in [Device:2][1]).
+If an Object has a compound unique key (multiple parameters included within the same unique key), then all keys must be present in the Instance Identifier and concatenated by the AND (&&) logical operator (the order of the parameters does not have to follow the order of the parameters as defined in the unique key element as defined in [Device:2][1]).
+
+*NOTE: Addressing by Unique Key uses the same format as Searching with Expressions (see below). If for a compound unique key expression a key component is omitted it is no longer addressing by unique key but becomes a search with expressions.*
 
 For example, the `Device.NAT.PortMapping` table has a compound unique key consisting of RemoteHost, ExternalPort, and Protocol, which would be addressed with the following Path Name:  
 
-`Device.NAT.PortMapping.[RemoteHost=="",ExternalPort==0,Protocol=="TCP"].`
+`Device.NAT.PortMapping.[RemoteHost==""&&ExternalPort==0&&Protocol=="TCP"].`
 
 ##### Searching with Expressions
 
 <a id="search" />
 
-Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object.   Search Paths use an Expression Variable enclosed in curly braces as the Instance Identifier within a Path Name and then appends a "::" to the end of the Path Name, followed by an Expression enclosed in another set of curly braces.
+Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Search Paths use an Expression enclosed in square brackets as the Instance Identifier within a Path Name.
 
 **R-ARC.9** - An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.
 
-**R-ARC.10** - An Expression Variable MUST be a valid identifier, which means that it MUST follow the same syntax as used for naming Parameters as defined in [TR-106][3].
-
 The basic format of a Search Path is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression>}`
+`Device.IP.Interface.[<expression>].Status`
 
-An Expression consists of one or more Expression Components that are separated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
+An Expression consists of one or more Expression Components that are concatenated by the AND (&&) logical operator (NOTE: the OR logical operator is not supported).  
 
 The basic format of a Search Path with the Expression element expanded is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression component>&&<expression component>}`
+`Device.IP.Interface.[<expression component>&&<expression component>].Status`
 
 An Expression Component is a combination of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
 
 The basic format of a Search Path with the Expression Component element expanded is:
 
-`Device.IP.Interface.{<expression variable>}.Status::{<expression parameter><expression operator><expression constant>}`
+`Device.IP.Interface.[<expression parameter><expression operator><expression constant>].Status`
 
-An Expression Parameter is based on an Expression Variable found in the Path Name, which allows the Expression Component to represent a relative path based on where the Expression Variable is located in the Path Name.
+For example, `Device.IP.Interface.[intf].IPv4Address.[addr].IPAddress` means that the "`intf`" Expression represents the instances of the `Device.IP.Interface.{i}` Object whereas the "`addr`" Expression represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
 
-For example, `Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{…}` means that "`intf`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}` Object whereas "`addr`" inside the Expression Parameter represents the instances of the `Device.IP.Interface.{i}.IPv4Address.{i}` Object.
-
-Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Expression can and should have their own Expression Variables)*
+Further, this relative path can’t include any child tables. *(NOTE: this is never necessary because any child tables that need to be referenced in the Search Path can and should have their own Expression)*
 
 An Expression Operator dictates how the Expression Component will be evaluated. The supported operators include: equals (==), not equals (!=), less than (<), greater than (>), less than or equal (<=), and greater than or equal (>=).
 
 An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in [TR-106][3]. **For string, boolean and enumeration types, only the '==' and '!=' operators are valid.**
 
-The Expression Constant is the value that the Expression Component is being evaluated against; Expression Components must match the type as defined for the associated Parameter in [TR-181][1].
+The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in [TR-181][1].
 
 *NOTE: String values are enclosed in double quotes. In order to allow a string value to contain double quotes, quote characters can be percent-escaped as %22 (double quote). Therefore, a literal percent character has to be quoted as %25.*
 
-Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the Search Expression lexical rules for referencing the Supported Data Model are:
 
-```
-[1] sdmpath ::= objpath | sdmparampath
-[2] sdmparampath::= sdmcomps '.' name
-[3] objpath ::= sdmcomps '.'
-[4] sdmcomps ::= name ( '.' sdmcomp )*
-[5] sdmcomp ::= name | sdminst
-[6] sdminst ::= posnum | '{i}'
-[7] name ::= [A-Za-z_] [A-Za-z_0-9]*
-[8] posnum ::= [1-9] [0-9]*
-```
-
-The Search Expression lexical rules for referencing the Instantiated Data Model are:
-
-```
-[1] idmpath ::= objinstpath | parampath | cmdpath | evntpath | searchpath
-[2] objinstpath ::= comps '.' expr?
-[3] parampath ::= comps '.' namemod
-[4] cmdpath ::= comps '()' expr?
-[5] evntpath ::= comps '!' expr?
-[6] searchpath ::= comps expr
-[7] comps ::= name ( '.' comp )*
-[8] comp ::= namemod | inst
-[9] inst ::= posnum | keyref | exprvar | '*'
-[10] keyref ::= '[' keyexpr ( ',' keyexpr )* ']'
-[11] keyexpr ::= relpath '==' value
-[12] exprvar ::= '{' name '}'
-[13] expr ::= '::' '{' exprcomp ( '&&' exprcomp )* '}'
-[14] exprcomp ::= relpath oper value
-[15] relpath ::= name ( '.' namemod )+
-[16] namemod ::= name ( '#' elem )? '+'?
-[17] oper ::= '==' | '!=' | '<' | '>' | '<=' | '>='
-[18] elem ::= posnum | '*'
-[19] value ::= literal | number
-[20] name ::= [A-Za-z_] [A-Za-z_0-9]*
-[21] literal ::= '"' [^"]* '"'
-[22] posnum ::= [1-9] [0-9]*
-[23] number ::= '0' | ( '-'? posnum )
-```
 
 ##### Search Examples
 
 <a id="search_examples" />
 
-Valid Searches:
+*Valid Searches:*
 
-Status for all IP Interfaces with a "Normal" type:
+- Status for all IP Interfaces with a "Normal" type:
 
-`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"}`
+  `Device.IP.Interface.[Type=="Normal"].Status`
 
-IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
+- IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:
 
-`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&addr.AddressingType=="Static"}`
+  `Device.IP.Interface.[Type=="Normal"].IPv4Address.[AddressingType=="Static"].IPAddress`
 
-IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
+- IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent
 
-`Device.IP.Interface.{intf}.IPv4Address.{addr}.IPAddress::{intf.Type=="Normal"&&intf.Stats.ErrorsSent>0&&addr.AddressingType=="Static"}`
+  `Device.IP.Interface.[Type=="Normal"&&Stats.ErrorsSent>0].IPv4Address.[AddressingType=="Static"].IPAddress`
 
-Searches that are NOT VALID::
+*Searches that are NOT VALID:*
 
-Invalid because the Expression Component is missing:
+- Invalid because the Expression is empty:
 
-`Device.IP.Interface.{intf}.`
+  `Device.IP.Interface.[].`
 
-Invalid because the Expression Component is empty:
+- Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance):
 
-`Device.IP.Interface.{intf}.::{}`
+  `Device.IP.Interface.[Type=="Normal"&&IPv4Address.*.AddressingType=="Static"].Status`
 
-Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance)
+- Invalid because the search expression uses curly brackets:
 
-`Device.IP.Interface.{intf}.Status::{intf.Type=="Normal"&&intf.IPv4Address.*.AddressingType=="Static"}`
+  `Device.IP.Interface.{Type=="Normal"}.Status`
+
 
 #### Searching by Wildcard
 
@@ -403,7 +363,7 @@ Invalid because the Expression Component has an Expression Parameter that descen
 
 Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character "\*" in place of the Instance Identifier.
 
-**R-ARC.11** - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
+**R-ARC.10** - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.
 
 Examples:
 
@@ -443,7 +403,7 @@ The steps that are executed by the Agent when following the reference in this ex
 * When configured, can be configured using Path Names using Instance Number Addressing or Unique-Key Addressing, however:
 * When the value of a reference parameter is read, all Instance Identifiers are returned as Instance Numbers.*
 
-**R-ARC.12** - A USP Agent MUST support the ability to use Key-based addressing in reference values.
+**R-ARC.11** - A USP Agent MUST support the ability to use Key-based addressing in reference values.
 
 For example, the following paths might illustrate a reference to the same object (defined as having the KeyParam parameter as unique key) instance using an Instance Number and then a key value:
 
@@ -452,7 +412,7 @@ For example, the following paths might illustrate a reference to the same object
 
 In the first example, the reference points to the FooObject with Instance Number 5. In the second example, the reference points to the FooObject with a KeyParam value of "KeyValueForInstance5".
 
-**R-ARC.13** - The following requirements relate to reference types and the associated Agent behavior:
+**R-ARC.12** - The following requirements relate to reference types and the associated Agent behavior:
 
   * An Agent MUST reject an attempt to set a strong reference parameter if the new value does not reference an existing parameter or object.
   * An Agent MUST NOT reject an attempt to set a weak reference parameter because the new value does not reference an existing parameter or object.
@@ -488,8 +448,7 @@ The Reference Following and Search Expression mechanisms can be combined.
 
 For example, reference the Signal Strength of all WiFi Associated Devices using the "ac" Operating Standard on the "MyHome" SSID, you would use the Path Name:
 
-`Device.WiFi.AccessPoint.{ap}.AssociatedDevice.{dev}.SignalStrength::
-{ap.SSIDReference+.SSID=="MyHome"&&dev.OperatingStandard=="ac"}`
+`Device.WiFi.AccessPoint.[SSIDReference+.SSID=="MyHome"].AssociatedDevice.[OperatingStandard=="ac"].SignalStrength`
 
 ##### Operations/Commands
 <a id="operation_command_path_names" />
@@ -504,6 +463,349 @@ For example: `Device.IP.Interface.[Name=="eth0"].Reset()`
 The Notify request allows a type of generic event (called Event) message that allows a USP Agent to emit events defined in the USP data models. Events are defined in and related to Objects in the USP data models like commands. Events are addressed like Parameter Paths that end with an exclamation point "!" to symbolize that it is an Event.
 
 For example: `Device.LocalAgent.Boot!`
+
+#### Instantiated Data Model Path Grammer
+Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the path lexical rules for referencing the Instantiated Data Model are:
+
+```
+idmpath ::= objpath | parampath | cmdpath | evntpath | searchpath
+objpath ::= name '.' (name (('.' inst)|(reffollow '.' name) )? '.')*
+parampath ::= objpath name
+cmdpath ::= objpath  name '()'
+evntpath ::= objpath  name '!'
+inst ::= posnum | expr | '*'
+expr ::= '[' (exprcomp ( '&&' exprcomp )*) ']'
+exprcomp ::= relpath oper value
+relpath ::= name (reffollow? '.' name )*
+reffollow ::=  ( '#' (posnum | '*') '+' )|  '+'
+oper ::= '==' | '!=' | '<' | '>' | '<=' | '>='
+value ::= literal | number
+name ::= [A-Za-z_] [A-Za-z_0-9]*
+literal ::= '"' [^"]* '"'
+posnum ::= [1-9] [0-9]*
+number ::= '0' | ( '-'? posnum )
+```
+
+The path lexical rules for referencing the Supported Data Model are:
+
+```
+sdmpath ::= name ‘.’ ( name ‘.’ ( ( posnum | ‘{i}’ ) ‘.’ )? )* name?
+name ::= [A-Za-z_] [A-Za-z_0-9]*
+posnum ::= [1-9] [0-9]*
+```
+
+##### BNF Diagrams for Instantiated Data Model
+<a name="idmpath">**idmpath**:</a>
+
+![](diagram/idmpath.png) <map name="idmpath.map"><area shape="rect" coords="49,1,115,33" href="#objpath" title="objpath"> <area shape="rect" coords="49,45,133,77" href="#parampath" title="parampath"> <area shape="rect" coords="49,89,121,121" href="#cmdpath" title="cmdpath"> <area shape="rect" coords="49,133,121,165" href="#evntpath" title="evntpath"> <area shape="rect" coords="49,177,135,209" href="#searchpath" title="searchpath"></map>
+
+<div class="ebnf">
+
+<code>[idmpath](#idmpath "idmpath")  ::= [objpath](#objpath "objpath")
+           | [parampath](#parampath "parampath")
+           | [cmdpath](#cmdpath "cmdpath")
+           | [evntpath](#evntpath "evntpath")
+           | [searchpath](#searchpath "searchpath")</code>
+
+</div>
+<br><br>
+
+<a name="objpath">**objpath**:</a>
+
+![](diagram/objpath.png) <map name="objpath.map"><area shape="rect" coords="29,121,83,153" href="#name" title="name"> <area shape="rect" coords="143,33,183,65" href="#inst" title="inst"> <area shape="rect" coords="143,77,197,109" href="#name" title="name"> <area shape="rect" coords="261,77,331,109" href="#reffollow" title="reffollow"> <area shape="rect" coords="371,1,425,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[objpath](#objpath "objpath")  ::= [name](#name "name") '.' ( [name](#name "name") ( '.' [inst](#inst "inst") | [reffollow](#reffollow "reffollow") '.' [name](#name "name") )? '.' )*</code>
+
+</div>
+
+referenced by:
+
+*   [cmdpath](#cmdpath "cmdpath")
+*   [evntpath](#evntpath "evntpath")
+*   [idmpath](#idmpath "idmpath")
+*   [parampath](#parampath "parampath")
+<br><br>
+
+
+<a name="parampath">**parampath**:</a>
+
+![](diagram/parampath.png) <map name="parampath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[parampath](#parampath "parampath")
+         ::= [objpath](#objpath "objpath") [name](#name "name")</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+<a name="cmdpath">**cmdpath**:</a>
+
+![](diagram/cmdpath.png) <map name="cmdpath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[cmdpath](#cmdpath "cmdpath")  ::= [objpath](#objpath "objpath") [name](#name "name") '()'</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+
+<a name="evntpath">**evntpath**:</a>
+
+![](diagram/evntpath.png) <map name="evntpath.map"><area shape="rect" coords="29,1,95,33" href="#objpath" title="objpath"> <area shape="rect" coords="115,1,169,33" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[evntpath](#evntpath "evntpath") ::= [objpath](#objpath "objpath") [name](#name "name") '!'</code>
+
+</div>
+
+referenced by:
+
+*   [idmpath](#idmpath "idmpath")
+<br><br>
+
+
+<a name="inst">**inst**:</a>
+
+![](diagram/inst.png) <map name="inst.map"><area shape="rect" coords="49,1,117,33" href="#posnum" title="posnum">  <area shape="rect" coords="49,45,95,77" href="#expr" title="expr"></map>
+
+<div class="ebnf">
+
+<code>[inst](#inst "inst")     ::= [posnum](#posnum "posnum")
+           | [expr](#expr "expr")
+           | '*'</code>
+
+</div>
+
+referenced by:
+
+*   [objpath](#objpath "objpath")
+<br><br>
+
+
+
+<a name="expr">**expr**:</a>
+
+![](diagram/expr.png) <map name="expr.map"><area shape="rect" coords="97,45,177,77" href="#exprcomp" title="exprcomp"></map>
+
+<div class="ebnf">
+
+<code>[expr](#expr "expr")     ::= '[' [exprcomp](#exprcomp "exprcomp") ( '&&' [exprcomp](#exprcomp "exprcomp") )* ']'</code>
+
+</div>
+
+referenced by:
+*   [inst](#inst "inst")
+<br><br>
+
+<a name="exprcomp">**exprcomp**:</a>
+
+![](diagram/exprcomp.png) <map name="exprcomp.map"><area shape="rect" coords="29,1,89,33" href="#relpath" title="relpath"> <area shape="rect" coords="109,1,155,33" href="#oper" title="oper"> <area shape="rect" coords="175,1,225,33" href="#value" title="value"></map>
+
+<div class="ebnf">
+
+<code>[exprcomp](#exprcomp "exprcomp") ::= [relpath](#relpath "relpath") [oper](#oper "oper") [value](#value "value")</code>
+
+</div>
+
+referenced by:
+
+*   [expr](#expr "expr")
+<br><br>
+
+<a name="relpath">**relpath**:</a>
+
+![](diagram/relpath.png) <map name="relpath.map"><area shape="rect" coords="49,77,103,109" href="#name" title="name"> <area shape="rect" coords="113,33,183,65" href="#reffollow" title="reffollow"></map>
+
+<div class="ebnf">
+
+<code>[relpath](#relpath "relpath")  ::= [name](#name "name") ( [reffollow](#reffollow "reffollow")? '.' [name](#name "name") )*</code>
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+*   [keyexpr](#keyexpr "keyexpr")
+<br><br>
+
+
+<a name="reffollow">**reffollow**:</a>
+
+![](diagram/reffollow.png) <map name="reffollow.map"><area shape="rect" coords="119,33,187,65" href="#posnum" title="posnum"></map>
+
+<div class="ebnf">
+
+<code>[reffollow](#reffollow "reffollow")
+         ::= ( '#' ( [posnum](#posnum "posnum") | '*' ) )? '+'<code>
+
+</div>
+
+referenced by:
+
+*   [objpath](#objpath "objpath")
+*   [relpath](#relpath "relpath")
+<br><br>
+
+<a name="oper">**oper**:</a>
+
+![](diagram/oper.png)
+
+<div class="ebnf">
+
+<code>[oper](#oper "oper")     ::= '=='
+           | '!='
+           | '<'
+           | '>'
+           | '<='
+           | '>='</code>
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+<br><br>
+
+<a name="value">**value**:</a>
+
+![](diagram/value.png) <map name="value.map"><area shape="rect" coords="49,1,99,33" href="#literal" title="literal"> <area shape="rect" coords="49,45,115,77" href="#number" title="number"></map>
+
+<div class="ebnf">
+
+<code>[value](#value "value")    ::= [literal](#literal "literal")</code>
+           | [number](#number "number")
+
+</div>
+
+referenced by:
+
+*   [exprcomp](#exprcomp "exprcomp")
+*   [keyexpr](#keyexpr "keyexpr")
+<br><br>
+
+
+<a name="name">**name**:</a>
+
+![](diagram/name.png)
+
+<div class="ebnf">
+
+<code>[name](#name "name")     ::= [A-Za-z_] [A-Za-z_0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [cmdpath](#cmdpath "cmdpath")
+*   [evntpath](#evntpath "evntpath")
+*   [objpath](#objpath "objpath")
+*   [parampath](#parampath "parampath")
+*   [relpath](#relpath "relpath")
+<br><br>
+
+
+<a name="literal">**literal**:</a>
+
+![](diagram/literal.png)
+
+
+<code>[literal](#literal "literal")  ::= '"' [^"]* '"'</code>
+
+referenced by:
+
+*   [value](#value "value")
+<br><br>
+
+
+<a name="number">**number**:</a>
+
+![](diagram/number.png) <map name="number.map"><area shape="rect" coords="135,45,203,77" href="#posnum" title="posnum"></map>
+
+<div class="ebnf">
+
+<code>[number](#number "number")   ::= '0'
+           | '-'? [posnum](#posnum "posnum")</code>
+
+</div>
+
+referenced by:
+
+*   [value](#value "value")
+<br><br>
+
+<a name="posnum">**posnum**:</a>
+
+![](diagram/posnum.png)
+
+<div class="ebnf">
+
+<code>[posnum](#posnum "posnum")   ::= [1-9] [0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [inst](#inst "inst")
+*   [number](#number "number")
+*   [reffollow](#reffollow "reffollow")
+<br><br>
+
+
+##### BNF Diagrams for Supported Data Model
+<a name="sdmpath">**sdmpath**:</a>
+
+![](diagram/sdmpath.png) <map name="sdmpath.map"><area shape="rect" coords="29,17,83,49" href="#name" title="name"> <area shape="rect" coords="187,17,241,49" href="#name" title="name"> <area shape="rect" coords="345,49,413,81" href="#posnum" title="posnum"> <area shape="rect" coords="577,49,631,81" href="#name" title="name"></map>
+
+<div class="ebnf">
+
+<code>[sdmpath](#sdmpath "sdmpath")  ::= [name](#name "name") '.' ( [name](#name "name") '.' ( ( [posnum](#posnum "posnum") | '{i}' ) '.' )? )* [name](#name "name")?</code>
+
+</div>
+<br><br>
+
+<a name="name">**name**:</a>
+
+![](diagram/name.png)
+
+<div class="ebnf">
+
+<code>[name](#name "name")     ::= [A-Za-z_] [A-Za-z_0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [sdmpath](#sdmpath "sdmpath")
+<br><br>
+
+<a name="posnum">**posnum**:</a>
+
+![](diagram/posnum.png)
+
+<div class="ebnf">
+
+<code>[posnum](#posnum "posnum")   ::= [1-9] [0-9]*</code>
+
+</div>
+
+referenced by:
+
+*   [sdmpath](#sdmpath "sdmpath")
+
+<br><br>
 
 [<-- Overview](/specification/)
 [Discovery -->](/specification/discovery/)
