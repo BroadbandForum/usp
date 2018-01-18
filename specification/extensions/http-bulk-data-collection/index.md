@@ -27,6 +27,14 @@
 
 # Annex A - HTTP Bulk Data Collection
 
+1. [Enabling HTTP/HTTPS Bulk Data Communication](#enabling_http_https_bulk_data_communication)
+  1. [Use of the URI Query Parameters](#use_of_the_uri_query_parameters)
+  2. [Use of HTTP Status Codes](#use_of_http_status_codes)
+  3. [Use of TLS and TCP](#use_of_tls_and_tcp)
+2. [Encoding of Bulk Data](#encoding_of_bulk_data)
+  1. [Encoding of CSV Bulk Data](#encoding_of_csv_bulk_data)
+  2. [Encoding of JSON Bulk Data](#encoding_of_json_bulk_data)
+
 *Note - This Annex is a translation from the HTTP Bulk Data Collection mechanism specified in Annex A of [Broadband Forum TR-157](https://www.broadband-forum.org/technical/download/TR-157.pdf), which was carried over into Amendment 6 of [TR-069][2]. The text here has been altered to fit with USP concepts.*
 
 This section discusses the Theory of Operation for the collection and transfer of bulk data using USP, HTTP and the BulkData object defined in [Device:2][1], to a Bulk Data Collector utilizing:
@@ -35,6 +43,8 @@ This section discusses the Theory of Operation for the collection and transfer o
 *	CSV and JSON for the encoding of collected data to be transferred
 
 The Agent configuration that enables the collection of bulk data using HTTP is defined using the BulkData component objects explained here. During this explanation, there will be references to data model objects specific to [Device:2][1]; that specification should be used for reference.
+
+<a id='enabling_http_https_bulk_data_communication' />
 
 ## Enabling HTTP/HTTPS Bulk Data Communication
 
@@ -56,6 +66,8 @@ The configuration above defines a profile that transfers data from the Agent to 
 Once the communication session is established between the Agent and Bulk Data Collector the data is transferred from the Agent using the POST HTTP method with a HTTP Date header and no compression.
 
 **R-BULK.0** - In many scenarios Agents will utilize "chunked" transfer encoding. As such, the Bulk Data Collector MUST support the HTTP transfer-coding value of "chunked".
+
+<a id='use_of_the_uri_query_parameters' />
 
 ### Use of the URI Query Parameters
 
@@ -81,6 +93,8 @@ By setting the following parameters using the Add message as follows:
 
     .BulkData.Profile.1.HTTP.RequestURIParameter 1.Name ="ct"
     .BulkData.Profile.1.HTTP.RequestURIParameter.1.Reference ="Device.Time.CurrentLocalTime"
+
+<a id='use_of_http_status_codes' />
 
 ### Use of HTTP Status Codes
 
@@ -116,6 +130,8 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 **R-BULK.5** - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next bulk data transfer.
 
+<a id='use_of_tls_and_tcp' />
+
 ### Use of TLS and TCP
 
 The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the protocol MAY be used directly over a TCP connection instead. If TLS is not used, some aspects of security are sacrificed. Specifically, TLS provides confidentiality and data integrity, and allows certificate-based authentication in lieu of shared secret-based authentication.
@@ -140,6 +156,8 @@ The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the prot
 *	A Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the Collection Server. If a Agent for any reason is unable to obtain absolute time, it can contact the Collection Server without waiting for accurate absolute time. If a Agent chooses to contact the Collection Server before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the Collection Server certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 *	Support for Agent authentication using client-side certificates is NOT RECOMMENDED.  Instead, the Collection Server SHOULD authenticate the Agent using HTTP basic or digest authentication to establish the identity of a specific Agent.
 
+<a id='encoding_of_bulk_data' />
+
 ## Encoding of Bulk Data
 Bulk Data that is transferred to the Bulk Data Collector from the Agent using HTTP/HTTPS is encoded using a specified encoding type. For HTTP/HTTPS the supported encoding types are CSV and JSON. The encoding type is sent a media type with the report format used for the encoding. For CSV the media type is `text/csv` as specified in [RFC 4180](https://tools.ietf.org/html/rfc4180) and for JSON the media type is `application/json` as specified in [RFC 7159](https://tools.ietf.org/html/rfc7159). For example, a CSV encoded report using `charset=UTF-8` would have the following Content-Type header:
 
@@ -159,6 +177,8 @@ For example a CSV encoded report using a ReportFormat for ParameterPerRow would 
 
 **R-BULK.8** - The BBF-Report-Format custom header MUST be present when transferring data to the Bulk Data Collector from the Agent using HTTP/HTTPS.
 
+<a id='using_wildcards_to_reference_object_instances_in_the_report' />
+
 ### Using Wildcards to Reference Object Instances in the Report
 
 When the Agent supports the use of the Wildcard value "\*"  in place of instance identifiers for the Reference parameter, then all object instances of the referenced parameter are encoded. For example to encode the "`BroadPktSent`" parameter for all object instances of the MoCA Interface object the following will be configured:
@@ -167,6 +187,8 @@ When the Agent supports the use of the Wildcard value "\*"  in place of instance
     .BulkData.Profile.1.Parameter.1.Name =  ""
     .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.*.Stats.BroadPktSent"
 ```  
+
+<a id='using_alternative_names_in_the_report' />
 
 ### Using Alternative Names in the Report
 
@@ -242,6 +264,8 @@ Using this configuration a device that has 1 WiFi Access Point (with instance id
     WiFi_AP_Assoc.1.11.RetryCount
     WiFi_AP_Assoc.1.11.MultipleRetryCount
 
+<a id='processing_of_content_for_failed_report_transmissions' />
+
 ### Processing of Content for Failed Report Transmissions
 When the content (report) cannot be successfully transmitted, including retries, to the data collector, the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance defines how the content should be disposed based on the following rules:
 
@@ -250,6 +274,8 @@ When the content (report) cannot be successfully transmitted, including retries,
 *	If the value of the NumberOfRetainedFailedReports parameter is `0`, then failed reports are not to be retained for transmission in the next reporting interval.
 *	If the Agent cannot retain the number of failed reports from previous reporting intervals while transmitting the report of the current reporting interval, then the oldest failed reports are deleted until the Agent is able to transmit the report from the current reporting interval.
 *	If the value `BulkData.Profile` object instance’s `EncodingType` parameter is modified any outstanding failed reports are deleted.
+
+<a id='encoding_of_csv_bulk_data' />
 
 ### Encoding of CSV Bulk Data
 
@@ -280,6 +306,88 @@ The report format of "`ParameterPerRow`" MUST format each parameter using the `P
 #### Layout of Content for Failed Report Transmissions
 
 When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For CSV Encoded data the content of new reporting interval is added onto the existing content without any header data.
+
+#### CSV Encoded Report Examples
+
+##### CSV Encoded Reporting Using ParameterPerRow Report Format
+
+Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerRow` report format:
+
+    .BulkData.Profile.1
+    .BulkData.Profile.1.Enable=true
+    .BulkData.Profile.1.Protocol = "HTTP"
+    .BulkData.Profile.1.ReportingInterval = 300
+    .BulkData.Profile.1.TimeReference = "0001-01-01T00:00:00Z"
+    .BulkData.Profile.1.HTTP.URL =  "https://bdc.acme.com/somedirectory"
+    .BulkData.Profile.1.HTTP.Username = "username"
+    .BulkData.Profile.1.HTTP.Password = "password"
+    .BulkData.Profile.1.HTTP.Compression = "Disabled"
+    .BulkData.Profile.1.HTTP.Method = "POST"
+    .BulkData.Profile.1.HTTP.UseDateHeader = true
+    .BulkData.Profile.1.EncodingType =  "CSV"
+    .BulkData.Profile.1 CSVEncoding.FieldSeparator = ","
+    .BulkData.Profile.1.CSVEncoding.RowSeparator="&#13;&#10;"
+    .BulkData.Profile.1.CSVEncoding.EscapeCharacter="&quot;"
+    .BulkData.Profile.1.CSVEncoding.ReportFormat ="ParameterPerRow"
+    .BulkData.Profile.1.CSVEncoding.ReportTimestamp ="Unix-Epoch"
+    .BulkData.Profile.1.Parameter.1.Name =  ""
+    .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.1.Stats.BroadPktSent"
+    .BulkData.Profile.1.Parameter.2.Name =  ""
+    .BulkData.Profile.1.Parameter.2.Reference =  "Device.MoCA.Interface.1.Stats.BytesReceived"
+    .BulkData.Profile.1.Parameter.3.Name =  ""
+    .BulkData.Profile.1.Parameter.3.Reference =  "Device.MoCA.Interface.1.Stats.BytesSent"
+    .BulkData.Profile.1.Parameter.4.Name =  ""
+    .BulkData.Profile.1.Parameter.4.Reference =  "Device.MoCA.Interface.1.Stats.MultiPktReceived"
+
+
+The resulting CSV encoded data would look like:
+
+    ReportTimestamp,ParameterName,ParameterValue,ParameterType
+    1364529149,Device.MoCA.Interface.1.Stats.BroadPktSent,25248,unsignedLong
+    1364529149,Device.MoCA.Interface.1.Stats.BytesReceived,200543250,unsignedLong
+    1364529149, Device.MoCA.Interface.1.Stats.Stats.BytesSent,7682161,unsignedLong
+    1364529149,Device.MoCA.Interface.1.Stats.MultiPktReceived,890682272,unsignedLong
+
+##### CSV Encoded Reporting Using ParameterPerColumn Report Format
+
+Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerColumn` report format:
+
+    .BulkData.Profile.1
+    .BulkData.Profile.1.Enable=true
+    .BulkData.Profile.1.Protocol = "HTTP"
+    .BulkData.Profile.1.ReportingInterval = 300
+    .BulkData.Profile.1.TimeReference = "0001-01-01T00:00:00Z"
+    .BulkData.Profile.1.HTTP.URL =  "https://bdc.acme.com/somedirectory"
+    .BulkData.Profile.1.HTTP.Username = "username"
+    .BulkData.Profile.1.HTTP.Password = "password"
+    .BulkData.Profile.1.HTTP.Compression = "Disabled"
+    .BulkData.Profile.1.HTTP.Method = "POST"
+    .BulkData.Profile.1.HTTP.UseDateHeader = true
+    .BulkData.Profile.1.EncodingType =  "CSV"
+    .BulkData.Profile.1 CSVEncoding.FieldSeparator = ","
+    .BulkData.Profile.1.CSVEncoding.RowSeparator="&#13;&#10;"
+    .BulkData.Profile.1.CSVEncoding.EscapeCharacter="&quot;"
+    .BulkData.Profile.1.CSVEncoding.ReportFormat ="ParameterPerColumn"
+    .BulkData.Profile.1.CSVEncoding.ReportTimestamp ="Unix-Epoch"
+    .BulkData.Profile.1.Parameter.1.Name =  "BroadPktSent"
+    .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.1.Stats.BroadPktSent"
+    .BulkData.Profile.1.Parameter.2.Name =  "BytesReceived"
+    .BulkData.Profile.1.Parameter.2.Reference =  "Device.MoCA.Interface.1.Stats.BytesReceived"
+    .BulkData.Profile.1.Parameter.3.Name =  "BytesSent"
+    .BulkData.Profile.1.Parameter.3.Reference =  "Device.MoCA.Interface.1.Stats.BytesSent"
+    .BulkData.Profile.1.Parameter.4.Name =  "MultiPktReceived"
+    .BulkData.Profile.1.Parameter.4.Reference =  "Device.MoCA.Interface.1.Stats.MultiPktReceived"
+
+
+The resulting CSV encoded data with transmission of the last 3 reports failed to complete would look like:
+
+    ReportTimestamp,BroadPktSent,BytesReceived,BytesSent,MultiPktReceived
+    1364529149,25248,200543250,7682161,890682272
+    1464639150,25249,200553250,7683161,900683272
+    1564749151,25255,200559350,7684133,910682272
+    1664859152,25252,200653267,7685167,9705982277
+
+<a id='encoding_of_json_bulk_data' />
 
 ### Encoding of JSON Bulk Data
 
@@ -390,90 +498,7 @@ TR-106 named data types are translated into the underlying base TR-106 data type
 | int, long, unsignedInt, unsignedLong | Number |
 | string | String |
 
-## Report Examples
-This section provides example report configurations along with the examples of how the resulting encoded data would look as it is transferred to the Bulk Data Collector.
-
-### CSV Encoded Report Examples
-
-#### CSV Encoded Reporting Using ParameterPerRow Report Format
-
-Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerRow` report format:
-
-    .BulkData.Profile.1
-    .BulkData.Profile.1.Enable=true
-    .BulkData.Profile.1.Protocol = "HTTP"
-    .BulkData.Profile.1.ReportingInterval = 300
-    .BulkData.Profile.1.TimeReference = "0001-01-01T00:00:00Z"
-    .BulkData.Profile.1.HTTP.URL =  "https://bdc.acme.com/somedirectory"
-    .BulkData.Profile.1.HTTP.Username = "username"
-    .BulkData.Profile.1.HTTP.Password = "password"
-    .BulkData.Profile.1.HTTP.Compression = "Disabled"
-    .BulkData.Profile.1.HTTP.Method = "POST"
-    .BulkData.Profile.1.HTTP.UseDateHeader = true
-    .BulkData.Profile.1.EncodingType =  "CSV"
-    .BulkData.Profile.1 CSVEncoding.FieldSeparator = ","
-    .BulkData.Profile.1.CSVEncoding.RowSeparator="&#13;&#10;"
-    .BulkData.Profile.1.CSVEncoding.EscapeCharacter="&quot;"
-    .BulkData.Profile.1.CSVEncoding.ReportFormat ="ParameterPerRow"
-    .BulkData.Profile.1.CSVEncoding.ReportTimestamp ="Unix-Epoch"
-    .BulkData.Profile.1.Parameter.1.Name =  ""
-    .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.1.Stats.BroadPktSent"
-    .BulkData.Profile.1.Parameter.2.Name =  ""
-    .BulkData.Profile.1.Parameter.2.Reference =  "Device.MoCA.Interface.1.Stats.BytesReceived"
-    .BulkData.Profile.1.Parameter.3.Name =  ""
-    .BulkData.Profile.1.Parameter.3.Reference =  "Device.MoCA.Interface.1.Stats.BytesSent"
-    .BulkData.Profile.1.Parameter.4.Name =  ""
-    .BulkData.Profile.1.Parameter.4.Reference =  "Device.MoCA.Interface.1.Stats.MultiPktReceived"
-
-
-The resulting CSV encoded data would look like:
-
-    ReportTimestamp,ParameterName,ParameterValue,ParameterType
-    1364529149,Device.MoCA.Interface.1.Stats.BroadPktSent,25248,unsignedLong
-    1364529149,Device.MoCA.Interface.1.Stats.BytesReceived,200543250,unsignedLong
-    1364529149, Device.MoCA.Interface.1.Stats.Stats.BytesSent,7682161,unsignedLong
-    1364529149,Device.MoCA.Interface.1.Stats.MultiPktReceived,890682272,unsignedLong
-
-#### CSV Encoded Reporting Using ParameterPerColumn Report Format
-
-Using the configuration examples provided in the previous sections the configuration for a CSV encoded HTTP report using the `ParameterPerColumn` report format:
-
-    .BulkData.Profile.1
-    .BulkData.Profile.1.Enable=true
-    .BulkData.Profile.1.Protocol = "HTTP"
-    .BulkData.Profile.1.ReportingInterval = 300
-    .BulkData.Profile.1.TimeReference = "0001-01-01T00:00:00Z"
-    .BulkData.Profile.1.HTTP.URL =  "https://bdc.acme.com/somedirectory"
-    .BulkData.Profile.1.HTTP.Username = "username"
-    .BulkData.Profile.1.HTTP.Password = "password"
-    .BulkData.Profile.1.HTTP.Compression = "Disabled"
-    .BulkData.Profile.1.HTTP.Method = "POST"
-    .BulkData.Profile.1.HTTP.UseDateHeader = true
-    .BulkData.Profile.1.EncodingType =  "CSV"
-    .BulkData.Profile.1 CSVEncoding.FieldSeparator = ","
-    .BulkData.Profile.1.CSVEncoding.RowSeparator="&#13;&#10;"
-    .BulkData.Profile.1.CSVEncoding.EscapeCharacter="&quot;"
-    .BulkData.Profile.1.CSVEncoding.ReportFormat ="ParameterPerColumn"
-    .BulkData.Profile.1.CSVEncoding.ReportTimestamp ="Unix-Epoch"
-    .BulkData.Profile.1.Parameter.1.Name =  "BroadPktSent"
-    .BulkData.Profile.1.Parameter.1.Reference =  "Device.MoCA.Interface.1.Stats.BroadPktSent"
-    .BulkData.Profile.1.Parameter.2.Name =  "BytesReceived"
-    .BulkData.Profile.1.Parameter.2.Reference =  "Device.MoCA.Interface.1.Stats.BytesReceived"
-    .BulkData.Profile.1.Parameter.3.Name =  "BytesSent"
-    .BulkData.Profile.1.Parameter.3.Reference =  "Device.MoCA.Interface.1.Stats.BytesSent"
-    .BulkData.Profile.1.Parameter.4.Name =  "MultiPktReceived"
-    .BulkData.Profile.1.Parameter.4.Reference =  "Device.MoCA.Interface.1.Stats.MultiPktReceived"
-
-
-The resulting CSV encoded data with transmission of the last 3 reports failed to complete would look like:
-
-    ReportTimestamp,BroadPktSent,BytesReceived,BytesSent,MultiPktReceived
-    1364529149,25248,200543250,7682161,890682272
-    1464639150,25249,200553250,7683161,900683272
-    1564749151,25255,200559350,7684133,910682272
-    1664859152,25252,200653267,7685167,9705982277
-
-### JSON Encoded Report Example
+#### JSON Encoded Report Example
 
 Using the configuration examples provided in the previous sections the configuration for a JSON encoded HTTP report:
 

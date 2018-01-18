@@ -27,6 +27,13 @@
 
 # CoAP Binding
 
+1. [Mapping USP Endpoints to CoAP URIs](#mapping_usp_endpoints_to_coap_uris)
+2. [Mapping USP Records to CoAP Messages](#mapping_usp_messages_to_coap_messages)
+  1. [Handling CoAP Request Success](#handling_coap_request_success)
+  2. [Handling CoAP Request Failures](#handling_coap_request_failures)
+3. [MTP Message Encryption](#mtp_message_encryption)
+
+
 The Constrained Application Protocol (CoAP) MTP transfers USP Records between USP Endpoints using the CoAP protocol as defined in [RFC 7252][9]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP Records between USP Endpoints.
 
 <img src="usp-request-response-over-coap.png"/>
@@ -37,9 +44,9 @@ In this example, a USP Request is encoded within a USP Record and encapsulated w
 
 As noted in the definition of a USP Request, this USP Record either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications from the Agent to the Controller. Notifications will only cause a USP Response to be generated if specified in the Notification Request. However, the CoAP response will always be sent.
 
-## Mapping USP Endpoints to CoAP URIs
+<a id="mapping_usp_endpoints_to_coap_uris" />
 
-<a id="mapping_usp_endpoints_to_coap_uri" />
+## Mapping USP Endpoints to CoAP URIs
 
 Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resources and provides a means of locating the resource.  These resources are organized hierarchically and governed by a CoAP server listening for CoAP requests on a given port. USP Endpoints are one type of CoAP resource that is identified and discovered.
 
@@ -57,9 +64,9 @@ The identifier within the CoAP server is used to deliver messages to the USP End
 
 **R-COAP.3** - When creating DNS-SD records {ref to Discovery section}, an Endpoint MUST set the DNS-SD TXT record "path" attribute equal to the value of the CoAP server identifier (uri-path).
 
-## Mapping USP Records to CoAP Messages
-
 <a id="mapping_usp_messages_to_coap_messages" />
+
+## Mapping USP Records to CoAP Messages
 
 **R-COAP.4** - In order for USP Records to be transferred between a USP Controller and Agent using CoAP, the USP Record MUST be encapsulated within the CoAP message as defined in [RFC 7252][9].
 
@@ -69,15 +76,15 @@ USP Records are transferred using the CoAP resource that represents the receivin
 
 **R-COAP.6** - The CoAP Content-Format for USP Records MUST be application/octet-stream (ID=42) for [protobuf encoding](/specification/encoding/).
 
-### Handling CoAP Request Success
-
 <a id="handling_coap_request_success" />
+
+### Handling CoAP Request Success
 
 **R-COAP.7** - Upon successful reception of the CoAP message using POST, the CoAP server MUST respond with a response code of `2.04 (Changed)`.
 
-### Handling CoAP Request Failures
-
 <a id="handling_coap_request_failures" />
+
+### Handling CoAP Request Failures
 
 At times CoAP requests fail to complete due to problems in the underlying transport (e.g., timeout) or a failure response code received from the CoAP server due to problems in the CoAP request sent by the CoAP client (4.xx) or problems with the CoAP server implementation (5.xx).
 
@@ -98,6 +105,8 @@ When a CoAP client sends a CoAP request, the CoAP client can provide incorrect o
 **R-COAP.12** - When a CoAP server receives a CoAP request with an invalid CoAP Content-Format option, the CoAP server MUST respond with a `4.15` response code.
 
 **R-COAP.13** - When a CoAP server receives a CoAP request and the receiving USP Endpoint cannot interpret or decode the USP Record for processing, the CoAP server MUST respond with a `4.00` response code.
+
+<a id='mtp_message_encryption' />
 
 ## MTP Message Encryption
 

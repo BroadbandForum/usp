@@ -26,7 +26,9 @@
 
 These Annexes define or provide theories of operation for additional, use-case specific functionality for the User Service Platform. These sections rely heavily on protocols external to USP. Included in this version are:
 
-* [Annex A - Bulk data collection over HTTP](http-bulk-data-collection/)
-* [Annex B - Software Module Management](software-module-management/)
+* [Annex A - Bulk data collection over HTTP](./http-bulk-data-collection/)
+* [Appendix I - Firmware Management of Devices with USP Agents](./firmware-management/)
+* [Appendix II - Software Module Management](./software-module-management/)
+* [Appendix III - Device Proxy](./device-proxy/)
 
 [<-- Security](/specification/security/)

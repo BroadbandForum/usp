@@ -27,13 +27,21 @@
 
 # Appendix I - Firmware Management of Devices with USP Agents
 
-Many manufacturers are now starting to build and deploy devices that are able to support multiple firmware images (i.e. multiple firmware images can be installed on an Agent at the same time). There are at least a couple of advantages to this strategy:
+1. [Getting the firmware image onto the device](#getting_the_firmware_image_onto_the_device)
+2. [Using multiple firmware images](#using_multiple_firmware_images)
+  1. [Switching firmware images](#switching_firmware_images)
+  2. [Performing a delayed firmware upgrade](#performing_a_delayed_firmware_upgrade)
+  3. [Recovering from a failed upgrade](#recovering_from_a_failed_upgrade)
+
+Many manufacturers build and deploy devices that are able to support multiple firmware images (i.e. multiple firmware images can be installed on an Agent at the same time). There are at least a couple of advantages to this strategy:
 
 1. Having multiple firmware images installed improves the robustness and stability of the device because, in all likelihood, one of the installed images will be stable and bootable. Should a device not be able to boot a newly installed firmware image, it could have the ability to attempt to boot from a different firmware image, thus allowing the device to come back online.
 
 2. Support for multiple firmware images offers the ability for the service provider to have a new firmware downloaded (but not activated) to the device at any point during the day, then perhaps requiring only a Set message and an Operate message to invoke the Reboot command at some later time (perhaps during a short maintenance window or when the device is idle) to cause the device to switch over to the new firmware. Along with reducing the impact on the subscriber, the ability to spread the download portion a firmware upgrade over a longer period of time (eg, the entire day or over several days) can help minimize the impact of the upgrade on the provider’s network.
 
 This Appendix discusses how to utilize the firmware image table on a device to support firmware upgrades whether the device supports multiple instances or just a single instance.
+
+<a id='getting_the_firmware_image_onto_the_device' />
 
 ## Getting the firmware image onto the device
 
@@ -43,9 +51,13 @@ If an Agent only supports a single firmware image instance then a Controller wou
 
 If an Agent supports more than a single firmware image instance then a Controller would typically invoke the `Download()` command on a non-active firmware image instance in an effort of preserving the current firmware image in case of an error while upgrading the firmware. A firmware image instance is considered active if it is the currently running firmware image.
 
-## Using Multiple Firmware Images
+<a id='using_multiple_firmware_images' />
+
+## Using multiple firmware images
 
 This section discusses the added functionality available when a device supports two or more instances in the `Device.FirmwareImage.{i}.` data model table.
+
+<a id='switching_firmware_images' />
 
 ### Switching firmware images
 
@@ -55,11 +67,15 @@ A Controller can activate a new firmware image by following one of two different
 
 When attempting to get a device to switch to a different firmware image, it is recommended that the Controller either subscribe to a `ValueChange` notification on the `DeviceInfo.SoftwareVersion` parameter or subscribe to the `Boot!` Event notification. If the Software Version value has not changed or the `Boot!` Event's `FirmwareUpdated` argument is false, it could be an indication that the device had problems booting the target firmware image.
 
+<a id='performing_a_delayed_firmware_upgrade' />
+
 ### Performing a delayed firmware upgrade
 
 One of the benefits to having support for multiple firmware images on a device is that it provides an opportunity to push a firmware image to a device and then have the device switch to that image at a later time. This functionally allows a service provider to push a firmware image to a set of devices at any point during the day and then use a maintenance window to switch all of the target devices to the target firmware.
 
 This ability is of value because normally the download of the firmware and the switch to the new image would both have to take place during the maintenance window. Bandwidth limitations may have an impact on the number of devices that can be performing the download at the same time. If this is the case, the number of devices that can be upgrading at the same time may be lower than desired, requiring multiple maintenance windows to complete the upgrade. However, support for multiple firmware images allows for the service provider to push firmware images over a longer period of time and then use a smaller maintenance window to tell the device to switch firmware images. This can result is shorter system-wide firmware upgrades.
+
+<a id='recovering_from_a_failed_upgrade' />
 
 ### Recovering from a failed upgrade
 

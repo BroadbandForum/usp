@@ -27,21 +27,47 @@
 
 # Messages
 
+1. [Encapsulation in a USP Record](#encapsulation_in_a_usp_record)
+2. [Requests, Responses and Errors](#requests_responses_and_errors)
+  1. [Handling Duplicate Messages](#handling_duplicate_messages)
+  2. [Example Message Flows](#example_message_flows)
+3. [Message Structure](#message_structure)
+  1. [The USP Message](#the_usp_message)
+  2. [Message Header](#message_header)
+  3. [Message Body](#message_body)
+4. [Creating, Updating, and Deleting Objects](#creating_updating_and_deleting_objects)
+  1. [Selecting Objects and Parameters](#selecting_objects_and_parameters)
+  2. [Using Allow Partial and Required Parameters](#using_allow_partial_and_required_parameters)
+  3. [The Add Message](#add)
+  4. [The Set Message](#set)
+  5. [The Delete Message](#delete)
+5. [Reading an Agent’s State and Capabilities](#reading_agent_state_and_capabilities)
+  1. [The Get Message](#get)
+  2. [The GetInstances Message](#getinstances)
+  3. [The GetSupportedDM Message](#getsupporteddm)
+  4. [The GetSupportedProtocol Message](#getsupportedprotocol)
+6. [Notifications and Subscription Mechanism](#notifications_and_subscrptions)
+  1. [Using Subscription Objects](#using_subscription_objects)
+  2. [Responses to Notifications and Notification Retry](#notification_retry)
+  3. [Notification Types](#notification_types)
+  4. [The Notify Message](#notify)
+7. [Defined Operations Mechanism](#defined_operations_mechanism)
+  1. [Synchronous Operations](#synchronous_operations)
+  2. [Asynchronous Operations](#asynchronous_operations)
+  3. [Operate Requests on Multiple Objects](#operate_requests_on_multiple_objects)
+  4. [Event Notifications for Operations](#event_notifications_for_operations)
+  5. [Concurrent Operations](#concurrent_operations)
+  6. [The Operate Message](#operate)
+8. [Error Codes](#error_codes)
+  1. [Vendor Defined Error Codes](#vendor_defined_error_codes)
+
 USP contains messages to create, read, update, and delete Objects, perform Object-defined operations, and allow agents to notify controllers of events. This is often referred to as CRUD with the addition of O (operate) and N (notify), or CRUD-ON.
 
 *Note: This version of the specification defines its messages in Protocol Buffers v3 (see [encoding](/specification/encoding/)). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
-These sections describe the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual fields of the schema are outlined below:
+These sections describe the types of USP messages and the normative requirements for their flow and operation. USP messages are described in a protocol buffers schema, and the normative requirements for the individual fields of the schema are outlined below.
 
-* [Add](#add)
-* [Set](#set)
-* [Delete](#delete)
-* [Get](#get)
-* [GetInstances](#getinstances)
-* [GetSupportedDM](#getsupporteddm)
-* [GetSupportedProtocol](#getsupportedprotocol)
-* [Notify](#notify)
-* [Operate](#operate)
+<a id='encapsulation_in_a_usp_record' />
 
 ## Encapsulation in a USP Record
 
@@ -49,9 +75,9 @@ All USP messages are encapsulated by a USP record. The definition of the USP rec
 portion of a USP message, and the rules for managing transactional integrity, are
 described in [End to End Message Exchange](/specification/e2e-message-exchange/).
 
-## Requests, Responses and Errors
-
 <a id="requests_responses_and_errors" />
+
+## Requests, Responses and Errors
 
 The three types of USP messages are Request, Response, and Error.
 
@@ -65,9 +91,9 @@ A request is a message sent from a source USP endpoint to a target USP endpoint 
 
 **R-MSG.3** - In any USP Message originating from an Agent, unless otherwise specified, Path Names reported from the Agent's Instantiated Data Model MUST use Instance Number Addressing.
 
-### Handling Duplicate Messages
-
 <a id="handling_duplicate_messages" />
+
+### Handling Duplicate Messages
 
 Circumstances may arise (such as multiple Message Transfer Protocols) that cause duplicate messages (those with an identical message ID) to arrive at the target USP endpoint.
 
@@ -75,9 +101,9 @@ Circumstances may arise (such as multiple Message Transfer Protocols) that cause
 
 For messages that require no response, it is up to the target endpoint implementation when to allow the same message ID to be re-used by the same source USP endpoint.
 
-### Example Message Flows
-
 <a id="example_message_flows" />
+
+### Example Message Flows
 
 Successful request/response: In this successful message sequence, a Controller sends an Agent a request. The message header and body are parsed, the message is understood, and the Agent sends a response with the relevant information in the body.
 
@@ -88,6 +114,8 @@ Failed request/response: In this failed message sequence, a Controller sends an 
 
 <img src="error_response.png" />
 Figure MSG.2 - A failed request/response sequence
+
+<a id='message_structure' />
 
 ## Message Structure
 
@@ -101,9 +129,9 @@ Every USP message contains a header and a body. The header contains basic destin
 
 Each of the message types and fields below are described with the field type according to [Protocol Buffers version 3][12], followed by its name.
 
-### The USP Message
+<a id="the_usp_message" />
 
-<a id="message_container" />
+### The USP Message
 
 `Header header`
 
@@ -115,9 +143,9 @@ The Message Body that must be present in every Message.  The Body field contains
 
 **R-MSG.7** - A Message MUST contain exactly one body field.
 
-### Message Header
+<a id="message_header" />
 
-<a id="header" />
+### Message Header
 
 The message header contains information on source and target of the message, as well as useful coordination information. Its fields include a message ID, the endpoint identifiers for the source and target endpoints, an optional reply-to identifier, and a field indicating the type of message.
 
@@ -159,9 +187,9 @@ This field contains an enumeration indicating the type of message contained in t
 
 **R-MSG.10** - The `msg_type` field MUST be present in every Header.
 
-### Message Body
+<a id="message_body" />
 
-<a id="body" />
+### Message Body
 
 The message body contains the intended message and the appropriate fields for the message type.
 
@@ -203,8 +231,6 @@ This field contains one of the types given below. Each indicates that the Messag
 
 #### Response fields
 
-<a id="response" />
-
 `oneof resp_type`
 
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
@@ -218,7 +244,6 @@ This field contains one of the types given below. Each indicates that the Messag
     NotifyResp notify_resp		
 
 #### Error fields
-<a id="error" />
 
 `fixed32 err_code`
 
@@ -246,11 +271,15 @@ This field contains a [numeric code](#error-codes) indicating the type of error 
 
 This field contains additional information about the reason behind the error.
 
+<a id='creating_updating_and_deleting_objects' />
+
 ## Creating, Updating, and Deleting Objects
 
 The [Add](#add), [Set](#set), and [Delete](#delete) requests are used to create, configure and remove Objects that comprise Service fields.
 
-### Selecting Objects and Parameters for CUD Operations
+<a id='selecting_objects_and_parameters' />
+
+### Selecting Objects and Parameters
 
 Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
 
@@ -298,9 +327,9 @@ The Agent’s response would include the successful Object update and the list o
         }
     }
 
-### Using Allow Partial and Required Parameters
+<a id='using_allow_partial_and_required_parameters' />
 
-<a id="allow_partial_and_required_parameters" />
+### Using Allow Partial and Required Parameters
 
 The Add, Set, and Delete requests contain an field called "`allow_partial`". This field determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
 
@@ -329,9 +358,9 @@ The logic can be described as follows:
 | `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `False` | Yes | Yes | - | Error | `oper_failure` | Yes |
 
-### The Add Message
-
 <a id="add" />
+
+### The Add Message
 
 The Add message is used to create new Instances of Multi-Instance Objects in the Agent's Instantiated Data Model.
 
@@ -507,9 +536,9 @@ This field contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Add message include `7000-7019`, `7026`, and `7800-7999`.
 
-### Set
-
 <a id="set" />
+
+### The Set Message
 
 The Set Message is used to update the Parameters of existing Objects in the Agent's Instantiated Data Model.
 
@@ -706,9 +735,9 @@ This field contains text related to the error specified by `err_code`.
 #### Set Message Supported Error Codes
 Appropriate error codes for the Set message include `7000-7016`, `7020`, `7021`, `7026`, and `7800-7999`.
 
-### The Delete Message
-
 <a id="delete" />
+
+### The Delete Message
 
 The Delete Message is used to remove Instances of Multi-Instance Objects in the Agent's Instantiated Data Model.
 
@@ -844,9 +873,13 @@ This field contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, `7026` and `7800-7999`.
 
+<a id='reading-agent-state-and-capabilities' />
+
 ## Reading an Agent’s State and Capabilities
 
 An Agent’s current state and capabilities are represented in its data model. The current state is referred to as its Instantiated Data Model, while the data model that represents its set of capabilities is referred to as its Supported Data Model. Messages exist to retrieve data from both the instantiated and Supported Data Models.
+
+<a id='get' />
 
 ### The Get Message
 
@@ -1171,9 +1204,9 @@ This field contains a set of mapped key/value pairs listing a Parameter Path (re
 
 Appropriate error codes for the Get message include `7000-7006`, `7008`, `7010`, `7026` and `7800-7999`.
 
-### The GetInstances Message
-
 <a id="getinstances" />
+
+### The GetInstances Message
 
 The GetInstances message takes a Path Name to an Object and requests that the Agent return the Instances of that Object that exist and *possibly* any Multi-Instance sub-Objects that exist as well as their Instances. This is used for getting a quick map of the Multi-Instance Objects (i.e., tables) the Agent currently represents, and their unique keys, so that they can be addressed and manipulated later.
 
@@ -1349,9 +1382,9 @@ This field contains a map of key/value pairs for all supported parameters that a
 
 Appropriate error codes for the GetInstances message include `7000-7006`, `7008`, `7016`, `7018`, `7026` and `7800-7999`.
 
-### The GetSupportedDM Message
-
 <a id="getsupporteddm" />
+
+### The GetSupportedDM Message
 
 GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
 
@@ -1603,7 +1636,7 @@ Appropriate error codes for the GetSupportedDM message include `7000-7006`, `700
 
 *Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
-<a id="notify" />
+<a id="getsupportedprotocol" />
 
 ### GetSupportedProtocol
 
@@ -1623,13 +1656,15 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
+<a id='notifications_and_subscrptions' />
+
 ## Notifications and Subscription Mechanism
 
 A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify message](#notify) to the Controller.
 
-### The Notify Message
+<a id='using_subscription_objects' />
 
-#### Using Subscription Objects
+### Using Subscription Objects
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model parameter descriptions for `Device.LocalAgent.Subscription.{i}.` in [Device:2][1].
 
@@ -1637,7 +1672,7 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
-###### ReferenceList Parameter
+#### ReferenceList Parameter
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
@@ -1645,7 +1680,9 @@ For example, a Controller wants to be notified when a new Wifi station joins the
 
 In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wifi network. It uses the Add message to create a subscription Object instance with `Device.Wifi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
-#### Responses to Notifications and Notification Retry
+<a id='notification_retry' />
+
+### Responses to Notifications and Notification Retry
 
 The Notify request contains a flag, `send_resp`, that specifies whether or not the Controller should send a response message after receiving a Notify request. This is used in tandem with the `NotifRetry` parameter in the subscription Object - if `NotifRetry` is `true`, then the Agent sends its Notify requests with `send_resp : true`, and the Agent considers the notification delivered when it receives a response from the Controller. If `NotifRetry` is `false`, the Agent does not need to use the `send_resp` flag and should ignore the delivery state of the notification.
 
@@ -1679,24 +1716,26 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 **R-NOT.4** - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification message.
 
-#### Notification Types
+<a id='notification_types' />
+
+### Notification Types
 
 There are several types events that can cause a Notify request. These include those that deal with changes to the Agent’s Instantiated Data Model (`ValueChange`, `ObjectCreation`, `ObjectDeletion`), the completion of an asynchronous Object-defined operation (`OperationComplete`), a policy-defined `OnBoardRequest`, and a generic `Event` for use with Object-defined events.
 
-##### ValueChange
+#### ValueChange
 
 The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.
 
-#####	 ObjectCreation and ObjectDeletion
+####	 ObjectCreation and ObjectDeletion
 These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.
 
 The `ObjectCreation` notification also includes the Object’s unique keys and their values as data in the notification.
 
-##### OperationComplete
+#### OperationComplete
 
 The `OperationComplete` notification is used to indicate that an asynchronous Object-defined operation finished (either successfully or unsuccessfully). These operations may also trigger other Events defined in the data model (see below).
 
-##### OnBoardRequest
+#### OnBoardRequest
 
 An `OnBoardRequest` notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
 
@@ -1710,7 +1749,7 @@ An `OnBoardRequest` notification is used by the Agent when it is triggered by an
 
 **R-NOT.6** a response is required, the OnBoardRequest MUST follow the Retry logic defined above.
 
-##### Event
+#### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what parameters, if any, are returned as part of the notification.
 
 #### Notify Examples
@@ -1798,6 +1837,10 @@ body {
   }
 }
 ```
+
+<a id='notify' />
+
+### The Notify Message
 
 #### Notify Request fields
 
@@ -1935,11 +1978,13 @@ This field contains the locally unique opaque identifier that was set by the Con
 
 Appropriate error codes for the Notify message include `7000-7006`, and `7800-7999`.
 
-<a id="operate">
+<a id="defined_operations_mechanism">
 
 ## Defined Operations Mechanism
 
 Additional methods (operations) are and can be defined in the USP data model. Operations are generally defined on an Object, using the "command" attribute, as defined in [TR-106][3]. The mechanism is controlled using the [Operate message](#operate) in conjunction with the Multi-Instance Request Object.
+
+<a id='synchronous_operations' />
 
 ### Synchronous Operations
 
@@ -1948,6 +1993,8 @@ A synchronous operation is intended to complete immediately following its proces
 <img src="synchronous_operation.png" />
 
 Figure OPR.1 - Operate Message Flow for Synchronous Operations
+
+<a id='asynchronous_operations' />
 
 ### Asynchronous Operations
 
@@ -1969,6 +2016,8 @@ Figure OPR.2 - Operate Message Flow for Asynchronous Operations
 
 Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that  Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table, and is considered to have failed. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.
 
+<a id='operate_requests_on_multiple_objects' />
+
 ### Operate Requests on Multiple Objects
 
 Since the Operate request can take a path expression as a value for the command field, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the `OperationResult` field type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different `OperationResult` entry. For this reason, operation failures are never conveyed in an Error message - in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.
@@ -1977,9 +2026,13 @@ Since the Operate request can take a path expression as a value for the command 
 
 **R-OPR.2** - For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command field.
 
+<a id='event_notifications_for_operations' />
+
 ### Event Notifications for Operations
 
-When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions)
+When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions).
+
+<a id='concurrent_operations' />
 
 ### Concurrent Operations
 
@@ -2027,6 +2080,8 @@ body {
   }
 }
 ```
+
+<a id='operate' />
 
 ### The Operate Message
 
@@ -2096,9 +2151,9 @@ This field contains additional (human readable) information about the reason beh
 #### Operate Message Error Codes
 Appropriate error codes for the Operate message include `7000-7008`, `7012` `7015`, `7016`, `7022`, and `7800-7999`.
 
-## Error Codes
-
 <a id="error_codes" />
+
+## Error Codes
 
 USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
 
@@ -2133,8 +2188,8 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
 | `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
 
-### Vendor Defined Error Codes
-
 <a id="vendor_defined_error_codes" />
+
+### Vendor Defined Error Codes
 
 Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use  the `7800-7999` series. There are no requirements on the content of these errors.

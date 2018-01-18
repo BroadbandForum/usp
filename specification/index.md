@@ -49,6 +49,8 @@ Appendix I. [Software Module Management](./extensions/software-module-management
 
 Appendix II. [Firmware Management](./extensions/firmware-management)
 
+Appendix III. [Device Proxy](./extensions/device-proxy)
+
 # Introduction
 
 <a id="introduction" />
@@ -75,29 +77,9 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 
 ## Revision History
 
-### Version-1.0-DRAFT-05
+### Release 1.0
 
-* Reworked Record definition and schema for efficiency
-* Clean-up of requirements and text based on comments from BBF members
-
-### Version-1.0-DRAFT-04
-
-* Added end to end message exchange system using USP record messages
-* Added WebSocket and STOMP bindings
-* Updated protobuf schema for usp messages and added usp record schema
-
-### Version 1.0-DRAFT-03
-
-* Single document format
-
-### Version 1.0-DRAFT-02
-
-* Editorial updates
-* Added requirement for OnBoardRequest retry mechanism
-
-### Version 1.0-DRAFT-01
-
-* Initial public draft
+* Release contains specification for the User Services Platform 1.0.
 
 ## Acknowledgements
 
@@ -108,12 +90,14 @@ THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTI
 | Jason Walls | QA Cafe, LLC | jason@qacafe.com | Editor/Broadband User Services Work Area Director
 | John Blackford | Arris | john.blackford@arris.com | Editor/Broadband User Services Work Area Director
 | William Lupton | Broadband Forum | wlupton@broadband-forum.org | BBF Software Architect
+| Jean-Didier Ott | Orange | jeandidier.ott@orange.com | Contributor
 | Timothy Carey | Nokia | timothy.carey@nokia.com | Contributor
 | Steven Nicolai | Arris | Steven.Nicolai@arris.com | Contributor
 | Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
 | Mark Tabry  | Google | mtab@google.com | Contributor
 | Klaus Wich | Huawei | klaus.wich@huawei.com | Contributor
 | Daniel Egger | Axiros | daniel.egger@axiros.com | Contributor
+| Bahadir Danisik | Nokia | bahadir.danisik@nokia.com | Contributor
 
 ## Executive Summary
 
@@ -134,7 +118,6 @@ To address this opportunity, use cases supported by USP include:
 * The ability to have both the application and network service provider manage, troubleshoot, and control different aspects of the services they are responsible for, and enabling provider partnerships.
 * Providing a consistent user experience from mobile to home.
 * Simple migration from the [CPE WAN Management Protocol][2] (CWMP) - commonly known by its document number, "TR-069" - through use of the same data model and data modeling tools.
-
 
 ## Purpose and Scope
 
