@@ -2193,3 +2193,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 ### Vendor Defined Error Codes
 
 Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use  the `7800-7999` series. There are no requirements on the content of these errors.
+
+[<-- Message Encoding](/specification/encoding)
+
+[Authentication and Authorization -->](/specification/security)
