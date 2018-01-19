@@ -28,20 +28,20 @@
 # End to End Message Exchange
 
 1. [USP Record Encapsulation](#usp_record_encapsulation)
-  1. [Record Definition](#record_definition)
+    1. [Record Definition](#record_definition)
 2. [Exchange of USP Records Within an E2E Session Context](#exchange_of_usp_records_within_an_e2e_session_context)
-  1. [Establishing an E2E Session Context](#establishing_an_e2e_session_context)
-  2. [USP Record Exchange](#USP Record Exchange)
-  3. [Guidelines for Handling Session Context Restarts](#guidelines_for_handling_session_context_restarts)
-  4. [Segmented Message Exchange](#segmented_message_exchange)
-  5. [Handling Duplicate USP Records](#handling_duplicate_usp_records)
+    1. [Establishing an E2E Session Context](#establishing_an_e2e_session_context)
+    2. [USP Record Exchange](#usp_record_exchange)
+    3. [Guidelines for Handling Session Context Restarts](#guidelines_for_handling_session_context_restarts)
+    4. [Segmented Message Exchange](#segmented_message_exchange)
+    5. [Handling Duplicate USP Records](#handling_duplicate_usp_records)
 3. [Exchange of USP Records without an E2E Session Context](#exchange_of_usp_records_without_an_e2e_session_context)
-  1. [Failure Handling](#failure_handling_of_received_usp_records_without_a_session_context)
+    1. [Failure Handling](#failure_handling_of_received_usp_records_without_a_session_context)
 4. [Validating the Integrity of the USP Record](#validating_the_integrity_of_the_usp_record)
-  1. [Using the Signature Method](#using_the_signature_method_to_validate_the_integrity_of_usp_records)
-  2. [Using TLS](#using_tls_to_validate_the_integrity_of_USP_records)
+    1. [Using the Signature Method](#using_the_signature_method_to_validate_the_integrity_of_usp_records)
+    2. [Using TLS](#using_tls_to_validate_the_integrity_of_USP_records)
 5. [Secure Message Exchange](#secure_message_exchange)
-  1. [TLS Payload Encapsulation](#tls_payload_encapsulation)
+    1. [TLS Payload Encapsulation](#tls_payload_encapsulation)
 
 
 USP Messages are exchanged between Controllers and Agents. In some deployment scenarios, the Controller and Agent have a direct connection. In other deployment scenarios, the messages exchanged by the Controller and Agent traverse multiple intermediate MTP Proxies. The latter deployment scenario typically occurs when the Agent or Controller is deployed outside the proximal or Local Area Network. In both types of scenarios, the End-to-End (E2E) message exchange capabilities of USP permit the:

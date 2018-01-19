@@ -29,8 +29,8 @@
 
 1. [Mapping USP Endpoints to CoAP URIs](#mapping_usp_endpoints_to_coap_uris)
 2. [Mapping USP Records to CoAP Messages](#mapping_usp_messages_to_coap_messages)
-  1. [Handling CoAP Request Success](#handling_coap_request_success)
-  2. [Handling CoAP Request Failures](#handling_coap_request_failures)
+    1. [Handling CoAP Request Success](#handling_coap_request_success)
+    2. [Handling CoAP Request Failures](#handling_coap_request_failures)
 3. [MTP Message Encryption](#mtp_message_encryption)
 
 

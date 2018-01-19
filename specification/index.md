@@ -25,8 +25,8 @@
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
-<h1>Broadband Forum WT-369: User Services Platform</h1>
-<h2>Version 1.0-DRAFT-04</h2>
+<h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
+<h2>USP Version 1.0</h2>
 
 **Table of Contents**
 

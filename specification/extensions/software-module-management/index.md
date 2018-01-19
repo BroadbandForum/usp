@@ -29,12 +29,12 @@
 
 1. [Lifecycle Manage](#lifecycle_management)
 2. [Software Modules](#software_modules)
-  1. [Deployment Units](#deployment_units)
-  2. [Execution Units](#execution_units)
+    1. [Deployment Units](#deployment_units)
+    2. [Execution Units](#execution_units)
 3. [Execution Environment Concepts](#execution_environment_concepts)
 4. [Fault Model](#fault_model)
-  1. [DU Faults](#du_faults)
-  2. [EU Faults](#eu_faults)
+    1. [DU Faults](#du_faults)
+    2. [EU Faults](#eu_faults)
 
 
 This section discusses the Theory of Operation for Software Module Management using USP and the Software Module object defined in the Root data model.

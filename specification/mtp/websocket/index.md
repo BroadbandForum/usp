@@ -28,11 +28,11 @@
 
 1. [Mapping USP Endpoints to WebSocket URIs](#mapping_usp_endpoints_to_websocket_uris)
 2. [Handling of the WebSocket Session](#handling_of_the_websocket_session)
-  1. [Mapping USP Records to WebSocket Messages](#mapping_usp_records_to_websocket_messages)
+    1. [Mapping USP Records to WebSocket Messages](#mapping_usp_records_to_websocket_messages)
 3. [Handling of WebSocket Frames](#handling_of_websocket_frames)
-  1. [Handling Failures to Deliver USP Records](#handling_failures_to_deliver_usp_records)
-  2. [Keeping the WebSocket Session Alive](#keeping_the_websocket_session_alive)
-  3. [Websocket Session Retry](#websocket_session_retry)
+    1. [Handling Failures to Deliver USP Records](#handling_failures_to_deliver_usp_records)
+    2. [Keeping the WebSocket Session Alive](#keeping_the_websocket_session_alive)
+    3. [Websocket Session Retry](#websocket_session_retry)
 4. [MTP Message Encryption](#mtp_message_encryption)
 
 The WebSockets MTP transfers USP Records between USP endpoints using the WebSocket protocol as defined in [RFC 6455][20]. Messages that are transferred between WebSocket clients and servers utilize a request/response messaging interaction across an established WebSocket session.

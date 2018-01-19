@@ -29,9 +29,9 @@
 
 1. [Getting the firmware image onto the device](#getting_the_firmware_image_onto_the_device)
 2. [Using multiple firmware images](#using_multiple_firmware_images)
-  1. [Switching firmware images](#switching_firmware_images)
-  2. [Performing a delayed firmware upgrade](#performing_a_delayed_firmware_upgrade)
-  3. [Recovering from a failed upgrade](#recovering_from_a_failed_upgrade)
+    1. [Switching firmware images](#switching_firmware_images)
+    2. [Performing a delayed firmware upgrade](#performing_a_delayed_firmware_upgrade)
+    3. [Recovering from a failed upgrade](#recovering_from_a_failed_upgrade)
 
 Many manufacturers build and deploy devices that are able to support multiple firmware images (i.e. multiple firmware images can be installed on an Agent at the same time). There are at least a couple of advantages to this strategy:
 

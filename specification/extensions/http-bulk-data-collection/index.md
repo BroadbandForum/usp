@@ -28,12 +28,12 @@
 # Annex A - HTTP Bulk Data Collection
 
 1. [Enabling HTTP/HTTPS Bulk Data Communication](#enabling_http_https_bulk_data_communication)
-  1. [Use of the URI Query Parameters](#use_of_the_uri_query_parameters)
-  2. [Use of HTTP Status Codes](#use_of_http_status_codes)
-  3. [Use of TLS and TCP](#use_of_tls_and_tcp)
+    1. [Use of the URI Query Parameters](#use_of_the_uri_query_parameters)
+    2. [Use of HTTP Status Codes](#use_of_http_status_codes)
+    3. [Use of TLS and TCP](#use_of_tls_and_tcp)
 2. [Encoding of Bulk Data](#encoding_of_bulk_data)
-  1. [Encoding of CSV Bulk Data](#encoding_of_csv_bulk_data)
-  2. [Encoding of JSON Bulk Data](#encoding_of_json_bulk_data)
+    1. [Encoding of CSV Bulk Data](#encoding_of_csv_bulk_data)
+    2. [Encoding of JSON Bulk Data](#encoding_of_json_bulk_data)
 
 *Note - This Annex is a translation from the HTTP Bulk Data Collection mechanism specified in Annex A of [Broadband Forum TR-157](https://www.broadband-forum.org/technical/download/TR-157.pdf), which was carried over into Amendment 6 of [TR-069][2]. The text here has been altered to fit with USP concepts.*
 

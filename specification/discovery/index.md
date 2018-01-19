@@ -30,11 +30,11 @@
 1. [Controller Information](#controller_information)
 2. [Agent Information](#agent_information)
 3. [Use of DHCP for Acquiring Controller Information](#dhcp)
-  1. [DHCP Options for Controller Discovery](#dhcp_options)
+    1. [DHCP Options for Controller Discovery](#dhcp_options)
 4. [Using mDNS](#mdns)
 5. [Using DNS](#dns)
-  1. [DNS-SD Records](#dns-sd)
-  2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
+    1. [DNS-SD Records](#dns-sd)
+    2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
 7. [Using the SendOnBoardRequest() operation and OnBoardRequest notification](#onboardrequest)
 
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.

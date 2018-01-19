@@ -27,13 +27,13 @@
 # STOMP Binding
 
 1. [Handling of the STOMP Session](#handling_of_the_stomp_session)
-  1. [Connecting a USP Endpoint to the STOMP Server](#connecting_a_usp_endpoint_to_the_stomp_server)
-  2. [Handling the STOMP Heart Beat Mechanism](#handling_the_stomp_heart_beat_mechanisms)
+    1. [Connecting a USP Endpoint to the STOMP Server](#connecting_a_usp_endpoint_to_the_stomp_server)
+    2. [Handling the STOMP Heart Beat Mechanism](#handling_the_stomp_heart_beat_mechanisms)
 2. [Mapping USP Endpoints to STOMP Destinations](#mapping_usp_endpoints_to_stomp_destinations)
-  1. [Subscribing a USP Endpoint to a STOMP Destination](#subscribing_a_usp_endpoint_to_a_stomp_destination)
+    1. [Subscribing a USP Endpoint to a STOMP Destination](#subscribing_a_usp_endpoint_to_a_stomp_destination)
 3. [Mapping USP Records to STOMP Frames](#mapping_usp_records_to_stomp_frames)
-  1. [Handling ERROR Frames](#handling_error_frames)
-  2. [Handling Other STOMP Frames](#handling_other_stomp_frames)
+    1. [Handling ERROR Frames](#handling_error_frames)
+    2. [Handling Other STOMP Frames](#handling_other_stomp_frames)
 4. [Discovery Requirements](#discovery_requirements)
 5. [STOMP Server Requirements](#stomp_server_requirements)
 6. [MTP Message Encryption](#mtp_message_encryption)

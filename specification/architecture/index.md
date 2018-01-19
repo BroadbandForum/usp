@@ -27,15 +27,15 @@
 # Architecture
 
 1. [Endpoints](#endpoints)
-  1. [Agents](#agents)
-  2. [Controllers](#controllers)
-  3. [Endpoint Identifier](#endpoint_identifier)
+    1. [Agents](#agents)
+    2. [Controllers](#controllers)
+    3. [Endpoint Identifier](#endpoint_identifier)
 2. [Service Elements](#service_elements)
-  1. [Data Models](#data_models)
-  2. [Path Names](#path_names)
-  3. [Searching](#searching)
-  4. [Other Path Decorators](#other_path_decorators)
-  5. [Instantiated Data Model Path Grammar](#instantiated_data_model_path_grammar)
+    1. [Data Models](#data_models)
+    2. [Path Names](#path_names)
+    3. [Searching](#searching)
+    4. [Other Path Decorators](#other_path_decorators)
+    5. [Data Model Path Grammar](#data_model_path_grammar)
 
 The User Services Platform consists of a collection of Endpoints (Agents and Controllers) that allow applications to manipulate Service Elements. These Service Elements are made up of a set of Objects and parameters that model a given service, such as network interfaces, software modules, device firmware, remote elements proxied through another interface, virtual elements, or other managed services.
 
@@ -374,7 +374,7 @@ The Expression Constant is the value that the Expression Parameter is being eval
 
   `Device.IP.Interface.{Type=="Normal"}.Status`
 
-<a id="search_examples" />
+<a id="searching_by_wildcard" />
 
 #### Searching by Wildcard
 
@@ -391,6 +391,8 @@ All parameters for all IP Interfaces that currently exist
 Type of each IP Interface that currently exists
 
 `Device.IP.Interface.*.Type`
+
+<a id="other_path_decorators" />
 
 ### Other Path Decorators
 
@@ -437,7 +439,7 @@ In the first example, the reference points to the FooObject with Instance Number
   * An Agent MUST remove the corresponding list item from a list-valued strong reference parameter when a referenced parameter or object is deleted.
   * An Agent MUST NOT change the value of a weak reference parameter when a referenced parameter or object is deleted.
 
-<a id="reference_following" />
+<a id="list_of_references" />
 
 ##### List of References
 
@@ -485,9 +487,9 @@ The Notify request allows a type of generic event (called Event) message that al
 
 For example: `Device.LocalAgent.Boot!`
 
-<a id='instantiated_data_model_path_grammar' />
+<a id='data_model_path_grammar' />
 
-### Instantiated Data Model Path Grammar
+### Data Model Path Grammar
 
 Expressed as a [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) for context-free grammars, the path lexical rules for referencing the Instantiated Data Model are:
 
