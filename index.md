@@ -15,7 +15,7 @@
     <li><strong>Enable multi-tenant</strong> (i.e., multi-stakeholder) management and control</li>
     </ul>
 
-    <p>USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the <a href="">Device:2 Data Model for TR-069 Devices</a> to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).</p>
+    <p>USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).</p>
 
     <h2>How to use this site:</h2>
 
