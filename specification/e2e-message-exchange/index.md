@@ -410,7 +410,7 @@ When a receiving USP Endpoint fails to either buffer or successfully process a U
 
 ## Validating the Integrity of the USP Record
 
-When a USP Record is transmitted to a USP Endpoint, the transmitting USP Endpoint has the capability to protect the integrity of the non-payload fields of the USP Record. The `payload` field is not part of the generation or verification process, as the expectation is that this element will be secured using an E2E security protection mechanism (`payload_security` other than plaintext).
+When a USP Record is transmitted to a USP Endpoint, the transmitting USP Endpoint has the capability to protect the integrity of the non-payload fields of the USP Record. The `payload` field is not part of the generation or verification process, as the expectation is that this element will be secured using an E2E security protection mechanism (`payload_security` other than PLAINTEXT).
 
 The integrity of the USP Record is required to be validated when the USP Record cannot be protected by the underlying MTP.
 
