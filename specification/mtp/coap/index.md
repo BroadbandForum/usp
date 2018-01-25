@@ -60,9 +60,9 @@ Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resour
 
 The identifier within the CoAP server is used to deliver messages to the USP Endpoint. When this identifier is used to deliver messages to the USP Endpoint, this identifier is a uri-path that represents the USP Endpoint Identifier. For example: "`/e/{endpointId}`"
 
-**R-COAP.2** - A CoAP Request message MUST include a Uri-Query option that supplies the CoAP server identifier (uri-path), uri-host, and uri-port of the Endpoint that is the source of the CoAP Request, formatted as “?reply-to=<uri-host>:<uri-port>/<uri-path>”
+**R-COAP.2** - A CoAP Request message MUST include a Uri-Query option that supplies the CoAP server identifier (uri-path), uri-host, and uri-port of the Endpoint that is the source of the CoAP Request, formatted as `?reply-to=<uri-host>:<uri-port>/<uri-path>`
 
-**R-COAP.3** - When creating DNS-SD records {ref to Discovery section}, an Endpoint MUST set the DNS-SD TXT record "path" attribute equal to the value of the CoAP server identifier (uri-path).
+**R-COAP.3** - When creating DNS-SD records (see [Using DNS](/specification/discovery/#dns-sd)), an Endpoint MUST set the DNS-SD TXT record "path" attribute equal to the value of the CoAP server identifier (uri-path).
 
 <a id="mapping_usp_messages_to_coap_messages" />
 
