@@ -58,7 +58,7 @@ Section 6 of [RFC 7252][9] discusses the URI schemes for identifying CoAP resour
 * Resource type (rt): "`bbf.usp.endpoint`"
 * Interface (if): "`bbf.usp.c`" for USP Controller or "`bbf.usp.a`" for USP Agent
 
-The identifier within the CoAP server is used to deliver messages to the USP Endpoint. When this identifier is used to deliver messages to the USP Endpoint, this identifier is a uri-path that represents the USP Endpoint Identifier. For example: "`/e/{endpointId}`"
+The identifier within the CoAP server is used to deliver messages to the USP Endpoint. When this identifier is used to deliver messages to the USP Endpoint, this identifier is a uri-path that represents the USP Endpoint.
 
 **R-COAP.2** - A CoAP Request message MUST include a Uri-Query option that supplies the CoAP server identifier (uri-path), uri-host, and uri-port of the Endpoint that is the source of the CoAP Request, formatted as `?reply-to=<uri-host>:<uri-port>/<uri-path>`
 

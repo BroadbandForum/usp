@@ -187,7 +187,7 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 ## MTP Message Encryption
 
-STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of [RFC 6455][20].
+STOMP MTP message encryption is provided using certificates in TLS as described in [RFC 5246][22].
 
 **R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 [RFC 5246][22].
 
