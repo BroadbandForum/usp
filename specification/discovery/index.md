@@ -56,7 +56,7 @@ Example mechanisms for configuration include but are not limited to:
 *	Configured through a separate bootstrap mechanism such as a user interface or other management interface.
 *	DHCP, DNS, or [mDNS discovery](#mdns).
 
-**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.Localagent.Controller` Object as defined in [The Device:2 Data Model][1].
+**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.LocalAgent.Controller` Object as defined in [The Device:2 Data Model][1].
 
 The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.
 
@@ -111,7 +111,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
 
-**R-DIS.6** - If DNS is enabled, an Endpoint MUST use DNS to resolve a FQDN with domain other than ones used for mDNS (R-DIS.10)
+**R-DIS.6** - If DNS is enabled, an Endpoint MUST use DNS to resolve a FQDN with domain other than ones used for mDNS (R-DIS.5)
 
 **R-DIS.7** - If the Agent is resolving an FQDN for a Controller, and the MTP or resource path are unknown, the Agent MUST request DNS-SD information (PTR, SRV and TXT resource records) in addition to A, AAAA or other resource records it is programmatically set to request.
 
