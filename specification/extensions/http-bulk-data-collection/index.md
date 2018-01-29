@@ -53,6 +53,8 @@ HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by
 
 The configuration above defines a profile that transfers data from the Agent to the Bulk Data Collector using secured HTTP. In addition the Agent will provide authentication credentials (username, password) to the Bulk Data Collector, if requested by the Bulk Data Collector. Finally, the Agent establishes a communication session with the Bulk Data Collector every 300 seconds in order to transfer the data defined by the `.BulkData.Report.` object instance.
 
+*Note - When a Bulk Data Collection Profile is either created or updated the Agent performs permission checks against the objects and parameters in existence at the time of the operation, utilizing the permissions assocated with the operating Controller.*
+
 Once the communication session is established between the Agent and Bulk Data Collector the data is transferred from the Agent using the POST HTTP method with a HTTP Date header and no compression.
 
 **R-BULK.0** - In many scenarios Agents will utilize "chunked" transfer encoding. As such, the Bulk Data Collector MUST support the HTTP transfer-coding value of "chunked".
