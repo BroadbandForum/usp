@@ -40,4 +40,5 @@ Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encod
 **R-ENC.2** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
 
 [<-- Message Transfer Protocols](/specification/mtp/)
+
 [End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)

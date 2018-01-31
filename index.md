@@ -15,7 +15,7 @@
     <li><strong>Enable multi-tenant</strong> (i.e., multi-stakeholder) management and control</li>
     </ul>
 
-    <p>USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the <a href="">Device:2 Data Model for TR-069 Devices</a> to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).</p>
+    <p>USP represents the natural evolution of the Broadband Forum's <a href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, and service functions (IoT functions, VoIP, etc.).</p>
 
     <h2>How to use this site:</h2>
 
@@ -27,29 +27,23 @@
   </div>
   <div style="width:45%; float:right;">
 
-    <h2>Current Version:</h2>
-
-    <h3>1.0-DRAFT-05</h3>
+    <h2>Current Version: 1.0</h2>
 
     <h4>About this version:</h4>
 
-    <p>This DRAFT version is for <strong>BETA TESTING ONLY</strong> in order to allow development to begin and feedback given to the BBF. It is NOT intended for deployment. It includes:</p>
+    <p>This specification includes:</p>
 
     <ul>
     <li>Architectural overview</li>
     <li>Discovery mechanisms for Controllers and Agents</li>
-    <li>Basic messaging between Controllers and Agents</li>
+    <li>Basic CRUD messages between Controllers and Agents</li>
     <li>Use of USP Record encapsulation for end to end integrity, security, and privacy</li>
     <li>Data model objects specific to protocol functionality, object defined operations, and notifications/events</li>
     <li>Protocol buffers encoding schema</li>
     <li>Use of CoAP, WebSockets, and STOMP as message transfer protocols (MTP)</li>
-    <li>Security at the transport (MTP) layer</li>
-    <li>Extensions for bulk data collection</li>
+    <li>A system for authentication and authorization</li>
+    <li>Extensions for bulk data collection, firmware management, software module management, and device proxying</li>
     </ul>
-
-    <h4>Upcoming versions:</h4>
-
-    <p>Additional versions of this DRAFT may be released prior to the 1.0 release.</p>
 
     <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>
     <p style="text-align:center;">USP is developed by the Broadband Forum. For more information, visit <a href="http://www.broadband-forum.org">http://www.broadband-forum.org</a></p>

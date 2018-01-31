@@ -24,7 +24,30 @@
 
 # Authentication and Authorization
 
+1. [Authentication](#authentication)
+2. [Role Based Access Control (RBAC)](#role_based_access_control_rbac)
+3. [Trusted Certificate Authorities](#trusted_certificate_authorities)
+4. [Trusted Brokers](#trusted_brokers)
+5. [Self-Signed Certificates](#self_signed_certificates)
+6. [Agent Authentication](#agent_authentication)
+7. [Challenge Strings and Images](#challenge_strings_and_images)
+8. [Analysis of Controller Certificates](#analysis_of_controller_certificates)
+    1. [Receiving a USP Record](#receiving_a_usp_record)
+    2. [Sending a USP Record](#sending_a_usp_record)
+    3. [Checking a Certificate Containing an Endpoint ID](#checking_a_certificate_containing_an_endpoint_id)
+    4. [Using a Trusted Broker](#using_a_trusted_broker)
+9. [Theory of Operations](#theory_of_operations)
+    1. [Data Model Elements](#data_model_elements)
+    2. [Roles (Access Control)](#roles_access_control)
+    3. [Assigning Controller Roles](#assigning_controller_roles)
+    4. [Controller Certificates and Certificate Validation](#controller_certificates_and_certificate_validation)
+    5. [Challenges](#challenges)
+    6. [Certificate Management](#certificate_management)
+    7. [Application of Modified Parameters](#application_of_modified_parameters)
+
 USP contains mechanisms for Authentication and Authorization, and Encryption. Encryption can be provided at the MTP layer, the USP layer, or both. Where Endpoints can determine (through Authentication) that the termination points of the MTP and USP messages are the same, MTP encryption is sufficient to provide end-to-end encryption and security. Where the termination points are different (because there is a proxy or other intermediate device between the USP Endpoints), USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) is required, or the intermediate device must be a trusted part of the end-to-end ecosystem.
+
+<a id='authentication' />
 
 ## Authentication
 
@@ -37,9 +60,11 @@ In order to support various authentication models (e.g., trust Endpoint identity
 * have the Controller's certificate information and have a cryptographically protected connection between the two Endpoints, or
 * have a Trusted Broker's certificate information and have a cryptographically protected connection between the Agent and the Trusted Broker
 
-TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (for example, without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use `payload_security` "plaintext" encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
+TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (for example, without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use `payload_security` "PLAINTEXT" encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [Secure Message Exchange](../e2e-message-exchange/index.md#).   
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
+
+<a id='role_based_access_control_rbac' />
 
 ## Role Based Access Control (RBAC)
 
@@ -50,6 +75,8 @@ It is expected that Agents will have some sort of Access Control List (ACL) that
 **R-SEC.1a** - Agents SHOULD implement the Controller object with the `AssignedRole` parameter (with at least read-only data model definition) and `InheritedRole` parameter (if allowed Roles can come from a trusted CA), so users can see what Controllers have access to the Agent and their permissions. This will help users identify rogue Controllers that may have gained access to the Agent.
 
 See the Theory of Operations, Roles (Access Control) and Assigning Controller Roles subsections, below for additional information on data model elements that can be implemented to expose information and allow control of Role definition and assignment.
+
+<a id='trusted_certificate_authorities' />
 
 ## Trusted Certificate Authorities
 
@@ -65,6 +92,8 @@ This secure means can be accomplished through USP (see [Theory of Operations](./
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller. The `Device.LocalAgent.ControllerTrust.Credential` object can be implemented to expose and allow control over trust and authorization of CAs.
 
+<a id='trusted_brokers' />
+
 ## Trusted Brokers
 
 An Endpoint can have a configured list of Trusted Broker certificates. The Endpoint policy would be to trust the broker to vouch for the identity of Endpoints it brokers – effectively authenticating the `from_id` contained in a received USP Record. The Agent policy may trust the broker to authorize all Controllers whose Records transit the broker to have a specific default Role.
@@ -75,9 +104,9 @@ This secure means of loading certificate information into an Agent can be accomp
 
 Note that trusting a broker to authorize a Controller Role requires the Agent to maintain an association between a Trusted Broker certificate and the Role(s) that Trusted Broker is trusted to authorize. The `Device.LocalAgent.ControllerTrust.Credential` object can be implemented to expose and allow control over identifying Trusted Brokers. The `AllowedUses` parameter is used to indicate whether an entry is a Trusted Broker.
 
-## Self-Signed Certificates
+<a id='self_signed_certificates'/>
 
-<a id='self-signed-certificates'/>
+## Self-Signed Certificates
 
 **R-SEC.5** - An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
 
@@ -93,9 +122,11 @@ Controller policy related to trust of Agent self-signed certificates is left to 
 
 **R-SEC.8** - An Endpoint that accepts self-signed certificates MUST maintain the association of accepted certificate and Endpoint IDs.
 
-Self-signed certificates require a "trust on first use" (TOFU) policy when using them to authenticate an Endpoint's identity. An external entity (a trusted Controller or user) can then authorize the authenticated Endpoint to have certain permissions. Subsequent to the first use, this same self-signed certificate can be trusted to establish the identity of that Endpoint. However, authentication of the Endpoint can only be subsequently trusted if the association of certificate to identity is remembered (i.e., it is known this is the same certificate that was used previously by that Endpoint). If it is not remembered, then every use is effectively a first use and would need to rely on an external entity to authorize permissions every time. The `Device.LocalAgent.Certificate` object can be implemeted if choosing to expose and allow control of remembered certificates in the data model.
+Self-signed certificates require a "trust on first use" (TOFU) policy when using them to authenticate an Endpoint's identity. An external entity (a trusted Controller or user) can then authorize the authenticated Endpoint to have certain permissions. Subsequent to the first use, this same self-signed certificate can be trusted to establish the identity of that Endpoint. However, authentication of the Endpoint can only be subsequently trusted if the association of certificate to identity is remembered (i.e., it is known this is the same certificate that was used previously by that Endpoint). If it is not remembered, then every use is effectively a first use and would need to rely on an external entity to authorize permissions every time. The `Device.LocalAgent.Certificate` object can be implemented if choosing to expose and allow control of remembered certificates in the data model.
 
-## Agent authentication
+<a id='agent_authentication' />
+
+## Agent Authentication
 
 **R-SEC.9** - Controllers MUST authenticate Agents either through X.509 certificates, a shared secret, or by trusting a Trusted Broker to vouch for Agent identity.
 
@@ -117,6 +148,8 @@ Use of a shared certificate is not recommended, and which portion of the `instan
 
 **R-SEC.12** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
 
+<a id='challenge_strings_and_images' />
+
 ## Challenge Strings and Images
 
 It is possible for the Agent to allow an external entity to change a Controller Role by means of a Challenge string or image. This Challenge string or image can take various forms, including having a user supply a passphrase or a PIN. Such a string could be printed on the Agent packaging, or supplied by means of a SMS to a phone number associated with the user account. These Challenge strings or images can be done using USP operations. Independent of how challenges are accomplished, following are some basic requirements related to Challenge strings and images.
@@ -133,13 +166,15 @@ It is possible for the Agent to allow an external entity to change a Controller 
 
 See the Theory of Operations, Challenges subsection, below for a description of data model elements that need to be implemented and are used when doing challenges through USP operations.
 
-## Analysis of Controller Certificates
+<a id='analysis_of_controller_certificates'/>
 
-<a id='analysis-controller-certificates'/>
+## Analysis of Controller Certificates
 
 An Agent will analyze Controller certificates to determine if they are valid, are appropriate for authentication of Controllers, and to determine what permissions (Role) a Controller has. The Agent will also determine whether MTP encryption is sufficient to provide end-to-end protection of the Record and Message, or if USP layer [Secure Message Exchange](../e2e-message-exchange/index.md#) is required.
 
 The diagrams in this section use the database symbol to identify where the described information can be represented in the data model, if an implementation chooses to expose this information through the USP protocol.
+
+<a id='receiving_a_usp_record' />
 
 ### Receiving a USP Record
 
@@ -165,6 +200,8 @@ Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
 
 <a id='figure-SEC2'/>
 
+<a id='sending_a_usp_record' />
+
 ### Sending a USP Record
 
 **R-SEC.23** - When an Agent sends a USP Record, the Agent MUST execute logic that achieves the same results as in the decision flow from Figure [SEC.3](./index.md#figure-SEC3).
@@ -174,6 +211,8 @@ Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
 Figure SEC.3 – Sending a USP Record
 
 <a id='figure-SEC3'/>
+
+<a id='checking_a_certificate_containing_an_endpoint_id' />
 
 ### Checking a Certificate Containing an Endpoint ID
 
@@ -195,9 +234,11 @@ Figure SEC.5 – Determining the Role
 
 <a id='figure-SEC5'/>
 
+<a id='using_a_trusted_broker' />
+
 ### Using a Trusted Broker
 
-Support for Trusted Broker logic is optional. 
+Support for Trusted Broker logic is optional.
 
 **R-SEC.26** - If Trusted Brokers are supported, and a Trusted Broker is encountered (from the optional "Trusted Broker cert?" decision diamonds in Figures SEC.2 or SEC.3), the Agent MUST execute logic that achieves the same results as in the decision flows from Figure [SEC.6](./index.md#figure-SEC6) for a received USP Record and Figure [SEC.7](./index.md#figure-SEC7) for sending a USP Record.
 
@@ -215,11 +256,13 @@ Figure SEC.7 - Trusted Broker Sending a Record
 
 <a id='figure-SEC7'/>
 
-## Theory of operations
+<a id="theory_of_operations" />
 
-<a id="theory-of-operations" />
+## Theory of Operations
 
 The following theory of operations relies on objects, parameters, events, and operations from the `LocalAgent` Object of the [Device:2 Data Model][1].
+
+<a id='data_model_elements' />
 
 ### Data Model Elements
 
@@ -241,6 +284,8 @@ From component `ControllerTrust`:
 The Object `LocalAgent.Certificate.` can be used to manage Controller and CA certificates, along with the `LocalAgent.AddCertificate()` and `LocalAgent.Controller.{i}.AddMyCertificate()` commands.
 
 For brevity, `Device.LocalAgent` is not placed in front of all further object references in this Security section. However, all objects references are under `Device.LocalAgent`. This section does not describe use of parameters under other top level components.
+
+<a id='roles_access_control' />
 
 ### Roles (Access Control)
 
@@ -288,6 +333,8 @@ The `ControllerTrust.Credential.{i}.Role` parameter value is inherited by Contro
 
 The `ControllerTrust.Challenge.{i}.Role` parameter is a Role that is assigned to Controllers that send a successful `ChallengeResponse()` command. For more information on use of challenges for assigning Controller Roles, see the sections below.
 
+<a id='assigning_controller_roles' />
+
 ### Assigning Controller Roles
 
 As mentioned above, the `Controller.{i}.AssignedRole` parameter can be used to expose the Controller’s assigned Role via the data model.
@@ -310,11 +357,15 @@ Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in t
 
 * If the Agent implements the `RequestChallenge()` and `ChallengeResponse()` commands, a Controller assigned the role in `UntrustedRole` can have permission to read one or more `ControllerTrust.Challenge.{i}.Alias` and `Description` values and issue the commands. Roles with more extensive permissions can have permission to read additional `ControllerTrust.Challenge.{i}.Alias` and `Description` values. A successful Challenge results in the Controller being assigned the associated Role value.
 
+<a id='controller_certificates_and_certificate_validation'
+
 ### Controller Certificates and Certificate Validation
 
 When an Agent is presented with a Controller’s certificate, the Agent will always attempt to validate the certificate to whatever extent possible. Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in [Analysis of Controller Certificates](./index.md#analysis-controller-certificates) identify points in the decision logic where data model parameters can be used to influence policy decisions related to Controller certificate analysis.
 
 Note that it is possible for an Agent to maintain policy of the type described by the `UntrustedRole`, `BannedRole`, and the information described by `ControllerTrust.Credential.{i}.` and `Controller.{i}.Credential` without exposing these through the data model. If the policy concepts and data are maintained but not exposed, the same methods can still be used. It is also possible for an Agent to have policy that is not described by any defined data model element.
+
+<a id='challenges' />
 
 ### Challenges
 
@@ -334,11 +385,15 @@ The number of times a `ControllerTrust.Challenge.{i}.` entry can be consecutivel
 
 Type values other than `Passphrase` can be used and defined to trigger custom mechanisms, such as requests for emailed or SMS-provided PINs.
 
+<a id='certificate_management' />
+
 ### Certificate Management
 
 If an Agent wants to allow certificates associated with Controllers and CAs to be exposed through USP, the Agent can implement the `Controller.{i}.Credential` and `ControllerTrust.Credential.{i}.Credential` parameters, which require implementation of the `LocalAgent.Certificate.` object. Allowing management of these certificates through USP can be accomplished by implementing `LocalAgent.AddCertificate()`, `Controller.{i}.AddMyCertificate()` and `Certificate.{i}.Delete()` commands.
 
 To allow a Controller to check whether the Agent has correct certificates, the `Certificate.{i}.GetFingerprint()` command can be implemented.
+
+<a id='application_of_modified_parameters' />
 
 ### Application of Modified Parameters
 
@@ -347,4 +402,6 @@ It is possible that various parameters related to authentication and authorizati
 There is no expectation that an Agent will apply these changes to cached sessions. It is up to the Agent to determine whether or not it will detect these changes and flush cached session information. However, it is expected that a reboot will clear all cached session information.
 
 
-[<-- Messages](../messages/index.md) [Extensions -->](../extensions/index.md)
+[<-- Messages](../messages/index.md)
+
+[Extensions -->](../extensions/index.md)

@@ -24,8 +24,20 @@
 [23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
-
 # STOMP Binding
+
+1. [Handling of the STOMP Session](#handling_of_the_stomp_session)
+    1. [Connecting a USP Endpoint to the STOMP Server](#connecting_a_usp_endpoint_to_the_stomp_server)
+    2. [Handling the STOMP Heart Beat Mechanism](#handling_the_stomp_heart_beat_mechanisms)
+2. [Mapping USP Endpoints to STOMP Destinations](#mapping_usp_endpoints_to_stomp_destinations)
+    1. [Subscribing a USP Endpoint to a STOMP Destination](#subscribing_a_usp_endpoint_to_a_stomp_destination)
+3. [Mapping USP Records to STOMP Frames](#mapping_usp_records_to_stomp_frames)
+    1. [Handling ERROR Frames](#handling_error_frames)
+    2. [Handling Other STOMP Frames](#handling_other_stomp_frames)
+4. [Discovery Requirements](#discovery_requirements)
+5. [STOMP Server Requirements](#stomp_server_requirements)
+6. [MTP Message Encryption](#mtp_message_encryption)
+
 
 The STOMP MTP transfers USP Records between USP endpoints using [version 1.2 of the STOMP protocol](https://stomp.github.io/stomp-specification-1.2.html) (further referred to as "STOMP Specification"), or the Simple Text Oriented Message Protocol. Messages that are transferred between STOMP clients utilize a message bus interaction model where the STOMP server is the messaging broker that routes and delivers messages based on the destination included in the STOMP header.
 
@@ -47,11 +59,15 @@ The basic steps for any USP Endpoint that utilizes a STOMP MTP are:
 
 **R-STOMP.1** - USP Agents utilizing STOMP clients for message transport SHOULD support the `STOMPAgent:1` and `STOMPHeartbeat:1` data model profile.
 
+<a id='handling_of_the_stomp_session' />
+
 ## Handling of the STOMP Session
 
 When exchanging USP Records across STOMP MTPs, each USP Endpoint establishes a communications session with a STOMP server. These STOMP communications sessions are expected to be long lived and are reused for subsequent exchange of USP Records. A STOMP communications session is established using a handshake procedure as described in "Connecting a USP Endpoint to the STOMP Server" section below. A STOMP communications session is intended to be established as soon as the USP Endpoint becomes network-aware and is capable of sending TCP/IP messages.
 
 When a STOMP communications session is no longer necessary, the STOMP connection is closed by the STOMP client, preferably by sending a `DISCONNECT` frame (see "Handling Other STOMP Frames" section below).
+
+<a id='connecting_a_usp_endpoint_to_the_stomp_server' />
 
 ### Connecting a USP Endpoint to the STOMP Server
 
@@ -67,6 +83,8 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 
 **R-STOMP.7** - If the connection to the STOMP server is NOT successful then the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
+<a id='handling_the_stomp_heart_beat_mechanisms' />
+
 ### Handling the STOMP Heart Beat Mechanism
 
 The STOMP Heart Beat mechanism can be used to periodically send data between a STOMP client and a STOMP server to ensure that the underlying TCP connection is still available.  This is an optional STOMP mechanism and is negotiated when establishing the STOMP connection.
@@ -79,11 +97,15 @@ The STOMP Heart Beat mechanism can be used to periodically send data between a S
 
 **R-STOMP.11** - USP Agents that have negotiated a STOMP Heart Beat mechanism with a STOMP server MUST adhere to the heart beat values (as defined in the "Heart-beating" section of the STOMP Specification) as returned in the `CONNECTED` frame.
 
+<a id='mapping_usp_endpoints_to_stomp_destinations' />
+
 ## Mapping USP Endpoints to STOMP Destinations
 
 USP Agents will have one STOMP destination per STOMP MTP independent of whether those STOMP MTPs use the same `STOMP.Connection` instance or a different one. The STOMP destination is either configured by the STOMP server via the USP custom `subscribe-dest` STOMP Header received in the `CONNECTED` frame (exposed in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter) or taken from the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter if there wasn't a `subscribe-dest` STOMP Header received in the `CONNECTED` frame. The USP custom `subscribe-dest` STOMP Header is helpful in scenarios where the USP Agent doesn't have a pre-configured destination as it allows the USP Agent to discover the destination.
 
 A USP Controller will subscribe to a STOMP destination for each STOMP server that it is associated with. The USP Controller's STOMP destination needs to be known by the USP Agent (this is configured in the `Device.LocalAgent.Controller.{i}.MTP.{i}.STOMP.Destination` parameter) as it is used when sending a USP Record containing a Notification.
+
+<a id='subscribing_a_usp_endpoint_to_a_stomp_destination' />
 
 ### Subscribing a USP Endpoint to a STOMP Destination
 
@@ -98,6 +120,8 @@ A USP Controller will subscribe to a STOMP destination for each STOMP server tha
 **R-STOMP.16** - USP Agents that have NOT received a `subscribe-dest` STOMP Header in the `CONNECTED` frame and do NOT have a value in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter MUST terminate the STOMP communications session (via the `DISCONNECT` frame) and consider the MTP disabled.
 
 **R-STOMP.17** - USP Endpoints sending a `SUBSCRIBE` frame MUST use an `ack` value of "auto".
+
+<a id='mapping_usp_records_to_stomp_frames' />
 
 ## Mapping USP Records to STOMP Frames
 
@@ -115,6 +139,8 @@ A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame
 
 **R-STOMP.23** - When a USP Endpoint receives a `MESSAGE` frame it MUST use the `reply-to-dest` included in the STOMP headers as the STOMP destination of the USP response (if a response is required by the incoming USP request).
 
+<a id='handling_error_frames' />
+
 ### Handling ERROR Frames
 
 If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint will drop the USP Record.
@@ -123,7 +149,9 @@ If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot
 
 **R-STOMP.25** - If an `ERROR` frame is received by the USP Endpoint, the STOMP server will terminate the connection. In this case the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
-### Handling other STOMP Frames
+<a id='handling_other_stomp_frames' />
+
+### Handling Other STOMP Frames
 
 **R-STOMP.26** - USP Endpoints utilizing STOMP clients for message transport MUST NOT send the transactional STOMP frames including: `BEGIN`, `COMMIT`, and `ABORT`.
 
@@ -135,6 +163,8 @@ If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot
 
 **R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Specification.
 
+<a id='discovery_requirements' />
+
 ## Discovery Requirements
 
 The USP [discovery section](/specification/discovery) details requirements about the general usage of DNS, mDNS, and DNS-SD records as it pertains to the USP protocol.  This section provides further requirements as to how a USP Endpoint advertises discovery information when a STOMP MTP is being utilized.
@@ -142,6 +172,8 @@ The USP [discovery section](/specification/discovery) details requirements about
 **R-STOMP.31** - When creating a DNS-SD record, an Endpoint MUST set the DNS-SD "`path`" attribute equal to the value of the destination that it has subscribed to.
 
 **R-STOMP.32** - When creating a DNS-SD record, an Endpoint MUST utilize the STOMP server's address information in the A and AAAA records instead of the USP Endpoint's address information.
+
+<a id='stomp_server_requirements' />
 
 ## STOMP Server Requirements
 
@@ -151,9 +183,11 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 **R-STOMP.35** - A STOMP server implementation SHOULD support both Client Certification Authentication and Username/Password Authentication mechanisms.
 
+<a id='mtp_message_encryption' />
+
 ## MTP Message Encryption
 
-STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of [RFC 6455][20].
+STOMP MTP message encryption is provided using certificates in TLS as described in [RFC 5246][22].
 
 **R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 [RFC 5246][22].
 
