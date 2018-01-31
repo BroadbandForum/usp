@@ -26,7 +26,18 @@
 
 # WebSocket Binding
 
+1. [Mapping USP Endpoints to WebSocket URIs](#mapping_usp_endpoints_to_websocket_uris)
+2. [Handling of the WebSocket Session](#handling_of_the_websocket_session)
+    1. [Mapping USP Records to WebSocket Messages](#mapping_usp_records_to_websocket_messages)
+3. [Handling of WebSocket Frames](#handling_of_websocket_frames)
+    1. [Handling Failures to Deliver USP Records](#handling_failures_to_deliver_usp_records)
+    2. [Keeping the WebSocket Session Alive](#keeping_the_websocket_session_alive)
+    3. [Websocket Session Retry](#websocket_session_retry)
+4. [MTP Message Encryption](#mtp_message_encryption)
+
 The WebSockets MTP transfers USP Records between USP endpoints using the WebSocket protocol as defined in [RFC 6455][20]. Messages that are transferred between WebSocket clients and servers utilize a request/response messaging interaction across an established WebSocket session.
+
+<a id='mapping_usp_endpoints_to_websocket_uris' />
 
 ## Mapping USP Endpoints to WebSocket URIs
 
@@ -37,6 +48,8 @@ Section 3 of RFC 6455 discusses the URI schemes for identifying WebSocket origin
 **R-WS.2** - A USP Endpoint MUST be represented as a WebSocket resource using the path component as defined in section 3 of [RFC 6455][20].
 
 **R-WS.3** - When creating DNS-SD records (see [Discovery](/specification/discovery/)), an Endpoint MUST set the DNS-SD TXT record "path" attribute equal to the value of the Websocket resource using the path component as defined in section 3 of [RFC 6455][20].
+
+<a id='handling_of_the_websocket_session' />
 
 ## Handling of the WebSocket Session
 
@@ -58,6 +71,8 @@ While WebSocket sessions can be established by either USP Controllers or USP Age
 
 **R-WS.8** - A USP Endpoint MUST implement the procedures to close a WebSocket  connection  as defined in section 7 of [RFC 6455][20].
 
+<a id='mapping_usp_records_to_websocket_messages' />
+
 ### Mapping USP Records to WebSocket Messages
 
 During the establishment of the WebSocket session, the WebSocket client informs the WebSocket server in the `Sec-WebSocket-Protocol` header about the type of USP Records that will be exchanged across the established WebSocket connection. For USP Records, the `Sec-WebSocket-Protocol` header contains the value `v1.usp`.  When presented with a `Sec-WebSocket-Protocol` header containing `v1.usp`, the WebSocket Server serving a USP Endpoint returns `v1.usp` in the response's Sec-WebSocket-Protocol header. If the WebSocket client doesn't receive a `Sec-WebSocket-Protocol` header with a value of `v1.usp`, the WebSocket client does not establish the WebSocket session.
@@ -69,6 +84,8 @@ During the establishment of the WebSocket session, the WebSocket client informs 
 **R-WS.11** - A WebSocket server that supports USP Endpoints MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when responding to an initiation of a WebSocket session.
 
 **R-WS.12** - A WebSocket client MUST NOT establish a WebSocket session if the response to a WebSocket session initiation request does not include the `Sec-WebSocket-Protocol` header for exchange of USP Records in response to an initiation of a WebSocket session.
+
+<a id='handling_of_websocket_frames' />
 
 ## Handling of WebSocket Frames
 
@@ -86,11 +103,15 @@ Figure WS.2 - USP Request using a WebSocket Session
 
 **R-WS.15** - USP Records are transferred between USP Endpoints using message body procedures as defined in section 6 of [RFC 6455][20].
 
+<a id='handling_failures_to_deliver_usp_records' />
+
 ### Handling Failures to Deliver USP Records
 
 If a USP Endpoint receives a WebSocket frame containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Record, bad encoding), the receiving USP Endpoint notifies the originating USP Endpoint that an error occurred by closing the WebSocket connection with a `1003` Status Code with the WebSocket Close frame.
 
 **R-WS.16** - A USP Endpoint that receives a WebSocket frame containing a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST terminate the connection using a WebSocket Close frame with a Status Code of `1003`.
+
+<a id='keeping_the_websocket_session_alive' />
 
 ### Keeping the WebSocket Session Alive
 
@@ -99,6 +120,8 @@ Once a WebSocket session is established, the WebSocket session is expected to re
 **R-WS.17** - A USP Endpoint MUST implement a WebSocket keep-alive mechanism by periodically sending Ping control frames and respond to Pong control frames as described in section 5.5 of [RFC 6455][20].
 
 **R-WS.18** - A USP Endpoint MUST provide the capability to assign a keep-alive interval in order to send Ping control frames to the remote USP Endpoint.
+
+<a id='websocket_session_retry' />
 
 ### WebSocket Session Retry
 
@@ -129,6 +152,8 @@ For Agents, the retry interval range is controlled by two variables (described i
 **R-WS.20** – Once a WebSocket session is established between the Agent and the Controller, the Agent MUST reset the WebSocket MTP's retry count to zero for the next WebSocket Session establishment.
 
 **R-WS.21** – If a reboot of the Agent occurs, the Agent MUST reset the WebSocket MTP's retry count to zero for the next WebSocket Session establishment.
+
+<a id='mtp_message_encryption' />
 
 ## MTP Message Encryption
 

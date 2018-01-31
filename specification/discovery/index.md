@@ -27,15 +27,23 @@
 
 # Discovery and Advertisement
 
+1. [Controller Information](#controller_information)
+2. [Agent Information](#agent_information)
+3. [Use of DHCP for Acquiring Controller Information](#dhcp)
+    1. [DHCP Options for Controller Discovery](#dhcp_options)
+4. [Using mDNS](#mdns)
+5. [Using DNS](#dns)
+    1. [DNS-SD Records](#dns-sd)
+    2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
+7. [Using the SendOnBoardRequest() operation and OnBoardRequest notification](#onboardrequest)
+
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
 
 Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints.
 
-## Learning Controller and Agent Information
+<a id='controller_information' />
 
-<a id="learning_endpoint_information" />
-
-### Learning Controller Information
+## Controller Information
 
 An Agent that has a USP relationship with a Controller needs to know that Controller’s Endpoint Identifier, credentials, and authorized Role.
 
@@ -48,19 +56,21 @@ Example mechanisms for configuration include but are not limited to:
 *	Configured through a separate bootstrap mechanism such as a user interface or other management interface.
 *	DHCP, DNS, or [mDNS discovery](#mdns).
 
-**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.Localagent.Controller` Object as defined in [The Device:2 Data Model][1].
+**R-DIS.0** - An Agent that supports USP configuration of Controllers MUST implement the `Device.LocalAgent.Controller` Object as defined in [The Device:2 Data Model][1].
 
 The Agent can be pre-configured with trusted root certificates or trusted certificates to allow authentication of Controllers. Other trust models are also possible, where an Agent without a current Controller association will trust the first discovered Controller, or where the Agent has a UI that allows a User to indicate whether a discovered Controller is authorized to configure that Agent.
 
-### Learning Agent Information
+<a id='agent_information' />
+
+## Required Agent Information
 
 A Controller that has a relationship with an Agent needs to know the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
 
 Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.
 
-## DHCP Options for Acquiring Controller Information
-
 <a id="dhcp" />
+
+## Use of DHCP for Acquiring Controller Information
 
 DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 Vendor-Identifying Vendor-Specific Information Option [RFC 3925](https://tools.ietf.org/html/rfc3925) (option code 125) and DHCPv6 Vendor-specific Information Option [RFC 3315](https://tools.ietf.org/html/rfc3315) (option code 17) can be used to provide information to Agents about a single Controller. The options that may be returned by DNS are shown below. Description of these options can be found in [Device:2][1].
 
@@ -72,6 +82,8 @@ The Role to associate with a DHCP-discovered Controller is programmatically dete
 
 ISPs are advised to limit the use of DHCP for configuration of a Controller to situations in which the security of the link between the DHCP server and the Agent can be assured by the service provider.  Since DHCP does not itself incorporate a security mechanism, it is a good idea to use pre-configured certificates or other means of establishing trust between the Agent and a Controller discovered by DHCP.
 
+<a id="dhcp_options" />
+
 ### DHCP Options for Controller Discovery
 
 |Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in [Device:2][1] |
@@ -81,9 +93,9 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 | USP retry minimum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
 | USP retry interval multiplier | `28` | `28` |	`Device.Controller.{i}.USPRetryIntervalMultiplier` |
 
-## mDNS
-
 <a id="mdns" />
+
+## mDNS
 
 **R-DIS.3** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in [RFC 6762][8].
 
@@ -91,19 +103,21 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 **R-DIS.5** - If mDNS is enabled, a USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
-### DNS
+<a id="dns" />
+
+## DNS
 
 <a id="dns" />
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
 
-**R-DIS.6** - If DNS is enabled, an Endpoint MUST use DNS to resolve a FQDN with domain other than ones used for mDNS (R-DIS.10)
+**R-DIS.6** - If DNS is enabled, an Endpoint MUST use DNS to resolve a FQDN with domain other than ones used for mDNS (R-DIS.5)
 
 **R-DIS.7** - If the Agent is resolving an FQDN for a Controller, and the MTP or resource path are unknown, the Agent MUST request DNS-SD information (PTR, SRV and TXT resource records) in addition to A, AAAA or other resource records it is programmatically set to request.
 
-### DNS-SD Records
-
 <a id="dns-sd" />
+
+### DNS-SD Records
 
 DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
@@ -112,7 +126,9 @@ The format of a DNS-SD Service Instance Name (which is the resource record (RR) 
 **R-DIS.8** -  USP Endpoint DNS-SD records MUST include the USP Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
 Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in [RFC 6763][7], the `<Service>` part of a Service Instance Name is constructed from these values as "`_<Service Name>._<Transport Protocol>`" (e.g., "`_usp-agt-coap._udp`").
 
-#### IANA-Registered USP Service Names
+<a id='iana_registered_usp_service_names' />
+
+### IANA-Registered USP Service Names
 
 | Service Name | Transport Protocol | MTP | Type of USP Endpoint |
 | ---------: | :-----: | :----: | :----------- |
@@ -188,9 +204,12 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
     <USP ID>.local.  AAAA   2001:db8::200
 ```
 
+<a id='onboardrequest' />
+
 ## Using the SendOnBoardRequest() operation and OnBoardRequest notification
 
 An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on notify messages for additional information about the OnBoardRequest notification.
 
 [<-- Architecture](/specification/architecture/)
+
 [Message Transfer Protocols -->](/specification/mtp/)
