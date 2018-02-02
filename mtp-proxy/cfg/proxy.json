@@ -8,13 +8,13 @@
           "EndpointURL" : "coap://localhost:15683/usp"
         },
         "STOMP" : {
-          "Host" : "stomp.johnblackford.org",
+          "Host" : "stomp.example.com",
           "Port" : 61613,
           "VirtualHost" : "/",
-          "Username" : "jab",
-          "Password" : "johnb23",
-          "ProxyDestination" : "/queue/proxy-1",
-          "EndpointDestination" : "/queue/controller-stomp-johnb"
+          "Username" : "my-username",
+          "Password" : "my-password",
+          "ProxyDestination" : "some-destination",
+          "EndpointDestination" : "some-destination"
         }
       }
     }
