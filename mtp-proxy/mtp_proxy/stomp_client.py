@@ -107,7 +107,7 @@ class MyStompConnListener(stomp.ConnectionListener):
 class StompClient(object):
     """A STOMP to USP Binding"""
     def __init__(self, host="127.0.0.1", port=61613, username="admin", password="admin", virtual_host="/",
-                 outgoing_heartbeats=0, incoming_heartbeats=0):
+                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id=""):
         """Initialize the STOMP USP Binding for a USP Endpoint
             - 61613 is the default STOMP port for RabbitMQ installations"""
         self._host = host
@@ -123,7 +123,7 @@ class StompClient(object):
                                         vhost=virtual_host, auto_decode=False)
         self._conn.set_listener("defaultListener", self._listener)
         self._conn.start()
-        self._conn.connect(username, password, wait=True)
+        self._conn.connect(username, password, wait=True, headers={"endpoint-id": proxy_endpoint_id})
 
     def listen(self, my_addr):
         """Listen to a STOMP destination for incoming messages"""

@@ -14,7 +14,8 @@
           "Username" : "my-username",
           "Password" : "my-password",
           "ProxyDestination" : "some-destination",
-          "EndpointDestination" : "some-destination"
+          "EndpointDestination" : "some-destination",
+          "ProxyEndpointID" : "os::00256D-SerialNum"
         }
       }
     }

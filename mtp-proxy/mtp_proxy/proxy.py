@@ -106,7 +106,8 @@ class Proxy(object):
                     proxy_addr = stomp_dict["ProxyDestination"]
                     stomp_mtp_inst = stomp_mtp.StompMtp(stomp_dict["Host"], stomp_dict["Port"],
                                                         stomp_dict["Username"], stomp_dict["Password"],
-                                                        stomp_dict["VirtualHost"], proxy_addr)
+                                                        stomp_dict["VirtualHost"], proxy_addr,
+                                                        proxy_endpoint_id=stomp_dict["ProxyEndpointID"])
                     endpoint_addr = stomp_dict["EndpointDestination"]
                     proxy_thr.add_mtp(stomp_mtp_inst, endpoint_addr)
 
