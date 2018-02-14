@@ -57,23 +57,68 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 ## Legal Notice
 
-### Notice
-
-The Broadband Forum is a non-profit corporation organized to create guidelines for broadband network system development and deployment.  This Working Text is a draft, is subject to change, and has not been approved by members of the Forum.  This Working Text is copyrighted by the Broadband Forum, and portions of this Working Text may be copyrighted by Broadband Forum members.  This Working Text is for use by Broadband Forum members only.  Advance written permission by the Broadband Forum is required for distribution of this Working Text in its entirety or in portions outside the Broadband Forum.
+  The Broadband Forum is a non-profit corporation organized to create
+  guidelines for broadband network system development and deployment.
+  This Technical Report has been approved by members of the Forum.
+  This Technical Report is subject to change.  This Technical Report
+  is copyrighted by the Broadband Forum, and all rights are reserved.
+  Portions of this Technical Report may be copyrighted by Broadband
+  Forum members.
 
 ### Intellectual Property
 
-Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of this Working Text if it were to be adopted as a Technical Report, and to provide supporting documentation.
+  Recipients of this Technical Report are requested to submit, with
+  their comments, notification of any relevant patent claims or other
+  intellectual property rights of which they may be aware that might
+  be infringed by any implementation of this Technical Report, or use
+  of any software code normatively referenced in this Technical Report,
+  and to provide supporting documentation.
 
 ### Terms of Use
 
-This Working Text (i) is made available to non-members for internal study purposes only, (ii) may be implemented by Broadband Forum members in a product or service made commercially available, and (iii) may only be copied and distributed internally for the purpose of exercising Broadband Forum membership rights and benefits.
+#### License
 
-### Confidentiality
+  Broadband Forum hereby grants you the right, without charge, on a
+  perpetual, non-exclusive and worldwide basis, to utilize the Technical
+  Report for the purpose of developing, making, having made, using,
+  marketing, importing, offering to sell or license, and selling or
+  licensing, and to otherwise distribute, products complying with the
+  Technical Report, in all cases subject to the conditions set forth
+  in this notice and any relevant patent and other intellectual
+  property rights of third parties (which may include members of
+  Broadband Forum).  This license grant does not include the right to
+  sublicense, modify or create derivative works based upon the
+  Technical Report except to the extent this Technical Report includes
+  text implementable in computer code, in which case your right under
+  this License to create and modify derivative works is limited to
+  modifying and creating derivative works of such code.  For the
+  avoidance of doubt, except as qualified by the preceding sentence,
+  products implementing this Technical Report are not deemed to be
+  derivative works of the Technical Report.
 
-All materials submitted for possible incorporation into Technical Reports or other work product shall be regarded as confidential until such time as the Technical Report or other work product in question is publicly released.  In the event that any material, or portion of any material, is not included in the Technical Report or other work product in question, or if such Technical Report or other work product is never publicly released, such material shall remain confidential until such time, if ever, as the submitter makes the same publicly available, or it otherwise becomes publicly disclosed other than by a breach of a Member’s obligations under this Confidentiality Policy. Member representatives shall have access to confidential materials in such manner as may from time to time be provided in Broadband Forum’s procedural rules, and shall not copy or further distribute such materials, except internally, to the extent necessary to exercise their participation rights as Members.
+#### NO WARRANTIES
 
-THIS WORKING TEXT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF THIS WORKING TEXT SHALL BE MADE ENTIRELY AT THE IMPLEMENTER'S OWN RISK, AND NEITHER THE FORUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS WORKING TEXT.
+  THIS TECHNICAL REPORT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER,
+  AND IN PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY
+  DISCLAIMED. ANY USE OF THIS TECHNICAL REPORT SHALL BE MADE ENTIRELY AT
+  THE IMPLEMENTER'S OWN RISK, AND NEITHER THE BROADBAND FORUM, NOR ANY
+  OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO
+  ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER,
+  DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS TECHNICAL REPORT.
+
+#### THIRD PARTY RIGHTS
+
+  Without limiting the generality of Section 2 above, BROADBAND FORUM
+  ASSUMES NO RESPONSIBILITY TO COMPILE, CONFIRM, UPDATE OR MAKE PUBLIC
+  ANY THIRD PARTY ASSERTIONS OF PATENT OR OTHER INTELLECTUAL PROPERTY
+  RIGHTS THAT MIGHT NOW OR IN THE FUTURE BE INFRINGED BY AN IMPLEMENTATION
+  OF THE TECHNICAL REPORT IN ITS CURRENT, OR IN ANY FUTURE FORM. IF ANY
+  SUCH RIGHTS ARE DESCRIBED ON THE TECHNICAL REPORT, BROADBAND FORUM
+  TAKES NO POSITION AS TO THE VALIDITY OR INVALIDITY OF SUCH ASSERTIONS,
+  OR THAT ALL SUCH ASSERTIONS THAT HAVE OR MAY BE MADE ARE SO LISTED.
+
+  The text of this notice must be included in all copies of this
+  Technical Report.
 
 ## Revision History
 
@@ -175,7 +220,7 @@ This word, or the term "OPTIONAL", means that this item is one of an allowed set
 
 <a id="references" />
 
-The following references are of relevance to this Working Text. At the time of publication, the editions indicated were valid. All references are subject to revision; users of this Working Text are therefore encouraged to investigate the possibility of applying the most recent edition of the references listed below.
+The following references are of relevance to this Technical Report. At the time of publication, the editions indicated were valid. All references are subject to revision; users of this Technical Report are therefore encouraged to investigate the possibility of applying the most recent edition of the references listed below.
 
 A list of currently valid Broadband Forum Technical Reports is published at
 [www.broadband-forum.org](https://www.broadband-forum.org).
