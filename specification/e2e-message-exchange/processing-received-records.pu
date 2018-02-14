@@ -6,7 +6,7 @@ if (Has ""<payload>""?) then (yes)
 :Process ""<payload>"";
 endif
 fork again
-if (Has ""<retransmit_id>""?) then (yes)
+if (Has ""<retransmit_id> > 0""?) then (yes)
 :Resend requested record;
 endif
 end fork

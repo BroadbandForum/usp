@@ -76,6 +76,12 @@ DHCP can be employed as a method for Agents to discover Controllers. The DHCPv4 
 
 **R-DIS.1** - If an Agent is configured to request Controller DHCP information, the Agent MUST include in its DHCPv4 requests a DHCPv4 V-I Vendor Class Option (option 124) and in its DHCPv6 requests a DHCPv6 Vendor Class (option 16). This option MUST include the Broadband Forum Enterprise Number (`3561` decimal, `0x0DE9` hex) as an enterprise-number, and the string "`usp`" (all lower case) in a vendor-class-data instance associated with this enterprise-number.
 
+**R-DIS.1a** - The Agent MUST decode all received options as strings (provisioning code, wait interval, and interval multiplier are not decoded as numeric fields).
+
+**R-DIS.1b** - The Agent MUST interpret a received URL or FQDN of the Controller as either an absolute URL or FQDN.
+
+**R-DIS.1c** - If the Agent receives an encapsulated option value that is null terminated, the Agent MUST accept the value provided, and MUST NOT interpret the null character as part of the value.
+
 The Role to associate with a DHCP-discovered Controller is programmatically determined (see [Security](/specification/security/)).
 
 **R-DIS.2** - If the URL provided by DHCP includes the FQDN of a Controller, the Agent MUST use [DNS](#dns) to retrieve additional Controller information.
@@ -88,7 +94,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 |Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in [Device:2][1] |
 | ----------: | :---------: | :----------: | :-------- |
-| URL of the Controller | `25` | `25` | `Dependent on MTP URL formation` |
+| URL or FQDN of the Controller | `25` | `25` | `Dependent on MTP` |
 | Provisioning code | `26` | `26` |	`Device.LocalAgent.Controller.{i}.ProvisioningCode` |
 | USP retry minimum wait interval | `27` | `27` |	`Device.Controller.{i}.USPRetryMinimumWaitInterval` |
 | USP retry interval multiplier | `28` | `28` |	`Device.Controller.{i}.USPRetryIntervalMultiplier` |
