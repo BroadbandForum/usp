@@ -11,5 +11,8 @@ specification/*pb2.py
 # Ignore the log files
 logs/
 
+# Ignore other MTP Proxy Config files
+mtp-proxy/cfg/proxy-*.json
+
 # Ignore MAC Special Files
 .DS_Store
