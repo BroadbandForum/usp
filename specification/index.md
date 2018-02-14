@@ -220,7 +220,7 @@ This word, or the term "OPTIONAL", means that this item is one of an allowed set
 
 <a id="references" />
 
-The following references are of relevance to this Working Text. At the time of publication, the editions indicated were valid. All references are subject to revision; users of this Working Text are therefore encouraged to investigate the possibility of applying the most recent edition of the references listed below.
+The following references are of relevance to this Technical Report. At the time of publication, the editions indicated were valid. All references are subject to revision; users of this Technical Report are therefore encouraged to investigate the possibility of applying the most recent edition of the references listed below.
 
 A list of currently valid Broadband Forum Technical Reports is published at
 [www.broadband-forum.org](https://www.broadband-forum.org).
