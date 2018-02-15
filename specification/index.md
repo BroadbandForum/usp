@@ -141,10 +141,10 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 ## Acknowledgements
 
-The following individuals contributed significant work to the testing and
+The following individuals contributed to the testing and
 development of this specification.
 
-| Name  | Company | Email | 
+| Name  | Company | Email |
 | ------ | :-----: | :---: |
 | Jean-Didier Ott | Orange | jeandidier.ott@orange.com |
 | Timothy Carey | Nokia | timothy.carey@nokia.com |
