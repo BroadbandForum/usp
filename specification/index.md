@@ -28,6 +28,10 @@
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
 <h2>USP Version 1.0</h2>
 
+*You can find a pdf version of this document [here](/specification/TR-369.pdf). Note that in the event of
+any differences between the pdf version and this site, this site represents the
+official version.*
+
 **Table of Contents**
 
 Main Specification
@@ -126,7 +130,7 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 * Release contains specification for the User Services Platform 1.0.
 
-## Acknowledgements
+## Editors
 
 | Name  | Company | Email | Role |
 | ------ | :-----: | :---: | :--- |
@@ -134,15 +138,22 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 | Tim Spets | Green Wave Systems | tim.spets@greenwavesystems.com | Editor/USP Project Lead
 | Jason Walls | QA Cafe, LLC | jason@qacafe.com | Editor/Broadband User Services Work Area Director
 | John Blackford | Arris | john.blackford@arris.com | Editor/Broadband User Services Work Area Director
-| William Lupton | Broadband Forum | wlupton@broadband-forum.org | BBF Software Architect
-| Jean-Didier Ott | Orange | jeandidier.ott@orange.com | Contributor
-| Timothy Carey | Nokia | timothy.carey@nokia.com | Contributor
-| Steven Nicolai | Arris | Steven.Nicolai@arris.com | Contributor
-| Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu | Contributor
-| Mark Tabry  | Google | mtab@google.com | Contributor
-| Klaus Wich | Huawei | klaus.wich@huawei.com | Contributor
-| Daniel Egger | Axiros | daniel.egger@axiros.com | Contributor
-| Bahadir Danisik | Nokia | bahadir.danisik@nokia.com | Contributor
+
+## Acknowledgements
+
+The following individuals are being acknowledged for their efforts in the testing and
+development of this specification.
+
+| Name  | Company | Email |
+| ------ | :-----: | :---: |
+| Jean-Didier Ott | Orange | jeandidier.ott@orange.com |
+| Timothy Carey | Nokia | timothy.carey@nokia.com |
+| Steven Nicolai | Arris | Steven.Nicolai@arris.com |
+| Apostolos Papageorgiou | NEC | apostolos.Papageorgiou@neclab.eu |
+| Mark Tabry  | Google | mtab@google.com |
+| Klaus Wich | Huawei | klaus.wich@huawei.com |
+| Daniel Egger | Axiros | daniel.egger@axiros.com |
+| Bahadir Danisik | Nokia | bahadir.danisik@nokia.com |
 
 ## Executive Summary
 
