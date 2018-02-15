@@ -25,7 +25,7 @@ These data models are based off of the [Broadband Forum](http://www.broadband-fo
 
 ## Service Data Model Documentation
 
-The service data models defined for CWMP are compatible with USP. These include Objects and Paramters for set-top-box functions, VoIP functions, network attached storage functions, and femto/small cell functions. These data models may be optimized for USP in the future (taking advantage of DM defined operations, event, etc.).
+The service data models defined for CWMP are compatible with USP. These include Objects and Parameters for set-top-box functions, VoIP functions, network attached storage functions, and femto/small cell functions. These data models may be optimized for USP in the future (taking advantage of DM defined operations, event, etc.).
 
 * [STBService:1.4 Data Model](tr-135-1-4-0.html)
 * [VoiceService:2.0 Data Model](tr-104-2-0-0.html)
