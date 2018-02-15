@@ -141,7 +141,7 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 ## Acknowledgements
 
-The following individuals contributed to the testing and
+The following individuals are being acknowledged for their efforts in the testing and
 development of this specification.
 
 | Name  | Company | Email |
