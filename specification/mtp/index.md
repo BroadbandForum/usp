@@ -69,4 +69,4 @@ Figure MTP.1 – Receiving a X.509 Certificate
 
 [<-- Discovery](/specification/discovery/)
 
-[--> CoAP as a Message Transfer Protocol](/specification/mtp/coap/)
+[--> Message Encoding](/specification/encoding/)
