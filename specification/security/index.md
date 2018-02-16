@@ -357,7 +357,7 @@ Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in t
 
 * If the Agent implements the `RequestChallenge()` and `ChallengeResponse()` commands, a Controller assigned the role in `UntrustedRole` can have permission to read one or more `ControllerTrust.Challenge.{i}.Alias` and `Description` values and issue the commands. Roles with more extensive permissions can have permission to read additional `ControllerTrust.Challenge.{i}.Alias` and `Description` values. A successful Challenge results in the Controller being assigned the associated Role value.
 
-<a id='controller_certificates_and_certificate_validation'
+<a id='controller_certificates_and_certificate_validation'/>
 
 ### Controller Certificates and Certificate Validation
 
