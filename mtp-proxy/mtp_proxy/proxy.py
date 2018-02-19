@@ -92,6 +92,12 @@ class Proxy(object):
                 proxy_thr = ProxyThread()
 
                 if "CoAP" in association_dict["Association"]:
+                    """
+                      ProxyPort : CoAP Port that the MTP Proxy is listening on
+                      ProxyResource : CoAP Resource associated with the MTP Proxy
+                                       This is typically used by the Proxied USP Endpoint when sending Notifications
+                      EndpointURL : CoAP URL for the USP Endpoint being proxied
+                    """
                     self._logger.info("Found a CoAP MTP")
                     coap_dict = association_dict["Association"]["CoAP"]
                     proxy_addr = "coap://" + self._my_ip_addr + ":" + str(coap_dict["ProxyPort"]) + \
@@ -102,6 +108,21 @@ class Proxy(object):
                     proxy_thr.add_mtp(coap_mtp_inst, endpoint_addr)
 
                 if "STOMP" in association_dict["Association"]:
+                    """
+                      Host : Hostname or IP Address of the STOMP Server
+                      Port : Port of the STOMP Server
+                      VirtualHost : Virtual Host to be used when connecting to the STOMP Server
+                      Username : Username to be used when connecting to the STOMP Server
+                                  Server will validate as part of credentials
+                      Password : Password to be used when connecting to the STOMP Server
+                                  Server will validate as part of credentials
+                      ProxyDestination : STOMP Destination associated with the MTP Proxy
+                                          This is typically used by the Proxied USP Endpoint when sending Notifications
+                                          This can be overridden by the STOMP Server via the subscribe-dest header
+                      EndpointDestination : STOMP Destination of the USP Endpoint being proxied
+                      ProxyEndpointID : Endpoint ID of the USP Endpoint being proxied
+                                         This is used in the endpoint-id header within the STOMP CONNECT Frame
+                    """
                     self._logger.info("Found a STOMP MTP")
                     stomp_dict = association_dict["Association"]["STOMP"]
                     proxy_addr = stomp_dict["ProxyDestination"]
