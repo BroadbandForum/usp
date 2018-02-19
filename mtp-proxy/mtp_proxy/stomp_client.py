@@ -151,7 +151,7 @@ class StompClient(object):
         self._logger.info("Subscribed to Destination: %s", my_dest)
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve a message from the queue"""
+        """Retrieve a Queue Item from the queue"""
         return self._queue.get_msg(timeout_in_seconds)
 
     def send_msg(self, my_addr, payload, to_addr):

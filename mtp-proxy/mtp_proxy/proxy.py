@@ -172,8 +172,8 @@ class ProxyThread(threading.Thread):
 
         while True:
             time.sleep(self._sleep_time_interval)
-            payload = self._mtp1.get_msg()
-#            payload, reply_to_addr = self._mtp1.get_msg()
+            queue_item = self._mtp1.get_msg()
+            payload = queue_item.get_payload()
             if payload is not None:
                 to_addr = self._endpoint_addr2
 #                if self._last_mtp2_reply_to_addr is not None:
@@ -183,7 +183,8 @@ class ProxyThread(threading.Thread):
                 self._logger.info("Found a payload on MTP 1; sending it to MTP 2 [%s]", to_addr)
                 self._mtp2.send_msg(payload, to_addr)
 
-            payload, reply_to_addr = self._mtp2.get_msg()
+            queue_item = self._mtp2.get_msg()
+            payload = queue_item.get_payload()
             if payload is not None:
                 to_addr = self._endpoint_addr1
 #                if self._last_mtp1_reply_to_addr is not None:

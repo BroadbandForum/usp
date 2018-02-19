@@ -58,7 +58,7 @@ class CoapMtp(abstract_mtp.AbstractMtp):
         self._server = coap_server.CoapServer(listen_port, resource_path, debug=self._debug)
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve the next incoming message from the Queue"""
+        """Retrieve the next incoming Queue Item from the Queue"""
         return self._server.get_msg(timeout_in_seconds)
 
     def send_msg(self, payload, to_addr):

@@ -99,10 +99,11 @@ class MyCoapResource(aiocoap.resource.Resource):
         if request.opt.content_format == 42:
             self._logger.debug("Incoming CoAP POST Request Content-Format Validated")
 
-            if self._validate_uri_query(request.opt.uri_query):
+            reply_to_addr = self._validate_uri_query(request.opt.uri_query)
+            if reply_to_addr is not None:
                 self._logger.debug("Incoming CoAP POST Request URI-Query Validated")
 
-                asyncio.get_event_loop().call_soon(self._queue.push, request.payload)
+                asyncio.get_event_loop().call_soon(self._queue.push, request.payload, reply_to_addr)
                 response = aiocoap.Message(code=aiocoap.Code.CHANGED)
                 self._logger.info("Responding to the CoAP Request with a 2.04 Status Code")
             else:
@@ -128,7 +129,7 @@ class MyCoapResource(aiocoap.resource.Resource):
         return link
 
     def _validate_uri_query(self, uri_query):
-        """Validate the URI-Query of the incoming CoAP message to retreive the reply-to address"""
+        """Validate the URI-Query of the incoming CoAP message and retrieve the reply-to address"""
         reply_to_addr = None
 
         for query_item in uri_query:
@@ -139,7 +140,7 @@ class MyCoapResource(aiocoap.resource.Resource):
                 reply_to_addr = "coap://" + query_item_parts[1]
                 self._logger.debug("Found 'reply-to' URI Query; value altered to: %s", reply_to_addr)
 
-        return reply_to_addr is not None
+        return reply_to_addr
 
 
 class CoapReceivingThread(threading.Thread):
@@ -200,5 +201,5 @@ class CoapServer(object):
         self._listen_thread.start()
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve a message from the queue"""
+        """Retrieve a Queue Item from the queue"""
         return self._queue.get_msg(timeout_in_seconds)
