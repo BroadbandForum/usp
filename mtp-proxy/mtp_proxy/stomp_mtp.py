@@ -51,11 +51,12 @@ from mtp_proxy import stomp_client
 class StompMtp(abstract_mtp.AbstractMtp):
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
     def __init__(self, host, port, username, password, virtual_host, my_addr,
-                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id=""):
+                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id="",
+                 fail_bad_content_type=False):
         """Initialize the STOMP MTP"""
         self._client = stomp_client.StompClient(host, port, username, password, virtual_host,
                                                 outgoing_heartbeats, incoming_heartbeats,
-                                                proxy_endpoint_id)
+                                                proxy_endpoint_id, fail_bad_content_type)
         self._my_addr = my_addr
 
     def get_msg(self, timeout_in_seconds=-1):

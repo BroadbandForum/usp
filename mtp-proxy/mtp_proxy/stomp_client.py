@@ -55,11 +55,12 @@ from mtp_proxy import utils
 
 class MyStompConnListener(stomp.ConnectionListener):
     """A STOMP Connection Listener for receiving USP messages"""
-    def __init__(self, queue):
+    def __init__(self, queue, fail_bad_content_type=False):
         """Initialize our STOMP Connection Listener"""
         stomp.ConnectionListener.__init__(self)
         self._queue = queue
         self._subscribe_dest = None
+        self._fail_bad_content_type = fail_bad_content_type
         self._logger = logging.getLogger(self.__class__.__name__)
 
     def get_subscribe_dest(self):
@@ -81,6 +82,7 @@ class MyStompConnListener(stomp.ConnectionListener):
 
     def on_message(self, headers, body):
         """STOMP Connection Listener - record messages to the incoming queue"""
+        bad_content_type = False
         self._logger.info("Received a STOMP message on my USP Message Queue")
         self._logger.debug("Payload received: [%s]", body)
 
@@ -90,16 +92,22 @@ class MyStompConnListener(stomp.ConnectionListener):
 
             if headers["content-type"].startswith("application/vnd.bbf.usp.msg"):
                 self._logger.debug("STOMP Message has a proper 'content-type'")
-
-                if "reply-to-dest" in headers:
-                    self._logger.debug("Found %s as the 'reply-to-dest' in the STOMP Headers",
-                                       headers["reply-to-dest"])
-                    self._queue.push(body)
-                else:
-                    self._logger.warning("Incoming STOMP message had no 'reply-to-dest' header")
             else:
+                bad_content_type = True
                 self._logger.warning("Incoming STOMP message contained an Unsupported Content-Type: %s",
                                      headers["content-type"])
+
+            if "reply-to-dest" in headers:
+                reply_to_addr = headers["reply-to-dest"]
+                self._logger.debug("Found %s as the 'reply-to-dest' in the STOMP Headers",
+                                   headers["reply-to-dest"])
+
+                if bad_content_type and self._fail_bad_content_type:
+                    self._logger.error("Failing Incoming STOMP message due to Content-Type")
+                else:
+                    self._queue.push(body, reply_to_addr)
+            else:
+                self._logger.warning("Incoming STOMP message had no 'reply-to-dest' header")
         else:
             self._logger.warning("Incoming STOMP message had no Content-Type")
 
@@ -107,7 +115,7 @@ class MyStompConnListener(stomp.ConnectionListener):
 class StompClient(object):
     """A STOMP to USP Binding"""
     def __init__(self, host="127.0.0.1", port=61613, username="admin", password="admin", virtual_host="/",
-                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id=""):
+                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id="", fail_bad_content_type=False):
         """Initialize the STOMP USP Binding for a USP Endpoint
             - 61613 is the default STOMP port for RabbitMQ installations"""
         self._host = host
@@ -115,7 +123,7 @@ class StompClient(object):
         self._username = username
         self._password = password
         self._queue = utils.GenericReceivingQueue()
-        self._listener = MyStompConnListener(self._queue)
+        self._listener = MyStompConnListener(self._queue, fail_bad_content_type)
         self._logger = logging.getLogger(self.__class__.__name__)
 
         # We don't want to decode the payload, so use auto_decode=False

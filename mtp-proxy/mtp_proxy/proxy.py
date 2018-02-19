@@ -57,12 +57,13 @@ from mtp_proxy import stomp_mtp
 
 class Proxy(object):
     """A Class for proxying messages between USP MTPs"""
-    def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO):
+    def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO, fail_bad_content_type=False):
         """Initialize the Proxy Class"""
         self._my_ip_addr = None
         self._proxy_thr_list = []
         self._cfg_file_contents = None
         self._debug = (log_level == logging.DEBUG)
+        self._fail_bad_content_type = fail_bad_content_type
 
         logging.basicConfig(filename=log_file_name, level=log_level,
                             format='%(asctime)-15s %(name)s %(levelname)-8s %(message)s')
@@ -107,7 +108,8 @@ class Proxy(object):
                     stomp_mtp_inst = stomp_mtp.StompMtp(stomp_dict["Host"], stomp_dict["Port"],
                                                         stomp_dict["Username"], stomp_dict["Password"],
                                                         stomp_dict["VirtualHost"], proxy_addr,
-                                                        proxy_endpoint_id=stomp_dict["ProxyEndpointID"])
+                                                        proxy_endpoint_id=stomp_dict["ProxyEndpointID"],
+                                                        fail_bad_content_type=self._fail_bad_content_type)
                     endpoint_addr = stomp_dict["EndpointDestination"]
                     proxy_thr.add_mtp(stomp_mtp_inst, endpoint_addr)
 
@@ -143,8 +145,10 @@ class ProxyThread(threading.Thread):
         threading.Thread.__init__(self)
         self._mtp1 = None
         self._endpoint_addr1 = None
+#        self._last_mtp1_reply_to_addr = None
         self._mtp2 = None
         self._endpoint_addr2 = None
+#        self._last_mtp2_reply_to_addr = None
         self._sleep_time_interval = sleep_time_interval
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -169,19 +173,30 @@ class ProxyThread(threading.Thread):
         while True:
             time.sleep(self._sleep_time_interval)
             payload = self._mtp1.get_msg()
+#            payload, reply_to_addr = self._mtp1.get_msg()
             if payload is not None:
-                self._logger.info("Found a payload on MTP 1; sending it to MTP 2 [%s]", self._endpoint_addr2)
-                self._mtp2.send_msg(payload, self._endpoint_addr2)
+                to_addr = self._endpoint_addr2
+#                if self._last_mtp2_reply_to_addr is not None:
+#                    to_addr = self._last_mtp2_reply_to_addr
 
-            payload = self._mtp2.get_msg()
+#                self._last_mtp1_reply_to_addr = reply_to_addr
+                self._logger.info("Found a payload on MTP 1; sending it to MTP 2 [%s]", to_addr)
+                self._mtp2.send_msg(payload, to_addr)
+
+            payload, reply_to_addr = self._mtp2.get_msg()
             if payload is not None:
-                self._logger.info("Found a payload on MTP 2; sending it to MTP 1 [%s]", self._endpoint_addr1)
-                self._mtp1.send_msg(payload, self._endpoint_addr1)
+                to_addr = self._endpoint_addr1
+#                if self._last_mtp1_reply_to_addr is not None:
+#                    to_addr = self._last_mtp1_reply_to_addr
+
+#                self._last_mtp2_reply_to_addr = reply_to_addr
+                self._logger.info("Found a payload on MTP 2; sending it to MTP 1 [%s]", to_addr)
+                self._mtp1.send_msg(payload, to_addr)
 
 
 def main():
     """Main Processing for the MTP Proxy"""
-    my_proxy = Proxy("cfg/proxy.json", "logs/proxy.log", log_level=logging.INFO)
+    my_proxy = Proxy("cfg/proxy.json", "logs/proxy.log", log_level=logging.INFO, fail_bad_content_type=False)
     my_proxy.process_config_file()
     my_proxy.start_threads()
 
