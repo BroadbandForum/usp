@@ -50,7 +50,7 @@ class AbstractMtp(object):
         """Retrieve the next incoming message from the Queue"""
         raise NotImplementedError()
 
-    def send_msg(self, payload, to_addr):
+    def send_msg(self, payload, to_addr, reply_to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
         raise NotImplementedError()
 

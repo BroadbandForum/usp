@@ -105,7 +105,8 @@ class MyStompConnListener(stomp.ConnectionListener):
                 if bad_content_type and self._fail_bad_content_type:
                     self._logger.error("Failing Incoming STOMP message due to Content-Type")
                 else:
-                    self._queue.push(body, reply_to_addr)
+                    queue_item = utils.ExpiringQueueItem(body, reply_to_addr)
+                    self._queue.push(queue_item)
             else:
                 self._logger.warning("Incoming STOMP message had no 'reply-to-dest' header")
         else:
@@ -122,6 +123,7 @@ class StompClient(object):
         self._port = port
         self._username = username
         self._password = password
+        self._subscribed_to_dest = None
         self._queue = utils.GenericReceivingQueue()
         self._listener = MyStompConnListener(self._queue, fail_bad_content_type)
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -133,32 +135,37 @@ class StompClient(object):
         self._conn.start()
         self._conn.connect(username, password, wait=True, headers={"endpoint-id": proxy_endpoint_id})
 
-    def listen(self, my_addr):
+    def listen(self, default_subscribe_to_dest):
         """Listen to a STOMP destination for incoming messages"""
         # Hard-coding the MSG ID to "1" based on the assumption that we will only ever subscribe to 1 destination
         #  for this instance of the StompClient.  If we need to subscribe to multiple destinations, then this
         #  needs to change.
         msg_id = 1
 
-        my_dest = self._listener.get_subscribe_dest()
-        if my_dest is None:
-            my_dest = my_addr
-            self._logger.info("Using Destination [%s] as retrieved from configuration", my_dest)
+        self._subscribed_to_dest = self._listener.get_subscribe_dest()
+        if self._subscribed_to_dest  is None:
+            self._subscribed_to_dest = default_subscribe_to_dest
+            self._logger.info("Using Destination [%s] as retrieved from configuration", self._subscribed_to_dest)
         else:
-            self._logger.info("Using Destination [%s] as discovered in the CONNECTED frame headers", my_dest)
+            self._logger.info("Using Destination [%s] as discovered in the CONNECTED frame headers",
+                              self._subscribed_to_dest)
 
-        self._conn.subscribe(my_dest, id=str(msg_id), ack="auto")
-        self._logger.info("Subscribed to Destination: %s", my_dest)
+        self._conn.subscribe(self._subscribed_to_dest, id=str(msg_id), ack="auto")
+        self._logger.info("Subscribed to Destination: %s", self._subscribed_to_dest)
+
+    def get_subscribed_to_dest(self):
+        """Retrieve the Destination that was subscribed to"""
+        return self._subscribed_to_dest
 
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve a Queue Item from the queue"""
         return self._queue.get_msg(timeout_in_seconds)
 
-    def send_msg(self, my_addr, payload, to_addr):
+    def send_msg(self, payload, to_addr, reply_to_addr):
         """Send the ProtoBuf Serialized message to the provided STOMP address"""
         content_type = "application/vnd.bbf.usp.msg"
-        usp_headers = {"reply-to-dest": my_addr}
-        self._logger.debug("Using [%s] as the value of the reply-to-dest header", my_addr)
+        usp_headers = {"reply-to-dest": reply_to_addr}
+        self._logger.debug("Using [%s] as the value of the reply-to-dest header", reply_to_addr)
         self._conn.send(to_addr, payload, content_type, usp_headers)
         self._logger.info("Sending a STOMP message to the following address: %s", to_addr)
 

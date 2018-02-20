@@ -65,7 +65,8 @@ def test_one_entry():
     payload = "TEST"
     reply_to_addr = "ADDR"
     queue = utils.GenericReceivingQueue()
-    queue.push(payload, reply_to_addr)
+    queue_item = utils.ExpiringQueueItem(payload, reply_to_addr)
+    queue.push(queue_item)
     queue_item = queue.pop()
 
     assert payload == queue_item.get_payload()
@@ -82,10 +83,14 @@ def test_multiple_entries_seq():
     payload4 = "TEST4"
     reply_to_addr4 = "ADDR4"
     queue = utils.GenericReceivingQueue()
-    queue.push(payload1, reply_to_addr1)
-    queue.push(payload2, reply_to_addr2)
-    queue.push(payload3, reply_to_addr3)
-    queue.push(payload4, reply_to_addr4)
+    queue_item1 = utils.ExpiringQueueItem(payload1, reply_to_addr1)
+    queue_item2 = utils.ExpiringQueueItem(payload2, reply_to_addr2)
+    queue_item3 = utils.ExpiringQueueItem(payload3, reply_to_addr3)
+    queue_item4 = utils.ExpiringQueueItem(payload4, reply_to_addr4)
+    queue.push(queue_item1)
+    queue.push(queue_item2)
+    queue.push(queue_item3)
+    queue.push(queue_item4)
     queue_item1 = queue.pop()
     queue_item2 = queue.pop()
     queue_item3 = queue.pop()
@@ -111,13 +116,17 @@ def test_multiple_entries_not_seq():
     payload4 = "TEST4"
     reply_to_addr4 = "ADDR4"
     queue = utils.GenericReceivingQueue()
-    queue.push(payload1, reply_to_addr1)
-    queue.push(payload2, reply_to_addr2)
+    queue_item1 = utils.ExpiringQueueItem(payload1, reply_to_addr1)
+    queue_item2 = utils.ExpiringQueueItem(payload2, reply_to_addr2)
+    queue_item3 = utils.ExpiringQueueItem(payload3, reply_to_addr3)
+    queue_item4 = utils.ExpiringQueueItem(payload4, reply_to_addr4)
+    queue.push(queue_item1)
+    queue.push(queue_item2)
     queue_item1 = queue.pop()
-    queue.push(payload3, reply_to_addr3)
+    queue.push(queue_item3)
     queue_item2 = queue.pop()
     queue_item3 = queue.pop()
-    queue.push(payload4, reply_to_addr4)
+    queue.push(queue_item4)
     queue_item4 = queue.pop()
 
     assert payload1 == queue_item1.get_payload()
@@ -138,7 +147,8 @@ def test_get_msg_found():
     time_mock.return_value = None
 
     queue = utils.GenericReceivingQueue(5)
-    queue.push(payload, reply_to_addr)
+    queue_item = utils.ExpiringQueueItem(payload, reply_to_addr)
+    queue.push(queue_item)
 
     with mock.patch("time.sleep", time_mock):
         queue_item = queue.get_msg(timeout)
@@ -165,7 +175,8 @@ def test_get_msg_no_timeout():
     reply_to_addr = "ADDR"
 
     queue = utils.GenericReceivingQueue()
-    queue.push(payload, reply_to_addr)
+    queue_item = utils.ExpiringQueueItem(payload, reply_to_addr)
+    queue.push(queue_item)
 
     queue_item = queue.get_msg()
 
@@ -182,7 +193,8 @@ def test_get_msg_expired():
     time_time_mock.return_value = time.time() + 61
 
     queue = utils.GenericReceivingQueue(5)
-    queue.push(payload)
+    queue_item = utils.ExpiringQueueItem(payload)
+    queue.push(queue_item)
 
     with mock.patch("time.sleep", time_mock):
         with mock.patch("time.time", time_time_mock):

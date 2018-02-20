@@ -62,10 +62,11 @@ except ImportError:
 
 class MyCoapResource(aiocoap.resource.Resource):
     """A CoAP Resource for receiving USP messages"""
-    def __init__(self, queue):
+    def __init__(self, resource_path, queue):
         """Initialize our USP CoAP Resource"""
         aiocoap.resource.Resource.__init__(self)
         self._queue = queue
+        self._resource_path = resource_path
         self._logger = logging.getLogger(self.__class__.__name__)
 
     @asyncio.coroutine
@@ -99,11 +100,13 @@ class MyCoapResource(aiocoap.resource.Resource):
         if request.opt.content_format == 42:
             self._logger.debug("Incoming CoAP POST Request Content-Format Validated")
 
-            reply_to_addr = self._validate_uri_query(request.opt.uri_query)
+            reply_to_addr = self._retrieve_reply_to_addr(request.opt.uri_query)
             if reply_to_addr is not None:
                 self._logger.debug("Incoming CoAP POST Request URI-Query Validated")
 
-                asyncio.get_event_loop().call_soon(self._queue.push, request.payload, reply_to_addr)
+                queue_item = utils.ExpiringQueueItem(request.payload, reply_to_addr)
+                queue_item.set_coap_details(self._resource_path)
+                asyncio.get_event_loop().call_soon(self._queue.push, queue_item)
                 response = aiocoap.Message(code=aiocoap.Code.CHANGED)
                 self._logger.info("Responding to the CoAP Request with a 2.04 Status Code")
             else:
@@ -128,8 +131,12 @@ class MyCoapResource(aiocoap.resource.Resource):
 
         return link
 
-    def _validate_uri_query(self, uri_query):
-        """Validate the URI-Query of the incoming CoAP message and retrieve the reply-to address"""
+    def get_queue(self):
+        """Retrieve the internal Queue"""
+        return self._queue
+
+    def _retrieve_reply_to_addr(self, uri_query):
+        """Retreive the reply-to address from the URI-Query of the incoming CoAP message"""
         reply_to_addr = None
 
         for query_item in uri_query:
@@ -174,32 +181,56 @@ class CoapReceivingThread(threading.Thread):
 
 class CoapServer(object):
     """A CoAP Server that receives CoAP Messages for re-distribution"""
-    def __init__(self, listen_port=5683, resource_path='usp', sending_thr_timeout=5, debug=False):
+    def __init__(self, ip_addr, listen_port=5683, sending_thr_timeout=5, debug=False):
         """Initialize the CoAP USP Binding for a USP Endpoint
             - 5683 is the default CoAP port, but 5684 is the default CoAPS port"""
         self._debug = debug
+        self._ip_addr = ip_addr
+        self._address_dict = {}
+        self._resource_dict = {}
         self._listen_thread = None
         self._listen_port = listen_port
-        self._resource_path = resource_path
-        self._queue = utils.GenericReceivingQueue()
         self._sending_thr_timeout = sending_thr_timeout
-        self._resource = MyCoapResource(self._queue)
+        self._resource_tree = aiocoap.resource.Site()
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def listen(self, my_addr):
-        """Listen for incoming CoAP messages"""
-        # Agent Initialization - Create a Server Resource Tree for the USP Agent
-        resource_tree = aiocoap.resource.Site()
-        resource_tree.add_resource(('.well-known', 'core'),
-                                   aiocoap.resource.WKCResource(resource_tree.get_resources_as_linkheader))
-        resource_tree.add_resource((self._resource_path,), self._resource)
+        # Initial population of the Server Resource Tree
+        self._resource_tree.add_resource(('.well-known', 'core'),
+                                         aiocoap.resource.WKCResource(self._resource_tree.get_resources_as_linkheader))
 
+    def listen(self):
+        """Listen for incoming CoAP messages"""
         # An Endpoint needs a Server Context for the Resource Tree
         self._logger.info("Starting the CoAP Receiving Thread")
-        self._listen_thread = CoapReceivingThread(resource_tree, self._listen_port, self._debug)
-        self._logger.info("Listening at URL: %s", my_addr)
+        self._listen_thread = CoapReceivingThread(self._resource_tree, self._listen_port, self._debug)
         self._listen_thread.start()
+
+    def add_resource(self, resource_path):
+        """Add a new CoAP Resource to the Resource Tree"""
+        queue = utils.GenericReceivingQueue()
+        resource = MyCoapResource(resource_path, queue)
+        addr = "coap://" + self._ip_addr + ":" + str(self._listen_port) + "/" + resource_path
+        self._resource_tree.add_resource((resource_path,), resource)
+        self._resource_dict[resource_path] = resource
+        self._address_dict[resource_path] = addr
+        self._logger.info("Listening at URL: %s", addr)
+
+    def get_addr_by_resource_path(self, resource_path):
+        """Retrieve the CoAP Address associated with the given resource_path"""
+        addr = None
+
+        if resource_path in self._address_dict:
+            addr = self._address_dict[resource_path]
+
+        return addr
 
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve a Queue Item from the queue"""
-        return self._queue.get_msg(timeout_in_seconds)
+        queue_item = None
+        for resource_path in self._resource_dict:
+            queue = self._resource_dict[resource_path].get_queue()
+            queue_item = queue.get_msg(timeout_in_seconds)
+            if queue_item is not None:
+                break
+
+        return queue_item

@@ -68,13 +68,13 @@ class GenericReceivingQueue(object):
         self._sleep_time_interval = sleep_time_interval
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def push(self, payload, reply_to_addr=""):
-        """Push the provided message payload onto the end of the incoming message queue"""
-        self._logger.debug("Pushing a payload onto the end of the incoming message queue")
-        self._incoming_queue.append(ExpiringQueueItem(payload, reply_to_addr))
+    def push(self, queue_item):
+        """Push the provided Queue Item onto the end of the incoming message queue"""
+        self._logger.debug("Pushing a Queue Item onto the end of the incoming message queue")
+        self._incoming_queue.append(queue_item)
 
     def pop(self):
-        """Pop the next payload off of the front of the incoming message queue"""
+        """Pop the next Queue Item off of the front of the incoming message queue"""
         non_expired_queue_item = None
 
         if len(self._incoming_queue) > 0:
@@ -88,7 +88,7 @@ class GenericReceivingQueue(object):
         return non_expired_queue_item
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve the next incoming message from the Queue"""
+        """Retrieve the next incoming Queue Item from the Queue"""
         sleep_time = 0
         queue_item = None
 
@@ -109,6 +109,8 @@ class ExpiringQueueItem(object):
         """Initialize the ExpiringQueueItem with the payload and a TTL (default of 60 seconds)"""
         self._ttl = ttl
         self._payload = payload
+        self._is_coap_msg = False
+        self._coap_resource_path = None
         self._create_time = time.time()
         self._reply_to_addr = reply_to_addr
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -121,6 +123,10 @@ class ExpiringQueueItem(object):
 
         return False
 
+    def is_coap_msg(self):
+        """Retrieve whether or not this Queue Item is from a CoAP MTP"""
+        return self._is_coap_msg
+
     def get_payload(self):
         """Retrieve the Payload"""
         return self._payload
@@ -128,6 +134,15 @@ class ExpiringQueueItem(object):
     def get_reply_to_addr(self):
         """Retrieve the Reply-To-Address"""
         return self._reply_to_addr
+
+    def get_coap_resource_path(self):
+        """Retreive the CoAP Resource Path"""
+        return self._coap_resource_path
+
+    def set_coap_details(self, resource_path):
+        """Set the CoAP Resource Path"""
+        self._is_coap_msg = True
+        self._coap_resource_path = resource_path
 
 
 class IPAddr:
