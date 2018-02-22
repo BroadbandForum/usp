@@ -231,8 +231,8 @@ def test_ipaddr_mac_intf():
 
             
 def test_ipaddr_rpi_no_intf():
-    os_proc = [["Linux  ".encode("utf-8")],
-    ["inet 192.168.1.1  ".encode("utf-8")]]
+    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
+    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
     os_proc_mock = mock.Mock(side_effect = os_proc)
 
     ip = utils.IPAddr()
@@ -245,8 +245,8 @@ def test_ipaddr_rpi_no_intf():
 
 def test_ipaddr_rpi_intf():
     intf = "eth0"
-    os_proc = [["Linux ".encode("utf-8")],
-    ["inet 192.168.1.1  ".encode("utf-8")]]
+    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
+    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
     os_proc_mock = mock.Mock(side_effect = os_proc)
 
     ip = utils.IPAddr()
