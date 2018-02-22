@@ -116,7 +116,8 @@ class MyCoapResource(aiocoap.resource.Resource):
                 self._logger.info("Responding to the CoAP Request with a 4.00 Status Code")
         else:
             # Failed Content Format (expected: application/octet-stream), respond with 4.15
-            self._logger.warning("Incoming CoAP Request contained an Unsupported Content-Format")
+            self._logger.warning("Incoming CoAP Request contained an Unsupported Content-Format: %s",
+                                 str(request.opt.content_format))
             response = aiocoap.Message(code=aiocoap.Code.UNSUPPORTED_MEDIA_TYPE)
             self._logger.info("Responding to the CoAP Request with a 4.15 Status Code")
 
@@ -210,6 +211,7 @@ class CoapServer(object):
         queue = utils.GenericReceivingQueue()
         resource = MyCoapResource(resource_path, queue)
         addr = "coap://" + self._ip_addr + ":" + str(self._listen_port) + "/" + resource_path
+        self._logger.info("Adding a New CoAP Resource: %s", resource_path)
         self._resource_tree.add_resource((resource_path,), resource)
         self._resource_dict[resource_path] = resource
         self._address_dict[resource_path] = addr
