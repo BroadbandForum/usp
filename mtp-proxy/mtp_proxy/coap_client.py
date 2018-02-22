@@ -85,7 +85,7 @@ class CoapSendingThread(threading.Thread):
         self._logger.debug("Creating a CoAP Client Context")
         context = yield from aiocoap.Context.create_client_context()
 
-        self._logger.info("Sending a CoAP message to the following address: %s", to_addr)
+        self._logger.info("Sending a CoAP message to the following address: %s", msg.get_request_uri())
         try:
             resp = yield from context.request(msg).response
             self._logger.info("CoAP Message Sent and [%s] Response received", resp.code)
