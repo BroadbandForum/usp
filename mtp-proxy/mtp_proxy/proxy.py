@@ -57,12 +57,13 @@ from mtp_proxy import stomp_mtp
 
 class Proxy(object):
     """A Class for proxying messages between USP MTPs"""
-    def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO):
+    def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO, fail_bad_content_type=False):
         """Initialize the Proxy Class"""
         self._my_ip_addr = None
         self._proxy_thr_list = []
         self._cfg_file_contents = None
         self._debug = (log_level == logging.DEBUG)
+        self._fail_bad_content_type = fail_bad_content_type
 
         logging.basicConfig(filename=log_file_name, level=log_level,
                             format='%(asctime)-15s %(name)s %(levelname)-8s %(message)s')
@@ -91,25 +92,42 @@ class Proxy(object):
                 proxy_thr = ProxyThread()
 
                 if "CoAP" in association_dict["Association"]:
+                    # ProxyPort : CoAP Port that the MTP Proxy is listening on
+                    # ProxyResource : Default CoAP Resource associated with the MTP Proxy
+                    #                  This is typically used by the Proxied USP Endpoint when sending Notifications
+                    # EndpointURL : CoAP URL for the USP Endpoint being proxied
                     self._logger.info("Found a CoAP MTP")
                     coap_dict = association_dict["Association"]["CoAP"]
-                    proxy_addr = "coap://" + self._my_ip_addr + ":" + str(coap_dict["ProxyPort"]) + \
-                                 "/" + coap_dict["ProxyResource"]
-                    coap_mtp_inst = coap_mtp.CoapMtp(coap_dict["ProxyPort"], coap_dict["ProxyResource"],
-                                                     proxy_addr, self._debug)
+                    default_resource_path = coap_dict["ProxyResource"]
+                    coap_mtp_inst = coap_mtp.CoapMtp(self._my_ip_addr, coap_dict["ProxyPort"],
+                                                     default_resource_path, self._debug)
                     endpoint_addr = coap_dict["EndpointURL"]
-                    proxy_thr.add_mtp(coap_mtp_inst, endpoint_addr)
+                    proxy_thr.add_coap_mtp(coap_mtp_inst, endpoint_addr)
 
                 if "STOMP" in association_dict["Association"]:
+                    # Host : Hostname or IP Address of the STOMP Server
+                    # Port : Port of the STOMP Server
+                    # VirtualHost : Virtual Host to be used when connecting to the STOMP Server
+                    # Username : Username to be used when connecting to the STOMP Server
+                    #             Server will validate as part of credentials
+                    # Password : Password to be used when connecting to the STOMP Server
+                    #             Server will validate as part of credentials
+                    # ProxyDestination : Default STOMP Destination associated with the MTP Proxy
+                    #                     This is typically used by the Proxied USP Endpoint when sending Notifications
+                    #                     This can be overridden by the STOMP Server via the subscribe-dest header
+                    # EndpointDestination : STOMP Destination of the USP Endpoint being proxied
+                    # ProxyEndpointID : Endpoint ID of the USP Endpoint being proxied
+                    #                    This is used in the endpoint-id header within the STOMP CONNECT Frame
                     self._logger.info("Found a STOMP MTP")
                     stomp_dict = association_dict["Association"]["STOMP"]
                     proxy_addr = stomp_dict["ProxyDestination"]
                     stomp_mtp_inst = stomp_mtp.StompMtp(stomp_dict["Host"], stomp_dict["Port"],
                                                         stomp_dict["Username"], stomp_dict["Password"],
                                                         stomp_dict["VirtualHost"], proxy_addr,
-                                                        proxy_endpoint_id=stomp_dict["ProxyEndpointID"])
+                                                        proxy_endpoint_id=stomp_dict["ProxyEndpointID"],
+                                                        fail_bad_content_type=self._fail_bad_content_type)
                     endpoint_addr = stomp_dict["EndpointDestination"]
-                    proxy_thr.add_mtp(stomp_mtp_inst, endpoint_addr)
+                    proxy_thr.add_stomp_mtp(stomp_mtp_inst, endpoint_addr)
 
                 self._proxy_thr_list.append(proxy_thr)
 
@@ -141,47 +159,83 @@ class ProxyThread(threading.Thread):
     def __init__(self, sleep_time_interval=1):
         """Initialize the Proxy Thread"""
         threading.Thread.__init__(self)
-        self._mtp1 = None
-        self._endpoint_addr1 = None
-        self._mtp2 = None
-        self._endpoint_addr2 = None
+        self._coap_mtp = None
+        self._stomp_mtp = None
+        self._coap_endpoint_addr = None
+        self._stomp_proxy_addr = None
+        self._stomp_endpoint_addr = None
+        self._coap_resp_resource_dict = {}  # Map CoAP Resource Paths (Key) to STOMP Destinations (Value)
         self._sleep_time_interval = sleep_time_interval
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def add_mtp(self, mtp, endpoint_addr):
-        """Add an MTP configuration to the Proxy Thread"""
-        if self._mtp1 is None:
-            self._mtp1 = mtp
-            self._endpoint_addr1 = endpoint_addr
-            self._logger.info("Adding MTP 1")
-        elif self._mtp2 is None:
-            self._mtp2 = mtp
-            self._endpoint_addr2 = endpoint_addr
-            self._logger.info("Adding MTP 2")
+    def add_coap_mtp(self, mtp, endpoint_addr):
+        """Add a CoAP MTP configuration to the Proxy Thread"""
+        if self._coap_mtp is None:
+            self._coap_mtp = mtp
+            self._coap_endpoint_addr = endpoint_addr
+            self._logger.info("Adding a CoAP MTP")
         else:
-            self._logger.warning("Can't add another MTP; all MTPs are already configured")
+            self._logger.warning("Can't add another CoAP MTP; the CoAP MTP is already configured")
+
+    def add_stomp_mtp(self, mtp, endpoint_addr):
+        """Add a STOMP MTP configuration to the Proxy Thread"""
+        if self._stomp_mtp is None:
+            self._stomp_mtp = mtp
+            self._stomp_endpoint_addr = endpoint_addr
+            self._logger.info("Adding a STOMP MTP")
+        else:
+            self._logger.warning("Can't add another STOMP MTP; the STOMP MTP is already configured")
 
     def run(self):
         """Start the thread"""
-        self._mtp1.listen()
-        self._mtp2.listen()
+        self._coap_mtp.listen()
+        self._stomp_mtp.listen()
+
+        self._stomp_proxy_addr = self._stomp_mtp.get_subscribed_to_dest()
 
         while True:
             time.sleep(self._sleep_time_interval)
-            payload = self._mtp1.get_msg()
-            if payload is not None:
-                self._logger.info("Found a payload on MTP 1; sending it to MTP 2 [%s]", self._endpoint_addr2)
-                self._mtp2.send_msg(payload, self._endpoint_addr2)
 
-            payload = self._mtp2.get_msg()
-            if payload is not None:
-                self._logger.info("Found a payload on MTP 2; sending it to MTP 1 [%s]", self._endpoint_addr1)
-                self._mtp1.send_msg(payload, self._endpoint_addr1)
+            # Read from CoAP MTP; Send to STOMP MTP
+            queue_item = self._coap_mtp.get_msg()
+            if queue_item is not None:
+                payload = queue_item.get_payload()
+                coap_resource_path = queue_item.get_coap_resource_path()
+
+                if coap_resource_path in self._coap_resp_resource_dict:
+                    to_addr = self._coap_resp_resource_dict[coap_resource_path]
+                else:
+                    to_addr = self._stomp_endpoint_addr
+
+                self._logger.info("Found a payload on the CoAP MTP (on resource path: [%s])", coap_resource_path)
+                self._logger.info("Sending it to the STOMP MTP (to destination: [%s], with reply-to-dest: [%s])",
+                                  to_addr, self._stomp_proxy_addr)
+                self._stomp_mtp.send_msg(payload, to_addr, self._stomp_proxy_addr)
+
+            # Read from STOMP MTP; Send to CoAP MTP
+            queue_item = self._stomp_mtp.get_msg()
+            if queue_item is not None:
+                payload = queue_item.get_payload()
+                stomp_reply_to_addr = queue_item.get_reply_to_addr()
+                coap_resp_resource = stomp_reply_to_addr.replace("#", ".")
+
+                if coap_resp_resource in self._coap_resp_resource_dict:
+                    coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+                else:
+                    self._coap_resp_resource_dict[coap_resp_resource] = stomp_reply_to_addr
+                    self._coap_mtp.add_resource(coap_resp_resource)
+                    coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+
+                to_addr = self._coap_endpoint_addr
+                self._logger.info("Found a payload on the STOMP MTP (with reply-to-dest: [%s])", stomp_reply_to_addr)
+                self._logger.info("Sending it to the CoAP MTP (to URL: [%s], with reply-to: [%s])",
+                                  to_addr, coap_reply_to_addr)
+                self._coap_mtp.send_msg(payload, to_addr, coap_reply_to_addr)
 
 
 def main():
     """Main Processing for the MTP Proxy"""
-    my_proxy = Proxy("cfg/proxy.json", "logs/proxy.log", log_level=logging.INFO)
+    my_proxy = Proxy("cfg/proxy.json", "logs/proxy.log", log_level=logging.INFO, fail_bad_content_type=False)
     my_proxy.process_config_file()
     my_proxy.start_threads()
 

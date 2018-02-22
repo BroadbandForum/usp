@@ -51,21 +51,29 @@ from mtp_proxy import coap_server
 
 class CoapMtp(abstract_mtp.AbstractMtp):
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
-    def __init__(self, listen_port, resource_path, my_addr, debug=False):
+    def __init__(self, ip_addr, listen_port, default_resource_path, debug=False):
         """Initialize the CoAP MTP"""
         self._debug = debug
-        self._my_addr = my_addr
-        self._server = coap_server.CoapServer(listen_port, resource_path, debug=self._debug)
+        self._server = coap_server.CoapServer(ip_addr, listen_port, debug=self._debug)
+        self.add_resource(default_resource_path)
+
+    def add_resource(self, resource_path):
+        """Add a Resource to the CoAP Server"""
+        self._server.add_resource(resource_path)
+
+    def get_addr(self, resource_path):
+        """Retrieve the CoAP Address for the given Resource Path"""
+        return self._server.get_addr_by_resource_path(resource_path)
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve the next incoming message from the Queue"""
+        """Retrieve the next incoming Queue Item from the Queue"""
         return self._server.get_msg(timeout_in_seconds)
 
-    def send_msg(self, payload, to_addr):
+    def send_msg(self, payload, to_addr, reply_to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
-        client = coap_client.CoapClient(self._my_addr, to_addr, debug=self._debug)
-        client.send_msg(payload)
+        client = coap_client.CoapClient(debug=self._debug)
+        client.send_msg(payload, to_addr, reply_to_addr)
 
     def listen(self):
         """Listen for incoming messages on the Protocol-specific USP Binding"""
-        self._server.listen(self._my_addr)
+        self._server.listen()

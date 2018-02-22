@@ -50,22 +50,27 @@ from mtp_proxy import stomp_client
 
 class StompMtp(abstract_mtp.AbstractMtp):
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
-    def __init__(self, host, port, username, password, virtual_host, my_addr,
-                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id=""):
+    def __init__(self, host, port, username, password, virtual_host, default_subscribe_to_dest,
+                 outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id="",
+                 fail_bad_content_type=False):
         """Initialize the STOMP MTP"""
+        self._default_subscribe_to_dest = default_subscribe_to_dest
         self._client = stomp_client.StompClient(host, port, username, password, virtual_host,
                                                 outgoing_heartbeats, incoming_heartbeats,
-                                                proxy_endpoint_id)
-        self._my_addr = my_addr
+                                                proxy_endpoint_id, fail_bad_content_type)
+
+    def get_subscribed_to_dest(self):
+        """Retrieve the STOMP Destination that was subscribed to"""
+        return self._client.get_subscribed_to_dest()
 
     def get_msg(self, timeout_in_seconds=-1):
-        """Retrieve the next incoming message from the Queue"""
+        """Retrieve the next incoming Queue Item from the Queue"""
         return self._client.get_msg(timeout_in_seconds)
 
-    def send_msg(self, payload, to_addr):
+    def send_msg(self, payload, to_addr, reply_to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
-        self._client.send_msg(self._my_addr, payload, to_addr)
+        self._client.send_msg(payload, to_addr, reply_to_addr)
 
     def listen(self):
         """Listen for incoming messages on the Protocol-specific USP Binding"""
-        self._client.listen(self._my_addr)
+        self._client.listen(self._default_subscribe_to_dest)

@@ -15,3 +15,6 @@ To Do List:
     as the Endpoint's IP Address)
 ~~8. Get the IP Address from the environment instead of using "localhost"
     for CoAP~~ :: DONE
+9. Debug/Fix incompatibility with Californium (Eclipse CoAP library)
+    when exchanging large messages (ones that require blockwise 
+    communications). 
