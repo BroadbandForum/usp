@@ -2,27 +2,27 @@
 
 hide footbox
 
-box "USP Controller" #8888FF
+box "USP Controller\n IPv4=192.0.2.1" #8888FF
 
-participant "Controller" as C
-participant "CoAP" as CC
+participant "Controller\n CoAP server resource is xyz" as C
+participant "CoAP\n coaps UDP port is 55555" as CC
 
 end box
 
-box "USP Agent" #cc9999
+box "USP Agent\n IPv4=192.0.2.20" #cc9999
 
-participant "CoAP" as CA
-participant "Agent" as A
+participant "CoAP\n coaps UDP port is 5684" as CA
+participant "Agent\n CoAP server resource is abc" as A
 
 end box
 
 C->CC : USP Record\n\t(e.g., w/USP Request message)
-CC->CA: CON[0x2607](POST[USP Record], Token 0x26)
-CC<--CA: ACK[0x2607](2.04, Token 0x26)
+CC->CA: CON[0x2607](POST[USP Record], Token 0x26, Uri-Host=192.0.2.20,\n Uri-Port=5684, Uri-Path=abc, Uri-Query=?reply-to=coaps://192.0.2.1:55555/xyz)
+CC<--CA: [ACK[0x2607](2.04, Token 0x26)
 CA->A : USP Record\n\t(e.g. w/USP Request message)
 ...
 CA<-A: USP Record\n\t(e.g., w/USP Response or Error message)
-CC<-CA: CON[0xaabb](POST[USP Record], Token 0x07)
+CC<-CA: CON[0xaabb](POST[USP Record], Token 0x07, Uri-Host (from received reply-to)=192.0.2.1,\n Uri-Port(from received reply-to)=55555, Uri-Path(from received reply-to)=xyz,\n Uri-Query=?reply-to=coaps://192.0.2.20:5684/abc)
 CC-->CA: ACK[0xaabb](2.04, Token 0x07)
 C<-CC: USP Record\n\t(e.g., w/USP Response or Error message)
 
