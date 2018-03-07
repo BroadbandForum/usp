@@ -84,7 +84,7 @@ An Endpoint can have a configured list of trusted Certificate Authority (CA) cer
 
 **R-SEC.2** - To confirm a certificate was signed by a trusted CA, the Endpoint MUST contain information from one or more trusted CA certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. At a minimum, this stored information will include a certificate fingerprint and fingerprint algorithm used to generate the fingerprint. The stored information MAY be the entire certificate.
 
-This secure means can be accomplished through USP (see [Theory of Operations](./index.md#theory-of-operations), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate` object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
+This secure means can be accomplished through USP (see [Theory of Operations](./#theory-of-operations), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate` object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
 
 **R-SEC.3** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
 
@@ -184,7 +184,7 @@ The diagrams in this section use the database symbol to identify where the descr
 
 **R-SEC.21** – An Agent MUST clear all cached encryption session and Role authorization information when it reboots.
 
-**R-SEC.22** - When an Agent receives a USP Record, the Agent MUST execute logic that achieves the same results as in the decision flows from Figures [SEC.1](./index.md#figure-SEC1) and [SEC.2](./index.md#figure-SEC2).
+**R-SEC.22** - When an Agent receives a USP Record, the Agent MUST execute logic that achieves the same results as in the decision flows from Figures [SEC.1](./#figure-SEC1) and [SEC.2](./#figure-SEC2).
 
 <img src="receive-record.png" />
 
@@ -204,7 +204,7 @@ Figure SEC.2 – USP Record without USP Layer Secure Message Exchange
 
 ### Sending a USP Record
 
-**R-SEC.23** - When an Agent sends a USP Record, the Agent MUST execute logic that achieves the same results as in the decision flow from Figure [SEC.3](./index.md#figure-SEC3).
+**R-SEC.23** - When an Agent sends a USP Record, the Agent MUST execute logic that achieves the same results as in the decision flow from Figure [SEC.3](./#figure-SEC3).
 
 <img src="send-record.png" />
 
@@ -216,7 +216,7 @@ Figure SEC.3 – Sending a USP Record
 
 ### Checking a Certificate Containing an Endpoint ID
 
-**R-SEC.24** - When an Agent analyzes a Controller certificate for authentication and determining permissions (Role), the Agent MUST execute logic that achieves the same results as in the decision flows from Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5).
+**R-SEC.24** - When an Agent analyzes a Controller certificate for authentication and determining permissions (Role), the Agent MUST execute logic that achieves the same results as in the decision flows from Figures [SEC.4](./#figure-SEC4) and [SEC.5](./#figure-SEC5).
 
 **R-SEC.25** - When determining the inherited Role to apply based on Roles associated with a trusted CA, only the first matching CA in the chain will be used.
 
@@ -240,7 +240,7 @@ Figure SEC.5 – Determining the Role
 
 Support for Trusted Broker logic is optional.
 
-**R-SEC.26** - If Trusted Brokers are supported, and a Trusted Broker is encountered (from the optional "Trusted Broker cert?" decision diamonds in Figures SEC.2 or SEC.3), the Agent MUST execute logic that achieves the same results as in the decision flows from Figure [SEC.6](./index.md#figure-SEC6) for a received USP Record and Figure [SEC.7](./index.md#figure-SEC7) for sending a USP Record.
+**R-SEC.26** - If Trusted Brokers are supported, and a Trusted Broker is encountered (from the optional "Trusted Broker cert?" decision diamonds in Figures SEC.2 or SEC.3), the Agent MUST execute logic that achieves the same results as in the decision flows from Figure [SEC.6](./#figure-SEC6) for a received USP Record and Figure [SEC.7](./#figure-SEC7) for sending a USP Record.
 
 <img src="broker-with-received-record.png" />
 
@@ -343,25 +343,25 @@ As mentioned above, the `Controller.{i}.AssignedRole` parameter can be used to e
 
 Controllers can be assigned Roles through a variety of methods, depending on the data model elements an Agent implements and the Agent’s coded policy. Note that it is possible for an Agent to maintain trusted CA credentials with associated permissions (as described by the `ControllerTrust.Credential.{i}.` object) and various default permission definitions (as identified by the `UntrustedRole` and `BannedRole` parameters) without exposing these through the data model. If the data is maintained but not exposed, the same methods can still be used.
 
-Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in the above [Analysis of Controller Certificates](./index.md#analysis-controller-certificates) section identify points in the decision logic where some of the following calls to data model parameters can be made. The following bullets note when they are identified in one of these figures.
+Figures [SEC.4](./#figure-SEC4) and [SEC.5](./#figure-SEC5) in the above [Analysis of Controller Certificates](./#analysis-controller-certificates) section identify points in the decision logic where some of the following calls to data model parameters can be made. The following bullets note when they are identified in one of these figures.
 
 * Another Controller (with appropriate permission) can insert a Controller (including the `AssignedRole` parameter value) into the `Controller.{i}.` table, or can modify the `AssignedRole` parameter of an existing `Controller.{i}.` entry. The `InheritedRole` value cannot be modified by another Controller.
 
-* If credentials in an entry in a `ControllerTrust.Credential.{i}.Credential` parameter with an associated `ControllerTrust.Credential.{i}.Role` parameter are used to successfully validate the certificate presented by the Controller, the Controller inherits the Role from the associated `ControllerTrust.Credential.{i}.Role`. The Agent writes this value to the `Controller.{i}.InheritedRole` parameter. This step is shown in Figure [SEC.5](./index.md#figure-SEC5).
+* If credentials in an entry in a `ControllerTrust.Credential.{i}.Credential` parameter with an associated `ControllerTrust.Credential.{i}.Role` parameter are used to successfully validate the certificate presented by the Controller, the Controller inherits the Role from the associated `ControllerTrust.Credential.{i}.Role`. The Agent writes this value to the `Controller.{i}.InheritedRole` parameter. This step is shown in Figure [SEC.5](./#figure-SEC5).
 
-* A Controller whose associated certificate is revoked by a CA can be assigned the role in `BannedRole`, if this parameter or policy is implemented. In this case, the value of `BannedRole` must be the only value in `Controller.{i}.AssignedRole` (all other entries are removed) and `Controller.{i}.InheritedRole` must be empty (all entries are removed). This step is shown in Figure [SEC.4](./index.md#figure-SEC4).In the case of a Controller that has not previously been assigned a Role or who has been assigned the value of `UntrustedRole`:
+* A Controller whose associated certificate is revoked by a CA can be assigned the role in `BannedRole`, if this parameter or policy is implemented. In this case, the value of `BannedRole` must be the only value in `Controller.{i}.AssignedRole` (all other entries are removed) and `Controller.{i}.InheritedRole` must be empty (all entries are removed). This step is shown in Figure [SEC.4](./#figure-SEC4).In the case of a Controller that has not previously been assigned a Role or who has been assigned the value of `UntrustedRole`:
 
 * If the Controller’s certificate is validated by credentials in a `ControllerTrust.Credential.{i}.Credential` parameter but there is no associated `ControllerTrust.Credential.{i}.Role` parameter (or the value is empty) and `Controller.{i}.AssignedRole` is empty, then the Controller is assigned the role in `UntrustedRole` (written to the `Controller.{i}.AssignedRole` parameter). This step is shown in Figure [SEC.5](./index.md#figure-SEC5). Note that assigning `UntrustedRole` means there needs to be some implemented way to elevate the Controller’s Role, either by another Controller manipulating the Role, implementing Challenges, or some non-USP method.
 
-* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRole`. The optional policy decision (whether or not to allow Trust on First Use (TOFU), which can be codified in the data model with the ControllerTrust.TOFUAllowed flag) is shown in Figure [SEC.4](./index.md#figure-SEC4); Figure [SEC.5](./index.md#figure-SEC5) shows the Role assignment.
+* If the Controller’s certificate is self-signed or is validated by credentials not in `ControllerTrust.Credential.{i}.`, the Agent policy may be to assign the role in `UntrustedRole`. The optional policy decision (whether or not to allow Trust on First Use (TOFU), which can be codified in the data model with the ControllerTrust.TOFUAllowed flag) is shown in Figure [SEC.4](./#figure-SEC4); Figure [SEC.5](./#figure-SEC5) shows the Role assignment.
 
 * If the Agent implements the `RequestChallenge()` and `ChallengeResponse()` commands, a Controller assigned the role in `UntrustedRole` can have permission to read one or more `ControllerTrust.Challenge.{i}.Alias` and `Description` values and issue the commands. Roles with more extensive permissions can have permission to read additional `ControllerTrust.Challenge.{i}.Alias` and `Description` values. A successful Challenge results in the Controller being assigned the associated Role value.
 
-<a id='controller_certificates_and_certificate_validation'
+<a id='controller_certificates_and_certificate_validation'/>
 
 ### Controller Certificates and Certificate Validation
 
-When an Agent is presented with a Controller’s certificate, the Agent will always attempt to validate the certificate to whatever extent possible. Figures [SEC.4](./index.md#figure-SEC4) and [SEC.5](./index.md#figure-SEC5) in [Analysis of Controller Certificates](./index.md#analysis-controller-certificates) identify points in the decision logic where data model parameters can be used to influence policy decisions related to Controller certificate analysis.
+When an Agent is presented with a Controller’s certificate, the Agent will always attempt to validate the certificate to whatever extent possible. Figures [SEC.4](./#figure-SEC4) and [SEC.5](./#figure-SEC5) in [Analysis of Controller Certificates](./#analysis-controller-certificates) identify points in the decision logic where data model parameters can be used to influence policy decisions related to Controller certificate analysis.
 
 Note that it is possible for an Agent to maintain policy of the type described by the `UntrustedRole`, `BannedRole`, and the information described by `ControllerTrust.Credential.{i}.` and `Controller.{i}.Credential` without exposing these through the data model. If the policy concepts and data are maintained but not exposed, the same methods can still be used. It is also possible for an Agent to have policy that is not described by any defined data model element.
 

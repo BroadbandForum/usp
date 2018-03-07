@@ -829,7 +829,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 ###### OperationFailure fields
 
-*Note: Since the `OperationSuccess` message of the Delete Response contains an `unaffected_path_errs`, the `OperationStatus` will only contain an `OperationFailure` message if the `requested_path` was did not match any existing Objects (error `7016`) or was syntactically incorrect (error `7008`).*
+*Note: Since the `OperationSuccess` message of the Delete Response contains an `unaffected_path_errs`, the `OperationStatus` will only contain an `OperationFailure` message if the `requested_path` did not match any existing Objects (error `7016`) or was syntactically incorrect (error `7008`).*
 
 `fixed32 err_code`
 
@@ -902,6 +902,7 @@ For example, a Controller wants to read the data model to learn the settings and
         "Device.Wifi.SSID.[SSID="Homenetwork", BSSID=00:11:22:33:44:55]."
       }
     }
+
 In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using an field for each of the requested paths. In this case:
 
     GetResp {
@@ -911,7 +912,7 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
         err_msg :
         resolved_path_results {
           resolved_path : "Device.Wifi.SSID.1."
-          result_parms {
+          result_params {
             {
               key: "Enable"
               value: "True"}
@@ -957,7 +958,7 @@ In response to this request the Agent returns only the Status parameter and its 
         err_msg :
         resolved_path_results {
           resolved_path : "Device.Wifi.SSID.1."
-          result_parms {
+          result_params {
             key: "Status"
             value: "Up"
           }
@@ -986,7 +987,7 @@ The Agent's GetResponse would be:
         err_msg :
         resolved_path_results {
           resolved_path : "Device.Wifi.SSID.1."
-          result_parms {
+          result_params {
             key: "Status"
             value: "Up"
           }
@@ -1172,9 +1173,9 @@ This field contains one of the Path Names or Search Paths given in the `param_pa
 
 This field contains a [numeric code](#error-codes/) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GET-0** - If `requested_path` contains a Path Name that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
+**R-GET.0** - If `requested_path` contains a Path Name that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
 
-**R-GET.1** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GET.1** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.
 
 `string err_msg`
 
@@ -1356,7 +1357,7 @@ This field contains one of the Path Names or Search Paths given in `obj_path` of
 
 This field contains a [numeric code](#error-codes) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported Data Model.
 
 `string err_msg`
 
@@ -1547,7 +1548,7 @@ This field contains one of the Path Names given in `obj_path` of the associated 
 
 This field contains a [numeric code](#error-codes) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GSP.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s instantiated data model.
+**R-GSP.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported Data Model.
 
 `string err_msg`
 
@@ -1676,7 +1677,7 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
-For example, a Controller wants to be notified when a new Wifi station joins the Wifi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
+For example, a Controller wants to be notified when a new Wifi station joins the Wifi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
 
 In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wifi network. It uses the Add message to create a subscription Object instance with `Device.Wifi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
