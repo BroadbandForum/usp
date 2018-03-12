@@ -390,7 +390,7 @@ Circumstances may arise (such as multiple Message Transfer Protocols, retransmis
 
 **R-E2E.25** - When exchanging USP Records with an E2E Session Context, if a target USP Endpoint receives a USP Record with duplicate `sequence_id` and `session_id` fields from the same originating USP Endpoint, it MUST gracefully ignore the duplicate USP Record.
 
-<a id='exchange_of_usp_records_without_an_e2e_session_context'
+<a id='exchange_of_usp_records_without_an_e2e_session_context'/>
 
 ## Exchange of USP Records without an E2E Session Context
 
