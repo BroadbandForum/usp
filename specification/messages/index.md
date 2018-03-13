@@ -755,7 +755,7 @@ header {
 body {
   request {
     delete {
-      obj_paths: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
+      obj_paths: "Device.LocalAgent.Controller.[EndpointID=="controller-temp"]."
     }
   }
 }
@@ -769,7 +769,7 @@ body {
   response {
     delete_resp {
       deleted_obj_results {
-        requested_path: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
+        requested_path: "Device.LocalAgent.Controller.[EndpointID=="controller-temp"]."
         oper_status {
           oper_success {
             affected_paths {
@@ -899,7 +899,7 @@ For example, a Controller wants to read the data model to learn the settings and
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID="Homenetwork", BSSID=00:11:22:33:44:55]."
+        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
       }
     }
 
@@ -907,7 +907,7 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
 
     GetResp {
         req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55]."
+        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -944,7 +944,7 @@ In another example, the Controller only wants to read the current status of the 
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status"
+        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
       }
     }
 
@@ -953,7 +953,7 @@ In response to this request the Agent returns only the Status parameter and its 
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status"
+        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -1014,8 +1014,8 @@ header {
 body {
   request {
     get {
-      param_paths: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
-      param_paths: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
+      param_paths: "Device.LocalAgent.MTP.[Alias=="CoAP-MTP1"]."
+      param_paths: "Device.LocalAgent.Subscription.[ID=="boot-1"&&Recipient=="Device.LocalAgent.Controller.1"].Enable"
     }
   }
 }
@@ -1029,7 +1029,7 @@ body {
   response {
     get_resp {
       req_path_results {
-        requested_path: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
+        requested_path: "Device.LocalAgent.MTP.[Alias=="CoAP-MTP1"]."
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156." {
               {
@@ -1137,7 +1137,7 @@ body {
         }
       }
       req_path_results {
-        requested_path: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
+        requested_path: "Device.LocalAgent.Subscription.[ID=="boot-1"&&Recipient=="Device.LocalAgent.Controller.1"].Enable"
         resolved_path_results {
           resolved_path: "Device.LocalAgent.Subscription.6629."
           result_params {
@@ -2058,7 +2058,7 @@ header {
 body {
   request {
     operate {
-      command: "Device.LocalAgent.Controller.[EndpointID==\"controller\"].SendOnBoardRequest()"
+      command: "Device.LocalAgent.Controller.[EndpointID=="controller"].SendOnBoardRequest()"
       command_key: "onboard_command_key"
       send_resp: true
     }
