@@ -692,7 +692,15 @@ This field contains a repeated set of `ParameterError` messages.
 
 `string param`
 
-This field contains the Parameter Path (relative to `affected_path`) to the parameter that failed to update.
+This field contains the Parameter Path to the parameter that failed to be set.
+
+`fixed32 err_code`
+
+This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+
+`string err_msg`
+
+This field contains text related to the error specified by `err_code`.
 
 ###### OperationSuccess fields
 
