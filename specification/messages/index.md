@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -692,7 +692,15 @@ This field contains a repeated set of `ParameterError` messages.
 
 `string param`
 
-This field contains the Parameter Path (relative to `affected_path`) to the parameter that failed to update.
+This field contains the Parameter Path to the parameter that failed to be set.
+
+`fixed32 err_code`
+
+This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+
+`string err_msg`
+
+This field contains text related to the error specified by `err_code`.
 
 ###### OperationSuccess fields
 
@@ -755,7 +763,7 @@ header {
 body {
   request {
     delete {
-      obj_paths: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
+      obj_paths: "Device.LocalAgent.Controller.[EndpointID=="controller-temp"]."
     }
   }
 }
@@ -769,7 +777,7 @@ body {
   response {
     delete_resp {
       deleted_obj_results {
-        requested_path: "Device.LocalAgent.Controller.[EndpointID==\"controller-temp\"]."
+        requested_path: "Device.LocalAgent.Controller.[EndpointID=="controller-temp"]."
         oper_status {
           oper_success {
             affected_paths {
@@ -899,7 +907,7 @@ For example, a Controller wants to read the data model to learn the settings and
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID="Homenetwork", BSSID=00:11:22:33:44:55]."
+        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
       }
     }
 
@@ -907,7 +915,7 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
 
     GetResp {
         req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55]."
+        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -944,7 +952,7 @@ In another example, the Controller only wants to read the current status of the 
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status"
+        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
       }
     }
 
@@ -953,7 +961,7 @@ In response to this request the Agent returns only the Status parameter and its 
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID="Homenetwork",BSSID=00:11:22:33:44:55].Status"
+        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -1014,8 +1022,8 @@ header {
 body {
   request {
     get {
-      param_paths: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
-      param_paths: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
+      param_paths: "Device.LocalAgent.MTP.[Alias=="CoAP-MTP1"]."
+      param_paths: "Device.LocalAgent.Subscription.[ID=="boot-1"&&Recipient=="Device.LocalAgent.Controller.1"].Enable"
     }
   }
 }
@@ -1029,7 +1037,7 @@ body {
   response {
     get_resp {
       req_path_results {
-        requested_path: "Device.LocalAgent.MTP.[Alias==\"CoAP-MTP1\"]."
+        requested_path: "Device.LocalAgent.MTP.[Alias=="CoAP-MTP1"]."
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156." {
               {
@@ -1137,7 +1145,7 @@ body {
         }
       }
       req_path_results {
-        requested_path: "Device.LocalAgent.Subscription.[ID==\"boot-1\",Recipient==\"Device.LocalAgent.Controller.1\"].Enable"
+        requested_path: "Device.LocalAgent.Subscription.[ID=="boot-1"&&Recipient=="Device.LocalAgent.Controller.1"].Enable"
         resolved_path_results {
           resolved_path: "Device.LocalAgent.Subscription.6629."
           result_params {
@@ -2058,7 +2066,7 @@ header {
 body {
   request {
     operate {
-      command: "Device.LocalAgent.Controller.[EndpointID==\"controller\"].SendOnBoardRequest()"
+      command: "Device.LocalAgent.Controller.[EndpointID=="controller"].SendOnBoardRequest()"
       command_key: "onboard_command_key"
       send_resp: true
     }

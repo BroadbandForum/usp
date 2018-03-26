@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://github.com/BroadbandForum/usp/tree/master/data-model "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -35,6 +35,9 @@
 5. [Using DNS](#dns)
     1. [DNS-SD Records](#dns-sd)
     2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
+    3. [Example Controller Unicast DNS-SD Resource Records](#example-controller-unicast-dns-sd-resource-records)
+    4. [Example Agent Multicast DNS-SD Resource Records](#example-agent-multicast-dns-sd-resource-records)
+    5. [Example Controller Multicast DNS-SD Resource Records](#example-controller-multicast-dns-sd-resource-records)
 7. [Using the SendOnBoardRequest() operation and OnBoardRequest notification](#onboardrequest)
 
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
@@ -123,7 +126,7 @@ Requirements for implementation of a DNS client and configuration of the DNS cli
 
 <a id="dns-sd" />
 
-### DNS-SD Records
+## DNS-SD Records
 
 DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
@@ -166,7 +169,10 @@ The TXT record can include other attributes defined in the TXT record attribute 
 
 Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.
 
+<a id="example-controller-unicast-dns-sd-resource-records" />
+
 ### Example Controller Unicast DNS-SD Resource Records
+
 ```
     ; One PTR record for each supported MTP
     _usp-ctr-coap._udp.host.example.com      PTR <USP ID>._usp-ctr-coap._udp.example.com.
@@ -179,7 +185,11 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
     host.example.com.  A      192.0.2.200
     host.example.com.  AAAA   2001:db8::200
 ```
+
+<a id="example-agent-multicast-dns-sd-resource-records" />
+
 ### Example Agent Multicast DNS-SD Resource Records
+
 ```
     ; One PTR record (DNS-SD Service) for each supported MTP    
     _usp-agt-coap._udp                 PTR <USP ID>._usp-agt-coap._udp.local.
@@ -198,6 +208,8 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 ```
 
 ### Example Controller Multicast DNS-SD Resource Records
+
+<a id="example-controller-multicast-dns-sd-resource-records" />
 
 LAN Controllers do not need to have PTR records, as they will only be queried using the DNS-SD instance identifier of the Controller.
 ```
