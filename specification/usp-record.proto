@@ -59,7 +59,7 @@ message Record {
 
   enum PayloadSecurity {
     PLAINTEXT = 0;
-    TLS12 = 1;
+    TLS = 1;
   }
 }
 
