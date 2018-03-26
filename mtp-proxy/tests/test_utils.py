@@ -201,3 +201,57 @@ def test_get_msg_expired():
             queue_item = queue.get_msg(timeout)
 
     assert queue_item is None
+
+
+def test_ipaddr_mac_no_intf():
+    os_proc = [["Darwin Test 16.7.0 Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64 x86_64".encode("utf-8")],
+    ["inet 192.168.202.13 netmask 0xfffffc00 broadcast 192.168.203.255".encode("utf-8")]]
+    os_proc_mock = mock.Mock(side_effect = os_proc)
+
+    ip = utils.IPAddr()
+
+    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+        ipaddr = ip.get_ip_addr()
+
+    assert ipaddr is ipaddr
+
+
+def test_ipaddr_mac_intf():
+    intf = "en0"
+    os_proc = [["Darwin Test 16.7.0 Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64 x86_64".encode("utf-8")],
+    ["inet 192.168.202.1 netmask 0xfffffc00 broadcast 192.168.203.255".encode("utf-8")]]
+    os_proc_mock = mock.Mock(side_effect = os_proc)
+
+    ip = utils.IPAddr()
+
+    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+        ipaddr = ip.get_ip_addr(intf)
+
+    assert ipaddr is ipaddr
+
+            
+def test_ipaddr_rpi_no_intf():
+    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
+    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
+    os_proc_mock = mock.Mock(side_effect = os_proc)
+
+    ip = utils.IPAddr()
+
+    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+        ipaddr = ip.get_ip_addr()
+
+    assert ipaddr is ipaddr
+    
+
+def test_ipaddr_rpi_intf():
+    intf = "eth0"
+    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
+    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
+    os_proc_mock = mock.Mock(side_effect = os_proc)
+
+    ip = utils.IPAddr()
+
+    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+        ipaddr = ip.get_ip_addr(intf)
+
+    assert ipaddr is ipaddr
