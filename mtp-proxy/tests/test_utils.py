@@ -54,6 +54,36 @@ import unittest.mock as mock
 from mtp_proxy import utils
 
 
+def get_mac_uname_results():
+    return "Darwin lasts-mbp.lan 16.7.0 Darwin Kernel Version 16.7.0: Mon Nov 13 21:56:25 PST 2017; root:xnu-3789.72.11~1/RELEASE_X86_64 x86_64"
+
+def get_rpi_uname_results():
+    return "Linux rpi-controller 4.9.64-v7+ #1053 SMP Tue Nov 21 14:56:27 GMT 2017 armv7l GNU/Linux"
+
+def get_mac_ifconfig_results():
+    ifconfig_results = """
+    en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+            ether 98:5a:eb:8b:cb:e8
+            inet6 fe80::804:8e65:bd04:5bb7%en0 prefixlen 64 secured scopeid 0x4
+            inet 99.100.101.102 netmask 0xffffff00 broadcast 192.168.86.255
+            nd6 options=201<PERFORMNUD,DAD>
+            media: autoselect
+            status: active
+    """
+    return ifconfig_results
+
+def get_rpi_ip_addr_results():
+    ip_addr_results = """
+    3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+        link/ether b8:27:eb:34:f7:e0 brd ff:ff:ff:ff:ff:ff
+        inet 99.100.101.102/24 brd 192.168.86.255 scope global wlan0
+           valid_lft forever preferred_lft forever
+        inet6 fe80::5f85:8005:2f1a:6ecc/64 scope link
+           valid_lft forever preferred_lft forever
+    """
+    return ip_addr_results
+
+
 def test_empty_pop():
     queue = utils.GenericReceivingQueue()
     queue_item = queue.pop()
@@ -204,54 +234,86 @@ def test_get_msg_expired():
 
 
 def test_ipaddr_mac_no_intf():
-    os_proc = [["Darwin Test 16.7.0 Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64 x86_64".encode("utf-8")],
-    ["inet 192.168.202.13 netmask 0xfffffc00 broadcast 192.168.203.255".encode("utf-8")]]
-    os_proc_mock = mock.Mock(side_effect = os_proc)
+    expected_ip_addr = "99.100.101.102"
+    uname_results_mock = mock.Mock()
+    ifconfig_results_mock = mock.Mock()
+
+    uname_attrs = {'communicate.return_value': [get_mac_uname_results().encode("utf-8")]}
+    uname_results_mock.configure_mock(**uname_attrs)
+
+    ifconfig_results_attrs = {'communicate.return_value': [get_mac_ifconfig_results().encode("utf-8")]}
+    ifconfig_results_mock.configure_mock(**ifconfig_results_attrs)
+
+    popen_mock = mock.Mock(side_effect=[uname_results_mock, ifconfig_results_mock])
 
     ip = utils.IPAddr()
 
-    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+    with mock.patch("subprocess.Popen", popen_mock):
         ipaddr = ip.get_ip_addr()
 
-    assert ipaddr is ipaddr
+    assert ipaddr == expected_ip_addr
 
 
 def test_ipaddr_mac_intf():
     intf = "en0"
-    os_proc = [["Darwin Test 16.7.0 Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64 x86_64".encode("utf-8")],
-    ["inet 192.168.202.1 netmask 0xfffffc00 broadcast 192.168.203.255".encode("utf-8")]]
-    os_proc_mock = mock.Mock(side_effect = os_proc)
+    expected_ip_addr = "99.100.101.102"
+    uname_results_mock = mock.Mock()
+    ifconfig_results_mock = mock.Mock()
+
+    uname_attrs = {'communicate.return_value': [get_mac_uname_results().encode("utf-8")]}
+    uname_results_mock.configure_mock(**uname_attrs)
+
+    ifconfig_results_attrs = {'communicate.return_value': [get_mac_ifconfig_results().encode("utf-8")]}
+    ifconfig_results_mock.configure_mock(**ifconfig_results_attrs)
+
+    popen_mock = mock.Mock(side_effect=[uname_results_mock, ifconfig_results_mock])
 
     ip = utils.IPAddr()
 
-    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+    with mock.patch("subprocess.Popen", popen_mock):
         ipaddr = ip.get_ip_addr(intf)
 
-    assert ipaddr is ipaddr
+    assert ipaddr == expected_ip_addr
 
-            
+
 def test_ipaddr_rpi_no_intf():
-    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
-    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
-    os_proc_mock = mock.Mock(side_effect = os_proc)
+    expected_ip_addr = "99.100.101.102"
+    uname_results_mock = mock.Mock()
+    ip_addr_show_results_mock = mock.Mock()
+
+    uname_attrs = {'communicate.return_value': [get_rpi_uname_results().encode("utf-8")]}
+    uname_results_mock.configure_mock(**uname_attrs)
+
+    ip_addr_show_attrs = {'communicate.return_value': [get_rpi_ip_addr_results().encode("utf-8")]}
+    ip_addr_show_results_mock.configure_mock(**ip_addr_show_attrs)
+
+    popen_mock = mock.Mock(side_effect=[uname_results_mock, ip_addr_show_results_mock])
 
     ip = utils.IPAddr()
 
-    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+    with mock.patch("subprocess.Popen", popen_mock):
         ipaddr = ip.get_ip_addr()
 
-    assert ipaddr is ipaddr
+    assert ipaddr == expected_ip_addr
     
 
 def test_ipaddr_rpi_intf():
-    intf = "eth0"
-    os_proc = [["Linux raspberrypi 3.2.27+ #250 PREEMPT Thu Oct 18 19:03:02 BST 2012 armv6l GNU/Linux".encode("utf-8")],
-    ["inet 192.168.17.252/24 brd 192.168.17.255 scope global eth0".encode("utf-8")]]
-    os_proc_mock = mock.Mock(side_effect = os_proc)
+    intf = "wlan0"
+    expected_ip_addr = "99.100.101.102"
+    uname_results_mock = mock.Mock()
+    ip_addr_show_results_mock = mock.Mock()
+
+    uname_attrs = {'communicate.return_value': [get_rpi_uname_results().encode("utf-8")]}
+    uname_results_mock.configure_mock(**uname_attrs)
+
+    ip_addr_show_attrs = {'communicate.return_value': [get_rpi_ip_addr_results().encode("utf-8")]}
+    ip_addr_show_results_mock.configure_mock(**ip_addr_show_attrs)
+
+    popen_mock = mock.Mock(side_effect=[uname_results_mock, ip_addr_show_results_mock])
 
     ip = utils.IPAddr()
 
-    with mock.patch("subprocess.Popen.communicate", os_proc_mock): 
+    with mock.patch("subprocess.Popen", popen_mock):
         ipaddr = ip.get_ip_addr(intf)
 
-    assert ipaddr is ipaddr
+    assert ipaddr == expected_ip_addr
