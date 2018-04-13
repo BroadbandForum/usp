@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
+    {% if site.google_analytics %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116541596-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-116541596-1');
+  </script>
+{% endif %}
     <meta charset="UTF-8">
     <title>The User Services Platform - Standardized IoT Management and Control</title>
     <meta name="description" content="{{ page.description | default: site.description | default: site.github.project_tagline }}"/>
@@ -29,6 +39,7 @@
       </footer>
     </section>
 
+<!--
     {% if site.google_analytics %}
       <script type="text/javascript">
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -39,5 +50,6 @@
         ga('send', 'pageview');
       </script>
     {% endif %}
+  -->
   </body>
 </html>
