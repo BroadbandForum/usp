@@ -93,7 +93,7 @@ When used in a certificate, an Endpoint ID is expressed as a urn in the bbf name
 
 `"urn:bbf:usp:id:" authority-scheme ":" [authority-id] ":" instance-id`
 
-When used in the `to_id` and `from_id` of a USP Record, the namespace information is omitted, and the Endpoint ID is expressed as:
+When used anywhere else (e.g. in the `to_id` and `from_id` of a USP Record), the namespace information is omitted, and the Endpoint ID is expressed as:
 
 `authority-scheme ":" [authority-id] ":" instance-id`
 
