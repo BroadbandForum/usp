@@ -1,0 +1,34 @@
+@startuml
+
+hide footbox
+
+
+participant "Controller" as C #8888FF
+
+participant "Agent" as A #cc9999
+
+
+activate C
+|||
+
+C -> A: USP Record(version: 1.0, to_id: <agent_id>, from_id: <controller_id>\n\tpayload: header(msg_id: <id>, msg_type <request>),\n\tbody(request(elements))
+
+
+activate A
+A-->A: Parse Message
+
+A-->A: Parse Body
+
+A-->A: Process Request
+
+hnote over A : Error
+
+A-->A: Generate **error** arguments
+
+
+A->C: USP Record(version: 1.0, to_id: <controller_id>, from_id: <agent_id>\n\tpayload: header(msg_id: <id>, msg_type <request>),\n\tbody(error(elements))
+
+deactivate A
+|||
+
+@enduml

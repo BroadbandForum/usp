@@ -1,0 +1,18 @@
+@startuml
+
+participant "Controller" as C
+participant "Agent" as A
+
+A --> A : Generate ""session_id""
+note over A : New TLS client for\n""(controller_id, session_id)""
+group TLS Handshake\n//(RFC5246, Section 7)//
+A -> C : ""USPRecord(session_id, sequence_id = 1,""\n""\t  payload = ClientHello)""
+note over C : New TLS session for\n""(agent_id, session_id)""
+C -> A : ""USPRecord(session_id, sequence_id = 1,""\n""\t  payload = ServerHello ... ServerHelloDone)""
+A -> C : ""USPRecord(session_id, sequence_id = 2,""\n""\t  payload = Certificate ... Finished)""
+C -> A : ""USPRecord(session_id, sequence_id = 2,""\n""\t  payload = Finished)""
+|||
+end
+... USP Session ...
+
+@enduml
