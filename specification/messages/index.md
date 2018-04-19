@@ -911,7 +911,7 @@ For example, a Controller wants to read the data model to learn the settings and
       }
     }
 
-In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using an field for each of the requested paths. In this case:
+In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using a field for each of the requested paths. In this case:
 
     GetResp {
         req_path_results {
