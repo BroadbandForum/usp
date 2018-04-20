@@ -26,7 +26,8 @@
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>USP Version 1.0</h2>
+<h2>Issue 1 Corrigendum 1</h2>
+<h4>USP Version 1.0.1</h4>
 
 You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
 
