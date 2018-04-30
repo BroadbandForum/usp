@@ -89,9 +89,13 @@ These three components are combined as:
 
 The format of the authority-id is dictated by the authority-scheme. The format of the instance-id is dictated either by the authority-scheme or by the entity identified by the authority-id.
 
-An Endpoint ID can be expressed as a urn in the bbf namespace as
+When used in a certificate, an Endpoint ID is expressed as a urn in the bbf namespace as:
 
 `"urn:bbf:usp:id:" authority-scheme ":" [authority-id] ":" instance-id`
+
+When used anywhere else (e.g. in the `to_id` and `from_id` of a USP Record), the namespace information is omitted, and the Endpoint ID is expressed as:
+
+`authority-scheme ":" [authority-id] ":" instance-id`
 
 #### Use of authority-scheme and authority-id
 
