@@ -76,6 +76,7 @@ When a STOMP communications session is no longer necessary, the STOMP connection
 **R-STOMP.3** - USP Endpoints that DO NOT utilize client certificate authentication MUST include the login and passcode STOMP headers in the STOMP frame.  For a USP Agent, if the `.STOMP.Connection.{i}.Username` parameter is implemented then its value will be the source for the `login` STOMP header, and if the `.STOMP.Connection.{i}.Password` parameter is implemented then its value will be the source for the `passcode` STOMP header.
 
 **R-STOMP.4** - USP Endpoints sending a `STOMP` frame MUST include (in addition to other mandatory STOMP headers) an `endpoint-id` STOMP header containing the Endpoint ID of the USP Endpoint sending the frame.
+NOTE: According to the STOMP Specification, the `STOMP` frame requires that "C style literal escapes" need to be used to encode any carriage return, line feed, or colon characters that are found within the UTF-8 encoded headers, and R-STOMP.4 requires the Endpoint ID to be included in those headers.  Since the Endpoint ID always contains colon characters, those will need to be escaped.
 
 **R-STOMP.5** - USP Endpoints sending a STOMP frame MUST include a host STOMP header, if configured to do so. For a USP Agent the value MUST contain the value from the appropriate `.STOMP.Connection.{i}.VirtualHost` parameter if supported and not empty.
 
