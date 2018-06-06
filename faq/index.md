@@ -62,4 +62,4 @@ Feedback and questions can always be given via [GitHub](http://github.com/Broadb
 The following resources are accessible to Broadband Forum members:
 
 * [USP Project Wiki](https://wiki.broadband-forum.org/display/BBF/User+Services+Platform+Project+Stream)
-* [USP Development Area](https://code.broadband-forum.org/projects/repos/USP/wt-369/browse)
+* [USP Development Area](https://code.broadband-forum.org/projects/USP/repos/wt-369/browse)
