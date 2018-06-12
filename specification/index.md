@@ -129,6 +129,11 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 * Release contains specification for the User Services Platform 1.0.
 
+#### Release 1.0.1
+
+* Added examples and clarifications to end-to-end messaging, use of endpoint ID,
+typographical fixes
+
 ## Editors
 
 | Name  | Company | Email | Role |
