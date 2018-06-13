@@ -434,7 +434,7 @@ Conditions:
 Conditions:
 
 1. Maximum TLS record size < size of (USP Message + TLS record header)
-2. Maximum USP Record size > maximum TLS record size + USP Record header
+2. Maximum USP Record size > maximum TLS record size + size of USP Record header
 3. Maximum USP Record size < size of USP Message + size of TLS record header + size of USP record header
 
 <img src='segmentation-case-6.png' />
