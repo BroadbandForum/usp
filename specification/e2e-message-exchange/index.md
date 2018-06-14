@@ -390,7 +390,7 @@ The following examples show the values assigned to `payload_sar_state` and `payl
 
 Conditions:
 
-1. Maximum USP Record size > size of USP Message + USP Record header
+1. Maximum USP Record size > size of (USP Message + USP Record header)
 
 <img src='segmentation-case-1.png' />
 
@@ -398,7 +398,7 @@ Conditions:
 
 Conditions:
 
-1. Maximum USP Record size < size of USP Message + USP Record header
+1. Maximum USP Record size < size of (USP Message + USP Record header)
 
 <img src='segmentation-case-2.png' />
 
@@ -406,8 +406,8 @@ Conditions:
 
 Conditions:
 
-1. Maximum TLS record size > size of USP Message + TLS record header
-2. Maximum USP Record size > size of USP Message + TLS record and USP Record headers
+1. Maximum TLS record size > size of (USP Message + TLS record header)
+2. Maximum USP Record size > size of USP Message + size of TLS record header + size of USP record header
 
 <img src='segmentation-case-3.png' />
 
@@ -415,8 +415,8 @@ Conditions:
 
 Conditions:
 
-1. Maximum TLS record size < size of USP Message + TLS record header
-2. Maximum USP Record size > size of USP Message + TLS record and USP Record headers
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size > size of all TLS records + size of USP record header
 
 <img src='segmentation-case-4.png' />
 
@@ -424,8 +424,8 @@ Conditions:
 
 Conditions:
 
-1. Maximum TLS record size > size of USP Message + TLS record header
-2. Maximum USP Record size < size of TLS record + USP Record header
+1. Maximum TLS record size > size of (USP Message + TLS record header)
+2. Maximum USP Record size < size of (TLS record + USP Record header)
 
 <img src='segmentation-case-5.png' />
 
@@ -433,9 +433,9 @@ Conditions:
 
 Conditions:
 
-1. Maximum TLS record size < size of USP Message + TLS record header
-2. Maximum USP Record size > maximum TLS record size + USP Record header
-3. Maximum USP Record size < size of USP Message + TLS record and USP Record headers
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size > maximum TLS record size + size of USP Record header
+3. Maximum USP Record size < size of USP Message + size of TLS record header + size of USP record header
 
 <img src='segmentation-case-6.png' />
 
@@ -443,8 +443,8 @@ Conditions:
 
 Conditions:
 
-1. Maximum TLS record size < size of USP Message + TLS record header
-2. Maximum USP Record size < size of some TLS records + USP Record header
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size < size of (some TLS records + USP Record header)
 
 <img src='segmentation-case-7.png' />
 
