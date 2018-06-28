@@ -1534,12 +1534,6 @@ This field, if `true`, indicates that, in the `supported_objs`, the Agent should
 
 This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` field containing Parameters supported by the reported Object(s).
 
-##### DiscoverObject fields
-
-`string obj_path`
-
-This field contains a Path Name to an Object (not an Object Instance) in the Agent's Supported Data Model.
-
 #### GetSupportedDMResp fields
 
 `repeated RequestedObjectResult req_obj_results`
