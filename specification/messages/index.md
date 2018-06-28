@@ -287,15 +287,15 @@ For Add and Set requests, each Object address or search is conveyed in an field 
 
 The Add response contains details about the success or failure of the creation of the Object and the parameters set during its creation. In addition, it also returns those parameters that were set by the Agent upon creation of the Object.
 
-For example, a Controller wants to create a new Wifi network on an Agent. It could use an Add message with the following fields:
+For example, a Controller wants to create a new WiFi network on an Agent. It could use an Add message with the following fields:
 
     allow_partial: false
     create_objs {
-    	obj_path: "Device.Wifi.SSID."
+    	obj_path: "Device.WiFi.SSID."
     	param_settings {
         {
       		param: "LowerLayers"
-      		value: "Device.Wifi.Radio.1."
+      		value: "Device.WiFi.Radio.1."
       		required: true}
     		{
           param: "SSID"
@@ -307,10 +307,10 @@ For example, a Controller wants to create a new Wifi network on an Agent. It cou
 The Agent’s response would include the successful Object update and the list of parameters that were set, including the default values for the Enable and Status parameters defined in [Device:2][1]:
 
     created_obj_results {
-      requested_path: "Device.Wifi.SSID."
+      requested_path: "Device.WiFi.SSID."
       oper_status {
         oper_success {
-          instantiated_path: "Device.Wifi.SSID.2."
+          instantiated_path: "Device.WiFi.SSID.2."
           created_param_results {
             {
               key: Enable
@@ -320,7 +320,7 @@ The Agent’s response would include the successful Object update and the list o
               value: Down}
             {
               key: LowerLayers
-              value: Device.Wifi.Radio.1.}
+              value: Device.WiFi.Radio.1.}
             {
               key: SSID
               value: NewSSIDName}				
@@ -903,11 +903,11 @@ For each resolved Path Name, a `ResolvedPathResult` message is given in the Resp
 
 #### Get Examples
 
-For example, a Controller wants to read the data model to learn the settings and stats of a single Wifi SSID, "HomeNetwork" with a BSSID of "00:11:22:33:44:55". It could use a Get request with the following fields:
+For example, a Controller wants to read the data model to learn the settings and stats of a single WiFi SSID, "HomeNetwork" with a BSSID of "00:11:22:33:44:55". It could use a Get request with the following fields:
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
+        "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
       }
     }
 
@@ -915,11 +915,11 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
 
     GetResp {
         req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
+        requested_path: "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
         err_code : 0
         err_msg :
         resolved_path_results {
-          resolved_path : "Device.Wifi.SSID.1."
+          resolved_path : "Device.WiFi.SSID.1."
           result_params {
             {
               key: "Enable"
@@ -948,11 +948,11 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
         }
       }
 
-In another example, the Controller only wants to read the current status of the Wifi network with the SSID "HomeNetwork" with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following fields:
+In another example, the Controller only wants to read the current status of the WiFi network with the SSID "HomeNetwork" with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following fields:
 
     Get {
       param_paths {
-        "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
+        "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
       }
     }
 
@@ -961,11 +961,11 @@ In response to this request the Agent returns only the Status parameter and its 
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.Wifi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
+        requested_path: "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
         err_code : 0
         err_msg :
         resolved_path_results {
-          resolved_path : "Device.Wifi.SSID.1."
+          resolved_path : "Device.WiFi.SSID.1."
           result_params {
             key: "Status"
             value: "Up"
@@ -975,12 +975,12 @@ In response to this request the Agent returns only the Status parameter and its 
     }
 ```
 
-Lastly, using wildcards or another Search Path, the requested path may resolve to more than one resolved path. For example for a Request sent to an Agent with two `Wifi.SSID` instances:
+Lastly, using wildcards or another Search Path, the requested path may resolve to more than one resolved path. For example for a Request sent to an Agent with two `WiFi.SSID` instances:
 
 ```
     Get {
       param_paths {
-        "Device.Wifi.SSID.*.Status"
+        "Device.WiFi.SSID.*.Status"
       }
     }
 ```
@@ -990,17 +990,17 @@ The Agent's GetResponse would be:
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.Wifi.SSID.*."
+        requested_path: "Device.WiFi.SSID.*."
         err_code : 0
         err_msg :
         resolved_path_results {
-          resolved_path : "Device.Wifi.SSID.1."
+          resolved_path : "Device.WiFi.SSID.1."
           result_params {
             key: "Status"
             value: "Up"
           }
 
-          resolved_path : "Device.Wifi.SSID.2."
+          resolved_path : "Device.WiFi.SSID.2."
           result_params {
               key: "Status"
               value: "Up"
@@ -1223,11 +1223,11 @@ GetInstances takes one or more Path Names to Multi-Instance Objects in a Request
 
 #### GetInstances Examples
 
-For example, if a Controller wanted to know *only* the current instances of Wifi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:
+For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:
 
 ```
     GetInstances {
-      obj_paths : "Device.Wifi.SSID."
+      obj_paths : "Device.WiFi.SSID."
       bool first_level_only : true
     }
 ```
@@ -1237,36 +1237,36 @@ The Agent's Response would contain:
 ```
     GetInstancesResp {
       req_path_results {
-        requested_path : "Device.Wifi.SSID."
+        requested_path : "Device.WiFi.SSID."
         err_code : 0
         err_msg :
         curr_insts {
-          instantiated_obj_path : "Device.Wifi.SSID.1."
+          instantiated_obj_path : "Device.WiFi.SSID.1."
           unique_keys {
             {
               key : "Alias"
-              value : "UserWifi1"}
+              value : "UserWiFi1"}
             {
               key : "Name"
-              value : "UserWifi1"}
+              value : "UserWiFi1"}
             {
               key : "SSID"
-              value : "SecureProviderWifi"}
+              value : "SecureProviderWiFi"}
             {
               key : "BSSID"
               value : "00:11:22:33:44:55"}
           }
-          instantiated_obj_path : "Device.Wifi.SSID.2."
+          instantiated_obj_path : "Device.WiFi.SSID.2."
           unique_keys {
             {
               key : "Alias"
-              value : "UserWifi2"}
+              value : "UserWiFi2"}
             {
               key : "Name"
-              value : "UserWifi2"}
+              value : "UserWiFi2"}
             {
               key : "SSID"
-              value : "GuestProviderWifi"}
+              value : "GuestProviderWiFi"}
             {
               key : "BSSID"
               value : "00:11:22:33:44:55"}
@@ -1276,60 +1276,60 @@ The Agent's Response would contain:
     }
 ```
 
-In another example, the Controller wants to get all of  the Instances of the `Device.Wifi.AccessPoint` table, plus all of the instances of the AssociatedDevice Object and AC Object (sub-Objects of AccessPoint). It would issue a GetInstances Request with the following:
+In another example, the Controller wants to get all of  the Instances of the `Device.WiFi.AccessPoint` table, plus all of the instances of the AssociatedDevice Object and AC Object (sub-Objects of AccessPoint). It would issue a GetInstances Request with the following:
 
 ```
     GetInstances {
-      obj_paths : "Device.Wifi.AccessPoint."
+      obj_paths : "Device.WiFi.AccessPoint."
       bool first_level_only : false
     }
 ```
 
-The Agent's Response will contain an entry in curr_insts for all of the Instances of the `Device.Wifi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
+The Agent's Response will contain an entry in curr_insts for all of the Instances of the `Device.WiFi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
 
 ```
     GetInstancesResp {
       req_path_results {
-        requested_path : "Device.Wifi.AccessPoint."
+        requested_path : "Device.WiFi.AccessPoint."
         err_code : 0
         err_msg :
         curr_insts {
-          instantiated_obj_path : "Device.Wifi.AccessPoint.1."
+          instantiated_obj_path : "Device.WiFi.AccessPoint.1."
           unique_keys {
             {
               key : "Alias"
               value : "SomeAlias"}
             {
               key : "SSIDReference"
-              value : "Device.Wifi.SSID.1"}
+              value : "Device.WiFi.SSID.1"}
           }
-          instantiated_obj_path : "Device.Wifi.AccessPoint.2."
+          instantiated_obj_path : "Device.WiFi.AccessPoint.2."
           unique_keys :
             {
               key : "Alias"
               value : "SomeAlias"}
             {
               key : "SSIDReference"
-              value : "Device.Wifi.SSID.2"}
-          instantiated_obj_path : "Device.Wifi.AccessPoint.1.AssociatedDevice.1."
+              value : "Device.WiFi.SSID.2"}
+          instantiated_obj_path : "Device.WiFi.AccessPoint.1.AssociatedDevice.1."
           unique_keys {
               key : "MACAddress"
               value : "11:22:33:44:55:66"
           }
 
-          instantiated_obj_path : "Device.Wifi.AccessPoint.1.AC.1."
+          instantiated_obj_path : "Device.WiFi.AccessPoint.1.AC.1."
           unique_keys {
             key : "AccessCategory"
             value : "BE"
           }
 
-          instantiated_obj_path : "Device.Wifi.AccessPoint.2.AssociatedDevice.1."
+          instantiated_obj_path : "Device.WiFi.AccessPoint.2.AssociatedDevice.1."
           unique_keys {
             key : "MACAddress"
             value : "11:22:33:44:55:66"
           }
 
-          instantiated_obj_path : "Device.Wifi.AccessPoint.2.AC.1."
+          instantiated_obj_path : "Device.WiFi.AccessPoint.2.AC.1."
           unique_keys {
             key : "AccessCategory"
             value : "BE"
@@ -1399,20 +1399,20 @@ GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands
 
 The GetSupportedDM is different from other USP messages in that it deals exclusively with the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance objects in the Path use the `{i}` identifier to indicate their place in the Path Name.
 
-For example, a Path Name to the `AssociatedDevice` Object (a child of the `.Wifi.AccessPoint` Object) would be addressed in the Supported Data Model as:
+For example, a Path Name to the `AssociatedDevice` Object (a child of the `.WiFi.AccessPoint` Object) would be addressed in the Supported Data Model as:
 
-`Device.Wifi.AccessPoint.{i}.AssociatedDevice.` or `Device.Wifi.AccessPoint.{i}.AssociatedDevice.{i}.`
+`Device.WiFi.AccessPoint.{i}.AssociatedDevice.` or `Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.`
 
 Both of these syntaxes are supported and equivalent. The Agent's Response returns the Path Name to the Object in the associated Device Type document as specified in [TR-106][3].
 
 #### GetSupportedDM Examples
 
-For example, the Controller wishes to learn the Wifi capabilities the Agent represents. It could issue a GetSupportedDM Request as:
+For example, the Controller wishes to learn the WiFi capabilities the Agent represents. It could issue a GetSupportedDM Request as:
 
 ```
     GetSupportedDM {
       obj_paths {
-        obj_path : "Device.Wifi."
+        obj_path : "Device.WiFi."
       }
       first_level_only : false
       return_commands : true
@@ -1426,12 +1426,12 @@ The Agent's Response would be:
 ```
     GetSupportedDMResp {
       req_obj_results {
-        req_obj_path : "Device.Wifi."
+        req_obj_path : "Device.WiFi."
         err_code : 0
         err_msg :
         data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
         supported_objs {
-          supported_obj_path :" Device.Wifi."
+          supported_obj_path :" Device.WiFi."
           is_multi_instance : false
           supported_params {
             {
@@ -1461,7 +1461,7 @@ The Agent's Response would be:
               "SomeArgumentB"
             }
           }
-          supported_obj_path : "Device.Wifi.SSID.{i}."
+          supported_obj_path : "Device.WiFi.SSID.{i}."
           access : ADD_DELETE (1)
           is_multi_instance : true
           supported_params {
@@ -1507,7 +1507,7 @@ The Agent's Response would be:
             }
           }                
 
-    // And continued, for Objects such as Device.Wifi.SSID.{i}.Stats., Device.Wifi.Radio.{i}, Device.Wifi.AccessPoint.{i}, Device.Wifi.AccessPoint.{i}.AssociatedDevice.{i}, etc.
+    // And continued, for Objects such as Device.WiFi.SSID.{i}.Stats., Device.WiFi.Radio.{i}, Device.WiFi.AccessPoint.{i}, Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}, etc.
       }
     }
 ```
@@ -1685,9 +1685,9 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
-For example, a Controller wants to be notified when a new Wifi station joins the Wifi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
+For example, a Controller wants to be notified when a new WiFi station joins the WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
 
-In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wifi network. It uses the Add message to create a subscription Object instance with `Device.Wifi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
+In another example, a Controller wants to be notified whenever an outside source changes the SSID of a WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
 <a id='notification_retry' />
 
