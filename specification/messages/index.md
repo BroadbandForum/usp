@@ -299,33 +299,33 @@ For example, a Controller wants to create a new WiFi network on an Agent. It cou
       		required: true}
     		{
           param: "SSID"
-    		value: "NewSSIDName"
-    		required: true}
+    		  value: "NewSSIDName"
+    		  required: true}
     		}
     	}
 
-The Agent’s response would include the successful Object update and the list of parameters that were set, including the default values for the Enable and Status parameters defined in [Device:2][1]:
+The Agent’s response would include the object created (with its instance identifier) and the unique keys of the created object as defined in [Device:2][1]:
 
     created_obj_results {
       requested_path: "Device.WiFi.SSID."
       oper_status {
         oper_success {
-          instantiated_path: "Device.WiFi.SSID.2."
-          created_param_results {
-            {
-              key: Enable
-              value: false}
-            {
-              key: Status
-              value: Down}
-            {
-              key: LowerLayers
-              value: Device.WiFi.Radio.1.}
-            {
-              key: SSID
-              value: NewSSIDName}				
+          instantiated_path: ""Device.WiFi.SSID.4."
+          unique_keys {
+          {
+            key: "BSSID"
+            value: "112233445566"}
+          {
+            key: "Name"
+            value: "GuestNetwork1"}
+          {
+            key: "Alias"
+            value: "cpe-alias-1"}            
+          }
         }
+      }
     }
+
 
 <a id='using_allow_partial_and_required_parameters' />
 
