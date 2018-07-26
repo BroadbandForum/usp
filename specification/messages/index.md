@@ -2127,9 +2127,11 @@ This field contains an Object Instance Path to the Request Object created as a r
 
 This field contains a message of one of the following types.
 
+```
   string req_obj_path
   OutputArgs req_output_args
   CommandFailure cmd_failure
+```
 
 ###### Using req_obj_path
 
