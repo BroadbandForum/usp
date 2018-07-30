@@ -257,7 +257,7 @@ Several USP messages make use of relative paths to address Objects or Parameters
 
 For example, for an Object Path of:
 
-`Device.Wifi.Radio.1.`
+`Device.WiFi.Radio.1.`
 
 Relative paths would include parameters:
 
@@ -453,7 +453,7 @@ For example, `Device.WiFi.SSID.{i}.LowerLayers` references a list of WiFi Radio 
 
 The steps that are executed by the Agent when following the reference in this example would be:
 
-1.	Retrieve the appropriate `Device.Wifi.SSID.{i}` instance based on the Instance Number Addressing information
+1.	Retrieve the appropriate `Device.WiFi.SSID.{i}` instance based on the Instance Number Addressing information
 
 2.	Retrieve the value of the LowerLayers Parameter, which in this case has a value of "`Device.WiFi.Radio.1, Device.WiFi.Radio.2`"
 
