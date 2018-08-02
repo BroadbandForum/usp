@@ -27,7 +27,7 @@
   </div>
   <div style="width:45%; float:right;">
 
-    <h2>Current Version: 1.0</h2>
+    <h2>Current Version: 1.0.1</h2>
 
     <h4>About this version:</h4>
 
