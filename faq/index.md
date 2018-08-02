@@ -55,11 +55,11 @@ A full compliance test suite for USP is in development. The Broadband Forum will
 
 ## I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?
 
-Feedback and questions can always be given via [GitHub](github.com/BroadbandForum/usp). Due to the standards process adopted by the Broadband Forum, a contributing Broadband Forum member must adopt suggested changes and present them to the Forum as a contribution from their company. An even easier way is to [become a member](https://www.broadband-forum.org/about-the-broadband-forum/membership/becoming-a-bbf-member) and contribute directly. The Broadband Forum has membership levels for large businesses, small businesses, and individuals.
+Feedback and questions can always be given via [GitHub](http://github.com/BroadbandForum/usp/specification). Due to the standards process adopted by the Broadband Forum, a contributing Broadband Forum member must adopt suggested changes and present them to the Forum as a contribution from their company. An even easier way is to [become a member](https://www.broadband-forum.org/about-the-broadband-forum/membership/becoming-a-bbf-member) and contribute directly. The Broadband Forum has membership levels for large businesses, small businesses, and individuals.
 
 # Resources
 
 The following resources are accessible to Broadband Forum members:
 
 * [USP Project Wiki](https://wiki.broadband-forum.org/display/BBF/User+Services+Platform+Project+Stream)
-* [USP Development Area](https://code.broadband-forum.org/projects/repos/USP/wt-369/browse)
+* [USP Development Area](https://code.broadband-forum.org/projects/USP/repos/wt-369/browse)

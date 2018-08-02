@@ -89,9 +89,13 @@ These three components are combined as:
 
 The format of the authority-id is dictated by the authority-scheme. The format of the instance-id is dictated either by the authority-scheme or by the entity identified by the authority-id.
 
-An Endpoint ID can be expressed as a urn in the bbf namespace as
+When used in a certificate, an Endpoint ID is expressed as a urn in the bbf namespace as:
 
 `"urn:bbf:usp:id:" authority-scheme ":" [authority-id] ":" instance-id`
+
+When used anywhere else (e.g. in the `to_id` and `from_id` of a USP Record), the namespace information is omitted, and the Endpoint ID is expressed as:
+
+`authority-scheme ":" [authority-id] ":" instance-id`
 
 #### Use of authority-scheme and authority-id
 
@@ -253,7 +257,7 @@ Several USP messages make use of relative paths to address Objects or Parameters
 
 For example, for an Object Path of:
 
-`Device.Wifi.Radio.1.`
+`Device.WiFi.Radio.1.`
 
 Relative paths would include parameters:
 
@@ -449,7 +453,7 @@ For example, `Device.WiFi.SSID.{i}.LowerLayers` references a list of WiFi Radio 
 
 The steps that are executed by the Agent when following the reference in this example would be:
 
-1.	Retrieve the appropriate `Device.Wifi.SSID.{i}` instance based on the Instance Number Addressing information
+1.	Retrieve the appropriate `Device.WiFi.SSID.{i}` instance based on the Instance Number Addressing information
 
 2.	Retrieve the value of the LowerLayers Parameter, which in this case has a value of "`Device.WiFi.Radio.1, Device.WiFi.Radio.2`"
 

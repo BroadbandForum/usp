@@ -26,9 +26,10 @@
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>USP Version 1.0</h2>
+<h2>Issue 1 Corrigendum 1</h2>
+<h4>USP Version 1.0.1</h4>
 
-*You can find a pdf version of this document [here](https://www.broadband-forum.org/technical/download/TR-369.pdf). Note that in the event of any differences between the pdf version and this site, this site represents the official version.*
+You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
 
 **Table of Contents**
 
@@ -128,6 +129,11 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 * Release contains specification for the User Services Platform 1.0.
 
+#### Release 1.0.1
+
+* Added examples and clarifications to end-to-end messaging, use of endpoint ID,
+typographical fixes
+
 ## Editors
 
 | Name  | Company | Email | Role |
@@ -163,7 +169,7 @@ The term "connected device" is a broad one, applying to the vast array of networ
 
 In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the entertainment, productivity, and storage applications they want.
 
-These realities have created an opportunity for CE vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
+These realities have created an opportunity for consumer electronics vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
 To address this opportunity, use cases supported by USP include:
 
@@ -179,7 +185,7 @@ To address this opportunity, use cases supported by USP include:
 
 ### Purpose
 
-This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wifi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
+This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart WiFi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 ### Scope
 

@@ -265,7 +265,7 @@ To communicate the sequence identifier of the last USP Record received by a rece
 
 The value of the `payload_security` field defines the type of payload security that is performed in the Session Context. Once a Session Context is established the payload security stays the same throughout the lifetime of the Session Context.
 
-**R-E2E.18** – The originating USP Endpoint MUST use the same value in the `payload_security` field for all USP Records within a Session Context. The receiving USP Endpoint MUST fail a USP Record with different payload security.
+**R-E2E.18** – The originating USP Endpoint MUST use the same value in the `payload_security` field for all USP Records within a Session Context.
 
 #### USP Record Reception
 
@@ -382,6 +382,72 @@ For each USP Message reassemble the segmented payload:
 
 If the segmentation and reassembly fails for any reason, the USP Endpoint that received the segmented USP Records will consider the last received USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
+#### Segmentation Examples
+
+The following examples show the values assigned to `payload_sar_state` and `payloadrec_sar_state` fields for various permutations of `payload_security`, and maximum USP Record size and Secure Message Exchange maximum TLS record size relative to the size of the USP Message. The examples are not exhaustive.
+
+**Case 1: payload_security = PLAINTEXT, single USP Record**
+
+Conditions:
+
+1. Maximum USP Record size > size of (USP Message + USP Record header)
+
+<img src='segmentation-case-1.png' />
+
+**Case 2: payload_security = PLAINTEXT, fragmented across multiple USP Records**
+
+Conditions:
+
+1. Maximum USP Record size < size of (USP Message + USP Record header)
+
+<img src='segmentation-case-2.png' />
+
+**Case 3: payload_security = TLS12, single TLS record, single USP Record**
+
+Conditions:
+
+1. Maximum TLS record size > size of (USP Message + TLS record header)
+2. Maximum USP Record size > size of USP Message + size of TLS record header + size of USP record header
+
+<img src='segmentation-case-3.png' />
+
+**Case 4: Payload_security = TLS12, all TLS records in a single USP Record**
+
+Conditions:
+
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size > size of all TLS records + size of USP record header
+
+<img src='segmentation-case-4.png' />
+
+**Case 5: Payload_security = TLS12, single TLS record fragmented across multiple USP Records**
+
+Conditions:
+
+1. Maximum TLS record size > size of (USP Message + TLS record header)
+2. Maximum USP Record size < size of (TLS record + USP Record header)
+
+<img src='segmentation-case-5.png' />
+
+**Case 6: Payload_security = TLS12, multiple TLS records, one TLS record per USP Record**
+
+Conditions:
+
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size > maximum TLS record size + size of USP Record header
+3. Maximum USP Record size < size of USP Message + size of TLS record header + size of USP record header
+
+<img src='segmentation-case-6.png' />
+
+**Case 7: Payload_security = TLS12, multiple TLS records, some TLS records fragmented across multiple USP Records**
+
+Conditions:
+
+1. Maximum TLS record size < size of (USP Message + TLS record header)
+2. Maximum USP Record size < size of (some TLS records + USP Record header)
+
+<img src='segmentation-case-7.png' />
+
 <a id='handling_duplicate_usp_records' />
 
 ### Handling Duplicate USP Records
@@ -442,7 +508,15 @@ This signature method uses a SHA-256 hash algorithm that generates a signature f
 
 When the transmitting and receiving USP Endpoints have established a TLS session between the USP Endpoints, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Record generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The key used for the HMAC algorithm uses a Key Derivation Function (KDF) in accordance with RFC 5869(https://tools.ietf.org/html/rfc5869) and requires the following inputs to be known by the USP Endpoints involved in the generation and validation of the MAC: length of the output MAC, salt, key and application context information (i.e., KDF info field). The application context information uses a constant value for all USP implementations ("`USP_Record`") and the length is fixed at 32 octets. The salt and key inputs are based on the underlying mechanism used to protect the payload of the USP Record. For TLS, the salt and key are taken from the TLS session once TLS negotiation is completed. The input key to the KDF uses the master key of the TLS session. The salt depends on role played by the USP Endpoint in the TLS Session (i.e., TLS session’s client or server random).
 
-**R-E2E.32** – When generating or validating the MAC to protect the integrity of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record's protobuf specification proceeding from lowest to highest. The non-payload fields in the Record definition (other than the mac_signature field itself) MUST be used first and then the fields of the SessionContextRecord if applicable.
+**R-E2E.32** – When generating or validating the MAC or signature to protect the integrity of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record’s protobuf specification proceeding from lowest to highest. The non-payload fields in the Record definition (other than the `mac_signature` field itself) MUST be used first and then the fields of the `SessionContextRecord` if applicable.
+
+**R-E2E.32.1** – When generating or validating the MAC or signature, all non-payload fields MUST be appended as byte arrays and fed into the MAC or signature generation function with the following conditions:
+
+* uint64 types MUST be passed as 8 bytes in big endian ordering
+* uint32 types MUST be passed as 4 bytes in big endian ordering
+* enum types MUST be treated as uint32
+* string types MUST be passed as UTF-8 encoded byte array
+* bytes types MUST be passed as is
 
 **R-E2E.33** – If using the TLS MAC method to protect the integrity of a USP Record, and a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the MAC using the SHA-256 HMAC algorithm for the non-payload portion of the USP Record.
 
