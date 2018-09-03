@@ -13,79 +13,22 @@ info:
 host: "swagger.usp.technology"
 basePath: "/v2"
 tags:
-- name: "agent"
+- name: "agents"
   description: "Interact with USP Agents"
 
 schemes:
 - "http"
 
 paths:
-  /agent/{endpointID}:
+  /agents/{endpointID}:
     get:
       tags:
-      - "agent"
-      summary: "Get service elements from an Agent"
-      description: "Retrieve a set of Service Elements from the USP Agent"
-      operationId: "getAgentServiceElements"
+      - "agents"
+      summary: "Get Details of a USP Agent"
+      description: "Retrieve details related to a specific USP Agent"
+      operationId: "getAgentDetails"
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "endpointID"
-        in: "path"
-        description: "USP Agent Endpoint ID"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Names of Service Elements to be retrieved from the Agent"
-        required: true
-        schema:
-          $ref: "#/definitions/ServiceElementNames"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/ServiceElementDetailArray"
-        404:
-          description: "USP Agent not found"
-    patch:
-      tags:
-      - "agent"
-      summary: "Update an existing service element on a USP Agent"
-      description: "Update the USP Agent's configuration with the given Service Element"
-      operationId: "updateAgentServiceElements"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "endpointID"
-        in: "path"
-        description: "USP Agent Endpoint ID"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Service Element objects that need to be configured on the USP Agent"
-        required: true
-        schema:
-          $ref: "#/definitions/ServiceElementDetailArray"
-      responses:
-        202:
-          description: "Service Element updates applied"
-        400:
-          description: "Service Element update failed"
-        404:
-          description: "USP Agent not found"
-  /agent/{endpointID}/status:
-    get:
-      tags:
-      - "agent"
-      summary: "Get USP Agent status"
-      description: "Retrieve the status of the USP Agent"
-      operationId: "getAgentStatus"
       produces:
       - "application/json"
       parameters:
@@ -98,16 +41,16 @@ paths:
         200:
           description: "Successful operation"
           schema:
-            $ref: "#/definitions/AgentStatus"
+            $ref: "#/definitions/AgentDetails"
         404:
           description: "USP Agent not found"
-  /agent/{endpointID}/instance:
+  /agents/{endpointID}/serviceElements:
     post:
       tags:
-      - "agent"
-      summary: "Create service element instance on a USP Agent"
+      - "agents"
+      summary: "Create service element on a USP Agent"
       description: "Update the USP Agent's configuration by creating a new Service Element"
-      operationId: "createAgentServiceElementInstance"
+      operationId: "createAgentServiceElement"
       consumes:
       - "application/json"
       produces:
@@ -131,12 +74,39 @@ paths:
           description: "Service Element instance creation failed"
         404:
           description: "USP Agent not found"
-    delete:
+  /agents/{endpointID}/serviceElements/{name}:
+    get:
       tags:
-      - "agent"
-      summary: "Delete service element instance from USP Agent"
-      description: "Update the USP Agent's configuration by removing an existing Service Element"
-      operationId: "deleteAgentServiceElementInstance"
+      - "agents"
+      summary: "Get Service Element by Name from USP Agent"
+      description: "Retrieve a Service Element form a specific USP Agent"
+      operationId: "getAgentServiceElement"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "endpointID"
+        in: "path"
+        description: "USP Agent Endpoint ID"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "path"
+        description: "Service Element Name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ServiceElementDetail"
+        404:
+          description: "USP Agent not found"
+    patch:
+      tags:
+      - "agents"
+      summary: "Update service element by Name on a USP Agent"
+      description: "Update the USP Agent's configuration with the given Service Element"
+      operationId: "updateAgentServiceElements"
       consumes:
       - "application/json"
       produces:
@@ -147,12 +117,45 @@ paths:
         description: "USP Agent Endpoint ID"
         required: true
         type: "string"
+      - name: "name"
+        in: "path"
+        description: "Service Element Name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
-        description: "Service Element object that needs to be removed from the USP Agent"
+        description: "Service Element objects that need to be configured on the USP Agent"
         required: true
         schema:
-          $ref: "#/definitions/ServiceElementReference"
+          $ref: "#/definitions/ServiceElementDetail"
+      responses:
+        202:
+          description: "Service Element updates applied"
+        400:
+          description: "Service Element update failed"
+        404:
+          description: "USP Agent not found"
+    delete:
+      tags:
+      - "agents"
+      summary: "Delete service element by Name from USP Agent"
+      description: "Update the USP Agent's configuration by removing an existing Service Element"
+      operationId: "deleteAgentServiceElement"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "endpointID"
+        in: "path"
+        description: "USP Agent Endpoint ID"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "path"
+        description: "Service Element Name"
+        required: true
+        type: "string"
       responses:
         200:
           description: "Service Element instance removed"
@@ -160,10 +163,10 @@ paths:
           description: "Service Element instance removal failed"
         404:
           description: "USP Agent not found"
-  /agent/{endpointID}/command:
+  /agents/{endpointID}/command:
     post:
       tags:
-      - "agent"
+      - "agents"
       summary: "Execute service element action on USP Agent"
       description: "Execute a Service Element Action on a USP Agent"
       operationId: "executeAgentServiceElementAction"
@@ -199,11 +202,9 @@ paths:
       
 
 definitions:
-  AgentStatus:
+  AgentDetails:
     type: "object"
     properties:
-      endpointID:
-        type: "string"
       mtpInUse:
         type: "string"
         enum: 
@@ -211,13 +212,15 @@ definitions:
         - "STOMP"
         - "WebSockets"
         - "Other"
-      status:
+      communicationsStatus:
         type: "string"
         enum: 
         - "Available"
         - "Unavailable"
         - "Unknown"
         default: "Unknown"
+      supportedServiceElements:
+        $ref: "#/definitions/ServiceElementNames"
   AsyncActionResults:
     type: "object"
     properties:
@@ -265,21 +268,9 @@ definitions:
               type: "string"
             elementValue:
               type: "string"
-  ServiceElementDetailArray:
-    type: "array"
-    items:
-      $ref: "#/definitions/ServiceElementDetail"
   ServiceElementNames:
     type: "array"
     items:
       type: "string"
-  ServiceElementReference:
-    type: "object"
-    properties:
-      name:
-        description: "Name of the Service Element"
-        type: "string"
-      uniqueKey:
-        type: "string"
 
   
