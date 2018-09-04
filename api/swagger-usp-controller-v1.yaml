@@ -44,7 +44,7 @@ paths:
             $ref: "#/definitions/AgentDetails"
         404:
           description: "USP Agent not found"
-  /agents/{endpointID}/serviceElements:
+  /agents/{endpointID}/serviceElements/{name}:
     post:
       tags:
       - "agents"
@@ -61,6 +61,11 @@ paths:
         description: "USP Agent Endpoint ID"
         required: true
         type: "string"
+      - name: "name"
+        in: "path"
+        description: "Service Element Name"
+        required: true
+        type: "string"
       - in: "body"
         name: "body"
         description: "Service Element object that needs to be created on the USP Agent"
@@ -74,7 +79,6 @@ paths:
           description: "Service Element instance creation failed"
         404:
           description: "USP Agent not found"
-  /agents/{endpointID}/serviceElements/{name}:
     get:
       tags:
       - "agents"
@@ -99,6 +103,8 @@ paths:
           description: "Successful operation"
           schema:
             $ref: "#/definitions/ServiceElementDetail"
+        400:
+          description: "Service Element not found"
         404:
           description: "USP Agent not found"
     patch:
@@ -156,6 +162,12 @@ paths:
         description: "Service Element Name"
         required: true
         type: "string"
+      - in: "body"
+        name: "body"
+        description: "The identifier of the Service Element to remove"
+        required: true
+        schema:
+          $ref: "#/definitions/ServiceElementIdentifier"
       responses:
         200:
           description: "Service Element instance removed"
@@ -163,7 +175,7 @@ paths:
           description: "Service Element instance removal failed"
         404:
           description: "USP Agent not found"
-  /agents/{endpointID}/command:
+  /agents/{endpointID}/commands:
     post:
       tags:
       - "agents"
@@ -253,12 +265,23 @@ definitions:
               type: "string"
             argValue:
               type: "string"
+  ServiceElementIdentifier:
+    type: "object"
+    properties:
+      uniqueKeyList:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            elementProperty:
+              type: "string"
+            elementValue:
+              type: "string"
   ServiceElementDetail:
     type: "object"
     properties:
-      name:
-        description: "Name of the Service Element"
-        type: "string"
+      identifier:
+        $ref: "#/definitions/ServiceElementIdentifier"
       propertyList:
         type: "array"
         items:
