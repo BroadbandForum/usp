@@ -98,6 +98,12 @@ paths:
         description: "Service Element Name"
         required: true
         type: "string"
+      - in: "body"
+        name: "body"
+        description: "The identifier of the Service Element to remove"
+        required: true
+        schema:
+          $ref: "#/definitions/ServiceElementIdentifier"
       responses:
         200:
           description: "Successful operation"
