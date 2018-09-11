@@ -1061,16 +1061,6 @@ body {
           }
 
         resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.XMPP."
-          result_params {
-            {
-              key: "Destination"}
-
-            {
-              key: "Reference"}
-          }
-        }
-        resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.CoAP."
           result_params {
             {
