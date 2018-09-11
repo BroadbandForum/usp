@@ -197,7 +197,7 @@ When a Session Context had been previously established between an Agent and Cont
 
 #### Session Context Expiration
 
-Sessions Contexts have a lifetime and can expire. The expiration of the Session Context is handled by the `Device.Controller.{i}.E2ESession.SessionExpiration` Parameter in the Agent. If the Agent does not see activity (an exchange of USP Records) within the Session Context, the Agent considers the Session Context expired and for the next interaction with the Controller a new Session Context is established.
+Sessions Contexts have a lifetime and can expire. The expiration of the Session Context is handled by the `Device.LocalAgent.Controller.{i}.E2ESession.SessionExpiration` Parameter in the Agent. If the Agent does not see activity (an exchange of USP Records) within the Session Context, the Agent considers the Session Context expired and for the next interaction with the Controller a new Session Context is established.
 
 **R-E2E.7** – When a Session Context between a Controller or Agent expires the Agent MUST initiate a new Session Context upon the next interaction with the remote USP Endpoint or from a Session Context request by the remote USP Endpoint.
 
@@ -211,7 +211,7 @@ USP Endpoints identify the USP Record using the `sequence_id` field. When the `s
 
 #### Failure Handling in the Session Context
 
-In some situations, (e.g., TLS negotiation handshake) the failure to handle a received USP Record is persistent, causing an infinite cycle of "receive failure/request->session/establish->session/receive->failure" to occur. In these situations, the Agent enforces a policy as defined in this section regarding establishment of failed Session Contexts or failed interactions within a Session Context. The policy is controlled by the `Device.Controller.{i}.E2ESession.Enable` Parameter.
+In some situations, (e.g., TLS negotiation handshake) the failure to handle a received USP Record is persistent, causing an infinite cycle of "receive failure/request->session/establish->session/receive->failure" to occur. In these situations, the Agent enforces a policy as defined in this section regarding establishment of failed Session Contexts or failed interactions within a Session Context. The policy is controlled by the `Device.LocalAgent.Controller.{i}.E2ESession.Enable` Parameter.
 
 **R-E2E.10** – When retrying USP Records, the Agent MUST use the following retry algorithm to manage the retransmission Session Context establishment procedure:
 
@@ -219,8 +219,8 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 
 | Descriptive Name | Symbol | Default | Data Model Parameter Name |
 | ---------: | :-----: | :------: | :------------ |
-|Minimum wait interval | m | 5 seconds |	`Device.Controller.{i}.E2ESession.SessionRetryMinimumWaitInterval` |
-| Interval multiplier |	k | 2000 | `Device.Controller.{i}.E2ESession.SessionRetryIntervalMultiplier` |
+|Minimum wait interval | m | 5 seconds |	`Device.LocalAgent.Controller.{i}.E2ESession.SessionRetryMinimumWaitInterval` |
+| Interval multiplier |	k | 2000 | `Device.LocalAgent.Controller.{i}.E2ESession.SessionRetryIntervalMultiplier` |
 
 | Retry Count | Default Wait Interval Range (min-max seconds) | Actual Wait Interval Range (min-max seconds) |
 | ----------: | :---------: | :-------------- |
@@ -306,7 +306,7 @@ The receiving USP Endpoint will determine if USP Record exists and then re-send 
 
 If the USP Record doesn't exist, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
-To guard against excessive requests to retransmit a specific USP Record, the USP Endpoint checks to see if the number of times the USP Record has been retransmitted is greater than or equal to maximum times a USP Record can be retransmitted as defined in the `Device.Controller.{i}.E2ESession.MaxRetransmitTries` Parameter. If this condition is met, then the USP Endpoint that received the USP Record with the retransmit request will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
+To guard against excessive requests to retransmit a specific USP Record, the USP Endpoint checks to see if the number of times the USP Record has been retransmitted is greater than or equal to maximum times a USP Record can be retransmitted as defined in the `Device.LocalAgent.Controller.{i}.E2ESession.MaxRetransmitTries` Parameter. If this condition is met, then the USP Endpoint that received the USP Record with the retransmit request will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
 <a id='guidelines_for_handling_session_context_restarts' />
 
