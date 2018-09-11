@@ -395,7 +395,7 @@ body {
 
 Add Response:
 header {
-  msg_id: "55362"
+  msg_id: "52867"
   msg_type: ADD_RESP
 }
 body {
@@ -582,8 +582,10 @@ body {
             updated_inst_results {
               affected_path: "Device.DeviceInfo."
               updated_params {
-                key: "FriendlyName"
-                value: "MyDevicesFriendlyName"
+                {
+                  key: "FriendlyName"
+                  value: "MyDevicesFriendlyName"
+                }
               }
             }
           }
@@ -1066,46 +1068,6 @@ body {
 
             {
               key: "Reference"}
-          }
-        }
-        resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.HTTP."
-          result_params {
-              {
-                key: "CheckPeerID"}
-              {
-                key: "EnableEncryption"}
-              {
-                key: "Host"}
-              {
-                key: "IsEncrypted"
-                value: "False"}
-              {
-                key: "Path"}
-              {
-                key: "Port"}
-              {
-                key: "ValidatePeerCertificate"}            
-          }
-        }
-        resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.WS."
-          result_params {
-              {
-                key: "CheckPeerID"}
-              {
-                key: "EnableEncryption"}
-              {
-                key: "Host"}
-              {
-                key: "IsEncrypted"
-                value: "False"}
-              {
-                key: "Path"}
-              {
-                key: "Port"}
-              {
-                key: "ValidatePeerCertificate"}
           }
         }
         resolved_path_results {
