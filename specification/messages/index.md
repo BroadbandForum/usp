@@ -1363,9 +1363,7 @@ For example, the Controller wishes to learn the WiFi capabilities the Agent repr
 
 ```
     GetSupportedDM {
-      obj_paths {
-        obj_path : "Device.WiFi."
-      }
+      obj_paths : "Device.WiFi."
       first_level_only : false
       return_commands : true
       return_events : true
@@ -1383,7 +1381,7 @@ The Agent's Response would be:
         err_msg :
         data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
         supported_objs {
-          supported_obj_path :" Device.WiFi."
+          supported_obj_path : "Device.WiFi.SSID.{i}."
           is_multi_instance : false
           supported_params {
             {
