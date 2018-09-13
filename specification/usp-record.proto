@@ -3,11 +3,11 @@ syntax = "proto3";
 //**************************************************************************
 // WT-369 USP Record Protocol Buffer Schema
 //
-//  Copyright (c) 2017, Broadband Forum
+//  Copyright (c) 2017-2018, Broadband Forum
 //
 //  The undersigned members have elected to grant the copyright to
 //  their contributed material used in this software:
-//    Copyright (c) 2017 ARRIS Enterprises, LLC.
+//    Copyright (c) 2017-2018 ARRIS Enterprises, LLC.
 //
 //  Redistribution and use in source and binary forms, with or
 //   without modification, are permitted provided that the following
@@ -49,7 +49,9 @@ syntax = "proto3";
 //
 //
 // | Unique Identifier | Name                   | Date          |
-// | TR-369 1.0.2      | User Services Platform | June 21, 2017 |
+// | TR-369 1.0.0      | User Services Platform | APR 17, 2018  |
+// | TR-369 1.0.1      | User Services Platform | JUN 14, 2018  |
+// | TR-369 1.0.2      | User Services Platform | TBD           |
 //
 // BBF software release registry: http://www.broadband-forum.org/software
 //**************************************************************************
