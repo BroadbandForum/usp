@@ -60,9 +60,9 @@ class CoapSendingThread(threading.Thread):
         self._debug = debug
         self._payload = payload
         self._to_addr = to_addr
+        self._reply_to = reply_to_addr
         self._logger = logging.getLogger(self.__class__.__name__)
 
-        self._reply_to = reply_to_addr.split("://")[1]
         self._logger.debug("Using [%s] as the value of the reply-to URI Query Option", self._reply_to)
 
     def run(self):
