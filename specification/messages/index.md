@@ -356,7 +356,7 @@ The logic can be described as follows:
 | `True`/`False` | Yes | No | No | Response | `oper_success` | No |
 | `True`/`False` | Yes | No | Yes | Response | oper_success | Yes |
 | `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
-| `False` | Yes | Yes | - | Error | `oper_failure` | Yes |
+| `False` | Yes | Yes | - | Error | N/A | Yes |
 
 <a id="add" />
 
@@ -424,9 +424,9 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects specified in the create_objs argument fails creation.
 
-**R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-ADD.1** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` holistically. A failure to create any one Object MUST cause the Add message to fail and return an `Error` Message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-ADD.1** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` holistically. A failure to create any one Object MUST cause the Add message to fail and return an `Error` Message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated CreateObject create_objs`
 
@@ -456,7 +456,7 @@ This field contains the value of the parameter specified in the `param` field th
 
 `bool required`
 
-This field specifies whether the Agent should treat the creation of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+This field specifies whether the Agent should treat the creation of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 **R-ADD.3** - If the `required` field is set to true, a failure to update this parameter MUST result in a failure to create the Object.
 
@@ -602,11 +602,11 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects matched in the `obj_path` fails to update.
 
-**R-SET.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 *Note: This may cause some counterintuitive behavior if there are no required parameters to be updated. The Set Request can still result in a Set Response (rather than an Error Message) if `allow_partial` is set to true.*
 
-**R-SET.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated UpdateObject update_objs`
 
@@ -636,7 +636,7 @@ This field contains the value of the parameter specified in the `param` field th
 
 This field specifies whether the Agent should treat the update of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter.
 
-**R-SET.2** - If the `required` field is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.2** - If the `required` field is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 #### Set Response
 
@@ -801,9 +801,9 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects specified in the `obj_path` argument fails deletion.
 
-**R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated string obj_paths`
 
@@ -1587,7 +1587,7 @@ This field contains a repeated set of local names for the arguments of the Event
 
 Appropriate error codes for the GetSupportedDM message include `7000-7006`, `7008`, `7016`, `7026`, and `7800-7999`.
 
-*Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
+*Note - when using error `7026` (invalid path), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
 <a id="getsupportedprotocol" />
 
@@ -1710,7 +1710,7 @@ The `Event` notification is used to indicate that an Object-defined event was tr
 In this example, a Controller has subscribed to be notified of changes in value to the `Device.DeviceInfo.FriendlyName` parameter. When it is changed, the Agent sends a Notify Request to inform the Controller of the change.
 
 ```
-Noify Request:
+Notify Request:
 header {
   msg_id: "33936"
   msg_type: NOTIFY

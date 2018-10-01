@@ -215,7 +215,7 @@ Commands define Object specific methods within the Data Model. A Controller can 
 
 #### Events
 
-Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](/specification/messages/notify/). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
+Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](/specification/messages/#notifications_and_subscrptions). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
 
 ### Path Names
 
