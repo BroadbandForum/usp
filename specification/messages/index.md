@@ -46,7 +46,7 @@
     2. [The GetInstances Message](#getinstances)
     3. [The GetSupportedDM Message](#getsupporteddm)
     4. [The GetSupportedProtocol Message](#getsupportedprotocol)
-6. [Notifications and Subscription Mechanism](#notifications_and_subscrptions)
+6. [Notifications and Subscription Mechanism](#notifications_and_subscriptions)
     1. [Using Subscription Objects](#using_subscription_objects)
     2. [Responses to Notifications and Notification Retry](#notification_retry)
     3. [Notification Types](#notification_types)
@@ -1609,7 +1609,7 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
-<a id='notifications_and_subscrptions' />
+<a id='notifications_and_subscriptions' />
 
 ## Notifications and Subscription Mechanism
 
@@ -1983,7 +1983,7 @@ Since the Operate request can take a path expression as a value for the command 
 
 ### Event Notifications for Operations
 
-When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions).
+When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscriptions).
 
 <a id='concurrent_operations' />
 
