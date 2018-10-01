@@ -2118,7 +2118,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7001` | Message not supported | This error indicates that the attempted message was not understood by the target endpoint.|
 | `7002` | Request denied (no reason specified) | This error indicates that the target endpoint cannot or will not process the message. |
 | `7003` | Internal error | This error indicates that the message failed due to internal hardware or software reasons. |
-| `7004` | Invalid arguments | This error indicates that the message failed due to invalid values in the Request fields and/or the failure to update one or more parameters during an Add or Set message. |
+| `7004` | Invalid arguments | This error indicates that the message failed due to invalid values in the USP message. |
 | `7005` | Resources exceeded | This error indicates that the message failed due to memory or processing limitations on the target endpoint. |
 | `7006` | Permission denied  | This error indicates that the source endpoint does not have the authorization for this action. |
 | `7007` | Invalid configuration | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
@@ -2141,6 +2141,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7024` | Delete failure | This error indicates that this Object Instance failed to be deleted. |
 | `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
 | `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
+| `7027` | Invalid Command Arguments | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
 | `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
 
 <a id="vendor_defined_error_codes" />
