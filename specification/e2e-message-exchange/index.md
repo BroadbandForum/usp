@@ -273,7 +273,7 @@ USP Records received by a USP Endpoint have information that is used by the rece
 
 1.	The payload contained within the USP Record,
 2.	A request to retransmit a USP Record, and
-3.	The contents of the of the outgoing buffer to clear the USP Records that the originating USP Endpoint has indicated it has received from the receiving USP Endpoint.
+3.	The contents of the outgoing buffer to clear the USP Records that the originating USP Endpoint has indicated it has received from the receiving USP Endpoint.
 
 As USP Records can be received out of order or not at all, the receiving USP Endpoint only begins to process a USP Record when the `sequence_id` field of the USP Record in the Session Context is the `sequence_id` field that the receiving USP Endpoint expects to receive. The following figure depicts the high-level processing for USP Endpoints that receive a USP Record.
 

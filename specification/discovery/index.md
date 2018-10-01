@@ -126,7 +126,7 @@ Requirements for implementation of a DNS client and configuration of the DNS cli
 
 <a id="dns-sd" />
 
-## DNS-SD Records
+### DNS-SD Records
 
 DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
@@ -226,7 +226,7 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
 
 ## Using the SendOnBoardRequest() operation and OnBoardRequest notification
 
-An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on notify messages for additional information about the OnBoardRequest notification.
+An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on [notify messages](/specification/messages/#notification_types) for additional information about the OnBoardRequest notification.
 
 [<-- Architecture](/specification/architecture/)
 
