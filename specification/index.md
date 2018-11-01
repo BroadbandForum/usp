@@ -26,8 +26,8 @@
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>Issue 1 Corrigendum 1</h2>
-<h4>USP Version 1.0.1</h4>
+<h2>Issue 1 Corrigendum 2</h2>
+<h4>USP Version 1.0.2</h4>
 
 You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
 
@@ -133,6 +133,10 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 * Added examples and clarifications to end-to-end messaging, use of endpoint ID,
 typographical fixes
+
+#### Release 1.0.2
+
+* Typographical and example fixes
 
 ## Editors
 

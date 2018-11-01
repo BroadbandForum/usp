@@ -46,7 +46,7 @@
     2. [The GetInstances Message](#getinstances)
     3. [The GetSupportedDM Message](#getsupporteddm)
     4. [The GetSupportedProtocol Message](#getsupportedprotocol)
-6. [Notifications and Subscription Mechanism](#notifications_and_subscrptions)
+6. [Notifications and Subscription Mechanism](#notifications_and_subscriptions)
     1. [Using Subscription Objects](#using_subscription_objects)
     2. [Responses to Notifications and Notification Retry](#notification_retry)
     3. [Notification Types](#notification_types)
@@ -356,7 +356,7 @@ The logic can be described as follows:
 | `True`/`False` | Yes | No | No | Response | `oper_success` | No |
 | `True`/`False` | Yes | No | Yes | Response | oper_success | Yes |
 | `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
-| `False` | Yes | Yes | - | Error | `oper_failure` | Yes |
+| `False` | Yes | Yes | - | Error | N/A | Yes |
 
 <a id="add" />
 
@@ -395,7 +395,7 @@ body {
 
 Add Response:
 header {
-  msg_id: "55362"
+  msg_id: "52867"
   msg_type: ADD_RESP
 }
 body {
@@ -424,9 +424,9 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects specified in the create_objs argument fails creation.
 
-**R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-ADD.1** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` holistically. A failure to create any one Object MUST cause the Add message to fail and return an `Error` Message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-ADD.1** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` holistically. A failure to create any one Object MUST cause the Add message to fail and return an `Error` Message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated CreateObject create_objs`
 
@@ -456,7 +456,7 @@ This field contains the value of the parameter specified in the `param` field th
 
 `bool required`
 
-This field specifies whether the Agent should treat the creation of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+This field specifies whether the Agent should treat the creation of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 **R-ADD.3** - If the `required` field is set to true, a failure to update this parameter MUST result in a failure to create the Object.
 
@@ -582,8 +582,10 @@ body {
             updated_inst_results {
               affected_path: "Device.DeviceInfo."
               updated_params {
-                key: "FriendlyName"
-                value: "MyDevicesFriendlyName"
+                {
+                  key: "FriendlyName"
+                  value: "MyDevicesFriendlyName"
+                }
               }
             }
           }
@@ -600,11 +602,11 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects matched in the `obj_path` fails to update.
 
-**R-SET.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 *Note: This may cause some counterintuitive behavior if there are no required parameters to be updated. The Set Request can still result in a Set Response (rather than an Error Message) if `allow_partial` is set to true.*
 
-**R-SET.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each `UpdateObject` message `obj_path` holistically. A failure to update any one Object MUST cause the Set message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated UpdateObject update_objs`
 
@@ -634,7 +636,7 @@ This field contains the value of the parameter specified in the `param` field th
 
 This field specifies whether the Agent should treat the update of the Object specified in `obj_path` as conditional upon the successful configuration of this parameter.
 
-**R-SET.2** - If the `required` field is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-SET.2** - If the `required` field is set to `true`, a failure to update this parameter MUST result in a failure to update the Object (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 #### Set Response
 
@@ -799,9 +801,9 @@ body {
 
 This field tells the Agent how to process the message in the event that one or more of the Objects specified in the `obj_path` argument fails deletion.
 
-**R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
 `repeated string obj_paths`
 
@@ -1058,56 +1060,6 @@ body {
             }
           }
 
-        resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.XMPP."
-          result_params {
-            {
-              key: "Destination"}
-
-            {
-              key: "Reference"}
-          }
-        }
-        resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.HTTP."
-          result_params {
-              {
-                key: "CheckPeerID"}
-              {
-                key: "EnableEncryption"}
-              {
-                key: "Host"}
-              {
-                key: "IsEncrypted"
-                value: "False"}
-              {
-                key: "Path"}
-              {
-                key: "Port"}
-              {
-                key: "ValidatePeerCertificate"}            
-          }
-        }
-        resolved_path_results {
-          resolved_path: "Device.LocalAgent.MTP.5156.WS."
-          result_params {
-              {
-                key: "CheckPeerID"}
-              {
-                key: "EnableEncryption"}
-              {
-                key: "Host"}
-              {
-                key: "IsEncrypted"
-                value: "False"}
-              {
-                key: "Path"}
-              {
-                key: "Port"}
-              {
-                key: "ValidatePeerCertificate"}
-          }
-        }
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.CoAP."
           result_params {
@@ -1411,9 +1363,7 @@ For example, the Controller wishes to learn the WiFi capabilities the Agent repr
 
 ```
     GetSupportedDM {
-      obj_paths {
-        obj_path : "Device.WiFi."
-      }
+      obj_paths : "Device.WiFi."
       first_level_only : false
       return_commands : true
       return_events : true
@@ -1431,7 +1381,7 @@ The Agent's Response would be:
         err_msg :
         data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
         supported_objs {
-          supported_obj_path :" Device.WiFi."
+          supported_obj_path : "Device.WiFi.SSID.{i}."
           is_multi_instance : false
           supported_params {
             {
@@ -1637,7 +1587,7 @@ This field contains a repeated set of local names for the arguments of the Event
 
 Appropriate error codes for the GetSupportedDM message include `7000-7006`, `7008`, `7016`, `7026`, and `7800-7999`.
 
-*Note - when using error `7016` (Object Does Not Exist), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
+*Note - when using error `7026` (invalid path), it is important to note that in the context of GetSupportedDM this applies to the Agent's Supported Data Model.*
 
 <a id="getsupportedprotocol" />
 
@@ -1659,7 +1609,7 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
-<a id='notifications_and_subscrptions' />
+<a id='notifications_and_subscriptions' />
 
 ## Notifications and Subscription Mechanism
 
@@ -1760,7 +1710,7 @@ The `Event` notification is used to indicate that an Object-defined event was tr
 In this example, a Controller has subscribed to be notified of changes in value to the `Device.DeviceInfo.FriendlyName` parameter. When it is changed, the Agent sends a Notify Request to inform the Controller of the change.
 
 ```
-Noify Request:
+Notify Request:
 header {
   msg_id: "33936"
   msg_type: NOTIFY
@@ -2033,7 +1983,7 @@ Since the Operate request can take a path expression as a value for the command 
 
 ### Event Notifications for Operations
 
-When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscrptions).
+When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described [above](#notifications_and_subscriptions).
 
 <a id='concurrent_operations' />
 
@@ -2168,7 +2118,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7001` | Message not supported | This error indicates that the attempted message was not understood by the target endpoint.|
 | `7002` | Request denied (no reason specified) | This error indicates that the target endpoint cannot or will not process the message. |
 | `7003` | Internal error | This error indicates that the message failed due to internal hardware or software reasons. |
-| `7004` | Invalid arguments | This error indicates that the message failed due to invalid values in the Request fields and/or the failure to update one or more parameters during an Add or Set message. |
+| `7004` | Invalid arguments | This error indicates that the message failed due to invalid values in the USP message. |
 | `7005` | Resources exceeded | This error indicates that the message failed due to memory or processing limitations on the target endpoint. |
 | `7006` | Permission denied  | This error indicates that the source endpoint does not have the authorization for this action. |
 | `7007` | Invalid configuration | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
@@ -2191,6 +2141,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7024` | Delete failure | This error indicates that this Object Instance failed to be deleted. |
 | `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
 | `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
+| `7027` | Invalid Command Arguments | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
 | `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
 
 <a id="vendor_defined_error_codes" />
