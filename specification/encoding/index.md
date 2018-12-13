@@ -31,9 +31,9 @@ USP requires a mechanism to serialize data to be sent over a message transfer pr
 
 * [Protocol Buffers Version 3][12]
 
-**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
+**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg.proto](/specification/usp-msg.proto).
 
-**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-record.proto).
+**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record.proto](/specification/usp-record.proto).
 
 Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.
 
