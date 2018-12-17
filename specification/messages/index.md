@@ -1700,7 +1700,7 @@ An `OnBoardRequest` notification is used by the Agent when it is triggered by an
 
 *Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.*
 
-**R-NOT.6** a response is required, the OnBoardRequest MUST follow the Retry logic defined above.
+**R-NOT.6** If a response is required, the OnBoardRequest MUST follow the Retry logic defined above.
 
 #### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what parameters, if any, are returned as part of the notification.
@@ -1898,10 +1898,6 @@ This field contains the [error code](#error-codes) of the error that caused the 
 This field contains additional (human readable) information about the reason behind the error.
 
 ##### OnBoardRequest fields
-
-`string obj_path`
-
-This field contains the Path Name of the Object associated with this notification.
 
 `string oui`
 
