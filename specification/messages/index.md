@@ -185,7 +185,10 @@ This field contains an enumeration indicating the type of message contained in t
     GET_SUPPORTED_PROTO (17)
     GET_SUPPORTED_PROTO_RESP (18)
 
-**R-MSG.10** - The `msg_type` field MUST be present in every Header.
+**R-MSG.10** - The `msg_type` field MUST be present in every Header. Though
+required, it is meant for information only. In the event this field differs
+from the `req_type` or `resp_type` in the message body (respectively), the
+type given in either of those elements SHOULD be regarded as correct.
 
 <a id="message_body" />
 

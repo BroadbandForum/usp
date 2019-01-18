@@ -344,6 +344,9 @@ While the `sequence_id` field identifies the USP Record sequence identifier with
 
 Figure E2E.3 – E2E Segmentation and Reassembly
 
+*Note: the 65k size limit is not inherent to the STOMP protocol. It is merely
+provided here as an example.*
+
 #### SAR function algorithm
 
 The following algorithm is used to provide the SAR function.
