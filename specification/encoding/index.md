@@ -39,6 +39,18 @@ Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encod
 
 **R-ENC.2** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
 
+Protocol Buffers uses a datatype called `oneof`. This means that the element
+contains elements of one or more varying types.
+
+**R-ENC.3** - USP Records and USP Messages that contain an element of type
+`oneof` MUST include 1 and only 1 instance of the element, which MUST contain
+one of the possible elements.
+
+**R-ENC.4** - A USP Record that violates R-ENC.3 MUST be discarded.
+
+**R-ENC.5** - A USP Message that violates R-ENC.3 SHOULD return an error of
+type 7004 (Invalid Arguments).
+
 [<-- Message Transfer Protocols](/specification/mtp/)
 
 [End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)
