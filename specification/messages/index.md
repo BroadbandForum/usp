@@ -2126,7 +2126,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7010` | Unsupported parameter | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
 | `7011` | Invalid type | This error indicates that the requested value was not of the correct data type for the parameter. |
 | `7012` | Invalid value | This error indicates that the requested value was not within the acceptable values for the parameter. |
-| `7013` | Attempt to update non-writeable parameter. | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
+| `7013` | Attempt to update non-writeable parameter | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
 | `7014` | Value conflict | This error indicates that the requested value would result in an invalid configuration based on other parameter values. |
 | `7015` | Operation error | This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.
 | `7016` | Object does not exist | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
