@@ -222,12 +222,14 @@ This field indicates that the Message contains an Error Message.
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
     Get get
-    GetObjects get_Objects
+    GetSupportedDM get_supported_dm
+    GetInstances get_instances
     Set set
     Add add
     Delete delete
     Operate operate
     Notify notify
+    GetSupportedProtocol get_supported_protocol
 
 #### Response fields
 
@@ -236,13 +238,15 @@ This field contains one of the types given below. Each indicates that the Messag
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
     GetResp get_resp
-    GetObjectsResp get_objects_resp
+    GetSupportedDMResp get_supported_dm_resp
+    GetInstancesResp get_instances_resp
     SetResp set_resp
-    AddResp add_resp		
-    DeleteResp delete_resp		
+    AddResp add_resp
+    DeleteResp delete_resp
     OperateResp operate_resp
-    NotifyResp notify_resp		
-
+    NotifyResp notify_resp
+    GetSupportedProtocolResp get_supported_protocol_resp
+    
 #### Error fields
 
 `fixed32 err_code`
