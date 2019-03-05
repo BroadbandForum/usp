@@ -225,7 +225,7 @@ Object or Object Instance paths can also be used to report all parameters of the
 
 For example, for a device to report the statistics of a WiFi associated device object instance the following would be configured:
 
-    .BulkData.Profile.1.Parameter.1.Name =  " WiFi_AP1_Assoc10"
+    .BulkData.Profile.1.Parameter.1.Name = "WiFi_AP1_Assoc10"
     .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.AccessPoint.1.AssociatedDevice.10.Stats."
 
 Using the configuration the device's report would contain the following parameter names:
@@ -242,10 +242,10 @@ Using the configuration the device's report would contain the following paramete
 
 It is also possible for the value of the Reference parameter to use both wildcards for instance identifiers and be a partial path. For example, for device to report the statistics for the device's WiFi associated device, the following would be configured:
 
-    .BulkData.Profile.1.Parameter.1.Name =  "WiFi_AP_Assoc"
+    .BulkData.Profile.1.Parameter.1.Name = "WiFi_AP_Assoc"
     .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.AccessPoint.*.AssociatedDevice.*.Stats."
 
-Using this configuration a device that has 1 WiFi Access Point (with instance identifier `10`) with 2 Associated Devices (with instance identifiers `10` and `11`), would contain a Report with following parameter names:
+Using this configuration a device that has 1 WiFi Access Point (with instance identifier `1`) with 2 Associated Devices (with instance identifiers `10` and `11`), would contain a Report with following parameter names:
 
     WiFi_AP_Assoc.1.10.BytesSent
     WiFi_AP_Assoc.1.10.BytesReceived
