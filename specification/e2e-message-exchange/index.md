@@ -225,15 +225,15 @@ The retry interval range is controlled by two Parameters, the minimum wait inter
 | Retry Count | Default Wait Interval Range (min-max seconds) | Actual Wait Interval Range (min-max seconds) |
 | ----------: | :---------: | :-------------- |
 | #1 | 5-10 | m - m.(k/1000) |
-| #2 | 10-20 | m.(k/1000) - m.(k/1000)2 |
-| #3 | 20-40 | m.(k/1000)2 - m.(k/1000)3 |
-| #4 | 40-80 | m.(k/1000)3 - m.(k/1000)4 |
-| #5 | 80-160 | m.(k/1000)4 - m.(k/1000)5 |
-| #6 | 160-320 | m.(k/1000)5 - m.(k/1000)6 |
-| #7 | 320-640 | m.(k/1000)6 - m.(k/1000)7 |
-| #8 | 640-1280 | m.(k/1000)7 - m.(k/1000)8 |
-| #9 | 1280-2560 | m.(k/1000)8 - m.(k/1000)9 |
-| #10 and subsequent | 2560-5120 | m.(k/1000)9 - m.(k/1000)10 |
+| #2 | 10-20 | m.(k/1000) - m.(k/1000)^2 |
+| #3 | 20-40 | m.(k/1000)^2 - m.(k/1000)^3 |
+| #4 | 40-80 | m.(k/1000)^3 - m.(k/1000)^4 |
+| #5 | 80-160 | m.(k/1000)^4 - m.(k/1000)^5 |
+| #6 | 160-320 | m.(k/1000)^5 - m.(k/1000)^6 |
+| #7 | 320-640 | m.(k/1000)^6 - m.(k/1000)^7 |
+| #8 | 640-1280 | m.(k/1000)^7 - m.(k/1000)^8 |
+| #9 | 1280-2560 | m.(k/1000)^8 - m.(k/1000)^9 |
+| #10 and subsequent | 2560-5120 | m.(k/1000)^9 - m.(k/1000)^10 |
 
 **R-E2E.11** - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed session establishment until a USP message is successfully received by the Agent or until the SessionExpiration time is reached.
 
