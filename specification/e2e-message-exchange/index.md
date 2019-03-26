@@ -92,7 +92,9 @@ Required. Originating/Source USP Endpoint Identifier.
 Optional. An enumeration of type PayloadSecurity. When the payload is present,
 this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message.
 The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be
-used to secure the payload (see "TLS Payload Encapsulation" section). Valid values are:
+used to secure the payload (see "TLS Payload Encapsulation" section).
+
+Valid values are:
 
 ```
 PLAINTEXT (0)
