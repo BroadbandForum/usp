@@ -1701,7 +1701,7 @@ An `OnBoardRequest` notification is used by the Agent when it is triggered by an
 
 **R-NOT.5** - An Agent MUST send an `OnBoardRequest` notify request in the following circumstances:
 
-1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the [Device:2 Data Model][1].
+1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the [Device:2 Data Model][1]. This requirement applies only to those Controller table instances that have their `.Enabled` parameter set to `true`.
 
 2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
 
@@ -1928,7 +1928,7 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.9** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` field does not contain the Subcription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
+**R-NOT.9** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` field does not contain the Subscription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
 
 #### Notify Error Codes
 
@@ -2145,6 +2145,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
 | `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
 | `7027` | Invalid Command Arguments | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
+| `7100-7199` | USP Record error codes | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |
 | `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
 
 <a id="vendor_defined_error_codes" />

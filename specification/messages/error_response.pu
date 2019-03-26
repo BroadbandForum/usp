@@ -26,7 +26,7 @@ hnote over A : Error
 A-->A: Generate **error** arguments
 
 
-A->C: USP Record(version: 1.0, to_id: <controller_id>, from_id: <agent_id>\n\tpayload: header(msg_id: <id>, msg_type <request>),\n\tbody(error(elements))
+A->C: USP Record(version: 1.0, to_id: <controller_id>, from_id: <agent_id>\n\tpayload: header(msg_id: <id>, msg_type <error>),\n\tbody(error(elements))
 
 deactivate A
 |||

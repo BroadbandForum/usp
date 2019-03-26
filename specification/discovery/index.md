@@ -50,7 +50,7 @@ Advertisement is the process by which USP Endpoints make their presence known (o
 
 An Agent that has a USP relationship with a Controller needs to know that Controller’s Endpoint Identifier, credentials, and authorized Role.
 
-An Agent that has a USP relationship with a Controller needs to obtain information that allows it to determine the MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
+An Agent that has a USP relationship with a Controller needs to obtain information that allows it to determine at least one MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
 
 Example mechanisms for configuration include but are not limited to:
 
@@ -111,6 +111,8 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 **R-DIS.4** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
 **R-DIS.5** - If mDNS is enabled, a USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
+
+In general, the expectation is that Agents will advertise themselves so they will be discoverable by Controllers. Controllers are not expected to advertise themselves, but are expected to discover Agents and respond to applicable mDNS requests from Agents. Agents will use mDNS to resolve a Controller "`.local.`" FQDN (and get DNS-SD records) when the Agent needs to send a Notification to that Controller.
 
 <a id="dns" />
 

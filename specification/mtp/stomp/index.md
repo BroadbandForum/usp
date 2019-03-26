@@ -102,7 +102,7 @@ The STOMP Heart Beat mechanism can be used to periodically send data between a S
 
 ## Mapping USP Endpoints to STOMP Destinations
 
-USP Agents will have one STOMP destination per STOMP MTP independent of whether those STOMP MTPs use the same `STOMP.Connection` instance or a different one. The STOMP destination is either configured by the STOMP server via the USP custom `subscribe-dest` STOMP Header received in the `CONNECTED` frame (exposed in the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter) or taken from the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter if there wasn't a `subscribe-dest` STOMP Header received in the `CONNECTED` frame. The USP custom `subscribe-dest` STOMP Header is helpful in scenarios where the USP Agent doesn't have a pre-configured destination as it allows the USP Agent to discover the destination.
+USP Agents will have one STOMP destination per STOMP MTP independent of whether those STOMP MTPs use the same `STOMP.Connection` instance or a different one. The STOMP destination is either configured by the STOMP server via the USP custom `subscribe-dest` STOMP Header received in the `CONNECTED` frame (exposed in the `Device.LocalAgent.MTP.{i}.STOMP.DestinationFromServer` parameter) or taken from the `Device.LocalAgent.MTP.{i}.STOMP.Destination` parameter if there wasn't a `subscribe-dest` STOMP Header received in the `CONNECTED` frame. The USP custom `subscribe-dest` STOMP Header is helpful in scenarios where the USP Agent doesn't have a pre-configured destination as it allows the USP Agent to discover the destination.
 
 A USP Controller will subscribe to a STOMP destination for each STOMP server that it is associated with. The USP Controller's STOMP destination needs to be known by the USP Agent (this is configured in the `Device.LocalAgent.Controller.{i}.MTP.{i}.STOMP.Destination` parameter) as it is used when sending a USP Record containing a Notification.
 
@@ -134,19 +134,53 @@ A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame
 
 **R-STOMP.20** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `content-type` STOMP header with a value of "`application/vnd.bbf.usp.msg`", which signifies that the body included in the `SEND` frame contains a [Protocol Buffer][12] binary encoding message.
 
-**R-STOMP.21** - USP Endpoints sending a `SEND` frame MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP Record should send any response (if required).
+**R-STOMP.21** - USP Endpoints sending a `SEND` frame with content-type of `application/vnd.bbf.usp.msg` MUST include (in addition to other mandatory STOMP headers) a `reply-to-dest` STOMP header containing the STOMP destination that indicates where the USP Endpoint that receives the USP Record should send any response (if required).
 
-**R-STOMP.22** - USP Endpoints sending a `SEND` frame MUST include the [Protocol Buffer][12] binary encoding of the USP Record as the body of the `SEND` frame.
+**R-STOMP.22** - USP Endpoints sending a `SEND` frame with content-type of `application/vnd.bbf.usp.msg` MUST include the [Protocol Buffer][12] binary encoding of the USP Record as the body of the `SEND` frame.
 
 **R-STOMP.23** - When a USP Endpoint receives a `MESSAGE` frame it MUST use the `reply-to-dest` included in the STOMP headers as the STOMP destination of the USP response (if a response is required by the incoming USP request).
 
 <a id='handling_error_frames' />
 
-### Handling ERROR Frames
+### Handling USP Record errors and ERROR Frames
 
-If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint will drop the USP Record.
+R-STOMP.23a - Endpoints SHOULD support STOMP content-type header value of application/vnd.bbf.usp.error.
 
-**R-STOMP.24** - When a USP Endpoint receives a `MESSAGE` frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST ignore the USP Record.
+R-STOMP.23b - If an Endpoint supports content-type value of application/vnd.bbf.usp.error, it MUST include a `usp-err-id` STOMP header in `SEND` frames of content-type `application/vnd.bbf.usp.msg`. The value of this header is:  `<USP Record to-id  > + "/" + <USP Message msg_id>`. Since the colon "`:`" is a reserved character in STOMP headers, all instances of "`:`" in the USP Record to-id MUST be expressed using percent-encoding of `%3A`.
+
+If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint will drop the USP Record if the STOMP  MESSAGE frame does not have a `usp-err-id` header or if the receiving Endpoint does not support the `application/vnd.bbf.usp.error` content-type value. If the receiving Endpoint does support the `application/vnd.bbf.usp.error` content-type value and the received STOMP MESSAGE frame had a `usp-err-id` header, the receiving Endpoint will issue a STOMP SEND frame of `application/vnd.bbf.usp.error` content-type value..
+
+**R-STOMP.24** - When a USP Endpoint receives a `MESSAGE` frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST ignore the USP Record if *either* of the following two cases is true:
+
+* the receiving USP Endpoint does not support application/vnd.bbf.usp.error content-type value, or
+
+* the received STOMP MESSAGE frame did not include a `usp-err-id` header
+
+**R-STOMP.24a** - When a USP Endpoint receives a MESSAGE frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing the receiving USP Endpoint MUST send a STOMP SEND frame with an `application/vnd.bbf.usp.error` content-type header value if *both* of the following two cases are true:
+
+* the receiving USP Endpoint supports application/vnd.bbf.usp.error content-type value, and
+
+* the received STOMP MESSAGE frame includes a `usp-err-id` header
+
+**R-STOMP.24b** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
+
+* `err_code:\<numeric code indicating the type of error that caused the overall message to fail\>`
+
+* `err_msg:\<additional information about the reason behind the error\>`
+
+The specific error codes are listed in the MTP [Brokered USP Record Errors](/specification/mtp#brokered-usp-record-errors) section.  
+
+The following is an example message. This example uses "`^@`" to represent the NULL octet that follows a STOMP body.
+
+    ```
+    SEND
+    destination:/usp/the-reply-to-dest
+    content-type:application/vnd.bbf.usp.error
+    usp-err-id:cid%3A3AA3F8%3Ausp-id-42/683
+
+    err_code:7100
+    err_msg:Field n is not recognized.^@
+    ```
 
 **R-STOMP.25** - If an `ERROR` frame is received by the USP Endpoint, the STOMP server will terminate the connection. In this case the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 
@@ -188,9 +222,9 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 ## MTP Message Encryption
 
-STOMP MTP message encryption is provided using certificates in TLS as described in [RFC 5246][22].
+STOMP MTP message encryption is provided using TLS certificates.
 
-**R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 [RFC 5246][22].
+**R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 RFC 5246 or later with backward compatibility to TLS 1.2.
 
 **R-STOMP.37** - STOMP server certificates MAY contain domain names and those domain names MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
 
