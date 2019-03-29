@@ -44,7 +44,7 @@
 #
 """
 
-class AbstractMtp(object):
+class AbstractMtp:
     """A generic MTP for receiving and sending USP Messages use by the Proxy"""
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve the next incoming message from the Queue"""

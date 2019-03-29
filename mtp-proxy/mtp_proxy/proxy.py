@@ -55,7 +55,7 @@ from mtp_proxy import coap_mtp
 from mtp_proxy import stomp_mtp
 
 
-class Proxy(object):
+class Proxy:
     """A Class for proxying messages between USP MTPs"""
     def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO, fail_bad_content_type=False):
         """Initialize the Proxy Class"""

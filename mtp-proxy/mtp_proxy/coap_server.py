@@ -48,16 +48,17 @@ import logging
 import threading
 
 import asyncio
+from asyncio import ensure_future as asyncio_ensure_future
 import aiocoap
 import aiocoap.resource
 
 from mtp_proxy import utils
 
-
-try:
-    from asyncio import ensure_future as asyncio_ensure_future
-except ImportError:
-    from asyncio import async as asyncio_ensure_future
+# TODO: Remove this old code if everything works through the plugfest
+#try:
+#    from asyncio import ensure_future as asyncio_ensure_future
+#except ImportError:
+#    from asyncio import async as asyncio_ensure_future
 
 
 class MyCoapResource(aiocoap.resource.Resource):
@@ -180,7 +181,7 @@ class CoapReceivingThread(threading.Thread):
         my_event_loop.close()
 
 
-class CoapServer(object):
+class CoapServer:
     """A CoAP Server that receives CoAP Messages for re-distribution"""
     def __init__(self, ip_addr, listen_port=5683, sending_thr_timeout=5, debug=False):
         """Initialize the CoAP USP Binding for a USP Endpoint

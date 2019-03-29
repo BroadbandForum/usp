@@ -67,9 +67,9 @@ class MyStompConnListener(stomp.ConnectionListener):
         """Retreive the current value of the internal subscribe_dest value"""
         return self._subscribe_dest
 
-    def on_error(self, headers, message):
+    def on_error(self, headers, body):
         """STOMP Connection Listener - handle errors"""
-        self._logger.error("Received an error [%s]", message)
+        self._logger.error("Received an error [%s]", body)
 
     def on_connected(self, headers, body):
         """STOMP Connection Listener - received CONNECTED frame; look for subscribe-dest header"""
@@ -113,7 +113,7 @@ class MyStompConnListener(stomp.ConnectionListener):
             self._logger.warning("Incoming STOMP message had no Content-Type")
 
 
-class StompClient(object):
+class StompClient:
     """A STOMP to USP Binding"""
     def __init__(self, host="127.0.0.1", port=61613, username="admin", password="admin", virtual_host="/",
                  outgoing_heartbeats=0, incoming_heartbeats=0, proxy_endpoint_id="", fail_bad_content_type=False):
