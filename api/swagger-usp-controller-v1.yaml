@@ -20,7 +20,7 @@ tags:
 schemes:
   - http
 paths:
-  '/agents/{endpointID}':
+  '/agents':
     post:
       tags:
         - agents
@@ -32,22 +32,18 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: endpointID
-          in: path
-          description: USP Agent Endpoint ID
-          required: true
-          type: string
         - in: body
           name: body
           description: Details about the new USP Agent
           required: true
           schema:
-            $ref: '#/definitions/AgentDetails'
+            $ref: '#/definitions/CreateAgentDetails'
       responses:
         '201':
           description: USP Agent created
         '400':
           description: USP Agent creation failed
+  '/agents/{endpointID}':
     get:
       tags:
         - agents
@@ -171,12 +167,12 @@ paths:
             $ref: '#/definitions/AgentSearchResults'
         '404':
           description: USP Agent not found
-  '/agents/{endpointID}/serviceElements/{name}':
+  '/agents/{endpointID}/serviceElements':
     post:
       tags:
         - agents
-      summary: Create service element on a USP Agent
-      description: Update the USP Agent's configuration by creating a new Service Element
+      summary: Create Service Element instance on a USP Agent
+      description: Update the USP Agent's configuration by creating a new instance of the specified Service Element
       operationId: createAgentServiceElement
       consumes:
         - application/json
@@ -188,17 +184,12 @@ paths:
           description: USP Agent Endpoint ID
           required: true
           type: string
-        - name: name
-          in: path
-          description: Service Element Name
-          required: true
-          type: string
         - in: body
           name: body
           description: Service Element object that needs to be created on the USP Agent
           required: true
           schema:
-            $ref: '#/definitions/ServiceElementDetail'
+            $ref: '#/definitions/CreateServiceElementDetail'
       responses:
         '201':
           description: Service Element instance created
@@ -206,11 +197,12 @@ paths:
           description: Service Element instance creation failed
         '404':
           description: USP Agent not found
+  '/agents/{endpointID}/serviceElements/{name}':
     get:
       tags:
         - agents
-      summary: Get Service Element by Name from USP Agent
-      description: Retrieve a Service Element form a specific USP Agent
+      summary: Get Service Element instance by Name from USP Agent
+      description: Retrieve an instance of the specified Service Element from a specific USP Agent
       operationId: getAgentServiceElement
       produces:
         - application/json
@@ -243,8 +235,8 @@ paths:
     patch:
       tags:
         - agents
-      summary: Update service element by Name on a USP Agent
-      description: Update the USP Agent's configuration with the given Service Element
+      summary: Update Service Element instance by Name on a USP Agent
+      description: Update the USP Agent's configuration with the given instance of the specified Service Element
       operationId: updateAgentServiceElements
       consumes:
         - application/json
@@ -277,10 +269,8 @@ paths:
     delete:
       tags:
         - agents
-      summary: Delete service element by Name from USP Agent
-      description: >-
-        Update the USP Agent's configuration by removing an existing Service
-        Element
+      summary: Delete Service Element instance by Name from USP Agent
+      description: Update the USP Agent's configuration by removing an existing instance of the specified Service Element
       operationId: deleteAgentServiceElement
       consumes:
         - application/json
@@ -314,7 +304,7 @@ paths:
     post:
       tags:
         - agents
-      summary: Execute service element action on USP Agent
+      summary: Execute Service Element Action on USP Agent
       description: Execute a Service Element Action on a USP Agent
       operationId: executeAgentServiceElementAction
       consumes:
@@ -341,13 +331,64 @@ paths:
         '202':
           description: Synchronous Action Invoked
           schema:
-            $ref: '#/definitions/SyncActionResults'
+            $ref: '#/definitions/ActionResults'
         '400':
           description: Service Element Action invocation failed
         '404':
           description: USP Agent not found
+  '/agents/{endpointID}/commands/{asyncRequestID}':
+    get:
+      tags:
+        - agents
+      summary: Get Asynchronous Service Element Action results.
+      description: Retrieve the asynchronous results of a Service Element Action
+      operationId: getAgentServiceElementActionResults
+      produces:
+        - application/json
+      parameters:
+        - name: endpointID
+          in: path
+          description: USP Agent Endpoint ID
+          required: true
+          type: string
+        - name: asyncRequestID
+          in: path
+          description: Service Element Asynchronous Action Request ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ActionResults'
+        '400':
+          description: Service Element Asynchronous Action Request ID not found
+        '404':
+          description: USP Agent not found
 
 definitions:
+  CreateAgentDetails:
+    type: object
+    properties:
+      endpointID:
+        description: Endpoint ID of USP Agent
+        type: string
+      mtpToUse:
+        type: string
+        enum:
+          - CoAP
+          - STOMP
+          - WebSockets
+      communicationsAddress:
+        description: URL (CoAP or WebSockets) or STOMP Destination of USP Agent
+        type: string
+      supportedServiceElements:
+        description: >-
+          The Service Elements supported by the USP Agent (if known by the USP
+          Controller)
+        type: array
+        items:
+          type: string
   AgentDetails:
     type: object
     properties:
@@ -390,7 +431,7 @@ definitions:
     properties:
       asyncRequestID:
         type: string
-  SyncActionResults:
+  ActionResults:
     type: object
     properties:
       outputArgs:
@@ -421,6 +462,23 @@ definitions:
     type: object
     properties:
       uniqueKeyList:
+        type: array
+        items:
+          type: object
+          properties:
+            elementProperty:
+              type: string
+            elementValue:
+              type: string
+  CreateServiceElementDetail:
+    type: object
+    properties:
+      name:
+        description: Service Element Name
+        type: string
+      identifier:
+        $ref: '#/definitions/ServiceElementIdentifier'
+      propertyList:
         type: array
         items:
           type: object
