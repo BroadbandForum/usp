@@ -45,7 +45,7 @@
 """
 
 from mtp_proxy import abstract_mtp
-from temp_code import websocket_client3
+from mtp_proxy import websocket_client
 from mtp_proxy import websocket_server
 
 
@@ -60,7 +60,7 @@ class WebSocketsMtp(abstract_mtp.AbstractMtp):
 
         if client:
             self._is_client = True
-            self._mtp = websocket_client3.WebSocketClient(host, port, path, debug)
+            self._mtp = websocket_client.WebSocketClient(host, port, path, debug)
         else:
             self._is_server = True
             self._mtp = websocket_server.WebSocketServer(host, port, path, debug)
