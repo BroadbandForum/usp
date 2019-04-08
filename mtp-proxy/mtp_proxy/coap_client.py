@@ -93,7 +93,7 @@ class CoapSendingThread(threading.Thread):
             self._logger.warning("CoAP Message Sent, but no Response received due to a Timeout Error")
 
 
-class CoapClient(object):
+class CoapClient:
     """A CoAP Client that sends CoAP Messages as requested"""
     def __init__(self, thr_timeout=10, debug=False):
         """Initialize the CoAP Client with the address to use when sending messages"""

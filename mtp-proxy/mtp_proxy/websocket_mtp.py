@@ -38,22 +38,41 @@
 # **************************************************************************
 
 """
-# File Name: abstract_mtp.py
+# File Name: weboscket_mtp.py
 #
-# Description: A generic MTP for receiving and sending USP Messages use by the Proxy
+# Description: An implementation of a WebSockets MTP
 #
 """
 
-class AbstractMtp:
-    """A generic MTP for receiving and sending USP Messages use by the Proxy"""
+from mtp_proxy import abstract_mtp
+from mtp_proxy import websocket_client
+from mtp_proxy import websocket_server
+
+
+class WebSocketsMtp(abstract_mtp.AbstractMtp):
+    """A WebSockets MTP for receiving and sending USP Messages use by the Proxy"""
+    def __init__(self, host, port, path, client=False, debug=False):
+        """Initialize the WebSockets MTP"""
+        self._mtp = None
+        self._debug = debug
+        self._is_client = False
+        self._is_server = False
+
+        if client:
+            self._is_client = True
+            self._mtp = websocket_client.WebSocketClient(host, port, path, debug)
+        else:
+            self._is_server = True
+            self._mtp = websocket_server.WebSocketServer(host, port, path, debug)
+
     def get_msg(self, timeout_in_seconds=-1):
         """Retrieve the next incoming message from the Queue"""
-        raise NotImplementedError()
+        return self._mtp.get_msg(timeout_in_seconds)
 
     def send_msg(self, payload, to_addr, reply_to_addr):
         """Send the ProtoBuf Serialized Message to the provided address via the Protocol-specific USP Binding"""
-        raise NotImplementedError()
+        self._mtp.send_msg(payload)
 
     def listen(self):
         """Listen for incoming messages on the Protocol-specific USP Binding"""
-        raise NotImplementedError()
+        self._mtp.listen()

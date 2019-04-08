@@ -48,16 +48,11 @@ import logging
 import threading
 
 import asyncio
+from asyncio import ensure_future as asyncio_ensure_future
 import aiocoap
 import aiocoap.resource
 
 from mtp_proxy import utils
-
-
-try:
-    from asyncio import ensure_future as asyncio_ensure_future
-except ImportError:
-    from asyncio import async as asyncio_ensure_future
 
 
 class MyCoapResource(aiocoap.resource.Resource):
@@ -68,29 +63,33 @@ class MyCoapResource(aiocoap.resource.Resource):
         self._queue = queue
         self._resource_path = resource_path
         self._logger = logging.getLogger(self.__class__.__name__)
+        self._logger.info("New CoAP Resource created for Resource: %s", resource_path)
 
     @asyncio.coroutine
     def render_get(self, request):
         """CoAP Resource for USP - handle the GET Method"""
-        self._logger.warning("GET:: Received a CoAP Request on the USP Resource; only POST is allowed")
+        self._logger.warning("GET:: Received a CoAP Request on Resource [%s]; only POST is allowed",
+                             self._resource_path)
         return aiocoap.Message(code=aiocoap.Code.METHOD_NOT_ALLOWED)
 
     @asyncio.coroutine
     def render_put(self, request):
         """CoAP Resource for USP - handle the PUT Method"""
-        self._logger.warning("PUT:: Received a CoAP Request on the USP Resource; only POST is allowed")
+        self._logger.warning("PUT:: Received a CoAP Request on Resource [%s]; only POST is allowed",
+                             self._resource_path)
         return aiocoap.Message(code=aiocoap.Code.METHOD_NOT_ALLOWED)
 
     @asyncio.coroutine
     def render_delete(self, request):
         """CoAP Resource for USP - handle the DELETE Method"""
-        self._logger.warning("DELETE:: Received a CoAP Request on the USP Resource; only POST is allowed")
+        self._logger.warning("DELETE:: Received a CoAP Request on Resource [%s]; only POST is allowed",
+                             self._resource_path)
         return aiocoap.Message(code=aiocoap.Code.METHOD_NOT_ALLOWED)
 
     @asyncio.coroutine
     def render_post(self, request):
         """CoAP Resource for USP - handle the POST Method"""
-        self._logger.info("POST:: Received a CoAP Request on the USP Resource")
+        self._logger.info("POST:: Received a CoAP Request on Resource: %s", self._resource_path)
         self._logger.debug("Payload received: [%s]", request.payload)
         self._logger.debug("Incoming Request opt.uri_path: [%s]", request.opt.uri_path)
         self._logger.debug("Incoming Request opt.uri_query: [%s]", request.opt.uri_query)
@@ -153,10 +152,11 @@ class MyCoapResource(aiocoap.resource.Resource):
 
 class CoapReceivingThread(threading.Thread):
     """A Thread that executes the AsyncIO Event Loop Processing to receive CoAP messages"""
-    def __init__(self, resource_tree, listening_port, debug=False):
+    def __init__(self, resource_tree, ip_addr, listening_port, debug=False):
         """Initialize the CoAP Receiving Thread"""
         threading.Thread.__init__(self, name="CoAP Receiving Thread: " + str(listening_port))
         self._debug = debug
+        self._ip_addr = ip_addr
         self._resource_tree = resource_tree
         self._listening_port = listening_port
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -170,9 +170,10 @@ class CoapReceivingThread(threading.Thread):
         my_event_loop = asyncio.new_event_loop()
         my_event_loop.set_debug(self._debug)
         asyncio.set_event_loop(my_event_loop)
-        self._logger.info("Creating a CoAP Server Context for the Resource Tree")
+        self._logger.info("Creating a CoAP Server Context for the Resource Tree with IP [%s] and Port [%d]",
+                          self._ip_addr, self._listening_port)
         asyncio_ensure_future(
-            aiocoap.Context.create_server_context(self._resource_tree, bind=("::", self._listening_port)))
+            aiocoap.Context.create_server_context(self._resource_tree, bind=(self._ip_addr, self._listening_port)))
 
         self._logger.info("Starting the AsyncIO CoAP Event Loop")
         my_event_loop.run_forever()
@@ -180,7 +181,7 @@ class CoapReceivingThread(threading.Thread):
         my_event_loop.close()
 
 
-class CoapServer(object):
+class CoapServer:
     """A CoAP Server that receives CoAP Messages for re-distribution"""
     def __init__(self, ip_addr, listen_port=5683, sending_thr_timeout=5, debug=False):
         """Initialize the CoAP USP Binding for a USP Endpoint
@@ -203,7 +204,7 @@ class CoapServer(object):
         """Listen for incoming CoAP messages"""
         # An Endpoint needs a Server Context for the Resource Tree
         self._logger.info("Starting the CoAP Receiving Thread")
-        self._listen_thread = CoapReceivingThread(self._resource_tree, self._listen_port, self._debug)
+        self._listen_thread = CoapReceivingThread(self._resource_tree, self._ip_addr, self._listen_port, self._debug)
         self._listen_thread.start()
 
     def add_resource(self, resource_path):

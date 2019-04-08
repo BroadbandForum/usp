@@ -53,9 +53,10 @@ import threading
 from mtp_proxy import utils
 from mtp_proxy import coap_mtp
 from mtp_proxy import stomp_mtp
+from mtp_proxy import websocket_mtp
 
 
-class Proxy(object):
+class Proxy:
     """A Class for proxying messages between USP MTPs"""
     def __init__(self, cfg_file_name, log_file_name, log_level=logging.INFO, fail_bad_content_type=False):
         """Initialize the Proxy Class"""
@@ -129,6 +130,21 @@ class Proxy(object):
                     endpoint_addr = stomp_dict["EndpointDestination"]
                     proxy_thr.add_stomp_mtp(stomp_mtp_inst, endpoint_addr)
 
+                if "WebSocket" in association_dict["Association"]:
+                    # Name : Unique Name of WebSocket Connection
+                    # Host : Hostname or IP Address portion of the WebSocket URL
+                    # Port : Port portion of the WebSocket URL
+                    # Path : Path portion of the WebSocket URL
+                    # Client : True if running as a WebSocket Client; False if running as a WebSocket Server
+                    self._logger.info("Found a WebSocket MTP")
+                    websocket_dict = association_dict["Association"]["WebSocket"]
+                    websocket_name = websocket_dict["Name"]
+                    websocket_mtp_inst = websocket_mtp.WebSocketsMtp(websocket_dict["Host"],
+                                                                     websocket_dict["Port"],
+                                                                     websocket_dict["Path"],
+                                                                     websocket_dict["Client"])
+                    proxy_thr.add_websocket_mtp(websocket_mtp_inst, websocket_name)
+
                 self._proxy_thr_list.append(proxy_thr)
 
     def start_threads(self):
@@ -161,9 +177,13 @@ class ProxyThread(threading.Thread):
         threading.Thread.__init__(self)
         self._coap_mtp = None
         self._stomp_mtp = None
+        self._websocket_mtp = None
+        self._mtp_bitmap = 0   # 1 for CoAP, 2 for STOMP, 4 for WebSockets
+        self._websocket_name = None
         self._coap_endpoint_addr = None
         self._stomp_proxy_addr = None
         self._stomp_endpoint_addr = None
+        self._last_stomp_reply_to_addr = None
         self._coap_resp_resource_dict = {}  # Map CoAP Resource Paths (Key) to STOMP Destinations (Value)
         self._sleep_time_interval = sleep_time_interval
         self._logger = logging.getLogger(self.__class__.__name__)
@@ -172,6 +192,7 @@ class ProxyThread(threading.Thread):
         """Add a CoAP MTP configuration to the Proxy Thread"""
         if self._coap_mtp is None:
             self._coap_mtp = mtp
+            self._mtp_bitmap += 1
             self._coap_endpoint_addr = endpoint_addr
             self._logger.info("Adding a CoAP MTP")
         else:
@@ -181,56 +202,185 @@ class ProxyThread(threading.Thread):
         """Add a STOMP MTP configuration to the Proxy Thread"""
         if self._stomp_mtp is None:
             self._stomp_mtp = mtp
+            self._mtp_bitmap += 2
             self._stomp_endpoint_addr = endpoint_addr
             self._logger.info("Adding a STOMP MTP")
         else:
             self._logger.warning("Can't add another STOMP MTP; the STOMP MTP is already configured")
 
+    def add_websocket_mtp(self, mtp, name):
+        """Add a WebSocket MTP configuration to the Proxy Thread"""
+        if self._websocket_mtp is None:
+            self._websocket_mtp = mtp
+            self._mtp_bitmap += 4
+            self._websocket_name = name
+            self._logger.info("Adding a WebSocket MTP")
+        else:
+            self._logger.warning("Can't add another WebSocket MTP; the WebSocket MTP is already configured")
+
     def run(self):
-        """Start the thread"""
-        self._coap_mtp.listen()
-        self._stomp_mtp.listen()
+        """Start listening to the appropriate MTPs"""
+        if self._coap_mtp is not None:
+            self._coap_mtp.listen()
 
-        self._stomp_proxy_addr = self._stomp_mtp.get_subscribed_to_dest()
+        if self._stomp_mtp is not None:
+            self._stomp_mtp.listen()
+            self._stomp_proxy_addr = self._stomp_mtp.get_subscribed_to_dest()
 
-        while True:
+        if self._websocket_mtp is not None:
+            self._websocket_mtp.listen()
+
+        should_run = self._validate_mtp_combinations()
+
+        while should_run:
             time.sleep(self._sleep_time_interval)
 
-            # Read from CoAP MTP; Send to STOMP MTP
-            queue_item = self._coap_mtp.get_msg()
-            if queue_item is not None:
-                payload = queue_item.get_payload()
-                coap_resource_path = queue_item.get_coap_resource_path()
+            if self._mtp_bitmap == 3:
+                # NOTE: CoAP Controller to STOMP Agent won't work :: No STOMP Broker available
+                self._read_coap_send_stomp()
+                self._read_stomp_send_coap()
+            elif self._mtp_bitmap == 5:
+                self._read_coap_send_websocket()
+                self._read_websocket_send_coap()
+            elif self._mtp_bitmap == 6:
+                # NOTE: WebSocket Controller to STOMP Agent won't work :: No STOMP Broker available
+                self._read_websocket_send_stomp()
+                self._read_stomp_send_websocket()
+            else:
+                self._logger.error("Unknown MTP Association Configuration")
+                break
 
-                if coap_resource_path in self._coap_resp_resource_dict:
-                    to_addr = self._coap_resp_resource_dict[coap_resource_path]
-                else:
-                    to_addr = self._stomp_endpoint_addr
+    def _validate_mtp_combinations(self):
+        """Validate the configured MTP Combinations"""
+        should_run = False
 
-                self._logger.info("Found a payload on the CoAP MTP (on resource path: [%s])", coap_resource_path)
-                self._logger.info("Sending it to the STOMP MTP (to destination: [%s], with reply-to-dest: [%s])",
-                                  to_addr, self._stomp_proxy_addr)
-                self._stomp_mtp.send_msg(payload, to_addr, self._stomp_proxy_addr)
+        if self._mtp_bitmap == 0:
+            self._logger.error("No MTPs configured")
+        elif self._mtp_bitmap == 1:
+            self._logger.error("Only the CoAP MTP was configured")
+        elif self._mtp_bitmap == 2:
+            self._logger.error("Only the STOMP MTP was configured")
+        elif self._mtp_bitmap == 3:
+            # NOTE: CoAP Controller to STOMP Agent won't work :: No STOMP Broker available
+            should_run = True
+            self._logger.info("Found a valid CoAP + STOMP MTP Association")
+        elif self._mtp_bitmap == 4:
+            self._logger.error("Only the WebSocket MTP was configured")
+        elif self._mtp_bitmap == 5:
+            should_run = True
+            self._logger.info("Found a valid CoAP + WebSocket MTP Association")
+        elif self._mtp_bitmap == 6:
+            # NOTE: WebSocket Controller to STOMP Agent won't work :: No STOMP Broker available
+            should_run = True
+            self._logger.info("Found a valid STOMP + WebSocket MTP Association")
+        elif self._mtp_bitmap == 7:
+            self._logger.error("All 3 MTPs configured")
+        else:
+            self._logger.error("Unknown MTP Association Configuration")
 
-            # Read from STOMP MTP; Send to CoAP MTP
-            queue_item = self._stomp_mtp.get_msg()
-            if queue_item is not None:
-                payload = queue_item.get_payload()
-                stomp_reply_to_addr = queue_item.get_reply_to_addr()
-                coap_resp_resource = stomp_reply_to_addr.replace("#", ".")
+        return should_run
 
-                if coap_resp_resource in self._coap_resp_resource_dict:
-                    coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
-                else:
-                    self._coap_resp_resource_dict[coap_resp_resource] = stomp_reply_to_addr
-                    self._coap_mtp.add_resource(coap_resp_resource)
-                    coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+    def _read_coap_send_stomp(self):
+        """Read from the CoAP MTP, and Send to the STOMP MTP"""
+        queue_item = self._coap_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+            coap_resource_path = queue_item.get_coap_resource_path()
 
-                to_addr = self._coap_endpoint_addr
-                self._logger.info("Found a payload on the STOMP MTP (with reply-to-dest: [%s])", stomp_reply_to_addr)
-                self._logger.info("Sending it to the CoAP MTP (to URL: [%s], with reply-to: [%s])",
-                                  to_addr, coap_reply_to_addr)
-                self._coap_mtp.send_msg(payload, to_addr, coap_reply_to_addr)
+            if coap_resource_path in self._coap_resp_resource_dict:
+                to_addr = self._coap_resp_resource_dict[coap_resource_path]
+            else:
+                to_addr = self._stomp_endpoint_addr
+
+            self._logger.info("Found a payload on the CoAP MTP (on resource path: [%s])", coap_resource_path)
+            self._logger.info("Sending it to the STOMP MTP (to destination: [%s], with reply-to-dest: [%s])",
+                              to_addr, self._stomp_proxy_addr)
+            self._stomp_mtp.send_msg(payload, to_addr, self._stomp_proxy_addr)
+
+    def _read_stomp_send_coap(self):
+        """Read from the STOMP MTP, and Send to the CoAP MTP"""
+        queue_item = self._stomp_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+            stomp_reply_to_addr = queue_item.get_reply_to_addr()
+            coap_resp_resource = stomp_reply_to_addr.replace("#", ".")
+
+            if coap_resp_resource in self._coap_resp_resource_dict:
+                coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+            else:
+                self._coap_resp_resource_dict[coap_resp_resource] = stomp_reply_to_addr
+                self._coap_mtp.add_resource(coap_resp_resource)
+                coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+
+            to_addr = self._coap_endpoint_addr
+            self._logger.info("Found a payload on the STOMP MTP (with reply-to-dest: [%s])", stomp_reply_to_addr)
+            self._logger.info("Sending it to the CoAP MTP (to URL: [%s], with reply-to: [%s])",
+                              to_addr, coap_reply_to_addr)
+            self._coap_mtp.send_msg(payload, to_addr, coap_reply_to_addr)
+
+    def _read_coap_send_websocket(self):
+        """Read from the CoAP MTP, and Send to the WebSocket MTP"""
+        queue_item = self._coap_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+            coap_resource_path = queue_item.get_coap_resource_path()
+
+            self._logger.info("Found a payload on the CoAP MTP (on resource path: [%s])", coap_resource_path)
+            self._logger.info("Sending it to the WebSocket MTP")
+            self._websocket_mtp.send_msg(payload, to_addr="", reply_to_addr="")
+
+    def _read_websocket_send_coap(self):
+        """Read from the WebSocket MTP, and Send to the CoAP MTP"""
+        queue_item = self._websocket_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+            coap_resp_resource = self._websocket_name.replace("#", ".")
+
+            if coap_resp_resource in self._coap_resp_resource_dict:
+                coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+            else:
+                self._coap_resp_resource_dict[coap_resp_resource] = self._websocket_name
+                self._coap_mtp.add_resource(coap_resp_resource)
+                coap_reply_to_addr = self._coap_mtp.get_addr(coap_resp_resource)
+
+            to_addr = self._coap_endpoint_addr
+            self._logger.info("Found a payload on the WebSocket MTP")
+            self._logger.info("Sending it to the CoAP MTP (to URL: [%s], with reply-to: [%s])",
+                              to_addr, coap_reply_to_addr)
+            self._coap_mtp.send_msg(payload, to_addr, coap_reply_to_addr)
+
+    def _read_websocket_send_stomp(self):
+        """Read from the WebSocket MTP, and Send to the STOMP MTP"""
+        queue_item = self._websocket_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+
+            if self._last_stomp_reply_to_addr is not None:
+                to_addr = self._last_stomp_reply_to_addr
+                self._logger.debug("'last_stomp_reply_to_addr' found, using 'to_addr' of [%s]", to_addr)
+                self._last_stomp_reply_to_addr = None
+                self._logger.debug("Clearing out the 'last_stomp_reply_to_addr'")
+            else:
+                to_addr = self._stomp_endpoint_addr
+                self._logger.debug("'last_stomp_reply_to_addr' not found, using 'to_addr' of [%s]", to_addr)
+
+            self._logger.info("Found a payload on the WebSocket MTP")
+            self._logger.info("Sending it to the STOMP MTP (to destination: [%s], with reply-to-dest: [%s])",
+                              to_addr, self._stomp_proxy_addr)
+            self._stomp_mtp.send_msg(payload, to_addr, self._stomp_proxy_addr)
+
+    def _read_stomp_send_websocket(self):
+        """Read from the STOMP MTP, and Send to the WebSocket MTP"""
+        queue_item = self._stomp_mtp.get_msg()
+        if queue_item is not None:
+            payload = queue_item.get_payload()
+            stomp_reply_to_addr = queue_item.get_reply_to_addr()
+            self._last_stomp_reply_to_addr = stomp_reply_to_addr
+            self._logger.debug("Setting the 'last_stomp_reply_to_addr' to [%s]", self._last_stomp_reply_to_addr)
+
+            self._logger.info("Found a payload on the STOMP MTP (with reply-to-dest: [%s])", stomp_reply_to_addr)
+            self._logger.info("Sending it to the WebSocket MTP")
+            self._websocket_mtp.send_msg(payload, to_addr="", reply_to_addr="")
 
 
 def main():
