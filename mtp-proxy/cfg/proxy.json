@@ -18,6 +18,21 @@
           "ProxyEndpointID" : "os::00256D-SerialNum"
         }
       }
+    }, {
+      "Association" : {
+        "CoAP" : {
+          "ProxyPort" : 25683,
+          "ProxyResource" : "usp",
+          "EndpointURL" : "coap://localhost:15683/usp"
+        },
+        "WebSocket" : {
+          "Name" : "ws1",
+          "Host" : "ws.example.com",
+          "Port" : 80,
+          "Path" : "",
+          "client" : true
+        }
+      }
     }
   ]
 }
