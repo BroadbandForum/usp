@@ -54,12 +54,6 @@ import aiocoap.resource
 
 from mtp_proxy import utils
 
-# TODO: Remove this old code if everything works through the plugfest
-#try:
-#    from asyncio import ensure_future as asyncio_ensure_future
-#except ImportError:
-#    from asyncio import async as asyncio_ensure_future
-
 
 class MyCoapResource(aiocoap.resource.Resource):
     """A CoAP Resource for receiving USP messages"""
