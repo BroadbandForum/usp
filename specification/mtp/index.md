@@ -36,6 +36,10 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 * [WebSockets](./websocket/)
 * The [Simple Text-Oriented Messaging Protocol](./stomp/)
 
+## Supporting Multiple MTPs
+
+Agents and Controllers may support more than one MTP. When an Agent supports multiple MTPs, the Agent may be configured with parameters for reaching a particular Controller across more than one MTP. When an Agent needs to send a Notification to such a Controller, the Agent can be designed (or possibly configured) to select a particular MTP, to try sending the Notification to the Controller on all MTPs simultaneously, or to try MTPs sequentially. USP has been designed to allow Endpoints to recognize when they receive a duplicate Message and to discard any duplicates. Endpoints will always send responses on the same MTP where the Message was received.
+
 ## Securing MTPs
 
 <a id="securing_mtps" />
@@ -66,6 +70,23 @@ Specific requirements for implementing these are provided in the individual MTP 
 Figure MTP.1 – Receiving a X.509 Certificate
 
 <a id='figure-MTP1'/>
+
+## Brokered USP Record Errors
+
+<a id='brokered-usp-record-errors' />
+
+MTPs that allow connectivity directly between Endpoints tear down the connection when encountering a USP Record error or other failure caused by the USP Record. This allows such a problem to be signaled to the other Endpoint. MTP protocols where Endpoints connect to a session broker do not tear down the connections to the session broker when encountering USP Record errors. To notify an Endpoint when a failed USP Record was sent, the receiving Endpoint replies with a simple error message.
+
+These error messages are indicated using content type `application/vnd.bbf.usp.error`. The following error codes (in the range 7100-7199) are defined to allow the error to be more specifically indicated. Requirements for communicating USP Record errors using this content type and these error codes are included in the definitions of brokered MTPs.
+
+| Code | Name | Description
+| :----- | :------------ | :---------------------- |
+| `7100` | Record could not be parsed	| This error indicates the received USP Record could not be parsed. |
+| `7101` | Secure session required | This error indicates USP layer [Secure Message Exchange](/specification/e2e-message-exchange/) is required.|
+| `7102` | Secure session not supported | This error indicates USP layer [Secure Message Exchange](/specification/e2e-message-exchange/) was indicated in the received Record but is not supported by the receiving Endpoint. |
+| `7103` | Segmentation and reassembly not supported | This error indicates segmentation and reassembly was indicated in the received Record but is not supported by the receiving Endpoint. |
+| `7104` | 	Invalid Record value | This error indicates the value of at least one Record field was invalid. |
+
 
 [<-- Discovery](/specification/discovery/)
 

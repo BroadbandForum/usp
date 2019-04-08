@@ -140,10 +140,10 @@ The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the prot
 
 **R-BULK.6** - Certain restrictions on the use of TLS and TCP are defined as follows:
 
-*	The Agent MUST support TLS version 1.2 or later.
+*	The Agent MUST support TLS version 1.2 or later (with backward compatibility to TLS 1.2).
 *	If the Collection Server URL has been specified as an HTTPS URL, the Agent MUST establish secure connections to the Collection Server, and MUST start the TLS session negotiation with TLS 1.2 or later.
 
-*Note - If the Collection Server does not support the version with which the Agent establishes the connection, it might be necessary to negotiate an earlier TLS 1.x version, or even SSL 3.0.  This implies that the Agent has to support the mandatory cipher suites for all supported TLS or SSL versions.*
+*Note - If the Collection Server does not support TLS 1.2 or higher with a cipher suite supported by the Agent, it may not be possible for the Agent to establish a secure connection to the Collection Server.*
 
 *Note - TLS_RSA_WITH_AES_128_CBC_SHA is the only mandatory TLS 1.2 cipher suite.*
 
