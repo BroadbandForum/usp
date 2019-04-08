@@ -60,7 +60,7 @@ import subprocess
 import collections
 
 
-class GenericReceivingQueue(object):
+class GenericReceivingQueue:
     """A Generic Receiving Queue to be used as a holding place before re-sending the message"""
     def __init__(self, sleep_time_interval=1):
         """Initialize the Generic Receiving Queue"""
@@ -77,7 +77,7 @@ class GenericReceivingQueue(object):
         """Pop the next Queue Item off of the front of the incoming message queue"""
         non_expired_queue_item = None
 
-        if len(self._incoming_queue) > 0:
+        if self._incoming_queue:
             queue_item = self._incoming_queue.popleft()
             if queue_item.is_expired():
                 self._logger.info("Popped an expired payload, try again!")
@@ -103,7 +103,7 @@ class GenericReceivingQueue(object):
         return queue_item
 
 
-class ExpiringQueueItem(object):
+class ExpiringQueueItem:
     """A Queue Item that has a TTL and a Payload"""
     def __init__(self, payload, reply_to_addr="", ttl=60):
         """Initialize the ExpiringQueueItem with the payload and a TTL (default of 60 seconds)"""
