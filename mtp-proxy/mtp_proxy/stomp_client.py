@@ -166,7 +166,12 @@ class StompClient:
         content_type = "application/vnd.bbf.usp.msg"
         usp_headers = {"reply-to-dest": reply_to_addr}
         self._logger.debug("Using [%s] as the value of the reply-to-dest header", reply_to_addr)
-        self._conn.send(to_addr, payload, content_type, usp_headers)
+        if isinstance(payload, bytearray):
+            self._logger.debug("Sending payload: [%s]", bytes(payload))
+            self._conn.send(to_addr, bytes(payload), content_type, usp_headers)
+        else:
+            self._logger.debug("Sending payload: [%s]", payload)
+            self._conn.send(to_addr, payload, content_type, usp_headers)
         self._logger.info("Sending a STOMP message to the following address: %s", to_addr)
 
     def clean_up(self):
