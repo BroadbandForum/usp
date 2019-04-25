@@ -75,15 +75,22 @@ Once the communication session is established between the Agent and Bulk Data Co
 
 The HTTP Bulk Data transfer mechanism allows parameters to be used as HTTP URI query parameters. This is useful when Bulk Data Collector utilizes the specific parameters that the Agent reports for processing (e.g., logging, locating directories) without the need for the Bulk Data Collector to parse the data being transferred.
 
-**R-BULK.1** - The Agent MUST transmit the device's Manufacturer OUI, Product Class and Serial Number as part of the URI query parameters. The data model parameters are encoded as:
+**R-BULK.1** - The Agent MUST transmit the device's Manufacturer OUI, Product Class and Serial Number or the USP Endpoint ID as part of the URI query parameters. The data model parameters are encoded as:
 
     .DeviceInfo.ManufacturerOUI -> oui
     .DeviceInfo.ProductClass  -> pc
     .DeviceInfo.SerialNumber  -> sn
+    .LocalAgent.EndpointID -> eid
 
 As such, the values of the device’s OUI, Serial Number and Product Class are formatted in the HTTP request URI as follows:
 
     POST https://<bulk data collector url>?oui=00256D&pc=Z&sn=Y
+
+If the USP Endpoint ID is used the HTTP request URI is formatted as:
+
+    POST https://<bulk data collector url>?eid=os::000256:asdfa99384
+
+*Note - If the USP Endpoint ID should be transmitted together with the device's Manufacturer OUI, Product Class and Serial Number (e.g. to distinguish multiple bulk data collection instances on the same device), than the USP Endpoint ID has to be configured as additional URI parameter in the `.BulkData.Profile.{i}.HTTP.RequestURIParameter.{i}.` table.*
 
 Configuring the URI query parameters for other parameters requires that instances of a `.BulkData.Profile.{i}.HTTP.RequestURIParameter` object instance be created and configured with the requested parameters. The additional parameters are appended to the required URI query parameters.
 
