@@ -196,7 +196,7 @@ The following is an example message. This example uses "`^@`" to represent the N
 
 **R-STOMP.29** - USP Endpoints utilizing STOMP clients for message transport that DID NOT receive a `subscribe-dest` STOMP Header in the `CONNECTED` frame when establishing the STOMP communications session MUST update their STOMP subscription when their destination is altered by sending the `UNSUBSCRIBE` STOMP frame (according to the rules defined in the UNSUBSCRIBE section of the STOMP Specification) and then re-subscribing as detailed in the "Subscribing a USP Endpoint to a STOMP Destination" section.
 
-**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the USP Endpoint MUST process the STOMP frame as defined in the RECEIPT section of the STOMP Specification.
+**R-STOMP.30** - USP Endpoints utilizing STOMP clients for message transport MAY receive a `RECEIPT` frame in which case the STOMP server is acknowledging that the corresponding client frame has been processed by the server.
 
 <a id='discovery_requirements' />
 
