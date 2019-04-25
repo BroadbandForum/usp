@@ -90,7 +90,7 @@ If the USP Endpoint ID is used the HTTP request URI is formatted as:
 
     POST https://<bulk data collector url>?eid=os::000256:asdfa99384
 
-*Note - If the USP Endpoint ID should be transmitted together with the device's Manufacturer OUI, Product Class and Serial Number (e.g. to distinguish multiple bulk data collection instances on the same device), than the USP Endpoint ID has to be configured as additional URI parameter in the `.BulkData.Profile.{i}.HTTP.RequestURIParameter.{i}.` table.*
+*Note - If the USP Endpoint ID should be transmitted together with the device's Manufacturer OUI, Product Class and Serial Number (e.g. to distinguish multiple bulk data collection instances on the same device), then the USP Endpoint ID has to be configured as additional URI parameter in the `.BulkData.Profile.{i}.HTTP.RequestURIParameter.{i}.` table.*
 
 Configuring the URI query parameters for other parameters requires that instances of a `.BulkData.Profile.{i}.HTTP.RequestURIParameter` object instance be created and configured with the requested parameters. The additional parameters are appended to the required URI query parameters.
 
