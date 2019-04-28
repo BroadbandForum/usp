@@ -48,8 +48,9 @@ The types of proxies described are:
 
 ## Proxying Building Block Functions
 
-These proxies are comprised of one or more of the building block functions described in the Table PRX.1.
+These proxies are comprised of one or more of the building block functions described in the [Table PRX.1](#table_PRX1).
 
+<a id='table_PRX1' />
 Table PRX.1: Proxy Building Block Functions
 
 | Function | Description |
@@ -66,7 +67,7 @@ Table PRX.1: Proxy Building Block Functions
 
 ## Discovery Proxy
 
-A Discovery Proxy simply repeats the exact information that it discovers from Endpoints. This is particularly useful in a multi-segment LAN, where mDNS messages do not cross segment boundaries. The [DNS-SD Discovery Proxy](https://tools.ietf.org/html/draft-ietf-dnssd-hybrid) functionality is recommended as a component of a Discovery Proxy. When used inside a LAN, this would need the *Non-USP Discovery Function* and the *Non-USP Advertisement Function* described in Table PRX.1.
+A Discovery Proxy simply repeats the exact information that it discovers from Endpoints. This is particularly useful in a multi-segment LAN, where mDNS messages do not cross segment boundaries. The [DNS-SD Discovery Proxy](https://tools.ietf.org/html/draft-ietf-dnssd-hybrid) functionality is recommended as a component of a Discovery Proxy. When used inside a LAN, this would need the *Non-USP Discovery Function* and the *Non-USP Advertisement Function* described in [Table PRX.1](#table_PRX1).
 
 An *Agent USP Advertisement Function* would be needed to support Endpoints in different networks (e.g., discovery of Agents on the LAN by a Controller on the WAN).
 
@@ -80,15 +81,15 @@ This describes proxying of discovery and IP connectivity of Endpoints that need 
 
 Both Endpoints must be using the same MTP. This Proxy translates the IP address (and possibly the TCP or UDP port) from the Connectivity Proxy to the proxied Endpoint, but does not touch (or need to understand) the MTP headers or USP Message.
 
-It is also possible to combine the caching functionality with the MTP Proxy, by adding the Caching Function to the MTP Proxy (see Section 3).
+It is also possible to combine the caching functionality with the MTP Proxy, by adding the *Caching Function* to the MTP Proxy (see Section 3).
 
-In order to serve as a Connectivity Proxy, the following functions (from Table PRX.1) are needed:
+In order to serve as a Connectivity Proxy, the following functions (from [Table PRX.1](#table_PRX1)) are needed:
 1. *L3/4 Translation Function*
 1. Depending on whether the proxy is on the same network as the proxied Endpoints:
    1. *Non-USP Discovery Function* and/or otherwise determined/configured knowledge of Agent(s)
    1. *Non-USP Advertisement Function* and/or *Agent USP Advertisement Function*
 
-The Connectivity Proxy can also include the Caching Function to support Endpoints with intermittent connectivity.
+The Connectivity Proxy can also include the *Caching Function* to support Endpoints with intermittent connectivity.
 
 <a id='MTP_proxy' />
 
@@ -96,13 +97,14 @@ The Connectivity Proxy can also include the Caching Function to support Endpoint
 
 This describes proxying between two USP Endpoints that do not support a common MTP. The USP Record is untouched by the proxy function. MTP and IP headers are changed by the proxy.
 
-In order to serve as a MTP Proxy, the following functions (from Table PRX.1) are needed:
+In order to serve as a MTP Proxy, the following functions (from [Table PRX.1](#table_PRX1)) are needed:
 
 1. *MTP Translation Function*
 1. Depending on whether it is on the same network as the proxied Agents and/or the Controller that wants to communicate with those Agents:
    1. *Non-USP Discovery Function* and/or otherwise determined/configured knowledge of Agent(s)
    1. *Non-USP Advertisement Function* and/or *Agent USP Advertisement Function* 
-The MTP Proxy can also include the Caching Function to support Endpoints with intermittent connectivity.
+
+The MTP Proxy can also include the *Caching Function* to support Endpoints with intermittent connectivity.
 
 <a id='MTP_header_translation_algorithms' />
 
@@ -135,13 +137,13 @@ Table PRX.2: Possible MTP Proxy Methods
 |  | Identify target USP Endpoint for a received message | possible source: received CoAP *uri-path* | put value from a maintained mapping in *uri-path* and use IP address and port from mapping |
 | WebSocket | Maintain mapping of discovered/configured info to advertised info | store WebSocket connection info (and Endpoint ID, if socket is used for more than one Endpoint) with "reply to" and/or connectivity info for other MTP | establish WebSocket connection or associate Endpoint with existing connection, for discovered info |
 |  | Maintain mapping of received info | store WebSocket connection info (and Endpoint ID, if socket is used for more than one Endpoint) with "reply to" and/or connectivity info for other MTP | store the supplied "reply to" and/or connectivity info with a WebSocket connection (and Endpoint ID, if socket is used for more than one Endpoint) |
-|  | Identify target USP Endpoint for a received message | possible source: WebSocket connection established per proxied Endpoint / possible source: to\_id in USP Record | send over WebSocket connection associated with the proxied Endpoint |
+|  | Identify target USP Endpoint for a received message | possible source: WebSocket connection established per proxied Endpoint <br> possible source: to\_id in USP Record | send over WebSocket connection associated with the proxied Endpoint |
 | STOMP | Maintain mapping of discovered/configured info to advertised info | store subscribed-to STOMP destination with "reply to" and/or connectivity info for other MTP | subscribe to STOMP destination for discovered info |
 |  | Maintain mapping of received info | store *reply-to-dest* STOMP header (and associated STOMP connection) with "reply to" or socket info of the sent message | store the supplied "reply to" and/or connectivity info with subscribed-to STOMP destination and connection |
-|  | Identify target USP Endpoint for a received message | possible source: received STOMP *destination* / possible source: to\_id in USP Record | put value from maintained mapping in STOMP destination header and use STOMP connection from that mapping |
+|  | Identify target USP Endpoint for a received message | possible source: received STOMP *destination* <br> possible source: to\_id in USP Record | put value from maintained mapping in STOMP destination header and use STOMP connection from that mapping |
 | MQTT | Maintain mapping of discovered/configured info to advertised info | store subscribed-to Topic (Filter) with "reply to" and/or connectivity info for other MTP | subscribe to MQTT Topic (Filter) for discovered info (if Topic Filter, know which specific Topic to use for "reply to" info) |
 |  | Maintain mapping of received info | store Response Topic or other provided "reply to" info (and associated MQTT connection) with "reply to" or connectivity info of the sent message | store the supplied "reply to" and/or connectivity info with a specific MQTT Topic (within subscribed-to Topic Filter) and connection |
-|  | Identify target USP Endpoint for a received message | possible source: received MQTT `PUBLISH` Topic Name / possible source: to\_id in USP Record | put value from maintained mapping in MQTT `PUBLISH` Topic Name and use MQTT connection from that mapping |
+|  | Identify target USP Endpoint for a received message | possible source: received MQTT `PUBLISH` Topic Name <br> possible source: to\_id in USP Record | put value from maintained mapping in MQTT `PUBLISH` Topic Name and use MQTT connection from that mapping |
 
 Figure PRX.1 shows an example of how an MTP Proxy might be used to proxy between an MTP used by a Cloud Server in the WAN and an MTP used inside the LAN. It also shows proxying between MTPs and internal APIs used to communicate with multiple Agents internal to the Services Gateway.
 
@@ -168,32 +170,32 @@ Assumptions include:
 
 Figure PRX.2: CoAP-STOMP MTP Proxy Example Flow
 
-_Controller connects to the STOMP server_
+**Controller connects to the STOMP server**
 
-_A / B / C_ At any point prior to #5 the USP Controller Endpoint ctrl1 connects to STOMP and subscribes to destination A
+**A / B / C**  At any point prior to #5 the USP Controller Endpoint ctrl1 connects to STOMP and subscribes to destination A
 
 * OUT OF SCOPE how the USP Endpoint ctrl1 destination A is discovered by Proxy
 * OUT OF SCOPE how the proxied USP Endpoint agent1 STOMP destination Y is discovered by USP Endpoint ctrl1
 
 Agent appears on network and Proxy allows Controller to communicate with Agent
 
-_#1_ The USP Endpoint agent1 appears on the network. Proxy receives advertisement and gets the USP Endpoint identifier "agent1" of the Agent (retrieved from mDNS advertisement see R-DIS.8).
+**#1** The USP Endpoint agent1 appears on the network. Proxy receives advertisement and gets the USP Endpoint identifier "agent1" of the Agent (retrieved from mDNS advertisement see R-DIS.8).
 
-_#2_ Proxy sends a CONNECT frame to the STOMP server with endpoint-id header of "agent1".
+**#2** Proxy sends a CONNECT frame to the STOMP server with endpoint-id header of "agent1".
 
-_#3_ Proxy receives a subscribe-dest header in the CONNECTED frame identifying the STOMP destination it needs to subscribe to on behalf of agent1.
+**#3** Proxy receives a subscribe-dest header in the CONNECTED frame identifying the STOMP destination it needs to subscribe to on behalf of agent1.
 
-_#4_ The Proxy sends a SUBSCRIBE frame to the STOMP server with destination:Y and stores a mapping of USP Endpoint agent1 with coaps:://\<Agent IP\>:\<port\>/agent1 to this STOMP connection with destination Y.
+**#4** The Proxy sends a SUBSCRIBE frame to the STOMP server with destination:Y and stores a mapping of USP Endpoint agent1 with coaps:://\<Agent IP\>:\<port\>/agent1 to this STOMP connection with destination Y.
 
-_#5 / #6_ USP Endpoint ctrl1 initiates USP message to agent. Proxy creates a STOMP reply-to-dest:A (on this STOMP connection) to coaps:://\<Proxy IP\>:\<port\>/destA mapping.
+**#5 / #6** USP Endpoint ctrl1 initiates USP message to agent. Proxy creates a STOMP reply-to-dest:A (on this STOMP connection) to coaps:://\<Proxy IP\>:\<port\>/destA mapping.
 
-_#7/ #7.1_ Proxy takes USP Record from the STOMP frame and sends it in a CoAP payload with CoAP URI coming from the step #4 mapping of STOMP destination Y to coap:://\<Agent IP\>:\<port\>/agent1. To secure the communication, the proxy and Agent establish a DTLS session (exchange certificates) and the Agent determines whether the proxy is a Trusted Broker.
+**#7/ #7.1** Proxy takes USP Record from the STOMP frame and sends it in a CoAP payload with CoAP URI coming from the step #4 mapping of STOMP destination Y to coap:://\<Agent IP\>:\<port\>/agent1. To secure the communication, the proxy and Agent establish a DTLS session (exchange certificates) and the Agent determines whether the proxy is a Trusted Broker.
 
-_#8 / #8.1_  USP Endpoint agent1 sends a USP Record in reply to ctrl1 using CoAP, to coaps:://\<Proxy IP\>:\<port\>/destA.
+**#8 / #8.1**  USP Endpoint agent1 sends a USP Record in reply to ctrl1 using CoAP, to coaps:://\<Proxy IP\>:\<port\>/destA.
 
-_#9 / #10_ Proxy takes USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (created in steps #5 / #6) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination A (and associated STOMP connection) created in steps #5 / #6 .
+**#9 / #10** Proxy takes USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (created in steps #5 / #6) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination A (and associated STOMP connection) created in steps #5 / #6 .
 
-_Agent sends Notify Message to Controller_
+**Agent sends Notify Message to Controller**
 
 These steps include the following additional assumptions:
 * Controller has configured Agent with a notification subscription.
@@ -201,13 +203,13 @@ These steps include the following additional assumptions:
 * Proxy replies to mDNS queries for Controller with "ctrl1" Instance. Controller was able to assume or otherwise determine that Proxy would do this and that its proxied CoAP connection would be discoverable by querying for ctrl1.\_usp-ctrl-coap.\_udp.\_local.
 * Proxy can use the previous reply-to-dest header value to reach this Controller
 
-_#11_ The Agent sends mDNS query for ctrl1.\_usp-ctrl-coap.\_udp.\_local. 
+**#11** The Agent sends mDNS query for ctrl1.\_usp-ctrl-coap.\_udp.\_local. 
 
-_#12_ The Proxy response to the Agent includes TXT record with path of coaps:://\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
+**#12** The Proxy response to the Agent includes TXT record with path of coaps:://\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
 
-_#13 / #13.1_ The Agent may sends a Notify Message to Controller at coaps:://\<Proxy IP\>:\<port\>/ctrl1.
+**#13 / #13.1** The Agent may sends a Notify Message to Controller at coaps:://\<Proxy IP\>:\<port\>/ctrl1.
 
-_#14 / #15_ Proxy takes the USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (stored in #5 / #6 ) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination:A (and associated STOMP connection).
+**#14 / #15** Proxy takes the USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (stored in #5 / #6 ) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination:A (and associated STOMP connection).
 
 <a id='USP_to_non-USP_proxy' />
 
@@ -215,4 +217,4 @@ _#14 / #15_ Proxy takes the USP Record from the CoAP payload and sends it in a S
 
 This describes proxying between a Controller and some other management protocol with its own data model schema (e.g., UPnP DM, ZigBee, NETCONF, RESTCONF). In this case the proxy is expected to maintain a USP representation of the non-USP data. This requires the proxy to expose itself as a full Agent to the Controller. See the [Device Proxy](../device-proxy/index.md) appendix for the Theory of Operations for the `Device.ProxiedDevice.` object defined in the [Device:2 Data Model][1].
 
-In order to serve as a USP to non-USP Proxy, the *USP to non-USP Translation Function* is needed.
+In order to serve as a USP to non-USP Proxy, the *USP to non-USP Translation Function* (from [Table PRX.1](#table_PRX1)) is needed.
