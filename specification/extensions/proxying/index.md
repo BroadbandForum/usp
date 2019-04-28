@@ -207,7 +207,7 @@ These steps include the following additional assumptions:
 
 **#12** The Proxy response to the Agent includes TXT record with path of coaps:://\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
 
-**#13 / #13.1** The Agent may sends a Notify Message to Controller at coaps:://\<Proxy IP\>:\<port\>/ctrl1.
+**#13 / #13.1** The Agent sends a Notify Message to Controller at coaps:://\<Proxy IP\>:\<port\>/ctrl1.
 
 **#14 / #15** Proxy takes the USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (stored in #5 / #6 ) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination:A (and associated STOMP connection).
 
