@@ -185,15 +185,15 @@ Agent appears on network and Proxy allows Controller to communicate with Agent
 
 **#3** Proxy receives a subscribe-dest header in the CONNECTED frame identifying the STOMP destination it needs to subscribe to on behalf of agent1.
 
-**#4** The Proxy sends a SUBSCRIBE frame to the STOMP server with destination:Y and stores a mapping of USP Endpoint agent1 with coaps:://\<Agent IP\>:\<port\>/agent1 to this STOMP connection with destination Y.
+**#4** The Proxy sends a SUBSCRIBE frame to the STOMP server with destination:Y and stores a mapping of USP Endpoint agent1 with coaps://\<Agent IP\>:\<port\>/agent1 to this STOMP connection with destination Y.
 
-**#5 / #6** USP Endpoint ctrl1 initiates USP message to agent. Proxy creates a STOMP reply-to-dest:A (on this STOMP connection) to coaps:://\<Proxy IP\>:\<port\>/destA mapping.
+**#5 / #6** USP Endpoint ctrl1 initiates USP message to agent. Proxy creates a STOMP reply-to-dest:A (on this STOMP connection) to coaps://\<Proxy IP\>:\<port\>/destA mapping.
 
-**#7/ #7.1** Proxy takes USP Record from the STOMP frame and sends it in a CoAP payload with CoAP URI coming from the step #4 mapping of STOMP destination Y to coap:://\<Agent IP\>:\<port\>/agent1. To secure the communication, the proxy and Agent establish a DTLS session (exchange certificates) and the Agent determines whether the proxy is a Trusted Broker.
+**#7/ #7.1** Proxy takes USP Record from the STOMP frame and sends it in a CoAP payload with CoAP URI coming from the step #4 mapping of STOMP destination Y to coap://\<Agent IP\>:\<port\>/agent1. To secure the communication, the proxy and Agent establish a DTLS session (exchange certificates) and the Agent determines whether the proxy is a Trusted Broker.
 
-**#8 / #8.1**  USP Endpoint agent1 sends a USP Record in reply to ctrl1 using CoAP, to coaps:://\<Proxy IP\>:\<port\>/destA.
+**#8 / #8.1**  USP Endpoint agent1 sends a USP Record in reply to ctrl1 using CoAP, to coaps://\<Proxy IP\>:\<port\>/destA.
 
-**#9 / #10** Proxy takes USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (created in steps #5 / #6) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination A (and associated STOMP connection) created in steps #5 / #6 .
+**#9 / #10** Proxy takes USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (created in steps #5 / #6) of coaps://\<Proxy IP\>:\<port\>/destA to STOMP destination A (and associated STOMP connection) created in steps #5 / #6 .
 
 **Agent sends Notify Message to Controller**
 
@@ -205,11 +205,11 @@ These steps include the following additional assumptions:
 
 **#11** The Agent sends mDNS query for ctrl1.\_usp-ctrl-coap.\_udp.\_local. 
 
-**#12** The Proxy response to the Agent includes TXT record with path of coaps:://\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
+**#12** The Proxy response to the Agent includes TXT record with path of coaps://\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
 
-**#13 / #13.1** The Agent sends a Notify Message to Controller at coaps:://\<Proxy IP\>:\<port\>/ctrl1.
+**#13 / #13.1** The Agent sends a Notify Message to Controller at coaps://\<Proxy IP\>:\<port\>/ctrl1.
 
-**#14 / #15** Proxy takes the USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (stored in #5 / #6 ) of coaps:://\<Proxy IP\>:\<port\>/destA to STOMP destination:A (and associated STOMP connection).
+**#14 / #15** Proxy takes the USP Record from the CoAP payload and sends it in a STOMP SEND frame using the mapping (stored in #5 / #6 ) of coaps://\<Proxy IP\>:\<port\>/destA to STOMP destination:A (and associated STOMP connection).
 
 <a id='USP_to_non-USP_proxy' />
 
