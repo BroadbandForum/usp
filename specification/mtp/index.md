@@ -35,6 +35,7 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 *	The [Constrained Application Protocol (CoAP)](./coap/)
 * [WebSockets](./websocket/)
 * The [Simple Text-Oriented Messaging Protocol](./stomp/)
+* [MQ Telemetry Transport (MQTT)](./mqtt)
 
 ## Supporting Multiple MTPs
 

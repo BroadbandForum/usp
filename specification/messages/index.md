@@ -1808,7 +1808,7 @@ body {
 
 This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.7** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification.
+**R-NOT.7** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If no subscription_id is available (for example, for OnBoardRequest notifications), this field MUST be set to an empty string.
 
 `bool send_resp`
 
@@ -1928,7 +1928,7 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.9** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` field does not contain the Subscription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
+**R-NOT.9** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` field does not contain the Subscription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries. If no subscription_id is available (for example, for OnBoardRequest notifications), this field MUST be set to an empty string.
 
 #### Notify Error Codes
 
