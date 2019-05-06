@@ -164,9 +164,9 @@ If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot
 
 **R-STOMP.24b** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
 
-* `err_code:\<numeric code indicating the type of error that caused the overall message to fail\>`
+* `err_code:<numeric code indicating the type of error that caused the overall message to fail>`
 
-* `err_msg:\<additional information about the reason behind the error\>`
+* `err_msg:<additional information about the reason behind the error>`
 
 The specific error codes are listed in the MTP [Brokered USP Record Errors](/specification/mtp#brokered-usp-record-errors) section.  
 
@@ -224,7 +224,7 @@ The USP [discovery section](/specification/discovery) details requirements about
 
 STOMP MTP message encryption is provided using TLS certificates.
 
-**R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 RFC 5246 or later with backward compatibility to TLS 1.2.
+**R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 [RFC 5246][22] or later with backward compatibility to TLS 1.2.
 
 **R-STOMP.37** - STOMP server certificates MAY contain domain names and those domain names MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
 

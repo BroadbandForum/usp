@@ -123,7 +123,7 @@ A Message consists of a header and body. When using [protocol buffers][12], the 
 
 **R-MSG.5** - A Message MUST conform to the schemas defined in [usp-msg.proto](/specification/usp-msg.proto).
 
-*Note: When using protocol buffers for message encoding, default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
+*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a oneof field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 
 Every USP message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
@@ -1808,7 +1808,7 @@ body {
 
 This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
 
-**R-NOT.7** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification.
+**R-NOT.7** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If no subscription_id is available (for example, for OnBoardRequest notifications), this field MUST be set to an empty string.
 
 `bool send_resp`
 
@@ -1926,9 +1926,9 @@ A comma separated list of USP Protocol Versions (major.minor) supported by this 
 
 `string subscription_id`
 
-This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.
+This field contains the Subscription ID that was received with the Notify Request.
 
-**R-NOT.9** - The `subscription_id` field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If the `subscription_id` field does not contain the Subscription ID of the Subscription Object that triggered this notification, this Response MUST be ignored and not considered valid for the purpose of calculating notification retries.
+**R-NOT.9** - The `subscription_id` field MUST contain same Subscription ID as was presented in the Notify Request. If the `subscription_id` field does not match the Subscription ID of the Subscription Object that triggered this notification, this Response MUST be ignored.
 
 #### Notify Error Codes
 

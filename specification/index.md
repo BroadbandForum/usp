@@ -22,12 +22,13 @@
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
 [23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[24]: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) "MQ Telemetry Transport 5.0"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>Issue 1 Corrigendum 2</h2>
-<h4>USP Version 1.0.2</h4>
+<h2>Issue 1 Amendment 1</h2>
+<h4>USP Version 1.1</h4>
 
 You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
 
@@ -267,7 +268,7 @@ A list of currently valid Broadband Forum Technical Reports is published at
 21. [Simple Text Oriented Message Protocol][21]
 22. [The Transport Layer Security (TLS) Protocol Version 1.2][22]
 23. [Datagram Transport Layer Security Version 1.2][23]
-
+24. [MQ Telemetry Transport 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)[24].
 
 # Definitions
 
