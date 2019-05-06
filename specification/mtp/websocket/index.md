@@ -117,9 +117,9 @@ If a USP Endpoint receives a WebSocket frame containing a USP Record that cannot
 
 Once a WebSocket session is established, the WebSocket session is expected to remain open for future exchanges of USP Records. The WebSocket protocol uses Ping and Pong control frames as a keep-alive session. Section 5.5 of RFC 6455 discusses the handling of Ping and Pong control frames.
 
-**R-WS.17** - A USP Endpoint MUST implement a WebSocket keep-alive mechanism by periodically sending Ping control frames and respond to Pong control frames as described in section 5.5 of [RFC 6455][20].
+**R-WS.17** - A USP Agent MUST implement a WebSocket keep-alive mechanism by periodically sending Ping control frames and respond to Pong control frames as described in section 5.5 of [RFC 6455][20].
 
-**R-WS.18** - A USP Endpoint MUST provide the capability to assign a keep-alive interval in order to send Ping control frames to the remote USP Endpoint.
+**R-WS.18** - A USP Agent MUST provide the capability to assign a keep-alive interval in order to send Ping control frames to the remote USP Endpoint.
 
 <a id='websocket_session_retry' />
 

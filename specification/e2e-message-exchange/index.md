@@ -538,7 +538,7 @@ When the transmitting and receiving USP Endpoints have established a TLS session
 
 **R-E2E.38** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST derive the key from the negotiated TLS session's master key.
 
-**R-E2E.39** – If using the TLS MAC method to protect the integrity of a USP Record, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST use TLS session's client or server random for the salt depending on the role the USP Endpoint plays in the TLS session.
+**R-E2E.39** – If using the TLS MAC method to protect the integrity of a USP Record, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST use TLS session’s client or server random for the salt depending on the role the USP Endpoint plays in the TLS session (i.e., the TLS client uses the client random and the TLS server uses the server random).
 
 <a id='secure_message_exchange' />
 

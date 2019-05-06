@@ -27,7 +27,7 @@
 
 # Appendix III - Device Proxy
 
-This Annex describes a Theory of Operations for the `Device.ProxiedDevice.` object
+This appendix describes a Theory of Operations for the `Device.ProxiedDevice.` object
 defined in the [Device:2 Data Model][1].
 
 The `Device.ProxiedDevice` table is defined as:
