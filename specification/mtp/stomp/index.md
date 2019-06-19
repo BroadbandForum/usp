@@ -144,25 +144,25 @@ A USP Record is sent from a USP Endpoint to a STOMP Server within a `SEND` frame
 
 ### Handling USP Record errors and ERROR Frames
 
-R-STOMP.23a - Endpoints SHOULD support STOMP content-type header value of application/vnd.bbf.usp.error.
-
-R-STOMP.23b - If an Endpoint supports content-type value of application/vnd.bbf.usp.error, it MUST include a `usp-err-id` STOMP header in `SEND` frames of content-type `application/vnd.bbf.usp.msg`. The value of this header is:  `<USP Record to-id  > + "/" + <USP Message msg_id>`. Since the colon "`:`" is a reserved character in STOMP headers, all instances of "`:`" in the USP Record to-id MUST be expressed using percent-encoding of `%3A`.
-
 If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), the receiving USP Endpoint will drop the USP Record if the STOMP  MESSAGE frame does not have a `usp-err-id` header or if the receiving Endpoint does not support the `application/vnd.bbf.usp.error` content-type value. If the receiving Endpoint does support the `application/vnd.bbf.usp.error` content-type value and the received STOMP MESSAGE frame had a `usp-err-id` header, the receiving Endpoint will issue a STOMP SEND frame of `application/vnd.bbf.usp.error` content-type value.
+
+**R-STOMP.23a** - USP Endpoints MUST support STOMP content-type header value of `application/vnd.bbf.usp.error`.
 
 **R-STOMP.24** - When a USP Endpoint receives a `MESSAGE` frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST ignore the USP Record if *either* of the following two cases is true:
 
-* the receiving USP Endpoint does not support application/vnd.bbf.usp.error content-type value, or
+* the receiving USP Endpoint does not support `application/vnd.bbf.usp.error` content-type value, or
 
 * the received STOMP MESSAGE frame did not include a `usp-err-id` header
 
 **R-STOMP.24a** - When a USP Endpoint receives a MESSAGE frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing the receiving USP Endpoint MUST send a STOMP SEND frame with an `application/vnd.bbf.usp.error` content-type header value if *both* of the following two cases are true:
 
-* the receiving USP Endpoint supports application/vnd.bbf.usp.error content-type value, and
+* the receiving USP Endpoint supports `application/vnd.bbf.usp.error` content-type value, and
 
 * the received STOMP MESSAGE frame includes a `usp-err-id` header
 
-**R-STOMP.24b** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
+**R-STOMP.24b** - A USP Endpoint MUST include a `usp-err-id` STOMP header in `SEND` frames of content-type `application/vnd.bbf.usp.msg`. The value of this header is:  `<USP Record to-id  > + "/" + <USP Message msg_id>`. Since the colon "`:`" is a reserved character in STOMP headers, all instances of "`:`" in the USP Record to-id MUST be expressed using percent-encoding of `%3A`.
+
+**R-STOMP.24c** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
 
 * `err_code:<numeric code indicating the type of error that caused the overall message to fail>`
 
@@ -172,15 +172,15 @@ The specific error codes are listed in the MTP [Brokered USP Record Errors](/spe
 
 The following is an example message. This example uses "`^@`" to represent the NULL octet that follows a STOMP body.
 
-    ```
-    SEND
-    destination:/usp/the-reply-to-dest
-    content-type:application/vnd.bbf.usp.error
-    usp-err-id:cid%3A3AA3F8%3Ausp-id-42/683
+```
+SEND
+destination:/usp/the-reply-to-dest
+content-type:application/vnd.bbf.usp.error
+usp-err-id:cid%3A3AA3F8%3Ausp-id-42/683
 
-    err_code:7100
-    err_msg:Field n is not recognized.^@
-    ```
+err_code:7100
+err_msg:Field n is not recognized.^@
+```
 
 **R-STOMP.25** - If an `ERROR` frame is received by the USP Endpoint, the STOMP server will terminate the connection. In this case the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `STOMP.Connection.{i}.` retry parameters: `ServerRetryInitialInterval`, `ServerRetryIntervalMultiplier`, and `ServerRetryMaxInterval`.
 

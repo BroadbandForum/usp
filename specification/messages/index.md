@@ -864,6 +864,8 @@ This field returns a repeated set of Path Names to Object Instances.
 
 **R-DEL.2** - If the Controller does not have Read permission on any of the Objects specified in `affected_paths`, these Objects MUST NOT be returned in this field.
 
+**R-DEL.2a** - If the requested_path was valid but did not resolve to any objects in the Agent's instantiated data model, the Agent MUST return an OperationSuccess for this requested_path, and include an empty set for affected_path.
+
 `repeated UnaffectedPathError unaffected_path_errs`
 
 This field contains a repeated set of messages of type `UnaffectedPathError`.
@@ -1152,6 +1154,8 @@ This field contains additional information about the reason behind the error.
 
 This field contains one message of type ResolvedPathResult for each path resolved by the Path Name or Search Path given by `requested_path`.
 
+**R-GET.1a** - If the requested_path did not resolve to any objects in the Agent's instantiated data model, the resolved_path_results set MUST be empty.
+
 ###### ResolvedPathResult fields
 
 `string resolved_path`
@@ -1369,103 +1373,144 @@ Both of these syntaxes are supported and equivalent. The Agent's Response return
 For example, the Controller wishes to learn the WiFi capabilities the Agent represents. It could issue a GetSupportedDM Request as:
 
 ```
-    GetSupportedDM {
-      obj_paths : "Device.WiFi."
-      first_level_only : false
-      return_commands : true
-      return_events : true
-      return_params : true
+    GetSupportedDM{
+    	obj_paths : "Device.WiFi."
+    	first_level_only : false
+    	return_commands : false
+    	return_events : false
+    	return_params : false
     }
 ```
 
 The Agent's Response would be:
 
 ```
-    GetSupportedDMResp {
-      req_obj_results {
-        req_obj_path : "Device.WiFi."
-        err_code : 0
-        err_msg :
-        data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
-        supported_objs {
-          supported_obj_path : "Device.WiFi.SSID.{i}."
-          is_multi_instance : false
-          supported_params {
-            {
-              param_name : "RadioNumberOfEntries"}
-            {
-              param_name : "SSIDNumberOfEntries"}
-            {
-              param_name : "AccessPointNumberOfEntries"}
-            {
-              param_name : "EndPointNumberOfEntries"}
-          }
-          supported_commands {
-            command_name : SomeCommand()
-            input_arg_names {
-              "SomeArgument1"
-              "SomeArgument2"
-            }
-            output_arg_names {
-              "SomeArgument1"
-              "SomeArgument2"
-            }
-          }
-          supported_events {
-            event_name : "SomeEvent!"
-            arg_names {
-              "SomeArgumentA"
-              "SomeArgumentB"
-            }
-          }
-          supported_obj_path : "Device.WiFi.SSID.{i}."
-          access : ADD_DELETE (1)
-          is_multi_instance : true
-          supported_params {
-            {
-              param_name : "Enable"
-              access : PARAM_READ_WRITE (1)}
-            {
-              param_name: "Status"}
-            {
-              param_name : "Alias"
-              access : PARAM_READ_WRITE (1)}
-            {
-              param_name : "Name"}
-            {
-              param_name: "LastChange"}
-            {
-              param_name : "LowerLayers"
-              access : PARAM_READ_WRITE (1)}
-            {
-              param_name : "BSSID"}
-            {
-              param_name : "MACAddress"}
-            {
-              param_name : "SSID"
-              access : PARAM_READ_WRITE (1)}
-          }
-          supported_commands {
-            command_name : "SomeCommand()"
-            input_arg_names {
-              "SomeArgument1"
-              "SomeArgument2"
-            }
-            output_arg_names {
-              "SomeArgument1"
-              "SomeArgument2"
-            }
-          }
-          supported_events {
-            event_name : "SomeEvent!"
-            arg_names {
-              "SomeArgumentA"
-              "SomeArgumentB"
-            }
-          }                
+GetSupportedDMResp {
+	req_obj_results {
+		req_obj_path : "Device.WiFi."
+		err_code : 0
+		err_msg :
+		data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
+		supported_objs {
+      {
+			supported_obj_path : "Device.WiFi."
+			access : OBJ_READ_ONLY
+			is_multi_instance : false}		
+			{
+      supported_obj_path : "Device.WiFi.Radio.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true
+			supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
+			access : ADD_DELETE (1)
+			is_multi_instance : true}			
+			{
+      supported_obj_path : "Device.WiFi.SSID.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true
+			supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
+			access : ADD_DELETE (1)
+			is_multi_instance : true}			
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Security."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.WPS."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Accounting."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
+			{
+			supported_obj_path : "Device.WiFi.EndPoint.{i}."
+			access : ADD_DELETE (1)
+			is_multi_instance : true}
 
-    // And continued, for Objects such as Device.WiFi.SSID.{i}.Stats., Device.WiFi.Radio.{i}, Device.WiFi.AccessPoint.{i}, Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}, etc.
-      }
+			// And continued, for Device.WiFi.EndPoint.{i}. sub-objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}.Security., etc.
+		}
+  }
+}
+```
+
+In another example request:
+
+```
+    GetSupportedDM{
+    	obj_paths : "Device.WiFi."
+    	first_level_only : true
+    	return_commands : true
+    	return_events : true
+    	return_params : true
+    }
+```
+
+The Agent's respose would be:
+
+```
+    GetSupportedDMResp {
+    	req_obj_results {
+    		req_obj_path : "Device.WiFi."
+    		err_code : 0
+    		err_msg :
+    		data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
+    		supported_objs {
+    			supported_obj_path : "Device.WiFi."
+    			access : OBJ_READ_ONLY
+    			is_multi_instance : false
+    			supported_params {
+    				{param_name : "RadioNumberOfEntries"
+    				acces : PARAM_READ_ONLY}
+    				{param_name : "SSIDNumberOfEntries"
+    				acces : PARAM_READ_ONLY}
+    				// Continued for all Device.WiFi. parameters
+    			}
+    			supported_commands {
+    				command_name : NeighboringWiFiDiagnostic()
+    				output_arg_names {"Result.{i}.Radio" "Result.{i}.SSID"
+    				"Result.{i}.BSSID" "Result.{i}.Mode" "Result.{i}.Channel"
+    				// Continued for other NeighboringWiFiDiagnostic() output arguments
+    				}
+    			}
+    			//followed by its immediate child objects with no details
+    			{
+          supported_obj_path : "Device.WiFi.Radio.{i}."
+    			access : ADD_DELETE (1)
+    			is_multi_instance : true}
+    			{
+    			supported_obj_path : "Device.WiFi.SSID.{i}."
+    			access : ADD_DELETE (1)
+    			is_multi_instance : true}
+    			{
+    			supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+    			access : ADD_DELETE (1)
+    			is_multi_instance : true}
+    			{
+    			supported_obj_path : "Device.WiFi.EndPoint.{i}."
+    			access : ADD_DELETE (1)
+    			is_multi_instance : true}
+    		}
+    	}
     }
 ```
 
@@ -1477,7 +1522,7 @@ This field contains a repeated set of Path Names to Objects in the Agent's Suppo
 
 `bool first_level_only`
 
-This field, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects.
+This field, if `true`, indicates that the Agent should return only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects. The list of child objects does not include commands, events, or parameters of the child objects regardless of the values of the following elements:
 
 `bool return_commands`
 
@@ -1978,6 +2023,8 @@ Synchronous Operations do not persist across a reboot or restart of the Agent or
 
 Since the Operate request can take a path expression as a value for the command field, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the `OperationResult` field type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different `OperationResult` entry. For this reason, operation failures are never conveyed in an Error message - in reply to an Operate request, Error is only used when the message itself fails for one or more reasons, rather than the operation invoked.
 
+*Note: This specification does not make any requirement on the order in which commands on multiple objects selected with a path expression are executed.*
+
 **R-OPR.1** - When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error message due to a failed operation. It MUST instead include the failure in the `cmd_failure` field of the Operate response.
 
 **R-OPR.2** - For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command field.
@@ -2115,38 +2162,38 @@ Appropriate error codes for the Operate message include `7000-7008`, `7012` `701
 
 USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each message (and how they must be implemented) are defined in the message descriptions below.
 
-| Code | Name | Description
-| :----- | :------------ | :---------------------- |
-| `7000` | Message failed	| This error indicates a general failure that is described in an err_msg field. |
-| `7001` | Message not supported | This error indicates that the attempted message was not understood by the target endpoint.|
-| `7002` | Request denied (no reason specified) | This error indicates that the target endpoint cannot or will not process the message. |
-| `7003` | Internal error | This error indicates that the message failed due to internal hardware or software reasons. |
-| `7004` | Invalid arguments | This error indicates that the message failed due to invalid values in the USP message. |
-| `7005` | Resources exceeded | This error indicates that the message failed due to memory or processing limitations on the target endpoint. |
-| `7006` | Permission denied  | This error indicates that the source endpoint does not have the authorization for this action. |
-| `7007` | Invalid configuration | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
-| `7008` | Invalid path syntax | This error indicates that the Path Name used was not understood by the target endpoint. |
-| `7009` | Parameter action failed | This error indicates that the parameter failed to update for a general reason described in an err_msg field. |
-| `7010` | Unsupported parameter | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
-| `7011` | Invalid type | This error indicates that the requested value was not of the correct data type for the parameter. |
-| `7012` | Invalid value | This error indicates that the requested value was not within the acceptable values for the parameter. |
-| `7013` | Attempt to update non-writeable parameter | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
-| `7014` | Value conflict | This error indicates that the requested value would result in an invalid configuration based on other parameter values. |
-| `7015` | Operation error | This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.
-| `7016` | Object does not exist | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
-| `7017` | Object could not be created | This error indicates that the operation failed to create an instance of the specified Object. |
-| `7018` | Object is not a table | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
-| `7019` | Attempt to create non-creatable Object | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
-| `7020` | Object could not be updated | This error indicates that the requested Object in a Set request failed to update. |
-| `7021` | Required parameter failed | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
-| `7022` | Command failure | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
-| `7023` | Command canceled | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
-| `7024` | Delete failure | This error indicates that this Object Instance failed to be deleted. |
-| `7025` | Object exists with duplicate key | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
-| `7026` | Invalid path | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
-| `7027` | Invalid Command Arguments | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
-| `7100-7199` | USP Record error codes | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |
-| `7800-7999`| Vendor defined error codes | These errors are [vendor defined](#vendor_defined_error_codes). |
+| Code | Name | Applicability | Description |
+| :--- | :--- | :------------ | :---------- |
+| `7000` | Message failed	| Error Message | This error indicates a general failure that is described in an err_msg field. |
+| `7001` | Message not supported | Error Message | This error indicates that the attempted message was not understood by the target endpoint.|
+| `7002` | Request denied (no reason specified) | Error Message | This error indicates that the target endpoint cannot or will not process the message. |
+| `7003` | Internal error | Error Message | This error indicates that the message failed due to internal hardware or software reasons. |
+| `7004` | Invalid arguments | Error Message | This error indicates that the message failed due to invalid values in the USP message. |
+| `7005` | Resources exceeded | Error Message | This error indicates that the message failed due to memory or processing limitations on the target endpoint. |
+| `7006` | Permission denied  | Error Message | This error indicates that the source endpoint does not have the authorization for this action. |
+| `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
+| `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target endpoint. |
+| `7009` | Parameter action failed | Set | This error indicates that the parameter failed to update for a general reason described in an err_msg field. |
+| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
+| `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the parameter. |
+| `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the parameter. |
+| `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
+| `7014` | Value conflict | Add, Set | This error indicates that the requested value would result in an invalid configuration based on other parameter values. |
+| `7015` | Operation error | Add, Set, Delete | This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.
+| `7016` | Object does not exist | Add, Set | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
+| `7017` | Object could not be created | Add | This error indicates that the operation failed to create an instance of the specified Object. |
+| `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
+| `7019` | Attempt to create non-creatable Object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
+| `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
+| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
+| `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
+| `7023` | Command canceled | Operate | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
+| `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |
+| `7025` | Object exists with duplicate key | Add | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
+| `7026` | Invalid path | Any | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
+| `7027` | Invalid Command Arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
+| `7100-7199` | USP Record error codes | - | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |
+| `7800-7999`| Vendor defined error codes | - | These errors are [vendor defined](#vendor_defined_error_codes). |
 
 <a id="vendor_defined_error_codes" />
 

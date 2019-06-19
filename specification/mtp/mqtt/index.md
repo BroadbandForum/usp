@@ -62,7 +62,7 @@ Figure MQTT.2 - MQTT Packets
 
 **R-MQTT.1** - USP Endpoints utilizing MQTT clients for message transport MUST implement [MQTT 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html).
 
-**R-MQTT.2** - USP Endpoints utilizing MQTT clients for message transport SHOULD implement [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html).
+**R-MQTT.2** - USP Endpoints utilizing MQTT clients for message transport MAY implement [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html).
 
 Requirements in this MQTT MTP specification are common to both the MQTT 3.1.1 and MQTT 5.0 specifications unless an MQTT version is named.
 
@@ -73,9 +73,9 @@ The MQTT specifications are very complete and comprehensive in describing syntax
 The MQTT specification also describes how MQTT can run over WebSockets. Deployments can choose to use MQTT over WebSockets, if they use MQTT clients and servers with support for this option. The TCP option is required to ensure interoperability.
 
 **R-MQTT.4** - USP Agents utilizing MQTT clients for message transport MUST support the `MQTTClientCon:1`, `MQTTClientSubscribe:1`, `MQTTAgent:1`, and `MQTTController:1` data model profiles.
- 
+
 **R-MQTT.5** - USP Agents utilizing MQTT clients for message transport SHOULD support the `MQTTClientExtended:1` data model profile.
- 
+
 <a id='connecting_a_usp_endpoint_to_the_mqtt_server' />
 
 ## Connecting a USP Endpoint to the MQTT Server
@@ -88,7 +88,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 **R-MQTT.6** - USP Endpoints utilizing MQTT clients for message transport MUST send a `CONNECT` packet to the MQTT server to initiate the MQTT communications session.
 
-**R-MQTT.7** - USP Endpoints with a configured MQTT User Name and Password for use with this MQTT server MUST include these in the MQTT `CONNECT` packet. If the `.MQTT.Client.{i}.Username` and `.MQTT.Client.{i}.Password` parameters are implemented in a USP Agent, these values (associated with this MQTT server) will be used for User Name and Password.
+**R-MQTT.7** - USP Endpoints with a configured MQTT User Name and Password for use with this MQTT server MUST include these in the MQTT `CONNECT` packet. The `.MQTT.Client.{i}.Username` and `.MQTT.Client.{i}.Password` parameters values (associated with this MQTT server) will be used for User Name and Password.
 
 **R-MQTT.8** - USP Endpoints MUST set the value of the `CONNECT` packet Client Identifier (ClientId) as follows:
 
@@ -96,12 +96,12 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 * If a MQTT 5.0 client has no configured ClientId (null or empty string) the USP Endpoint MUST send an empty string in the Client Identifier property.
 * If a MQTT 3.1.1 client has no configured ClientId, the USP Endpoint SHOULD attempt to use its USP Endpoint ID as the ClientId.
 
-**R-MQTT.9** - A MQTT 5.0 client MUST save an Assigned Client Identifier included in a `CONNACK` packet as its configured ClientId, for future use.
+**R-MQTT.9** - A MQTT 5.0 client MUST save (in the `.MQTT.Client.{i}.ClientID` parameter) an Assigned Client Identifier included in a `CONNACK` packet as its configured ClientId for future use.
 
-**R-MQTT.10** - If the connection to the MQTT server is NOT successful then the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the MQTT.Client.{i}. retry parameters: ConnectRetryTime, ConnectRetryIntervalMultiplier, and ConnectRetryMaxInterval. 
+**R-MQTT.10** - If the connection to the MQTT server is NOT successful then the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `MQTT.Client.{i}.` retry parameters: `ConnectRetryTime`, `ConnectRetryIntervalMultiplier`, and `ConnectRetryMaxInterval`.
 
 **R-MQTT.11** - Once a USP Endpoint has successfully connected to a MQTT server, it MUST use the same ClientId for all subsequent connections with that server.
- 
+
 <a id='connect_flags_and_properties' />
 
 ### CONNECT Flags and Properties
@@ -129,13 +129,13 @@ The Response Information property is used by an MQTT 5.0 client as the Response 
 
 The MQTT Keep Alive mechanism has several components:
 
-* The `CONNECT` packet Keep Alive field that lets the client require the server to disconnect the client if the server does not receive a packet from the client before the Keep Alive time (in seconds) has elapsed since the prior received packet.
+* The `CONNECT` packet Keep Alive field that tells the server to disconnect the client if the server does not receive a packet from the client before the Keep Alive time (in seconds) has elapsed since the prior received packet.
 * The MQTT 5.0 `CONNACK` packet Keep Alive field that allows the server to inform the client the maximum interval the server will allow to elapse between received packets before it disconnects the client due to inactivity.
 * `PINGREQ` and `PINGRESP` packets that can be used to keep the connection up if the timer is nearing expiry and there is no need for another type of message. `PINGREQ` can also be used by the client at any time to check on the status of the connection.
 
 The client can indicate the Server is not required to disconnect the Client on the grounds of inactivity by setting the `CONNECT` Keep Alive to zero (0). Note that WebSockets mechanisms can be used to keep the connection alive if MQTT is being run over WebSockets. Also note the server is allowed to disconnect the client at any time, regardless of Keep Alive value.
 
-**R-MQTT.14** - USP Endpoints with a configured Keep Alive value MUST include this in the MQTT `CONNECT` packet. If the `.MQTT.Client.{i}. KeepAliveTime` parameter is implemented in a USP Agent, this value will be used.
+**R-MQTT.14** - USP Endpoints with a configured Keep Alive value MUST include this in the MQTT `CONNECT` packet. The `.MQTT.Client.{i}. KeepAliveTime` parameter value (associated with this MQTT server) will be used for the Keep Alive value.
 
 Use of `PINGREQ` and `PINGRESP` for keeping sessions alive (or determining session aliveness) is as described in the MQTT specification. No additional requirements are provided for use of these packets in a USP context.
 
@@ -154,15 +154,14 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 * All configured Topic Filter values for use with this MQTT server MUST be included in a `SUBSCRIBE` packet. For a USP Agent, the `.MQTT.Client.{i}.Subscription.{i}. ` table can be used to configure Topic Filter values.
 * If a MQTT 5.0 USP Endpoint received one or more User Property in the `CONNACK` packet where the name of the name-value pair is “subscribe-topic”, the USP Endpoint MUST include the value of all such name-value pairs in its `SUBSCRIBE` packet as a Topic Filter.
 * If a MQTT 5.0 Endpoint received a Response Information property in the `CONNACK` packet, and the topic from that Response Information property is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the previous 2 bullets, the Endpoint MUST include the value of the Response Information property in its `SUBSCRIBE` packet.
+* If an Endpoint has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Endpoint MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet.
 
 **R-MQTT.16** - USP Agents that have NOT received a "subscribe-topic" User Property in the `CONNACK` and do NOT have a configured Topic Filter (`Device.MQTT.Client.{i}.Subscription.{i}.Topic` parameter for this Client instance in the data model) MUST terminate the MQTT communications session (via the `DISCONNECT` packet) and consider the MTP disabled.
 
-**R-MQTT.17** - A USP Agent MUST successfully subscribe to at least one Topic prior to sending a `PUBLISH` packet with a USP Record as its Application Message.
-
-**R-MQTT.18** - If a USP Endpoint does not successfully subscribe to at least one Topic, it MUST disconnect from the MQTT server.
+**R-MQTT.17** - If a USP Endpoint does not successfully subscribe to at least one Topic, it MUST NOT publish a packet with a USP Record in its Application Message, and must disconnect from MQTT server.
 
 For each Topic listed in a `SUBSCRIBE` packet, the client will also provide a desired QoS level. See the MQTT specification ([MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) or [MQTT 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html), Section 4.3) for description of the three QoS levels (QoS 0, QoS 1, QoS 2). The usefulness of these QoS levels in the context of USP depends on the particulars of the MQTT deployment. It is therefore up to the implementer / deployer to decide which QoS setting to use. In order to ensure deployments have the ability to use at least QoS 1, MQTT clients and servers are required to implement at least QoS 1 (see requirements in [Sending the USP Record in a PUBLISH Packet Payload](#sending_the_usp_record_in_a_publish_packet_payload) and [MQTT Server Requirements](#mqtt_server_requirements).
- 
+
 <a id='sending_the_usp_record_in_a_publish_packet_payload' />
 
 ## Sending the USP Record in a PUBLISH Packet Payload
@@ -171,11 +170,11 @@ A USP Record is sent from a USP Endpoint to a MQTT Server within a `PUBLISH` pac
 
 R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this section and its sub-sections are compliant with the MQTT specifications. Reading the MQTT specification is highly recommended to ensure the correct syntax and usage of MQTT packets and properties (`PUBLISH`, Content Type, Response Topic, etc.).
 
-**R-MQTT.19** - USP Endpoints utilizing MQTT clients for message transport MUST send the USP Record in the payload of a `PUBLISH` packet.
+**R-MQTT.18** - USP Endpoints utilizing MQTT clients for message transport MUST send the USP Record in the payload of a `PUBLISH` packet.
 
-**R-MQTT.20** - USP Endpoints MUST send USP Records using the [Protocol Buffer](12) binary encoding of the USP Record.
+**R-MQTT.19** - USP Endpoints MUST send USP Records using the [Protocol Buffer](12) binary encoding of the USP Record.
 
-**R-MQTT.21** - USP Endpoints utilizing MQTT clients for message transport MUST support MQTT QoS 0 and QoS 1.
+**R-MQTT.20** - USP Endpoints utilizing MQTT clients for message transport MUST support MQTT QoS 0 and QoS 1.
 
 The USP Controller's MQTT Topic needs to be known by any USP Agent expected to send a Notify message to the Controller.
 
@@ -183,7 +182,7 @@ The USP Agent will also need to know an exact Topic where it can be reached (and
 
 **R-MQTT.21** - A MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
 
-**R-MQTT.22** - USP Endpoints MUST include a "reply-to" Topic in all `PUBLISH` packets transporting USP Records.
+**R-MQTT.22** - USP Endpoints MUST include a "reply to" Topic in all `PUBLISH` packets transporting USP Records.
 
 **R-MQTT.23** - USP Endpoints using MQTT 5.0 MUST include their “reply to” Topic in the `PUBLISH` Response Topic property.
 
@@ -200,7 +199,7 @@ USP Endpoints that need to send a response to a received USP Record will need to
 **R-MQTT.27** - USP Endpoints sending a USP Record using MQTT 5.0 MUST have “application/vnd.bbf.usp.msg” in the Content Type property.
 
 MQTT clients using MQTT 3.1.1 will need to know to pass the payload to the USP Agent for handling. There is no indication in MQTT 3.1.1 of the payload application or encoding. A MQTT 3.1.1 deployment could choose to dedicate the MQTT connection to USP, or put something in the syntax of `PUBLISH` packet Topic Names that would indicate the payload is a USP Record.
- 
+
 <a id='handling_errors' />
 
 ## Handling Errors
@@ -224,7 +223,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 The specific error codes are listed in the MTP [Brokered USP Record Errors](/specification/mtp#brokered-usp-record-errors) section.
 
-MQTT 5.0 includes a Reason Code in the `PUBACK`, `PUBREC`, `PUBREL`, and `PUBCOMP` packets that are used to respond to `PUBLISH` packets when QoS 1 or QoS 2 is used. 
+MQTT 5.0 includes a Reason Code that is used to respond to `PUBLISH` packets when QoS 1 or QoS 2 is used.
 
 **R-MQTT.32** - When a USP Endpoint using MQTT 5.0 receives a `PUBLISH` packet with QoS 1 or QoS 2 containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST include Reason Code 153 (0x99) identifying “Payload format invalid” in any `PUBACK` or `PUBREC` packet.
 
@@ -236,7 +235,7 @@ Note these packets will be received by the MQTT server and will not be forwarded
 
 ## Handling Other MQTT Packets
 
-Use of `PUBACK`, `PUBREC`, `PUBREL`, and `PUBCOMP` depends on the QoS level being used for the subscribed Topic. No additional requirements are provided for use of these packets in a USP context.
+Use of `PUBREL`, and `PUBCOMP` depends on the QoS level being used for the subscribed Topic. No additional requirements are provided for use of these packets in a USP context.
 
 Use of `PINGREQ` and `PINGRESP` for keeping sessions alive (or determining session aliveness) is as described in the MQTT specification. No additional requirements are provided for use of these packets in a USP context.
 
@@ -249,7 +248,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 **R-MQTT.35** - USP Endpoints utilizing MQTT clients for message transport SHOULD send a `DISCONNECT` packet when shutting down a MQTT connection.
 
 MQTT 5.0 specifies the `AUTH` packet to use for extended authentication. Implementations can make use of extended authentication but should only do so if they are sure that all clients and servers will support the same authentication mechanisms.
- 
+
 <a id='discovery_requirements' />
 
 ## Discovery Requirements
@@ -261,7 +260,7 @@ The USP discovery section details requirements about the general usage of DNS, m
 **R-MQTT.37** - When creating a DNS-SD record, a Controller MUST set the DNS-SD "path" attribute equal to a value that is included among the Controller's subscribed Topics and Topic Filters.
 
 **R-MQTT.38** - When creating a DNS-SD record, an Endpoint MUST utilize the MQTT server's address information in the A and AAAA records instead of the USP Endpoint's address information.
- 
+
 <a id='mqtt_server_requirements' />
 
 ## MQTT Server Requirements
@@ -272,19 +271,19 @@ The USP discovery section details requirements about the general usage of DNS, m
 
 **R-MQTT.41** - MQTT servers MUST implement MQTT over TCP transport protocol.
 
-**R-MQTT.42** - A MQTT server implementation MUST support authentication of the MQTT client through at least one of the mechanisms described in Section 5.4.1 of the MQTT specification, and support an Access Control List mechanism that can restrict the topics an authenticated MQTT client can subscribe or publish to.
+**R-MQTT.42** - A MQTT server MUST support authentication of the MQTT client through at least one of the mechanisms described in Section 5.4.1 of the MQTT specification, and support an Access Control List mechanism that can restrict the topics an authenticated MQTT client can subscribe or publish to.
 
-**R-MQTT.43** - A MQTT server implementation SHOULD support both Client Certification Authentication and User Name / Password Authentication mechanisms.
+**R-MQTT.43** - A MQTT server SHOULD support both Client Certification Authentication and User Name / Password Authentication mechanisms.
 
-**R-MQTT.44** - A MQTT server implementation SHOULD support sending Topic or Topic Filter values in a "subscribe-topic" User Property in the `CONNECT` packet.
+**R-MQTT.44** - A MQTT server SHOULD support sending Topic or Topic Filter values in a "subscribe-topic" User Property in the `CONNECT` packet.
 
-**R-MQTT.45** - If an MQTT server implementation will support subscriptions from unconfigured Agents, it MUST support wildcarded Topic Filters.
+**R-MQTT.45** - If an MQTT server supports subscriptions from unconfigured Agents, it MUST support wildcarded Topic Filters.
 
 This will allow support for Agents that try to subscribe to “+/\<Endpoint ID\>/#” and “+/+/\<Endpoint ID\>/#” Topic Filters.
 
-**R-MQTT.46** - A MQTT server implementation MUST support at least MQTT QoS 1 level.
+**R-MQTT.46** - A MQTT server MUST support at least MQTT QoS 1 level.
 
-**R-MQTT.47** - A MQTT server implementation SHOULD support a ClientId value that is a USP Endpoint ID. This includes supporting all Endpoint ID characters (includes "\-", ".", "\_", "%", and ":") and at least 64 characters length.
+**R-MQTT.47** - A MQTT server SHOULD support a ClientId value that is a USP Endpoint ID. This includes supporting all Endpoint ID characters (includes "\-", ".", "\_", "%", and ":") and at least 64 characters length.
 
 <a id='mtp_message_encryption' />
 
