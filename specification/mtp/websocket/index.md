@@ -89,6 +89,8 @@ When a WebSocket connection is being initiated with TLS, no USP Record is sent u
 
 **R-WS.11a** - A WebSocket server MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the server's Endpoint ID when responding to an initiation of a WebSocket session that includes the `bbf-usp-protocol` extension.
 
+**R-WS.11b** - WebSocket clients SHOULD NOT consider WebSocket responses that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
+
 **R-WS.12** - A WebSocket client MUST NOT establish a WebSocket session if the response to a WebSocket session initiation request does not include the `Sec-WebSocket-Protocol` header for exchange of USP Records in response to an initiation of a WebSocket session.
 
 <a id='handling_of_websocket_frames' />
