@@ -864,7 +864,7 @@ This field returns a repeated set of Path Names to Object Instances.
 
 **R-DEL.2** - If the Controller does not have Read permission on any of the Objects specified in `affected_paths`, these Objects MUST NOT be returned in this field.
 
-**R-DEL.2a** - If the requested_path was valid but did not resolve to any objects in the Agent's instantiated data model, the Agent MUST return an OperationSuccess for this requested_path, and include an empty set for affected_path.
+**R-DEL.2a** - If the requested_path was valid (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any objects in the Agent's instantiated data model, the Agent MUST return an OperationSuccess for this requested_path, and include an empty set for affected_path.
 
 `repeated UnaffectedPathError unaffected_path_errs`
 
@@ -1154,7 +1154,7 @@ This field contains additional information about the reason behind the error.
 
 This field contains one message of type ResolvedPathResult for each path resolved by the Path Name or Search Path given by `requested_path`.
 
-**R-GET.1a** - If the requested_path did not resolve to any objects in the Agent's instantiated data model, the resolved_path_results set MUST be empty.
+**R-GET.1a** - If the requested_path is valid (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any objects in the Agent's instantiated data model, the resolved_path_results set MUST be empty and is not considered an error.
 
 ###### ResolvedPathResult fields
 
