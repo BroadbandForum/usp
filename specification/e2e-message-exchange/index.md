@@ -75,7 +75,7 @@ Following are the fields contained within a USP Record. When not explicitly set 
 
 `string version`
 
-Required. Version of the USP Protocol. The only valid value is `1.0`.
+Required. Version (Major.Minor) of the USP Protocol (i.e., "1.0" or "1.1").
 
 `string to_id`
 
