@@ -340,11 +340,13 @@ Further, this relative path can’t include any child tables. *(NOTE: this is ne
 
 An Expression Operator dictates how the Expression Component will be evaluated. The supported operators include: equals (==), not equals (!=), less than (<), greater than (>), less than or equal (<=), and greater than or equal (>=).
 
+*Note: When comparing values of type dateType, the values are presumed to be converted to their numeric equivalent before comparison.*
+
 An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in [TR-106][3]. **For string, boolean and enumeration types, only the '==' and '!=' operators are valid.**
 
 The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in [TR-181][1].
 
-*NOTE: String values are enclosed in double quotes. In order to allow a string value to contain double quotes, quote characters can be percent-escaped as %22 (double quote). Therefore, a literal percent character has to be quoted as %25.*
+*Note: String values are enclosed in double quotes. In order to allow a string value to contain double quotes, quote characters can be percent-escaped as %22 (double quote). Therefore, a literal percent character has to be quoted as %25.*
 
 <a id="search_examples" />
 
