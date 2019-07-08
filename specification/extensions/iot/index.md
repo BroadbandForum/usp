@@ -167,7 +167,7 @@ The minimum definition of a "LevelControl" consists of:
 
 The value can be changed either directly by an USP Set operation, or via the step commands.
 
-If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command operation would exceed the defined range, the result is only the range limit value.
+If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command operation would exceed the defined range, the operation does not result in a failure - instead, the result is set to the range limit value.
 
 For example, if a temperature range is defined from 5.5° to 25° with a step value of 1°, a step down from 6° would result in 5.5° and not in 5°.
 

@@ -55,6 +55,11 @@ Appendix II. [Firmware Management](./extensions/firmware-management)
 
 Appendix III. [Device Proxy](./extensions/device-proxy)
 
+Appendix IV. [Proxying (Other)](./extensions/proxying/)
+
+Appendix V. [IoT Data Model Theory of Operation](./extensions/iot/)
+
+
 # Introduction
 
 <a id="introduction" />
