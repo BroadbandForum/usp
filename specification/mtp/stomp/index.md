@@ -168,7 +168,7 @@ The following is an example message. This example uses "`^@`" to represent the N
 SEND
 destination:/usp/the-reply-to-dest
 content-type:application/vnd.bbf.usp.error
-usp-err-id:cid%3A3AA3F8%3Ausp-id-42/683
+usp-err-id:cid\c3AA3F8\cusp-id-42/683
 
 err_code:7100
 err_msg:Field n is not recognized.^@
