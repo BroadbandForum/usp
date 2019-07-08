@@ -148,13 +148,13 @@ If a USP Endpoint receives a `MESSAGE` frame containing a USP Record that cannot
 
 **R-STOMP.23a** - USP Endpoints MUST support STOMP content-type header value of `application/vnd.bbf.usp.error`.
 
+**R-STOMP.23b** - A USP Endpoint MUST include a `usp-err-id` STOMP header in `SEND` frames of content-type `application/vnd.bbf.usp.msg`. The value of this header is:  `<USP Record to-id  > + "/" + <USP Message msg_id>`. Since the colon "`:`" is a reserved character in STOMP headers, all instances of "`:`" in the USP Record to-id MUST be expressed using an encoding of `\c`.
+
 **R-STOMP.24** - When a USP Endpoint receives a `MESSAGE` frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST ignore the USP Record if the received STOMP MESSAGE frame did not include a `usp-err-id` header.
 
-**R-STOMP.24a** - When a USP Endpoint receives a MESSAGE frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing the receiving USP Endpoint MUST send a STOMP SEND frame with an `application/vnd.bbf.usp.error` content-type header value if the received STOMP MESSAGE frame includes a `usp-err-id` header.
+**R-STOMP.24a** - When a USP Endpoint receives a MESSAGE frame containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST send a STOMP SEND frame with an `application/vnd.bbf.usp.error` content-type header value if the received STOMP MESSAGE frame included a `usp-err-id` header.
 
-**R-STOMP.24b** - A USP Endpoint MUST include a `usp-err-id` STOMP header in `SEND` frames of content-type `application/vnd.bbf.usp.msg`. The value of this header is:  `<USP Record to-id  > + "/" + <USP Message msg_id>`. Since the colon "`:`" is a reserved character in STOMP headers, all instances of "`:`" in the USP Record to-id MUST be expressed using percent-encoding of `%3A`.
-
-**R-STOMP.24c** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
+**R-STOMP.24b** - A STOMP SEND frame with `application/vnd.bbf.usp.error` content-type MUST contain the received `usp-err-id` header, the destination header value set to the received `reply-to-dest` header, and a message body (formatted using UTF-8 encoding) with the following 2 lines:
 
 * `err_code:<numeric code indicating the type of error that caused the overall message to fail>`
 

@@ -126,18 +126,28 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 ## Revision History
 
-### Release 1.0
+### Release 1.1
 
-* Release contains specification for the User Services Platform 1.0.
+* Release contains specification for the User Services Platform 1.1.
+  * Adds MQTT support as a Message Transfer Protocol
+  * Adds a theory of operations for IoT control using USP Agents
+  * Clarifications on protocol functions, error messages, and updates to examples
 
-#### Release 1.0.1
+Valid versions for USP Agents as of this release include "1.1" and "1.0".
+
+### Release 1.0.2
+
+* Typographical and example fixes
+
+### Release 1.0.1
 
 * Added examples and clarifications to end-to-end messaging, use of endpoint ID,
 typographical fixes
 
-#### Release 1.0.2
+### Release 1.0
 
-* Typographical and example fixes
+* Release contains specification for the User Services Platform 1.0.
+
 
 ## Editors
 

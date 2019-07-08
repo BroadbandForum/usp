@@ -43,6 +43,7 @@
     <li>Use of CoAP, WebSockets, MQTT, and STOMP as message transfer protocols (MTP)</li>
     <li>A system for authentication and authorization</li>
     <li>Extensions for bulk data collection, firmware management, software module management, and device proxying</li>
+    <li>Theory of operations for using a USP Agent to control IoT devices and systems.
     </ul>
 
     <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>

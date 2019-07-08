@@ -5,6 +5,19 @@
 
 USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services and home networks. USP consists of an architecture, protocol, and set of data models that create a network of controllers and agents that allow applications to manipulate user service elements (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).
 
+## What do I need to get started?
+
+### Protocol buffers schemas
+
+USP uses protocol buffers encoding for USP Records and USP Messages. When implementing an agent or controller, use these files to apply the schema:
+
+* USP Records are defined in [usp-record.proto](/specification/usp-record.proto)
+* USP Messages are defined in [usp-msg.proto](/specification/usp-msg.proto)
+
+### Is there an open source USP Agent?
+
+The Broadband Forum hosts the OB-USP-AGENT project on Github [here](https://github.com/BroadbandForum/obuspa).
+
 ## What are the major features of USP?
 
 The User Services Protocol is designed with four major features in mind:
