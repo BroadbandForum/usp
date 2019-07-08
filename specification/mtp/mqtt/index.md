@@ -80,7 +80,7 @@ The MQTT specification also describes how MQTT can run over WebSockets. Deployme
 
 ## Connecting a USP Endpoint to the MQTT Server
 
-When exchanging USP Records across MQTT MTPs, each USP Endpoint establishes a communications session with an MQTT server. These MQTT communications sessions are expected to be long-lived and are re-used for subsequent exchange of USP Records. an MQTT communications session is established using the procedure in this section. an MQTT communications session is intended to be established as soon as the USP Endpoint becomes network-aware and can send TCP/IP messages.
+When exchanging USP Records across MQTT MTPs, each USP Endpoint establishes a communications session with an MQTT server. These MQTT communications sessions are expected to be long-lived and are re-used for subsequent exchange of USP Records. An MQTT communications session is established using the procedure in this section. An MQTT communications session is intended to be established as soon as the USP Endpoint becomes network-aware and can send TCP/IP messages.
 
 When an MQTT communications session is no longer necessary or expires (see "Keep Alive" section below), the MQTT connection is closed by the MQTT client, preferably by sending a `DISCONNECT` packet (see [Handling Other MQTT Packets](#handling_other_mqtt_packets) section below).
 
@@ -96,7 +96,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 * If an MQTT 5.0 client has no configured ClientId (null or empty string) the USP Endpoint MUST send an empty string in the Client Identifier property.
 * If an MQTT 3.1.1 client has no configured ClientId, the USP Endpoint SHOULD attempt to use its USP Endpoint ID as the ClientId.
 
-**R-MQTT.9** - an MQTT 5.0 client MUST save (in the `.MQTT.Client.{i}.ClientID` parameter) an Assigned Client Identifier included in a `CONNACK` packet as its configured ClientId for future use.
+**R-MQTT.9** - An MQTT 5.0 client MUST save (in the `.MQTT.Client.{i}.ClientID` parameter) an Assigned Client Identifier included in a `CONNACK` packet as its configured ClientId for future use.
 
 **R-MQTT.10** - If the connection to the MQTT server is NOT successful then the USP Endpoint MUST enter a connection retry state. For a USP Agent the retry mechanism is based on the `MQTT.Client.{i}.` retry parameters: `ConnectRetryTime`, `ConnectRetryIntervalMultiplier`, and `ConnectRetryMaxInterval`.
 
@@ -117,11 +117,11 @@ MQTT 3.1.1 also does not provide a mechanism for the MQTT server to tell a clien
 
 MQTT 5.0 includes additional properties that deployments can choose to use.
 
-**R-MQTT.12** - an MQTT 5.0 USP Endpoint MUST support setting the Request Response Information property to 1, and MUST support receiving the corresponding Response Information in the `CONNACK` packet.
+**R-MQTT.12** - An MQTT 5.0 USP Endpoint MUST support setting the Request Response Information property to 1, and MUST support receiving the corresponding Response Information in the `CONNACK` packet.
 
 The Response Information property is used by an MQTT 5.0 client as the Response Topic (which is the MQTT 5.0 `PUBLISH` packet property identifying the Topic to send a USP response to). The Response Information property requirements for use of the received Response Information are below in the section [Sending the USP Record in a PUBLISH Packet Payload](#sending_the_usp_record_in_a_publish_packet_payload). Ensuring the client is subscribed to this Topic or a Topic Filter that includes this Topic is described in [Subscribing to MQTT Topics](#subscribing_to_mqtt_topics).
 
-**R-MQTT.13** - an MQTT 5.0 USP Endpoint MUST include a User Property name-value pair in the `CONNECT` packet with name of "usp-endpoint-id" and value of this Endpoint's USP Endpoint ID.
+**R-MQTT.13** - An MQTT 5.0 USP Endpoint MUST include a User Property name-value pair in the `CONNECT` packet with name of "usp-endpoint-id" and value of this Endpoint's USP Endpoint ID.
 
 <a id='keep_alive' />
 
@@ -180,7 +180,7 @@ The USP Controller's MQTT Topic needs to be known by any USP Agent expected to s
 
 The USP Agent will also need to know an exact Topic where it can be reached (and not just a Topic Filter) in order to provide a Controller with the Agent’s “reply to” Topic.
 
-**R-MQTT.21** - an MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
+**R-MQTT.21** - An MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
 
 **R-MQTT.22** - USP Endpoints MUST include a "reply to" Topic in all `PUBLISH` packets transporting USP Records.
 
@@ -206,7 +206,7 @@ MQTT clients using MQTT 3.1.1 will need to know to pass the payload to the USP A
 
 The MQTT specification requires servers and clients to disconnect if there is a violation at the MQTT protocol layer.
 
-If an MQTT 5.0 USP Endpoint receives a `PUBLISH` packet containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), it is required to send an error message (described below). an MQTT 3.1.1 receiving USP Endpoint will silently drop the unprocessed USP Record.
+If an MQTT 5.0 USP Endpoint receives a `PUBLISH` packet containing a USP Record that cannot be extracted for processing (e.g., text frame instead of a binary frame, malformed USP Record or USP Message, bad encoding), it is required to send an error message (described below). An MQTT 3.1.1 receiving USP Endpoint will silently drop the unprocessed USP Record.
 
 R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this section and its sub-sections are compliant with the MQTT specifications. Reading the MQTT specification is highly recommended to ensure the correct syntax and usage of MQTT packets and properties (`PUBLISH`, `PUBACK`, etc.).
 
@@ -271,19 +271,19 @@ The USP discovery section details requirements about the general usage of DNS, m
 
 **R-MQTT.41** - MQTT servers MUST implement MQTT over TCP transport protocol.
 
-**R-MQTT.42** - an MQTT server MUST support authentication of the MQTT client through at least one of the mechanisms described in Section 5.4.1 of the MQTT specification, and support an Access Control List mechanism that can restrict the topics an authenticated MQTT client can subscribe or publish to.
+**R-MQTT.42** - An MQTT server MUST support authentication of the MQTT client through at least one of the mechanisms described in Section 5.4.1 of the MQTT specification, and support an Access Control List mechanism that can restrict the topics an authenticated MQTT client can subscribe or publish to.
 
-**R-MQTT.43** - an MQTT server SHOULD support both Client Certification Authentication and User Name / Password Authentication mechanisms.
+**R-MQTT.43** - An MQTT server SHOULD support both Client Certification Authentication and User Name / Password Authentication mechanisms.
 
-**R-MQTT.44** - an MQTT server SHOULD support sending Topic or Topic Filter values in a "subscribe-topic" User Property in the `CONNECT` packet.
+**R-MQTT.44** - An MQTT server SHOULD support sending Topic or Topic Filter values in a "subscribe-topic" User Property in the `CONNECT` packet.
 
 **R-MQTT.45** - If an MQTT server supports subscriptions from unconfigured Agents, it MUST support wildcarded Topic Filters.
 
 This will allow support for Agents that try to subscribe to “+/\<Endpoint ID\>/#” and “+/+/\<Endpoint ID\>/#” Topic Filters.
 
-**R-MQTT.46** - an MQTT server MUST support at least MQTT QoS 1 level.
+**R-MQTT.46** - An MQTT server MUST support at least MQTT QoS 1 level.
 
-**R-MQTT.47** - an MQTT server SHOULD support a ClientId value that is a USP Endpoint ID. This includes supporting all Endpoint ID characters (includes "\-", ".", "\_", "%", and ":") and at least 64 characters length.
+**R-MQTT.47** - An MQTT server SHOULD support a ClientId value that is a USP Endpoint ID. This includes supporting all Endpoint ID characters (includes "\-", ".", "\_", "%", and ":") and at least 64 characters length.
 
 <a id='mtp_message_encryption' />
 
