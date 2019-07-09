@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://usp-data-models.broadband-forum.org/ "TR-181 Issue 2 Device:2 Data Model for CWMP Endpoints and USP Agents"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -103,7 +103,7 @@ In order to serve as a MTP Proxy, the following functions (from [Table PRX.1](#t
 1. *MTP Translation Function*
 1. Depending on whether it is on the same network as the proxied Agents and/or the Controller that wants to communicate with those Agents:
    1. *Non-USP Discovery Function* and/or otherwise determined/configured knowledge of Agent(s)
-   1. *Non-USP Advertisement Function* and/or *Agent USP Advertisement Function* 
+   1. *Non-USP Advertisement Function* and/or *Agent USP Advertisement Function*
 
 The MTP Proxy can also include the *Caching Function* to support Endpoints with intermittent connectivity.
 
@@ -123,7 +123,7 @@ The following information will need to be stored in a maintained mapping for an 
    1. For CoAP, this is the uri-path of the CoAP server Endpoint resource
    1. For WebSocket, this is either an established WebSocket connection or the WebSocket server Endpoint resource
    1. For STOMP, this is the STOMP destination of the Endpoint
-   1. For MQTT, this is a Topic that is subscribed to by the Endpoint 
+   1. For MQTT, this is a Topic that is subscribed to by the Endpoint
 
 This mapping information is used to construct important parts of the sent IP, UDP/TCP, and MTP headers. Other information used to construct these headers may come from the received MTP Headers or even the received USP Record.
 
@@ -204,7 +204,7 @@ These steps include the following additional assumptions:
 * Proxy replies to mDNS queries for Controller with "ctrl1" Instance. Controller was able to assume or otherwise determine that Proxy would do this and that its proxied CoAP connection would be discoverable by querying for ctrl1.\_usp-ctrl-coap.\_udp.\_local.
 * Proxy can use the previous reply-to-dest header value to reach this Controller
 
-**#11** The Agent sends mDNS query for ctrl1.\_usp-ctrl-coap.\_udp.\_local. 
+**#11** The Agent sends mDNS query for ctrl1.\_usp-ctrl-coap.\_udp.\_local.
 
 **#12** The Proxy response to the Agent includes TXT record with path of coaps:\/\/\<Proxy IP\>:\<port\>/ctrl1. This provides a URL for the Agent to use to send a Notify Message to the Controller.
 

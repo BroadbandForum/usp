@@ -1,5 +1,5 @@
 <!-- Reference Links -->
-[1]:	https://usp-data-models.broadband-forum.org/ "TR-181 Issue 2 Device:2 Data Model for CWMP Endpoints and USP Agents"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
 [3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
@@ -260,7 +260,7 @@ The following references are of relevance to this Technical Report. At the time 
 A list of currently valid Broadband Forum Technical Reports is published at
 [www.broadband-forum.org](https://www.broadband-forum.org).
 
-1. [Broadband Forum TR-181 Issue 2: *Device:2 Data Model for CWMP Endpoints and USP Agents*][1]
+1. [Broadband Forum TR-181 Issue 2: *Device Data Model*][1]
 2. [Broadband Forum TR-069 Amendment 6:	*CPE WAN Management Protocol*][2]
 3. [Broadband Forum TR-106 Amendment 8: *Data Model Template for CWMP Endpoints and USP Agents*][3]
 4. [IETF RFC 7228:	*Terminology for Constrained-Node Networks*][4]

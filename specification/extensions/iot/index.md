@@ -105,11 +105,7 @@ All capability objects contain two type related parameters:
 * A mandatory `Type` enumeration value
 * An `TypeDetail` string value.
 
-The `Type` value is a predefined enumeration value with the goal to give a unified description of the capability object. If the predefined "Type" value is to generic, the `TypeDetail` parameter can express a more specific purpose.
-
-For example, to distinguish different temperature related controller capabilities of an IoT device, all controllers have the same `Type` value "Temperature" to express that these influence a temperature setting, but have different `TypeDetail` values, like "Target Heat Temperature", "Target Cool Temperature", to express the detailed purpose (see "Example: A/C Thermostat").
-
-If a needed general type is not defined, the enumeration value "Other" is used. In this case the `TypeDetail` parameter is provided with the needed definition.
+The `Type` value is a predefined enumeration value with the goal to give a unified description of the capability object. If a needed general type is not defined, the enumeration value "Other" is used. In this case the `TypeDetail` parameter is provided with the needed definition.
 
 *Note: The "Type" enumeration in the data model can also be extended with vendor specific values in the form of `X_<oui>_name` like all TR-181 parameters, using the rules defined in [TR-106][3].*
 
@@ -167,7 +163,7 @@ The minimum definition of a "LevelControl" consists of:
 
 The value can be changed either directly by an USP Set operation, or via the step commands.
 
-If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command operation would exceed the defined range, the operation does not result in a failure - instead, the result is set to the range limit value.
+If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command would exceed the defined range, the operation does not result in a failure - instead, the result is set to the range limit value.
 
 For example, if a temperature range is defined from 5.5° to 25° with a step value of 1°, a step down from 6° would result in 5.5° and not in 5°.
 
@@ -192,7 +188,7 @@ It is possible to implement only one of the step commands, if only one direction
 
 ### Sensor Objects
 
-Sensor objects represent IoT capabilities that involve reading or reporting on a device or application state. They include Binary Sensors, Level Sensors, and Enumerated Sensors, along with functionality for triggering events and thresholds.
+Sensor objects represent IoT capabilities that involve reading or reporting on a device or application state. They include Binary Sensors, Level Sensors, and Enumerated Sensors, along with support for thresholds and triggering events.
 
 #### Binary Sensor
 
@@ -219,11 +215,11 @@ For example, a motion sensor would be modeled as:
 
 ```
     IoTCapability.i.Class              = "BinarySensor"
-    IoTCapability.i.BinarySensor.Type  = "Motion"
+    IoTCapability.i.BinarySensor.Type  = "MotionDetected"
     IoTCapability.i.BinarySensor.Value = {true/false}
 ```
 
-Note that binary sensor types should be meaningful to binary state behavior, i.e., "WindowOpen" rather than "Window".
+Note that binary sensor types should be meaningful to binary state behavior, e.g., "WindowOpen" rather than "Window".
 
 ##### Threshold trigger sensor
 
@@ -327,7 +323,7 @@ For example, to show the remaining load of a battery in percent, this capability
 ```
     IoTCapability.1.Class             = "LevelSensor"
     IoTCapability.1.LevelSensor.Type  = "Battery"
-    IoTCapability.1.LevelSensor.Unit  = " %"
+    IoTCapability.1.LevelSensor.Unit  = "%"
     IoTCapability.1.LevelSensor.Value = "63"  
 ```
 
@@ -337,7 +333,7 @@ Since the unit value is a decimal type it is also possible to specify fractions 
 ```
     IoTCapability.1.Class = "LevelSensor"
     IoTCapability.1.LevelSensor.Type = "Battery"
-    IoTCapability.1.LevelSensor.Unit = " %"
+    IoTCapability.1.LevelSensor.Unit = "%"
     IoTCapability.1.LevelSensor.Value = "63.26"
 ```
 
@@ -361,7 +357,7 @@ When modeling a battery with a `LevelSensor` object, an additional low level war
 ```
     IoTCapability.1.Class                         = "LevelSensor"
     IoTCapability.1.LevelSensor.Type              = "Battery"
-    IoTCapability.1.LevelSensor.Unit              = " %"
+    IoTCapability.1.LevelSensor.Unit              = "%"
     IoTCapability.1.LevelSensor.LowLevelThreshold = "20"
     IoTCapability.1.LevelSensor.Value             = "19"
     IoTCapability.1.LevelSensor.LowLevel          = "True"
@@ -803,7 +799,7 @@ Instantiated data model:
     Device.IoTCapability.5.Class                   = "LevelSensor"
     Device.IoTCapability.5.Name                    = "Valve Position"
     Device.IoTCapability.5.LevelSensor.Type        = "Position"
-    Device.IoTCapability.5.LevelSensor.Unit        = " %"
+    Device.IoTCapability.5.LevelSensor.Unit        = "%"
     Device.IoTCapability.5.LevelSensor.MinValue    = "0"
     Device.IoTCapability.5.LevelSensor.MaxValue    = "100"
     Device.IoTCapability.5.LevelSensor.Value       = "16"      # e.g. 16% valve
