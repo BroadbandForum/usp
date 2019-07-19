@@ -172,6 +172,3 @@ WebSocket MTP message encryption is provided using certificates in TLS as descri
 **R-WS.23** - USP Endpoints capable of obtaining absolute time SHOULD wait until it has accurate absolute time before contacting the peer USP Endpoint. If a USP Endpoint for any reason is unable to obtain absolute time, it can contact the peer USP Endpoint without waiting for accurate absolute time. If a USP Endpoint chooses to contact the peer USP Endpoint before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the peer USP Endpoint's WebScoket MTP certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
 **R-WS.24** - USP Controller certificates MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
-
-[<-- Message Transfer Protocols](/specification/mtp/)
-[--> Message Encoding](/specification/encoding/)

@@ -134,7 +134,3 @@ While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further gui
 As USP Endpoints play the role of both CoAP client and server; when the MTP is secured using the Certificate mode of CoAP Security, the USP Endpoint provides a X.509 certificate to the MTP peer.
 
 **R-COAP.16** – When the Certificate mode of CoAP is used to secure an MTP, a USP Endpoint MUST provide an X.509 certificate to the MTP peer.
-
-[<-- Message Transfer Protocols](/specification/mtp/)
-
-[--> Message Encoding](/specification/encoding/)

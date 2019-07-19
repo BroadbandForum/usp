@@ -50,7 +50,3 @@ one of the possible elements.
 
 **R-ENC.5** - A USP Message that violates R-ENC.3 SHOULD return an error of
 type 7004 (Invalid Arguments).
-
-[<-- Message Transfer Protocols](/specification/mtp/)
-
-[End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)

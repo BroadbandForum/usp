@@ -2009,6 +2009,8 @@ The lifetime of a Request Object expires when the operation is complete (either 
 
 If any Controller wants a notification that an operation has completed, it creates a Subscription Object with the `NotificationType` set to `OperationComplete` and with the `ReferenceList` parameter including a path to the specified command. The Agent processes this Subscription when the operation completes and sends a Notify message, including the `command_key` value that the Controller assigned when making the Operate request.
 
+A Controller can cancel a request that is still present in the Agent's `Device.LocalAgent.Request.` table by invoking the `Device.LocalAgent.Request.{i}.Cancel()` command through another Operate message.
+
 <img src="asynchronous_operation.png" />
 
 Figure OPR.2 - Operate Message Flow for Asynchronous Operations
@@ -2045,7 +2047,7 @@ If an asynchronous operation is triggered multiple times by one or more Controll
 2. The operations are performed in parallel and independently.
 3. The operations are queued and completed in order.
 
-**R-OPR.3** - When handling concurrently invoked operations, an Agent MUST NOT cancel an operation already in progress unless explicitly told to do so by a Controller with permission to do so.
+**R-OPR.3** - When handling concurrently invoked operations, an Agent MUST NOT cancel an operation already in progress unless explicitly told to do so by a Controller with permission to do so (i.e., via the `Device.LocalAgent.Request.{i}.Cancel()` operation).
 
 ### Operate Examples
 
@@ -2200,7 +2202,3 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 ### Vendor Defined Error Codes
 
 Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use  the `7800-7999` series. There are no requirements on the content of these errors.
-
-[<-- Message Encoding](/specification/encoding)
-
-[Authentication and Authorization -->](/specification/security)
