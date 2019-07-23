@@ -219,6 +219,3 @@ STOMP MTP message encryption is provided using TLS certificates.
 **R-STOMP.36** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 [RFC 5246][22] or later with backward compatibility to TLS 1.2.
 
 **R-STOMP.37** - STOMP server certificates MAY contain domain names and those domain names MAY contain domain names with wildcard characters per [RFC 6125](https://tools.ietf.org/html/rfc6125) guidance.
-
-[<-- Message Transfer Protocols](/specification/mtp/)
-[--> Message Encoding](/specification/encoding/)

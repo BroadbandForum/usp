@@ -230,7 +230,3 @@ LAN Controllers do not need to have PTR records, as they will only be queried us
 ## Using the SendOnBoardRequest() operation and OnBoardRequest notification
 
 An "OnBoardRequest" notification can be sent by an Agent to a Controller to begin an on-boarding process (for example, when the Agent first comes online and discovers a Controller using DHCP). Its use is largely driven by policy, but there is a mechanism other Controllers can use to ask an Agent to send "OnBoardRequest" to another Controller: the SendOnBoardRequest() command is defined in the [Device:2][1]. See section on [notify messages](/specification/messages/#notification_types) for additional information about the OnBoardRequest notification.
-
-[<-- Architecture](/specification/architecture/)
-
-[Message Transfer Protocols -->](/specification/mtp/)

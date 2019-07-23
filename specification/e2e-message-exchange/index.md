@@ -579,8 +579,3 @@ TLS provides a mechanism to renegotiate the keys of a TLS session without tearin
 USP relies upon peer authentication using X.509 certificates, as provided by TLS. Each USP endpoint identifier is identified within an X.509 certificate. The rules for authentication are provided in [Authentication and Authorization](/specification/security/).
 
 **R-E2E.43** – USP Endpoints MUST be mutually authenticated using X.509 certificates using the USP Endpoint identifier encoded within the X.509 certificates `subjectAltName` field.
-
-
-[<-- Message Encoding](/specification/encoding/)
-
-[USP Messages -->](/specification/messages/)

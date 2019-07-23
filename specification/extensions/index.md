@@ -30,5 +30,3 @@ These Annexes define or provide theories of operation for additional, use-case s
 * [Appendix I - Firmware Management of Devices with USP Agents](./firmware-management/)
 * [Appendix II - Software Module Management](./software-module-management/)
 * [Appendix III - Device Proxy](./device-proxy/)
-
-[<-- Security](/specification/security/)

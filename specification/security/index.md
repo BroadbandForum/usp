@@ -92,6 +92,8 @@ This secure means can be accomplished through USP (see [Theory of Operations](./
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller. The `Device.LocalAgent.ControllerTrust.Credential` object can be implemented to expose and allow control over trust and authorization of CAs.
 
+Note that if an Agent supports and has enabled a Trust on First Use (TOFU) policy, it is possible for Controllers signed by unknown CAs to be granted the "untrusted role". See Figures SEC.4 and SEC.5 and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
+
 <a id='trusted_brokers' />
 
 ## Trusted Brokers
@@ -114,7 +116,7 @@ Self-signed certificates supplied by Controllers can only be meaningfully used i
 
 **R-SEC.6** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an "untrusted" Role on first use.
 
-That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do.
+That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do. See Figures SEC.4 and SEC.5 and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
 
 **R-SEC.7** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
 
@@ -400,8 +402,3 @@ To allow a Controller to check whether the Agent has correct certificates, the `
 It is possible that various parameters related to authentication and authorization may change that would impact cached encrypted sessions and Role permissions for Controllers. Example of such parameters include `Controller.{i}.AssignedRole`, `Controller.{i}.Credential`, `ControllerTrust.Role.` definition of a Role, and `ControllerTrust.Credential.{i}.Role`.
 
 There is no expectation that an Agent will apply these changes to cached sessions. It is up to the Agent to determine whether or not it will detect these changes and flush cached session information. However, it is expected that a reboot will clear all cached session information.
-
-
-[<-- Messages](../messages/index.md)
-
-[Extensions -->](../extensions/index.md)

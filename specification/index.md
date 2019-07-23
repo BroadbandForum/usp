@@ -559,5 +559,3 @@ However reliable the security of communications protocols, in a platform that en
 **Assurance of privacy** depends on whether stakeholders expect, or are legally required, to have information protected or controlled from certain uses. As with security, the ability for users to control who has access to their data is of primary importance in the world of the connected user, made clear by users as well as regulators.
 
 USP contains rigorous access control and authorization mechanisms to ensure that data is only used by those that have been enabled by the user.
-
-[Architecture -->](/specification/architecture/)
