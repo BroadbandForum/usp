@@ -42,7 +42,7 @@ The figure shows the overall structure of the IoT data model:
 
 Figure 73 - IoT data model structure
 
-The data model defines an IoT Capability table, whose instances describe the IoT device's exposed capabilities. The capability table is a may appear directly under the `Device.` object (if the IoT device hosts a USP Agent) or under a `Device.ProxiedDevice.{i}.`  or `Device.ProxiedDevice.{i}.Node` instance.
+The data model defines an IoT Capability table, whose instances describe the IoT device's exposed capabilities. The capability table can appear directly under the `Device.` object (if the IoT device hosts a USP Agent) or under a `Device.ProxiedDevice.{i}.`  or `Device.ProxiedDevice.{i}.Node.{i}.` instance.
 
 ### IoT Capability table
 
@@ -71,21 +71,21 @@ The `Device.Node.{i}.` and `Device.ProxiedDevice.{i}.Node.{i}.` objects are moun
 
 Stand-alone IoT devices, which are capable of supporting their own USP Agent, provide their own data models, which expose the IoT sensor and control capabilities of the device:
 
-![Figure 74 - IoT individual devices models](./figure-74.png)
+![Figure 74 - IoT individual device models](./figure-74.png)
 
-Figure 74 - IoT individual devices models
+Figure 74 - IoT individual device models
 
-Each device registers as an individual entity to the USP controller. With the help of `Node` objects, the capabilities can be additionally structured (not shown in the picture).
+Each device registers as an individual entity to the USP Controller. With the help of `Node` objects, the capabilities can be additionally structured (not shown in the picture).
 
 ### Proxied IoT devices
 
 IoT devices connected over a proxy protocol (e.g. ZigBee) with an IoT control device hosting the USP Agent are modeled as proxied devices (i.e., using the `Device.ProxiedDevice.` table) in the data model of the control device's USP Agent:
 
-![Figure 75 - IoT proxied devices model](./figure-75.png)
+![Figure 75 - IoT proxied device model](./figure-75.png)
 
-Figure 75 - IoT proxied devices model
+Figure 75 - IoT proxied device model
 
-Each IoT device is represented as a `Device.ProxiedDevice.{i}.` instance in the data model of the control device, which exposes its IoT capabilities in the corresponding objects. The capabilities can be additionally structured with the help of `Node` objecta (not shown in the picture).
+Each IoT device is represented as a `Device.ProxiedDevice.{i}.` instance in the data model of the control device, which exposes its IoT capabilities in the corresponding objects. The capabilities can be additionally structured with the help of `Node` object (not shown in the picture).
 
 ## IoT data model object details
 
@@ -97,21 +97,21 @@ These parameters have the same behavior for all capability sub-objects, where de
 
 **Applies to:** All capability sub-objects
 
-All capability objects contains a mandatory `Type` enumeration value.
+All capability objects contain a mandatory `Type` enumeration value.
 
-The `Type` value is a predefined enumeration value with the goal of giving a unified description of the capability object.  If the `Type`  value requires further detail, the  `Description`  parameter may provided a further definition.
+The `Type` value is a predefined enumeration value with the goal of giving a unified description of the capability object.  If the `Type`  value requires further detail, the `Description` parameter may provided a further definition.
 
-*Note: The "Type" enumeration in the data model can also be extended with vendor specific values in the form of `X_<oui>_name` like all TR-181 parameters, using the rules defined in [TR-106][3].*
+*Note: The `Type` enumeration in the data model can also be extended with vendor-specific values like all TR-181 parameters, using the rules defined in [TR-106][3].*
 
 #### Unit definition
 
 **Applies to:** LevelControl, LevelSensor, MultilevelSensor
 
-To define the used unit a similar concept as for the type definition is used. The definition consists of the `Unit` enumeration value
+To define the used unit a similar concept as for the type definition is used. The definition consists of the `Unit` enumeration value.
 
-The `Unit` value is a predefined enumeration value with the goal of giving a unified representation of the used unit. 
+The `Unit` value is a predefined enumeration value with the goal of giving a unified representation of the used unit.
 
-*Note: The "Unit" enumeration in the data model can also be extended with vendor specific values in the form of `X_<oui>_name` like all TR-181 parameters, using the rules defined in [TR-106][3].*
+*Note: The `Unit` enumeration in the data model can also be extended with vendor-specific values like all TR-181 parameters, using the rules defined in [TR-106][3].*
 
 *Note - Imperial units are intentionally not modeled in favor of the metric system to increase the inter-working. If the Controller needs imperial units, it can easily convert the metric units into imperial ones by using the well-defined conversion routines.*
 
@@ -132,10 +132,7 @@ The minimum definition of a "BinaryControl" consists of:
     IoTCapability.i.BinaryControl.Value = ...
 ```
 
-The value can be changed either directly by a USP Set operation, or via two commands:
-
-* The `Toggle()` command corresponds to the behavior of a switch, changing the value to the other state.
-* The `Push()` command corresponds to the behavior of a push button, changing the value to `true` and immediately changing it back to `false` upon release. In this case the `Value`  parameter is Read Only.
+The value can be changed either directly by a USP Set operation, or via The `Toggle()` command, which corresponds to the behavior of a switch, changing the value to the other state.
 
 #### LevelControl
 
@@ -200,6 +197,7 @@ The binary sensor object instance supports different kinds of binary sensor oper
 ##### Simple binary state sensor
 
 To model a simple sensor, which changes between two distinct states (e.g. a window or door open/close sensor), only the `Value` parameter is needed.
+
 The minimum definition of a BinarySensor consists of:
 
 ```
@@ -215,7 +213,7 @@ For example, a motion sensor would be modeled as:
 ```
     IoTCapability.i.Class              = "BinarySensor"
     IoTCapability.i.BinarySensor.Type  = "MotionDetected"
-    IoTCapability.i.BinarySensor.Value = {true/false}
+    IoTCapability.i.BinarySensor.Value = true
 ```
 
 Note that binary sensor types are meaningful for binary state behavior, e.g., "WindowOpen" rather than "Window".
@@ -225,10 +223,10 @@ Note that binary sensor types are meaningful for binary state behavior, e.g., "W
 To model a sensor, which additionally triggers on a certain threshold, add the `Sensitivity` parameter to the definition:
 
 ```
-    IoTCapability.1.Class                    = BinarySensor
+    IoTCapability.1.Class                    = "BinarySensor"
     IoTCapability.1.BinarySensor.Type        = "CarbonDioxideDetected"
     IoTCapability.1.BinarySensor.Value       = {true/false}
-    IoTCapability.1.BinarySensor.Sensitivity = "50"
+    IoTCapability.1.BinarySensor.Sensitivity = 50
 ```
 
 With the `Sensitivity` parameter, the threshold is controlled. As soon as the measured value exceeds the threshold, the `Value` parameter is set to `true`. As soon as the measured value goes below the threshold the `Value` parameter is set to `false`.
@@ -244,11 +242,11 @@ The sensitivity value is a relative value in the range 0 to 100 percent. The exa
 If the sensor state, after being triggered, should stay active for a minimum period, the `HoldTime` parameter is used:
 
 ```
-    IoTCapability.1.Class                    = "BinarySensor
+    IoTCapability.1.Class                    = "BinarySensor"
     IoTCapability.1.BinarySensor.Type        = "CarbonDioxideDetected"
-    IoTCapability.1.BinarySensor.Value       = "false"
-    IoTCapability.1.BinarySensor.Sensitivity = "50"
-    IoTCapability.1.BinarySensor.HoldTime    = "5000"
+    IoTCapability.1.BinarySensor.Value       = {true/false}
+    IoTCapability.1.BinarySensor.Sensitivity = 50
+    IoTCapability.1.BinarySensor.HoldTime    = 5000
 ```
 
 This figure shows the effect of the `HoldTime` parameter on the resulting value:
@@ -266,9 +264,9 @@ Some sensors might produce too many triggers, e.g. continuous movement, when onl
 ```
     IoTCapability.1.Class                    = "BinarySensor"
     IoTCapability.1.BinarySensor.Type        = "CarbonDioxideDetected"
-    IoTCapability.1.BinarySensor.Value       = "true"
-    IoTCapability.1.BinarySensor.Sensitivity = "50"
-    IoTCapability.1.BinarySensor.RestTime    = "10000"
+    IoTCapability.1.BinarySensor.Value       = {true/false}
+    IoTCapability.1.BinarySensor.Sensitivity = 50
+    IoTCapability.1.BinarySensor.RestTime    = 10000
 ```
 
 With this setting, new trigger events are ignored for 10 seconds (10000 miliseconds) after the first trigger has been detected, resulting in the following pattern:
@@ -287,9 +285,9 @@ To get readings with a minimum duration, combine rest and hold times:
     IoTCapability.1.Class                    = "BinarySensor"
     IoTCapability.1.BinarySensor.Type        = "CarbonDioxideDetected"
     IoTCapability.1.BinarySensor.Value       = {true/false}
-    IoTCapability.1.BinarySensor.Sensitivity = "50"
-    IoTCapability.1.BinarySensor.HoldTime    = "5000"
-    IoTCapability.1.BinarySensor.RestTime    = "10000"
+    IoTCapability.1.BinarySensor.Sensitivity = 50
+    IoTCapability.1.BinarySensor.HoldTime    = 5000
+    IoTCapability.1.BinarySensor.RestTime    = 10000
 ```
 
 Which results in the following pattern:
@@ -323,7 +321,7 @@ For example, to show the remaining load of a battery in percent, this capability
     IoTCapability.1.Class             = "LevelSensor"
     IoTCapability.1.LevelSensor.Type  = "Battery"
     IoTCapability.1.LevelSensor.Unit  = "%"
-    IoTCapability.1.LevelSensor.Value = "63"  
+    IoTCapability.1.LevelSensor.Value = 63"
 ```
 
 With this definition, the remaining load is expressed in percent, here 63 percent.
@@ -333,14 +331,14 @@ Since the unit value is a decimal type it is also possible to specify fractions 
     IoTCapability.1.Class = "LevelSensor"
     IoTCapability.1.LevelSensor.Type  = "Battery"
     IoTCapability.1.LevelSensor.Unit  = "%"
-    IoTCapability.1.LevelSensor.Value = "63.26"
+    IoTCapability.1.LevelSensor.Value = 63.26
 ```
 
 This expresses a total remaining load of 63.26 percent.
 
 ##### Threshold trigger
 
-In cases where not only the actual value is of interest, but also important to know if a predefined threshold is reached or undershot, the `LevelSensor` object can be extended with threshold parameters. Once the `LowLevel` or `HighLevel` parameter is `true`, it will remain  `true` until the device is reset or the condition no longer exists. This will depend on the particular device.
+In cases where not only the actual value is of interest, but also important to know if a predefined threshold is reached or undershot, the `LevelSensor` object can be extended with threshold parameters. Once the `LowLevel` or `HighLevel` parameter is `true`, it will remain `true` until the device is reset or the condition no longer exists. This will depend on the particular device.
 
 | Parameter            | Type    | R/W  | Description                              |
 | -------------------- | ------- | ---- | ---------------------------------------- |
@@ -357,9 +355,9 @@ When modeling a battery with a `LevelSensor` object, an additional low level war
     IoTCapability.1.Class                         = "LevelSensor"
     IoTCapability.1.LevelSensor.Type              = "Battery"
     IoTCapability.1.LevelSensor.Unit              = "%"
-    IoTCapability.1.LevelSensor.LowLevelThreshold = "20"
-    IoTCapability.1.LevelSensor.Value             = "19"
-    IoTCapability.1.LevelSensor.LowLevel          = "true"
+    IoTCapability.1.LevelSensor.LowLevelThreshold = 20
+    IoTCapability.1.LevelSensor.Value             = 19
+    IoTCapability.1.LevelSensor.LowLevel          = true
 ```
 
 *Note - For more complex scenarios, like having a grace period, the binary sensor object can be used instead of the LowLevel or HighLevel Threshold parameters.*
@@ -438,10 +436,10 @@ Instantiated data model:
 
 ```
     ProxiedDevice.1.Type                                    = "Thermostat"
-    ProxiedDevice.1.Online                                  = "true"
+    ProxiedDevice.1.Online                                  = true
     ProxiedDevice.1.ProxyProtocol                           = "Z-Wave"
 
-    ProxiedDevice.1.IoTCapabilityNumberOfEntries            = "9"
+    ProxiedDevice.1.IoTCapabilityNumberOfEntries            = 9
 
     ProxiedDevice.1.IoTCapability.1.Class                   = "EnumControl"
     ProxiedDevice.1.IoTCapability.1.EnumControl.Type        = "ThermostatMode"
@@ -454,38 +452,38 @@ Instantiated data model:
     ProxiedDevice.1.IoTCapability.2.Class                   = "LevelControl"
     ProxiedDevice.1.IoTCapability.2.LevelControl.Type       = "Temperature"
     ProxiedDevice.1.IoTCapability.2.LevelControl.Description = "TargetCoolTemperature"
-    ProxiedDevice.1.IoTCapability.2.LevelControl.Value      = "17"
+    ProxiedDevice.1.IoTCapability.2.LevelControl.Value      = 17
     ProxiedDevice.1.IoTCapability.2.LevelControl.Unit       = "degC"
-    ProxiedDevice.1.IoTCapability.2.LevelControl.MinValue   = "14"
-    ProxiedDevice.1.IoTCapability.2.LevelControl.MaxValue   = "25"
+    ProxiedDevice.1.IoTCapability.2.LevelControl.MinValue   = 14
+    ProxiedDevice.1.IoTCapability.2.LevelControl.MaxValue   = 25
 
     ProxiedDevice.1.IoTCapability.3.Class                   = "LevelControl"
     ProxiedDevice.1.IoTCapability.3.LevelControl.Type       = "Temperature"
     ProxiedDevice.1.IoTCapability.3.LevelControl.Description = "TargetHeatTemperature"
-    ProxiedDevice.1.IoTCapability.3.LevelControl.Value      = "21"
+    ProxiedDevice.1.IoTCapability.3.LevelControl.Value      = 21
     ProxiedDevice.1.IoTCapability.3.LevelControl.Unit       = "degC"
-    ProxiedDevice.1.IoTCapability.3.LevelControl.MinValue   = "14"
-    ProxiedDevice.1.IoTCapability.3.LevelControl.MaxValue   = "25"
+    ProxiedDevice.1.IoTCapability.3.LevelControl.MinValue   = 14
+    ProxiedDevice.1.IoTCapability.3.LevelControl.MaxValue   = 25
 
     ProxiedDevice.1.IoTCapability.4.Class                   = "LevelControl"
     ProxiedDevice.1.IoTCapability.4.LevelControl.Type       = "Temperature"
     ProxiedDevice.1.IoTCapability.4.LevelControl.Description = "TargetEnergyCoolTemp"
-    ProxiedDevice.1.IoTCapability.4.LevelControl.Value      = "19"
+    ProxiedDevice.1.IoTCapability.4.LevelControl.Value      = 19
     ProxiedDevice.1.IoTCapability.4.LevelControl.Unit       = "degC"
-    ProxiedDevice.1.IoTCapability.4.LevelControl.MinValue   = "14"
-    ProxiedDevice.1.IoTCapability.4.LevelControl.MaxValue   = "25"
+    ProxiedDevice.1.IoTCapability.4.LevelControl.MinValue   = 14
+    ProxiedDevice.1.IoTCapability.4.LevelControl.MaxValue   = 25
 
     ProxiedDevice.1.IoTCapability.5.Class                   = "LevelControl"
     ProxiedDevice.1.IoTCapability.5.LevelControl.Type       = "Temperature"
     ProxiedDevice.1.IoTCapability.5.LevelControl.Description = "TargetEnergyHeatTemp"
-    ProxiedDevice.1.IoTCapability.5.LevelControl.Value      = "19"
+    ProxiedDevice.1.IoTCapability.5.LevelControl.Value      = 19
     ProxiedDevice.1.IoTCapability.5.LevelControl.Unit       = "degC"
-    ProxiedDevice.1.IoTCapability.5.LevelControl.MinValue   = "14"
-    ProxiedDevice.1.IoTCapability.5.LevelControl.MaxValue   = "25"
+    ProxiedDevice.1.IoTCapability.5.LevelControl.MinValue   = 14
+    ProxiedDevice.1.IoTCapability.5.LevelControl.MaxValue   = 25
 
     ProxiedDevice.1.IoTCapability.6.Class                   = "LevelSensor"
     ProxiedDevice.1.IoTCapability.6.LevelSensor.Type        = "Temperature"
-    ProxiedDevice.1.IoTCapability.6.LevelSensor.Value       = "19.5"
+    ProxiedDevice.1.IoTCapability.6.LevelSensor.Value       = 19.5
     ProxiedDevice.1.IoTCapability.6.LevelSensor.Unit        = "degC"
 
     ProxiedDevice.1.IoTCapability.7.Class                   = "EnumControl"
@@ -510,7 +508,7 @@ This example shows a dimmable light connected over Z-Wave as proxied device to a
 
 Structure elements:
 
-* IoTCapability.1 (BinaryControl) : On/Off Switch, expressed as  `true`  and  `false`  value
+* IoTCapability.1 (BinaryControl) : On/Off Switch, expressed as `true` and `false` value
 * IoTCapability.2 (LevelControl) : Brightness control from 0% to 100%
 
 Instantiated data model:
@@ -520,17 +518,17 @@ Instantiated data model:
     ProxiedDevice.2.Online                                    = "true"
     ProxiedDevice.2.ProxyProtocol                             = "Z-Wave"
     ProxiedDevice.2.Name                                      = "GE DimMing Bulb"
-    ProxiedDevice.2.IoTCapabilityNumberOfEntries              = "2"
+    ProxiedDevice.2.IoTCapabilityNumberOfEntries              = 2
 
     ProxiedDevice.2.IoTCapability.1.Class                     = "BinaryControl"
     ProxiedDevice.2.IoTCapability.1.BinaryControl.Type        = "Switch"
-    ProxiedDevice.2.IoTCapability.1.BinaryControl.Value       = "true"
+    ProxiedDevice.2.IoTCapability.1.BinaryControl.Value       = true
 
     ProxiedDevice.2.IoTCapability.2.Class                     = "LevelControl"
     ProxiedDevice.2.IoTCapability.2.LevelControl.Type         = "Brightness"
-    ProxiedDevice.2.IoTCapability.2.LevelControl.Value        = "100"
-    ProxiedDevice.2.IoTCapability.2.LevelControl.Min          = "0"
-    ProxiedDevice.2.IoTCapability.2.LevelControl.Max          = "100"
+    ProxiedDevice.2.IoTCapability.2.LevelControl.Value        = 100
+    ProxiedDevice.2.IoTCapability.2.LevelControl.Min          = 0
+    ProxiedDevice.2.IoTCapability.2.LevelControl.Max          = 100
     ProxiedDevice.2.IoTCapability.2.LevelControl.Unit         = "%"
 ```
 
@@ -540,7 +538,7 @@ This example shows a simple fan connected over Z-Wave as proxied device to an Io
 
 Structure elements:
 
-* IoTCapability.1 (EnumControl) :  Fan state
+* IoTCapability.1 (EnumControl) : Fan state
 
 Instantiated data model:
 
@@ -549,7 +547,7 @@ Instantiated data model:
     ProxiedDevice.3.Online                                     = "true"
     ProxiedDevice.3.ProxyProtocol                              = "Z-Wave"
     ProxiedDevice.3.name                                       = "GE Fan"
-    ProxiedDevice.3.IoTCapabilityNumberOfEntries               = "1"
+    ProxiedDevice.3.IoTCapabilityNumberOfEntries               = 1
 
     ProxiedDevice.2.IoTCapability.1.Class                      = "EnumControl"
     ProxiedDevice.3.IoTCapability.1.EnumControl.Type           = "FanMode"
@@ -566,29 +564,29 @@ Instantiated data model:
 
 ```
     ProxiedDevice.4.Type                                             = "SensorStrip"
-    ProxiedDevice.4.Online                                           = "true"
+    ProxiedDevice.4.Online                                           = true
     ProxiedDevice.4.ProxyProtocol                                    = "Z-Wave"
     ProxiedDevice.4.Name                                             = "Insertable Sensor Strip"
-    ProxiedDevice.4.IoTCapabilityNumberOfEntries                     = "1"
-    ProxiedDevice.4.NodeNumberOfEntries                              = "2"
+    ProxiedDevice.4.IoTCapabilityNumberOfEntries                     = 1
+    ProxiedDevice.4.NodeNumberOfEntries                              = 2
 
     ProxiedDevice.4.IoTCapability.1.Class                            = "LevelSensor"
-    ProxiedDevice.4.IoTCapability.1.LevelSensor.Value                = "80"
+    ProxiedDevice.4.IoTCapability.1.LevelSensor.Value                = 80
     ProxiedDevice.4.IoTCapability.1.LevelSensor.Unit                 = "%"
     ProxiedDevice.4.IoTCapability.1.LevelSensor.Type                 = "Battery"
-    ProxiedDevice.4.IoTCapability.1.LevelSensor.LowLevelThreshold    = "30"
-    ProxiedDevice.4.IoTCapability.1.LevelSensor.LowLevel             = "false"
+    ProxiedDevice.4.IoTCapability.1.LevelSensor.LowLevelThreshold    = 30
+    ProxiedDevice.4.IoTCapability.1.LevelSensor.LowLevel             = false
 
     ProxiedDevice.4.Node.1.Type                                      = "Sensor"
-    ProxiedDevice.4.Node.1.IoTCapabilityNumberOfEntries              = "1"
+    ProxiedDevice.4.Node.1.IoTCapabilityNumberOfEntries              = 1
 
     ProxiedDevice.4.Node.1.IoTCapability.1.Class                     = "BinarySensor"
-    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.HoldTime     = "0"
-    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.Sensitivity  = "5"
-    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.RestTime     = "10000"
-    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.Value        = "false"
+    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.HoldTime     = 0
+    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.Sensitivity  = 5
+    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.RestTime     = 10000
+    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.Value        = false
     ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.Type         = "MotionDetected"
-    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.LastChange   = "2019-07-22T20:57:29Z"
+    ProxiedDevice.4.Node.1.IoTCapability.1.BinarySensor.LastSensingTime  = 1573344000
 ```
 
 ### Example: Ceiling Fan with integrated light
@@ -598,43 +596,43 @@ This example shows a ceiling fan with integrated light connected over Z-Wave as 
 Structure elements:
 
 * IoTCapability.1 (BinaryControl) :
-* Node.1 :      Represents the light control
+* Node.1 : Represents the light control
 * .IoTCapability.1 (LevelControl) : Brightness control from 0% to 100%
-* .IoTCapability.2 (BinaryControl) : On/Off Switch, expressed as  `true`  and  `false`  value
-* Node.2 :     Fan control
+* .IoTCapability.2 (BinaryControl) : On/Off Switch, expressed as `true` and `false` value
+* Node.2 : Fan control
 * .IoTCapability.1 (EnumControl) : Set fan state
 
 Instantiated data model:
 
 ```
     ProxiedDevice.5.Type                                           = "Fan"
-    ProxiedDevice.5.Online                                         = "true"
+    ProxiedDevice.5.Online                                         = true
     ProxiedDevice.5.ProxyProtocol                                  = "Z-Wave"
     ProxiedDevice.5.Name                                           = "42'' Ceiling Fan"
 
-    ProxiedDevice.5.IoTCapabilityNumberOfEntries                   = "1"
-    ProxiedDevice.5.NodeNumberOfEntries                            = "2"
+    ProxiedDevice.5.IoTCapabilityNumberOfEntries                   = 1
+    ProxiedDevice.5.NodeNumberOfEntries                            = 2
 
     ProxiedDevice.5.IoTCapability.1.Class                          = "BinaryControl"
     ProxiedDevice.5.IoTCapability.1.BinaryControl.Type             = "Switch"
-    ProxiedDevice.5.IoTCapability.1.BinaryControl.State            = "true"
+    ProxiedDevice.5.IoTCapability.1.BinaryControl.State            = true
 
     ProxiedDevice.5.Node.1.Type                                    = "Light"
-    ProxiedDevice.5.Node.1.IoTCapabilityNumberOfEntries            = "2"
+    ProxiedDevice.5.Node.1.IoTCapabilityNumberOfEntries            = 2
 
     ProxiedDevice.5.Node.1.IoTCapability.1.Class                   = "LevelControl"
     ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.Type       = "Brightness"
-    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.Value      = "99"
-    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.MinValue   = "0"
-    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.MaxValue   = "100"
+    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.Value      = 99
+    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.MinValue   = 0
+    ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.MaxValue   = 100
     ProxiedDevice.5.Node.1.IoTCapability.1.LevelControl.Unit       = "%"
 
     ProxiedDevice.5.Node.1.IoTCapability.2.Class                   = "BinaryControl"
     ProxiedDevice.5.Node.1.IoTCapability.2.BinaryControl.Type      = "Switch"
-    ProxiedDevice.5.Node.1.IoTCapability.2.BinaryControl.Value     = "true"
+    ProxiedDevice.5.Node.1.IoTCapability.2.BinaryControl.Value     = true
 
     ProxiedDevice.5.Node.2.Type                                    = "Fan"
-    ProxiedDevice.5.Node.2.IoTCapabilityNumberOfEntries            = "1"
+    ProxiedDevice.5.Node.2.IoTCapabilityNumberOfEntries            = 1
 
     ProxiedDevice.5.Node.2.IoTCapability.1.Class                   = "EnumControl"
     ProxiedDevice.5.Node.2.IoTCapability.1.EnumControl.Type        = "FanMode"
@@ -650,12 +648,12 @@ This example shows a power strip with integrated power measurements connected ov
 
 Structure elements:
 
-* IoTCapability.1 (BinaryControl) :   On/Off Switch for complete power strip
-* IoTCapability.2 (LevelSensor) :  Total power reading of strip in KWh.
-* Node.1 - 3:      Each node represents a power outlet with:
-    * .IoTCapability.1 (BinaryControl) :  On/Off Switch, expressed as `true` and  `false`  value
-    * .IoTCapability.2 (LevelSensor) :  Current power reading of outlet in Watt.
-    * .IoTCapability.3 (LevelSensor) :  Total used power reading of outlet in KWh.
+* IoTCapability.1 (BinaryControl) : On/Off Switch for complete power strip
+* IoTCapability.2 (LevelSensor) : Total power reading of strip in KWh.
+* Node.1 - 3: Each node represents a power outlet with:
+    * .IoTCapability.1 (BinaryControl) : On/Off Switch, expressed as `true` and `false` value
+    * .IoTCapability.2 (LevelSensor) : Current power reading of outlet in Watt.
+    * .IoTCapability.3 (LevelSensor) : Total used power reading of outlet in KWh.
 
 Instantiated data model:
 
@@ -664,12 +662,12 @@ Instantiated data model:
     ProxiedDevice.6.Online                                       = "true"
     ProxiedDevice.6.ProxyProtocol                                = "Z-Wave"
     ProxiedDevice.6.Name                                         = "3 Plug Strip"
-    ProxiedDevice.6.IoTCapabilityNumberOfEntries                 = "2"
-    ProxiedDevice.6.NodeNumberOfEntries                          = "3"
+    ProxiedDevice.6.IoTCapabilityNumberOfEntries                 = 2
+    ProxiedDevice.6.NodeNumberOfEntries                          = 3
 
     ProxiedDevice.6.IoTCapability.1.Class                        = "BinaryControl"
     ProxiedDevice.6.IoTCapability.1.BinaryControl.Type           = "Switch"
-    ProxiedDevice.6.IoTCapability.1.BinaryControl.Value          = "true"
+    ProxiedDevice.6.IoTCapability.1.BinaryControl.Value          = true
     ProxiedDevice.6.IoTCapability.3.Class                        = "LevelSensor"
     ProxiedDevice.6.IoTCapability.3 Name                         = "Total Accumulated Power"
     ProxiedDevice.6.IoTCapability.3.LevelSensor.Type             = "Power"
@@ -677,49 +675,49 @@ Instantiated data model:
     ProxiedDevice.6.IoTCapability.3.LevelSensor.Value            = "2227,56"
 
     ProxiedDevice.6.Node.1.Type                                  = "Switch"
-    ProxiedDevice.6.Node.1.IoTCapabilityNumberOfEntries          = "3"
+    ProxiedDevice.6.Node.1.IoTCapabilityNumberOfEntries          = 3
     ProxiedDevice.6.Node.1.IoTCapability.1.Class                 = "BinaryControl"
     ProxiedDevice.6.Node.1.IoTCapability.1.BinaryControl.Type    = "Switch"
-    ProxiedDevice.6.Node.1.IoTCapability.1.BinaryControl.State   = "true"
+    ProxiedDevice.6.Node.1.IoTCapability.1.BinaryControl.State   = true
     ProxiedDevice.6.Node.1.IoTCapability.2.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.1.IoTCapability.2.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.1.IoTCapability.2.LevelSensor.Unit      = "W"
-    ProxiedDevice.6.Node.1.IoTCapability.2.LevelSensor.Value     = "99"
+    ProxiedDevice.6.Node.1.IoTCapability.2.LevelSensor.Value     = 99
     ProxiedDevice.6.Node.1.IoTCapability.3.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.1.IoTCapability.3 Name                  = "Accumulated Power"
     ProxiedDevice.6.Node.1.IoTCapability.3.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.1.IoTCapability.3.LevelSensor.Unit      = "KWh"
-    ProxiedDevice.6.Node.1.IoTCapability.3.LevelSensor.Value     = "390.67"
+    ProxiedDevice.6.Node.1.IoTCapability.3.LevelSensor.Value     = 390.67
 
     ProxiedDevice.6.Node.2.Type                                  = "Switch"
-    ProxiedDevice.6.Node.2.IoTCapabilityNumberOfEntries          = "3"
+    ProxiedDevice.6.Node.2.IoTCapabilityNumberOfEntries          = 3
     ProxiedDevice.6.Node.2.IoTCapability.1.Class                 = "BinaryControl"
     ProxiedDevice.6.Node.2.IoTCapability.1.BinaryControl.Type    = "Switch"
-    ProxiedDevice.6.Node.2.IoTCapability.1.BinaryControl.State   = "true"
+    ProxiedDevice.6.Node.2.IoTCapability.1.BinaryControl.State   = true
     ProxiedDevice.6.Node.2.IoTCapability.2.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.2.IoTCapability.2.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.2.IoTCapability.2.LevelSensor.Unit      = "W"
-    ProxiedDevice.6.Node.2.IoTCapability.2.LevelSensor.Value     = "76"
+    ProxiedDevice.6.Node.2.IoTCapability.2.LevelSensor.Value     = 76
     ProxiedDevice.6.Node.2.IoTCapability.3.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.2.IoTCapability.3 Name                  = "Accumulated Power"
     ProxiedDevice.6.Node.2.IoTCapability.3.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.2.IoTCapability.3.LevelSensor.Unit      = "KWh"
-    ProxiedDevice.6.Node.2.IoTCapability.3.LevelSensor.Value     = "1783.63"
+    ProxiedDevice.6.Node.2.IoTCapability.3.LevelSensor.Value     = 1783.63
 
     ProxiedDevice.6.Node.3.Type                                  = "Switch"
-    ProxiedDevice.6.Node.3.IoTCapabilityNumberOfEntries          = "3"
+    ProxiedDevice.6.Node.3.IoTCapabilityNumberOfEntries          = 3
     ProxiedDevice.6.Node.3.IoTCapability.1.Class                 = "BinaryControl"
     ProxiedDevice.6.Node.3.IoTCapability.1.BinaryControl.Type    = "Switch"
-    ProxiedDevice.6.Node.3.IoTCapability.1.BinaryControl.State   = "true"
+    ProxiedDevice.6.Node.3.IoTCapability.1.BinaryControl.State   = true
     ProxiedDevice.6.Node.3.IoTCapability.2.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.3.IoTCapability.2.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.3.IoTCapability.2.LevelSensor.Unit      = "W"
-    ProxiedDevice.6.Node.3.IoTCapability.2.LevelSensor.Value     = "0"
+    ProxiedDevice.6.Node.3.IoTCapability.2.LevelSensor.Value     = 0
     ProxiedDevice.6.Node.3.IoTCapability.3.Class                 = "LevelSensor"
     ProxiedDevice.6.Node.3.IoTCapability.3 Name                  = "Accumulated Power"
     ProxiedDevice.6.Node.3.IoTCapability.3.LevelSensor.Type      = "Power"
     ProxiedDevice.6.Node.3.IoTCapability.3.LevelSensor.Unit      = "KWh"
-    ProxiedDevice.6.Node.3.IoTCapability.3.LevelSensor.Value     = "53.26"
+    ProxiedDevice.6.Node.3.IoTCapability.3.LevelSensor.Value     = 53.26
 ```
 
 ### Example: Battery powered radiator thermostat
@@ -732,8 +730,8 @@ Structure elements:
 * IoTCapability.2 (EnumControl): Auto/Manual Temperature setting
 * IoTCapability.3 (EnumControl): Vacation Temperature setting
 * IoTCapability.4 (LevelSensor) : Current Temperature
-* IoTCapability.5 (LevelSensor):  Valve position
-* IoTCapability.6 (LevelSensor):  Battery status
+* IoTCapability.5 (LevelSensor): Valve position
+* IoTCapability.6 (LevelSensor): Battery status
 
 *Note - All temperature settings are modeled as "EnumControl" to define a range between 4 and 23° degC in steps of 0.5° or an "Off" value.*
 
@@ -745,7 +743,7 @@ Instantiated data model:
 
     :
 
-    Device.IoTCapabilityNumberOfEntries            = "6"
+    Device.IoTCapabilityNumberOfEntries            = 6
 
     Device.IoTCapability.1.Class                   = "EnumControl
     Device.IoTCapability.1.EnumControl.Type        = "ThermostatMode"
@@ -763,9 +761,9 @@ Instantiated data model:
                                                      16.5, 17, 17.5, 18, 18.5,
                                                      19, 19.5, 20, 20.5, 21,
                                                      21.5, 22, 22.5, 23"
-    Device.IoTCapability.2.EnumControl.Value       = "19"   # Requested temperature
+    Device.IoTCapability.2.EnumControl.Value       = 19   # Requested temperature
 
-    Device.IoTCapability.3.Class                   = "EnumControl
+    Device.IoTCapability.3.Class                   = "EnumControl"
     Device.IoTCapability.3.Name                    = "Vacation Temperature"
     Device.IoTCapability.3.EnumControl.Type        = "TemperatureMode"
     Device.IoTCapability.3.EnumControl.ValidValues = "Off, 4, 4.5, 5.0, 5.5,
@@ -776,29 +774,29 @@ Instantiated data model:
                                                      16.5, 17, 17.5, 18, 18.5,
                                                      19, 19.5, 20, 20.5, 21,
                                                      21.5, 22, 22.5, 23"
-    Device.IoTCapability.3.EnumControl.Value       = "12"   # Requested temperature
+    Device.IoTCapability.3.EnumControl.Value       = 12   # Requested temperature
                                                             # during absence
 
     Device.IoTCapability.4.Class                   = "LevelSensor"
     Device.IoTCapability.4.Name                    = "Current Temperature"
     Device.IoTCapability.4.LevelSensor.Type        = "Temperature"
     Device.IoTCapability.4.LevelSensor.Unit        = "degC"
-    Device.IoTCapability.4.LevelSensor.Value       = "19.3" # Current temperature
+    Device.IoTCapability.4.LevelSensor.Value       = 19.3 # Current temperature
 
     Device.IoTCapability.5.Class                   = "LevelSensor"
     Device.IoTCapability.5.Name                    = "Valve Position"
     Device.IoTCapability.5.LevelSensor.Type        = "Position"
     Device.IoTCapability.5.LevelSensor.Unit        = "%"
-    Device.IoTCapability.5.LevelSensor.MinValue    = "0"
-    Device.IoTCapability.5.LevelSensor.MaxValue    = "100"
-    Device.IoTCapability.5.LevelSensor.Value       = "16"      # e.g. 16% valve
+    Device.IoTCapability.5.LevelSensor.MinValue    = 0
+    Device.IoTCapability.5.LevelSensor.MaxValue    = 100
+    Device.IoTCapability.5.LevelSensor.Value       = 16     # e.g. 16% valve
                                                                # opening
 
     Device.IoTCapability.6.Class                   = "LevelSensor"
     Device.IoTCapability.6.Name                    = "Local Battery"
     Device.IoTCapability.6.LevelSensor.Type        = "Battery"
     Device.IoTCapability.6.LevelSensor.Unit        = "%"
-    Device.IoTCapability.6.LevelSensor.MinValue    = "0"
-    Device.IoTCapability.6.LevelSensor.MaxValue    = "100"
-    Device.IoTCapability.6.LevelSensor.Value       = "82"      # e.g. 82% battery load
+    Device.IoTCapability.6.LevelSensor.MinValue    = 0
+    Device.IoTCapability.6.LevelSensor.MaxValue    = 100
+    Device.IoTCapability.6.LevelSensor.Value       = 82      # e.g. 82% battery load
 ```
