@@ -840,7 +840,3 @@ referenced by:
 *   [sdmpath](#sdmpath "sdmpath")
 
 <br><br>
-
-[<-- Introduction](/specification/)
-
-[Discovery -->](/specification/discovery/)

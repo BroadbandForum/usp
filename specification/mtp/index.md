@@ -87,8 +87,3 @@ These error messages are indicated using content type `application/vnd.bbf.usp.e
 | `7102` | Secure session not supported | This error indicates USP layer [Secure Message Exchange](/specification/e2e-message-exchange/) was indicated in the received Record but is not supported by the receiving Endpoint. |
 | `7103` | Segmentation and reassembly not supported | This error indicates segmentation and reassembly was indicated in the received Record but is not supported by the receiving Endpoint. |
 | `7104` | 	Invalid Record value | This error indicates the value of at least one Record field was invalid. |
-
-
-[<-- Discovery](/specification/discovery/)
-
-[--> Message Encoding](/specification/encoding/)
