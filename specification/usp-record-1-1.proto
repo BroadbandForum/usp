@@ -48,7 +48,7 @@ syntax = "proto3";
 //   license grant are also deemed granted under this license.
 //
 //
-// | Version           | Name                   | Date          |
+// | Version           | Name                   | Date       |
 // | TR-369 1.0.0      | User Services Platform | APR, 2018  |
 // | TR-369 1.0.1      | User Services Platform | JUN, 2018  |
 // | TR-369 1.0.2      | User Services Platform | OCT, 2018  |

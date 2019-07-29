@@ -11,8 +11,8 @@ USP stands for the User Services Platform, a standardized platform to manage, mo
 
 USP uses protocol buffers encoding for USP Records and USP Messages. When implementing an agent or controller, use these files to apply the schema:
 
-* USP Records are defined in [usp-record.proto](/specification/usp-record.proto)
-* USP Messages are defined in [usp-msg.proto](/specification/usp-msg.proto)
+* USP Records are defined in [usp-record-1-1.proto](/specification/usp-record-1-1.proto)
+* USP Messages are defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto)
 
 ### Is there an open source USP Agent?
 
