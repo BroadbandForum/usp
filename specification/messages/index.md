@@ -533,7 +533,7 @@ This field contains the Relative Parameter Path to the parameter that failed to 
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains the [numeric code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -705,7 +705,7 @@ This field contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains a [error code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -743,7 +743,7 @@ This field contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains a [error code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -882,7 +882,7 @@ This field returns the Path Name to the Object Instance that failed to be delete
 
 `fixed32 err_code`
 
-This field contains the error code of the error that caused the deletion of this object to fail.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the deletion of this object to fail.
 
 `string err_msg`
 
@@ -1943,7 +1943,7 @@ This field contains a map of key/value pairs indicating the output arguments (re
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the operation to fail. Appropriate error codes for CommandFailure include `7002-7008`, `7016`, `7022`, `7023`, and `7800-7999`.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the operation to fail. Appropriate error codes for CommandFailure include `7002-7008`, `7016`, `7022`, `7023`, and `7800-7999`.
 
 `string err_msg`
 
@@ -2149,7 +2149,7 @@ This field contains a map of key/value pairs indicating the output arguments (re
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the operation to fail.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the operation to fail.
 
 `string err_msg`
 
@@ -2185,7 +2185,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7016` | Object does not exist | Add, Set | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
 | `7017` | Object could not be created | Add | This error indicates that the operation failed to create an instance of the specified Object. |
 | `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
-| `7019` | Attempt to create non-creatable Object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
+| `7019` | Attempt to create non-creatable object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
 | `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
 | `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
@@ -2193,7 +2193,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |
 | `7025` | Object exists with duplicate key | Add | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
 | `7026` | Invalid path | Any | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
-| `7027` | Invalid Command Arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
+| `7027` | Invalid command arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
 | `7100-7199` | USP Record error codes | - | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |
 | `7800-7999`| Vendor defined error codes | - | These errors are [vendor defined](#vendor_defined_error_codes). |
 
