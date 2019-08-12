@@ -1795,7 +1795,7 @@ body {
 
 ```
 
-In another example, the event "Boot!", defined in the `Device.LocalAgent.` object, is triggered. The Agent sends a Notify Request to the Controller(s) subscribed to that event.
+In another example, the event "Boot!", defined in the `Device.` object, is triggered. The Agent sends a Notify Request to the Controller(s) subscribed to that event.
 
 ```
 Notify Request
@@ -1809,7 +1809,7 @@ body {
       subscription_id: "boot-1"
       send_resp: true
       event {
-        obj_path: "Device.LocalAgent."
+        obj_path: "Device."
         event_name: "Boot!"
         params {
           {

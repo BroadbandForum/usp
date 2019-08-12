@@ -491,7 +491,7 @@ For example: `Device.IP.Interface.[Name=="eth0"].Reset()`
 
 The Notify request allows a type of generic event (called Event) message that allows a USP Agent to emit events defined in the USP data models. Events are defined in and related to Objects in the USP data models like commands. Events are addressed like Parameter Paths that end with an exclamation point "!" to symbolize that it is an Event.
 
-For example: `Device.LocalAgent.Boot!`
+For example: `Device.Boot!`
 
 <a id='data_model_path_grammar' />
 
