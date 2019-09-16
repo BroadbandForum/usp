@@ -2121,10 +2121,6 @@ This field contains a repeated set of `OperationResult` messages.
 
 This field contains a Command Path to the Object defined Operation that is the subject of this `OperateResp` message.
 
-`string req_object_path`
-
-This field contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.
-
 `oneof operate_resp`
 
 This field contains a message of one of the following types.
