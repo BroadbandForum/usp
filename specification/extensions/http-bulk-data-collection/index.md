@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
+[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
@@ -75,15 +75,22 @@ Once the communication session is established between the Agent and Bulk Data Co
 
 The HTTP Bulk Data transfer mechanism allows parameters to be used as HTTP URI query parameters. This is useful when Bulk Data Collector utilizes the specific parameters that the Agent reports for processing (e.g., logging, locating directories) without the need for the Bulk Data Collector to parse the data being transferred.
 
-**R-BULK.1** - The Agent MUST transmit the device's Manufacturer OUI, Product Class and Serial Number as part of the URI query parameters. The data model parameters are encoded as:
+**R-BULK.1** - The Agent MUST transmit the device's Manufacturer OUI, Product Class and Serial Number or the USP Endpoint ID as part of the URI query parameters. The data model parameters are encoded as:
 
     .DeviceInfo.ManufacturerOUI -> oui
     .DeviceInfo.ProductClass  -> pc
     .DeviceInfo.SerialNumber  -> sn
+    .LocalAgent.EndpointID -> eid
 
 As such, the values of the device’s OUI, Serial Number and Product Class are formatted in the HTTP request URI as follows:
 
     POST https://<bulk data collector url>?oui=00256D&pc=Z&sn=Y
+
+If the USP Endpoint ID is used the HTTP request URI is formatted as:
+
+    POST https://<bulk data collector url>?eid=os::000256:asdfa99384
+
+*Note - If the USP Endpoint ID should be transmitted together with the device's Manufacturer OUI, Product Class and Serial Number (e.g. to distinguish multiple bulk data collection instances on the same device), then the USP Endpoint ID has to be configured as additional URI parameter in the `.BulkData.Profile.{i}.HTTP.RequestURIParameter.{i}.` table.*
 
 Configuring the URI query parameters for other parameters requires that instances of a `.BulkData.Profile.{i}.HTTP.RequestURIParameter` object instance be created and configured with the requested parameters. The additional parameters are appended to the required URI query parameters.
 
@@ -140,10 +147,10 @@ The use of TLS to transport the HTTP Bulk Data is RECOMMENDED, although the prot
 
 **R-BULK.6** - Certain restrictions on the use of TLS and TCP are defined as follows:
 
-*	The Agent MUST support TLS version 1.2 or later.
+*	The Agent MUST support TLS version 1.2 or later (with backward compatibility to TLS 1.2).
 *	If the Collection Server URL has been specified as an HTTPS URL, the Agent MUST establish secure connections to the Collection Server, and MUST start the TLS session negotiation with TLS 1.2 or later.
 
-*Note - If the Collection Server does not support the version with which the Agent establishes the connection, it might be necessary to negotiate an earlier TLS 1.x version, or even SSL 3.0.  This implies that the Agent has to support the mandatory cipher suites for all supported TLS or SSL versions.*
+*Note - If the Collection Server does not support TLS 1.2 or higher with a cipher suite supported by the Agent, it may not be possible for the Agent to establish a secure connection to the Collection Server.*
 
 *Note - TLS_RSA_WITH_AES_128_CBC_SHA is the only mandatory TLS 1.2 cipher suite.*
 
@@ -225,7 +232,7 @@ Object or Object Instance paths can also be used to report all parameters of the
 
 For example, for a device to report the statistics of a WiFi associated device object instance the following would be configured:
 
-    .BulkData.Profile.1.Parameter.1.Name =  " WiFi_AP1_Assoc10"
+    .BulkData.Profile.1.Parameter.1.Name = "WiFi_AP1_Assoc10"
     .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.AccessPoint.1.AssociatedDevice.10.Stats."
 
 Using the configuration the device's report would contain the following parameter names:
@@ -242,10 +249,10 @@ Using the configuration the device's report would contain the following paramete
 
 It is also possible for the value of the Reference parameter to use both wildcards for instance identifiers and be a partial path. For example, for device to report the statistics for the device's WiFi associated device, the following would be configured:
 
-    .BulkData.Profile.1.Parameter.1.Name =  "WiFi_AP_Assoc"
+    .BulkData.Profile.1.Parameter.1.Name = "WiFi_AP_Assoc"
     .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.AccessPoint.*.AssociatedDevice.*.Stats."
 
-Using this configuration a device that has 1 WiFi Access Point (with instance identifier `10`) with 2 Associated Devices (with instance identifiers `10` and `11`), would contain a Report with following parameter names:
+Using this configuration a device that has 1 WiFi Access Point (with instance identifier `1`) with 2 Associated Devices (with instance identifiers `10` and `11`), would contain a Report with following parameter names:
 
     WiFi_AP_Assoc.1.10.BytesSent
     WiFi_AP_Assoc.1.10.BytesReceived

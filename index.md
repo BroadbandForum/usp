@@ -27,7 +27,7 @@
   </div>
   <div style="width:45%; float:right;">
 
-    <h2>Current Version: 1.0.2</h2>
+    <h2>Current Version: 1.1</h2>
 
     <h4>About this version:</h4>
 
@@ -40,9 +40,10 @@
     <li>Use of USP Record encapsulation for end to end integrity, security, and privacy</li>
     <li>Data model objects specific to protocol functionality, object defined operations, and notifications/events</li>
     <li>Protocol buffers encoding schema</li>
-    <li>Use of CoAP, WebSockets, and STOMP as message transfer protocols (MTP)</li>
+    <li>Use of CoAP, WebSockets, MQTT, and STOMP as message transfer protocols (MTP)</li>
     <li>A system for authentication and authorization</li>
     <li>Extensions for bulk data collection, firmware management, software module management, and device proxying</li>
+    <li>Theory of operations for using a USP Agent to control IoT devices and systems</li>
     </ul>
 
     <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>

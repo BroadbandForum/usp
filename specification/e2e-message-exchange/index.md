@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
+[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
@@ -22,6 +22,7 @@
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
 [23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[24]: https://tools.ietf.org/html/rfc6979 "Deterministic Usage of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA)"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
@@ -74,7 +75,7 @@ Following are the fields contained within a USP Record. When not explicitly set 
 
 `string version`
 
-Required. Version of the USP Protocol. The only valid value is `1.0`.
+Required. Version (Major.Minor) of the USP Protocol (i.e., "1.0" or "1.1").
 
 `string to_id`
 
@@ -89,7 +90,11 @@ Required. Originating/Source USP Endpoint Identifier.
 `enum PayloadSecurity payload_security`
 
 Optional. An enumeration of type PayloadSecurity. When the payload is present,
-this indicates the protocol or mechanism used to secure the USP Message. Valid values are:
+this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message.
+The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be
+used to secure the payload (see "TLS Payload Encapsulation" section).
+
+Valid values are:
 
 ```
 PLAINTEXT (0)
@@ -344,6 +349,9 @@ While the `sequence_id` field identifies the USP Record sequence identifier with
 
 Figure E2E.3 – E2E Segmentation and Reassembly
 
+*Note: the 65k size limit is not inherent to the STOMP protocol. It is merely
+provided here as an example.*
+
 #### SAR function algorithm
 
 The following algorithm is used to provide the SAR function.
@@ -490,7 +498,7 @@ The integrity of the USP Record is required to be validated when the USP Record 
 
 **R-E2E.30** – When a USP Endpoint receives a USP Record, the USP Endpoint MUST verify the integrity of the non-payload portion of the USP Record when the USP Record contains the mac_signature field or the USP Endpoint is not protected by the underlying MTP.
 
-The integrity of the non-payload fields is accomplished by the transmitting USP Endpoint generating a Message Authentication Code (MAC) or signature of the non-payload fields which is then placed into the mac_signature field where the receiving USP Endpoint then verifies the MAC or signature as appropriate. The method to generate and validate MAC or signature depends on the value of the `payload_security` field. If the value of the `payload_security` field is PLAINTEXT then the integrity validation method always uses the signature method described in section Using the Signature Method to Validate the Integrity of USP Records. If the value of the `payload_security` field is TLS then the validation method that is used is dependent on whether the TLS handshake has been completed. If the TLS handshake has not been completed, the signature method described in section Using the Signature Method to Validate the Integrity of USP Records is used otherwise the MAC method described in section Using TLS to Validate the Integrity of USP Records is used.
+The integrity of the non-payload fields is accomplished by the transmitting USP Endpoint generating a Message Authentication Code (MAC) or signature of the non-payload fields which is then placed into the mac_signature field where the receiving USP Endpoint then verifies the MAC or signature as appropriate. The method to generate and validate MAC or signature depends on the value of the `payload_security` field. If the value of the `payload_security` field is `PLAINTEXT` then the integrity validation method always uses the signature method described in section Using the Signature Method to Validate the Integrity of USP Records. If the value of the `payload_security` field is `TLS12` then the validation method that is used is dependent on whether the TLS handshake has been completed. If the TLS handshake has not been completed, the signature method described in section Using the Signature Method to Validate the Integrity of USP Records is used otherwise the MAC method described in section Using TLS to Validate the Integrity of USP Records is used.
 
 <a id='using_the_signature_method_to_validate_the_integrity_of_usp_records' />
 
@@ -498,9 +506,9 @@ The integrity of the non-payload fields is accomplished by the transmitting USP 
 
 When the transmitting USP Endpoint protects the integrity of the non-payload fields of the USP Record using the signature method in this section, the non-payload fields are protected by signing a hash of the non-payload fields using the private key of the sending USP Endpoint's certificate. The receiving USP Endpoint then verifies the integrity using either the public key of the certificate in the USP Record `sender_cert` field or of the certificate used for Secure Message Exchange.
 
-This signature method uses a SHA-256 hash algorithm that generates a signature for the hash using the PKCS#1 Probabilistic Signature Scheme (PSS) scheme as defined in [RFC 8017](https://tools.ietf.org/html/rfc8017), with the MGF1 mask generation function, and a salt length that matches the output size of the hash function.
+This signature method uses a SHA-256 hash algorithm that generates a signature for the hash using the Digital Signature Standard (DSS) scheme as defined in [FIPS PUB 186-4 Digital Signature Standard (DSS)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf). To reduce the burden of requiring a strong source of randomness, the signature algorithm may apply the method described in [RFC 6979](https://tools.ietf.org/html/rfc6979) to deterministically derive encryption parameters.
 
-**R-E2E.31** – When using the signature method to protect the integrity of the non-payload portion of the USP Record, the transmitting USP Endpoint MUST protect the integrity using the ECDSA scheme as defined in [FIPS PUB 186-4 Digital Signature Standard (DSS)](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf) , using the SHA-256 hash algorithm, as defined in [FIPS PUB 180-4 Secure Hash Standard (SHS)](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf), to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
+**R-E2E.31** – When using the signature method to protect the integrity of the non-payload portion of the USP Record, the transmitting USP Endpoint MUST protect the integrity using the ECDSA scheme as defined in [FIPS PUB 186-4 Digital Signature Standard (DSS)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf), using the SHA-256 hash algorithm, as defined in [FIPS PUB 180-4 Secure Hash Standard (SHS)](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf), to sign and verify the protection. The transmitting USP Endpoint MUST create the signature using the private key of the transmitting USP Endpoint's certificate. The receiving USP Endpoint MUST verify the signature using the public key of the transmitted sender's certificate.
 
 <a id='using_tls_to_validate_the_integrity_of_USP_records' />
 
@@ -530,7 +538,7 @@ When the transmitting and receiving USP Endpoints have established a TLS session
 
 **R-E2E.38** – If using the TLS MAC method to protect the integrity of a USP Record, when generating or validating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST derive the key from the negotiated TLS session's master key.
 
-**R-E2E.39** – If using the TLS MAC method to protect the integrity of a USP Record, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST use TLS session's client or server random for the salt depending on the role the USP Endpoint plays in the TLS session.
+**R-E2E.39** – If using the TLS MAC method to protect the integrity of a USP Record, when generating the MAC of the USP Record and the USP Endpoint uses TLS to secure the payload of the USP Record, the USP Endpoint MUST use TLS session’s client or server random for the salt depending on the role the USP Endpoint plays in the TLS session (i.e., the TLS client uses the client random and the TLS server uses the server random).
 
 <a id='secure_message_exchange' />
 
@@ -542,11 +550,11 @@ While message transport bindings implement point-to-point security, the existenc
 
 ### TLS Payload Encapsulation
 
-USP employs TLS 1.2 as one security mechanism for protection of USP payloads in Agent-Controller message exchanges.
+USP employs TLS as one security mechanism for protection of USP payloads in Agent-Controller message exchanges.
 
 While traditionally deployed over reliable streams, TLS is a record-based protocol that can be carried over datagrams, with considerations taken for reliable and in-order delivery. To aid interoperability, USP endpoints are initially limited to a single cipher specification, though future revisions of the protocol may choose to expand cipher support.
 
-**R-E2E.40** – When using TLS to protect USP payloads in USP Records, USP Endpoints MUST implement TLS 1.2 with the ECDHE-ECDSA-AES128-GCM-SHA256 cipher and P-256 curve.
+**R-E2E.40** – When using TLS to protect USP payloads in USP Records, USP Endpoints MUST implement TLS 1.2 or later (with backward compatibility to TLS 1.2) with the ECDHE-ECDSA-AES128-GCM-SHA256 cipher and P-256 curve.
 
 *Note: The cipher listed above requires a USP Endpoint acting as the TLS server to use X.509 certificates signed with ECDSA and Diffie-Hellman key exchange credentials to negotiate the cipher.*
 
@@ -558,7 +566,7 @@ When TLS is used as a payload protection mechanism for USP Message, TLS requires
 
 Figure E2E.4 – TLS session handshake
 
-**R-E2E.41** – USP Endpoints that specify TLS in the `payload_security` field MUST exchange USP Records within an E2E Session Context.
+**R-E2E.41** – USP Endpoints that specify `TLS12` in the `payload_security` field MUST exchange USP Records within an E2E Session Context.
 
 If the TLS session cannot be established for any reason, the USP Endpoint that received the USP Record will consider the USP Record as failed and perform the failure processing as defined in section Failure Handling of Received USP Records.
 
@@ -571,8 +579,3 @@ TLS provides a mechanism to renegotiate the keys of a TLS session without tearin
 USP relies upon peer authentication using X.509 certificates, as provided by TLS. Each USP endpoint identifier is identified within an X.509 certificate. The rules for authentication are provided in [Authentication and Authorization](/specification/security/).
 
 **R-E2E.43** – USP Endpoints MUST be mutually authenticated using X.509 certificates using the USP Endpoint identifier encoded within the X.509 certificates `subjectAltName` field.
-
-
-[<-- Message Encoding](/specification/encoding/)
-
-[USP Messages -->](/specification/messages/)

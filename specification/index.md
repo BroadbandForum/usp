@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
+[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
@@ -22,12 +22,13 @@
 [21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
 [22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
 [23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
+[24]: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) "MQ Telemetry Transport 5.0"
 [Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>Issue 1 Corrigendum 2</h2>
-<h4>USP Version 1.0.2</h4>
+<h2>Issue 1 Amendment 1</h2>
+<h4>USP Version 1.1</h4>
 
 You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
 
@@ -53,6 +54,11 @@ Appendix I. [Software Module Management](./extensions/software-module-management
 Appendix II. [Firmware Management](./extensions/firmware-management)
 
 Appendix III. [Device Proxy](./extensions/device-proxy)
+
+Appendix IV. [Proxying (Other)](./extensions/proxying/)
+
+Appendix V. [IoT Data Model Theory of Operation](./extensions/iot/)
+
 
 # Introduction
 
@@ -125,18 +131,28 @@ Appendix III. [Device Proxy](./extensions/device-proxy)
 
 ## Revision History
 
-### Release 1.0
+### Release 1.1
 
-* Release contains specification for the User Services Platform 1.0.
+* Release contains specification for the User Services Platform 1.1.
+  * Adds MQTT support as a Message Transfer Protocol
+  * Adds a theory of operations for IoT control using USP Agents
+  * Clarifications on protocol functions, error messages, and updates to examples
 
-#### Release 1.0.1
+Valid versions for USP Agents as of this release include "1.1" and "1.0".
+
+### Release 1.0.2
+
+* Typographical and example fixes
+
+### Release 1.0.1
 
 * Added examples and clarifications to end-to-end messaging, use of endpoint ID,
 typographical fixes
 
-#### Release 1.0.2
+### Release 1.0
 
-* Typographical and example fixes
+* Release contains specification for the User Services Platform 1.0.
+
 
 ## Editors
 
@@ -244,9 +260,9 @@ The following references are of relevance to this Technical Report. At the time 
 A list of currently valid Broadband Forum Technical Reports is published at
 [www.broadband-forum.org](https://www.broadband-forum.org).
 
-1. [Broadband Forum TR-181 Issue 2: *Device Data Model for TR-069 Endpoints and USP Agents*][1]
+1. [Broadband Forum TR-181 Issue 2: *Device Data Model*][1]
 2. [Broadband Forum TR-069 Amendment 6:	*CPE WAN Management Protocol*][2]
-3. [Broadband Forum TR-106 Amendment 8: *Data Model Template for TR-069 Enabled Devices*][3]
+3. [Broadband Forum TR-106 Amendment 8: *Data Model Template for CWMP Endpoints and USP Agents*][3]
 4. [IETF RFC 7228:	*Terminology for Constrained-Node Networks*][4]
 5. [IETF RFC 2136:	*Dynamic Updates in the Domain Name System*][5]
 6. [IETF RFC 3007:	*Secure Domain Name System Dynamic Update*][6]
@@ -267,7 +283,7 @@ A list of currently valid Broadband Forum Technical Reports is published at
 21. [Simple Text Oriented Message Protocol][21]
 22. [The Transport Layer Security (TLS) Protocol Version 1.2][22]
 23. [Datagram Transport Layer Security Version 1.2][23]
-
+24. [MQ Telemetry Transport 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)[24].
 
 # Definitions
 
@@ -543,5 +559,3 @@ However reliable the security of communications protocols, in a platform that en
 **Assurance of privacy** depends on whether stakeholders expect, or are legally required, to have information protected or controlled from certain uses. As with security, the ability for users to control who has access to their data is of primary importance in the world of the connected user, made clear by users as well as regulators.
 
 USP contains rigorous access control and authorization mechanisms to ensure that data is only used by those that have been enabled by the user.
-
-[Architecture -->](/specification/architecture/)

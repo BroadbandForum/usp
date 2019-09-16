@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
+[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
@@ -31,14 +31,22 @@ USP requires a mechanism to serialize data to be sent over a message transfer pr
 
 * [Protocol Buffers Version 3][12]
 
-**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-msg.proto).
+**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto).
 
-**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record.proto](https://github.com/BroadbandForum/usp/blob/master/specification/usp-record.proto).
+**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record-1-1.proto](/specification/usp-record-1-1.proto).
 
 Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.
 
 **R-ENC.2** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
 
-[<-- Message Transfer Protocols](/specification/mtp/)
+Protocol Buffers uses a datatype called `oneof`. This means that the element
+contains elements of one or more varying types.
 
-[End-to-End Messages Exchange -->](/specification/e2e-message-exchange/)
+**R-ENC.3** - USP Records and USP Messages that contain an element of type
+`oneof` MUST include 1 and only 1 instance of the element, which MUST contain
+one of the possible elements.
+
+**R-ENC.4** - A USP Record that violates R-ENC.3 MUST be discarded.
+
+**R-ENC.5** - A USP Message that violates R-ENC.3 SHOULD return an error of
+type 7004 (Invalid Arguments).

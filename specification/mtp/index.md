@@ -1,7 +1,7 @@
 <!-- Reference Links -->
-[1]:	https://broadbandforum.github.io/usp-data-models/ "TR-181 Issue 2 Device:2 Data Model"
+[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
 [2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for TR-069 Enabled Devices"
+[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
 [4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
 [5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
 [6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
@@ -35,6 +35,11 @@ The requirements for each individual Message Transfer Protocol is covered in a s
 *	The [Constrained Application Protocol (CoAP)](./coap/)
 * [WebSockets](./websocket/)
 * The [Simple Text-Oriented Messaging Protocol](./stomp/)
+* [MQ Telemetry Transport (MQTT)](./mqtt)
+
+## Supporting Multiple MTPs
+
+Agents and Controllers may support more than one MTP. When an Agent supports multiple MTPs, the Agent may be configured with parameters for reaching a particular Controller across more than one MTP. When an Agent needs to send a Notification to such a Controller, the Agent can be designed (or possibly configured) to select a particular MTP, to try sending the Notification to the Controller on all MTPs simultaneously, or to try MTPs sequentially. USP has been designed to allow Endpoints to recognize when they receive a duplicate Message and to discard any duplicates. Endpoints will always send responses on the same MTP where the Message was received.
 
 ## Securing MTPs
 
@@ -67,6 +72,18 @@ Figure MTP.1 – Receiving a X.509 Certificate
 
 <a id='figure-MTP1'/>
 
-[<-- Discovery](/specification/discovery/)
+## Brokered USP Record Errors
 
-[--> Message Encoding](/specification/encoding/)
+<a id='brokered-usp-record-errors' />
+
+MTPs that allow connectivity directly between Endpoints tear down the connection when encountering a USP Record error or other failure caused by the USP Record. This allows such a problem to be signaled to the other Endpoint. MTP protocols where Endpoints connect to a session broker do not tear down the connections to the session broker when encountering USP Record errors. To notify an Endpoint when a failed USP Record was sent, the receiving Endpoint replies with a simple error message.
+
+These error messages are indicated using content type `application/vnd.bbf.usp.error`. The following error codes (in the range 7100-7199) are defined to allow the error to be more specifically indicated. Requirements for communicating USP Record errors using this content type and these error codes are included in the definitions of brokered MTPs.
+
+| Code | Name | Description
+| :----- | :------------ | :---------------------- |
+| `7100` | Record could not be parsed	| This error indicates the received USP Record could not be parsed. |
+| `7101` | Secure session required | This error indicates USP layer [Secure Message Exchange](/specification/e2e-message-exchange/) is required.|
+| `7102` | Secure session not supported | This error indicates USP layer [Secure Message Exchange](/specification/e2e-message-exchange/) was indicated in the received Record but is not supported by the receiving Endpoint. |
+| `7103` | Segmentation and reassembly not supported | This error indicates segmentation and reassembly was indicated in the received Record but is not supported by the receiving Endpoint. |
+| `7104` | 	Invalid Record value | This error indicates the value of at least one Record field was invalid. |
