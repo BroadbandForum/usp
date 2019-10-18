@@ -5,9 +5,9 @@ In addition to the TR-369 specification and data models, a number of resources a
 
 * **[OB-USP-Agent](https://github.com/BroadbandForum/obuspa)** - This is the official Open Broadband project, operated by the Broadband Forum, for an open-source reference implementation of a USP Agent.
 
-* **[USP Record ProtoBuf Schema](https://usp.technology/specification/usp-record-1-1.proto)** - A direct link to the USP specification's protocol buffers schema for USP Records.
+* **[USP Record Protocol Buffers Schema](https://usp.technology/specification/usp-record-1-1.proto)** - A direct link to the USP specification's protocol buffers schema for USP Records.
 
-* **[USP Message ProtoBuf Schema](https://usp.technology/specification/usp-msg-1-1.proto)** - A direct link to the USP specification's protocol buffers schema for USP Messages contained in USP records.
+* **[USP Message Protocol Buffers Schema](https://usp.technology/specification/usp-msg-1-1.proto)** - A direct link to the USP specification's protocol buffers schema for USP Messages contained in USP records.
 
 * **[Controller REST API defintion](https://github.com/BroadbandForum/usp/blob/master/api/swagger-usp-controller-v1.yaml)** - A direct link to the USP Controller's REST API definition, which can also be opened in a Swagger / Open API viewer or editor (like "https://editor.swagger.io").
 
