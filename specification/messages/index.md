@@ -1951,14 +1951,6 @@ This field contains additional (human readable) information about the reason beh
 
 ##### OnBoardRequest fields
 
-<!-- this element was added in error, as it does not appear in usp-msg.proto. It's removed here and will be fixed in release 1.1
-
-`string obj_path`
-
-This field contains the Path Name of the Object associated with this notification.
-
--->
-
 `string oui`
 
 This field contains the Organizationally Unique Identifier associated with the Agent.
