@@ -3,20 +3,11 @@
 
 ## What is USP?
 
-USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services and home networks. USP consists of an architecture, protocol, and set of data models that create a network of controllers and agents that allow applications to manipulate user service elements (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).
+USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services, IoT, and home networks. USP consists of an architecture, protocol, and set of data models that create a network of controllers and agents that allow applications to manipulate user service elements (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).
 
 ## What do I need to get started?
 
-### Protocol buffers schemas
-
-USP uses protocol buffers encoding for USP Records and USP Messages. When implementing an agent or controller, use these files to apply the schema:
-
-* USP Records are defined in [usp-record-1-1.proto](/specification/usp-record-1-1.proto)
-* USP Messages are defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto)
-
-### Is there an open source USP Agent?
-
-The Broadband Forum hosts the OB-USP-AGENT project on Github [here](https://github.com/BroadbandForum/obuspa).
+Checkout our [development resources](/resources/) for schemas, code, testing, and more.
 
 ## What are the major features of USP?
 
@@ -27,12 +18,13 @@ The User Services Protocol is designed with four major features in mind:
 * Standardization and ease of migration - USP meets the challenges of connected device (network gateways, whole-home and enterprise Wi-Fi, and IoT) management with an interoperable, non-proprietary standard, that easily evolves from existing TR-069 deployments.
 * Security - USP is designed with application layer security, authentication, integrity, and privacy from the ground up.
 
+For an in-depth look at the high level benefits of USP, read our whitepaper, "[Realizing the Promise of the Connected Home with USP](https://www.broadband-forum.org/technical/download/MU-461.pdf)".
+
 ## Who makes the User Services Platform?
 
 <p style="margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>
 
 USP is developed by the [Broadband Forum](http://www.broadband-forum.org), an international standards organization of network service providers/MSOs, end user device manufacturers, government and university organizations, and test laboratories. It is developed in the "Broadband User Services" [Work Area](https://www.broadband-forum.org/standards-and-software/downloads/work-areas-projects).
-
 
 ## How does USP relate to TR-069?
 
@@ -62,9 +54,9 @@ USP objects can represent hardware-independent elements via either abstraction o
 
 No. Each supported transport is meant for a different core use case. In addition, transport proxy functions are in development that will make co-existence and interoperability of implementations of different transports simple.
 
-## I'm building a USP Agent. How do I make sure it's compliant?
+## I'm building a USP Agent. How do I get certified?
 
-A full compliance test suite for USP is in development. The Broadband Forum will operate an associated certification program for USP implementations when it is complete.
+The conformance test plan for USP Agents is defined in [TR-469](https://usp-compliance.broadband-forum.org/). This test plan evolves, and forms the basis for the Broadband Forum's USP Agent Certification Program (coming in early 2020).
 
 ## I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?
 
