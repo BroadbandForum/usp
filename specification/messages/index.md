@@ -260,11 +260,11 @@ This field contains a [numeric code](#error-codes) indicating the type of error 
 
 This field contains additional information about the reason behind the error.
 
-`repeated ParamError param_errs`
+`repeated ParameterError param_errs`
 
 This field is present in an Error Message in response to an Add or Set message when the allow_partial field is false and detailed error information is available for each Object or parameter that have caused the message to report an Error.
 
-##### ParamError fields
+##### ParameterError fields
 
 `string param_path`
 
@@ -352,11 +352,11 @@ If `allow_partial` is true, but one or more required parameters fail to be updat
 
 If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.
 
-Both the `oper_failure` fields and Error messages contain an field called `param_error`, which contains fields of type `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
+Both the `oper_success` fields and Error messages contain an field called `param_errs`, which contains fields of type `ParameterError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
 
 The logic can be described as follows:
 
-| `allow_partial`	| Required Parameters	| Required Parameter Failed	| Other Parameter Failed | 	Response/Error |	Oper_status of Object	| Contains param_error |
+| `allow_partial`	| Required Parameters	| Required Parameter Failed	| Other Parameter Failed | 	Response/Error |	Oper_status of Object	| Contains param_errs |
 | -----: | :-----: | :-----: | :-----: | :-----: | :-----: | :----- |
 | `True`/`False`	| No |-	|	No	| Response	| `oper_success`	| No |
 | `True`/`False`	| No | - | Yes | Response | `oper_success` | Yes |
@@ -2172,7 +2172,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
 | `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target endpoint. |
 | `7009` | Parameter action failed | Set | This error indicates that the parameter failed to update for a general reason described in an err_msg field. |
-| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
+| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParameterError did not match any instantiated parameters. |
 | `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the parameter. |
 | `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the parameter. |
 | `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
@@ -2183,7 +2183,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
 | `7019` | Attempt to create non-creatable Object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
-| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
+| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParameterError message. |
 | `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
 | `7023` | Command canceled | Operate | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
 | `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |
