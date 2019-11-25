@@ -317,7 +317,7 @@ The Agent’s response would include the object created (with its instance ident
       requested_path: "Device.WiFi.SSID."
       oper_status {
         oper_success {
-          instantiated_path: ""Device.WiFi.SSID.4."
+          instantiated_path: "Device.WiFi.SSID.4."
           unique_keys {
           {
             key: "BSSID"
