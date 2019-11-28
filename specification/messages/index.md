@@ -1049,6 +1049,8 @@ body {
     get_resp {
       req_path_results {
         requested_path: "Device.LocalAgent.MTP.[Alias=="CoAP-MTP1"]."
+	err_code : 0
+        err_msg :
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156." {
               {
@@ -1107,6 +1109,8 @@ body {
       }
       req_path_results {
         requested_path: "Device.LocalAgent.Subscription.[ID=="boot-1"&&Recipient=="Device.LocalAgent.Controller.1"].Enable"
+	err_code : 0
+        err_msg :
         resolved_path_results {
           resolved_path: "Device.LocalAgent.Subscription.6629."
           result_params {
