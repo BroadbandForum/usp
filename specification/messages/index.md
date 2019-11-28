@@ -1322,6 +1322,8 @@ This field, if `true`, indicates that the Agent should return only those instanc
 
 `repeated RequestedPathResult req_path_results`
 
+##### RequestedPathResult fields
+
 This field contains a RequestedPathResult message for each Path Name or Search
 
 `string requested_path`
