@@ -83,7 +83,7 @@ The three types of USP messages are Request, Response, and Error.
 
 A request is a message sent from a source USP endpoint to a target USP endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify message follows the same format as a request but is sent from an Agent to a Controller.
 
-**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see Operate and Notify messages).
+**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see [Operate](#operate) and [Notify](#notify) messages).
 
 **R-MSG.1** - The target USP endpoint MUST ignore or send an error message in response to messages it does not understand.
 
@@ -1186,7 +1186,7 @@ GetInstances takes one or more Path Names to Multi-Instance Objects in a Request
 
 #### GetInstances Examples
 
-For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:
+For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 2 SSIDs), it would send a GetInstances Request as:
 
 ```
     GetInstances {
