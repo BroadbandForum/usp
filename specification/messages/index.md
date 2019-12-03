@@ -892,7 +892,7 @@ This field contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, `7026` and `7800-7999`.
 
-<a id='reading-agent-state-and-capabilities' />
+<a id='reading_agent_state_and_capabilities' />
 
 ## Reading an Agent’s State and Capabilities
 
