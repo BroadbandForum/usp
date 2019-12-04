@@ -352,7 +352,7 @@ If `allow_partial` is true, but one or more required parameters fail to be updat
 
 If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.
 
-Both the `oper_failure` fields and Error messages contain an field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
+The `oper_failure` and `oper_success` fields as well as Error messages contain an field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
 
 The logic can be described as follows:
 
