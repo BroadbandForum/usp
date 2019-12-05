@@ -123,7 +123,7 @@ A Message consists of a header and body. When using [protocol buffers][12], the 
 
 **R-MSG.5** - A Message MUST conform to the schemas defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto).
 
-*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a oneof field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
+*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a `oneof` field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 
 Every USP message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
@@ -164,7 +164,7 @@ A locally unique opaque identifier assigned by the Endpoint that generated this 
 `enum MsgType msg_type`
 
 This field contains an enumeration indicating the type of message contained in the message body. It is an enumeration of:
-
+```
     ERROR (0)
     GET (1)
     GET_RESP (2)
@@ -184,6 +184,7 @@ This field contains an enumeration indicating the type of message contained in t
     NOTIFY_RESP (16)
     GET_SUPPORTED_PROTO (17)
     GET_SUPPORTED_PROTO_RESP (18)
+```
 
 **R-MSG.10** - The `msg_type` field MUST be present in every Header. Though
 required, it is meant for information only. In the event this field differs
@@ -224,6 +225,7 @@ This field indicates that the Message contains an Error Message.
 
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
+```
     Get get
     GetSupportedDM get_supported_dm
     GetInstances get_instances
@@ -233,6 +235,7 @@ This field contains one of the types given below. Each indicates that the Messag
     Operate operate
     Notify notify
     GetSupportedProtocol get_supported_protocol
+```
 
 #### Response fields
 
@@ -240,6 +243,7 @@ This field contains one of the types given below. Each indicates that the Messag
 
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
+```
     GetResp get_resp
     GetSupportedDMResp get_supported_dm_resp
     GetInstancesResp get_instances_resp
@@ -249,6 +253,7 @@ This field contains one of the types given below. Each indicates that the Messag
     OperateResp operate_resp
     NotifyResp notify_resp
     GetSupportedProtocolResp get_supported_protocol_resp
+```
 
 #### Error fields
 
@@ -296,6 +301,7 @@ The Add response contains details about the success or failure of the creation o
 
 For example, a Controller wants to create a new WiFi network on an Agent. It could use an Add message with the following fields:
 
+```
     allow_partial: false
     create_objs {
     	obj_path: "Device.WiFi.SSID."
@@ -303,36 +309,43 @@ For example, a Controller wants to create a new WiFi network on an Agent. It cou
         {
       		param: "LowerLayers"
       		value: "Device.WiFi.Radio.1."
-      		required: true}
+      		required: true
+        }
     		{
           param: "SSID"
     		  value: "NewSSIDName"
-    		  required: true}
+    		  required: true
+          }
     		}
     	}
+```
 
 The Agent’s response would include the object created (with its instance identifier) and the unique keys of the created object as defined in [Device:2][1]:
 
+```
     created_obj_results {
       requested_path: "Device.WiFi.SSID."
       oper_status {
         oper_success {
           instantiated_path: "Device.WiFi.SSID.4."
           unique_keys {
-          {
-            key: "BSSID"
-            value: "112233445566"}
-          {
-            key: "Name"
-            value: "GuestNetwork1"}
-          {
-            key: "Alias"
-            value: "cpe-alias-1"}            
+            {
+              key: "BSSID"
+              value: "112233445566"
+            }
+            {
+              key: "Name"
+              value: "GuestNetwork1"
+            }
+            {
+              key: "Alias"
+              value: "cpe-alias-1"
+            }
           }
         }
       }
     }
-
+```
 
 <a id='using_allow_partial_and_required_parameters' />
 
@@ -390,10 +403,12 @@ body {
         param_settings {
           {
             param: "Enable"
-            value: "True"}
+            value: "True"
+          }
           {
             param: "EndpointID"
-            value: "controller-temp"}
+            value: "controller-temp"
+          }
         }
       }
     }
@@ -429,7 +444,7 @@ body {
 
 `bool allow_partial`
 
-This field tells the Agent how to process the message in the event that one or more of the Objects specified in the create_objs argument fails creation.
+This field tells the Agent how to process the message in the event that one or more of the Objects specified in the `create_objs` argument fails creation.
 
 **R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
@@ -791,9 +806,12 @@ body {
           oper_success {
             affected_paths {
               {
-              "Device.LocalAgent.Controller.31185."}
+                "Device.LocalAgent.Controller.31185."
+              }
               {
-              "Device.LocalAgent.Controller.31185.E2ESession."}
+                "Device.LocalAgent.Controller.31185.E2ESession."
+              }
+            }
           }
         }
       }
@@ -916,14 +934,17 @@ For each resolved Path Name, a `ResolvedPathResult` message is given in the Resp
 
 For example, a Controller wants to read the data model to learn the settings and stats of a single WiFi SSID, "HomeNetwork" with a BSSID of "00:11:22:33:44:55". It could use a Get request with the following fields:
 
+```
     Get {
       param_paths {
         "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
       }
     }
+```
 
 In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using a field for each of the requested paths. In this case:
 
+```
     GetResp {
         req_path_results {
         requested_path: "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
@@ -934,38 +955,49 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
           result_params {
             {
               key: "Enable"
-              value: "True"}
+              value: "True"
+            }
             {
               key: "Status"
-              value: "Up"}
+              value: "Up"
+            }
             {
               key: "Name"
-              value: "Home Network"}
+              value: "Home Network"
+            }
             {
               key: "LastChange"
-              value: "864000"}
+              value: "864000"
+            }
             {
               key: "BSSID"
-              value: "00:11:22:33:44:55"}
+              value: "00:11:22:33:44:55"
+            }
             {
               key: "Stats.BytesSent"
-              value: "24901567"}
+              value: "24901567"
+            }
             {
               key: "Stats.BytesReceived"
-              value: "892806908296"}
+              value: "892806908296"
+            }
 
             (etc.)
           }
         }
       }
+    }
+```
 
 In another example, the Controller only wants to read the current status of the WiFi network with the SSID "HomeNetwork" with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following fields:
 
+```
     Get {
       param_paths {
         "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
       }
     }
+```
 
 In response to this request the Agent returns only the Status parameter and its value.
 
@@ -1040,6 +1072,7 @@ body {
 }
 
 Get Response:
+
 header {
   msg_id: "5721"
   msg_type: GET_RESP
@@ -1053,19 +1086,24 @@ body {
           resolved_path: "Device.LocalAgent.MTP.5156." {
               {
                 key: "Alias"
-                value: "CoAP-MTP1"}
+                value: "CoAP-MTP1"
+              }
               {
                 key: "Enable"
-                value: "False"}
+                value: "False"
+              }
               {
                 key: "EnableMDNS"
-                value: "True"}
+                value: "True"
+              }
               {
                 key: "Protocol"
-                value: "CoAP"}
+                value: "CoAP"
+              }
               {
                 key: "Status"
-                value: "Inactive"}
+                value: "Inactive"
+              }
             }
           }
 
@@ -1074,34 +1112,43 @@ body {
           result_params {
             {
               key: "CheckPeerID"
-              value: "False"}
+              value: "False"
+            }
             {
               key: "EnableEncryption"
-              value: "True"}
+              value: "True"
+            }
             {
               key: "Host"
-              value: "127.0.0.1"}
+              value: "127.0.0.1"
+            }
             {
               key: "IsEncrypted"
-              value: "False"}
+              value: "False"
+            }
             {
               key: "Path"
-              value: "/e/agent"}
+              value: "/e/agent"
+            }
             {
               key: "Port"
-              value: "5684"}
+              value: "5684"
+            }
             {
               key: "ValidatePeerCertificate"
-              value: "True"}
+              value: "True"
+            }
           }
         }
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.STOMP."
           result_params {
             {
-              key: "Destination"}
+              key: "Destination"
+            }
             {
-              key: "Reference"}
+              key: "Reference"
+            }
           }
         }
       }
@@ -1208,31 +1255,39 @@ The Agent's Response would contain:
           unique_keys {
             {
               key : "Alias"
-              value : "UserWiFi1"}
+              value : "UserWiFi1"
+            }
             {
               key : "Name"
-              value : "UserWiFi1"}
+              value : "UserWiFi1"
+            }
             {
               key : "SSID"
-              value : "SecureProviderWiFi"}
+              value : "SecureProviderWiFi"
+            }
             {
               key : "BSSID"
-              value : "00:11:22:33:44:55"}
+              value : "00:11:22:33:44:55"
+            }
           }
           instantiated_obj_path : "Device.WiFi.SSID.2."
           unique_keys {
             {
               key : "Alias"
-              value : "UserWiFi2"}
+              value : "UserWiFi2"
+            }
             {
               key : "Name"
-              value : "UserWiFi2"}
+              value : "UserWiFi2"
+            }
             {
               key : "SSID"
-              value : "GuestProviderWiFi"}
+              value : "GuestProviderWiFi"
+            }
             {
               key : "BSSID"
-              value : "00:11:22:33:44:55"}
+              value : "00:11:22:33:44:55"
+            }
           }
         }
       }
@@ -1248,7 +1303,7 @@ In another example, the Controller wants to get all of  the Instances of the `De
     }
 ```
 
-The Agent's Response will contain an entry in curr_insts for all of the Instances of the `Device.WiFi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
+The Agent's Response will contain an entry in `curr_insts` for all of the Instances of the `Device.WiFi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
 
 ```
     GetInstancesResp {
@@ -1261,19 +1316,23 @@ The Agent's Response will contain an entry in curr_insts for all of the Instance
           unique_keys {
             {
               key : "Alias"
-              value : "SomeAlias"}
+              value : "SomeAlias"
+            }
             {
               key : "SSIDReference"
-              value : "Device.WiFi.SSID.1"}
+              value : "Device.WiFi.SSID.1"
+            }
           }
           instantiated_obj_path : "Device.WiFi.AccessPoint.2."
           unique_keys :
             {
               key : "Alias"
-              value : "SomeAlias"}
+              value : "SomeAlias"
+            }
             {
               key : "SSIDReference"
-              value : "Device.WiFi.SSID.2"}
+              value : "Device.WiFi.SSID.2"
+            }
           instantiated_obj_path : "Device.WiFi.AccessPoint.1.AssociatedDevice.1."
           unique_keys {
               key : "MACAddress"
@@ -1373,7 +1432,7 @@ Both of these syntaxes are supported and equivalent. The Agent's Response return
 For example, the Controller wishes to learn the WiFi capabilities the Agent represents. It could issue a GetSupportedDM Request as:
 
 ```
-    GetSupportedDM{
+    GetSupportedDM {
     	obj_paths : "Device.WiFi."
     	first_level_only : false
     	return_commands : false
@@ -1393,61 +1452,73 @@ GetSupportedDMResp {
 		data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
 		supported_objs {
       {
-			supported_obj_path : "Device.WiFi."
-			access : OBJ_READ_ONLY
-			is_multi_instance : false}		
+			  supported_obj_path : "Device.WiFi."
+			  access : OBJ_READ_ONLY
+			  is_multi_instance : false
+      }		
 			{
-      supported_obj_path : "Device.WiFi.Radio.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true
-			supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
-			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+        supported_obj_path : "Device.WiFi.Radio.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+			  supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }			
 			{
-      supported_obj_path : "Device.WiFi.SSID.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true
-			supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
-			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+        supported_obj_path : "Device.WiFi.SSID.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+			  supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }			
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Security."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.Security."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.WPS."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.WPS."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Accounting."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.Accounting."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-			supported_obj_path : "Device.WiFi.EndPoint.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+			  supported_obj_path : "Device.WiFi.EndPoint.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 
-			// And continued, for Device.WiFi.EndPoint.{i}. sub-objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}.Security., etc.
+      // And continued, for Device.WiFi.EndPoint.{i}. sub-objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}/// .Security., etc.
 		}
   }
 }
@@ -1456,7 +1527,7 @@ GetSupportedDMResp {
 In another example request:
 
 ```
-    GetSupportedDM{
+    GetSupportedDM {
     	obj_paths : "Device.WiFi."
     	first_level_only : true
     	return_commands : true
@@ -1465,7 +1536,7 @@ In another example request:
     }
 ```
 
-The Agent's respose would be:
+The Agent's response would be:
 
 ```
     GetSupportedDMResp {
@@ -1494,21 +1565,25 @@ The Agent's respose would be:
     			}
     			//followed by its immediate child objects with no details
     			{
-          supported_obj_path : "Device.WiFi.Radio.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+            supported_obj_path : "Device.WiFi.Radio.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.SSID.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.SSID.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.AccessPoint.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.EndPoint.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.EndPoint.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     		}
     	}
     }
@@ -1576,10 +1651,12 @@ This field contains the Path Name of the reported Object.
 
 The field contains an enumeration of type ObjAccessType specifying the access permissions that are specified for this Object in the Agent's Supported Data Model. This usually only applies to Multi-Instance Objects. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
 
+```
     OBJ_READ_ONLY (0)
     OBJ_ADD_DELETE (1)
     OBJ_ADD_ONLY (2)
     OBJ_DELETE_ONLY (3)
+```
 
 `bool is_multi_instance`
 
@@ -1607,9 +1684,11 @@ This field contains the local name of the Parameter.
 
 The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
 
+```
     PARAM_READ_ONLY (0)
     PARAM_READ_WRITE (1)
     PARAM_WRITE_ONLY (2)
+```
 
 ###### SupportedCommandResult fields
 
@@ -1772,7 +1851,7 @@ body {
     notify {
       subscription_id: "vc-1"
       send_resp: true
-      value_change {      
+      value_change {
           param_path: "Device.DeviceInfo.FriendlyName"
           param_value: "MyDevicesFriendlyName"
       }
@@ -1814,15 +1893,20 @@ body {
         params {
           {
             key: "Cause"
-            value: "LocalReboot"}
+            value: "LocalReboot"
+          }
           {
-            key: "CommandKey"}
+            key: "CommandKey"
+            value: ""
+          }
           {
             key: "Parameter.1.Path"
-            value: "Device.LocalAgent.Controller.1.Enable"}
+            value: "Device.LocalAgent.Controller.1.Enable"
+          }
           {
             key: "Parameter.1.Value"
-            value: "True"}
+            value: "True"
+          }
         }
       }
     }
@@ -1989,7 +2073,7 @@ Additional methods (operations) are and can be defined in the USP data model. Op
 
 ### Synchronous Operations
 
-A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the send_resp flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.
+A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the `send_resp` flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.
 
 <img src="synchronous_operation.png" />
 
