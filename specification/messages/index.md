@@ -83,7 +83,7 @@ The three types of USP messages are Request, Response, and Error.
 
 A request is a message sent from a source USP endpoint to a target USP endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify message follows the same format as a request but is sent from an Agent to a Controller.
 
-**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see Operate and Notify messages).
+**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see [Operate](#operate) and [Notify](#notify) messages).
 
 **R-MSG.1** - The target USP endpoint MUST ignore or send an error message in response to messages it does not understand.
 
@@ -290,7 +290,7 @@ The [Add](#add), [Set](#set), and [Delete](#delete) requests are used to create,
 
 Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
 
-For Add and Set requests, each Object address or search is conveyed in an field that also contains a sub-field listing the parameters to update in the matched Objects.
+For Add and Set requests, each Object address or search is conveyed in a field that also contains a sub-field listing the parameters to update in the matched Objects.
 
 The Add response contains details about the success or failure of the creation of the Object and the parameters set during its creation. In addition, it also returns those parameters that were set by the Agent upon creation of the Object.
 
@@ -338,11 +338,11 @@ The Agent’s response would include the object created (with its instance ident
 
 ### Using Allow Partial and Required Parameters
 
-The Add, Set, and Delete requests contain an field called "`allow_partial`". This field determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
+The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
 
 For Delete, this is straightforward - if `allow_partial` is `true`, the Agent should return a Response message with `affected_paths` and `unaffected_path_errs` containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If `allow_partial` is `false`, the Agent should return an Error message if any Objects fail to be deleted.
 
-For the Add and Set messages, parameter updates contain an field called "`required`". This details whether or not the update or creation of the Object should fail if a required parameter fails.
+For the Add and Set messages, parameter updates contain a field called "`required`". This details whether or not the update or creation of the Object should fail if a required parameter fails.
 
 This creates a hierarchy of error conditions for the Add and Set requests, such as:
 
@@ -352,7 +352,7 @@ If `allow_partial` is true, but one or more required parameters fail to be updat
 
 If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.
 
-The `oper_failure` and `oper_success` fields as well as Error messages contain an field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
+The `oper_failure` and `oper_success` fields as well as Error messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
 
 The logic can be described as follows:
 
@@ -361,7 +361,7 @@ The logic can be described as follows:
 | `True`/`False`	| No |-	|	No	| Response	| `oper_success`	| No |
 | `True`/`False`	| No | - | Yes | Response | `oper_success` | Yes |
 | `True`/`False` | Yes | No | No | Response | `oper_success` | No |
-| `True`/`False` | Yes | No | Yes | Response | oper_success | Yes |
+| `True`/`False` | Yes | No | Yes | Response | `oper_success` | Yes |
 | `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `False` | Yes | Yes | - | Error | N/A | Yes |
 
@@ -892,7 +892,7 @@ This field contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, `7026` and `7800-7999`.
 
-<a id='reading-agent-state-and-capabilities' />
+<a id='reading_agent_state_and_capabilities' />
 
 ## Reading an Agent’s State and Capabilities
 
@@ -906,7 +906,7 @@ The basic Get message is used to retrieve the values of a set of Object’s para
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recognize this behavior as the difference between "partial paths" and "complete paths". This behavior is replicated in USP for the Get message for each path that is matched by the expression(s) supplied in the request.*
 
-*Note: Each search path is intended to be evaluated separately, and the results from a given search path are returned in an field dedicated to that path. As such, it is possible that the same information may be returned from more than one search path. This is intended, and the Agent should treat each search path atomically.*
+*Note: Each search path is intended to be evaluated separately, and the results from a given search path are returned in a field dedicated to that path. As such, it is possible that the same information may be returned from more than one search path. This is intended, and the Agent should treat each search path atomically.*
 
 The response returns an entry for each Path Name resolved by the path given in `requested_path`. If a path expression specified in the request does not match any valid parameters or Objects, the response will indicate that this expression was an "invalid path", indicating that the Object or parameter does not currently exist in the Agent’s Supported Data Model.
 
@@ -1186,7 +1186,7 @@ GetInstances takes one or more Path Names to Multi-Instance Objects in a Request
 
 #### GetInstances Examples
 
-For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:
+For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 2 SSIDs), it would send a GetInstances Request as:
 
 ```
     GetInstances {
