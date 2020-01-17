@@ -1,4 +1,4 @@
 bbf_version: 1.1
-url: ''
+baseurl: ''
 theme: jekyll-theme-cayman
 google_analytics: true
