@@ -16,3 +16,8 @@ mtp-proxy/cfg/proxy-*.json
 
 # Ignore MAC Special Files
 .DS_Store
+
+# Ignore Jekyll-related files
+_site
+.sass-cache
+.jekyll-metadata
