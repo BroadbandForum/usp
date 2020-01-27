@@ -134,9 +134,9 @@ message Response {
 message Error {
   fixed32 err_code = 1;
   string err_msg = 2;
-  repeated ParamError param_errs = 3;
+  repeated ParameterError param_errs = 3;
 
-  message ParamError {
+  message ParameterError {
     string param_path = 1;
     fixed32 err_code = 2;
     string err_msg = 3;
