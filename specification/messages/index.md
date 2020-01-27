@@ -327,7 +327,7 @@ The Agent’s response would include the object created (with its instance ident
             value: "GuestNetwork1"}
           {
             key: "Alias"
-            value: "cpe-alias-1"}            
+            value: "cpe-alias-1"}
           }
         }
       }
@@ -1001,7 +1001,7 @@ The Agent's GetResponse would be:
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.WiFi.SSID.*."
+        requested_path: "Device.WiFi.SSID.*.Status"
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -1395,21 +1395,21 @@ GetSupportedDMResp {
       {
 			supported_obj_path : "Device.WiFi."
 			access : OBJ_READ_ONLY
-			is_multi_instance : false}		
+			is_multi_instance : false}
 			{
       supported_obj_path : "Device.WiFi.Radio.{i}."
 			access : ADD_DELETE (1)
 			is_multi_instance : true
 			supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
 			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+			is_multi_instance : true}
 			{
       supported_obj_path : "Device.WiFi.SSID.{i}."
 			access : ADD_DELETE (1)
 			is_multi_instance : true
 			supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
 			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+			is_multi_instance : true}
 			{
       supported_obj_path : "Device.WiFi.AccessPoint.{i}."
 			access : ADD_DELETE (1)
@@ -1772,7 +1772,7 @@ body {
     notify {
       subscription_id: "vc-1"
       send_resp: true
-      value_change {      
+      value_change {
           param_path: "Device.DeviceInfo.FriendlyName"
           param_value: "MyDevicesFriendlyName"
       }
