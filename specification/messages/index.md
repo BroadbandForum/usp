@@ -455,7 +455,7 @@ This field contains a repeated set of CreateParamSetting fields.
 
 `string param`
 
-This field contains a relative path to a parameter of the Object specified in `obj_path`, or a parameter of a single instance sub-object of the Object specified in `obj_path`.
+This field contains a relative path to a parameter of the Object specified in `obj_path`, or  any parameter in a nested tree of single instance sub-objects of the Object specified in `obj_path`.
 
 `string value`
 
@@ -1124,7 +1124,7 @@ body {
 
 `repeated string param_paths`
 
-This field is a set of Object Paths, Instance Paths, Parameter Paths, or Search Paths to Objects, Object Instances, and Parameters in an Agent’s Instantiated Data Model.
+This field is a set of Object Paths, Object Instance Paths, Parameter Paths, or Search Paths to Objects and Parameters in an Agent’s Instantiated Data Model.
 
 #### Get Response fields
 
@@ -1328,7 +1328,7 @@ This field contains one of the Path Names or Search Paths given in `obj_path` of
 
 This field contains a [numeric code](#error-codes) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported Data Model.
+**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter used for matching through the `requested_path` field, any otherwise matched Object MUST be treated as if it is not present in the Agent’s Instantiated Data Model
 
 `string err_msg`
 
@@ -1342,7 +1342,7 @@ This field contains a message of type `CurrInstance` for each Instance of *all* 
 
 `string instantiated_obj_path`
 
-This field contains the Instance Path Name of the Object Instance.
+This field contains the Object Instance Path of the object.
 
 `map<string, string> unique_keys`
 
@@ -1681,9 +1681,9 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
-For example, a Controller wants to be notified when a new WiFi station joins the WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
+For example, a Controller wants to be notified when a new WiFi station joins the WiFi network. It uses the Add message to create a subscription Object Instance with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
 
-In another example, a Controller wants to be notified whenever an outside source changes the SSID of a WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
+In another example, a Controller wants to be notified whenever an outside source changes the SSID of a WiFi network. It uses the Add message to create a subscription Object Instance with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
 <a id='notification_retry' />
 
@@ -1900,7 +1900,7 @@ This field contains the value of the parameter specified in `param_path`.
 
 `string obj_path`
 
-This field contains the Path Name of the created Object instance.
+This field contains the Path Name of the created Object Instance.
 
 `map<string, string> unique_keys`
 
@@ -1910,7 +1910,7 @@ This field contains a map of key/value pairs for all supported parameters that a
 
 `string obj_path`
 
-This field contains the Path Name of the deleted Object instance.
+This field contains the Path Name of the deleted Object Instance.
 
 ##### OperationComplete fields
 
@@ -2172,7 +2172,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
 | `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target endpoint. |
 | `7009` | Parameter action failed | Set | This error indicates that the parameter failed to update for a general reason described in an err_msg field. |
-| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
+| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated parameters. |
 | `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the parameter. |
 | `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the parameter. |
 | `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
@@ -2183,7 +2183,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
 | `7019` | Attempt to create non-creatable Object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
-| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
+| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError or ParameterError message. |
 | `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
 | `7023` | Command canceled | Operate | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
 | `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |

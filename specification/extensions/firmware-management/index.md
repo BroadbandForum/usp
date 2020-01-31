@@ -63,7 +63,7 @@ This section discusses the added functionality available when a device supports 
 
 Once a device has multiple firmware images downloaded, validated, and available, a Controller can use the data model to query what images are on the device, which image is active, and configure which image to activate.
 
-A Controller can activate a new firmware image by following one of two different procedures: (A) the Controller can modify the `Device.DeviceInfo.BootFirmwareImage` parameter to point to the `Device.DeviceInfo.FirmwareImage.{i}.` object instance that contains the desired firmware image and then reboot the device by invoking an `Operate` message with a `Reboot()` command or (B) the Controller can invoke an Operate message with an `Activate()` command against the desired `FirmwareImage` instance.
+A Controller can activate a new firmware image by following one of two different procedures: (A) the Controller can modify the `Device.DeviceInfo.BootFirmwareImage` parameter to point to the `Device.DeviceInfo.FirmwareImage.{i}.` Object Instance that contains the desired firmware image and then reboot the device by invoking an `Operate` message with a `Reboot()` command or (B) the Controller can invoke an Operate message with an `Activate()` command against the desired `FirmwareImage` instance.
 
 When attempting to get a device to switch to a different firmware image, it is recommended that the Controller either subscribe to a `ValueChange` notification on the `DeviceInfo.SoftwareVersion` parameter or subscribe to the `Boot!` Event notification. If the Software Version value has not changed or the `Boot!` Event's `FirmwareUpdated` argument is false, it could be an indication that the device had problems booting the target firmware image.
 

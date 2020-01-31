@@ -380,10 +380,6 @@ A term used to identify to an Instance of a Multi-Instance Object (also called a
 
 An Instance Number is a numeric Instance Identifier assigned by the Agent to instances of Multi-Instance Objects in an Agent’s Instantiated Data Model.
 
-**Instance Path**
-
-An Instance Path is a Path Name that addresses an Instance of a Multi-Instance Object (also called a Row of a Table). It includes the Object Path followed by an Instance Identifier.
-
 **Message**
 
 A Message refers to the contents of a USP layer communication including exactly one Message Header and at most one Message Body.
@@ -420,9 +416,13 @@ An Object refers to a defined type that an Agent represents and exposes. A Servi
 
 An Object Instance refers to a single instance Object of a type defined by a Multi-Instance Object in the Agent’s Instantiated Data Model. Also called a Row of a Table.
 
+**Object Instance Path**
+
+An Object Instance Path is a Path Name that addresses an Instance of a Multi-Instance Object (also called a Row of a Table). It includes the Object Path followed by an Instance Identifier.
+
 **Object Path**
 
-An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Instance Paths
+An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Object Instance Paths.
 
 **Operation**
 
