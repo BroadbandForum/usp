@@ -422,7 +422,7 @@ An Object Instance refers to a single instance Object of a type defined by a Mul
 
 **Object Path**
 
-An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Object Instance Paths. See [Path Names](https://usp.technology/specification/architecture/#path_names).
+An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Instance Paths
 
 **Operation**
 
@@ -438,7 +438,7 @@ A Parameter Path is a Path Name that addresses a Parameter of an Object or Objec
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. See [Path Names](https://usp.technology/specification/architecture/#path_names).
+A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model.
 
 **Path Reference**
 
