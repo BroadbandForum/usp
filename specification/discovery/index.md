@@ -104,7 +104,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 <a id="mdns" />
 
-## mDNS
+## Using mDNS
 
 **R-DIS.3** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in [RFC 6762][8].
 
@@ -116,9 +116,7 @@ In general, the expectation is that Agents will advertise themselves so they wil
 
 <a id="dns" />
 
-## DNS
-
-<a id="dns" />
+## Using DNS
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
 
@@ -210,9 +208,9 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
     <USP ID>.local.  AAAA   2001:db8::100
 ```
 
-### Example Controller Multicast DNS-SD Resource Records
-
 <a id="example-controller-multicast-dns-sd-resource-records" />
+
+### Example Controller Multicast DNS-SD Resource Records
 
 LAN Controllers do not need to have PTR records, as they will only be queried using the DNS-SD instance identifier of the Controller.
 ```
