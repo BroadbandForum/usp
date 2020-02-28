@@ -1033,7 +1033,7 @@ The Agent's GetResponse would be:
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.WiFi.SSID.*."
+        requested_path: "Device.WiFi.SSID.*.Status"
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -1260,10 +1260,6 @@ The Agent's Response would contain:
             {
               key : "Name"
               value : "UserWiFi1"
-            }
-            {
-              key : "SSID"
-              value : "SecureProviderWiFi"
             }
             {
               key : "BSSID"
