@@ -1277,12 +1277,8 @@ The Agent's Response would contain:
               value : "UserWiFi2"
             }
             {
-              key : "SSID"
-              value : "GuestProviderWiFi"
-            }
-            {
               key : "BSSID"
-              value : "00:11:22:33:44:55"
+              value : "11:22:33:44:55:66"
             }
           }
         }
@@ -1312,7 +1308,7 @@ The Agent's Response will contain an entry in `curr_insts` for all of the Instan
           unique_keys {
             {
               key : "Alias"
-              value : "SomeAlias"
+              value : "SomeAlias1"
             }
             {
               key : "SSIDReference"
@@ -1323,7 +1319,7 @@ The Agent's Response will contain an entry in `curr_insts` for all of the Instan
           unique_keys :
             {
               key : "Alias"
-              value : "SomeAlias"
+              value : "SomeAlias2"
             }
             {
               key : "SSIDReference"
