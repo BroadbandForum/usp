@@ -47,7 +47,7 @@ Main Specification
 
 Extensions
 
-Annex A. [HTTP Bulk Data Transfer](./extensions/http-bulk-data-collection)
+Annex A. [HTTP Bulk Data Collection](./extensions/http-bulk-data-collection)
 
 Appendix I. [Software Module Management](./extensions/software-module-management)
 
