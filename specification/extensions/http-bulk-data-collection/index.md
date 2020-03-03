@@ -48,7 +48,7 @@ The Agent configuration that enables the collection of bulk data using HTTP is d
 
 ## Enabling HTTP/HTTPS Bulk Data Communication
 
-HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` object instance using the [Add](/specification/messages/add/) message. For example:
+HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by configuring the `BulkData.Profile` object for the HTTP/HTTPS transport protocol adding and configuring a new `BulkData.Profile` Object Instance using the [Add](/specification/messages/add/) message. For example:
 
     .BulkData.Profile.1
     .BulkData.Profile.1.Enable=true
@@ -61,7 +61,7 @@ HTTP/HTTPS communication between the Agent and Bulk Data Collector is enabled by
     .BulkData.Profile.1.HTTP.Method = "POST"
     .BulkData.Profile.1.HTTP.UseDateHeader = true
 
-The configuration above defines a profile that transfers data from the Agent to the Bulk Data Collector using secured HTTP. In addition the Agent will provide authentication credentials (username, password) to the Bulk Data Collector, if requested by the Bulk Data Collector. Finally, the Agent establishes a communication session with the Bulk Data Collector every 300 seconds in order to transfer the data defined by the `.BulkData.Report.` object instance.
+The configuration above defines a profile that transfers data from the Agent to the Bulk Data Collector using secured HTTP. In addition the Agent will provide authentication credentials (username, password) to the Bulk Data Collector, if requested by the Bulk Data Collector. Finally, the Agent establishes a communication session with the Bulk Data Collector every 300 seconds in order to transfer the data defined by the `.BulkData.Report.` Object Instance.
 
 *Note - When a Bulk Data Collection Profile is either created or updated the Agent performs permission checks against the objects and parameters in existence at the time of the operation, utilizing the permissions assocated with the operating Controller.*
 
@@ -92,7 +92,7 @@ If the USP Endpoint ID is used the HTTP request URI is formatted as:
 
 *Note - If the USP Endpoint ID should be transmitted together with the device's Manufacturer OUI, Product Class and Serial Number (e.g. to distinguish multiple bulk data collection instances on the same device), then the USP Endpoint ID has to be configured as additional URI parameter in the `.BulkData.Profile.{i}.HTTP.RequestURIParameter.{i}.` table.*
 
-Configuring the URI query parameters for other parameters requires that instances of a `.BulkData.Profile.{i}.HTTP.RequestURIParameter` object instance be created and configured with the requested parameters. The additional parameters are appended to the required URI query parameters.
+Configuring the URI query parameters for other parameters requires that instances of a `.BulkData.Profile.{i}.HTTP.RequestURIParameter` Object Instance be created and configured with the requested parameters. The additional parameters are appended to the required URI query parameters.
 
 Using the example to add the device's current local time to the required URI parameters, the HTTP request URI would be as follows:
 
@@ -190,7 +190,7 @@ For example a CSV encoded report using a ReportFormat for ParameterPerRow would 
 
 ### Using Wildcards to Reference Object Instances in the Report
 
-When the Agent supports the use of the Wildcard value "\*"  in place of instance identifiers for the Reference parameter, then all object instances of the referenced parameter are encoded. For example to encode the "`BroadPktSent`" parameter for all object instances of the MoCA Interface object the following will be configured:
+When the Agent supports the use of the Wildcard value "\*"  in place of instance identifiers for the Reference parameter, then all Object Instances of the referenced parameter are encoded. For example to encode the "`BroadPktSent`" parameter for all Object Instances of the MoCA Interface object the following will be configured:
 
 ```
     .BulkData.Profile.1.Parameter.1.Name =  ""
@@ -230,7 +230,7 @@ Object or Object Instance paths can also be used to report all parameters of the
 
 **R-BULK.10** - When the value of the Reference parameter is an Object Path, the value of the Name parameter (as used in a report) MUST reflect the remainder of the parameter path. Specifically, the value of Name parameter MUST be appended with a "." and then the remainder of the parameter path.
 
-For example, for a device to report the statistics of a WiFi associated device object instance the following would be configured:
+For example, for a device to report the statistics of a WiFi associated device Object Instance the following would be configured:
 
     .BulkData.Profile.1.Parameter.1.Name = "WiFi_AP1_Assoc10"
     .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.AccessPoint.1.AssociatedDevice.10.Stats."
@@ -276,13 +276,13 @@ Using this configuration a device that has 1 WiFi Access Point (with instance id
 <a id='processing_of_content_for_failed_report_transmissions' />
 
 ### Processing of Content for Failed Report Transmissions
-When the content (report) cannot be successfully transmitted, including retries, to the data collector, the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance defines how the content should be disposed based on the following rules:
+When the content (report) cannot be successfully transmitted, including retries, to the data collector, the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` Object Instance defines how the content should be disposed based on the following rules:
 
 *	When the value of the `NumberOfRetainedFailedReports` parameter is greater than `0`, then the report for the current reporting interval is appended to the list of failed reports. How the content is appended is dependent on the type of encoding (e.g., CSV, JSON) and is described further in corresponding encoding section.
 *	If the value of the `NumberOfRetainedFailedReports` parameter is `-1`, then the Agent will retain as many failed reports as possible.
 *	If the value of the NumberOfRetainedFailedReports parameter is `0`, then failed reports are not to be retained for transmission in the next reporting interval.
 *	If the Agent cannot retain the number of failed reports from previous reporting intervals while transmitting the report of the current reporting interval, then the oldest failed reports are deleted until the Agent is able to transmit the report from the current reporting interval.
-*	If the value `BulkData.Profile` object instance’s `EncodingType` parameter is modified any outstanding failed reports are deleted.
+*	If the value `BulkData.Profile` Object Instance’s `EncodingType` parameter is modified any outstanding failed reports are deleted.
 
 <a id='encoding_of_csv_bulk_data' />
 
@@ -314,7 +314,7 @@ The report format of "`ParameterPerRow`" MUST format each parameter using the `P
 
 #### Layout of Content for Failed Report Transmissions
 
-When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For CSV Encoded data the content of new reporting interval is added onto the existing content without any header data.
+When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` Object Instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For CSV Encoded data the content of new reporting interval is added onto the existing content without any header data.
 
 #### CSV Encoded Report Examples
 
@@ -424,7 +424,7 @@ Reports are defined as an Array of Report instances encoded as:
 
 #### Layout of Content for Failed Report Transmissions
 
-When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` object instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For JSON Encoded data the report for the current reporting interval is added onto the existing appended as a new "Data" object array instance as shown below:
+When the value of the `NumberOfRetainedFailedReports` parameter of the `BulkData.Profile` Object Instance is `-1` or greater than `0`, then the report of the current reporting interval is appended to the failed reports. For JSON Encoded data the report for the current reporting interval is added onto the existing appended as a new "Data" object array instance as shown below:
 
     "Report": [
     {Report from a failed reporting interval},
