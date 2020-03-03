@@ -418,11 +418,11 @@ An Object Instance refers to a single instance Object of a type defined by a Mul
 
 **Object Instance Path**
 
-An Object Instance Path is a Path Name that addresses an Instance of a Multi-Instance Object (also called a Row of a Table). It includes the Object Path followed by an Instance Identifier.
+An Object Instance Path is a Path Name that addresses an Instance of a Multi-Instance Object (also called a Row of a Table). It includes the Object Path followed by an Instance Identifier. See [Path Names](/specification/architecture/#path_names).
 
 **Object Path**
 
-An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Object Instance Paths.
+An Object Path is a Path Name that addresses an Object. In the case of Multi-Instance Objects, an Object Path addresses the Object type itself rather than instances of that Object, which are addressed by Object Instance Paths. See [Path Names](/specification/architecture/#path_names).
 
 **Operation**
 
@@ -434,11 +434,11 @@ A Parameter is a variable or attribute of an Object. Parameters have both type a
 
 **Parameter Path**
 
-A Parameter Path is a Path Name that addresses a Parameter of an Object or Object Instance.
+A Parameter Path is a Path Name that addresses a Parameter of an Object or Object Instance. See [Path Names](/specification/architecture/#path_names).
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model.
+A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. See [Path Names](/specification/architecture/#path_names).
 
 **Path Reference**
 
