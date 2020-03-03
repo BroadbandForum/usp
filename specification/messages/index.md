@@ -363,7 +363,9 @@ Parameter Error -> Object Error -> Message Error
 
 If `allow_partial` is true, but one or more required parameters fail to be updated or configured, the creation or update of an individual Object fails. This results in an `oper_failure` in the `oper_status` field and `updated_obj_result` or `created_obj_result` returned in the Add or Set response.
 
-If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.
+If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an Error message rather than a response message.
+
+If the message was at least partially successful, the response will make use of the `oper_success` field to indicate the successfully affected Objects.
 
 The `oper_failure` and `oper_success` fields as well as Error messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
 
@@ -506,9 +508,11 @@ This field contains one of the types given below. Each indicates that the field 
 
 `OperationFailure oper_failure`
 
-This message is used when the object given in `requested_path` failed to be created.
+Used when the object given in `requested_path` failed to be created.
 
 `OperationSuccess oper_success`
+
+Used when the `Add` message was (at least partially) successful.
 
 ###### OperationFailure fields
 
@@ -688,6 +692,8 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `OperationSuccess oper_success`
 
+Used when the `Set` message was (at least partially) successful.
+
 ###### OperationFailure fields
 
 `fixed32 err_code`
@@ -861,6 +867,8 @@ This field contains a message of one of the following types.
 Used when the Object specified in `requested_path` failed to be deleted.
 
 `OperationSuccess oper_success`
+
+Used when the `Delete` message was (at least partially) successful.
 
 ###### OperationFailure fields
 
