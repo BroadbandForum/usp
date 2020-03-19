@@ -143,11 +143,13 @@ Service Name values [registered by BBF with IANA](http://www.broadband-forum.org
 | Service Name | Transport Protocol | MTP | Type of USP Endpoint |
 | ---------: | :-----: | :----: | :----------- |
 | `usp-agt-coap` | udp | CoAP | Agent |
-| `usp-ctr-coap` | udp | CoAP | Controller |
-| `usp-agt-ws` | tcp | WebSocket | Agent |
-| `usp-ctr-ws` | tcp | WebSocket | Controller |
+| `usp-agt-mqtt` | tcp | MQTT | Agent |
 | `usp-agt-stomp` | tcp | STOMP | Agent |
+| `usp-agt-ws` | tcp | WebSocket | Agent |
+| `usp-ctr-coap` | udp | CoAP | Controller |
+| `usp-ctr-mqtt` | tcp | MQTT | Controller |
 | `usp-ctr-stomp` | tcp | STOMP | Controller |
+| `usp-ctr-ws` | tcp | WebSocket | Controller |
 
 <!--
 | `usp-agt-http` | tcp | HTTP | Agent |
