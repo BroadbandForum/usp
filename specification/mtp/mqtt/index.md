@@ -106,7 +106,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 ### CONNECT Flags and Properties
 
-The MQTT `CONNECT` packet has a number of flags and properties that can be set. The User Name and Password flags are set to 1 if these parameters are included. The use of the Will Retain, Will QoS, and Will Flag are left up to the deployment. They are not needed in order to use MQTT as a USP MTP and can be “0” if there is no deployment-specified need for them. The Clean Start flag can also be used according to deployment-specified needs. Configured values for these flags can be provided through the related `.MQTT.Client.{i}.` parameters.
+The MQTT `CONNECT` packet has a number of flags and properties that can be set. The User Name and Password flags are set to 1 if these parameters are included. The use of the Will Retain, Will QoS, and Will Flag are left up to the deployment. They are not needed in order to use MQTT as a USP MTP and can be "0" if there is no deployment-specified need for them. The Clean Start flag can also be used according to deployment-specified needs. Configured values for these flags can be provided through the related `.MQTT.Client.{i}.` parameters.
 
 MQTT 3.1.1 does not provide a simple mechanism for a USP MQTT client to provide its Endpoint ID to the MQTT server. But the server does have other options, such as:
 
@@ -145,14 +145,14 @@ Use of `PINGREQ` and `PINGRESP` for keeping sessions alive (or determining sessi
 
 The `SUBSCRIBE` packet is sent by the MQTT client to subscribe to one or more Topics or Topic Filters. These are needed to allow the MQTT client to receive application messages. The MQTT client will receive all application messages published by other clients that are sent to a Topic that matches (either exactly or within a wildcarded Topic Filter) a subscribed-to Topic or Topic Filter. The MQTT server indicates in the `SUBACK` response packet whether the client has succeeded or failed to subscribe to each Topic or Topic Filter sent in the `SUBSCRIBE` packet.
 
-USP Endpoints can be configured with one or more specific MQTT Topics or Topic Filters to subscribe to for each MQTT server they are associated with. In MQTT 5.0, a `CONNACK` User Property named “subscribe-topic” can be used to provide the client with Topic or Topic Filter values for the client to subscribe to. There is no similar capability in MQTT 3.1.1. This means configuration or some out-of-band mechanism are the only means of supplying subscription Topics or Topic Filters to an MQTT 3.1.1 client. An Agent will need to be configured with a Controller’s MQTT Topic (the Device.LocalAgent.Controller.{i}.MTP.{i}.MQTT.Topic parameter is used to configure this), to send a Notification to that Controller.
+USP Endpoints can be configured with one or more specific MQTT Topics or Topic Filters to subscribe to for each MQTT server they are associated with. In MQTT 5.0, a `CONNACK` User Property named "subscribe-topic" can be used to provide the client with Topic or Topic Filter values for the client to subscribe to. There is no similar capability in MQTT 3.1.1. This means configuration or some out-of-band mechanism are the only means of supplying subscription Topics or Topic Filters to an MQTT 3.1.1 client. An Agent will need to be configured with a Controller’s MQTT Topic (the Device.LocalAgent.Controller.{i}.MTP.{i}.MQTT.Topic parameter is used to configure this), to send a Notification to that Controller.
 
 R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this section and its sub-sections are compliant with the MQTT specifications. Reading the MQTT specification is highly recommended to ensure the correct syntax and usage of MQTT packets and properties (`SUBSCRIBE`, Topic Filter, QoS 0, QoS 1, QoS 2, etc.).
 
 **R-MQTT.15** - USP Endpoints that successfully connect to an MQTT server MUST send a `SUBSCRIBE` packet with all Topic Filters identified in the following list:
 
 * All configured Topic Filter values for use with this MQTT server MUST be included in a `SUBSCRIBE` packet. For a USP Agent, the `.MQTT.Client.{i}.Subscription.{i}. ` table can be used to configure Topic Filter values.
-* If an MQTT 5.0 USP Endpoint received one or more User Property in the `CONNACK` packet where the name of the name-value pair is “subscribe-topic”, the USP Endpoint MUST include the value of all such name-value pairs in its `SUBSCRIBE` packet as a Topic Filter.
+* If an MQTT 5.0 USP Endpoint received one or more User Property in the `CONNACK` packet where the name of the name-value pair is "subscribe-topic", the USP Endpoint MUST include the value of all such name-value pairs in its `SUBSCRIBE` packet as a Topic Filter.
 * If an MQTT 5.0 Endpoint received a Response Information property in the `CONNACK` packet, and the topic from that Response Information property is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the previous 2 bullets, the Endpoint MUST include the value of the Response Information property in its `SUBSCRIBE` packet.
 * If an Endpoint has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Endpoint MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet.
 
@@ -178,29 +178,29 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 The USP Controller's MQTT Topic needs to be known by any USP Agent expected to send a Notify message to the Controller.
 
-The USP Agent will also need to know an exact Topic where it can be reached (and not just a Topic Filter) in order to provide a Controller with the Agent’s “reply to” Topic.
+The USP Agent will also need to know an exact Topic where it can be reached (and not just a Topic Filter) in order to provide a Controller with the Agent’s "reply to" Topic.
 
 **R-MQTT.21** - An MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
 
 **R-MQTT.22** - USP Endpoints MUST include a "reply to" Topic in all `PUBLISH` packets transporting USP Records.
 
-**R-MQTT.23** - USP Endpoints using MQTT 5.0 MUST include their “reply to” Topic in the `PUBLISH` Response Topic property.
+**R-MQTT.23** - USP Endpoints using MQTT 5.0 MUST include their "reply to" Topic in the `PUBLISH` Response Topic property.
 
-**R-MQTT.24** - USP Endpoints using MQTT 3.1.1 MUST include their “reply to” Topic after “/reply-to=” at the end of the `PUBLISH` Topic Name, with any “/” character in the Topic replaced by “%2F”.
+**R-MQTT.24** - USP Endpoints using MQTT 3.1.1 MUST include their "reply to" Topic after "/reply-to=" at the end of the `PUBLISH` Topic Name, with any "/" character in the Topic replaced by "%2F".
 
-For example, if a Controller’s “reply to” Topic is “usp/controllers/oui:00256D:my-unique-bbf-id-42”, and it is sending to an Agent whose Topic is “usp/agents/cid:3AA3F8:my-unique-usp-id-42”, the `PUBLISH` Topic Name for a USP Controller using an MQTT 3.1.1 client will be “usp/agents/cid:3AA3F8:my-unique-usp-id-42/reply-to= usp%2Fcontrollers%2Foui:00256D:my-unique-bbf-id-42”.
+For example, if a Controller’s "reply to" Topic is "usp/controllers/oui:00256D:my-unique-bbf-id-42", and it is sending to an Agent whose Topic is "usp/agents/cid:3AA3F8:my-unique-usp-id-42", the `PUBLISH` Topic Name for a USP Controller using an MQTT 3.1.1 client will be "usp/agents/cid:3AA3F8:my-unique-usp-id-42/reply-to= usp%2Fcontrollers%2Foui:00256D:my-unique-bbf-id-42".
 
 USP Endpoints that need to send a response to a received USP Record will need to determine the Topic Name to use in the responding `PUBLISH` packet.
 
-**R-MQTT.25** - USP Endpoints using MQTT 3.1.1 MUST interpret the portion of the received `PUBLISH` Topic Name following the last forward slash “/reply-to=” as the response Topic Name. Any instance of “%2F” in this received string MUST be replaced with “/”.
+**R-MQTT.25** - USP Endpoints using MQTT 3.1.1 MUST interpret the portion of the received `PUBLISH` Topic Name following the last forward slash "/reply-to=" as the response Topic Name. Any instance of "%2F" in this received string MUST be replaced with "/".
 
 **R-MQTT.26** - USP Endpoints using MQTT 5.0 MUST use the received `PUBLISH` Response Topic property as the response Topic Name.
 
-**R-MQTT.27** - USP Endpoints sending a USP Record using MQTT 5.0 MUST have “usp.msg” in the Content Type property.
+**R-MQTT.27** - USP Endpoints sending a USP Record using MQTT 5.0 MUST have "usp.msg" in the Content Type property.
 
 MQTT clients using MQTT 3.1.1 will need to know to pass the payload to the USP Agent for handling. There is no indication in MQTT 3.1.1 of the payload application or encoding. an MQTT 3.1.1 deployment could choose to dedicate the MQTT connection to USP, or put something in the syntax of `PUBLISH` packet Topic Names that would indicate the payload is a USP Record.
 
-**R-MQTT.27a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret Content Type property of "usp.msg" or "application/vnd.usp.msg" (the registered USP Record mime type) as indicating the packet contains a USP Record.
+**R-MQTT.27a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret the Content Type property of "usp.msg" or "application/vnd.usp.msg" (the registered USP Record MIME type) as indicating the packet contains a USP Record.
 
 <a id='handling_errors' />
 
@@ -214,7 +214,7 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 **R-MQTT.28** - MQTT 5.0 Endpoints MUST support `PUBLISH` Content Type value of "usp.error".
 
-**R-MQTT.29** - MQTT 5.0 Endpoints MUST include a `usp-err-id` MQTT User Property in `PUBLISH` packets of content-type “usp.msg”. The value of this header is:  \<USP Record to-id\> + "/" + \<USP Message msg\_id\>.
+**R-MQTT.29** - MQTT 5.0 Endpoints MUST include a `usp-err-id` MQTT User Property in `PUBLISH` packets of content-type "usp.msg". The value of this header is:  \<USP Record to-id\> + "/" + \<USP Message msg\_id\>.
 
 **R-MQTT.30** - When an MQTT 3.1.1 USP Endpoint receives a `PUBLISH` packet containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST silently drop the USP Record.
 
@@ -225,11 +225,11 @@ R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this sect
 
 The specific error codes are listed in the MTP [Brokered USP Record Errors](/specification/mtp#brokered-usp-record-errors) section.
 
-**R-MQTT.31a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret Content Type property of "usp.error" or "application/vnd.usp.error" (the registered USP error message mime type) as indicating the packet contains a USP error message and code.
+**R-MQTT.31a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret the Content Type property of "usp.error" or "application/vnd.usp.error" (the registered USP error message MIME type) as indicating the packet contains a USP error message and code.
 
 MQTT 5.0 includes a Reason Code that is used to respond to `PUBLISH` packets when QoS 1 or QoS 2 is used.
 
-**R-MQTT.32** - When a USP Endpoint using MQTT 5.0 receives a `PUBLISH` packet with QoS 1 or QoS 2 containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST include Reason Code 153 (0x99) identifying “Payload format invalid” in any `PUBACK` or `PUBREC` packet.
+**R-MQTT.32** - When a USP Endpoint using MQTT 5.0 receives a `PUBLISH` packet with QoS 1 or QoS 2 containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST include Reason Code 153 (0x99) identifying "Payload format invalid" in any `PUBACK` or `PUBREC` packet.
 
 Note these packets will be received by the MQTT server and will not be forwarded to the USP Endpoint that originally sent the USP Record.
 
@@ -259,7 +259,7 @@ MQTT 5.0 specifies the `AUTH` packet to use for extended authentication. Impleme
 
 The USP discovery section details requirements about the general usage of DNS, mDNS, and DNS-SD records as it pertains to the USP protocol. This section provides further requirements as to how a USP Endpoint advertises discovery information when an MQTT MTP is being utilized.
 
-**R-MQTT.36** - When creating a DNS-SD record, an Agent MUST set the DNS-SD "path" attribute equal to the value of its “reply to ” Topic.
+**R-MQTT.36** - When creating a DNS-SD record, an Agent MUST set the DNS-SD "path" attribute equal to the value of its "reply to " Topic.
 
 **R-MQTT.37** - When creating a DNS-SD record, a Controller MUST set the DNS-SD "path" attribute equal to a value that is included among the Controller's subscribed Topics and Topic Filters.
 
@@ -283,7 +283,7 @@ The USP discovery section details requirements about the general usage of DNS, m
 
 **R-MQTT.45** - If an MQTT server supports subscriptions from unconfigured Agents, it MUST support wildcarded Topic Filters.
 
-This will allow support for Agents that try to subscribe to “+/\<Endpoint ID\>/#” and “+/+/\<Endpoint ID\>/#” Topic Filters.
+This will allow support for Agents that try to subscribe to "+/\<Endpoint ID\>/#" and "+/+/\<Endpoint ID\>/#" Topic Filters.
 
 **R-MQTT.46** - An MQTT server MUST support at least MQTT QoS 1 level.
 
