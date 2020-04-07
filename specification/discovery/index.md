@@ -170,7 +170,7 @@ The "path" attribute is dependent on each [Message Transfer Protocol](/specifica
 
 **R-DIS.11a** - If a USP Endpoint requires MTP encryption to be used when connecting to its advertised service, it MUST include the "encrypt" parameter in the TXT record.
 
-The "encrypt" parameter is Boolean and does not require a value to be specified. Its presence means MTP encryption is required when connecting to the advertised service. Its absence meand MTP encryption is not required when connecting to the advertised service.
+The "encrypt" parameter is Boolean and does not require a value to be specified. Its presence means MTP encryption is required when connecting to the advertised service. Its absence means MTP encryption is not required when connecting to the advertised service.
 
 The TXT record can include other attributes defined in the TXT record attribute registry, as well.
 
