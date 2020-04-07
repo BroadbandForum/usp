@@ -259,7 +259,7 @@ MQTT 5.0 specifies the `AUTH` packet to use for extended authentication. Impleme
 
 The USP discovery section details requirements about the general usage of DNS, mDNS, and DNS-SD records as it pertains to the USP protocol. This section provides further requirements as to how a USP Endpoint advertises discovery information when an MQTT MTP is being utilized.
 
-**R-MQTT.36** - When creating a DNS-SD record, an Agent MUST set the DNS-SD "path" attribute equal to the value of its "reply to " Topic.
+**R-MQTT.36** - When creating a DNS-SD record, an Agent MUST set the DNS-SD "path" attribute equal to the value of its "reply to" Topic.
 
 **R-MQTT.37** - When creating a DNS-SD record, a Controller MUST set the DNS-SD "path" attribute equal to a value that is included among the Controller's subscribed Topics and Topic Filters.
 
