@@ -34,10 +34,10 @@
 4. [Using mDNS](#mdns)
 5. [Using DNS](#dns)
 6. [DNS-SD Records](#dns-sd)
-    2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
-    3. [Example Controller Unicast DNS-SD Resource Records](#example-controller-unicast-dns-sd-resource-records)
-    4. [Example Agent Multicast DNS-SD Resource Records](#example-agent-multicast-dns-sd-resource-records)
-    5. [Example Controller Multicast DNS-SD Resource Records](#example-controller-multicast-dns-sd-resource-records)
+    1. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
+    2. [Example Controller Unicast DNS-SD Resource Records](#example-controller-unicast-dns-sd-resource-records)
+    3. [Example Agent Multicast DNS-SD Resource Records](#example-agent-multicast-dns-sd-resource-records)
+    4. [Example Controller Multicast DNS-SD Resource Records](#example-controller-multicast-dns-sd-resource-records)
 7. [Using the SendOnBoardRequest() operation and OnBoardRequest notification](#onboardrequest)
 
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
