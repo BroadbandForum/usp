@@ -196,9 +196,11 @@ USP Endpoints that need to send a response to a received USP Record will need to
 
 **R-MQTT.26** - USP Endpoints using MQTT 5.0 MUST use the received `PUBLISH` Response Topic property as the response Topic Name.
 
-**R-MQTT.27** - USP Endpoints sending a USP Record using MQTT 5.0 MUST have “application/vnd.bbf.usp.msg” in the Content Type property.
+**R-MQTT.27** - USP Endpoints sending a USP Record using MQTT 5.0 MUST have “usp.msg” in the Content Type property.
 
 MQTT clients using MQTT 3.1.1 will need to know to pass the payload to the USP Agent for handling. There is no indication in MQTT 3.1.1 of the payload application or encoding. an MQTT 3.1.1 deployment could choose to dedicate the MQTT connection to USP, or put something in the syntax of `PUBLISH` packet Topic Names that would indicate the payload is a USP Record.
+
+**R-MQTT.27a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret Content Type property of "usp.msg" or "application/vnd.usp.msg" (the registered USP Record mime type) as indicating the packet contains a USP Record.
 
 <a id='handling_errors' />
 
@@ -210,18 +212,20 @@ If an MQTT 5.0 USP Endpoint receives a `PUBLISH` packet containing a USP Record 
 
 R-MQTT-1 and R-MQTT-2 require that all MQTT capabilities referenced in this section and its sub-sections are compliant with the MQTT specifications. Reading the MQTT specification is highly recommended to ensure the correct syntax and usage of MQTT packets and properties (`PUBLISH`, `PUBACK`, etc.).
 
-**R-MQTT.28** - MQTT 5.0 Endpoints MUST support `PUBLISH` Content Type value of application/vnd.bbf.usp.error.
+**R-MQTT.28** - MQTT 5.0 Endpoints MUST support `PUBLISH` Content Type value of "usp.error".
 
-**R-MQTT.29** - MQTT 5.0 Endpoints MUST include a `usp-err-id` MQTT User Property in `PUBLISH` packets of content-type “application/vnd.bbf.usp.msg”. The value of this header is:  \<USP Record to-id\> + "/" + \<USP Message msg\_id\>.
+**R-MQTT.29** - MQTT 5.0 Endpoints MUST include a `usp-err-id` MQTT User Property in `PUBLISH` packets of content-type “usp.msg”. The value of this header is:  \<USP Record to-id\> + "/" + \<USP Message msg\_id\>.
 
 **R-MQTT.30** - When an MQTT 3.1.1 USP Endpoint receives a `PUBLISH` packet containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST silently drop the USP Record.
 
-**R-MQTT.31** - When an MQTT 5.0 USP Endpoint receives a `PUBLISH` packet containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST send a `PUBLISH` packet with Content Type application/vnd.bbf.usp.error, a User Property set to the received `usp-err-id` User Property, the Topic Name  set to the received Response Topic, and a `PUBLISH` Payload (formatted using UTF-8 encoding) with the following 2 lines:
+**R-MQTT.31** - When an MQTT 5.0 USP Endpoint receives a `PUBLISH` packet containing a USP Record or an encapsulated USP Message within a USP Record that cannot be extracted for processing, the receiving USP Endpoint MUST send a `PUBLISH` packet with Content Type "usp.error", a User Property set to the received `usp-err-id` User Property, the Topic Name  set to the received Response Topic, and a `PUBLISH` Payload (formatted using UTF-8 encoding) with the following 2 lines:
 
 *    `err_code:`\<numeric code indicating the type of error that caused the overall message to fail\>
 *    `err_msg:`\<additional information about the reason behind the error\>
 
 The specific error codes are listed in the MTP [Brokered USP Record Errors](/specification/mtp#brokered-usp-record-errors) section.
+
+**R-MQTT.31a** - USP Endpoints receiving a MQTT 5.0 `PUBLISH` packet MUST interpret Content Type property of "usp.error" or "application/vnd.usp.error" (the registered USP error message mime type) as indicating the packet contains a USP error message and code.
 
 MQTT 5.0 includes a Reason Code that is used to respond to `PUBLISH` packets when QoS 1 or QoS 2 is used.
 
