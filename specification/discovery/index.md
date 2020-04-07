@@ -168,7 +168,7 @@ DNS TXT records allow for a small set of additional information to be included i
 
 The "path" attribute is dependent on each [Message Transfer Protocol](/specification/mtp/).
 
-**R-DIS.11a** - If a USP Endpoint requires MTP enryption to be used when connecting to its advertised service, it MUST include the "encrypt" parameter in the TXT record.
+**R-DIS.11a** - If a USP Endpoint requires MTP encryption to be used when connecting to its advertised service, it MUST include the "encrypt" parameter in the TXT record.
 
 The "encrypt" parameter is Boolean and does not require a value to be specified. Its presence means MTP encryption is required when connecting to the advertised service. Its absence meand MTP encryption is not required when connecting to the advertised service.
 
