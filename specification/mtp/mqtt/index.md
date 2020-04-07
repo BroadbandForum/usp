@@ -186,7 +186,7 @@ The USP Agent will also need to know an exact Topic where it can be reached (and
 
 **R-MQTT.23** - USP Endpoints using MQTT 5.0 MUST include their “reply to” Topic in the `PUBLISH` Response Topic property.
 
-**R-MQTT.24** - USP Endpoints using MQTT 3.1.1 MUST include their “reply to” Topic after a forward slash “/reply-to=” at the end of the `PUBLISH` Topic Name, with any “/” character in the Topic replaced by “%2F”.
+**R-MQTT.24** - USP Endpoints using MQTT 3.1.1 MUST include their “reply to” Topic after “/reply-to=” at the end of the `PUBLISH` Topic Name, with any “/” character in the Topic replaced by “%2F”.
 
 For example, if a Controller’s “reply to” Topic is “usp/controllers/oui:00256D:my-unique-bbf-id-42”, and it is sending to an Agent whose Topic is “usp/agents/cid:3AA3F8:my-unique-usp-id-42”, the `PUBLISH` Topic Name for a USP Controller using an MQTT 3.1.1 client will be “usp/agents/cid:3AA3F8:my-unique-usp-id-42/reply-to= usp%2Fcontrollers%2Foui:00256D:my-unique-bbf-id-42”.
 
