@@ -219,7 +219,7 @@ paths:
           type: string
         - in: body
           name: body
-          description: The identifier of the Service Element to remove
+          description: The identifier of the Service Element to retrieve 
           required: true
           schema:
             $ref: '#/definitions/ServiceElementIdentifier'
@@ -379,8 +379,9 @@ definitions:
           - CoAP
           - STOMP
           - WebSockets
+          - MQTT
       communicationsAddress:
-        description: URL (CoAP or WebSockets) or STOMP Destination of USP Agent
+        description: URL (CoAP or WebSockets), STOMP Destination or MQTT Topic of USP Agent
         type: string
       supportedServiceElements:
         description: >-
@@ -398,8 +399,9 @@ definitions:
           - CoAP
           - STOMP
           - WebSockets
+          - MQTT
       communicationsAddress:
-        description: URL (CoAP or WebSockets) or STOMP Destination of USP Agent
+        description: URL (CoAP or WebSockets), STOMP Destination or MQTT Topic of USP Agent
         type: string
       supportedServiceElements:
         description: >-
