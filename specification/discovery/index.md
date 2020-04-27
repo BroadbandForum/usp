@@ -33,11 +33,11 @@
     1. [DHCP Options for Controller Discovery](#dhcp_options)
 4. [Using mDNS](#mdns)
 5. [Using DNS](#dns)
-    1. [DNS-SD Records](#dns-sd)
-    2. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
-    3. [Example Controller Unicast DNS-SD Resource Records](#example-controller-unicast-dns-sd-resource-records)
-    4. [Example Agent Multicast DNS-SD Resource Records](#example-agent-multicast-dns-sd-resource-records)
-    5. [Example Controller Multicast DNS-SD Resource Records](#example-controller-multicast-dns-sd-resource-records)
+6. [DNS-SD Records](#dns-sd)
+    1. [IANA Registered USP Service Names](#iana_registered_usp_service_names)
+    2. [Example Controller Unicast DNS-SD Resource Records](#example-controller-unicast-dns-sd-resource-records)
+    3. [Example Agent Multicast DNS-SD Resource Records](#example-agent-multicast-dns-sd-resource-records)
+    4. [Example Controller Multicast DNS-SD Resource Records](#example-controller-multicast-dns-sd-resource-records)
 7. [Using the SendOnBoardRequest() operation and OnBoardRequest notification](#onboardrequest)
 
 Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
@@ -126,7 +126,7 @@ Requirements for implementation of a DNS client and configuration of the DNS cli
 
 <a id="dns-sd" />
 
-### DNS-SD Records
+## DNS-SD Records
 
 DNS Service Discovery (DNS-SD) [RFC 6763][7] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries [RFC 1035](https://www.ietf.org/rfc/rfc1035.txt) or Multicast DNS (mDNS) [RFC 6762][8]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. [RFC 6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
@@ -168,6 +168,10 @@ DNS TXT records allow for a small set of additional information to be included i
 
 The "path" attribute is dependent on each [Message Transfer Protocol](/specification/mtp/).
 
+**R-DIS.11a** - If a USP Endpoint requires MTP encryption to be used when connecting to its advertised service, it MUST include the "encrypt" parameter in the TXT record.
+
+The "encrypt" parameter is Boolean and does not require a value to be specified. Its presence means MTP encryption is required when connecting to the advertised service. Its absence means MTP encryption is not required when connecting to the advertised service.
+
 The TXT record can include other attributes defined in the TXT record attribute registry, as well.
 
 Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (through configuration or mDNS advertisement) their information in a local DNS-SD server can be a configured option that can be enabled/disabled, depending on the intended deployment usage scenario.
@@ -181,8 +185,8 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
     _usp-ctr-coap._udp.host.example.com      PTR <USP ID>._usp-ctr-coap._udp.example.com.
 
     ; One SRV+TXT (DNS-SD Service Instance) record for each supported MTP
-    <USP ID>._usp-ctr-coap._udp.example.com.   SRV 0 1 443 host.example.com.
-    <USP ID>._usp-ctr-coap._udp.example.com.   TXT "path=<pathname>"
+    <USP ID>._usp-ctr-coap._udp.example.com.   SRV 0 1 5684 host.example.com.
+    <USP ID>._usp-ctr-coap._udp.example.com.   TXT "<length byte>path=<pathname><length byte>encrypt"
 
     ; Controller A and AAAA records
     host.example.com.  A      192.0.2.200
@@ -202,8 +206,8 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
     _gateway._sub._usp-agt-coap._udp       PTR <USP ID>._usp-agt-coap._udp.local.
 
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
-    <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5694 <USP ID>.local.
-    <USP ID>._usp-agt-coap._udp.local.    TXT "path=<pathname>" "name=kitchen light"
+    <USP ID>._usp-agt-coap._udp.local.    SRV 0 1 5684 <USP ID>.local.
+    <USP ID>._usp-agt-coap._udp.local.    TXT "<length byte>path=<pathname><length byte>name=kitchen light<length byte>encrypt"
 
     ; Agent A and AAAA records
     <USP ID>.local.  A      192.0.2.100
@@ -217,8 +221,8 @@ Whether a particular USP Endpoint responds to DNS or mDNS queries or populates (
 LAN Controllers do not need to have PTR records, as they will only be queried using the DNS-SD instance identifier of the Controller.
 ```
     ; One SRV+TXT record (DNS-SD Service Instance) for each supported MTP
-    <USP ID>._usp-ctr-coap._tcp.local.    SRV 0 1 443 <USP ID>.local.
-    <USP ID>._usp-ctr-coap._tcp.local.    TXT "path=<pathname>"
+    <USP ID>._usp-ctr-coap._tcp.local.    SRV 0 1 5683 <USP ID>.local.
+    <USP ID>._usp-ctr-coap._tcp.local.    TXT "<length byte>path=<pathname>"
 
     ; Controller A and AAAA records
     <USP ID>.local.  A      192.0.2.200
