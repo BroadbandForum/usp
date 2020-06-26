@@ -217,9 +217,9 @@ Commands define Object specific methods within the Data Model. A Controller can 
 
 Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a [Notify Request by the Agent](/specification/messages/#notifications_and_subscriptions). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.
 
-### Path Names
-
 <a id="path_names" />
+
+### Path Names
 
 A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. The syntax for Path Names is defined in [TR-106][3].
 

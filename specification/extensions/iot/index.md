@@ -46,7 +46,7 @@ The data model defines an IoT Capability table, whose instances describe the IoT
 
 ### IoT Capability table
 
-A capability is represented in the `Device.IoTCapability.` table as a generic object instance with a specific class, and an instantiated sub-object depending on this class. The class name is defined by the sub-object name in a `Class` parameter for each IoT Capability table entry, to allow the Controller to detect the instantiated sub-object.
+A capability is represented in the `Device.IoTCapability.` table as a generic Object Instance with a specific class, and an instantiated sub-object depending on this class. The class name is defined by the sub-object name in a `Class` parameter for each IoT Capability table entry, to allow the Controller to detect the instantiated sub-object.
 
 Only one out of the following sub-objects can exist per instance:
 
@@ -188,7 +188,7 @@ Sensor objects represent IoT capabilities that involve reading or reporting on a
 
 #### Binary Sensor
 
-The binary sensor object instance supports different kinds of binary sensor operations:
+The binary sensor Object Instance supports different kinds of binary sensor operations:
 
 * Simple binary state, e.g. a door or window state
 * Threshold trigger, e.g. trigger a Carbon Dioxide Alarm if a certain threshold is exceeded.

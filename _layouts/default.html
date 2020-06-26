@@ -17,15 +17,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{'/assets/css/style.css?v=' | append: site.github.build_revision | relative_url}}">
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name"><a href="/" style="text-decoration:none; color:white;"><img src="/assets/img/bbflogo-bw.png"/><br>User Services Platform (USP)</a></h1>
+      <h1 class="project-name"><a href="{{'/' | relative_url}}"
+  style="text-decoration:none;
+  color:white;"><img src="{{'/assets/img/bbflogo-bw.png' | relative_url}}"/><br>User Services Platform (USP)</a></h1>
       <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks.</h2>
-      <p>Version 1.1</p>
-      <p><a class="btn" href="/specification/">Specification</a> <a class="btn" href="https://broadbandforum.github.io/usp-data-models/">Data Models</a>  <a class="btn" href="/resources/">Dev Resources</a> <a class="btn" href="/faq/">FAQ</a></p>
-
+      <p>Version {{site.bbf_version}}</p>
+      <p><a class="btn" href="{{'/specification' | relative_url}}">Specification</a>
+      <a class="btn" href="https://broadbandforum.github.io/usp-data-models/">Data Models</a>
+      <a class="btn" href="{{'/resources' | relative_url}}">Dev Resources</a>
+      <a class="btn" href="{{'/faq' | relative_url}}">FAQ</a></p>
     </section>
 
     <section class="main-content">
@@ -34,21 +38,21 @@
       <footer class="site-footer">
         <div class="text-center">
           Specification Sections<br>
-        <a href="/specification/#introduction" >1. Introduction</a> |
-        <a href="/specification/architecture" >2. Architecture</a> |
-        <a href="/specification/discovery" >3. Discovery and Advertisement</a> |
-        <a href="/specification/mtp" >4. Message Transfer Protocols</a> |
-        <a href="/specification/encoding" >5. Message Encoding</a> |
-        <a href="/specification/e2e-message-exchange" >6. End to End Message Exchange</a> |
-        <a href="/specification/messages" >7. Messages</a> |
-        <a href="/specification/security" >8. Authentication and Authorization</a> |
-        <a href="/specification/extensions/http-bulk-data-collection" >A. HTTP Bulk Data Transfer</a> |
-        <a href="/specification/extensions/software-module-management" >I. Software Module Management</a> |
-        <a href="/specification/extensions/firmware-management" >II. Firmware Management</a> |
-        <a href="/specification/extensions/device-proxy" >III. Device Proxy</a> |
-        <a href="/specification/extensions/proxying" >IV. Proxying (Other)</a> |
-        <a href="/specification/extensions/iot" >V. IoT Theory of Operations</a> |
-        <a href="https://usp-data-models.broadband-forum.org/">USP Data Model</a>
+        <a href="{{'/specification/#introduction' | relative_url}}" >1. Introduction</a> |
+        <a href="{{'/specification/architecture' | relative_url}}" >2. Architecture</a> |
+        <a href="{{'/specification/discovery' | relative_url}}" >3. Discovery and Advertisement</a> |
+        <a href="{{'/specification/mtp' | relative_url}}" >4. Message Transfer Protocols</a> |
+        <a href="{{'/specification/encoding' | relative_url}}" >5. Message Encoding</a> |
+        <a href="{{'/specification/e2e-message-exchange' | relative_url}}" >6. End to End Message Exchange</a> |
+        <a href="{{'/specification/messages' | relative_url}}" >7. Messages</a> |
+        <a href="{{'/specification/security' | relative_url}}" >8. Authentication and Authorization</a> |
+        <a href="{{'/specification/extensions/http-bulk-data-collection' | relative_url}}" >A. HTTP Bulk Data Transfer</a> |
+        <a href="{{'/specification/extensions/software-module-management' | relative_url}}" >I. Software Module Management</a> |
+        <a href="{{'/specification/extensions/firmware-management' | relative_url}}" >II. Firmware Management</a> |
+        <a href="{{'/specification/extensions/device-proxy' | relative_url}}" >III. Device Proxy</a> |
+        <a href="{{'/specification/extensions/proxying' | relative_url}}" >IV. Proxying (Other)</a> |
+        <a href="{{'/specification/extensions/iot' | relative_url}}" >V. IoT Theory of Operations</a> |
+        <a href="https://usp-data-models.broadband-forum.org' | relative_url}}">USP Data Model</a>
       </div>
       <br>
         {% if site.github.is_project_page %}

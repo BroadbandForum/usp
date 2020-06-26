@@ -68,7 +68,7 @@ Whether a Controller requires Agent certificates is left up to the Controller im
 
 ## Role Based Access Control (RBAC)
 
-It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This Working Text refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
+It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This specification refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
 
 **R-SEC.1** - An Agent MUST confirm a Controller has the necessary permissions to perform the requested actions in a Message prior to performing that action.
 
@@ -277,7 +277,7 @@ These data model elements play a role in reporting on and allowing control of tr
 From component `ControllerTrust`:
 
 * Object `LocalAgent.ControllerTrust.`
-* Parameters `UntrustedRole`, `BannedRole`, TOFUAllowed, TOFUInactivityTimer
+* Parameters `UntrustedRole`, `BannedRole`, `TOFUAllowed`, `TOFUInactivityTimer`
 * Commands `RequestChallenge()`, `ChallengeResponse()`
 * Object `LocalAgent.ControllerTrust.Role.{i}.`
 * Object `LocalAgent.ControllerTrust.Credential.{i}.`
@@ -379,7 +379,7 @@ A Controller that sends a Get message on `Device.ControllerTrust.Challenge.{i}.`
 
 The Controller can display the value of `Description` to the user and allow the user to indicate they want to request the described challenge. If multiple entries were returned, the user can be asked to select which challenge they want to request, based on the description. An example of a description might be "Request administrative privileges" or "Request guest privilege".
 
-When the user indicates to the Controller which challenge they want, the Controller sends `RequestChallenge()` with the path name of the `Challenge` object instance associated with the desired `Description`. The Agent replies with the associated `Instruction`, `InstructionType`, `ValueType` and an auto-generated `ChallengeID`. The Controller presents the value of `Instruction` to the user (in a manner appropriate for `InstructionType`). Examples of an instruction might be "Enter passphrase printed on bottom of device" or "Enter PIN sent to registered email address". The user enters a string per the instructions, and the Controller sends this value together with the `ChallengeID` in `ChallengeResponse()`.
+When the user indicates to the Controller which challenge they want, the Controller sends `RequestChallenge()` with the path name of the `Challenge` Object Instance associated with the desired `Description`. The Agent replies with the associated `Instruction`, `InstructionType`, `ValueType` and an auto-generated `ChallengeID`. The Controller presents the value of `Instruction` to the user (in a manner appropriate for `InstructionType`). Examples of an instruction might be "Enter passphrase printed on bottom of device" or "Enter PIN sent to registered email address". The user enters a string per the instructions, and the Controller sends this value together with the `ChallengeID` in `ChallengeResponse()`.
 
 If the returned value matches `Value`, the Agent gives a successful response - otherwise it returns an unsuccessful response. If successful, the `ControllerTrust.Challenge.{i}.Role` replaces an `UntrustedRole` in `Controller.{i}.AssignedRole` or is appended to any other `Controller.{i}.AssignedRole` value.
 
