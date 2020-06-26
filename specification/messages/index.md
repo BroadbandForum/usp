@@ -896,7 +896,7 @@ This field returns a repeated set of Path Names to Object Instances.
 
 This field contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.3** - If any of the Object Instances specified in the `obj_paths` field fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
+**R-DEL.3** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete message to fail and return an Error message.
 
 **R-DEL.4** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this field.
 
@@ -1897,15 +1897,11 @@ body {
           }
           {
             key: "CommandKey"
-            value: ""
+            value: "controller-command-key"
           }
           {
-            key: "Parameter.1.Path"
-            value: "Device.LocalAgent.Controller.1.Enable"
-          }
-          {
-            key: "Parameter.1.Value"
-            value: "True"
+            key: "ParameterMap"
+            value: "{Parameter.1.Path:Device.LocalAgent.Controller.1.Enable,Parameter.1.Value.:True}"
           }
         }
       }
@@ -2271,7 +2267,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
 | `7023` | Command canceled | Operate | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
 | `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |
-| `7025` | Object exists with duplicate key | Add | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
+| `7025` | Object exists with duplicate key | Add, Set | This error indicates that an Object already exists with the unique keys specified in an Add or Set message. |
 | `7026` | Invalid path | Any | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
 | `7027` | Invalid command arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
 | `7100-7199` | USP Record error codes | - | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |

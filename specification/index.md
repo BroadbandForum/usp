@@ -519,7 +519,7 @@ This specification uses the following abbreviations:
 |USP	| User Services Platform |
 |CWMP	| CPE WAN Management Protocol|
 |DNS	| Domain Name Service |
-|DNS-SD	| Domain Name Service - Service Definition |
+|DNS-SD	| Domain Name Service - Service Discovery |
 |DT	| Device Type Definition |
 |E2E | End to End (Message Exchange) |
 |HMAC | Hash Message Authentication Code |
