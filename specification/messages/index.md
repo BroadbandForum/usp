@@ -834,7 +834,7 @@ This field tells the Agent how to process the message in the event that one or m
 
 **R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete message to fail and return an Error message.
 
 `repeated string obj_paths`
 
@@ -896,7 +896,7 @@ This field returns a repeated set of Path Names to Object Instances.
 
 This field contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.3** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete message to fail and return an Error message.
+**R-DEL.3** - **R-DEL.3** - If any of the Object Instances specified in the `obj_paths` field fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
 **R-DEL.4** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this field.
 
@@ -1901,7 +1901,11 @@ body {
           }
           {
             key: "ParameterMap"
-            value: "{Parameter.1.Path:Device.LocalAgent.Controller.1.Enable,Parameter.1.Value.:True}"
+            value: "Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
+          }
+          {
+            key: "FirmwareUpdated"
+            value: "false"
           }
         }
       }
