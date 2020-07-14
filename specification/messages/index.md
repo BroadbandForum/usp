@@ -896,7 +896,7 @@ This field returns a repeated set of Path Names to Object Instances.
 
 This field contains a repeated set of messages of type `UnaffectedPathError`.
 
-**R-DEL.3** - **R-DEL.3** - If any of the Object Instances specified in the `obj_paths` field fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
+**R-DEL.3** - If any of the Object Instances specified in the `obj_paths` field fail to delete, this set MUST include one `UnaffectedPathError` message for each of the Object Instances that failed to Delete.
 
 **R-DEL.4** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this field.
 
@@ -1901,7 +1901,7 @@ body {
           }
           {
             key: "ParameterMap"
-            value: "Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
+            value: {"Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
           }
           {
             key: "FirmwareUpdated"
