@@ -1901,7 +1901,7 @@ body {
           }
           {
             key: "ParameterMap"
-            value: {"Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
+            value: "{Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
           }
           {
             key: "FirmwareUpdated"
