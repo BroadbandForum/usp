@@ -3,19 +3,19 @@
 
 ## What is USP?
 
-USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services, IoT, and home networks. USP consists of an architecture, protocol, and set of data models that create a network of controllers and agents that allow applications to manipulate user service elements (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).
+USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services, IoT, and home networks. USP consists of an architecture, protocol, and set of data models that create a network of controllers and agents that allow applications to manipulate the hardware and software capabilities of an end-user's network and devices (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).
 
 ## What do I need to get started?
 
-Checkout our [development resources](/resources/) for schemas, code, testing, and more.
+Checkout our [development resources](/resources/) for schemas, code, certification, and more.
 
 ## What are the major features of USP?
 
 The User Services Protocol is designed with four major features in mind:
 
 * Flexibility - USP is applicable to many different use cases or deployment scenarios, and able to be implemented by new and varied kinds of devices.
-* Scaling - With the increase in the kinds of devices that can now be managed, monitored, or controlled, comes an increase in the raw numbers of those devices. USP is able to scale to a very large number of managed devices and connections.
-* Standardization and ease of migration - USP meets the challenges of connected device (network gateways, whole-home and enterprise Wi-Fi, and IoT) management with an interoperable, non-proprietary standard, that easily evolves from existing TR-069 deployments.
+* Scaling - With the increase in the kinds of devices that can now be managed, monitored, or controlled, comes an increase in the raw numbers of those devices. USP is able to scale to a very large number of managed devices, services, and connections.
+* Standardization and ease of migration - USP meets the challenges of connected device (network gateways, whole-home and enterprise Wi-Fi, and IoT) management and control with an interoperable, non-proprietary standard, that easily evolves from existing TR-069 deployments.
 * Security - USP is designed with application layer security, authentication, integrity, and privacy from the ground up.
 
 For an in-depth look at the high level benefits of USP, read our whitepaper, "[Realizing the Promise of the Connected Home with USP](https://www.broadband-forum.org/technical/download/MU-461.pdf)".
@@ -56,7 +56,7 @@ No. Each supported transport is meant for a different core use case. In addition
 
 ## I'm building a USP Agent. How do I get certified?
 
-The conformance test plan for USP Agents is defined in [TR-469](https://usp-compliance.broadband-forum.org/). This test plan evolves, and forms the basis for the Broadband Forum's USP Agent Certification Program (coming in early 2020).
+The conformance test plan for USP Agents is defined in [TR-469](https://usp-compliance.broadband-forum.org/). This test plan evolves, and forms the basis for the Broadband Forum's [USP Agent Certification Program](https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification).
 
 ## I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?
 
