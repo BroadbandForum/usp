@@ -27,8 +27,8 @@
 
 
 <h1>Broadband Forum TR-369: User Services Platform (USP)</h1>
-<h2>Issue 1 Amendment 1</h2>
-<h4>USP Version 1.1</h4>
+<h2>Issue 1 Amendment 1 Corrigendum 2</h2>
+<h4>USP Version 1.1.2</h4>
 
 **Table of Contents**
 
@@ -128,6 +128,10 @@ Appendix V. [IoT Data Model Theory of Operation](./extensions/iot/)
   Technical Report.
 
 ## Revision History
+
+### Releae 1.1.2
+
+* Clarifies several examples, requirements, and error types
 
 ### Release 1.1
 
