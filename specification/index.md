@@ -30,8 +30,6 @@
 <h2>Issue 1 Amendment 1</h2>
 <h4>USP Version 1.1</h4>
 
-You can find a pdf version of this document **[here](https://www.broadband-forum.org/technical/download/TR-369.pdf)**.
-
 **Table of Contents**
 
 Main Specification
