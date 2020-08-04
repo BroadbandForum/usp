@@ -28,7 +28,7 @@
 
 USP messages are sent between Endpoints over one or more Message Transfer Protocols.
 
-Note: Message Transfer Protocol was a term adopted to avoid confusion with the term "Transport", which is often overloaded to include both application layer (i.e. CoAP) and the actual OSI Transport layer (i.e. UDP). Throughout this document, Message Transfer Protocol (MTP) refers to application layer transport.
+Note: Message Transfer Protocol was a term adopted to avoid confusion with the term "Transport", which is often overloaded to include both application layer (e.g. CoAP) and the actual OSI Transport layer (e.g. UDP). Throughout this document, Message Transfer Protocol (MTP) refers to application layer transport.
 
 The requirements for each individual Message Transfer Protocol is covered in a section of this document. This version of the specification includes definitions for:
 

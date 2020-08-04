@@ -83,7 +83,7 @@ The three types of USP messages are Request, Response, and Error.
 
 A request is a message sent from a source USP endpoint to a target USP endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify message follows the same format as a request but is sent from an Agent to a Controller.
 
-**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see Operate and Notify messages).
+**R-MSG.0** - The target USP endpoint MUST respond to a request message from the source USP endpoint with either a response message or error message, unless otherwise specified (see [Operate](#operate) and [Notify](#notify) messages).
 
 **R-MSG.1** - The target USP endpoint MUST ignore or send an error message in response to messages it does not understand.
 
@@ -123,7 +123,7 @@ A Message consists of a header and body. When using [protocol buffers][12], the 
 
 **R-MSG.5** - A Message MUST conform to the schemas defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto).
 
-*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a oneof field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
+*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a `oneof` field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in [Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3#default).*
 
 Every USP message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
@@ -164,7 +164,7 @@ A locally unique opaque identifier assigned by the Endpoint that generated this 
 `enum MsgType msg_type`
 
 This field contains an enumeration indicating the type of message contained in the message body. It is an enumeration of:
-
+```
     ERROR (0)
     GET (1)
     GET_RESP (2)
@@ -184,6 +184,7 @@ This field contains an enumeration indicating the type of message contained in t
     NOTIFY_RESP (16)
     GET_SUPPORTED_PROTO (17)
     GET_SUPPORTED_PROTO_RESP (18)
+```
 
 **R-MSG.10** - The `msg_type` field MUST be present in every Header. Though
 required, it is meant for information only. In the event this field differs
@@ -224,6 +225,7 @@ This field indicates that the Message contains an Error Message.
 
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
+```
     Get get
     GetSupportedDM get_supported_dm
     GetInstances get_instances
@@ -233,6 +235,7 @@ This field contains one of the types given below. Each indicates that the Messag
     Operate operate
     Notify notify
     GetSupportedProtocol get_supported_protocol
+```
 
 #### Response fields
 
@@ -240,6 +243,7 @@ This field contains one of the types given below. Each indicates that the Messag
 
 This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.
 
+```
     GetResp get_resp
     GetSupportedDMResp get_supported_dm_resp
     GetInstancesResp get_instances_resp
@@ -249,6 +253,7 @@ This field contains one of the types given below. Each indicates that the Messag
     OperateResp operate_resp
     NotifyResp notify_resp
     GetSupportedProtocolResp get_supported_protocol_resp
+```
 
 #### Error fields
 
@@ -262,7 +267,7 @@ This field contains additional information about the reason behind the error.
 
 `repeated ParamError param_errs`
 
-This field is present in an Error Message in response to an Add or Set message when the allow_partial field is false and detailed error information is available for each Object or parameter that have caused the message to report an Error.
+This field is present in an Error Message in response to an Add, Set, or Delete message when the allow_partial field is false and detailed error information is available for each Object or parameter that have caused the message to report an Error.
 
 ##### ParamError fields
 
@@ -290,12 +295,13 @@ The [Add](#add), [Set](#set), and [Delete](#delete) requests are used to create,
 
 Each Add, Set, and Delete request operates on one or more paths. For the Add request, these paths are references to Multi-Instance Objects. For all other requests, these paths can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
 
-For Add and Set requests, each Object address or search is conveyed in an field that also contains a sub-field listing the parameters to update in the matched Objects.
+For Add and Set requests, each Object address or search is conveyed in a field that also contains a sub-field listing the parameters to update in the matched Objects.
 
 The Add response contains details about the success or failure of the creation of the Object and the parameters set during its creation. In addition, it also returns those parameters that were set by the Agent upon creation of the Object.
 
 For example, a Controller wants to create a new WiFi network on an Agent. It could use an Add message with the following fields:
 
+```
     allow_partial: false
     create_objs {
     	obj_path: "Device.WiFi.SSID."
@@ -303,46 +309,53 @@ For example, a Controller wants to create a new WiFi network on an Agent. It cou
         {
       		param: "LowerLayers"
       		value: "Device.WiFi.Radio.1."
-      		required: true}
+      		required: true
+        }
     		{
           param: "SSID"
     		  value: "NewSSIDName"
-    		  required: true}
+    		  required: true
+          }
     		}
     	}
+```
 
 The Agent’s response would include the object created (with its instance identifier) and the unique keys of the created object as defined in [Device:2][1]:
 
+```
     created_obj_results {
       requested_path: "Device.WiFi.SSID."
       oper_status {
         oper_success {
-          instantiated_path: ""Device.WiFi.SSID.4."
+          instantiated_path: "Device.WiFi.SSID.4."
           unique_keys {
-          {
-            key: "BSSID"
-            value: "112233445566"}
-          {
-            key: "Name"
-            value: "GuestNetwork1"}
-          {
-            key: "Alias"
-            value: "cpe-alias-1"}            
+            {
+              key: "BSSID"
+              value: "112233445566"
+            }
+            {
+              key: "Name"
+              value: "GuestNetwork1"
+            }
+            {
+              key: "Alias"
+              value: "cpe-alias-1"
+            }
           }
         }
       }
     }
-
+```
 
 <a id='using_allow_partial_and_required_parameters' />
 
 ### Using Allow Partial and Required Parameters
 
-The Add, Set, and Delete requests contain an field called "`allow_partial`". This field determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
+The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether or not the message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
 
 For Delete, this is straightforward - if `allow_partial` is `true`, the Agent should return a Response message with `affected_paths` and `unaffected_path_errs` containing the successfully deleted Objects and unsuccessfully deleted objects, respectively. If `allow_partial` is `false`, the Agent should return an Error message if any Objects fail to be deleted.
 
-For the Add and Set messages, parameter updates contain an field called "`required`". This details whether or not the update or creation of the Object should fail if a required parameter fails.
+For the Add and Set messages, parameter updates contain a field called "`required`". This details whether or not the update or creation of the Object should fail if a required parameter fails.
 
 This creates a hierarchy of error conditions for the Add and Set requests, such as:
 
@@ -350,18 +363,20 @@ Parameter Error -> Object Error -> Message Error
 
 If `allow_partial` is true, but one or more required parameters fail to be updated or configured, the creation or update of an individual Object fails. This results in an `oper_failure` in the `oper_status` field and `updated_obj_result` or `created_obj_result` returned in the Add or Set response.
 
-If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an error message rather than a response message.
+If `allow_partial` is false, the failure of any required parameters will cause the update or creation of the Object to fail, which will cause the entire message to fail. In this case, the Agent returns an Error message rather than a response message.
 
-Both the `oper_failure` fields and Error messages contain an field called `param_error`, which contains fields of type `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
+If the message was at least partially successful, the response will make use of the `oper_success` field to indicate the successfully affected Objects.
+
+The `oper_failure` and `oper_success` fields as well as Error messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed parameter updates regardless of whether or not the Agent returned a response message or error message.
 
 The logic can be described as follows:
 
-| `allow_partial`	| Required Parameters	| Required Parameter Failed	| Other Parameter Failed | 	Response/Error |	Oper_status of Object	| Contains param_error |
+| `allow_partial`	| Required Parameters	| Required Parameter Failed	| Other Parameter Failed | 	Response/Error |	Oper_status of Object	| Contains param_errs |
 | -----: | :-----: | :-----: | :-----: | :-----: | :-----: | :----- |
 | `True`/`False`	| No |-	|	No	| Response	| `oper_success`	| No |
 | `True`/`False`	| No | - | Yes | Response | `oper_success` | Yes |
 | `True`/`False` | Yes | No | No | Response | `oper_success` | No |
-| `True`/`False` | Yes | No | Yes | Response | oper_success | Yes |
+| `True`/`False` | Yes | No | Yes | Response | `oper_success` | Yes |
 | `True` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `False` | Yes | Yes | - | Error | N/A | Yes |
 
@@ -390,10 +405,12 @@ body {
         param_settings {
           {
             param: "Enable"
-            value: "True"}
+            value: "True"
+          }
           {
             param: "EndpointID"
-            value: "controller-temp"}
+            value: "controller-temp"
+          }
         }
       }
     }
@@ -429,7 +446,7 @@ body {
 
 `bool allow_partial`
 
-This field tells the Agent how to process the message in the event that one or more of the Objects specified in the create_objs argument fails creation.
+This field tells the Agent how to process the message in the event that one or more of the Objects specified in the `create_objs` argument fails creation.
 
 **R-ADD.0** - If the `allow_partial` field is set to `true`, and no other exceptions are encountered, the Agent treats each Object matched in `obj_path` independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
@@ -455,7 +472,7 @@ This field contains a repeated set of CreateParamSetting fields.
 
 `string param`
 
-This field contains a relative path to a parameter of the Object specified in `obj_path`, or a parameter of a single instance sub-object of the Object specified in `obj_path`.
+This field contains a relative path to a parameter of the Object specified in `obj_path`, or  any parameter in a nested tree of single instance sub-objects of the Object specified in `obj_path`.
 
 `string value`
 
@@ -491,9 +508,11 @@ This field contains one of the types given below. Each indicates that the field 
 
 `OperationFailure oper_failure`
 
-This message is used when the object given in `requested_path` failed to be created.
+Used when the object given in `requested_path` failed to be created.
 
 `OperationSuccess oper_success`
+
+Used when the `Add` message was (at least partially) successful.
 
 ###### OperationFailure fields
 
@@ -533,7 +552,7 @@ This field contains the Relative Parameter Path to the parameter that failed to 
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains the [numeric code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -623,7 +642,7 @@ This field contains a repeated set of UpdateObject messages.
 
 `string obj_path`
 
-This field contains an Object Path, Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.
+This field contains an Object Path, Object Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.
 
 `repeated UpdateParamSetting param_settings`
 
@@ -673,6 +692,8 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 `OperationSuccess oper_success`
 
+Used when the `Set` message was (at least partially) successful.
+
 ###### OperationFailure fields
 
 `fixed32 err_code`
@@ -705,7 +726,7 @@ This field contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains a [error code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -743,7 +764,7 @@ This field contains the Parameter Path to the parameter that failed to be set.
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the parameter set to fail.
+This field contains a [error code](#error-codes) of the error that caused the parameter set to fail.
 
 `string err_msg`
 
@@ -791,9 +812,12 @@ body {
           oper_success {
             affected_paths {
               {
-              "Device.LocalAgent.Controller.31185."}
+                "Device.LocalAgent.Controller.31185."
+              }
               {
-              "Device.LocalAgent.Controller.31185.E2ESession."}
+                "Device.LocalAgent.Controller.31185.E2ESession."
+              }
+            }
           }
         }
       }
@@ -810,7 +834,7 @@ This field tells the Agent how to process the message in the event that one or m
 
 **R-DEL.0** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
 
-**R-DEL.1** - If the `allow_partial` field is set to false, and no other exceptions are encountered, the Agent treats each entry in `obj_path` holistically. A failure to delete any one Object MUST cause the Delete message to fail and return an Error message (see [allow partial and required parameters](#using_allow_partial_and_required_parameters)).
+**R-DEL.1** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete message to fail and return an Error message.
 
 `repeated string obj_paths`
 
@@ -843,6 +867,8 @@ This field contains a message of one of the following types.
 Used when the Object specified in `requested_path` failed to be deleted.
 
 `OperationSuccess oper_success`
+
+Used when the `Delete` message was (at least partially) successful.
 
 ###### OperationFailure fields
 
@@ -882,7 +908,7 @@ This field returns the Path Name to the Object Instance that failed to be delete
 
 `fixed32 err_code`
 
-This field contains the error code of the error that caused the deletion of this object to fail.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the deletion of this object to fail.
 
 `string err_msg`
 
@@ -892,7 +918,7 @@ This field contains text related to the error specified by `err_code`.
 
 Appropriate error codes for the Delete message include `7000-7008`, `7015`, `7016`, `7018`, `7024`, `7026` and `7800-7999`.
 
-<a id='reading-agent-state-and-capabilities' />
+<a id='reading_agent_state_and_capabilities' />
 
 ## Reading an Agent’s State and Capabilities
 
@@ -906,7 +932,7 @@ The basic Get message is used to retrieve the values of a set of Object’s para
 
 *Note: Those familiar with Broadband Forum [TR-069][2] will recognize this behavior as the difference between "partial paths" and "complete paths". This behavior is replicated in USP for the Get message for each path that is matched by the expression(s) supplied in the request.*
 
-*Note: Each search path is intended to be evaluated separately, and the results from a given search path are returned in an field dedicated to that path. As such, it is possible that the same information may be returned from more than one search path. This is intended, and the Agent should treat each search path atomically.*
+*Note: Each search path is intended to be evaluated separately, and the results from a given search path are returned in a field dedicated to that path. As such, it is possible that the same information may be returned from more than one search path. This is intended, and the Agent should treat each search path atomically.*
 
 The response returns an entry for each Path Name resolved by the path given in `requested_path`. If a path expression specified in the request does not match any valid parameters or Objects, the response will indicate that this expression was an "invalid path", indicating that the Object or parameter does not currently exist in the Agent’s Supported Data Model.
 
@@ -916,14 +942,17 @@ For each resolved Path Name, a `ResolvedPathResult` message is given in the Resp
 
 For example, a Controller wants to read the data model to learn the settings and stats of a single WiFi SSID, "HomeNetwork" with a BSSID of "00:11:22:33:44:55". It could use a Get request with the following fields:
 
+```
     Get {
       param_paths {
         "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55]."
       }
     }
+```
 
 In response to this request the Agent returns all parameters, plus sub-Objects and their parameters, of the addressed instance. The Agent returns this data in the Get response using a field for each of the requested paths. In this case:
 
+```
     GetResp {
         req_path_results {
         requested_path: "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID=00:11:22:33:44:55]."
@@ -934,38 +963,49 @@ In response to this request the Agent returns all parameters, plus sub-Objects a
           result_params {
             {
               key: "Enable"
-              value: "True"}
+              value: "True"
+            }
             {
               key: "Status"
-              value: "Up"}
+              value: "Up"
+            }
             {
               key: "Name"
-              value: "Home Network"}
+              value: "Home Network"
+            }
             {
               key: "LastChange"
-              value: "864000"}
+              value: "864000"
+            }
             {
               key: "BSSID"
-              value: "00:11:22:33:44:55"}
+              value: "00:11:22:33:44:55"
+            }
             {
               key: "Stats.BytesSent"
-              value: "24901567"}
+              value: "24901567"
+            }
             {
               key: "Stats.BytesReceived"
-              value: "892806908296"}
+              value: "892806908296"
+            }
 
             (etc.)
           }
         }
       }
+    }
+```
 
 In another example, the Controller only wants to read the current status of the WiFi network with the SSID "HomeNetwork" with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following fields:
 
+```
     Get {
       param_paths {
         "Device.WiFi.SSID.[SSID=="Homenetwork"&&BSSID==00:11:22:33:44:55].Status"
       }
     }
+```
 
 In response to this request the Agent returns only the Status parameter and its value.
 
@@ -1001,7 +1041,7 @@ The Agent's GetResponse would be:
 ```
     GetResp {
       req_path_results {
-        requested_path: "Device.WiFi.SSID.*."
+        requested_path: "Device.WiFi.SSID.*.Status"
         err_code : 0
         err_msg :
         resolved_path_results {
@@ -1040,6 +1080,7 @@ body {
 }
 
 Get Response:
+
 header {
   msg_id: "5721"
   msg_type: GET_RESP
@@ -1053,19 +1094,24 @@ body {
           resolved_path: "Device.LocalAgent.MTP.5156." {
               {
                 key: "Alias"
-                value: "CoAP-MTP1"}
+                value: "CoAP-MTP1"
+              }
               {
                 key: "Enable"
-                value: "False"}
+                value: "False"
+              }
               {
                 key: "EnableMDNS"
-                value: "True"}
+                value: "True"
+              }
               {
                 key: "Protocol"
-                value: "CoAP"}
+                value: "CoAP"
+              }
               {
                 key: "Status"
-                value: "Inactive"}
+                value: "Inactive"
+              }
             }
           }
 
@@ -1074,34 +1120,43 @@ body {
           result_params {
             {
               key: "CheckPeerID"
-              value: "False"}
+              value: "False"
+            }
             {
               key: "EnableEncryption"
-              value: "True"}
+              value: "True"
+            }
             {
               key: "Host"
-              value: "127.0.0.1"}
+              value: "127.0.0.1"
+            }
             {
               key: "IsEncrypted"
-              value: "False"}
+              value: "False"
+            }
             {
               key: "Path"
-              value: "/e/agent"}
+              value: "/e/agent"
+            }
             {
               key: "Port"
-              value: "5684"}
+              value: "5684"
+            }
             {
               key: "ValidatePeerCertificate"
-              value: "True"}
+              value: "True"
+            }
           }
         }
         resolved_path_results {
           resolved_path: "Device.LocalAgent.MTP.5156.STOMP."
           result_params {
             {
-              key: "Destination"}
+              key: "Destination"
+            }
             {
-              key: "Reference"}
+              key: "Reference"
+            }
           }
         }
       }
@@ -1124,7 +1179,7 @@ body {
 
 `repeated string param_paths`
 
-This field is a set of Object Paths, Instance Paths, Parameter Paths, or Search Paths to Objects, Object Instances, and Parameters in an Agent’s Instantiated Data Model.
+This field is a set of Object Paths, Object Instance Paths, Parameter Paths, or Search Paths to Objects and Parameters in an Agent’s Instantiated Data Model.
 
 #### Get Response fields
 
@@ -1186,7 +1241,7 @@ GetInstances takes one or more Path Names to Multi-Instance Objects in a Request
 
 #### GetInstances Examples
 
-For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 3 SSIDs), it would send a GetInstances Request as:
+For example, if a Controller wanted to know *only* the current instances of WiFi SSID Objects that exist on an Agent (that has 2 SSIDs), it would send a GetInstances Request as:
 
 ```
     GetInstances {
@@ -1208,31 +1263,31 @@ The Agent's Response would contain:
           unique_keys {
             {
               key : "Alias"
-              value : "UserWiFi1"}
+              value : "UserWiFi1"
+            }
             {
               key : "Name"
-              value : "UserWiFi1"}
-            {
-              key : "SSID"
-              value : "SecureProviderWiFi"}
+              value : "UserWiFi1"
+            }
             {
               key : "BSSID"
-              value : "00:11:22:33:44:55"}
+              value : "00:11:22:33:44:55"
+            }
           }
           instantiated_obj_path : "Device.WiFi.SSID.2."
           unique_keys {
             {
               key : "Alias"
-              value : "UserWiFi2"}
+              value : "UserWiFi2"
+            }
             {
               key : "Name"
-              value : "UserWiFi2"}
-            {
-              key : "SSID"
-              value : "GuestProviderWiFi"}
+              value : "UserWiFi2"
+            }
             {
               key : "BSSID"
-              value : "00:11:22:33:44:55"}
+              value : "11:22:33:44:55:66"
+            }
           }
         }
       }
@@ -1248,7 +1303,7 @@ In another example, the Controller wants to get all of  the Instances of the `De
     }
 ```
 
-The Agent's Response will contain an entry in curr_insts for all of the Instances of the `Device.WiFi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
+The Agent's Response will contain an entry in `curr_insts` for all of the Instances of the `Device.WiFi.AccessPoint` table, plus the Instances of the Multi-Instance sub-Objects `.AssociatedDevice.` and `.AC.`:
 
 ```
     GetInstancesResp {
@@ -1261,19 +1316,23 @@ The Agent's Response will contain an entry in curr_insts for all of the Instance
           unique_keys {
             {
               key : "Alias"
-              value : "SomeAlias"}
+              value : "SomeAlias1"
+            }
             {
               key : "SSIDReference"
-              value : "Device.WiFi.SSID.1"}
+              value : "Device.WiFi.SSID.1"
+            }
           }
           instantiated_obj_path : "Device.WiFi.AccessPoint.2."
           unique_keys :
             {
               key : "Alias"
-              value : "SomeAlias"}
+              value : "SomeAlias2"
+            }
             {
               key : "SSIDReference"
-              value : "Device.WiFi.SSID.2"}
+              value : "Device.WiFi.SSID.2"
+            }
           instantiated_obj_path : "Device.WiFi.AccessPoint.1.AssociatedDevice.1."
           unique_keys {
               key : "MACAddress"
@@ -1328,7 +1387,7 @@ This field contains one of the Path Names or Search Paths given in `obj_path` of
 
 This field contains a [numeric code](#error-codes) indicating the type of error that caused the Get to fail on this path. A value of 0 indicates the path could be read successfully.
 
-**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported Data Model.
+**R-GIN.0** - If the Controller making the Request does not have Read permission on an Object or Parameter used for matching through the `requested_path` field, any otherwise matched Object MUST be treated as if it is not present in the Agent’s Instantiated Data Model
 
 `string err_msg`
 
@@ -1342,7 +1401,7 @@ This field contains a message of type `CurrInstance` for each Instance of *all* 
 
 `string instantiated_obj_path`
 
-This field contains the Instance Path Name of the Object Instance.
+This field contains the Object Instance Path of the Object.
 
 `map<string, string> unique_keys`
 
@@ -1373,7 +1432,7 @@ Both of these syntaxes are supported and equivalent. The Agent's Response return
 For example, the Controller wishes to learn the WiFi capabilities the Agent represents. It could issue a GetSupportedDM Request as:
 
 ```
-    GetSupportedDM{
+    GetSupportedDM {
     	obj_paths : "Device.WiFi."
     	first_level_only : false
     	return_commands : false
@@ -1393,61 +1452,73 @@ GetSupportedDMResp {
 		data_model_inst_uri : "urn:broadband-forum-org:tr-181-2-12-0"
 		supported_objs {
       {
-			supported_obj_path : "Device.WiFi."
-			access : OBJ_READ_ONLY
-			is_multi_instance : false}		
+			  supported_obj_path : "Device.WiFi."
+			  access : OBJ_READ_ONLY
+			  is_multi_instance : false
+      }		
 			{
-      supported_obj_path : "Device.WiFi.Radio.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true
-			supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
-			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+        supported_obj_path : "Device.WiFi.Radio.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+			  supported_obj_path : "Device.WiFi.Radio.{i}.Stats"
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }			
 			{
-      supported_obj_path : "Device.WiFi.SSID.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true
-			supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
-			access : ADD_DELETE (1)
-			is_multi_instance : true}			
+        supported_obj_path : "Device.WiFi.SSID.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+			  supported_obj_path : "Device.WiFi.SSID.{i}.Stats"
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }			
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Security."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.Security."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.WPS."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.WPS."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-      supported_obj_path : "Device.WiFi.AccessPoint.{i}.Accounting."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+        supported_obj_path : "Device.WiFi.AccessPoint.{i}.Accounting."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 			{
-			supported_obj_path : "Device.WiFi.EndPoint.{i}."
-			access : ADD_DELETE (1)
-			is_multi_instance : true}
+			  supported_obj_path : "Device.WiFi.EndPoint.{i}."
+			  access : ADD_DELETE (1)
+			  is_multi_instance : true
+      }
 
-			// And continued, for Device.WiFi.EndPoint.{i}. sub-objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}.Security., etc.
+      // And continued, for Device.WiFi.EndPoint.{i}. sub-objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}/// .Security., etc.
 		}
   }
 }
@@ -1456,7 +1527,7 @@ GetSupportedDMResp {
 In another example request:
 
 ```
-    GetSupportedDM{
+    GetSupportedDM {
     	obj_paths : "Device.WiFi."
     	first_level_only : true
     	return_commands : true
@@ -1465,7 +1536,7 @@ In another example request:
     }
 ```
 
-The Agent's respose would be:
+The Agent's response would be:
 
 ```
     GetSupportedDMResp {
@@ -1494,21 +1565,25 @@ The Agent's respose would be:
     			}
     			//followed by its immediate child objects with no details
     			{
-          supported_obj_path : "Device.WiFi.Radio.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+            supported_obj_path : "Device.WiFi.Radio.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.SSID.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.SSID.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.AccessPoint.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.AccessPoint.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     			{
-    			supported_obj_path : "Device.WiFi.EndPoint.{i}."
-    			access : ADD_DELETE (1)
-    			is_multi_instance : true}
+    			  supported_obj_path : "Device.WiFi.EndPoint.{i}."
+    			  access : ADD_DELETE (1)
+    			  is_multi_instance : true
+          }
     		}
     	}
     }
@@ -1576,10 +1651,12 @@ This field contains the Path Name of the reported Object.
 
 The field contains an enumeration of type ObjAccessType specifying the access permissions that are specified for this Object in the Agent's Supported Data Model. This usually only applies to Multi-Instance Objects. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
 
+```
     OBJ_READ_ONLY (0)
     OBJ_ADD_DELETE (1)
     OBJ_ADD_ONLY (2)
     OBJ_DELETE_ONLY (3)
+```
 
 `bool is_multi_instance`
 
@@ -1607,9 +1684,11 @@ This field contains the local name of the Parameter.
 
 The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
 
+```
     PARAM_READ_ONLY (0)
     PARAM_READ_WRITE (1)
     PARAM_WRITE_ONLY (2)
+```
 
 ###### SupportedCommandResult fields
 
@@ -1681,9 +1760,9 @@ Subscriptions are maintained in instances of the Multi-Instance Subscription Obj
 
 All subscriptions apply to one or more Objects or parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the `ReferenceList` parameter. The `ReferenceList` parameter may have different meaning depending on the nature of the notification subscribed to.
 
-For example, a Controller wants to be notified when a new WiFi station joins the WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
+For example, a Controller wants to be notified when a new WiFi station joins the WiFi network. It uses the Add message to create an instance of a Subscription Object with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` parameter and `ObjectCreation` as the `NotificationType`.
 
-In another example, a Controller wants to be notified whenever an outside source changes the SSID of a WiFi network. It uses the Add message to create a subscription Object instance with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
+In another example, a Controller wants to be notified whenever an outside source changes the SSID of a WiFi network. It uses the Add message to create an instance of a Subscription Object with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
 
 <a id='notification_retry' />
 
@@ -1772,7 +1851,7 @@ body {
     notify {
       subscription_id: "vc-1"
       send_resp: true
-      value_change {      
+      value_change {
           param_path: "Device.DeviceInfo.FriendlyName"
           param_value: "MyDevicesFriendlyName"
       }
@@ -1814,15 +1893,20 @@ body {
         params {
           {
             key: "Cause"
-            value: "LocalReboot"}
+            value: "LocalReboot"
+          }
           {
-            key: "CommandKey"}
+            key: "CommandKey"
+            value: "controller-command-key"
+          }
           {
-            key: "Parameter.1.Path"
-            value: "Device.LocalAgent.Controller.1.Enable"}
+            key: "ParameterMap"
+            value: "{Device.LocalAgent.Controller.1.Enable:True,Device.LocalAgent.Controller.2.Enable:False}"
+          }
           {
-            key: "Parameter.1.Value"
-            value: "True"}
+            key: "FirmwareUpdated"
+            value: "false"
+          }
         }
       }
     }
@@ -1900,7 +1984,7 @@ This field contains the value of the parameter specified in `param_path`.
 
 `string obj_path`
 
-This field contains the Path Name of the created Object instance.
+This field contains the Path Name of the created Object Instance.
 
 `map<string, string> unique_keys`
 
@@ -1910,7 +1994,7 @@ This field contains a map of key/value pairs for all supported parameters that a
 
 `string obj_path`
 
-This field contains the Path Name of the deleted Object instance.
+This field contains the Path Name of the deleted Object Instance.
 
 ##### OperationComplete fields
 
@@ -1943,7 +2027,7 @@ This field contains a map of key/value pairs indicating the output arguments (re
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the operation to fail. Appropriate error codes for CommandFailure include `7002-7008`, `7016`, `7022`, `7023`, and `7800-7999`.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the operation to fail. Appropriate error codes for CommandFailure include `7002-7008`, `7016`, `7022`, `7023`, and `7800-7999`.
 
 `string err_msg`
 
@@ -1989,7 +2073,7 @@ Additional methods (operations) are and can be defined in the USP data model. Op
 
 ### Synchronous Operations
 
-A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the send_resp flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.
+A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the `send_resp` flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.
 
 <img src="synchronous_operation.png" />
 
@@ -2145,7 +2229,7 @@ This field contains a map of key/value pairs indicating the output arguments (re
 
 `fixed32 err_code`
 
-This field contains the [error code](#error-codes) of the error that caused the operation to fail.
+This field contains a [numeric code](#error-codes) indicating the type of the error that caused the operation to fail.
 
 `string err_msg`
 
@@ -2172,7 +2256,7 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target endpoint in an invalid or unrecoverable state. |
 | `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target endpoint. |
 | `7009` | Parameter action failed | Set | This error indicates that the parameter failed to update for a general reason described in an err_msg field. |
-| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError did not match any instantiated parameters. |
+| `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated parameters. |
 | `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the parameter. |
 | `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the parameter. |
 | `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source endpoint attempted to update a parameter that is not defined as a writeable parameter. |
@@ -2181,15 +2265,15 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7016` | Object does not exist | Add, Set | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
 | `7017` | Object could not be created | Add | This error indicates that the operation failed to create an instance of the specified Object. |
 | `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
-| `7019` | Attempt to create non-creatable Object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
+| `7019` | Attempt to create non-creatable object | Add | This error indicates that the source endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
-| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError message. |
+| `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required parameters failed to update. Details on the failed parameters are included in an associated ParamError or ParameterError message. |
 | `7022` | Command failure | Operate | This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field. |
 | `7023` | Command canceled | Operate | This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation. |
 | `7024` | Delete failure | Delete | This error indicates that this Object Instance failed to be deleted. |
-| `7025` | Object exists with duplicate key | Add | This error indicates that an Object tried to be created with a unique keys that already exist, or the unique keys were configured to those that already exist. |
+| `7025` | Object exists with duplicate key | Add, Set | This error indicates that an Object already exists with the unique keys specified in an Add or Set message. |
 | `7026` | Invalid path | Any | This error indicates that the Object or Parameter Path Name specified does not match any Objects or Parameters in the Agent's Supported Data Model |
-| `7027` | Invalid Command Arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
+| `7027` | Invalid command arguments | Operate | This error indicates that an Operate message failed due to invalid or unknown arguments specified in the command. |
 | `7100-7199` | USP Record error codes | - | These errors are listed and described in (Message Transfer Protocols)[/specification/mtp/]. |
 | `7800-7999`| Vendor defined error codes | - | These errors are [vendor defined](#vendor_defined_error_codes). |
 

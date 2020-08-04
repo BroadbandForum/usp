@@ -150,7 +150,7 @@ The state transitions between the non-transitory states are triggered by executi
 
 * In order to Stop an EU, the Controller sends a `SetRequestedState()` command with the `RequestedState` parameter set to Idle.   The EU enters the Stopping state, during which it takes any necessary steps to move to the Idle state, and then transitions to that state.
 
-* It is also possible that the EU could transition to the Active or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` object instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` parameter.
+* It is also possible that the EU could transition to the Active or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` Object Instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` parameter.
 
 The inventory of available EUs along with their current state can be found in the `SoftwareModules` service element found in the Root data model; i.e., the `SoftwareModules.ExecutionUnit.{i}` object.  This object contains a list of all the EUs currently on the device along with accompanying status and any current errors as well as resource utilization related to the EU, including memory and disk space in use.
 
@@ -178,13 +178,13 @@ The EUs created by the Installation of a particular DU might provide functionali
 
 5. Standalone vendor extension objects that are directly controlled objects of the EU (for example, a new vendor specific object providing configuration for a movies on demand service).
 
-In all cases the [GetSupportedDM](/specification/messages/#getsupporteddm) and [GetInstances](/specification/messages/#getinstances) messages can be used to retrieve the associated supported data model along with the corresponding object instances.
+In all cases the [GetSupportedDM](/specification/messages/#getsupporteddm) and [GetInstances](/specification/messages/#getinstances) messages can be used to retrieve the associated supported data model along with the corresponding Object Instances.
 
 All data model services, objects, and parameters related to a particular EU come into existence at the time of Installation or Update of the related DU, The related data model disappears from the device’s data model tree at the time of Uninstall and clean up of the related DU resources.  It is possible that the device could encounter errors during the process of discovering and creating EUs; if this happens, it is not expected that the device would roll back any data model it has created up until this point but would rather set the `ExecutionFaultCode` of the EU to "`Unstartable`."  In this case, it is not expected that any faults (with the exception of System Resources Exceeded) would have been generated in response to the Install or Update operation.  See below for more information on EU faults.
 
-The configuration of EUs could be backed up and restored using vendor configuration files.  The EU object in the data model contains a parameter, which is a path reference to an instance in the vendor config file table in the Root data model.  This path reference indicates the vendor config file associated with the configuration of the particular EU from which the associated object instance could be backed up or restored using respective commands for that object instance.
+The configuration of EUs could be backed up and restored using vendor configuration files.  The EU object in the data model contains a parameter, which is a path reference to an instance in the vendor config file table in the Root data model.  This path reference indicates the vendor config file associated with the configuration of the particular EU from which the associated Object Instance could be backed up or restored using respective commands for that Object Instance.
 
-It is also possible that applications could have dedicated log files.  The EU object also contains a parameter, which is a path reference to an instance in the log file table in the root data model. This path reference indicates the log file associated with a particular EU from which the referenced object instance could be retrieved using the Upload command for that object instance.
+It is also possible that applications could have dedicated log files.  The EU object also contains a parameter, which is a path reference to an instance in the log file table in the root data model. This path reference indicates the log file associated with a particular EU from which the referenced Object Instance could be retrieved using the Upload command for that Object Instance.
 
 <a id='execution_environment_concepts' />
 
@@ -196,7 +196,7 @@ As discussed above, an EE is a software platform that supports the dynamic loadi
 
 Figure SMM.3 – Possible Multi-Execution Environment Implementation
 
-In this example, the device exposes its Linux Operating System as an EE and has two different OSGi frameworks layered on top of it, all of which are modeled as separate ExecEnv object instances. In order to indicate the layering to a Controller, the two OSGi framework objects (`.ExecEnv.2` and `.ExecEnv.3`) would populate the `Exec.Env.{i}.Parent` parameter with a path reference to the Linux object (`.ExecEnv.1`).  The Linux EE object would populate that parameter with an empty string to indicate that it is not layered on top of any managed EE.
+In this example, the device exposes its Linux Operating System as an EE and has two different OSGi frameworks layered on top of it, all of which are modeled as separate ExecEnv Object Instances. In order to indicate the layering to a Controller, the two OSGi framework objects (`.ExecEnv.2` and `.ExecEnv.3`) would populate the `Exec.Env.{i}.Parent` parameter with a path reference to the Linux object (`.ExecEnv.1`).  The Linux EE object would populate that parameter with an empty string to indicate that it is not layered on top of any managed EE.
 
 Multiple versions of a DU can be installed within a single EE instance, but there can only be one instance of a given version at a time.  In the above diagram, there are two versions of DU1, v1.0 and v1.2 installed on `.ExecEnv.2.`  If an attempt is made to update DU1 to version 1.2, or to install another DU with version 1.0 or 1.2, on `ExecEnv.2`, the operation will fail.
 

@@ -134,3 +134,5 @@ While section 9 of [RFC 7252][9] provides guidance on securing CoAP, further gui
 As USP Endpoints play the role of both CoAP client and server; when the MTP is secured using the Certificate mode of CoAP Security, the USP Endpoint provides a X.509 certificate to the MTP peer.
 
 **R-COAP.16** – When the Certificate mode of CoAP is used to secure an MTP, a USP Endpoint MUST provide an X.509 certificate to the MTP peer.
+
+Note that DTLS sessions established for an Endpoint's CoAP client and CoAP server are distinct. Therefore, it is possible for CoAP to be encrypted in one direction and not the other. If this happens, the requirements and flows in [Authentication and Authorization](../../security/index.html) will dictate that [Secure Message Exchange](../../e2e-message-exchange/index.md) be used.
