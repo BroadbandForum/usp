@@ -22,12 +22,14 @@
     <ul>
     <li>The <a href="/specification/"><em>specification</em></a> directory contains the full text of the current version of the protocol, and the schema (currently in Protocol Buffers) for the syntax of USP messages. Use this section when developing your USP protocol stack.</li>
     <li>The <a href="http://usp-data-models.broadband-forum.org/"><em>data models</em></a> link will take you to the generated versions of the Device:2 data model (also known as "TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents") specific to USP. The raw xml used in development can be found in this directory. Use these to find the objects necessary to the USP protocol stack, and when developing the objects, interfaces, services, etc. that you want to manage and control with USP.</li>
+    <li>The USP Agent <a href="https://usp-compliance.broadband-forum.org/">Test Plan</a> provides a list of the test cases executed to validate USP Agent implementations and seek certification.</li>
+    <li><a href="/resources/">Dev Resources</a> provides several links for how to build, test, certify, and bring to market USP based solutions.</li>
     <li>The <a href="/faq/"><em>FAQ</em></a> page gives information on frequently asked questions. Use this section to learn more about USP and getting involved in its ongoing development.</li>
     </ul>
   </div>
   <div style="width:45%; float:right;">
 
-    <h2>Current Version: 1.1</h2>
+    <h2>Current Version: 1.1.2</h2>
 
     <h4>About this version:</h4>
 
