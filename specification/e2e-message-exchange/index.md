@@ -562,7 +562,7 @@ While traditionally deployed over reliable streams, TLS is a record-based protoc
 
 When TLS is used as a payload protection mechanism for USP Message, TLS requires the use of the Session Context to negotiate its TLS session. The USP Endpoint that initiated the Session Context will act in the TLS client role when establishing the security layer. The security layer is constructed using a standard TLS handshake, encapsulated within one or more of the above-defined USP Record payload datagrams. Per the TLS protocol, establishment of a new TLS session requires two round-trips.
 
-<img src="handshake.png">
+<img src="tls-session-handshake.png">
 
 Figure E2E.4 – TLS session handshake
 
