@@ -47,6 +47,13 @@
     <li>Extensions for bulk data collection, firmware management, software module management, and device proxying</li>
     <li>Theory of operations for using a USP Agent to control IoT devices and systems</li>
     </ul>
+    
+    <h4>Available drafts:</h4>
+    <p>The upcoming versions of USP (1.2) and the TR-181 Device Data Model for USP (Device:2.15) are available for preview.</p>
+    <ul>
+      <li><a href="/resources/tr-181-2-usp.xml.html">View Device:2.15 draft (html)</a></li>
+      <li><a href="/resources/wt-369-1-2-draft1.pdf">Download the USP 1.2 draft (pdf)</a></li>
+    </ul>
 
     <p style="text-align:center; margin-top:4ex;"><a href="http://www.broadband-forum.org"><img src="/assets/img/broadband-forum-logo.png"></a></p>
     <p style="text-align:center;">USP is developed by the Broadband Forum. For more information, visit <a href="http://www.broadband-forum.org">http://www.broadband-forum.org</a></p>
