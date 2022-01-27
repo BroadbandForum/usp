@@ -1,0 +1,423 @@
+# WT-369 common metadata
+
+# each makefile must set ROOTDIR to be the relative path to the root target
+# directory; as it happens, it will typically be the same as TOPDIR
+
+# USP major, minor, patch and draft versions
+# XXX could improve how these are referenced
+uspMajor: 1
+uspMinor: 2
+uspPatch: 0
+uspDraft: ''
+
+# BBF-specific metadata; c.f. Word properties
+bbfNumber: TR-369a%uspMinor%%uspDraft%
+bbfTitle: User Services Platform (USP)
+bbfIssue: Issue
+bbfVersion: '%uspMajor% Amendment %uspMinor%'
+bbfMonth: January
+bbfYear: 2022
+bbfType: Technical Report
+bbfStatus:
+bbfContrib:
+
+# default title is 'shortname -- bbfTitle', but shortname is set below; without
+# this override, the title wouldn't include the number
+title: '%bbfNumber% -- %bbfTitle%'
+
+# information shown on each page header
+siteurl: '%ROOTDIR%/index.html'
+
+project: The User Services Platform
+
+tagline: A standardized protocol to manage, monitor, update, and control
+         connected devices, IoT endpoints, user services and home networks
+
+# displayed version number
+versionNumber: '%uspMajor%.%uspMinor%'
+
+# don't display these in the banner
+version: ''
+status: ''
+
+# information shown in the footer
+shortname: USP
+reponame: usp
+
+# Protobuf files and URLs
+usp-msg-proto-file: 'usp-msg-%uspMajor%-%uspMinor%.proto'
+usp-record-proto-file: 'usp-record-%uspMajor%-%uspMinor%.proto'
+usp-msg-proto-url: '%ROOTDIR%/specification/%usp-msg-proto-file%'
+usp-record-proto-url: '%ROOTDIR%/specification/%usp-record-proto-file%'
+
+# Protobuf example verification settings
+code-block-filters:
+  pbv:
+    prog: protobuf-verify.py
+    args:
+      path:
+        - '%PYTHONDIR%'
+      import:
+        - 'usp.usp_record_%uspMajor%_%uspMinor%_pb2'
+        - 'usp.usp_msg_%uspMajor%_%uspMinor%_pb2'
+      type: '!attributes.type'
+      from: '!attributes.from'
+      to: '!classes.protobuf|json|yaml'
+
+# Dev Resources and FAQ URLs (also used in top-level index.md)
+resurl: '%ROOTDIR%/resources/01-index-usp-development-resources.html'
+faqurl: '%ROOTDIR%/faq/01-index-faq.html'
+
+buttons:
+- label: Specification
+  title: USP Specification
+  url: '%ROOTDIR%/specification/index.html'
+- label: HTML
+  title: USP Specification Single-file HTML
+  url: '%ROOTDIR%/specification/index.htm'
+- label: PDF
+  title: USP Specification PDF
+  url: '%ROOTDIR%/specification/index.pdf'
+- label: Data Models
+  title: USP Data Models
+  url: https://usp-data-models.broadband-forum.org
+- label: Test Plan
+  title: USP Test Plan
+  url: https://usp-test.broadband-forum.org
+- label: Resources
+  title: USP Development Resources
+  url: '%resurl%'
+- label: FAQ
+  title: USP Frequently Asked Questions
+  url: '%faqurl%'
+
+# these references assume use of bbf.csl; please follow the existing style
+
+references:
+
+# IETF
+
+- id: RFC1035
+  call-number: RFC 1035
+  title: Domain Names - Implementation and Specification
+  publisher: IETF
+  issued: {year: 1987}
+  URL: https://tools.ietf.org/html/rfc1035
+
+- id: RFC2119
+  call-number: RFC 2119
+  title: Key words for use in RFCs to Indicate Requirement Levels
+  publisher: IETF
+  issued: {year: 1997}
+  URL: https://tools.ietf.org/html/rfc2119
+
+- id: RFC2136
+  call-number: RFC 2136
+  title: Dynamic Updates in the Domain Name System (DNS UPDATE)
+  publisher: IETF
+  issued: {year: 1997}
+  URL: https://tools.ietf.org/html/rfc2136
+
+# XXX this is obsoleted by RFC 8141
+- id: RFC2141
+  call-number: RFC 2141
+  title: URN Syntax
+  publisher: IETF
+  issued: {year: 1997}
+  URL: https://tools.ietf.org/html/rfc2141
+
+- id: RFC2234
+  call-number: RFC 2234
+  title: 'Augmented BNF for Syntax Specifications: ABNF'
+  publisher: IETF
+  issued: {year: 1997}
+  URL: https://tools.ietf.org/html/rfc2234
+
+- id: RFC2648
+  call-number: RFC 2648
+  title: A URN Namespace for IETF Documents
+  publisher: IETF
+  issued: {year: 1999}
+  URL: https://tools.ietf.org/html/rfc2648
+
+- id: RFC3007
+  call-number: RFC 3007
+  title: Secure Domain Name System (DNS) Dynamic Update
+  publisher: IETF
+  issued: {year: 2000}
+  URL: https://tools.ietf.org/html/rfc3007
+
+- id: RFC3279
+  call-number: RFC 3279
+  title: Algorithms and Identifiers for the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile
+  publisher: IETF
+  issued: {year: 2002}
+  URL: https://datatracker.ietf.org/doc/html/rfc3279
+
+- id: RFC3315
+  call-number: RFC 3315
+  title: Dynamic Host Configuration Protocol for IPv6 (DHCPv6)
+  publisher: IETF
+  issued: {year: 2003}
+  URL: https://tools.ietf.org/html/rfc3315
+
+- id: RFC3925
+  call-number: RFC 3925
+  title: Vendor-Identifying Vendor Options for
+         Dynamic Host Configuration Protocol version 4 (DHCPv4)
+  publisher: IETF
+  issued: {year: 2004}
+  URL: https://tools.ietf.org/html/rfc3925
+
+- id: RFC3986
+  call-number: RFC 3986
+  title: 'Uniform Resource Identifier (URI): Generic Syntax'
+  publisher: IETF
+  issued: {year: 2005}
+  URL: https://tools.ietf.org/html/rfc3986
+
+- id: RFC4033
+  call-number: RFC 4033
+  title: DNS Security Introduction and Requirements
+  published: IETF
+  issued: {year: 2005}
+  URL: https://tools.ietf.org/html/rfc4033
+
+- id: RFC4122
+  call-number: RFC 4122
+  title: A Universally Unique IDentifier (UUID) URN Namespace
+  published: IETF
+  issued: {year: 2005}
+  URL: https://tools.ietf.org/html/rfc4122
+
+- id: RFC4180
+  call-number: RFC 4180
+  title: Common Format and MIME Type for Comma-Separated Values (CSV) Files
+  published: IETF
+  issued: {year: 2005}
+  URL: https://tools.ietf.org/html/rfc4180
+
+- id: RFC5246
+  call-number: RFC 5246
+  title: The Transport Layer Security (TLS) Protocol Version 1.2
+  published: IETF
+  issued: {year: 2008}
+  URL: https://tools.ietf.org/html/rfc5246
+
+# XXX this is wrongly labeled RFC 5290 on usp.technology
+- id: RFC5280
+  call-number: RFC 5280
+  title: Internet X.509 Public Key Infrastructure Certificate and
+         Certificate Revocation List (CRL) Profile
+  published: IETF
+  issued: {year: 2008}
+  URL: https://tools.ietf.org/html/rfc5280
+
+- id: RFC5705
+  call-number: RFC 5705
+  title: Keying Material Exporters for Transport Layer Security (TLS)
+  publisher: IETF
+  issued: {year: 2010}
+  URL: https://tools.ietf.org/html/rfc5705
+
+- id: RFC5869
+  call-number: RFC 5869
+  title: HMAC-based Extract-and-Expand Key Derivation Function (HKDF)
+  publisher: IETF
+  issued: {year: 2010}
+  URL: https://tools.ietf.org/html/rfc5869
+
+- id: RFC6066
+  call-number: RFC 6066
+  title: "Transport Layer Security (TLS) Extensions: Extension Definitions"
+  publisher: IETF
+  issued: {year: 2011}
+  URL: https://tools.ietf.org/html/rfc6066
+
+- id: RFC6125
+  call-number: RFC 6125
+  title: Representation and Verification of Domain-Based Application Service
+         Identity within Internet Public Key Infrastructure Using X.509 (PKIX)
+         Certificates in the Context of Transport Layer Security (TLS)
+  publisher: IETF
+  issued: {year: 2011}
+  URL: https://tools.ietf.org/html/rfc6125
+
+- id: RFC6455
+  call-number: RFC 6455
+  title: The WebSocket Protocol
+  publisher: IETF
+  issued: {year: 2011}
+  URL: https://tools.ietf.org/html/rfc6455
+
+- id: RFC6347
+  call-number: RFC 6347
+  title: Datagram Transport Layer Security Version 1.2
+  publisher: IETF
+  issued: {year: 2012}
+  URL: https://tools.ietf.org/html/rfc6347
+
+- id: RFC6762
+  call-number: RFC 6762
+  title: Multicast DNS
+  publisher: IETF
+  issued: {year: 2013}
+  URL: https://tools.ietf.org/html/rfc6762
+
+- id: RFC6763
+  call-number: RFC 6763
+  title: DNS-Based Service Discovery
+  publisher: IETF
+  issued: {year: 2013}
+  URL: https://tools.ietf.org/html/rfc6763
+
+- id: RFC6818
+  call-number: RFC 6818
+  title: Updates to the Internet X.509 Public Key Infrastructure
+         Certificate and Certificate Revocation List (CRL) Profile
+  publisher: IETF
+  issued: {year: 2013}
+  URL: https://tools.ietf.org/html/rfc6818
+
+- id: RFC6979
+  call-number: RFC 6979
+  title: Deterministic Usage of the Digital Signature Algorithm (DSA) and
+         Elliptic Curve Digital Signature Algorithm (ECDSA)
+  publisher: IETF
+  issued: {year: 2013}
+  URL: https://tools.ietf.org/html/rfc6979
+
+- id: RFC7159
+  call-number: RFC 7159
+  title: The JavaScript Object Notation (JSON) Data Interchange Format
+  published: IETF
+  issued: {year: 2014}
+  URL: https://tools.ietf.org/html/rfc7159
+
+- id: RFC7228
+  call-number: RFC 7228
+  title: Terminology for Constrained-Node Networks
+  published: IETF
+  issued: {year: 2013}
+  URL: https://tools.ietf.org/html/rfc7228
+
+- id: RFC7252
+  call-number: RFC 7252
+  title: The Constrained Application Protocol (CoAP)
+  published: IETF
+  issued: {year: 2014}
+  URL: https://tools.ietf.org/html/rfc7252
+
+- id: RFC7390
+  call-number: RFC 7390
+  title: Group Communication for the Constrained Application Protocol (CoAP)
+  published: IETF
+  issued: {year: 2014}
+  URL: https://tools.ietf.org/html/rfc7390
+
+- id: RFC7925
+  call-number: RFC 7925
+  title: Transport Layer Security (TLS) / Datagram Transport Layer Security (DTLS) Profiles for the Internet of Things
+  published: IETF
+  issued: {year: 2016}
+  URL: https://tools.ietf.org/html/rfc7925
+
+- id: RFC7959
+  call-number: RFC 7959
+  title: Block-Wise Transfers in the Constrained Application Protocol (CoAP)
+  published: IETF
+  issued: {year: 2016}
+  URL: https://tools.ietf.org/html/rfc7959
+
+- id: RFC8446
+  call-number: RFC 8446
+  title: The Transport Layer Security (TLS) Protocol Version 1.3
+  publisher: IETF
+  issued: {year: 2018}
+  URL: https://tools.ietf.org/html/rfc8446
+
+- id: RFC8766
+  call-number: RFC 8766
+  title: Discovery Proxy for Multicast DNS-Based Service Discovery
+  published: IETF
+  issued: {year: 2020}
+  URL: https://tools.ietf.org/html/rfc8766
+
+# BBF
+
+- id: TR-069
+  call-number: TR-069 Amendment 6
+  title: CPE WAN Management Protocol
+  publisher: Broadband Forum
+  issued: {year: 2018}
+  URL: https://www.broadband-forum.org/technical/download/TR-069.pdf
+
+- id: TR-106
+  call-number: TR-106
+  title: Data Model Template for CWMP Endpoints and USP Agents
+  publisher: Broadband Forum
+  URL: https://data-model-template.broadband-forum.org
+
+- id: TR-181
+  call-number: TR-181 Issue 2
+  title: Device Data Model
+  publisher: Broadband Forum
+  URL: https://usp-data-models.broadband-forum.org#Device:2
+
+# other
+
+- id: IEEEREG
+  call-number: Assignments
+  title: IEEE Registration Authority
+  publisher: IEEE
+  URL: https://regauth.standards.ieee.org
+
+- id: MQTT-5-0
+  call-number: MQTT 5.0
+  title: MQ Telemetry Transport 5.0
+  publisher: OASIS
+  URL: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+
+- id: MQTT-3-1-1
+  call-number: MQTT 3.1.1
+  title: MQ Telemetry Transport 3.1.1
+  publisher: OASIS
+  URL: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
+
+- id: PROTOBUF
+  call-number: Protocol Buffers v3
+  title: Protocol Buffers Mechanism for Serializing Structured Data Version 3
+  publisher: Google
+  URL: https://developers.google.com/protocol-buffers/docs/proto3
+
+# XXX should the reference include the version number?
+- id: STOMP-1-2
+  call-number: STOMP-1-2
+  title: Simple Text Oriented Message Protocol
+  URL: https://stomp.github.io/stomp-specification-1.2.html
+
+- id: FIPS-180.4
+  call-number: FIPS PUB 180-4
+  title: Secure Hash Standard (SHS)
+  publisher: NIST
+  URL: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+
+- id: FIPS-186.4
+  call-number: FIPS PUB 186-4
+  title: Digital Signature Standard (DSS)
+  publisher: NIST
+  URL: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf
+
+- id: SOAP-1-1
+  call-number: SOAP 1.1
+  title: Simple Object Access Protocol (SOAP) 1.1
+  publisher: W3C
+  issued: {year: 2000}
+  URL: https://www.w3.org/TR/2000/NOTE-SOAP-20000508/
+
+- id: XMLSCHEMA-2
+  call-number: XML Schema Part 2
+  title: 'XML Schema Part 2: Datatypes Second Edition'
+  publisher: W3C
+  issued: {year: 2004}
+  URL: https://www.w3.org/TR/xmlschema-2/

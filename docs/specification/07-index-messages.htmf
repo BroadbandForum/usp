@@ -1,0 +1,2529 @@
+<!-- <h1 class="display-none" id="sec:messages">7 Messages<a class="headerlink" href="07-index-messages.html#sec:messages" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h1> -->
+
+<p>USP contains messages to create, read, update, and delete Objects, perform Object-defined operations, and allow Agents to notify controllers of events. This is often referred to as CRUD with the addition of O (operate) and N (notify), or CRUD-ON.</p>
+
+<p><em>Note: This version of the specification defines its Messages in <a href='05-index-encoding.html#sec:encoding' title='' class="heading">Protocol Buffers v3</a>. This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.</em></p>
+
+<p>These sections describe the types of USP Messages and the normative requirements for their flow and operation. USP Messages are described in a protocol buffers schema, and the normative requirements for the individual fields of the schema are outlined below.</p>
+
+<h2 id="sec:encapsulation-in-a-usp-record">7.1 Encapsulation in a USP Record<a class="headerlink" href="07-index-messages.html#sec:encapsulation-in-a-usp-record" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>All USP Messages are encapsulated by a USP Record. The definition of the USP Record portion of a USP Message can be found in <a href='04-index-mtp.html#sec:record-definition' title='' class="heading">Record Definition</a>, and the rules for managing transactional integrity are described in <a href='06-index-e2e-message-exchange.html#sec:e2e-message-exchange' title='' class="heading">End to End Message Exchange</a>.</p>
+
+<h2 id="sec:requests-responses-and-errors">7.2 Requests, Responses and Errors<a class="headerlink" href="07-index-messages.html#sec:requests-responses-and-errors" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The three types of USP Messages are Request, Response, and Error.</p>
+
+<p>A request is a Message sent from a source USP Endpoint to a target USP Endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify Message follows the same format as a request but is sent from an Agent to a Controller.</p>
+
+<p><strong><span id="r-msg.0">R-MSG.0<a class="headerlink" href="07-index-messages.html#r-msg.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The target USP Endpoint MUST respond to a request Message from the source USP Endpoint with either a response Message or Error Message, unless otherwise specified (see <a href='07-index-messages.html#sec:operate' title='' class="heading">The Operate Message</a> and <a href='07-index-messages.html#sec:notify' title='' class="heading">The Notify Message</a>).</p>
+
+<p><strong><span id="r-msg.1">R-MSG.1<a class="headerlink" href="07-index-messages.html#r-msg.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The target USP Endpoint MUST ignore or send an Error Message in response to Messages it does not understand.</p>
+
+<p><em>Note: Requirement R-MSG.2 was removed in USP 1.2, because it did not align with the concept of brokered MTPs and long-lived connections in general.</em></p>
+
+<p><strong><span id="r-msg.3">R-MSG.3<a class="headerlink" href="07-index-messages.html#r-msg.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - In any USP Message originating from an Agent, unless otherwise specified, Path Names reported from the Agent’s Instantiated Data Model MUST use Instance Number Addressing.</p>
+
+<h3 id="sec:handling-duplicate-messages">7.2.1 Handling Duplicate Messages<a class="headerlink" href="07-index-messages.html#sec:handling-duplicate-messages" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Circumstances may arise (such as multiple Message Transfer Protocols) that cause duplicate Messages (those with an identical Message ID) to arrive at the target USP Endpoint.</p>
+
+<p><strong><span id="r-msg.4">R-MSG.4<a class="headerlink" href="07-index-messages.html#r-msg.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If a target USP Endpoint receives a Message with a duplicate Message ID before it has processed and sent a Response or Error to the original Message, it MUST gracefully ignore the duplicate Message.</p>
+
+<p>For Messages that require no response, it is up to the target Endpoint implementation when to allow the same Message ID to be re-used by the same source USP Endpoint.</p>
+
+<h3 id="sec:handling-search-expressions">7.2.2 Handling search expressions<a class="headerlink" href="07-index-messages.html#sec:handling-search-expressions" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Many USP Messages allow for search expressions to be used in the request. To
+help make Controller requests more flexible, it is desired that requests using
+search expressions that match zero Objects should receive a successful
+response. In these cases, the Agent is in the desired state the Controller
+intends, and the result should not interrupt the Controller’s application.</p>
+
+<p>In the Messages below, this requirement is sometimes explicit, but it is stated here as a general requirement.</p>
+
+<p><strong><span id="r-msg.4a">R-MSG.4a<a class="headerlink" href="07-index-messages.html#r-msg.4a" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - Unless otherwise specified, if a Request contains a
+Search Path, the associated Response MUST result in a successful operation
+with an empty element (i.e. <code>oper_success{}</code>) if the Search Path matches zero
+Objects in the Agent’s Instantiated Data Model.</p>
+
+<h3 id="sec:example-message-flows">7.2.3 Example Message Flows<a class="headerlink" href="07-index-messages.html#sec:example-message-flows" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Successful request/response: In this successful Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, the Message is understood, and the Agent sends a response with the relevant information in the body.</p>
+
+<figure>
+<img src="messages/successful_response.png" id="fig:a-successful-requestresponse-sequence" alt=""/>
+<figcaption>Figure 12: A successful request/response sequence<a class="headerlink" href="07-index-messages.html#fig:a-successful-requestresponse-sequence" title="Permalink to this figure"> <img src='permalink.png' title='' width="0.8em"/></a></figcaption>
+</figure>
+
+<p>Failed request/response: In this failed Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, but the Agent throws an error. The error arguments are generated and sent in an Error Message.</p>
+
+<figure>
+<img src="messages/error_response.png" id="fig:a-failed-requestresponse-sequence" alt=""/>
+<figcaption>Figure 13: A failed request/response sequence<a class="headerlink" href="07-index-messages.html#fig:a-failed-requestresponse-sequence" title="Permalink to this figure"> <img src='permalink.png' title='' width="0.8em"/></a></figcaption>
+</figure>
+
+<h2 id="sec:message-structure">7.3 Message Structure<a class="headerlink" href="07-index-messages.html#sec:message-structure" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>A Message consists of a header and body. When using <span class="cite" data-citation-ids="PROTOBUF"><a href='01-index-introduction.html#ref-PROTOBUF' title=''>[6]</a></span>, the fields of the header and body for different Messages are defined in a schema and sent in an encoded format from one USP Endpoint to another.</p>
+
+<p><strong><span id="r-msg.5">R-MSG.5<a class="headerlink" href="07-index-messages.html#r-msg.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A Message MUST conform to the schemas defined in <a href='../specification/usp-msg-1-2.proto' title=''>usp-msg-1-2.proto</a>.</p>
+
+<p><em>Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is &ldquo;false&rdquo;. For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a <code>oneof</code> field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. &ldquo;Repeated&rdquo; fields can be included any number of times, including zero. For additional information, default values (when fields are missing) are described in the &ldquo;Default Values&rdquo; section of <span class="cite" data-citation-ids="PROTOBUF"><a href='01-index-introduction.html#ref-PROTOBUF' title=''>[6]</a></span>.</em></p>
+
+<p>Every USP Message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.</p>
+
+<p>Each of the Message types and fields below are described with the field type according to Protocol Buffers version 3 <span class="cite" data-citation-ids="PROTOBUF"><a href='01-index-introduction.html#ref-PROTOBUF' title=''>[6]</a></span>, followed by its name.</p>
+
+<h3 id="sec:the-usp-message">7.3.1 The USP Message<a class="headerlink" href="07-index-messages.html#sec:the-usp-message" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p><code>Header header</code></p>
+
+<p><strong><span id="r-msg.6">R-MSG.6<a class="headerlink" href="07-index-messages.html#r-msg.6" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A Message MUST contain exactly one header field.</p>
+
+<p><code>Body body</code></p>
+
+<p>The Message Body that must be present in every Message. The Body field contains either a Request, Response, or Error field.</p>
+
+<p><strong><span id="r-msg.7">R-MSG.7<a class="headerlink" href="07-index-messages.html#r-msg.7" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A Message MUST contain exactly one body field.</p>
+
+<h3 id="sec:message-header">7.3.2 Message Header<a class="headerlink" href="07-index-messages.html#sec:message-header" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Message Header includes a Message ID to associate Requests with Responses or Errors, and a field indicating the type of Message.</p>
+
+<p>The purpose of the Message Header is to provide basic information necessary for the target Endpoint to process the message.</p>
+
+<h4 id="sec:message-header-fields">7.3.2.1 Message Header fields<a class="headerlink" href="07-index-messages.html#sec:message-header-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string msg_id</code></p>
+
+<p>A locally unique opaque identifier assigned by the Endpoint that generated this Message.</p>
+
+<p><strong><span id="r-msg.8">R-MSG.8<a class="headerlink" href="07-index-messages.html#r-msg.8" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The msg_id field MUST be present in every Header.</p>
+
+<p><strong><span id="r-msg.9">R-MSG.9<a class="headerlink" href="07-index-messages.html#r-msg.9" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The msg_id field in the Message Header for a Response or Error that is associated with a Request MUST contain the Message ID of the associated request. If the msg_id field in the Response or Error does not contain the Message ID of the associated Request, the response or error MUST be ignored.</p>
+
+<p><code>enum MsgType msg_type</code></p>
+
+<p>This field contains an enumeration indicating the type of message contained in the Message body. It is an enumeration of:</p>
+
+<pre><code>    ERROR (0)
+    GET (1)
+    GET_RESP (2)
+    NOTIFY (3)
+    SET (4)
+    SET_RESP (5)
+    OPERATE (6)
+    OPERATE_RESP (7)
+    ADD (8)
+    ADD_RESP (9)
+    DELETE (10)
+    DELETE_RESP (11)
+    GET_SUPPORTED_DM (12)
+    GET_SUPPORTED_DM_RESP (13)
+    GET_INSTANCES (14)
+    GET_INSTANCES_RESP (15)
+    NOTIFY_RESP (16)
+    GET_SUPPORTED_PROTO (17)
+    GET_SUPPORTED_PROTO_RESP (18)</code></pre>
+
+<p><strong><span id="r-msg.10">R-MSG.10<a class="headerlink" href="07-index-messages.html#r-msg.10" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The <code>msg_type</code> field MUST be present in every Header. Though
+required, it is meant for information only. In the event this field differs
+from the <code>req_type</code> or <code>resp_type</code> in the Message body (respectively), the
+type given in either of those elements SHOULD be regarded as correct.</p>
+
+<h3 id="sec:message-body">7.3.3 Message Body<a class="headerlink" href="07-index-messages.html#sec:message-body" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Message body contains the intended message and the appropriate fields for the Message type.</p>
+
+<p>Every Message body contains exactly one message and its fields. When an Agent is the target Endpoint, these messages can be used to create, read, update, and delete Objects, or execute Object-defined operations. When a Controller is the target Endpoint, the Message will contain a notification, response, or an error.</p>
+
+<h4 id="sec:message-body-fields">7.3.3.1 Message Body fields<a class="headerlink" href="07-index-messages.html#sec:message-body-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>oneof msg_body</code></p>
+
+<p>This field contains one of the types given below:</p>
+
+<p><code>Request request</code></p>
+
+<p>This field indicates that the Message contains a request of a type given in the Request Message.</p>
+
+<p><code>Response response</code></p>
+
+<p>This field indicates that the Message contains a response of a type given in the Response Message.</p>
+
+<p><code>Error  error</code></p>
+
+<p>This field indicates that the Message contains an Error Message.</p>
+
+<h4 id="sec:request-fields">7.3.3.2 Request fields<a class="headerlink" href="07-index-messages.html#sec:request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>oneof req_type</code></p>
+
+<p>This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.</p>
+
+<pre><code>    Get get
+    GetSupportedDM get_supported_dm
+    GetInstances get_instances
+    Set set
+    Add add
+    Delete delete
+    Operate operate
+    Notify notify
+    GetSupportedProtocol get_supported_protocol</code></pre>
+
+<h4 id="sec:response-fields">7.3.3.3 Response fields<a class="headerlink" href="07-index-messages.html#sec:response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>oneof resp_type</code></p>
+
+<p>This field contains one of the types given below. Each indicates that the Message contains a Message of the given type.</p>
+
+<pre><code>    GetResp get_resp
+    GetSupportedDMResp get_supported_dm_resp
+    GetInstancesResp get_instances_resp
+    SetResp set_resp
+    AddResp add_resp
+    DeleteResp delete_resp
+    OperateResp operate_resp
+    NotifyResp notify_resp
+    GetSupportedProtocolResp get_supported_protocol_resp</code></pre>
+
+<h4 id="sec:error-fields">7.3.3.4 Error fields<a class="headerlink" href="07-index-messages.html#sec:error-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (see <a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the overall Message to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<p><code>repeated ParamError param_errs</code></p>
+
+<p>This field is present in an Error Message in response to an Add, Set, or Delete Message when the allow_partial field is false and detailed error information is available for each Object or Parameter that have caused the Message to report an Error.</p>
+
+<h5 id="sec:paramerror-fields">7.3.3.4.1 ParamError fields<a class="headerlink" href="07-index-messages.html#sec:paramerror-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string param_path</code></p>
+
+<p>This field contains a Path Name to the Object or Parameter that caused the error.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (see <a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Message to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<h2 id="sec:creating-updating-and-deleting-objects">7.4 Creating, Updating, and Deleting Objects<a class="headerlink" href="07-index-messages.html#sec:creating-updating-and-deleting-objects" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The <a href='07-index-messages.html#sec:add' title='' class="heading">Add</a>, <a href='07-index-messages.html#sec:set' title='' class="heading">Set</a>, and <a href='07-index-messages.html#sec:delete' title='' class="heading">Delete</a> requests are used to create, configure and remove Objects that comprise Service fields.</p>
+
+<h3 id="sec:selecting-objects-and-parameters">7.4.1 Selecting Objects and Parameters<a class="headerlink" href="07-index-messages.html#sec:selecting-objects-and-parameters" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Each Add, Set, and Delete request operates on one or more Path Names. For the Add request, these Path Names are references to Multi-Instance Objects. For all other requests, these Path Names can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.</p>
+
+<p>For Add and Set requests, each Object address or search is conveyed in a field that also contains a sub-field listing the Parameters to update in the matched Objects.</p>
+
+<p>The Add response contains details about the success or failure of the creation of the Object and the Parameters set during its creation. In addition, it also returns those Parameters that were set by the Agent upon creation of the Object.</p>
+
+<p>Note: The order of the data on the wire is not guaranteed to be in the order an implementation may require to process a <code>Message</code> piece by piece. Some common scenarios which an Agent will need to handle:</p>
+
+<ul>
+<li>In Objects containing a union Object, the union member Object will only exist after the discriminator Parameter was set to the associated value</li>
+<li>Key Parameters need only to have unique values after the whole Message has been processed</li>
+<li>All explicit and hidden data dependencies need to be accounted for, so if related Parameters are changed, the order in which they occur in the Message do not make any difference to the outcome</li>
+</ul>
+
+<p>For example, a Controller wants to create a new Wi-Fi network on an Agent. It could use an Add Message with the following fields:</p>
+
+<pre><code filter="pbv" type="Request">    add {
+      allow_partial: false
+      create_objs {
+        obj_path: "Device.WiFi.SSID."
+        param_settings {
+          param: "LowerLayers"
+          value: "Device.WiFi.Radio.1."
+          required: true
+        }
+        param_settings {
+          param: "SSID"
+          value: "NewSSIDName"
+          required: true
+        }
+      }
+    }</code></pre>
+
+<p>The Agent’s response would include the Object created (with its instance identifier) and the Unique Key Parameters of the created Object as defined in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href='01-index-introduction.html#ref-TR-181' title=''>[38]</a></span>:</p>
+
+<pre><code filter="pbv" type="Response">    add_resp {
+      created_obj_results {
+        requested_path: "Device.WiFi.SSID."
+        oper_status {
+          oper_success {
+            instantiated_path: "Device.WiFi.SSID.4."
+            unique_keys {
+              key: "BSSID"
+              value: "112233445566"
+            }
+            unique_keys {
+              key: "Name"
+              value: "GuestNetwork1"
+            }
+            unique_keys {
+              key: "Alias"
+              value: "cpe-alias-1"
+            }
+          }
+        }
+      }
+    }</code></pre>
+
+<h3 id="sec:using-allow-partial-and-required-parameters">7.4.2 Using Allow Partial and Required Parameters<a class="headerlink" href="07-index-messages.html#sec:using-allow-partial-and-required-parameters" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Add, Set, and Delete requests contain a field called &ldquo;<code>allow_partial</code>&rdquo;. This field determines whether or not the Message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.</p>
+
+<p>For Delete, this is straightforward - if <code>allow_partial</code> is <code>true</code>, the Agent returns a Response Message with <code>affected_paths</code> and <code>unaffected_path_errs</code> containing the successfully deleted Objects and unsuccessfully deleted Objects, respectively. If <code>allow_partial</code> is <code>false</code>, the Agent will return an Error Message if any Objects fail to be deleted.</p>
+
+<p>For the Add and Set Messages, Parameter updates contain a field called &ldquo;<code>required</code>&rdquo;. This details whether or not the update or creation of the Object should fail if a required Parameter fails.</p>
+
+<p>This creates a hierarchy of error conditions for the Add and Set requests, such as:</p>
+
+<p>Parameter Error -&gt; Object Error -&gt; Message Error</p>
+
+<p>If <code>allow_partial</code> is true, but one or more required Parameters fail to be updated or configured, the creation or update of a requested Path Name fails. This results in an <code>oper_failure</code> in the <code>oper_status</code> field and <code>updated_obj_result</code> or <code>created_obj_result</code> returned in the Add or Set response.</p>
+
+<p>If <code>allow_partial</code> is false, the failure of any required Parameters will cause the update or creation of the Object to fail, which will cause the entire Message to fail. In this case, the Agent returns an Error Message rather than a response Message.</p>
+
+<p><em>Note: It is up to the individual implementation whether to abort and return an
+Error Message after the first error, or provide information about multiple
+failures.</em></p>
+
+<p>If the Message was at least partially successful, the response will make use of the <code>oper_success</code> field to indicate the successfully affected Objects.</p>
+
+<p>The <code>oper_failure</code> and <code>oper_success</code> fields as well as Error Messages contain a field called <code>param_errs</code>, which contains fields of type <code>ParameterError</code> or <code>ParamError</code>. This is so that the Controller will receive the details of failed Parameter updates regardless of whether or not the Agent returned a Response or Error Message.</p>
+
+<p>The logic can be described as follows:</p>
+
+<table>
+<col width="13%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="13%" />
+<tr class="header">
+<th align="right"><code>allow_partial</code></th>
+<th align="center">Required Parameters</th>
+<th align="center">Required Parameter Failed</th>
+<th align="center">Other Parameter Failed</th>
+<th align="center">Response/Error</th>
+<th align="center">Oper_status of Object</th>
+<th align="left">Contains param_errs</th>
+</tr>
+<tr class="odd">
+<td align="right"><code>true</code>/<code>false</code></td>
+<td align="center">No</td>
+<td align="center">-</td>
+<td align="center">No</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="right"><code>true</code>/<code>false</code></td>
+<td align="center">No</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>true</code>/<code>false</code></td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="right"><code>true</code>/<code>false</code></td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_success</code></td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>true</code></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">-</td>
+<td align="center">Response</td>
+<td align="center"><code>oper_failure</code></td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="right"><code>false</code></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">-</td>
+<td align="center">Error</td>
+<td align="center">N/A</td>
+<td align="left">Yes</td>
+</tr>
+</table>
+
+<h3 id="sec:add">7.4.3 The Add Message<a class="headerlink" href="07-index-messages.html#sec:add" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Add Message is used to create new Instances of Multi-Instance Objects in the Agent’s Instantiated Data Model.</p>
+
+<h4 id="sec:add-example">7.4.3.1 Add Example<a class="headerlink" href="07-index-messages.html#sec:add-example" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>In this example, the Controller requests that the Agent create a new instance in the <code>Device.LocalAgent.Controller</code> table.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "52867"
+  msg_type: ADD
+}
+body {
+  request {
+    add {
+      allow_partial: true
+      create_objs {
+        obj_path: "Device.LocalAgent.Controller."
+        param_settings {
+          param: "Enable"
+          value: "true"
+          required: false
+        }
+        param_settings {
+          param: "EndpointID"
+          value: "controller-temp"
+          required: false
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "52867"
+  msg_type: ADD_RESP
+}
+body {
+  response {
+    add_resp {
+      created_obj_results {
+        requested_path: "Device.LocalAgent.Controller."
+        oper_status {
+          oper_success {
+            instantiated_path: "Device.LocalAgent.Controller.3."
+            unique_keys {
+              key: "EndpointID"
+              value: "controller-temp"
+            }
+            unique_keys {
+              key: "Alias"
+              value: "cpe-alias-3"
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<h4 id="sec:add-request-fields">7.4.3.2 Add Request fields<a class="headerlink" href="07-index-messages.html#sec:add-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>bool allow_partial</code></p>
+
+<p>This field tells the Agent how to process the Message in the event that one or more of the Objects specified in the <code>create_objs</code> argument fails creation.</p>
+
+<p><strong><span id="r-add.0">R-ADD.0<a class="headerlink" href="07-index-messages.html#r-add.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to <code>true</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> independently. The Agent MUST complete the creation of valid Objects regardless of the inability to create or update one or more Objects (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><strong><span id="r-add.1">R-ADD.1<a class="headerlink" href="07-index-messages.html#r-add.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to <code>false</code>, and no other exceptions are encountered, the Agent treats each Object matched in <code>obj_path</code> holistically. A failure to create any one Object MUST cause the Add Message to fail and return an <code>Error</code> Message (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><code>repeated CreateObject create_objs</code></p>
+
+<p>This field contains a repeated set of CreateObject fields.</p>
+
+<h5 id="sec:createobject-fields">7.4.3.2.1 CreateObject fields<a class="headerlink" href="07-index-messages.html#sec:createobject-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.</p>
+
+<p><strong><span id="r-add.2">R-ADD.2<a class="headerlink" href="07-index-messages.html#r-add.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The <code>obj_path</code> field in the <code>CreateObject</code> Message of an Add Request MUST specify or match exactly one Object Path.</p>
+
+<p><code>repeated CreateParamSetting param_settings</code></p>
+
+<p>This field contains a repeated set of CreateParamSetting fields.</p>
+
+<h6 id="sec:createparamsetting-fields">7.4.3.2.1.1 CreateParamSetting fields<a class="headerlink" href="07-index-messages.html#sec:createparamsetting-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param</code></p>
+
+<p>This field contains a Relative Path to a Parameter of the Object specified in <code>obj_path</code>, or  any Parameter in a nested tree of single instance Sub-Objects of the Object specified in <code>obj_path</code>.</p>
+
+<p><code>string value</code></p>
+
+<p>This field contains the value of the Parameter specified in the <code>param</code> field that the Controller would like to configure as part of the creation of this Object.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<p><code>bool required</code></p>
+
+<p>This field specifies whether the Agent should treat the creation of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this Parameter (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><em>Note: Any Unique Key Parameter contained in the Add Message will be considered as required regardless of how this field is set. This is to ensure that Unique Key constraints are met when creating the instance of the Object.</em></p>
+
+<p><strong><span id="r-add.3">R-ADD.3<a class="headerlink" href="07-index-messages.html#r-add.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>required</code> field is set to true, a failure to update this Parameter MUST result in a failure to create the Object.</p>
+
+<h4 id="sec:add-response-fields">7.4.3.3 Add Response fields<a class="headerlink" href="07-index-messages.html#sec:add-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated CreatedObjectResult created_obj_results</code></p>
+
+<p>A repeated set of <code>CreatedObjectResult</code> fields for each <code>CreateObject</code> field in the Add Message.</p>
+
+<h5 id="sec:createdobjectresult-fields">7.4.3.3.1 CreatedObjectResult fields<a class="headerlink" href="07-index-messages.html#sec:createdobjectresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string requested_path</code></p>
+
+<p>This field returns the value of <code>obj_paths</code> in the <code>CreateObject</code> Message associated with this <code>CreatedObjectResult</code>.</p>
+
+<p><code>OperationStatus oper_status</code></p>
+
+<p>The field contains a Message of type <code>OperationStatus</code> that specifies the overall status for the creation of the Object specified in <code>requested_path</code>.</p>
+
+<h6 id="sec:operationstatus-fields">7.4.3.3.1.1 OperationStatus fields<a class="headerlink" href="07-index-messages.html#sec:operationstatus-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>oneof oper_status</code></p>
+
+<p>This field contains one of the types given below. Each indicates that the field contains a Message of the given type.</p>
+
+<p><code>OperationFailure oper_failure</code></p>
+
+<p>Used when the Object given in <code>requested_path</code> failed to be created.</p>
+
+<p><code>OperationSuccess oper_success</code></p>
+
+<p>Used when the <code>Add</code> Message was (at least partially) successful.</p>
+
+<h6 id="sec:operationfailure-fields">7.4.3.3.1.2 OperationFailure fields<a class="headerlink" href="07-index-messages.html#sec:operationfailure-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Object creation to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<h6 id="sec:operation-success-fields">7.4.3.3.1.3 Operation Success fields<a class="headerlink" href="07-index-messages.html#sec:operation-success-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string instantiated_path</code></p>
+
+<p>This field contains the Object Instance Path of the created Object.</p>
+
+<p><code>repeated ParameterError param_errs</code></p>
+
+<p>This field returns a repeated set of ParameterError messages.</p>
+
+<p><strong><span id="r-add.4">R-ADD.4<a class="headerlink" href="07-index-messages.html#r-add.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If any of the Parameters and values specified in the <code>param_settings</code> field fail to configure upon creation, this set MUST include one field describing each of the failed Parameters and the reason for their failure.</p>
+
+<p><code>map&lt;string, string&gt; unique_keys</code></p>
+
+<p>This field contains a map of the Relative Path and value for all of this Object’s Unique Key Parameters that are supported by the Agent.</p>
+
+<p><strong><span id="r-add.5">R-ADD.5<a class="headerlink" href="07-index-messages.html#r-add.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller did not include some or all of the Unique Key Parameters that are supported by the Agent in the <code>param_settings</code> field, the Agent MUST assign values to these Parameters and return them in the <code>unique_keys</code> field.</p>
+
+<p><strong><span id="r-add.6">R-ADD.6<a class="headerlink" href="07-index-messages.html#r-add.6" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Parameters returned in <code>unique_keys</code>, these Parameters MUST NOT be returned in this field.</p>
+
+<h6 id="sec:parametererror-fields">7.4.3.3.1.4 ParameterError fields<a class="headerlink" href="07-index-messages.html#sec:parametererror-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param</code></p>
+
+<p>This field contains the Relative Parameter Path to the Parameter that failed to be set.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains the numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) of the error that caused the Parameter set to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains text related to the error specified by <code>err_code</code>.</p>
+
+<h4 id="sec:add-message-supported-error-codes">7.4.3.4 Add Message Supported Error Codes<a class="headerlink" href="07-index-messages.html#sec:add-message-supported-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the Add Message include <code>7000-7019</code>, <code>7026</code>, and <code>7800-7999</code>.</p>
+
+<h3 id="sec:set">7.4.4 The Set Message<a class="headerlink" href="07-index-messages.html#sec:set" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Set Message is used to update the Parameters of existing Objects in the Agent’s Instantiated Data Model.</p>
+
+<h4 id="sec:set-example">7.4.4.1 Set Example<a class="headerlink" href="07-index-messages.html#sec:set-example" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>In this example the Controller requests that the Agent change the value of the <code>FriendlyName</code> Parameter in the <code>Device.DeviceInfo.</code> Object.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "19220"
+  msg_type: SET
+}
+body {
+  request {
+    set {
+      allow_partial: true
+      update_objs {
+        obj_path: "Device.DeviceInfo."
+        param_settings {
+          param: "FriendlyName"
+          value: "MyDevicesFriendlyName"
+          required: true
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "19220"
+  msg_type: SET_RESP
+}
+body {
+  response {
+    set_resp {
+      updated_obj_results {
+        requested_path: "Device.DeviceInfo."
+        oper_status {
+          oper_success {
+            updated_inst_results {
+              affected_path: "Device.DeviceInfo."
+              updated_params {
+                key: "FriendlyName"
+                value: "MyDevicesFriendlyName"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<h4 id="sec:set-request-fields">7.4.4.2 Set Request fields<a class="headerlink" href="07-index-messages.html#sec:set-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>bool allow_partial</code></p>
+
+<p>This field tells the Agent how to process the Message in the event that one or more of the Objects matched in the <code>obj_path</code> fails to update.</p>
+
+<p><strong><span id="r-set.0">R-SET.0<a class="headerlink" href="07-index-messages.html#r-set.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to true, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> independently. The Agent MUST complete the update of valid Objects regardless of the inability to update one or more Objects (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><em>Note: This may cause some counterintuitive behavior if there are no required Parameters to be updated. The Set Request can still result in a Set Response (rather than an Error Message) if <code>allow_partial</code> is set to true.</em></p>
+
+<p><strong><span id="r-set.1">R-SET.1<a class="headerlink" href="07-index-messages.html#r-set.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to false, and no other exceptions are encountered, the Agent treats each <code>UpdateObject</code> message <code>obj_path</code> holistically. A failure to update any one Object MUST cause the Set Message to fail and return an Error Message (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><code>repeated UpdateObject update_objs</code></p>
+
+<p>This field contains a repeated set of UpdateObject messages.</p>
+
+<h5 id="sec:updateobject-fields">7.4.4.2.1 UpdateObject fields<a class="headerlink" href="07-index-messages.html#sec:updateobject-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains an Object Path, Object Instance Path, or Search Path to Objects or Object Instances in the Agent’s Instantiated Data Model.</p>
+
+<p><code>repeated UpdateParamSetting param_settings</code></p>
+
+<p>The field contains a repeated set of <code>UpdatedParamSetting</code> messages.</p>
+
+<h6 id="sec:updateparamsetting-fields">7.4.4.2.1.1 UpdateParamSetting fields<a class="headerlink" href="07-index-messages.html#sec:updateparamsetting-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param</code></p>
+
+<p>This field contains the Relative Path of a Parameter of the Object specified in <code>obj_path</code>.</p>
+
+<p><code>string value</code></p>
+
+<p>This field contains the value of the Parameter specified in the <code>param</code> field that the Controller would like to configure.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<p><code>bool required</code></p>
+
+<p>This field specifies whether the Agent should treat the update of the Object specified in <code>obj_path</code> as conditional upon the successful configuration of this Parameter.</p>
+
+<p><strong><span id="r-set.2">R-SET.2<a class="headerlink" href="07-index-messages.html#r-set.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>required</code> field is set to <code>true</code>, a failure to update this Parameter MUST result in a failure to update the Object (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<h4 id="sec:set-response">7.4.4.3 Set Response<a class="headerlink" href="07-index-messages.html#sec:set-response" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated UpdatedObjectResult updated_obj_results</code></p>
+
+<p>This field contains a repeated set of <code>UpdatedObjectResult</code> messages for each <code>UpdateObject</code> message in the associated Set Request.</p>
+
+<h5 id="sec:updatedobjectresult-fields">7.4.4.3.1 UpdatedObjectResult fields<a class="headerlink" href="07-index-messages.html#sec:updatedobjectresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string requested_path</code></p>
+
+<p>This field returns the value of <code>updated_obj_results</code> in the <code>UpdateObject</code> message associated with this <code>UpdatedObjectResult</code>.</p>
+
+<p><code>OperationStatus oper_status</code></p>
+
+<p>The field contains a message of type <code>OperationStatus</code> that specifies the overall status for the update of the Object specified in <code>requested_path</code>.</p>
+
+<h6 id="sec:operationstatus-fields-1">7.4.4.3.1.1 OperationStatus fields<a class="headerlink" href="07-index-messages.html#sec:operationstatus-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>oneof oper_status</code></p>
+
+<p>This field contains a message of one of the following types.</p>
+
+<p><code>OperationFailure oper_failure</code></p>
+
+<p>Used when the Object specified in <code>requested_path</code> failed to be updated.</p>
+
+<p><code>OperationSuccess oper_success</code></p>
+
+<p>Used when the <code>Set</code> message was (at least partially) successful.</p>
+
+<h6 id="sec:operationfailure-fields-1">7.4.4.3.1.2 OperationFailure fields<a class="headerlink" href="07-index-messages.html#sec:operationfailure-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Object update to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<p><code>repeated UpdatedInstanceFailure updated_inst_failures</code></p>
+
+<p>This field contains a repeated set of messages of type <code>UpdatedInstanceFailure</code>.</p>
+
+<h6 id="sec:updatedinstancefailure-fields">7.4.4.3.1.3 UpdatedInstanceFailure fields<a class="headerlink" href="07-index-messages.html#sec:updatedinstancefailure-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string affected_path</code></p>
+
+<p>This field returns the Object Path or Object Instance Path of the Object that failed to update.</p>
+
+<p><code>repeated ParameterError param_errs</code></p>
+
+<p>This field contains a repeated set of <code>ParameterError</code> messages.</p>
+
+<h6 id="sec:parametererror-fields-1">7.4.4.3.1.4 ParameterError fields<a class="headerlink" href="07-index-messages.html#sec:parametererror-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param</code></p>
+
+<p>This field contains the Relative Parameter Path to the Parameter that failed to be set.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Parameter set to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains text related to the error specified by <code>err_code</code>.</p>
+
+<h6 id="sec:operationsuccess-fields">7.4.4.3.1.5 OperationSuccess fields<a class="headerlink" href="07-index-messages.html#sec:operationsuccess-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>repeated UpdatedInstanceResult updated_inst_results</code></p>
+
+<p>This field contains a repeated set of <code>UpdatedInstanceResult</code> messages.</p>
+
+<h6 id="sec:updatedinstanceresult-fields">7.4.4.3.1.6 UpdatedInstanceResult fields<a class="headerlink" href="07-index-messages.html#sec:updatedinstanceresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string affected_path</code></p>
+
+<p>This field returns the Object Path or Object Instance Path of the updated Object.</p>
+
+<p><code>repeated ParameterError param_errs</code></p>
+
+<p>This field contains a repeated set of <code>ParameterError</code> messages.</p>
+
+<p><code>map&lt;string, string&gt; updated_params</code></p>
+
+<p>This field returns a set of key/value pairs containing a Relative Parameter Path (relative to the <code>affected_path</code>) to each of the Parameters updated by the Set Request and its value after the update.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<p><strong><span id="r-set.3">R-SET.3<a class="headerlink" href="07-index-messages.html#r-set.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Parameters specified in <code>updated_params</code>, these Parameters MUST NOT be returned in this field.</p>
+
+<p><em>Note: If the Set Request configured a Parameter to the same value it already had, this Parameter is still returned in the <code>updated_params</code>.</em></p>
+
+<h6 id="sec:parametererror-fields-2">7.4.4.3.1.7 ParameterError fields<a class="headerlink" href="07-index-messages.html#sec:parametererror-fields-2" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param</code></p>
+
+<p>This field contains the Parameter Path to the Parameter that failed to be set.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Parameter set to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains text related to the error specified by <code>err_code</code>.</p>
+
+<h4 id="sec:set-message-supported-error-codes">7.4.4.4 Set Message Supported Error Codes<a class="headerlink" href="07-index-messages.html#sec:set-message-supported-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the Set Message include <code>7000-7016</code>, <code>7020</code>, <code>7021</code>, <code>7026</code>, and <code>7800-7999</code>.</p>
+
+<h3 id="sec:delete">7.4.5 The Delete Message<a class="headerlink" href="07-index-messages.html#sec:delete" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Delete Message is used to remove Instances of Multi-Instance Objects in the Agent’s Instantiated Data Model.</p>
+
+<h4 id="sec:delete-example">7.4.5.1 Delete Example<a class="headerlink" href="07-index-messages.html#sec:delete-example" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>In this example, the Controller requests that the Agent remove the instance in
+<code>Device.LocalAgent.Controller</code> table that has the EndpointID value of &ldquo;<code>controller-temp</code>&rdquo;.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "24799"
+  msg_type: DELETE
+}
+body {
+  request {
+    delete {
+      allow_partial: false
+      obj_paths: 'Device.LocalAgent.Controller.[EndpointID=="controller-temp"].'
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "24799"
+  msg_type: DELETE_RESP
+}
+body {
+  response {
+    delete_resp {
+      deleted_obj_results {
+        requested_path: 'Device.LocalAgent.Controller.[EndpointID=="controller-temp"].'
+        oper_status {
+          oper_success {
+            affected_paths: "Device.LocalAgent.Controller.31185."
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<h4 id="sec:delete-request-fields">7.4.5.2 Delete Request fields<a class="headerlink" href="07-index-messages.html#sec:delete-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>bool allow_partial</code></p>
+
+<p>This field tells the Agent how to process the Message in the event that one or more of the Objects specified in the <code>obj_path</code> argument fails deletion.</p>
+
+<p><strong><span id="r-del.0">R-DEL.0<a class="headerlink" href="07-index-messages.html#r-del.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to true, and no other exceptions are encountered, the Agent treats each entry in <code>obj_path</code> independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see <a href='07-index-messages.html#sec:using-allow-partial-and-required-parameters' title='' class="heading">Using Allow Partial and Required Parameters</a>).</p>
+
+<p><strong><span id="r-del.1">R-DEL.1<a class="headerlink" href="07-index-messages.html#r-del.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>allow_partial</code> field is set to false, the Agent treats each entry in <code>obj_path</code> holistically. Any entry referring to an Object which is non-deletable or doesn’t exist in the supported data model MUST cause the Delete Message to fail and return an Error Message.</p>
+
+<p><code>repeated string obj_paths</code></p>
+
+<p>This field contains a repeated set of Object Instance Paths or Search Paths.</p>
+
+<h4 id="sec:delete-response-fields">7.4.5.3 Delete Response fields<a class="headerlink" href="07-index-messages.html#sec:delete-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated DeletedObjectResult deleted_obj_results</code></p>
+
+<p>This field contains a repeated set of <code>DeletedObjectResult</code> messages.</p>
+
+<h5 id="sec:deletedobjectresult-fields">7.4.5.3.1 DeletedObjectResult fields<a class="headerlink" href="07-index-messages.html#sec:deletedobjectresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string requested_path</code></p>
+
+<p>This field returns the value of the entry of <code>obj_paths</code> (in the Delete Request) associated with this <code>DeleteObjectResult</code>.</p>
+
+<p><code>OperationStatus oper_status</code></p>
+
+<p>This field contains a message of type <code>OperationStatus</code>.</p>
+
+<h6 id="sec:operationstatus-fields-2">7.4.5.3.1.1 OperationStatus fields<a class="headerlink" href="07-index-messages.html#sec:operationstatus-fields-2" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>oneof oper_status</code></p>
+
+<p>This field contains a message of one of the following types.</p>
+
+<p><code>OperationFailure oper_failure</code></p>
+
+<p>Used when the Object specified in <code>requested_path</code> failed to be deleted.</p>
+
+<p><code>OperationSuccess oper_success</code></p>
+
+<p>Used when the <code>Delete</code> Message was (at least partially) successful.</p>
+
+<h6 id="sec:operationfailure-fields-2">7.4.5.3.1.2 OperationFailure fields<a class="headerlink" href="07-index-messages.html#sec:operationfailure-fields-2" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the delete to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<h6 id="sec:operationsuccess-fields-1">7.4.5.3.1.3 OperationSuccess fields<a class="headerlink" href="07-index-messages.html#sec:operationsuccess-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>repeated string affected_paths</code></p>
+
+<p>This field returns a repeated set of Path Names to Object Instances.</p>
+
+<p><strong><span id="r-del.2">R-DEL.2<a class="headerlink" href="07-index-messages.html#r-del.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Objects specified in <code>affected_paths</code>, these Objects MUST NOT be returned in this field.</p>
+
+<p><strong><span id="r-del.2a">R-DEL.2a<a class="headerlink" href="07-index-messages.html#r-del.2a" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the requested_path was valid (i.e., properly formatted and in the Agent’s supported data model) but did not resolve to any Objects in the Agent’s instantiated data model, the Agent MUST return an OperationSuccess for this requested_path, and include an empty set for affected_path.</p>
+
+<p><code>repeated UnaffectedPathError unaffected_path_errs</code></p>
+
+<p>This field contains a repeated set of messages of type <code>UnaffectedPathError</code>.</p>
+
+<p><strong><span id="r-del.3">R-DEL.3<a class="headerlink" href="07-index-messages.html#r-del.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - This set MUST include one <code>UnaffectedPathError</code> message for each Object Instance that exists in the Agent’s instantiated data model and were matched by the Path Name specified in <code>obj_path</code> and failed to delete.</p>
+
+<p><strong><span id="r-del.4">R-DEL.4<a class="headerlink" href="07-index-messages.html#r-del.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Objects specified in <code>unaffected_paths</code>, these Objects MUST NOT be returned in this field.</p>
+
+<h6 id="sec:unaffectedpatherror-fields">7.4.5.3.1.4 UnaffectedPathError fields<a class="headerlink" href="07-index-messages.html#sec:unaffectedpatherror-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string unaffected_path</code></p>
+
+<p>This field returns the Path Name to the Object Instance that failed to be deleted.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of the error that caused the deletion of this Object to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains text related to the error specified by <code>err_code</code>.</p>
+
+<h4 id="sec:delete-message-supported-error-codes">7.4.5.4 Delete Message Supported Error Codes<a class="headerlink" href="07-index-messages.html#sec:delete-message-supported-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the Delete Message include <code>7000-7008</code>, <code>7015</code>, <code>7016</code>, <code>7018</code>, <code>7024</code>, <code>7026</code> and <code>7800-7999</code>.</p>
+
+<h2 id="sec:reading-an-agents-state-and-capabilities">7.5 Reading an Agent’s State and Capabilities<a class="headerlink" href="07-index-messages.html#sec:reading-an-agents-state-and-capabilities" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>An Agent’s current state and capabilities are represented in its data model. The current state is referred to as its Instantiated Data Model, while the data model that represents its set of capabilities is referred to as its Supported Data Model. Messages exist to retrieve data from both the instantiated and Supported Data Models.</p>
+
+<h3 id="sec:the-get-message">7.5.1 The Get Message<a class="headerlink" href="07-index-messages.html#sec:the-get-message" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The basic Get Message is used to retrieve the values of a set of Object’s Parameters in order to learn an Agent’s current state. It takes a set of Path Names as an input and returns the complete tree of all Objects and Sub-Objects of any Object matched by the specified expressions, along with each Object’s Parameters and their values. The Search Paths specified in a Get request can also target individual Parameters within Objects to be returned.</p>
+
+<p><em>Note: Those familiar with Broadband Forum TR-069 <span class="cite" data-citation-ids="TR-069"><a href='01-index-introduction.html#ref-TR-069' title=''>[36]</a></span> will recognize this behavior as the difference between &ldquo;Partial Paths&rdquo; and &ldquo;Complete Paths&rdquo;. This behavior is replicated in USP for the Get Message for each Path Name that is matched by the expression(s) supplied in the request.</em></p>
+
+<p><em>Note: Each Search Path is intended to be evaluated separately, and the results from a given Search Path are returned in a field dedicated to that Path Name. As such, it is possible that the same information may be returned from more than one Search Path. This is intended, and the Agent should treat each Search Path atomically.</em></p>
+
+<p>The response returns a <code>req_path_results</code> entry for each Path Name given in <code>param_paths</code>. If a Path expression specified in the request does not match any valid Parameters or Objects, the response will indicate that this expression was an &ldquo;Invalid Path&rdquo;, indicating that the Object or Parameter does not currently exist in the Agent’s Supported Data Model.</p>
+
+<p>Each <code>req_path_results</code> message given in the response contains a set of <code>resolved_path_results</code> messages for each Object and Sub-Object relative to the Path resolved by the <code>param_paths</code> element. Each results is followed by a list of Parameters (<code>result_params</code>) and their values. If there are no Parameters, <code>result_params</code> may be empty. These Parameter Paths are Relative Paths to the <code>resolved_path</code>.
+<em>Note: This behavior has been clarified as of USP 1.2. Previous versions implied that Sub-Object Parameters be returned as Relative Paths to the original <code>resolved_path</code> in a single <code>result_params</code> list. In USP 1.2, each Sub-Object is returned in its own <code>resolved_path</code>.</em></p>
+
+<p>The tree depth of a Get <code>result_params</code> tree can be limited by specifying a non-zero value for the <code>max_depth</code> field in Get request. If <code>max_depth</code> field is present and not <code>0</code> then the Agent will limit the maximum depth of each returned <code>result_params</code> tree to the depth specified by <code>max_depth</code> value.</p>
+
+<p><em>Note: The <code>max_depth</code> field was introduced in USP 1.2. If this field is not present in a Get request or has a value of <code>0</code>, the Agent returns the complete tree of all Objects and Sub-Objects of all the Path Names mentioned in <code>param_paths</code>. This is the same as the behavior specified for prior USP versions. An Agent implementing a prior version of the USP specification will ignore the field and behave as if the <code>max_depth</code> field was set to <code>0</code>.</em></p>
+
+<h4 id="sec:get-examples">7.5.1.1 Get Examples<a class="headerlink" href="07-index-messages.html#sec:get-examples" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>The following table illustrates the result params for one of the Path Names mentioned in <code>param_paths</code> is <code>Device.DeviceInfo.</code> and example values of the <code>max_depth</code> Get request field.</p>
+
+<table>
+<col width="32%" />
+<col width="37%" />
+<col width="32%" />
+<tr class="header">
+<th align="right"><code>max_depth</code></th>
+<th align="center"><code>param_paths</code></th>
+<th align="left"><code>result_params</code></th>
+</tr>
+<tr class="odd">
+<td align="right"><code>0</code></td>
+<td align="center"><code>Device.DeviceInfo.</code></td>
+<td align="left">All the Parameters of <code>Device.DeviceInfo.</code> and all of its Sub-Objects (like <code>Device.DeviceInfo.TemperatureStatus.</code> and <code>Device.DeviceInfo.TemperatureStatus.TemperatureSensor.{i}.</code>) along with their values</td>
+</tr>
+<tr class="even">
+<td align="right"><code>1</code></td>
+<td align="center"><code>Device.DeviceInfo.</code></td>
+<td align="left">All the Parameters of <code>Device.DeviceInfo.</code> and their values only</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>2</code></td>
+<td align="center"><code>Device.DeviceInfo.</code></td>
+<td align="left">All the Parameters of <code>Device.DeviceInfo.</code> and its first level Sub-Objects(like <code>Device.DeviceInfo.TemperatureStatus.</code>) along with their values</td>
+</tr>
+<tr class="even">
+<td align="right"><code>3</code></td>
+<td align="center"><code>Device.DeviceInfo.</code></td>
+<td align="left">All the Parameters of <code>Device.DeviceInfo.</code> and its first and second level Sub-Objects (like <code>Device.DeviceInfo.TemperatureStatus.</code> and <code>Device.DeviceInfo.TemperatureStatus.TemperatureSensor.{i}.</code>) along with their values</td>
+</tr>
+</table>
+
+<p>For example, a Controller wants to read the data model to learn the settings and <code>Stats</code> of a single Wi-Fi SSID, &ldquo;HomeNetwork&rdquo; with a BSSID of &ldquo;00:11:22:33:44:55&rdquo;. It could use a Get request with the following fields:</p>
+
+<pre><code filter="pbv" type="Request">    get {
+      param_paths: 'Device.WiFi.SSID.[SSID=="HomeNetwork"&amp;&amp;BSSID=="00:11:22:33:44:55"].'
+      max_depth: 2
+    }</code></pre>
+
+<p>In response to this request the Agent returns all Parameters, plus Sub-Objects and their Parameters, of the addressed instance. The <code>max_depth</code> value of <code>2</code> has no impact on the returned result in this case since the SSID Object only contains the <code>Stats</code> Sub-Object which has no Sub-Objects of its own. Had <code>max_depth</code> been set to <code>1</code> then all of the SSID Parameters and their values would have been returned, as well as the <code>Stats</code> Sub-Object, but the Sub-Object’s Parameters and values would have been omitted. The Agent returns this data in the Get response using a field for each of the requested Path Names. In this case:</p>
+
+<pre><code filter="pbv" type="Response">    get_resp {
+      req_path_results {
+        requested_path: 'Device.WiFi.SSID.[SSID=="HomeNetwork"&amp;&amp;BSSID=="00:11:22:33:44:55"].'
+        resolved_path_results {
+          resolved_path: "Device.WiFi.SSID.1."
+          result_params {
+            key: "Enable"
+            value: "true"
+          }
+          result_params {
+            key: "Status"
+            value: "Up"
+          }
+          result_params {
+            key: "Alias"
+            value: "cpe-alias-1"
+          }
+          result_params {
+            key: "Name"
+            value: "Home Network"
+          }
+          result_params {
+            key: "LastChange"
+            value: "864000"
+          }
+          result_params {
+            key: "BSSID"
+            value: "00:11:22:33:44:55"
+          }
+          result_params {
+            key: "SSID"
+            value: "HomeNetwork"
+          }
+        }
+
+        resolved_path_results {
+          resolved_path: "Device.WiFi.SSID.1.Stats."
+          result_params {
+            key: "BytesSent"
+            value: "24901567"
+          }
+          result_params {
+            key: "BytesReceived"
+            value: "892806908296"
+          }
+
+#           (etc.)
+
+
+        }
+      }
+    }</code></pre>
+
+<p>In another example, the Controller only wants to read the current status of the Wi-Fi network with the SSID &ldquo;HomeNetwork&rdquo; with the BSSID of 00:11:22:33:44:55. It could use a Get request with the following fields:</p>
+
+<pre><code filter="pbv" type="Request">    get {
+      param_paths: 'Device.WiFi.SSID.[SSID=="HomeNetwork"&amp;&amp;BSSID=="00:11:22:33:44:55"].Status'
+    }</code></pre>
+
+<p>In response to this request the Agent returns only the Status Parameter and its value.</p>
+
+<pre><code filter="pbv" type="Response">    get_resp {
+      req_path_results {
+        requested_path: 'Device.WiFi.SSID.[SSID=="HomeNetwork"&amp;&amp;BSSID=="00:11:22:33:44:55"].Status'
+        resolved_path_results {
+          resolved_path: "Device.WiFi.SSID.1."
+          result_params {
+            key: "Status"
+            value: "Up"
+          }
+        }
+      }
+    }</code></pre>
+
+<p>Lastly, using wildcards or another Search Path, the requested Path Name may resolve to more than one resolved Path Names. For example for a Request sent to an Agent with two <code>WiFi.SSID</code> instances:</p>
+
+<pre><code filter="pbv" type="Request">    get {
+      param_paths: "Device.WiFi.SSID.*.Status"
+    }</code></pre>
+
+<p>The Agent’s response would be:</p>
+
+<pre><code filter="pbv" type="Response">    get_resp {
+      req_path_results {
+        requested_path: "Device.WiFi.SSID.*.Status"
+        resolved_path_results {
+          resolved_path: "Device.WiFi.SSID.1."
+          result_params {
+            key: "Status"
+            value: "Up"
+          }
+        }
+        resolved_path_results {
+          resolved_path: "Device.WiFi.SSID.2."
+          result_params {
+            key: "Status"
+            value: "Up"
+          }
+        }
+      }
+    }</code></pre>
+
+<p>In an example with full USP Message header and body, the Controller requests all Parameters of the MTP table entry that contains the <code>Alias</code> value &ldquo;WS-MTP1&rdquo;, and the value of the <code>Enable</code> Parameter of the <code>Subscription</code> table where the value of the Parameter <code>ID</code> is &ldquo;boot-1&rdquo; and the <code>Recipient</code> Parameter has a value of &ldquo;Device.LocalAgent.Controller.1&rdquo;:</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "5721"
+  msg_type: GET
+}
+body {
+  request {
+    get {
+      param_paths: 'Device.LocalAgent.MTP.[Alias=="WS-MTP1"].'
+      param_paths: 'Device.LocalAgent.Subscription.[ID=="boot-1"&amp;&amp;Recipient=="Device.LocalAgent.Controller.1"].Enable'
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "5721"
+  msg_type: GET_RESP
+}
+body {
+  response {
+    get_resp {
+      req_path_results {
+        requested_path: 'Device.LocalAgent.MTP.[Alias=="WS-MTP1"].'
+        resolved_path_results {
+          resolved_path: "Device.LocalAgent.MTP.5156."
+          result_params {
+            key: "Alias"
+            value: "WS-MTP1"
+          }
+          result_params {
+            key: "Enable"
+            value: "true"
+          }
+          result_params {
+            key: "Status"
+            value: "Up"
+          }
+          result_params {
+            key: "Protocol"
+            value: "WebSocket"
+          }
+          result_params {
+            key: "EnableMDNS"
+            value: "false"
+          }
+        }
+        resolved_path_results {
+          resolved_path: "Device.LocalAgent.MTP.5156.WebSocket."
+          result_params {
+            key: "Interfaces"
+            value: "Device.IP.Interface.1."
+          }
+          result_params {
+            key: "Port"
+            value: "5684"
+          }
+          result_params {
+            key: "Path"
+            value: "usp-controller"
+          }
+          result_params {
+            key: "EnableEncryption"
+            value: "true"
+          }
+        }
+      }
+
+      req_path_results {
+        requested_path: 'Device.LocalAgent.Subscription.[ID=="boot-1"&amp;&amp;Recipient=="Device.LocalAgent.Controller.1"].Enable'
+        err_code: 0
+        err_msg: ""
+        resolved_path_results {
+          resolved_path: "Device.LocalAgent.Subscription.6629."
+          result_params {
+            key: "Enable"
+            value: "true"
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<h4 id="sec:get-request-fields">7.5.1.2 Get Request fields<a class="headerlink" href="07-index-messages.html#sec:get-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated string param_paths</code></p>
+
+<p>This field is a set of Object Paths, Object Instance Paths, Parameter Paths, or Search Paths to Objects and Parameters in an Agent’s Instantiated Data Model.</p>
+
+<p><code>fixed32 max_depth</code></p>
+
+<p>This field limits the maximum depth of each returned <code>result_params</code> tree to the depth specified by <code>max_depth</code> value. A value of <code>0</code> returns the complete tree of all Objects and Sub-Objects of all the Path Names mentioned in <code>param_paths</code>.</p>
+
+<p><strong><span id="r-get.5">R-GET.5<a class="headerlink" href="07-index-messages.html#r-get.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>max_depth</code> field is present and contains a value other than 0, then the Agent MUST limit the tree depth of the resolved Sub-Objects included in the <code>resolved_path_results</code> field of the Response to the specified value.</p>
+
+<h4 id="sec:get-response-fields">7.5.1.3 Get Response fields<a class="headerlink" href="07-index-messages.html#sec:get-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated RequestedPathResult req_path_results</code></p>
+
+<p>A repeated set of <code>RequestedPathResult</code> messages for each of the Path Names given in the associated Get request.</p>
+
+<h5 id="sec:requestedpathresult-field">7.5.1.3.1 RequestedPathResult field<a class="headerlink" href="07-index-messages.html#sec:requestedpathresult-field" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string requested_path</code></p>
+
+<p>This field contains one of the Path Names or Search Paths given in the <code>param_path</code> field of the associated Get Request.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the Get to fail on this Path Names. A value of 0 indicates the Path Name could be read successfully.</p>
+
+<p><strong><span id="r-get.0">R-GET.0<a class="headerlink" href="07-index-messages.html#r-get.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If <code>requested_path</code> contains a Path Name that does not match any Object or Parameter in the Agent’s Supported Data Model, the Agent MUST use the <code>7026 - Invalid Path</code> error in this <code>RequestedPathResult</code>.</p>
+
+<p><strong><span id="r-get.1">R-GET.1<a class="headerlink" href="07-index-messages.html#r-get.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<p><code>repeated ResolvedPathResult resolved_path_results</code></p>
+
+<p>This field contains one message of type ResolvedPathResult for each Path Name resolved by the Path Name or Search Path given by <code>requested_path</code>.</p>
+
+<p><strong><span id="r-get.1a">R-GET.1a<a class="headerlink" href="07-index-messages.html#r-get.1a" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the requested_path is valid (i.e., properly formatted and in the Agent’s supported data model) but did not resolve to any Objects in the Agent’s instantiated data model, the resolved_path_results set MUST be empty and is not considered an error.</p>
+
+<h6 id="sec:resolvedpathresult-fields">7.5.1.3.1.1 ResolvedPathResult fields<a class="headerlink" href="07-index-messages.html#sec:resolvedpathresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string resolved_path</code></p>
+
+<p>This field contains a Path Name to an Object or Object Instance that was resolved from the Path Name or Search Path given in <code>requested_path</code>.</p>
+
+<p><strong><span id="r-get.2">R-GET.2<a class="headerlink" href="07-index-messages.html#r-get.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>requested_path</code> included a Path Name to a Parameter, the <code>resolved_path</code> MUST contain only the Path Name to the parent Object or Object Instance of that Parameter.</p>
+
+<p><code>map&lt;string, string&gt; result_params</code></p>
+
+<p>This field contains a set of mapped key/value pairs listing a Parameter Path (relative to the Path Name in <code>resolved_path</code>) to each of the Parameters and their values of the Object given in <code>resolved_path</code>.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<p><strong><span id="r-get.3">R-GET.3<a class="headerlink" href="07-index-messages.html#r-get.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the <code>requested_path</code> included a Path Name to a Parameter, <code>result_params</code> MUST contain only the Parameter included in that Path Name.</p>
+
+<p><strong><span id="r-get.4">R-GET.4<a class="headerlink" href="07-index-messages.html#r-get.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Parameters specified in <code>result_params</code>, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.</p>
+
+<h6 id="sec:get-message-supported-error-codes">7.5.1.3.1.2 Get Message Supported Error Codes<a class="headerlink" href="07-index-messages.html#sec:get-message-supported-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p>Appropriate error codes for the Get Message include <code>7000-7006</code>, <code>7008</code>, <code>7010</code>, <code>7026</code> and <code>7800-7999</code>.</p>
+
+<h3 id="sec:getinstances">7.5.2 The GetInstances Message<a class="headerlink" href="07-index-messages.html#sec:getinstances" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The GetInstances Message takes a Path Name to an Object and requests that the Agent return the Instances of that Object that exist and <em>possibly</em> any Multi-Instance Sub-Objects that exist as well as their Instances. This is used for getting a quick map of the Multi-Instance Objects (i.e., Tables) the Agent currently represents, and their Unique Key Parameters, so that they can be addressed and manipulated later.</p>
+
+<p>GetInstances takes one or more Path Names to Multi-Instance Objects in a Request to an Agent. In addition, both GetInstances and GetSupportedDM (below) make use of a flag called <code>first_level_only</code>, which determines whether or not the Response should include all of the Sub-Objects that are children of the Object specified in <code>obj_path</code>. A value of <code>true</code> means that the Response returns data <em>only</em> for the Object specified. A value of false means that all Sub-Objects will be resolved and returned.</p>
+
+<h4 id="sec:getinstances-examples">7.5.2.1 GetInstances Examples<a class="headerlink" href="07-index-messages.html#sec:getinstances-examples" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>For example, if a Controller wanted to know <em>only</em> the current instances of Wi-Fi SSID Objects that exist on an Agent (that has 2 SSIDs), it would send a GetInstances Request as:</p>
+
+<pre><code filter="pbv" type="Request">    get_instances {
+      obj_paths: "Device.WiFi.SSID."
+      first_level_only: true
+    }</code></pre>
+
+<p>The Agent’s Response would contain:</p>
+
+<pre><code filter="pbv" type="Response">    get_instances_resp {
+      req_path_results {
+        requested_path: "Device.WiFi.SSID."
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.SSID.1."
+          unique_keys {
+            key: "Alias"
+            value: "UserWiFi1"
+          }
+          unique_keys {
+            key: "Name"
+            value: "UserWiFi1"
+          }
+          unique_keys {
+            key: "BSSID"
+            value: "00:11:22:33:44:55"
+          }
+        }
+
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.SSID.2."
+          unique_keys {
+            key: "Alias"
+            value: "UserWiFi2"
+          }
+          unique_keys {
+            key: "Name"
+            value: "UserWiFi2"
+          }
+          unique_keys {
+            key: "BSSID"
+            value: "11:22:33:44:55:66"
+          }
+        }
+      }
+    }</code></pre>
+
+<p>In another example, the Controller wants to get all of the Instances of the <code>Device.WiFi.AccessPoint</code> table, plus all of the instances of the AssociatedDevice Object and AC Object (Sub-Objects of AccessPoint). It would issue a GetInstances Request with the following:</p>
+
+<pre><code filter="pbv" type="Request">    get_instances {
+      obj_paths: "Device.WiFi.AccessPoint."
+      first_level_only: false
+    }</code></pre>
+
+<p>The Agent’s Response will contain an entry in <code>curr_insts</code> for all of the Instances of the <code>Device.WiFi.AccessPoint</code> table, plus the Instances of the Multi-Instance Sub-Objects <code>.AssociatedDevice.</code> and <code>.AC.</code>:</p>
+
+<pre><code filter="pbv" type="Response">    get_instances_resp {
+      req_path_results {
+        requested_path: "Device.WiFi.AccessPoint."
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.1."
+          unique_keys {
+            key: "Alias"
+            value: "cpe-alias-1"
+          }
+          unique_keys {
+            key: "SSIDReference"
+            value: "Device.WiFi.SSID.1"
+          }
+        }
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.1.AssociatedDevice.1."
+          unique_keys {
+            key: "MACAddress"
+            value: "11:22:33:44:55:66"
+          }
+        }
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.1.AC.1."
+          unique_keys {
+            key: "AccessCategory"
+            value: "BE"
+          }
+        }
+
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.2."
+          unique_keys {
+            key: "Alias"
+            value: "cpe-alias-2"
+          }
+          unique_keys {
+            key: "SSIDReference"
+            value: "Device.WiFi.SSID.2"
+          }
+        }
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.2.AssociatedDevice.1."
+          unique_keys {
+            key: "MACAddress"
+            value: "11:22:33:44:55:66"
+          }
+        }
+        curr_insts {
+          instantiated_obj_path: "Device.WiFi.AccessPoint.2.AC.1."
+          unique_keys {
+            key: "AccessCategory"
+            value: "BE"
+          }
+        }
+      }
+    }</code></pre>
+
+<p>Or more, if more Object Instances exist.</p>
+
+<h4 id="sec:getinstances-request-fields">7.5.2.2 GetInstances Request fields<a class="headerlink" href="07-index-messages.html#sec:getinstances-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated string obj_paths</code></p>
+
+<p>This field contains a repeated set of Path Names or Search Paths to Multi-Instance Objects in the Agent’s Instantiated Data Model.</p>
+
+<p><code>bool first_level_only</code></p>
+
+<p>This field, if <code>true</code>, indicates that the Agent returns only those instances in the Object(s) matched by the Path Name or Search Path in <code>obj_path</code>, and not return any child Objects.</p>
+
+<h4 id="sec:getinstances-response-fields">7.5.2.3 GetInstances Response fields<a class="headerlink" href="07-index-messages.html#sec:getinstances-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated RequestedPathResult req_path_results</code></p>
+
+<p>This field contains a RequestedPathResult message for each Path Name or Search</p>
+
+<p><code>string requested_path</code></p>
+
+<p>This field contains one of the Path Names or Search Paths given in <code>obj_path</code> of the associated GetInstances Request.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the GetInstances to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.</p>
+
+<p><strong><span id="r-gin.0">R-GIN.0<a class="headerlink" href="07-index-messages.html#r-gin.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller making the Request does not have Read permission on an Object or Parameter used for matching through the <code>requested_path</code> field, any otherwise matched Object MUST be treated as if it is not present in the Agent’s Instantiated Data Model</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<p><code>repeated CurrInstance curr_insts</code></p>
+
+<p>This field contains a message of type <code>CurrInstance</code> for each Instance of <em>all</em> of the Objects matched by <code>requested_path</code> that exists in the Agent’s Instantiated Data Model.</p>
+
+<h6 id="sec:currinstance-fields">7.5.2.3.0.1 CurrInstance fields<a class="headerlink" href="07-index-messages.html#sec:currinstance-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string instantiated_obj_path</code></p>
+
+<p>This field contains the Object Instance Path of the Object.</p>
+
+<p><code>map&lt;string, string&gt; unique_keys</code></p>
+
+<p>This field contains a map of key/value pairs for all of this Object’s Unique Key Parameters that are supported by the Agent.</p>
+
+<p><strong><span id="r-gin.1">R-GIN.1<a class="headerlink" href="07-index-messages.html#r-gin.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller does not have Read permission on any of the Parameters specified in <code>unique_keys</code>, these Parameters MUST NOT be returned in this field.</p>
+
+<h4 id="sec:getinstances-error-codes">7.5.2.4 GetInstances Error Codes<a class="headerlink" href="07-index-messages.html#sec:getinstances-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the GetInstances Message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, <code>7018</code>, <code>7026</code> and <code>7800-7999</code>.</p>
+
+<h3 id="sec:the-getsupporteddm-message">7.5.3 The GetSupportedDM Message<a class="headerlink" href="07-index-messages.html#sec:the-getsupporteddm-message" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent’s Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.</p>
+
+<p>The GetSupportedDM Message is different from other USP Messages in that it only returns information about the Agent’s Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance Objects in the Path Name use the <code>{i}</code> identifier to indicate their place in the Path Name as specified in TR-106 <span class="cite" data-citation-ids="TR-106"><a href='01-index-introduction.html#ref-TR-106' title=''>[37]</a></span>.</p>
+
+<p>The <code>obj_paths</code> field takes a list of Object Paths, either from the Supported Data Model or the Instantiated Data Model.</p>
+
+<p>For example, a Path Name to the <code>AssociatedDevice</code> Object (a child of the <code>.WiFi.AccessPoint</code> Object) could be addressed in the Supported Data Model as <code>Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.</code> but in addition to this notation the omission of the final <code>{i}.</code> is also allowed, such as <code>Device.WiFi.AccessPoint.{i}.AssociatedDevice.</code>. Both of these syntaxes are supported and equivalent.</p>
+
+<p>Alternatively an Instantiated Data Model Object Path can be used as long as the Object exists, such as <code>Device.WiFi.AccessPoint.1.AssociatedDevice.</code>. The Agent will use the Supported Data Model pertaining to this particular Object when processing the Message.</p>
+
+<p>If the Agent encounters a diverging Supported Data Model, e.g. due to the use of different Mounted Objects underneath a Mountpoint, the Agent will skip the traversal of the children Objects, populate the Response’s <code>divergent_paths</code> element with all divergent Object Instance Paths, and continue processing with the next unambiguous Object. The Supported Data Model of such divergent Objects can only be obtained by specifically using Object Instance Paths in the <code>obj_paths</code> field of a GetSupportedDM request.</p>
+
+<p>The Agent’s Response returns all Path Names in the <code>supported_obj_path</code> field according to the associated Device Type document as specified in TR-106 <span class="cite" data-citation-ids="TR-106"><a href='01-index-introduction.html#ref-TR-106' title=''>[37]</a></span>.</p>
+
+<h4 id="sec:getsupporteddm-examples">7.5.3.1 GetSupportedDM Examples<a class="headerlink" href="07-index-messages.html#sec:getsupporteddm-examples" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>For example, the Controller wishes to learn the Wi-Fi capabilities the Agent represents. It could issue a GetSupportedDM Request as:</p>
+
+<pre><code filter="pbv" type="Request">    get_supported_dm {
+      obj_paths : "Device.WiFi."
+      first_level_only : false
+      return_commands : false
+      return_events : false
+      return_params : false
+    }</code></pre>
+
+<p>The Agent’s Response would be:</p>
+
+<pre><code filter="pbv" type="Response">    get_supported_dm_resp {
+      req_obj_results {
+        req_obj_path: "Device.WiFi."
+        data_model_inst_uri: "urn:broadband-forum-org:tr-181-2-12-0"
+        supported_objs {
+          supported_obj_path: "Device.WiFi."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.Radio.{i}."
+          access: OBJ_READ_ONLY
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.Radio.{i}.Stats"
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.SSID.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.SSID.{i}.Stats"
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.Security."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.WPS."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}."
+          access: OBJ_READ_ONLY
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.Stats."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.AC.{i}."
+          access: OBJ_READ_ONLY
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.AC.{i}.Stats."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}.Accounting."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.EndPoint.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+
+        ## And continued, for Device.WiFi.EndPoint.{i}. Sub-Objects such as Device.WiFi.EndPoint.{i}.Stats., Device.WiFi.EndPoint.{i}/// .Security., etc.
+
+      }
+    }</code></pre>
+
+<p>In another example request:</p>
+
+<pre><code filter="pbv" type="Request">    get_supported_dm {
+      obj_paths : "Device.WiFi."
+      first_level_only : true
+      return_commands : true
+      return_events : true
+      return_params : true
+    }</code></pre>
+
+<p>The Agent’s response would be:</p>
+
+<pre><code filter="pbv" type="Response">    get_supported_dm_resp {
+      req_obj_results {
+        req_obj_path: "Device.WiFi."
+        data_model_inst_uri: "urn:broadband-forum-org:tr-181-2-12-0"
+        supported_objs {
+          supported_obj_path: "Device.WiFi."
+          access: OBJ_READ_ONLY
+          is_multi_instance: false
+          supported_params {
+            param_name: "RadioNumberOfEntries"
+            access: PARAM_READ_ONLY
+            value_type : PARAM_UNSIGNED_INT
+            value_change : VALUE_CHANGE_ALLOWED
+          }
+          supported_params {
+            param_name: "SSIDNumberOfEntries"
+            access: PARAM_READ_ONLY
+            value_type : PARAM_UNSIGNED_INT
+            value_change : VALUE_CHANGE_ALLOWED
+          }
+
+          ## Continued for all Device.WiFi. Parameters
+
+          supported_commands {
+            command_name: "NeighboringWiFiDiagnostic()"
+            output_arg_names: "Status"
+            output_arg_names: "Result.{i}.Radio"
+            output_arg_names: "Result.{i}.SSID"
+            output_arg_names: "Result.{i}.BSSID"
+            output_arg_names: "Result.{i}.Mode"
+            output_arg_names: "Result.{i}.Channel"
+
+            ## Continued for other NeighboringWiFiDiagnostic() output arguments
+
+            command_type : CMD_ASYNC
+          }
+        }
+
+        ## followed by its immediate child objects with no details
+
+        supported_objs {
+          supported_obj_path: "Device.WiFi.Radio.{i}."
+          access: OBJ_READ_ONLY
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.SSID.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.AccessPoint.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+        supported_objs {
+          supported_obj_path: "Device.WiFi.EndPoint.{i}."
+          access: OBJ_ADD_DELETE
+          is_multi_instance: true
+        }
+      }
+    }</code></pre>
+
+<h4 id="sec:getsupporteddm-request-fields">7.5.3.2 GetSupportedDM Request fields<a class="headerlink" href="07-index-messages.html#sec:getsupporteddm-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated obj_paths</code></p>
+
+<p>This field contains a repeated set of Path Names to Objects in the Agent’s Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final <code>{i}.</code> is allowed.</p>
+
+<p><code>bool first_level_only</code></p>
+
+<p>This field, if <code>true</code>, indicates that the Agent returns only those objects matched by the Path Name or Search Path in <code>obj_path</code> and its immediate (i.e., next level) child objects. The list of child objects does not include commands, events, or Parameters of the child objects regardless of the values of the following elements:</p>
+
+<p><code>bool return_commands</code></p>
+
+<p>This field, if <code>true</code>, indicates that, in the <code>supported_objs</code>, the Agent should include a <code>supported_commands</code> field containing Commands supported by the reported Object(s).</p>
+
+<p><code>bool return_events</code></p>
+
+<p>This field, if <code>true</code>, indicates that, in the <code>supported_objs</code>, the Agent should include a <code>supported_events</code> field containing Events supported by the reported Object(s).</p>
+
+<p><code>bool return_params</code></p>
+
+<p>This field, if <code>true</code>, indicates that, in the <code>supported_objs</code>, the Agent should include a <code>supported_params</code> field containing Parameters supported by the reported Object(s).</p>
+
+<h4 id="sec:getsupporteddmresp-fields">7.5.3.3 GetSupportedDMResp fields<a class="headerlink" href="07-index-messages.html#sec:getsupporteddmresp-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated RequestedObjectResult req_obj_results</code></p>
+
+<p>This field contains a repeated set of messages of type <code>RequestedObjectResult</code>.</p>
+
+<h5 id="sec:requestedobjectresult-fields">7.5.3.3.1 RequestedObjectResult fields<a class="headerlink" href="07-index-messages.html#sec:requestedobjectresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string req_obj_path</code></p>
+
+<p>This field contains one of the Path Names given in <code>obj_path</code> of the associated GetSupportedDM Request.</p>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (<a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of error that caused the GetSupportedDM to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.</p>
+
+<p><strong><span id="r-gsp.0">R-GSP.0<a class="headerlink" href="07-index-messages.html#r-gsp.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the <code>requested_path</code> field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported Data Model.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional information about the reason behind the error.</p>
+
+<p><code>string data_model_inst_uri</code></p>
+
+<p>This field contains a Uniform Resource Identifier (URI) to the Data Model associated with the Object specified in <code>obj_path</code>.</p>
+
+<p><code>repeated SupportedObjectResult supported_objs</code></p>
+
+<p>The field contains a message of type <code>SupportedObjectResult</code> for each reported Object.</p>
+
+<h6 id="sec:supportedobjectresult-fields">7.5.3.3.1.1 SupportedObjectResult fields<a class="headerlink" href="07-index-messages.html#sec:supportedobjectresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p>In the case of a diverging Supported Data Model, only the <code>supported_obj_path</code>, <code>access</code>, <code>is_multi_instance</code>, and <code>divergent_paths</code> fields will be populated for the divergent Object.</p>
+
+<p><code>string supported_obj_path</code></p>
+
+<p>This field contains the Full Object Path Name of the reported Object in Supported Data Model notation.</p>
+
+<p><code>ObjAccessType access</code></p>
+
+<p>The field contains an enumeration of type ObjAccessType specifying the access permissions that are specified for this Object in the Agent’s Supported Data Model. This usually only applies to Multi-Instance Objects. This may be further restricted to the Controller based on rules defined in the Agent’s Access Control List. It is an enumeration of:</p>
+
+<pre><code>    OBJ_READ_ONLY (0)
+    OBJ_ADD_DELETE (1)
+    OBJ_ADD_ONLY (2)
+    OBJ_DELETE_ONLY (3)</code></pre>
+
+<p><code>bool is_multi_instance</code></p>
+
+<p>This field, if <code>true</code>, indicates that the reported Object is a Multi-Instance Object.</p>
+
+<p><code>repeated SupportedParamResult supported_params</code></p>
+
+<p>The field contains a message of type <code>SupportedParamResult</code> for each Parameter supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.</p>
+
+<p><code>repeated SupportedCommandResult supported_commands</code></p>
+
+<p>The field contains a message of type <code>SupportedCommandResult</code> for each Command supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.</p>
+
+<p><code>repeated SupportedEventResult supported_events</code></p>
+
+<p>The field contains a message of type <code>SupportedEventResult</code> for each Event supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.</p>
+
+<p><code>repeated string divergent_paths</code></p>
+
+<p>The field contains an Object Instance Path for each divergent Path Name.</p>
+
+<p><em>Note: The <code>divergent_paths</code> field was added in USP 1.2. An Agent that supports versions before USP 1.2 would not know to send the <code>divergent_paths</code> field and thus an empty list will be seen by the Controller.</em></p>
+
+<h6 id="sec:supportedparamresult-fields">7.5.3.3.1.2 SupportedParamResult fields<a class="headerlink" href="07-index-messages.html#sec:supportedparamresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string param_name</code></p>
+
+<p>This field contains the Relative Path of the Parameter.</p>
+
+<p><code>ParamAccessType access</code></p>
+
+<p>The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent’s Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent’s Access Control List. It is an enumeration of:</p>
+
+<pre><code>    PARAM_READ_ONLY (0)
+    PARAM_READ_WRITE (1)
+    PARAM_WRITE_ONLY (2)</code></pre>
+
+<p><code>ParamValueType value_type</code></p>
+
+<p>This field contains an enumeration of type ParamValueType specifying the <em>primitive (or base) data type</em> of this Parameter in the Agent’s Supported Data Model. It is an enumeration of:</p>
+
+<pre><code>    PARAM_UNKNOWN (0)
+    PARAM_BASE_64 (1)
+    PARAM_BOOLEAN (2)
+    PARAM_DATE_TIME (3)
+    PARAM_DECIMAL (4)
+    PARAM_HEX_BINARY (5)
+    PARAM_INT (6)
+    PARAM_LONG (7)
+    PARAM_STRING (8)
+    PARAM_UNSIGNED_INT (9)
+    PARAM_UNSIGNED_LONG (10)</code></pre>
+
+<p><em>Note: The value_type field was added in USP 1.2, and the PARAM_UNKNOWN enumerated value is present for backwards compatibility purposes. An Agent that supports versions before USP 1.2 would not know to send the value_type and thus a 0 value (PARAM_UNKNOWN) will be seen by the Controller.</em></p>
+
+<p><em>Note: This refers to the data type of the Parameter as implemented on the device, even though the value itself is transmitted as a Protocol Buffers string.</em></p>
+
+<p><code>ValueChangeType value_change</code></p>
+
+<p>This field contains an enumeration of type ValueChangeType specifying whether or not the Parameter will honor or ignore a ValueChange Subscription. The value of this field does not impact the ability for a Controller to create a ValueChange Subscription that references the associated Parameter, it only impacts how the Agent handles the Subscription. It is an enumeration of:</p>
+
+<pre><code>    VALUE_CHANGE_UNKNOWN (0)
+    VALUE_CHANGE_ALLOWED (1)
+    VALUE_CHANGE_WILL_IGNORE (2)</code></pre>
+
+<p><em>Note: The value_change field was added in USP 1.2, and the VALUE_CHANGE_UNKNOWN enumerated value is present for backwards compatibility purposes. An Agent that supports versions before USP 1.2 would not know to send the value_change and thus a 0 value (VALUE_CHANGE_UNKNOWN) will be seen by the Controller.</em></p>
+
+<h6 id="sec:supportedcommandresult-fields">7.5.3.3.1.3 SupportedCommandResult fields<a class="headerlink" href="07-index-messages.html#sec:supportedcommandresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string command_name</code></p>
+
+<p>This field contains the Relative Path of the Command.</p>
+
+<p><code>repeated string input_arg_names</code></p>
+
+<p>This field contains a repeated set of Relative Paths for the input arguments of the Command, which can include Objects and Object Instances where the names are represented in Supported Data Model notation.</p>
+
+<p><em>Note: This field only contains the Path Name of the supported Input arguments without details about the supported number of instances, mandatory arguments or expected data types. Those details are implementation specific and not detailed as part of the <code>SupportedCommandResult</code>.</em></p>
+
+<p><code>repeated string output_arg_names</code></p>
+
+<p>This field contains a repeated set of Relative Paths for the output arguments of the Command, which can include Objects and Object Instances where the names are represented in Supported Data Model notation.</p>
+
+<p><code>CmdType command_type</code></p>
+
+<p>This field contains an enumeration of type CmdType specifying the type of execution for the Command. It is an enumeration of:</p>
+
+<pre><code>    CMD_UNKNOWN (0)
+    CMD_SYNC (1)
+    CMD_ASYNC (2)</code></pre>
+
+<p><em>Note: The command_type field was added in USP 1.2, and the CMD_UNKNOWN enumerated value is present for backwards compatibility purposes. An Agent that supports versions before USP 1.2 would not know to send the command_type and thus a 0 value (CMD_UNKNOWN) will be seen by the Controller.</em></p>
+
+<h6 id="sec:supportedeventresult">7.5.3.3.1.4 SupportedEventResult<a class="headerlink" href="07-index-messages.html#sec:supportedeventresult" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>string event_name</code></p>
+
+<p>This field contains the Relative Path of the Event.</p>
+
+<p><code>repeated string arg_names</code></p>
+
+<p>This field contains a repeated set of Relative Paths for the arguments of the Event.</p>
+
+<h4 id="sec:getsupporteddm-error-codes">7.5.3.4 GetSupportedDM Error Codes<a class="headerlink" href="07-index-messages.html#sec:getsupporteddm-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the GetSupportedDM Message include <code>7000-7006</code>, <code>7008</code>, <code>7016</code>, <code>7026</code>, and <code>7800-7999</code>.</p>
+
+<p><em>Note: when using error <code>7026</code> (Invalid path), it is important to note that in the context of GetSupportedDM this applies to the Agent’s Supported Data Model.</em></p>
+
+<h3 id="sec:getsupportedprotocol">7.5.4 GetSupportedProtocol<a class="headerlink" href="07-index-messages.html#sec:getsupportedprotocol" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The GetSupportedProtocol Message is used as a simple way for the Controller and Agent to learn
+which versions of USP each supports to aid in interoperability and backwards
+compatibility.</p>
+
+<h4 id="sec:getsupportedprotocol-request-fields">7.5.4.1 GetSupportedProtocol Request fields<a class="headerlink" href="07-index-messages.html#sec:getsupportedprotocol-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string controller_supported_protocol_versions</code></p>
+
+<p>A comma separated list of USP Protocol Versions (major.minor) supported by this Controller.</p>
+
+<h4 id="sec:getsupportedprotocolresponse-fields">7.5.4.2 GetSupportedProtocolResponse fields<a class="headerlink" href="07-index-messages.html#sec:getsupportedprotocolresponse-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string agent_supported_protocol_versions</code></p>
+
+<p>A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.</p>
+
+<h2 id="sec:notifications-and-subscriptions">7.6 Notifications and Subscription Mechanism<a class="headerlink" href="07-index-messages.html#sec:notifications-and-subscriptions" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a Parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a <a href='07-index-messages.html#sec:notify' title='' class="heading">Notify Message</a> to the Controller.</p>
+
+<h3 id="sec:using-subscription-objects">7.6.1 Using Subscription Objects<a class="headerlink" href="07-index-messages.html#sec:using-subscription-objects" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model Parameter descriptions for <code>Device.LocalAgent.Subscription.{i}.</code> in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href='01-index-introduction.html#ref-TR-181' title=''>[38]</a></span>.</p>
+
+<p><strong><span id="r-not.0">R-NOT.0<a class="headerlink" href="07-index-messages.html#r-not.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The Agent and Controller MUST follow the normative requirements defined in the <code>Device.LocalAgent.Subscription.{i}.</code> Object specified in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href='01-index-introduction.html#ref-TR-181' title=''>[38]</a></span>.</p>
+
+<p><em>Note: Those familiar with Broadband Forum TR-069 <span class="cite" data-citation-ids="TR-069"><a href='01-index-introduction.html#ref-TR-069' title=''>[36]</a></span> will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.</em></p>
+
+<h4 id="sec:referencelist-parameter">7.6.1.1 ReferenceList Parameter<a class="headerlink" href="07-index-messages.html#sec:referencelist-parameter" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>All subscriptions apply to one or more Objects or Parameters in the Agent’s Instantiated Data Model. These are specified as Path Names or Search Paths in the <code>ReferenceList</code> Parameter. The <code>ReferenceList</code> Parameter may have different meaning depending on the nature of the notification subscribed to.</p>
+
+<p>For example, a Controller wants to be notified when a new Wi-Fi station joins the Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with <code>Device.WiFi.AccessPoint.1.AssociatedDevice.</code> specified in the <code>ReferenceList</code> Parameter and <code>ObjectCreation</code> as the <code>NotificationType</code>.</p>
+
+<p>In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with <code>Device.WiFi.SSID.1.SSID</code> specified in the <code>ReferenceList</code> and <code>ValueChange</code> as the <code>NotificationType</code>.</p>
+
+<h3 id="sec:responses-and-retry">7.6.2 Responses to Notifications and Notification Retry<a class="headerlink" href="07-index-messages.html#sec:responses-and-retry" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The Notify request contains a flag, <code>send_resp</code>, that specifies whether or not the Controller should send a response Message after receiving a Notify request. This is used in tandem with the <code>NotifRetry</code> Parameter in the subscription Object - if <code>NotifRetry</code> is <code>true</code>, then the Agent sends its Notify requests with <code>send_resp : true</code>, and the Agent considers the notification delivered when it receives a response from the Controller. If <code>NotifRetry</code> is <code>false</code>, the Agent does not need to use the <code>send_resp</code> flag and should ignore the delivery state of the notification.</p>
+
+<p>If <code>NotifRetry</code> is <code>true</code>, and the Agent does not receive a response from the Controller, it begins retrying using the retry algorithm below. The subscription Object also uses a <code>NotifExpiration</code> Parameter to specify when this retry should end if no success is ever achieved.</p>
+
+<p><strong><span id="r-not.1">R-NOT.1<a class="headerlink" href="07-index-messages.html#r-not.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When retrying notifications, the Agent MUST use the following retry algorithm to manage the retransmission of the Notify request.</p>
+
+<p>The retry interval range is controlled by two Parameters, the minimum wait interval and the interval multiplier, each of which corresponds to a data model Parameter, and which are described in the table below. The factory default values of these Parameters MUST be the default values listed in the Default column. They MAY be changed by a Controller with the appropriate permissions at any time.</p>
+
+<table>
+<col width="26%" />
+<col width="18%" />
+<col width="21%" />
+<col width="34%" />
+<tr class="header">
+<th align="right">Descriptive Name</th>
+<th align="center">Symbol</th>
+<th align="center">Default</th>
+<th align="left">Data Model Parameter Name</th>
+</tr>
+<tr class="odd">
+<td align="right">Minimum wait interval</td>
+<td align="center">m</td>
+<td align="center">5 seconds</td>
+<td align="left"><code>Device.LocalAgent.Controller.{i}.USPNotifRetryMinimumWaitInterval</code></td>
+</tr>
+<tr class="even">
+<td align="right">Interval multiplier</td>
+<td align="center">k</td>
+<td align="center">2000</td>
+<td align="left"><code>Device.LocalAgent.Controller.{i}.USPNotifRetryIntervalMultiplier</code></td>
+</tr>
+</table>
+
+<table>
+<col width="30%" />
+<col width="30%" />
+<col width="41%" />
+<tr class="header">
+<th align="right">Retry Count</th>
+<th align="center">Default Wait Interval Range (min-max seconds)</th>
+<th align="left">Actual Wait Interval Range (min-max seconds)</th>
+</tr>
+<tr class="odd">
+<td align="right">#1</td>
+<td align="center">5-10</td>
+<td align="left">m - m.(k/1000)</td>
+</tr>
+<tr class="even">
+<td align="right">#2</td>
+<td align="center">10-20</td>
+<td align="left">m.(k/1000) - m.(k/1000)^2</td>
+</tr>
+<tr class="odd">
+<td align="right">#3</td>
+<td align="center">20-40</td>
+<td align="left">m.(k/1000)^2 - m.(k/1000)^3</td>
+</tr>
+<tr class="even">
+<td align="right">#4</td>
+<td align="center">40-80</td>
+<td align="left">m.(k/1000)^3 - m.(k/1000)^4</td>
+</tr>
+<tr class="odd">
+<td align="right">#5</td>
+<td align="center">80-160</td>
+<td align="left">m.(k/1000)^4 - m.(k/1000)^5</td>
+</tr>
+<tr class="even">
+<td align="right">#6</td>
+<td align="center">160-320</td>
+<td align="left">m.(k/1000)^5 - m.(k/1000)^6</td>
+</tr>
+<tr class="odd">
+<td align="right">#7</td>
+<td align="center">320-640</td>
+<td align="left">m.(k/1000)^6 - m.(k/1000)^7</td>
+</tr>
+<tr class="even">
+<td align="right">#8</td>
+<td align="center">640-1280</td>
+<td align="left">m.(k/1000)^7 - m.(k/1000)^8</td>
+</tr>
+<tr class="odd">
+<td align="right">#9</td>
+<td align="center">1280-2560</td>
+<td align="left">m.(k/1000)^8 - m.(k/1000)^9</td>
+</tr>
+<tr class="even">
+<td align="right">#10 and subsequent</td>
+<td align="center">2560-5120</td>
+<td align="left">m.(k/1000)^9 - m.(k/1000)^10</td>
+</tr>
+</table>
+
+<p><strong><span id="r-not.2">R-NOT.2<a class="headerlink" href="07-index-messages.html#r-not.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - Beginning with the tenth retry attempt, the Agent MUST choose from the fixed maximum range. The Agent will continue to retry a failed notification until it is successfully delivered or until the <code>NotifExpiration</code> time is reached.</p>
+
+<p><strong><span id="r-not.3">R-NOT.3<a class="headerlink" href="07-index-messages.html#r-not.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - Once a notification is successfully delivered, the Agent MUST reset the retry count to zero for the next notification Message.</p>
+
+<p><strong><span id="r-not.4">R-NOT.4<a class="headerlink" href="07-index-messages.html#r-not.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If a reboot of the Agent occurs, the Agent MUST reset the retry count to zero for the next notification Message.</p>
+
+<h3 id="sec:notification-types">7.6.3 Notification Types<a class="headerlink" href="07-index-messages.html#sec:notification-types" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>There are several types events that can cause a Notify request. These include those that deal with changes to the Agent’s Instantiated Data Model (<code>ValueChange</code>, <code>ObjectCreation</code>, <code>ObjectDeletion</code>), the completion of an asynchronous Object-defined operation (<code>OperationComplete</code>), a policy-defined <code>OnBoardRequest</code>, and a generic <code>Event</code> for use with Object-defined events.</p>
+
+<h4 id="sec:valuechange">7.6.3.1 ValueChange<a class="headerlink" href="07-index-messages.html#sec:valuechange" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>The <code>ValueChange</code> notification is subscribed to by a Controller when it wants to know that the value of a single or set of Parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.</p>
+
+<h4 id="sec:objectcreation-and-objectdeletion">7.6.3.2 ObjectCreation and ObjectDeletion<a class="headerlink" href="07-index-messages.html#sec:objectcreation-and-objectdeletion" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like <code>ValueChange</code>, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.</p>
+
+<p>The <code>ObjectCreation</code> notification also includes the Object’s Unique Key Parameters and their values.</p>
+
+<h4 id="sec:operationcomplete">7.6.3.3 OperationComplete<a class="headerlink" href="07-index-messages.html#sec:operationcomplete" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>The <code>OperationComplete</code> notification is used to indicate that an asynchronous Object-defined operation finished (either successfully or unsuccessfully). These operations may also trigger other Events defined in the data model (see below).</p>
+
+<h4 id="sec:onboardrequest">7.6.3.4 OnBoardRequest<a class="headerlink" href="07-index-messages.html#sec:onboardrequest" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>An <code>OnBoardRequest</code> notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).</p>
+
+<p><strong><span id="r-not.5">R-NOT.5<a class="headerlink" href="07-index-messages.html#r-not.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - An Agent MUST send an <code>OnBoardRequest</code> notify request in the following circumstances:</p>
+
+<ol>
+<li><p>When the <code>SendOnBoardRequest()</code> command is executed. This sends the notification request to the Controller that is the subject of that operation. The <code>SendOnBoardRequest()</code> operation is defined in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href='01-index-introduction.html#ref-TR-181' title=''>[38]</a></span>. This requirement applies only to those Controller table instances that have their <code>Enabled</code> Parameter set to <code>true</code>.</p></li>
+<li><p>When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).</p></li>
+</ol>
+
+<p><em>Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.</em></p>
+
+<p><strong><span id="r-not.6">R-NOT.6<a class="headerlink" href="07-index-messages.html#r-not.6" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> If a response is required, the OnBoardRequest MUST follow the Retry logic defined above.</p>
+
+<h4 id="sec:event">7.6.3.5 Event<a class="headerlink" href="07-index-messages.html#sec:event" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>The <code>Event</code> notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what Parameters, if any, are returned as part of the notification.</p>
+
+<h4 id="sec:notify-examples">7.6.3.6 Notify Examples<a class="headerlink" href="07-index-messages.html#sec:notify-examples" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>In this example, a Controller has subscribed to be notified of changes in value to the <code>Device.DeviceInfo.FriendlyName</code> Parameter. When it is changed, the Agent sends a Notify Request to inform the Controller of the change.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "33936"
+  msg_type: NOTIFY
+}
+body {
+  request {
+    notify {
+      subscription_id: "vc-1"
+      send_resp: true
+      value_change {
+          param_path: "Device.DeviceInfo.FriendlyName"
+          param_value: "MyDevicesFriendlyName"
+      }
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "33936"
+  msg_type: NOTIFY_RESP
+}
+body {
+  response {
+    notify_resp {
+      subscription_id: "vc-1"
+    }
+  }
+}</code></pre>
+
+<p>In another example, the event &ldquo;Boot!&rdquo;, defined in the <code>Device.</code> Object, is triggered. The Agent sends a Notify Request to the Controller(s) subscribed to that event.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "26732"
+  msg_type: NOTIFY
+}
+body {
+  request {
+    notify {
+      subscription_id: "boot-1"
+      send_resp: true
+      event {
+        obj_path: "Device."
+        event_name: "Boot!"
+        params {
+          key: "Cause"
+          value: "LocalReboot"
+        }
+        params {
+          key: "CommandKey"
+          value: "controller-command-key"
+        }
+        params {
+          key: "ParameterMap"
+          value: '{"Device.LocalAgent.Controller.1.Enable":"True","Device.LocalAgent.Controller.2.Enable":"False"}'
+        }
+        params {
+          key: "FirmwareUpdated"
+          value: "false"
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "26732"
+  msg_type: NOTIFY_RESP
+}
+body {
+  response {
+    notify_resp {
+      subscription_id: "boot-1"
+    }
+  }
+}</code></pre>
+
+<h3 id="sec:notify">7.6.4 The Notify Message<a class="headerlink" href="07-index-messages.html#sec:notify" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<h4 id="sec:notify-request-fields">7.6.4.1 Notify Request fields<a class="headerlink" href="07-index-messages.html#sec:notify-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string subscription_id</code></p>
+
+<p>This field contains the locally unique opaque identifier that was set by the Controller when it created the Subscription on the Agent.</p>
+
+<p><strong><span id="r-not.7">R-NOT.7<a class="headerlink" href="07-index-messages.html#r-not.7" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The <code>subscription_id</code> field MUST contain the Subscription ID of the Subscription Object that triggered this notification. If no subscription_id is available (for example, for OnBoardRequest notifications), this field MUST be set to an empty string.</p>
+
+<p><code>bool send_resp</code></p>
+
+<p>This field lets the Agent indicate to the Controller whether or not it expects a response in association with the Notify request.</p>
+
+<p><strong><span id="r-not.8">R-NOT.8<a class="headerlink" href="07-index-messages.html#r-not.8" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When <code>send_response</code> is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.</p>
+
+<p><code>oneof notification</code></p>
+
+<p>Contains one of the following Notification messages:</p>
+
+<pre><code>Event   event
+ValueChange value_change
+ObjectCreation obj_creation
+ObjectDeletion obj_deletion
+OperationComplete oper_complete
+OnBoardRequest on_board_req</code></pre>
+
+<h5 id="sec:event-fields">7.6.4.1.1 Event fields<a class="headerlink" href="07-index-messages.html#sec:event-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains the Object or Object Instance Path of the Object that caused this event (for example, <code>Device.LocalAgent.</code>).</p>
+
+<p><code>string event_name</code></p>
+
+<p>This field contains the name of the Object defined event that caused this notification (for example, <code>Boot!</code>).</p>
+
+<p><code>map&lt;string, string&gt; parameters</code></p>
+
+<p>This field contains a set of key/value pairs of Parameters associated with this event.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<h5 id="sec:valuechange-fields">7.6.4.1.2 ValueChange fields<a class="headerlink" href="07-index-messages.html#sec:valuechange-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string param_path</code></p>
+
+<p>This field contains the Path Name of the changed Parameter.</p>
+
+<p><code>string param_value</code></p>
+
+<p>This field contains the value of the Parameter specified in <code>param_path</code>.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how Parameter values are encoded as Protocol Buffers v3 strings.</p>
+
+<h5 id="sec:objectcreation-fields">7.6.4.1.3 ObjectCreation fields<a class="headerlink" href="07-index-messages.html#sec:objectcreation-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains the Path Name of the created Object Instance.</p>
+
+<p><code>map&lt;string, string&gt; unique_keys</code></p>
+
+<p>This field contains a map of key/value pairs for all of this Object’s Unique Key Parameters that are supported by the Agent.</p>
+
+<h5 id="sec:objectdeletion-fields">7.6.4.1.4 ObjectDeletion fields<a class="headerlink" href="07-index-messages.html#sec:objectdeletion-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains the Path Name of the deleted Object Instance.</p>
+
+<h5 id="sec:operationcomplete-fields">7.6.4.1.5 OperationComplete fields<a class="headerlink" href="07-index-messages.html#sec:operationcomplete-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string command_name</code></p>
+
+<p>This field contains the Relative Path of the Object defined command that caused this notification (i.e., <code>Download()</code>).</p>
+
+<p><code>string obj_path</code></p>
+
+<p>This field contains the Object or Object Instance Path to the Object that contains this operation.</p>
+
+<p><code>string command_key</code></p>
+
+<p>This field contains the command key set during an Object defined Operation that caused this notification.</p>
+
+<p><code>oneof operation_resp</code></p>
+
+<p>Contains one of the following messages:</p>
+
+<pre><code>OutputArgs req_output_args
+CommandFailure cmd_failure</code></pre>
+
+<h6 id="sec:outputargs-fields">7.6.4.1.5.1 OutputArgs fields<a class="headerlink" href="07-index-messages.html#sec:outputargs-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>map&lt;string, string&gt; output_args</code></p>
+
+<p>This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command_name</code> field) returned by the method invoked in the Operate Message.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how argument values are encoded as Protocol Buffers v3 strings.</p>
+
+<h6 id="sec:commandfailure-fields">7.6.4.1.5.2 CommandFailure fields<a class="headerlink" href="07-index-messages.html#sec:commandfailure-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (see <a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of the error that caused the operation to fail. Appropriate error codes for CommandFailure include <code>7002-7008</code>, <code>7016</code>, <code>7022</code>, <code>7023</code>, and <code>7800-7999</code>.
+Error <code>7023</code> is reserved for asynchronous operations that were canceled by
+a Controller invoking the Cancel() command on the appropriate Request Object (see <a href='07-index-messages.html#sec:asynchronous-operations' title='' class="heading">Asynchronous Operations</a>).</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional (human readable) information about the reason behind the error.</p>
+
+<h5 id="sec:onboardrequest-fields">7.6.4.1.6 OnBoardRequest fields<a class="headerlink" href="07-index-messages.html#sec:onboardrequest-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string oui</code></p>
+
+<p>This field contains the Organizationally Unique Identifier associated with the Agent.</p>
+
+<p><code>string product_class</code></p>
+
+<p>This field contains a string used to provide additional context about the Agent.</p>
+
+<p><code>string serial_number</code></p>
+
+<p>This field contains a string used to provide additional context about the Agent.</p>
+
+<p><code>string agent_supported_protocol_versions</code></p>
+
+<p>A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.</p>
+
+<h4 id="sec:notify-response-fields">7.6.4.2 Notify Response fields<a class="headerlink" href="07-index-messages.html#sec:notify-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string subscription_id</code></p>
+
+<p>This field contains the Subscription ID that was received with the Notify Request.</p>
+
+<p><strong><span id="r-not.9">R-NOT.9<a class="headerlink" href="07-index-messages.html#r-not.9" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> -The Agent SHOULD ignore the subscription_id field.</p>
+
+<p><em>Note: The requirement in the previous versions of the specification requiring the Agent to check this subscription_id field has been deprecated. However for backward compatibility the Controller is still required to send the matching subscription_id.</em></p>
+
+<p><strong><span id="r-not.10">R-NOT.10<a class="headerlink" href="07-index-messages.html#r-not.10" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - The Controller MUST populate the subscription_id field with the same Subscription ID as was presented in the Notify Request.</p>
+
+<h4 id="sec:notify-error-codes">7.6.4.3 Notify Error Codes<a class="headerlink" href="07-index-messages.html#sec:notify-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the Notify Message include <code>7000-7006</code>, and <code>7800-7999</code>.</p>
+
+<h2 id="sec:defined-operations-mechanism">7.7 Defined Operations Mechanism<a class="headerlink" href="07-index-messages.html#sec:defined-operations-mechanism" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>Additional methods (operations) are and can be defined in the USP data model. Operations are generally defined on an Object, using the &ldquo;command&rdquo; attribute, as defined in <span class="cite" data-citation-ids="TR-106"><a href='01-index-introduction.html#ref-TR-106' title=''>[37]</a></span>. The mechanism is controlled using the <a href='07-index-messages.html#sec:operate' title='' class="heading">Operate Message</a> in conjunction with the Multi-Instance Request Object.</p>
+
+<h3 id="sec:synchronous-operations">7.7.1 Synchronous Operations<a class="headerlink" href="07-index-messages.html#sec:synchronous-operations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>A synchronous operation is intended to complete immediately following its processing. When complete, the output arguments are sent in the Operate response. If the <code>send_resp</code> flag is false, the Controller doesn’t need the returned information (if any), and the Agent does not send an Operate Response.</p>
+
+<figure>
+<img src="messages/synchronous_operation.png" id="fig:operate-message-flow-for-synchronous-operations" alt=""/>
+<figcaption>Figure 14: Operate Message Flow for Synchronous Operations<a class="headerlink" href="07-index-messages.html#fig:operate-message-flow-for-synchronous-operations" title="Permalink to this figure"> <img src='permalink.png' title='' width="0.8em"/></a></figcaption>
+</figure>
+
+<h3 id="sec:asynchronous-operations">7.7.2 Asynchronous Operations<a class="headerlink" href="07-index-messages.html#sec:asynchronous-operations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>An asynchronous operation expects to take some processing on the system the Agent represents and will return results at a later time. When complete, the output arguments are sent in a <code>Notify</code> (<code>OperationComplete</code>) request to any Controllers that have an active subscription to the operation and Object(s) to which it applies.</p>
+
+<p>When a Controller using the Operate request specifies an operation that is defined as asynchronous, the Agent creates an instance of the Request Object in its data model, and includes a reference to the created Object in the Operate response. If the <code>send_resp</code> flag is <code>false</code>, the Controller doesn’t need the Request details, and intends to ignore it.</p>
+
+<p>The lifetime of a Request Object expires when the operation is complete (either by success or failure). An expired Request Object is removed from the Instantiated Data Model.</p>
+
+<p><strong><span id="r-opr.0">R-OPR.0<a class="headerlink" href="07-index-messages.html#r-opr.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When an Agent receives an Operate Request that addresses an asynchronous operation, it MUST create a Request Object in the Request table of its Instantiated Data Model (see the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href='01-index-introduction.html#ref-TR-181' title=''>[38]</a></span>). When the Operation is complete (either success or failure), it MUST remove this Object from the Request table.</p>
+
+<p>If any Controller wants a notification that an operation has completed, it creates a Subscription Object with the <code>NotificationType</code> set to <code>OperationComplete</code> and with the <code>ReferenceList</code> Parameter including a Path Name to the specified command. The Agent processes this Subscription when the operation completes and sends a Notify Message, including the <code>command_key</code> value that the Controller assigned when making the Operate request.</p>
+
+<p>A Controller can cancel a request that is still present in the Agent’s <code>Device.LocalAgent.Request.</code> table by invoking the <code>Device.LocalAgent.Request.{i}.Cancel()</code> command through another Operate Message.</p>
+
+<figure>
+<img src="messages/asynchronous_operation.png" id="fig:operate-message-flow-for-asynchronous-operations" alt=""/>
+<figcaption>Figure 15: Operate Message Flow for Asynchronous Operations<a class="headerlink" href="07-index-messages.html#fig:operate-message-flow-for-asynchronous-operations" title="Permalink to this figure"> <img src='permalink.png' title='' width="0.8em"/></a></figcaption>
+</figure>
+
+<h4 id="sec:persistance-of-asynchronous-operations">7.7.2.1 Persistance of Asynchronous Operations<a class="headerlink" href="07-index-messages.html#sec:persistance-of-asynchronous-operations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table, and is considered to have failed. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.</p>
+
+<h3 id="sec:operate-requests-on-multiple-objects">7.7.3 Operate Requests on Multiple Objects<a class="headerlink" href="07-index-messages.html#sec:operate-requests-on-multiple-objects" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Since the Operate request can take a Path Name expression as a value for the command field, it is possible to invoke the same operation on multiple valid Objects as part of a single Operate request. Responses to requests to Operate on more than one Object are handled using the <code>OperationResult</code> field type, which is returned as a repeated set in the Operate Response. The success or failure of the operation on each Object is handled separately and returned in a different <code>OperationResult</code> entry. For this reason, operation failures are never conveyed in an Error Message - in reply to an Operate request, Error is only used when the Message itself fails for one or more reasons, rather than the operation invoked.</p>
+
+<p><em>Note: This specification does not make any requirement on the order in which commands on multiple objects selected with a Path Name expression are executed.</em></p>
+
+<p><strong><span id="r-opr.1">R-OPR.1<a class="headerlink" href="07-index-messages.html#r-opr.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When processing Operate Requests on multiple Objects, an Agent MUST NOT send an Error Message due to a failed operation. It MUST instead include the failure in the <code>cmd_failure</code> field of the Operate response.</p>
+
+<p><strong><span id="r-opr.2">R-OPR.2<a class="headerlink" href="07-index-messages.html#r-opr.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - For asynchronous operations the Agent MUST create a separate Request Object for each Object and associated operation matched in the command field.</p>
+
+<h3 id="sec:event-notifications-for-operations">7.7.4 Event Notifications for Operations<a class="headerlink" href="07-index-messages.html#sec:event-notifications-for-operations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>When an operation triggers an Event notification, the Agent sends the Event notification for all subscribed recipients as described in <a href='07-index-messages.html#sec:notifications-and-subscriptions' title='' class="heading">Notifications and Subscription Mechanism</a>.</p>
+
+<h3 id="sec:concurrent-operations">7.7.5 Concurrent Operations<a class="headerlink" href="07-index-messages.html#sec:concurrent-operations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>If an asynchronous operation is triggered multiple times by one or more Controllers, the Agent has the following options:</p>
+
+<ol>
+<li>Deny the new operation (with, for example, <code>7005 Resources Exceeded</code> )</li>
+<li>The operations are performed in parallel and independently.</li>
+<li>The operations are queued and completed in order.</li>
+</ol>
+
+<p><strong><span id="r-opr.3">R-OPR.3<a class="headerlink" href="07-index-messages.html#r-opr.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When handling concurrently invoked operations, an Agent MUST NOT cancel an operation already in progress unless explicitly told to do so by a Controller with permission to do so (i.e., via the <code>Device.LocalAgent.Request.{i}.Cancel()</code> operation).</p>
+
+<h3 id="sec:operate-examples">7.7.6 Operate Examples<a class="headerlink" href="07-index-messages.html#sec:operate-examples" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>In this example, the Controller requests that the Agent initiate the SendOnBoardRequest() operation defined in the <code>Device.LocalAgent.Controller.</code> Object.</p>
+
+<pre><code filter="pbv">header {
+  msg_id: "42314"
+  msg_type: OPERATE
+}
+body {
+  request {
+    operate {
+      command: 'Device.LocalAgent.Controller.[EndpointID=="controller"].SendOnBoardRequest()'
+      command_key: "onboard_command_key"
+      send_resp: true
+    }
+  }
+}</code></pre>
+
+<pre><code filter="pbv">header {
+  msg_id: "42314"
+  msg_type: OPERATE_RESP
+}
+body {
+  response {
+    operate_resp {
+      operation_results {
+        executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
+        req_obj_path: "Device.LocalAgent.Request.1"
+      }
+    }
+  }
+}</code></pre>
+
+<h3 id="sec:operate">7.7.7 The Operate Message<a class="headerlink" href="07-index-messages.html#sec:operate" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<h4 id="sec:operate-request-fields">7.7.7.1 Operate Request fields<a class="headerlink" href="07-index-messages.html#sec:operate-request-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>string command</code></p>
+
+<p>This field contains a Command Path or Search Path to an Object defined Operation in one or more Objects.</p>
+
+<p><code>string command_key</code></p>
+
+<p>This field contains a string used as a reference by the Controller to match the operation with notifications.</p>
+
+<p><code>bool send_resp</code></p>
+
+<p>This field lets the Controller indicate to Agent whether or not it expects a response in association with the operation request.</p>
+
+<p><strong><span id="r-opr.4">R-OPR.4<a class="headerlink" href="07-index-messages.html#r-opr.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When <code>send_resp</code> is set to <code>false</code>, the target Endpoint SHOULD NOT send an <code>OperateResp</code> Message to the source Endpoint. If an error occurs during the processing of an <code>Operate</code> Message, the target Endpoint SHOULD send an <code>Error</code> Message to the source Endpoint. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.</p>
+
+<p><em>Note: The requirement in the previous versions of the specification also discouraged the sending of an <code>Error</code> Message, however the Controller issuing the <code>Operate</code> might want to learn about and handle errors occurring during the processing of the <code>Operate</code> request but still ignore execution results.</em></p>
+
+<p><code>map&lt;string, string&gt; input_args</code></p>
+
+<p>This field contains a map of key/value pairs indicating the input arguments (relative to the Command Path in the command field) to be passed to the method indicated in the command field.</p>
+
+<p><strong><span id="r-opr.5">R-OPR.5<a class="headerlink" href="07-index-messages.html#r-opr.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A <code>Command</code> can have mandatory <code>input_args</code> as defined in the Supported Data Model. When a mandatory Input argument is omitted from the <code>input_args</code> field, the Agent MUST respond with an <code>Error</code> of type <code>7004 Invalid arguments</code> and stop processing the <code>Operate</code> Message.</p>
+
+<p><strong><span id="r-opr.6">R-OPR.6<a class="headerlink" href="07-index-messages.html#r-opr.6" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When an unrecognized Input argument is included in the <code>input_args</code> field, the Agent MUST ignore the Input argument and continue processing the <code>Operate</code> Message.</p>
+
+<p><strong><span id="r-opr.7">R-OPR.7<a class="headerlink" href="07-index-messages.html#r-opr.7" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - When a non-mandatory Input argument is omitted from the <code>input_args</code> field, the Agent MUST use a default value for the missing Input argument and continue processing the <code>Operate</code> Message.</p>
+
+<p>Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how argument values are encoded as Protocol Buffers v3 strings.</p>
+
+<h4 id="sec:operate-response-fields">7.7.7.2 Operate Response fields<a class="headerlink" href="07-index-messages.html#sec:operate-response-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p><code>repeated OperationResult operation_results</code></p>
+
+<p>This field contains a repeated set of <code>OperationResult</code> messages.</p>
+
+<h5 id="sec:operationresult-fields">7.7.7.2.1 OperationResult fields<a class="headerlink" href="07-index-messages.html#sec:operationresult-fields" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h5>
+
+<p><code>string executed_command</code></p>
+
+<p>This field contains a Command Path to the Object defined Operation that is the subject of this <code>OperateResp</code> message.</p>
+
+<p><code>oneof operate_resp</code></p>
+
+<p>This field contains a message of one of the following types.</p>
+
+<pre><code>  string req_obj_path
+  OutputArgs req_output_args
+  CommandFailure cmd_failure</code></pre>
+
+<h6 id="sec:using-req_obj_path">7.7.7.2.1.1 Using req_obj_path<a class="headerlink" href="07-index-messages.html#sec:using-req_obj_path" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p>The req_obj_path field, when used as the <code>operate_resp</code>, contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.</p>
+
+<h6 id="sec:outputargs-fields-1">7.7.7.2.1.2 OutputArgs fields<a class="headerlink" href="07-index-messages.html#sec:outputargs-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>map&lt;string, string&gt; output_args</code></p>
+
+<p>This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the <code>command</code> field) returned by the method invoked in the Operate Message.
+Refer to <a href='05-index-encoding.html#sec:parameter-value-encoding' title='' class="heading">Parameter and Argument Value Encoding</a> for details of how argument values are encoded as Protocol Buffers v3 strings.</p>
+
+<h6 id="sec:commandfailure-fields-1">7.7.7.2.1.3 CommandFailure fields<a class="headerlink" href="07-index-messages.html#sec:commandfailure-fields-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h6>
+
+<p><code>fixed32 err_code</code></p>
+
+<p>This field contains a numeric code (see <a href='07-index-messages.html#sec:error-codes' title='' class="heading">Error Codes</a>) indicating the type of the error that caused the operation to fail.</p>
+
+<p><code>string err_msg</code></p>
+
+<p>This field contains additional (human readable) information about the reason behind the error.</p>
+
+<h4 id="sec:operate-message-error-codes">7.7.7.3 Operate Message Error Codes<a class="headerlink" href="07-index-messages.html#sec:operate-message-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>Appropriate error codes for the Operate Message include <code>7000-7008</code>, <code>7016</code>, <code>7022</code>, <code>7026</code>, <code>7027</code>, and <code>7800-7999</code>.</p>
+
+<h2 id="sec:error-codes">7.8 Error Codes<a class="headerlink" href="07-index-messages.html#sec:error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>USP uses error codes with a range 7000-7999 for both Controller and Agent errors. The errors appropriate for each Message (and how they must be implemented) are defined in the message descriptions below.</p>
+
+<table>
+<col width="5%" />
+<col width="17%" />
+<col width="17%" />
+<col width="61%" />
+<tr class="header">
+<th align="left">Code</th>
+<th align="left">Name</th>
+<th align="left">Applicability</th>
+<th align="left">Description</th>
+</tr>
+<tr class="odd">
+<td align="left"><code>7000</code></td>
+<td align="left">Message failed</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates a general failure that is described in an err_msg field.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7001</code></td>
+<td align="left">Message not supported</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the attempted message was not understood by the target Endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7002</code></td>
+<td align="left">Request denied (no reason specified)</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the target Endpoint cannot or will not process the message.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7003</code></td>
+<td align="left">Internal error</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the message failed due to internal hardware or software reasons.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7004</code></td>
+<td align="left">Invalid arguments</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the message failed due to invalid values in the USP message.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7005</code></td>
+<td align="left">Resources exceeded</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the message failed due to memory or processing limitations on the target Endpoint.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7006</code></td>
+<td align="left">Permission denied</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the source Endpoint does not have the authorization for this action.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7007</code></td>
+<td align="left">Invalid configuration</td>
+<td align="left">Error Message</td>
+<td align="left">This error indicates that the message failed because processing the message would put the target Endpoint in an invalid or unrecoverable state.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7008</code></td>
+<td align="left">Invalid path syntax</td>
+<td align="left">any requested_path</td>
+<td align="left">This error indicates that the Path Name used was not understood by the target Endpoint.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7009</code></td>
+<td align="left">Parameter action failed</td>
+<td align="left">Set</td>
+<td align="left">This error indicates that the Parameter failed to update for a general reason described in an err_msg field.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7010</code></td>
+<td align="left">Unsupported parameter</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated Parameters.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7011</code></td>
+<td align="left">Invalid type</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the requested value was not of the correct data type for the Parameter.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7012</code></td>
+<td align="left">Invalid value</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the requested value was not within the acceptable values for the Parameter.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7013</code></td>
+<td align="left">Attempt to update non-writeable parameter</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the source Endpoint attempted to update a Parameter that is not defined as a writeable Parameter.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7014</code></td>
+<td align="left">Value conflict</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the requested value would result in an invalid configuration based on other Parameter values.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7015</code></td>
+<td align="left">Operation error</td>
+<td align="left">Add, Set, Delete</td>
+<td align="left">This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7016</code></td>
+<td align="left">Object does not exist</td>
+<td align="left">Add, Set, Operate</td>
+<td align="left">This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7017</code></td>
+<td align="left">Object could not be created</td>
+<td align="left">Add</td>
+<td align="left">This error indicates that the operation failed to create an instance of the specified Object.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7018</code></td>
+<td align="left">Object is not a table</td>
+<td align="left">Add</td>
+<td align="left">This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7019</code></td>
+<td align="left">Attempt to create non-creatable object</td>
+<td align="left">Add</td>
+<td align="left">This error indicates that the source Endpoint attempted to create an Object that is not defined as able to be created.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7020</code></td>
+<td align="left">Object could not be updated</td>
+<td align="left">Set</td>
+<td align="left">This error indicates that the requested Object in a Set request failed to update.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7021</code></td>
+<td align="left">Required parameter failed</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that the request failed on this Object because one or more required Parameters failed to update. Details on the failed Parameters are included in an associated ParamError or ParameterError message.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7022</code></td>
+<td align="left">Command failure</td>
+<td align="left">Operate</td>
+<td align="left">This error indicates that an command initiated in an Operate Request failed to complete for one or more reasons explained in the err_msg field.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7023</code></td>
+<td align="left">Command canceled</td>
+<td align="left">Operate</td>
+<td align="left">This error indicates that an asynchronous command initiated in an Operate Request failed to complete because it was cancelled using the Cancel() operation.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7024</code></td>
+<td align="left">Delete failure</td>
+<td align="left">Delete</td>
+<td align="left">This error indicates that this Object Instance failed to be deleted.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7025</code></td>
+<td align="left">Object exists with duplicate key</td>
+<td align="left">Add, Set</td>
+<td align="left">This error indicates that an Object already exists with the Unique Keys specified in an Add or Set Message.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7026</code></td>
+<td align="left">Invalid path</td>
+<td align="left">Any</td>
+<td align="left">This error indicates that the Object, Parameter, or Command Path Name specified does not match any Objects, Parameters, or Commands in the Agent’s Supported Data Model</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7027</code></td>
+<td align="left">Invalid command arguments</td>
+<td align="left">Operate</td>
+<td align="left">This error indicates that an Operate Message failed due to invalid or unknown arguments specified in the command.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7100-7199</code></td>
+<td align="left">USP Record error codes</td>
+<td align="left">-</td>
+<td align="left">These errors are listed and described in <a href='04-index-mtp.html#sec:usp-record-errors' title='' class="heading">USP Record Errors</a>.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>7200-7299</code></td>
+<td align="left">Data model defined error codes</td>
+<td align="left">-</td>
+<td align="left">These errors are described in the data model.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>7800-7999</code></td>
+<td align="left">Vendor defined error codes</td>
+<td align="left">-</td>
+<td align="left">These errors are described in <a href='07-index-messages.html#sec:vendor-defined-error-codes' title='' class="heading">Vendor Defined Error Codes</a>.</td>
+</tr>
+</table>
+
+<h3 id="sec:vendor-defined-error-codes">7.8.1 Vendor Defined Error Codes<a class="headerlink" href="07-index-messages.html#sec:vendor-defined-error-codes" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Implementations of USP MAY specify their own error codes for use with Errors and Responses. These codes use the <code>7800-7999</code> series. There are no requirements on the content of these errors.</p>
+

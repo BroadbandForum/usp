@@ -4,9 +4,37 @@ info:
     This is the REST API for the User Services Platform (USP) Controller.  This
     is how an external entity can interact with a USP Controller to retrieve
     information from or configure a USP Agent.
+
+
+    The REST API is based on the following general concepts.
+
+    * __Agent__ - A USP Agent.
+
+    * __Associated Agent__ - USP Agents that have a relationship to another USP Agent
+    (e.g. USP Agents that reside within the same home network).
+
+    * __Command__ - A USP Data Model Command (e.g. Reboot a Device) mapped via a
+    Service Element Action.
+
+    * __Service Element__ - The generic mapping of Data Model Objects and Parameters.
+    This provides a means of abstracting the underlying device Data Model to a
+    concept that can span devices that utilize different Data Models to represent
+    the same functionality, which is beneficial when dealing with vendor specific
+    Data Models or different root Data Models.
+
+    * __Service Element Action__ - The generic mapping of a USP Data Model Command.
+    This provides a means of abstracting the underlying device Data Model to a
+    concept that can span devices that utilize different Data Models to represent
+    the same functionality, which is beneficial when dealing with vendor specific
+    Data Models or different root Data Models.
+
+    * __Service Element Identifier__ - The unique identifier for a Service Element,
+    which consists of the Unique Key of the Data Model Object that the Service
+    Element is abstracting. This is used to identify a specific instance of a Service
+    Element when retrieving/patching/deleting a Service Element.
   version: 1.0.0
   title: User Services Platform - Controller API
-  termsOfService: 'http://usp.technology/terms/'
+  termsOfService: 'https://usp.technology/specification/#sec:terms-of-use'
   contact:
     email: info@broadband-forum.org
   license:

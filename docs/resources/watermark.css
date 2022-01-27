@@ -1,0 +1,16 @@
+.main-content {
+    background-image: url("watermark.png");
+    background-origin: content-box;
+    background-repeat: repeat-y;
+    background-size: 100%;
+}
+
+/* XXX the above works for PDF, which means it must be using
+       default-template.html, but the following doesn't seem to have any
+       effect (the top of the first watermark is missing, which suggests
+       that it's using the content box) */
+@media print {
+    .main-content {
+        background-origin: border-box;
+    }
+}

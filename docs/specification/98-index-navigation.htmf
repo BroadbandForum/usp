@@ -1,0 +1,21 @@
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-introduction.html#sec:introduction">1 Introduction</a>
+ | <a href="02-index-architecture.html#sec:architecture">2 Architecture</a>
+ | <a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a>
+ | <a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a>
+ | <a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a>
+ | <a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a>
+ | <a href="07-index-messages.html#sec:messages">7 Messages</a>
+ | <a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a>
+ | <a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a>
+ | <a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a>
+ | <a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a>
+ | <a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a>
+ | <a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a>
+ | <a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a>
+ | <a href="99-index-footnotes.html#footnotes">Footnotes</a>
+</p>
+</nav>
+

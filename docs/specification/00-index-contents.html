@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<!-- BBF GitHub Pages pandoc template; modified from default.html template -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="generator" content="pandoc"/>
+  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+  <title>BBF – TR-369a2 – User Services Platform (USP)</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="github.css"/>
+  <link rel="stylesheet" href="extra.css"/>
+  <link rel="stylesheet" href="toc.css"/>
+  <link rel="stylesheet" href="release.css"/>
+  <link rel="stylesheet" href="local.css"/>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- XXX header includes are included just before the ToC (below) -->
+</head>
+
+<body>
+  <section class="page-header">
+    <h1 class="project-name">
+      <a href="../index.html" style="text-decoration: none; color: white;">
+        <img src="bbflogo-bw.png"/><br>
+        The User Services Platform
+      </a>
+    </h1>
+    <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks</h2>
+    <p></p>
+    <p></p>
+    <div class="project-buttons">
+      <a class="btn" href="../specification/index.html" title="USP Specification">Specification</a>
+      <a class="btn" href="../specification/index.htm" title="USP Specification Single-file HTML">HTML</a>
+      <a class="btn" href="../specification/index.pdf" title="USP Specification PDF">PDF</a>
+      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP Data Models">Data Models</a>
+      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP Test Plan">Test Plan</a>
+      <a class="btn" href="../resources/01-index-usp-development-resources.html" title="USP Development Resources">Resources</a>
+      <a class="btn" href="../faq/01-index-faq.html" title="USP Frequently Asked Questions">FAQ</a>
+    </div>
+  </section>
+
+  <section class="main-content">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-introduction.html#sec:introduction">1 Introduction</a>
+ | <a href="02-index-architecture.html#sec:architecture">2 Architecture</a>
+ | <a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a>
+ | <a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a>
+ | <a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a>
+ | <a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a>
+ | <a href="07-index-messages.html#sec:messages">7 Messages</a>
+ | <a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a>
+ | <a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a>
+ | <a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a>
+ | <a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a>
+ | <a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a>
+ | <a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a>
+ | <a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a>
+ | <a href="99-index-footnotes.html#footnotes">Footnotes</a>
+</p>
+</nav>
+
+<nav id="TOCFULL">
+<ul>
+  <li><a href="00-index-contents.html#contents">Cover Page</a></li>
+  <li><a href="01-index-introduction.html#sec:introduction">1 Introduction</a></li>
+  <ul>
+    <li><a href="01-index-introduction.html#sec:executive-summary">1.1 Executive Summary</a></li>
+    <li><a href="01-index-introduction.html#sec:purpose-and-scope">1.2 Purpose and Scope</a></li>
+    <li><a href="01-index-introduction.html#sec:references-and-terminology">1.3 References and Terminology</a></li>
+    <li><a href="01-index-introduction.html#sec:definitions">1.4 Definitions</a></li>
+    <li><a href="01-index-introduction.html#sec:abbreviations">1.5 Abbreviations</a></li>
+    <li><a href="01-index-introduction.html#sec:specification-impact">1.6 Specification Impact</a></li>
+  </ul>
+  <li><a href="02-index-architecture.html#sec:architecture">2 Architecture</a></li>
+  <ul>
+    <li><a href="02-index-architecture.html#sec:endpoints">2.1 Endpoints</a></li>
+    <li><a href="02-index-architecture.html#sec:endpoint-identifier">2.2 Endpoint Identifier</a></li>
+    <li><a href="02-index-architecture.html#sec:service-elements">2.3 Service Elements</a></li>
+    <li><a href="02-index-architecture.html#sec:data-models">2.4 Data Models</a></li>
+    <li><a href="02-index-architecture.html#sec:path-names">2.5 Path Names</a></li>
+    <li><a href="02-index-architecture.html#sec:other-path-decorators">2.6 Other Path Decorators</a></li>
+    <li><a href="02-index-architecture.html#sec:data-model-path-grammar">2.7 Data Model Path Grammar</a></li>
+  </ul>
+  <li><a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a></li>
+  <ul>
+    <li><a href="03-index-discovery.html#sec:controller-information">3.1 Controller Information</a></li>
+    <li><a href="03-index-discovery.html#sec:required-agent-information">3.2 Required Agent Information</a></li>
+    <li><a href="03-index-discovery.html#sec:using-dhcp">3.3 Use of DHCP for Acquiring Controller Information</a></li>
+    <li><a href="03-index-discovery.html#sec:using-mdns">3.4 Using mDNS</a></li>
+    <li><a href="03-index-discovery.html#sec:using-dns">3.5 Using DNS</a></li>
+    <li><a href="03-index-discovery.html#sec:dns-sd-records">3.6 DNS-SD Records</a></li>
+    <li><a href="03-index-discovery.html#sec:using-the-sendonboardrequest-operation-and-onboardrequest-notification">3.7 Using the SendOnBoardRequest() operation and OnBoardRequest notification</a></li>
+  </ul>
+  <li><a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a></li>
+  <ul>
+    <li><a href="04-index-mtp.html#sec:generic-requirements">4.1 Generic Requirements</a></li>
+    <li><a href="04-index-mtp.html#sec:coap-binding-deprecated">4.2 CoAP Binding (DEPRECATED)</a></li>
+    <li><a href="04-index-mtp.html#sec:websocket">4.3 WebSocket Binding</a></li>
+    <li><a href="04-index-mtp.html#sec:stomp-binding">4.4 STOMP Binding</a></li>
+    <li><a href="04-index-mtp.html#sec:mqtt-binding">4.5 MQTT Binding</a></li>
+  </ul>
+  <li><a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a></li>
+  <ul>
+    <li><a href="05-index-encoding.html#sec:parameter-value-encoding">5.1 Parameter and Argument Value Encoding</a></li>
+  </ul>
+  <li><a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a></li>
+  <ul>
+    <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-within-an-e2e-session-context">6.1 Exchange of USP Records within an E2E Session Context</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-without-an-e2e-session-context">6.2 Exchange of USP Records without an E2E Session Context</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:validating-the-integrity-of-the-usp-record">6.3 Validating the Integrity of the USP Record</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:secure-message-exchange">6.4 Secure Message Exchange</a></li>
+  </ul>
+  <li><a href="07-index-messages.html#sec:messages">7 Messages</a></li>
+  <ul>
+    <li><a href="07-index-messages.html#sec:encapsulation-in-a-usp-record">7.1 Encapsulation in a USP Record</a></li>
+    <li><a href="07-index-messages.html#sec:requests-responses-and-errors">7.2 Requests, Responses and Errors</a></li>
+    <li><a href="07-index-messages.html#sec:message-structure">7.3 Message Structure</a></li>
+    <li><a href="07-index-messages.html#sec:creating-updating-and-deleting-objects">7.4 Creating, Updating, and Deleting Objects</a></li>
+    <li><a href="07-index-messages.html#sec:reading-an-agents-state-and-capabilities">7.5 Reading an Agent’s State and Capabilities</a></li>
+    <li><a href="07-index-messages.html#sec:notifications-and-subscriptions">7.6 Notifications and Subscription Mechanism</a></li>
+    <li><a href="07-index-messages.html#sec:defined-operations-mechanism">7.7 Defined Operations Mechanism</a></li>
+    <li><a href="07-index-messages.html#sec:error-codes">7.8 Error Codes</a></li>
+  </ul>
+  <li><a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a></li>
+  <ul>
+    <li><a href="08-index-auth.html#sec:authentication-1">8.1 Authentication</a></li>
+    <li><a href="08-index-auth.html#sec:role-based-access-control-rbac">8.2 Role Based Access Control (RBAC)</a></li>
+    <li><a href="08-index-auth.html#sec:trusted-certificate-authorities">8.3 Trusted Certificate Authorities</a></li>
+    <li><a href="08-index-auth.html#sec:trusted-brokers">8.4 Trusted Brokers</a></li>
+    <li><a href="08-index-auth.html#sec:self-signed-certificates">8.5 Self-Signed Certificates</a></li>
+    <li><a href="08-index-auth.html#sec:agent-authentication">8.6 Agent Authentication</a></li>
+    <li><a href="08-index-auth.html#sec:challenge-strings-and-images">8.7 Challenge Strings and Images</a></li>
+    <li><a href="08-index-auth.html#sec:analysis-controller-certificates">8.8 Analysis of Controller Certificates</a></li>
+    <li><a href="08-index-auth.html#sec:theory-of-operations">8.9 Theory of Operations</a></li>
+  </ul>
+  <li><a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a></li>
+  <ul>
+    <li><a href="09-index-bulk-data-collection.html#sec:introduction-1">A.1 Introduction</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:http-bulk-data-collection">A.2 HTTP Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:mqtt-bulk-data-collection">A.3 MQTT Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:uspeventnotif-bulk-data-collection">A.4 USPEventNotif Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:using-wildcards-to-reference-object-instances-in-the-report">A.5 Using Wildcards to Reference Object Instances in the Report</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:using-alternative-names-in-the-report">A.6 Using Alternative Names in the Report</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:encoding-of-bulk-data">A.7 Encoding of Bulk Data</a></li>
+  </ul>
+  <li><a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a></li>
+  <ul>
+    <li><a href="10-index-software-module-management.html#sec:lifecycle-management">I.1 Lifecycle Management</a></li>
+    <li><a href="10-index-software-module-management.html#sec:software-modules">I.2 Software Modules</a></li>
+    <li><a href="10-index-software-module-management.html#sec:execution-environment-concepts">I.3 Execution Environment Concepts</a></li>
+    <li><a href="10-index-software-module-management.html#sec:fault-model">I.4 Fault Model</a></li>
+  </ul>
+  <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a></li>
+  <ul>
+    <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:getting-the-firmware-image-onto-the-device">II.1 Getting the firmware image onto the device</a></li>
+    <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:using-multiple-firmware-images">II.2 Using multiple firmware images</a></li>
+  </ul>
+  <li><a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a></li>
+  <li><a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a></li>
+  <ul>
+    <li><a href="13-index-proxying.html#sec:proxying-building-block-functions">IV.1 Proxying Building Block Functions</a></li>
+    <li><a href="13-index-proxying.html#sec:discovery-proxy">IV.2 Discovery Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:connectivity-proxy">IV.3 Connectivity Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:message-transfer-protocol-mtp-proxy">IV.4 Message Transfer Protocol (MTP) Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:usp-to-non-usp-proxy">IV.5 USP to Non-USP Proxy</a></li>
+  </ul>
+  <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a></li>
+  <ul>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:introduction-2">V.1 Introduction</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-overview">V.2 IoT data model overview</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:architecture-mappings">V.3 Architecture mappings</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-object-details">V.4 IoT data model Object details</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:examples">V.5 Examples</a></li>
+  </ul>
+  <li><a href="99-index-footnotes.html#footnotes">Footnotes</a></li>
+</ul>
+</nav>
+
+    <header id="title-block-header">
+      <h1 class="title" id="contents">TR-369a2 – User Services Platform (USP)<a href="#contents" class="headerlink" title="Permalink to this header"> <img src="permalink.png" style="width: 0.8em"/></a></h1>
+      <p class="subtitle">Issue: 1 Amendment 2 <span class="release"></span></p>
+      <p class="date">Issue Date: January 2022</p>
+    </header>
+  <h3 class="unnumbered unlisted" id="table-of-contents">Table of Contents<a class="headerlink" href="14-index-iot-data-model-theory-of-operation.html#table-of-contents" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <nav>
+  <ul>
+    <li><a href="01-index-introduction.html#sec:introduction">1 Introduction</a></li>
+    <ul>
+      <li><a href="01-index-introduction.html#sec:executive-summary">1.1 Executive Summary</a></li>
+      <li><a href="01-index-introduction.html#sec:purpose-and-scope">1.2 Purpose and Scope</a></li>
+      <li><a href="01-index-introduction.html#sec:references-and-terminology">1.3 References and Terminology</a></li>
+      <li><a href="01-index-introduction.html#sec:definitions">1.4 Definitions</a></li>
+      <li><a href="01-index-introduction.html#sec:abbreviations">1.5 Abbreviations</a></li>
+      <li><a href="01-index-introduction.html#sec:specification-impact">1.6 Specification Impact</a></li>
+    </ul>
+    <li><a href="02-index-architecture.html#sec:architecture">2 Architecture</a></li>
+    <ul>
+      <li><a href="02-index-architecture.html#sec:endpoints">2.1 Endpoints</a></li>
+      <li><a href="02-index-architecture.html#sec:endpoint-identifier">2.2 Endpoint Identifier</a></li>
+      <li><a href="02-index-architecture.html#sec:service-elements">2.3 Service Elements</a></li>
+      <li><a href="02-index-architecture.html#sec:data-models">2.4 Data Models</a></li>
+      <li><a href="02-index-architecture.html#sec:path-names">2.5 Path Names</a></li>
+      <li><a href="02-index-architecture.html#sec:other-path-decorators">2.6 Other Path Decorators</a></li>
+      <li><a href="02-index-architecture.html#sec:data-model-path-grammar">2.7 Data Model Path Grammar</a></li>
+    </ul>
+    <li><a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a></li>
+    <ul>
+      <li><a href="03-index-discovery.html#sec:controller-information">3.1 Controller Information</a></li>
+      <li><a href="03-index-discovery.html#sec:required-agent-information">3.2 Required Agent Information</a></li>
+      <li><a href="03-index-discovery.html#sec:using-dhcp">3.3 Use of DHCP for Acquiring Controller Information</a></li>
+      <li><a href="03-index-discovery.html#sec:using-mdns">3.4 Using mDNS</a></li>
+      <li><a href="03-index-discovery.html#sec:using-dns">3.5 Using DNS</a></li>
+      <li><a href="03-index-discovery.html#sec:dns-sd-records">3.6 DNS-SD Records</a></li>
+      <li><a href="03-index-discovery.html#sec:using-the-sendonboardrequest-operation-and-onboardrequest-notification">3.7 Using the SendOnBoardRequest() operation and OnBoardRequest notification</a></li>
+    </ul>
+    <li><a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a></li>
+    <ul>
+      <li><a href="04-index-mtp.html#sec:generic-requirements">4.1 Generic Requirements</a></li>
+      <li><a href="04-index-mtp.html#sec:coap-binding-deprecated">4.2 CoAP Binding (DEPRECATED)</a></li>
+      <li><a href="04-index-mtp.html#sec:websocket">4.3 WebSocket Binding</a></li>
+      <li><a href="04-index-mtp.html#sec:stomp-binding">4.4 STOMP Binding</a></li>
+      <li><a href="04-index-mtp.html#sec:mqtt-binding">4.5 MQTT Binding</a></li>
+    </ul>
+    <li><a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a></li>
+    <ul>
+      <li><a href="05-index-encoding.html#sec:parameter-value-encoding">5.1 Parameter and Argument Value Encoding</a></li>
+    </ul>
+    <li><a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a></li>
+    <ul>
+      <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-within-an-e2e-session-context">6.1 Exchange of USP Records within an E2E Session Context</a></li>
+      <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-without-an-e2e-session-context">6.2 Exchange of USP Records without an E2E Session Context</a></li>
+      <li><a href="06-index-e2e-message-exchange.html#sec:validating-the-integrity-of-the-usp-record">6.3 Validating the Integrity of the USP Record</a></li>
+      <li><a href="06-index-e2e-message-exchange.html#sec:secure-message-exchange">6.4 Secure Message Exchange</a></li>
+    </ul>
+    <li><a href="07-index-messages.html#sec:messages">7 Messages</a></li>
+    <ul>
+      <li><a href="07-index-messages.html#sec:encapsulation-in-a-usp-record">7.1 Encapsulation in a USP Record</a></li>
+      <li><a href="07-index-messages.html#sec:requests-responses-and-errors">7.2 Requests, Responses and Errors</a></li>
+      <li><a href="07-index-messages.html#sec:message-structure">7.3 Message Structure</a></li>
+      <li><a href="07-index-messages.html#sec:creating-updating-and-deleting-objects">7.4 Creating, Updating, and Deleting Objects</a></li>
+      <li><a href="07-index-messages.html#sec:reading-an-agents-state-and-capabilities">7.5 Reading an Agent’s State and Capabilities</a></li>
+      <li><a href="07-index-messages.html#sec:notifications-and-subscriptions">7.6 Notifications and Subscription Mechanism</a></li>
+      <li><a href="07-index-messages.html#sec:defined-operations-mechanism">7.7 Defined Operations Mechanism</a></li>
+      <li><a href="07-index-messages.html#sec:error-codes">7.8 Error Codes</a></li>
+    </ul>
+    <li><a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a></li>
+    <ul>
+      <li><a href="08-index-auth.html#sec:authentication-1">8.1 Authentication</a></li>
+      <li><a href="08-index-auth.html#sec:role-based-access-control-rbac">8.2 Role Based Access Control (RBAC)</a></li>
+      <li><a href="08-index-auth.html#sec:trusted-certificate-authorities">8.3 Trusted Certificate Authorities</a></li>
+      <li><a href="08-index-auth.html#sec:trusted-brokers">8.4 Trusted Brokers</a></li>
+      <li><a href="08-index-auth.html#sec:self-signed-certificates">8.5 Self-Signed Certificates</a></li>
+      <li><a href="08-index-auth.html#sec:agent-authentication">8.6 Agent Authentication</a></li>
+      <li><a href="08-index-auth.html#sec:challenge-strings-and-images">8.7 Challenge Strings and Images</a></li>
+      <li><a href="08-index-auth.html#sec:analysis-controller-certificates">8.8 Analysis of Controller Certificates</a></li>
+      <li><a href="08-index-auth.html#sec:theory-of-operations">8.9 Theory of Operations</a></li>
+    </ul>
+    <li><a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a></li>
+    <ul>
+      <li><a href="09-index-bulk-data-collection.html#sec:introduction-1">A.1 Introduction</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:http-bulk-data-collection">A.2 HTTP Bulk Data Collection</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:mqtt-bulk-data-collection">A.3 MQTT Bulk Data Collection</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:uspeventnotif-bulk-data-collection">A.4 USPEventNotif Bulk Data Collection</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:using-wildcards-to-reference-object-instances-in-the-report">A.5 Using Wildcards to Reference Object Instances in the Report</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:using-alternative-names-in-the-report">A.6 Using Alternative Names in the Report</a></li>
+      <li><a href="09-index-bulk-data-collection.html#sec:encoding-of-bulk-data">A.7 Encoding of Bulk Data</a></li>
+    </ul>
+    <li><a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a></li>
+    <ul>
+      <li><a href="10-index-software-module-management.html#sec:lifecycle-management">I.1 Lifecycle Management</a></li>
+      <li><a href="10-index-software-module-management.html#sec:software-modules">I.2 Software Modules</a></li>
+      <li><a href="10-index-software-module-management.html#sec:execution-environment-concepts">I.3 Execution Environment Concepts</a></li>
+      <li><a href="10-index-software-module-management.html#sec:fault-model">I.4 Fault Model</a></li>
+    </ul>
+    <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a></li>
+    <ul>
+      <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:getting-the-firmware-image-onto-the-device">II.1 Getting the firmware image onto the device</a></li>
+      <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:using-multiple-firmware-images">II.2 Using multiple firmware images</a></li>
+    </ul>
+    <li><a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a></li>
+    <ul>
+      <li><a href="13-index-proxying.html#sec:proxying-building-block-functions">IV.1 Proxying Building Block Functions</a></li>
+      <li><a href="13-index-proxying.html#sec:discovery-proxy">IV.2 Discovery Proxy</a></li>
+      <li><a href="13-index-proxying.html#sec:connectivity-proxy">IV.3 Connectivity Proxy</a></li>
+      <li><a href="13-index-proxying.html#sec:message-transfer-protocol-mtp-proxy">IV.4 Message Transfer Protocol (MTP) Proxy</a></li>
+      <li><a href="13-index-proxying.html#sec:usp-to-non-usp-proxy">IV.5 USP to Non-USP Proxy</a></li>
+    </ul>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a></li>
+    <ul>
+      <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:introduction-2">V.1 Introduction</a></li>
+      <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-overview">V.2 IoT data model overview</a></li>
+      <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:architecture-mappings">V.3 Architecture mappings</a></li>
+      <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-object-details">V.4 IoT data model Object details</a></li>
+      <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:examples">V.5 Examples</a></li>
+    </ul>
+    <li><a href="99-index-footnotes.html#footnotes">Footnotes</a></li>
+  </ul>
+  </nav>
+
+  <h3 class="unnumbered unlisted" id="list-of-figures">List of Figures<a class="headerlink" href="14-index-iot-data-model-theory-of-operation.html#list-of-figures" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <ol>
+  <li><a href='02-index-architecture.html#fig:usp-agent-and-controller-architecture' title=''>USP Agent and Controller Architecture</a></li>
+  <li><a href='04-index-mtp.html#fig:receiving-a-x509-certificate' title=''>Receiving a X.509 Certificate</a></li>
+  <li><a href='04-index-mtp.html#fig:usp-request-response-over-coap' title=''>Example: USP Request/Response over the CoAP MTP</a></li>
+  <li><a href='04-index-mtp.html#fig:websocket-session-handshake' title=''>WebSocket Session Handshake</a></li>
+  <li><a href='04-index-mtp.html#fig:usp-request-using-a-websocket-session' title=''>USP Request using a WebSocket Session</a></li>
+  <li><a href='04-index-mtp.html#fig:usp-over-stomp' title=''>USP over STOMP Architecture</a></li>
+  <li><a href='04-index-mtp.html#fig:usp-over-mqtt' title=''>USP over MQTT Architecture</a></li>
+  <li><a href='04-index-mtp.html#fig:mqtt-packets' title=''>MQTT Packets</a></li>
+  <li><a href='06-index-e2e-message-exchange.html#fig:processing-received-records' title=''>Processing of Received USP Records</a></li>
+  <li><a href='06-index-e2e-message-exchange.html#fig:segmentation-and-reassembly' title=''>E2E Segmentation and Reassembly</a></li>
+  <li><a href='06-index-e2e-message-exchange.html#fig:handshake' title=''>TLS Session Handshake</a></li>
+  <li><a href='07-index-messages.html#fig:a-successful-requestresponse-sequence' title=''>A successful request/response sequence</a></li>
+  <li><a href='07-index-messages.html#fig:a-failed-requestresponse-sequence' title=''>A failed request/response sequence</a></li>
+  <li><a href='07-index-messages.html#fig:operate-message-flow-for-synchronous-operations' title=''>Operate Message Flow for Synchronous Operations</a></li>
+  <li><a href='07-index-messages.html#fig:operate-message-flow-for-asynchronous-operations' title=''>Operate Message Flow for Asynchronous Operations</a></li>
+  <li><a href='08-index-auth.html#fig:receive-record' title=''>Receiving a USP Record</a></li>
+  <li><a href='08-index-auth.html#fig:no-secure-message-exchange' title=''>USP Record without USP Layer Secure Message Exchange</a></li>
+  <li><a href='08-index-auth.html#fig:send-record' title=''>Sending a USP Record</a></li>
+  <li><a href='08-index-auth.html#fig:check-cert' title=''>Checking a Certificate</a></li>
+  <li><a href='08-index-auth.html#fig:determine-role' title=''>Determining the Role</a></li>
+  <li><a href='08-index-auth.html#fig:broker-with-received-record' title=''>Trusted Broker with Received Record</a></li>
+  <li><a href='08-index-auth.html#fig:broker-with-sent-record' title=''>Trusted Broker Sending a Record</a></li>
+  <li><a href='10-index-software-module-management.html#fig:deployment-unit-state-diagram' title=''>Deployment Unit State Diagram</a></li>
+  <li><a href='10-index-software-module-management.html#fig:execution-unit-state-diagram' title=''>Execution Unit State Diagram</a></li>
+  <li><a href='10-index-software-module-management.html#fig:possible-multi-execution-environment-implementation' title=''>Possible Multi-Execution Environment Implementation</a></li>
+  <li><a href='13-index-proxying.html#fig:example-of-mtp-proxy-in-lan-with-wan-controller' title=''>Example of MTP Proxy in LAN with WAN Controller</a></li>
+  <li><a href='13-index-proxying.html#fig:coap-stomp-mtp-proxy-example-flow' title=''>CoAP-STOMP MTP Proxy Example Flow</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-data-model' title=''>IoT Data Model</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-individual-device-models' title=''>IoT individual device models</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-proxied-device-model' title=''>IoT proxied device model</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-threshold-trigger-sensitivity' title=''>IoT threshold trigger sensitivity</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-threshold-trigger-hold-time' title=''>IoT threshold trigger hold time</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-threshold-trigger-rest-time' title=''>IoT threshold trigger rest time</a></li>
+  <li><a href='14-index-iot-data-model-theory-of-operation.html#fig:iot-threshold-trigger-minimum-duration' title=''>IoT threshold trigger minimum duration</a></li>
+  </ol>
+
+  <h3 class="unnumbered unlisted" id="list-of-tables">List of Tables<a class="headerlink" href="14-index-iot-data-model-theory-of-operation.html#list-of-tables" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <ol>
+  <li><a href='13-index-proxying.html#tbl:proxy-building-block-functions' title=''>Proxy Building Block Functions</a></li>
+  <li><a href='13-index-proxying.html#tbl:possible-mtp-proxy-methods' title=''>Possible MTP Proxy Methods</a></li>
+  </ol>
+
+  <h3 class="unnumbered unlisted new-page" id="sec:notice">Notice<a class="headerlink" href="00-index-contents.html#sec:notice" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <p>The Broadband Forum is a non-profit corporation organized to create guidelines
+  for broadband network system development and deployment. This Technical Report
+  has been approved by members of the Forum. This Technical Report is subject to
+  change. This Technical Report is owned and copyrighted by the Broadband Forum,
+  and all rights are reserved. Portions of this Technical Report may be owned
+  and/or copyrighted by Broadband Forum members.</p>
+
+  <h3 class="unnumbered unlisted" id="sec:intellectual-property">Intellectual Property<a class="headerlink" href="00-index-contents.html#sec:intellectual-property" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <p>Recipients of this Technical Report are requested to submit, with their
+  comments, notification of any relevant patent claims or other intellectual
+  property rights of which they may be aware that might be infringed by any
+  implementation of this Technical Report, or use of any software code
+  normatively referenced in this Technical Report, and to provide supporting
+  documentation.</p>
+
+  <h3 class="unnumbered unlisted" id="sec:terms-of-use">Terms of Use<a class="headerlink" href="00-index-contents.html#sec:terms-of-use" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <p><strong>1. License</strong></p>
+
+  <p>Broadband Forum hereby grants you the right, without charge, on a perpetual,
+  non-exclusive and worldwide basis, to utilize the Technical Report for the
+  purpose of developing, making, having made, using, marketing, importing,
+  offering to sell or license, and selling or licensing, and to otherwise
+  distribute, products complying with the Technical Report, in all cases subject
+  to the conditions set forth in this notice and any relevant patent and other
+  intellectual property rights of third parties (which may include members of
+  Broadband Forum). This license grant does not include the right to sublicense,
+  modify or create derivative works based upon the Technical Report except to the
+  extent this Technical Report includes text implementable in computer code, in
+  which case your right under this License to create and modify derivative works
+  is limited to modifying and creating derivative works of such code. For the
+  avoidance of doubt, except as qualified by the preceding sentence, products
+  implementing this Technical Report are not deemed to be derivative works of the
+  Technical Report.</p>
+
+  <p><strong>2. NO WARRANTIES</strong></p>
+
+  <p>THIS TECHNICAL REPORT IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN
+  PARTICULAR, ANY WARRANTY OF NONINFRINGEMENT AND ANY IMPLIED WARRANTIES ARE
+  EXPRESSLY DISCLAIMED. ANY USE OF THIS TECHNICAL REPORT SHALL BE MADE ENTIRELY
+  AT THE USER’S OR IMPLEMENTER’S OWN RISK, AND NEITHER THE BROADBAND FORUM, NOR
+  ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY LIABILITY WHATSOEVER TO ANY
+  USER, IMPLEMENTER, OR THIRD PARTY FOR ANY DAMAGES OF ANY NATURE WHATSOEVER,
+  DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS TECHNICAL REPORT,
+  INCLUDING BUT NOT LIMITED TO, ANY CONSEQUENTIAL, SPECIAL, PUNITIVE, INCIDENTAL,
+  AND INDIRECT DAMAGES.</p>
+
+  <p><strong>3. THIRD PARTY RIGHTS</strong></p>
+
+  <p>Without limiting the generality of Section 2 above, BROADBAND FORUM ASSUMES NO
+  RESPONSIBILITY TO COMPILE, CONFIRM, UPDATE OR MAKE PUBLIC ANY THIRD PARTY
+  ASSERTIONS OF PATENT OR OTHER INTELLECTUAL PROPERTY RIGHTS THAT MIGHT NOW OR IN
+  THE FUTURE BE INFRINGED BY AN IMPLEMENTATION OF THE TECHNICAL REPORT IN ITS
+  CURRENT, OR IN ANY FUTURE FORM. IF ANY SUCH RIGHTS ARE DESCRIBED ON THE
+  TECHNICAL REPORT, BROADBAND FORUM TAKES NO POSITION AS TO THE VALIDITY OR
+  INVALIDITY OF SUCH ASSERTIONS, OR THAT ALL SUCH ASSERTIONS THAT HAVE OR MAY BE
+  MADE ARE SO LISTED.</p>
+
+  <p>All copies of this Technical Report (or any portion hereof) must include the
+  notices, legends, and other provisions set forth on this page.</p>
+
+  <div bbfTable="bbfRevisionHistory">
+  </div>
+
+  <h3 class="unnumbered unlisted new-page" id="sec:bbfissue-history-1">Issue History<a class="headerlink" href="00-index-contents.html#sec:bbfissue-history-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <div bbfTable="uspRevisionHistory">
+  <table>
+  <col width="17%" />
+  <col width="81%" />
+  <tr class="header">
+  <th align="left">Issue Number</th>
+  <th align="left">Changes</th>
+  </tr>
+  <tr class="odd">
+  <td align="left"><a href='https://www.broadband-forum.org/download/TR-369_Issue-1.pdf' title=''>Release 1.0</a></td>
+  <td align="left">Release contains specification for the User Services Platform 1.0</td>
+  </tr>
+  <tr class="even">
+  <td align="left"><a href='https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf' title=''>Release 1.0.1</a></td>
+  <td align="left">Added examples and clarifications to end-to-end messaging, use of endpoint
+  ID, typographical fixes</td>
+  </tr>
+  <tr class="odd">
+  <td align="left"><a href='https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf' title=''>Release 1.0.2</a></td>
+  <td align="left">Typographical and example fixes</td>
+  </tr>
+  <tr class="even">
+  <td align="left"><a href='https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf' title=''>Release 1.1</a></td>
+  <td align="left"><p>Release contains specification for the User Services Platform 1.1.</p>
+
+  <ul>
+  <li>Adds MQTT support as a Message Transfer Protocol</li>
+  <li>Adds a theory of operations for IoT control using USP Agents</li>
+  <li>Clarifications on protocol functions, error messages, and updates to
+  examples</li>
+  </ul></td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Release 1.1.2</td>
+  <td align="left">Clarifies several examples, requirements, and error types</td>
+  </tr>
+  <tr class="even">
+  <td align="left"><a href='https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf' title=''>Release 1.2</a></td>
+  <td align="left"><ul>
+  <li>Deprecates the use of COAP as an MTP</li>
+  <li>GetSupportedDM now allows retrieval of parameter data types</li>
+  <li>GetSupportedDM now allows the Agent to provide information about whether
+  or not it will ignore ValueChange subscriptions on a given parameter</li>
+  <li>GetSupportedDM now provides information about whether a command is
+  synchronous vs. asynchronous</li>
+  <li>GetSupportedDM now allows requests on specific object instances and
+  handles divergent data models</li>
+  <li>Defines discovery mechanisms for Endpoints connected to STOMP and MQTT
+  brokers</li>
+  <li>Clarifies the use of search paths vs. unique key addressing in the Add
+  message</li>
+  <li>Clarifies the use of required parameters and defaults for unique keys in
+  the Add message</li>
+  <li>Annex A now provides a theory of operations for use of the USPEventNotif
+  mechanism for bulk data collection using the Push! event</li>
+  <li>Annex A defines a new bulk data collection over MQTT mechanism</li>
+  <li>DHCP discovery mechanism now provides a Controller Endpoint ID to the
+  Agent</li>
+  <li>Enhances ease of use and clarifies requirements for use of TLS in
+  USP Record integrity</li>
+  <li>Adds USP connect and disconnect records for use independent of MTP</li>
+  <li>Adds USP Record specific error mechanism and error codes</li>
+  <li>USP Records can now include an empty payload</li>
+  <li>Get requests can now include a max_depth flag to limit response size</li>
+  <li>Get response format has been clarified to return separate elements for
+  each sub-object</li>
+  <li>Clarifies the requirements around processing an entire message in the
+  event of a failed operation when allow_partial is true vs. false</li>
+  <li>Clarifies the response behavior for Get, Set, and Delete when using a
+  path that matches no instances</li>
+  <li>Fixes and enhances the use of error codes for the Operate message</li>
+  <li>Clarifies and updates Controller credential/authentication theory of
+  operations and flow diagrams</li>
+  <li>Clarifies the use of subjectAltName in certificates</li>
+  </ul></td>
+  </tr>
+  </table></div>
+
+  <p>Comments or questions about this Broadband Forum Technical Report should be
+  directed to <a href='mailto:info@broadband-forum.org' title='' class="email">info@broadband-forum.org</a>.</p>
+
+  <div bbfList="bbfEditors">
+  </div>
+
+  <h3 class="unnumbered unlisted" id="sec:editors-1">Editors<a class="headerlink" href="00-index-contents.html#sec:editors-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <div bbfTable="uspEditors">
+  <table>
+  <col width="22%" />
+  <col width="16%" />
+  <col width="25%" />
+  <col width="35%" />
+  <tr class="header">
+  <th align="left">Name</th>
+  <th align="left">Company</th>
+  <th align="left">Email</th>
+  <th align="left">Role</th>
+  </tr>
+  <tr class="odd">
+  <td align="left">Barbara Stark</td>
+  <td align="left">AT&amp;T</td>
+  <td align="left">barbara.stark@att.com</td>
+  <td align="left">Editor/USP Project Lead</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Tim Spets</td>
+  <td align="left">Assia</td>
+  <td align="left">tspets@assia-inc.com</td>
+  <td align="left">Editor/USP Project Lead</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Jason Walls</td>
+  <td align="left">QA Cafe, LLC</td>
+  <td align="left">jason@qacafe.com</td>
+  <td align="left">Editor/Broadband User Services Work Area Director</td>
+  </tr>
+  <tr class="even">
+  <td align="left">John Blackford</td>
+  <td align="left">Commscope</td>
+  <td align="left">john.blackford@commscope.com</td>
+  <td align="left">Editor/Broadband User Services Work Area Director</td>
+  </tr>
+  </table></div>
+
+  <div bbfList="bbfWADs">
+  </div>
+
+  <div bbfTable="uspWADs">
+  </div>
+
+  <div bbfList="bbfPSLs">
+  </div>
+
+  <div bbfTable="uspPSLs">
+  </div>
+
+  <h3 class="unnumbered unlisted" id="sec:acknowledgments">Acknowledgments<a class="headerlink" href="00-index-contents.html#sec:acknowledgments" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+  <p>The following individuals are being acknowledged for their efforts in the
+  testing and development of this specification.</p>
+
+  <div bbfTable="uspAcknowledgments">
+  <table>
+  <col width="45%" />
+  <col width="22%" />
+  <col width="31%" />
+  <tr class="header">
+  <th align="left">Name</th>
+  <th align="left">Company</th>
+  <th align="left">Email</th>
+  </tr>
+  <tr class="odd">
+  <td align="left">Jean-Didier Ott</td>
+  <td align="left">Orange</td>
+  <td align="left">jeandidier.ott@orange.com</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Timothy Carey</td>
+  <td align="left">Nokia</td>
+  <td align="left">timothy.carey@nokia.com</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Steven Nicolai</td>
+  <td align="left">Arris</td>
+  <td align="left">Steven.Nicolai@arris.com</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Apostolos Papageorgiou</td>
+  <td align="left">NEC</td>
+  <td align="left">apostolos.Papageorgiou@neclab.eu</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Mark Tabry</td>
+  <td align="left">Google</td>
+  <td align="left">mtab@google.com</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Klaus Wich</td>
+  <td align="left">Huawei</td>
+  <td align="left">klaus.wich@huawei.com</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Daniel Egger</td>
+  <td align="left">Axiros</td>
+  <td align="left">daniel.egger@axiros.com</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Bahadir Danisik</td>
+  <td align="left">Nokia</td>
+  <td align="left">bahadir.danisik@nokia.com</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">William Lupton</td>
+  <td align="left">Broadband Forum</td>
+  <td align="left">wlupton@broadband-forum.org</td>
+  </tr>
+  <tr class="even">
+  <td align="left">Matthieu Anne</td>
+  <td align="left">Orange</td>
+  <td align="left">matthieu.anne@orange.com</td>
+  </tr>
+  <tr class="odd">
+  <td align="left">Thales Fragoso</td>
+  <td align="left">Axiros</td>
+  <td align="left">thales.fragoso@axiros.com</td>
+  </tr>
+  </table></div>
+
+  <div bbfTable="uspRevisionHistory">
+  </div>
+
+  <div bbfTable="uspEditors">
+  </div>
+
+  <div bbfTable="uspAcknowledgments">
+  </div>
+
+
+    <div style="clear: both;"/>
+    <footer class="site-footer">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-introduction.html#sec:introduction">1 Introduction</a>
+ | <a href="02-index-architecture.html#sec:architecture">2 Architecture</a>
+ | <a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a>
+ | <a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a>
+ | <a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a>
+ | <a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a>
+ | <a href="07-index-messages.html#sec:messages">7 Messages</a>
+ | <a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a>
+ | <a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a>
+ | <a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a>
+ | <a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a>
+ | <a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a>
+ | <a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a>
+ | <a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a>
+ | <a href="99-index-footnotes.html#footnotes">Footnotes</a>
+</p>
+</nav>
+
+      <span class="site-footer-owner">
+        USP is developed and maintained
+        by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
+        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+      </span>
+      <span class="site-footer-credits">
+        This page was generated by <a href="https://pandoc.org">pandoc</a>
+        and <a href="https://pages.github.com">GitHub Pages</a>.
+        View the <a href="https://github.com/BroadbandForum/usp">specification source on GitHub</a>.
+        <span class="release"/>
+      </span>
+    </footer>
+  </section>
+</body>
+</html>

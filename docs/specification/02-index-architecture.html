@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<!-- BBF GitHub Pages pandoc template; modified from default.html template -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="generator" content="pandoc"/>
+  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+  <title>BBF – 2 Architecture</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="github.css"/>
+  <link rel="stylesheet" href="extra.css"/>
+  <link rel="stylesheet" href="toc.css"/>
+  <link rel="stylesheet" href="release.css"/>
+  <link rel="stylesheet" href="local.css"/>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- XXX header includes are included just before the ToC (below) -->
+</head>
+
+<body>
+  <section class="page-header">
+    <h1 class="project-name">
+      <a href="../index.html" style="text-decoration: none; color: white;">
+        <img src="bbflogo-bw.png"/><br>
+        The User Services Platform
+      </a>
+    </h1>
+    <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks</h2>
+    <p></p>
+    <p></p>
+    <div class="project-buttons">
+      <a class="btn" href="../specification/index.html" title="USP Specification">Specification</a>
+      <a class="btn" href="../specification/index.htm" title="USP Specification Single-file HTML">HTML</a>
+      <a class="btn" href="../specification/index.pdf" title="USP Specification PDF">PDF</a>
+      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP Data Models">Data Models</a>
+      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP Test Plan">Test Plan</a>
+      <a class="btn" href="../resources/01-index-usp-development-resources.html" title="USP Development Resources">Resources</a>
+      <a class="btn" href="../faq/01-index-faq.html" title="USP Frequently Asked Questions">FAQ</a>
+    </div>
+  </section>
+
+  <section class="main-content">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-introduction.html#sec:introduction">1 Introduction</a>
+ | <a href="02-index-architecture.html#sec:architecture">2 Architecture</a>
+ | <a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a>
+ | <a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a>
+ | <a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a>
+ | <a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a>
+ | <a href="07-index-messages.html#sec:messages">7 Messages</a>
+ | <a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a>
+ | <a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a>
+ | <a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a>
+ | <a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a>
+ | <a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a>
+ | <a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a>
+ | <a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a>
+ | <a href="99-index-footnotes.html#footnotes">Footnotes</a>
+</p>
+</nav>
+
+<nav id="TOCFULL">
+<ul>
+  <li><a href="00-index-contents.html#contents">Cover Page</a></li>
+  <li><a href="01-index-introduction.html#sec:introduction">1 Introduction</a></li>
+  <ul>
+    <li><a href="01-index-introduction.html#sec:executive-summary">1.1 Executive Summary</a></li>
+    <li><a href="01-index-introduction.html#sec:purpose-and-scope">1.2 Purpose and Scope</a></li>
+    <li><a href="01-index-introduction.html#sec:references-and-terminology">1.3 References and Terminology</a></li>
+    <li><a href="01-index-introduction.html#sec:definitions">1.4 Definitions</a></li>
+    <li><a href="01-index-introduction.html#sec:abbreviations">1.5 Abbreviations</a></li>
+    <li><a href="01-index-introduction.html#sec:specification-impact">1.6 Specification Impact</a></li>
+  </ul>
+  <li><a href="02-index-architecture.html#sec:architecture">2 Architecture</a></li>
+  <ul>
+    <li><a href="02-index-architecture.html#sec:endpoints">2.1 Endpoints</a></li>
+    <li><a href="02-index-architecture.html#sec:endpoint-identifier">2.2 Endpoint Identifier</a></li>
+    <li><a href="02-index-architecture.html#sec:service-elements">2.3 Service Elements</a></li>
+    <li><a href="02-index-architecture.html#sec:data-models">2.4 Data Models</a></li>
+    <li><a href="02-index-architecture.html#sec:path-names">2.5 Path Names</a></li>
+    <li><a href="02-index-architecture.html#sec:other-path-decorators">2.6 Other Path Decorators</a></li>
+    <li><a href="02-index-architecture.html#sec:data-model-path-grammar">2.7 Data Model Path Grammar</a></li>
+  </ul>
+  <li><a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a></li>
+  <ul>
+    <li><a href="03-index-discovery.html#sec:controller-information">3.1 Controller Information</a></li>
+    <li><a href="03-index-discovery.html#sec:required-agent-information">3.2 Required Agent Information</a></li>
+    <li><a href="03-index-discovery.html#sec:using-dhcp">3.3 Use of DHCP for Acquiring Controller Information</a></li>
+    <li><a href="03-index-discovery.html#sec:using-mdns">3.4 Using mDNS</a></li>
+    <li><a href="03-index-discovery.html#sec:using-dns">3.5 Using DNS</a></li>
+    <li><a href="03-index-discovery.html#sec:dns-sd-records">3.6 DNS-SD Records</a></li>
+    <li><a href="03-index-discovery.html#sec:using-the-sendonboardrequest-operation-and-onboardrequest-notification">3.7 Using the SendOnBoardRequest() operation and OnBoardRequest notification</a></li>
+  </ul>
+  <li><a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a></li>
+  <ul>
+    <li><a href="04-index-mtp.html#sec:generic-requirements">4.1 Generic Requirements</a></li>
+    <li><a href="04-index-mtp.html#sec:coap-binding-deprecated">4.2 CoAP Binding (DEPRECATED)</a></li>
+    <li><a href="04-index-mtp.html#sec:websocket">4.3 WebSocket Binding</a></li>
+    <li><a href="04-index-mtp.html#sec:stomp-binding">4.4 STOMP Binding</a></li>
+    <li><a href="04-index-mtp.html#sec:mqtt-binding">4.5 MQTT Binding</a></li>
+  </ul>
+  <li><a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a></li>
+  <ul>
+    <li><a href="05-index-encoding.html#sec:parameter-value-encoding">5.1 Parameter and Argument Value Encoding</a></li>
+  </ul>
+  <li><a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a></li>
+  <ul>
+    <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-within-an-e2e-session-context">6.1 Exchange of USP Records within an E2E Session Context</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:exchange-of-usp-records-without-an-e2e-session-context">6.2 Exchange of USP Records without an E2E Session Context</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:validating-the-integrity-of-the-usp-record">6.3 Validating the Integrity of the USP Record</a></li>
+    <li><a href="06-index-e2e-message-exchange.html#sec:secure-message-exchange">6.4 Secure Message Exchange</a></li>
+  </ul>
+  <li><a href="07-index-messages.html#sec:messages">7 Messages</a></li>
+  <ul>
+    <li><a href="07-index-messages.html#sec:encapsulation-in-a-usp-record">7.1 Encapsulation in a USP Record</a></li>
+    <li><a href="07-index-messages.html#sec:requests-responses-and-errors">7.2 Requests, Responses and Errors</a></li>
+    <li><a href="07-index-messages.html#sec:message-structure">7.3 Message Structure</a></li>
+    <li><a href="07-index-messages.html#sec:creating-updating-and-deleting-objects">7.4 Creating, Updating, and Deleting Objects</a></li>
+    <li><a href="07-index-messages.html#sec:reading-an-agents-state-and-capabilities">7.5 Reading an Agent’s State and Capabilities</a></li>
+    <li><a href="07-index-messages.html#sec:notifications-and-subscriptions">7.6 Notifications and Subscription Mechanism</a></li>
+    <li><a href="07-index-messages.html#sec:defined-operations-mechanism">7.7 Defined Operations Mechanism</a></li>
+    <li><a href="07-index-messages.html#sec:error-codes">7.8 Error Codes</a></li>
+  </ul>
+  <li><a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a></li>
+  <ul>
+    <li><a href="08-index-auth.html#sec:authentication-1">8.1 Authentication</a></li>
+    <li><a href="08-index-auth.html#sec:role-based-access-control-rbac">8.2 Role Based Access Control (RBAC)</a></li>
+    <li><a href="08-index-auth.html#sec:trusted-certificate-authorities">8.3 Trusted Certificate Authorities</a></li>
+    <li><a href="08-index-auth.html#sec:trusted-brokers">8.4 Trusted Brokers</a></li>
+    <li><a href="08-index-auth.html#sec:self-signed-certificates">8.5 Self-Signed Certificates</a></li>
+    <li><a href="08-index-auth.html#sec:agent-authentication">8.6 Agent Authentication</a></li>
+    <li><a href="08-index-auth.html#sec:challenge-strings-and-images">8.7 Challenge Strings and Images</a></li>
+    <li><a href="08-index-auth.html#sec:analysis-controller-certificates">8.8 Analysis of Controller Certificates</a></li>
+    <li><a href="08-index-auth.html#sec:theory-of-operations">8.9 Theory of Operations</a></li>
+  </ul>
+  <li><a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a></li>
+  <ul>
+    <li><a href="09-index-bulk-data-collection.html#sec:introduction-1">A.1 Introduction</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:http-bulk-data-collection">A.2 HTTP Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:mqtt-bulk-data-collection">A.3 MQTT Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:uspeventnotif-bulk-data-collection">A.4 USPEventNotif Bulk Data Collection</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:using-wildcards-to-reference-object-instances-in-the-report">A.5 Using Wildcards to Reference Object Instances in the Report</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:using-alternative-names-in-the-report">A.6 Using Alternative Names in the Report</a></li>
+    <li><a href="09-index-bulk-data-collection.html#sec:encoding-of-bulk-data">A.7 Encoding of Bulk Data</a></li>
+  </ul>
+  <li><a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a></li>
+  <ul>
+    <li><a href="10-index-software-module-management.html#sec:lifecycle-management">I.1 Lifecycle Management</a></li>
+    <li><a href="10-index-software-module-management.html#sec:software-modules">I.2 Software Modules</a></li>
+    <li><a href="10-index-software-module-management.html#sec:execution-environment-concepts">I.3 Execution Environment Concepts</a></li>
+    <li><a href="10-index-software-module-management.html#sec:fault-model">I.4 Fault Model</a></li>
+  </ul>
+  <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a></li>
+  <ul>
+    <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:getting-the-firmware-image-onto-the-device">II.1 Getting the firmware image onto the device</a></li>
+    <li><a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:using-multiple-firmware-images">II.2 Using multiple firmware images</a></li>
+  </ul>
+  <li><a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a></li>
+  <li><a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a></li>
+  <ul>
+    <li><a href="13-index-proxying.html#sec:proxying-building-block-functions">IV.1 Proxying Building Block Functions</a></li>
+    <li><a href="13-index-proxying.html#sec:discovery-proxy">IV.2 Discovery Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:connectivity-proxy">IV.3 Connectivity Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:message-transfer-protocol-mtp-proxy">IV.4 Message Transfer Protocol (MTP) Proxy</a></li>
+    <li><a href="13-index-proxying.html#sec:usp-to-non-usp-proxy">IV.5 USP to Non-USP Proxy</a></li>
+  </ul>
+  <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a></li>
+  <ul>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:introduction-2">V.1 Introduction</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-overview">V.2 IoT data model overview</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:architecture-mappings">V.3 Architecture mappings</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-object-details">V.4 IoT data model Object details</a></li>
+    <li><a href="14-index-iot-data-model-theory-of-operation.html#sec:examples">V.5 Examples</a></li>
+  </ul>
+  <li><a href="99-index-footnotes.html#footnotes">Footnotes</a></li>
+</ul>
+</nav>
+
+    <header id="title-block-header">
+      <h1 class="title" id="sec:architecture">2 Architecture<a href="#sec:architecture" class="headerlink" title="Permalink to this header"> <img src="permalink.png" style="width: 0.8em"/></a></h1>
+    </header>
+    <nav id="_TOC" role="doc-toc">
+<ul>
+<li><a href="#sec:endpoints">2.1 Endpoints <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:endpoint-identifier">2.2 Endpoint Identifier <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:service-elements">2.3 Service Elements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:data-models">2.4 Data Models <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:path-names">2.5 Path Names <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:other-path-decorators">2.6 Other Path Decorators <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:data-model-path-grammar">2.7 Data Model Path Grammar <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+</ul>
+    </nav>
+<p>The User Services Platform consists of a collection of Endpoints (Agents and Controllers) that allow applications to manipulate Service Elements. These Service Elements are made up of a set of Objects and Parameters that model a given service, such as network interfaces, software modules, device firmware, remote elements proxied through another interface, virtual elements, or other managed services.</p>
+<p>USP is made up of several architectural components:</p>
+<ul>
+<li>Mechanisms for discovery and trust establishment</li>
+<li>A method for encoding messages for transport</li>
+<li>A system for end-to-end confidentiality, integrity and identity authentication</li>
+<li>Transport of messages over one or more Message Transfer Protocols (MTPs) with associated MTP security</li>
+<li>A set of standardized messages based on the CRUD model (create, read, update, delete), plus an Object defined operations mechanism and a notification mechanism (CRUD-ON)</li>
+<li>Authorization and access control on a per element basis</li>
+<li>A method for modeling service elements using a set of Objects, Parameters, operations, and events (supported and instantiated data models)</li>
+</ul>
+<h2 id="sec:endpoints">2.1 Endpoints <a href="02-index-architecture.html#sec:endpoints" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>A USP Endpoint can act as Agent or a Controller. Controllers only send messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other Endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.</p>
+<figure>
+<img src="architecture/usp_architecture.png" id="fig:usp-agent-and-controller-architecture" alt="Figure 1: USP Agent and Controller Architecture " /><figcaption aria-hidden="true">Figure 1: USP Agent and Controller Architecture <a href="02-index-architecture.html#fig:usp-agent-and-controller-architecture" class="headerlink" title="Permalink to this figure"><img src="permalink.png" style="width:0.8em" /></a></figcaption>
+</figure>
+<h3 id="sec:agents">2.1.1 Agents <a href="02-index-architecture.html#sec:agents" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>A USP Agent exposes (to Controllers) one or more Service Elements that are represented in its data model. It contains or references both an Instantiated Data Model (representing the current state of Service Elements it represents) and a Supported Data Model.</p>
+<h3 id="sec:controllers">2.1.2 Controllers <a href="02-index-architecture.html#sec:controllers" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>A USP Controller manipulates (through Agents) a set of Service Elements that are represented in Agent data models. It may maintain a database of Agents, their capabilities, and their states, in any combination. A Controller usually acts as an interface to a user application or policy engine that uses the User Services Platform to address particular use cases.</p>
+<h2 id="sec:endpoint-identifier">2.2 Endpoint Identifier <a href="02-index-architecture.html#sec:endpoint-identifier" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>Endpoints are identified by an Endpoint Identifier.</p>
+<p>The Endpoint Identifier is a locally or globally unique USP layer identifier of an Endpoint. Whether it is globally or locally unique depends on the scheme used for assignment.</p>
+<p>The Endpoint Identifier (ID) is used in the USP Record and various Parameters in a USP Message to uniquely identify Controller and Agent Endpoints. It can be globally or locally unique, either among all Endpoints or among all Controllers or all Agents, depending on the scheme used for assignment.</p>
+<p>The Endpoint ID is comprised of two mandatory and one optionally mandatory components: <code>authority-scheme</code>, <code>authority-id</code>, and <code>instance-id</code>.</p>
+<p>These three components are combined as:</p>
+<p><code>authority-scheme ":" [authority-id] ":" instance-id</code></p>
+<p>The format of the authority-id is dictated by the authority-scheme. The format of the instance-id is dictated either by the authority-scheme or by the entity identified by the authority-id.</p>
+<p>When used in a certificate, an Endpoint ID is expressed as a urn in the bbf namespace as:</p>
+<p><code>"urn:bbf:usp:id:" authority-scheme ":" [authority-id] ":" instance-id</code></p>
+<p>When used anywhere else (e.g. in the <code>to_id</code> and <code>from_id</code> of a USP Record), the namespace information is omitted, and the Endpoint ID is expressed as:</p>
+<p><code>authority-scheme ":" [authority-id] ":" instance-id</code></p>
+<h3 id="sec:use-of-authority-scheme-and-authority-id">2.2.1 Use of authority-scheme and authority-id <a href="02-index-architecture.html#sec:use-of-authority-scheme-and-authority-id" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The authority-scheme follows the following syntax:</p>
+<p><code>authority-scheme = "oui" | "cid" | "pen" | "self"  | "user" | "os" | "ops" | "uuid" | "imei" | "proto" | "doc"</code></p>
+<p>How these authority-scheme values impact the format and values of authority-id and instance-id is described below.</p>
+<p>The authority defined by an OUI, CID, or Private Enterprise Number (including OUI used in “ops” and “os” authority scheme) is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the “user” authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the “self” authority scheme, the Endpoint is responsible for ensuring uniqueness.</p>
+<p><strong><span id="r-arc.0">R-ARC.0 <a href="02-index-architecture.html#r-arc.0" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - A Controller and Agent within the same ecosystem MAY use the same Endpoint ID.</p>
+<p><strong><span id="r-arc.1">R-ARC.1 <a href="02-index-architecture.html#r-arc.1" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same ecosystem.</p>
+<p><strong><span id="r-arc.2">R-ARC.2 <a href="02-index-architecture.html#r-arc.2" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - Endpoints that share the same Endpoint ID MUST NOT communicate with each other via USP.</p>
+<p>No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever ecosystem it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.</p>
+<p>Unless the authority responsible for assigning an Endpoint ID assigns meaning to an Agent and Controller having the same Endpoint ID, no meaning can be construed. That is, unless the assigning authority specifically states that an Agent and Controller with the same Endpoint ID are somehow related, no relationship can be assumed to exist.</p>
+<p><strong><span id="r-arc.2a">R-ARC.2a <a href="02-index-architecture.html#r-arc.2a" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - Endpoints MUST follow the authority-scheme requirements outlined in the following table:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header header">
+<th style="text-align: right;">authority-scheme</th>
+<th style="text-align: left;">usage and rules for authority-id and instance-id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd odd">
+<td style="text-align: right;"><code>oui</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be an OUI assigned and registered by the IEEE Registration Authority <span class="cite" data-citation-ids="IEEEREG"><a href="01-index-introduction.html#ref-IEEEREG">[1]</a></span> to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). <code>instance-id</code> syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:<code>oui:00256D:my-unique-bbf-id-42</code></td>
+</tr>
+<tr class="even even">
+<td style="text-align: right;"><code>cid</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be a CID assigned and registered by the IEEE Registration Authority <span class="cite" data-citation-ids="IEEEREG"><a href="01-index-introduction.html#ref-IEEEREG">[1]</a></span> to the entity responsible for this Endpoint. <code>authority-id</code> MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters).<br />
+<code>instance-id</code> syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the CID.<br />
+Example: cid:3AA3F8:my-unique-usp-id-42</td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: right;"><code>pen</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be a Private Enterprise Number assigned and registered by the <a href="http://pen.iana.org/pen/PenApplication.page">IANA</a> to the entity responsible for this Endpoint. <code>authority-id</code> MUST use decimal encoding of the IANA-assigned number.<br />
+<code>instance-id</code> syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the Private Enterprise Number.<br />
+Example: <code>pen:3561:my-unique-bbf-id-42</code></td>
+</tr>
+<tr class="even even">
+<td style="text-align: right;"><code>self</code></td>
+<td style="text-align: left;">When present, an <code>authority-id</code> for “<code>self</code>” MUST be between 1 and 6 non-reserved characters in length. When present, it is generated by the Endpoint. It is not required to have an <code>authority-id</code> for “<code>self</code>”.<br />
+The Endpoint ID, including <code>instance-id</code>, is generated by the Endpoint.<br />
+The Endpoint MUST change its Endpoint ID if it ever encounters another Endpoint using the identical Endpoint ID.<br />
+Example: <code>self::my-Agent</code></td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: right;"><code>user</code></td>
+<td style="text-align: left;">An <code>authority-id</code> for “<code>user</code>” MUST be between 0 and 6 non-reserved characters in length.<br />
+The Endpoint ID, including <code>instance-id</code>, is assigned to the Endpoint via a user or management interface.</td>
+</tr>
+<tr class="even even">
+<td style="text-align: right;"><code>os</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be zero-length.<br />
+<code>instance-id</code>is <code>&lt;OUI&gt; "-" &lt;SerialNumber&gt;</code>, as defined in TR-069 <span class="cite" data-citation-ids="TR-069"><a href="01-index-introduction.html#ref-TR-069">[3.4.4/36]</a></span>.<br />
+Example: <code>os::00256D-0123456789</code></td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: right;"><code>ops</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be zero-length.<br />
+<code>instance-id</code> is <code>&lt;OUI&gt; "-" &lt;ProductClass&gt; "-" &lt;SerialNumber&gt;</code>, as defined in TR-069 <span class="cite" data-citation-ids="TR-069"><a href="01-index-introduction.html#ref-TR-069">[3.4.4/36]</a></span>.<br />
+Example: <code>ops::00256D-STB-0123456789</code></td>
+</tr>
+<tr class="even even">
+<td style="text-align: right;"><code>uuid</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be zero-length.<br />
+<code>instance-id</code> is a UUID <span class="cite" data-citation-ids="RFC4122"><a href="01-index-introduction.html#ref-RFC4122">[15]</a></span><br />
+Example:<code>uuid::f81d4fae-7dec-11d0-a765-00a0c91e6bf6</code></td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: right;"><code>imei</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be zero-length.<br />
+<code>instance-id</code> is an IMEI as defined by GSMA (https://imeidb.gsma.com/imei/index).<br />
+Example: <code>imei::990000862471854</code></td>
+</tr>
+<tr class="even even">
+<td style="text-align: right;"><code>proto</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be between 0 and 6 non-reserved characters (except “.”) in length.<br />
+“<code>proto</code>” is used for prototyping purposes only. Any <code>authority-id</code> and <code>instance-id</code> value (or scheme for creating the value) is left to the prototyper.<br />
+Example: <code>proto::my-Agent</code></td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: right;"><code>doc</code></td>
+<td style="text-align: left;"><code>authority-id</code> MUST be between 0 and 6 non-reserved characters in length.<br />
+“<code>doc</code>” is used for documentation purposes only (for creating examples in slide decks, tutorials, and other explanatory documents). Any <code>authority-id</code> and <code>instance-id</code> value (or scheme for creating the value) is left to the document creator.</td>
+</tr>
+</tbody>
+</table>
+<p><strong><span id="r-arc.3">R-ARC.3 <a href="02-index-architecture.html#r-arc.3" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - BBF OUI (<code>00256D</code>) and Private Enterprise Number (<code>3561</code>) are reserved for use in BBF documentation and BBF prototyping and MUST NOT be used by any entity other than BBF.</p>
+<p><strong><span id="r-arc.4">R-ARC.4 <a href="02-index-architecture.html#r-arc.4" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - The “<code>proto</code>” and “<code>doc</code>” authority-scheme values MUST NOT be used in production environments.</p>
+<p>The “<code>proto</code>” and “<code>doc</code>” values are intended only for prototyping and documentation (tutorials, examples, etc.), respectively.</p>
+<h3 id="sec:use-of-instance-id">2.2.2 Use of instance-id <a href="02-index-architecture.html#sec:use-of-instance-id" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p><strong><span id="r-arc.5">R-ARC.5 <a href="02-index-architecture.html#r-arc.5" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - <code>instance-id</code> MUST be encoded using only the following characters:</p>
+<pre><code>    instance-id = unreserved / pct-encoded
+    unreserved = ALPHA / DIGIT / &quot;-&quot; / &quot;.&quot; / &quot;_&quot;
+    pct-encoded = &quot;%&quot; HEXDIG HEXDIG</code></pre>
+<p>The above expression uses the Augmented Backus-Naur Form (ABNF) notation of RFC 2234 <span class="cite" data-citation-ids="RFC2234"><a href="01-index-introduction.html#ref-RFC2234">[10]</a></span>, including the following core ABNF syntax rules defined by that specification: ALPHA (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken from RFC 3986 <span class="cite" data-citation-ids="RFC3986"><a href="01-index-introduction.html#ref-RFC3986">[14]</a></span> as the set of unreserved characters and percent-encoded characters that are acceptable for all components of a URI. This set is also allowed for use in URNs RFC 2141 <span class="cite" data-citation-ids="RFC2141"><a href="01-index-introduction.html#ref-RFC2141">[9]</a></span>, and all MTP headers.</p>
+<p><strong><span id="r-arc.6">R-ARC.6 <a href="02-index-architecture.html#r-arc.6" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - An <code>instance-id</code> value MUST be no more than 50 characters in length.</p>
+<p>Shorter values are preferred, as end users could be exposed to Endpoint IDs. Long values tend to create a poor user experience when users are exposed to them.</p>
+<h2 id="sec:service-elements">2.3 Service Elements <a href="02-index-architecture.html#sec:service-elements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>“Service Element” is a general term referring to the set of Objects, Sub-Objects, commands, events, and Parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent’s Service Elements are represented in a Data Model - the data model representing an Agent’s current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. The Supported Data Model is described in a Device Type Definition (DT). An Agent’s Data Model is referenced using Path Names.</p>
+<h2 id="sec:data-models">2.4 Data Models <a href="02-index-architecture.html#sec:data-models" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>USP is designed to allow a Controller to manipulate Service Elements on an Agent using a standardized description of those Service Elements. This standardized description is known as an information model, and an information model that is further specified for use in a particular protocol is known as a “Data Model”.</p>
+<p><em>Note: This should be understood by those familiar with CWMP. For those unfamiliar with that protocol, a Data Model is similar to a Management Information Base (MIB) used in the Simple Network Management Protocol (SNMP) or YANG definitions used in NETCONF.</em></p>
+<p>This version of the specification defines support for the following Data Model(s):</p>
+<ul>
+<li>The Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href="01-index-introduction.html#ref-TR-181">[38]</a></span></li>
+</ul>
+<p>This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href="01-index-introduction.html#ref-TR-181">[38]</a></span>, and for creating Device Type Definitions based on that Data Model, are defined in Broadband Forum TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>.</p>
+<p>The use of USP with any of the above data models creates some dependencies on specific Objects and Parameters that must be included for base functionality.</p>
+<h3 id="sec:instantiated-data-model">2.4.1 Instantiated Data Model <a href="02-index-architecture.html#sec:instantiated-data-model" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>An Agent’s Instantiated Data Model represents the Service Elements (and their state) that are currently represented by the Agent. The Instantiated Data Model includes a set of Objects, and the Sub-Objects (“children”), Parameters, Events, and Commands associated with those Objects.</p>
+<h3 id="sec:supported-data-model">2.4.2 Supported Data Model <a href="02-index-architecture.html#sec:supported-data-model" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>An Agent’s Support Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents. A Supported Data Model consists of the union of all Device Type Definitions used by the Agent.</p>
+<h3 id="sec:objects">2.4.3 Objects <a href="02-index-architecture.html#sec:objects" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Objects are data structures that are defined by their Sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be static (single-instance) or dynamic (a multi-instance Object, or “table”).</p>
+<h4 id="sec:single-instance-objects">2.4.3.1 Single-Instance Objects <a href="02-index-architecture.html#sec:single-instance-objects" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Static Objects, or “single instance” Objects, are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.</p>
+<h4 id="sec:multi-instance-objects">2.4.3.2 Multi-Instance Objects <a href="02-index-architecture.html#sec:multi-instance-objects" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Dynamic Objects, or “multi-instance” Objects, are those Objects that can be the subject of “create” and “delete” operations (using the Add and Delete Messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a “Table”, with each instance of the Object referred to as a “Row”. Multi-Instance Objects can be also the subject of a search.</p>
+<h3 id="sec:parameters">2.4.4 Parameters <a href="02-index-architecture.html#sec:parameters" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Parameters define the attributes or variables of an Object. They are retrieved by a Controller using the read operations of USP and configured using the update operations of USP (the Get and Set Messages, respectively). Parameters have data types and are used to store values.</p>
+<h3 id="sec:commands">2.4.5 Commands <a href="02-index-architecture.html#sec:commands" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the “Operate” Message in USP (i.e., the Operate Message). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.</p>
+<h3 id="sec:events">2.4.6 Events <a href="02-index-architecture.html#sec:events" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Events define Object specific notifications within the Data Model. A Controller can subscribe to these events by creating instances of the Subscription table, which are then sent in a Notify request by the Agent (see <a href="07-index-messages.html#sec:notifications-and-subscriptions" class="heading">Notifications and Subscription Mechanism</a>). Events may also have information associated with them that are delivered in the Notify Request - this information is defined with the Event in the Data Model.</p>
+<h2 id="sec:path-names">2.5 Path Names <a href="02-index-architecture.html#sec:path-names" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent’s instantiated or Supported Data Model. The syntax for Path Names is defined in TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>.</p>
+<p><strong><span id="r-arc.7">R-ARC.7 <a href="02-index-architecture.html#r-arc.7" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - All USP Endpoints MUST support the Path Name syntax as defined in TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>.</p>
+<p>Path Names are represented by a hierarchy of Objects (“parents”) and Sub-Objects (“children”), separated by the dot “.” character, ending with a Parameter if referencing a Parameter Path. There are six different types of Path Names used to address the data model of an Agent:</p>
+<ol>
+<li><p>Object Path - This is a Path Name of either a single-instance (“static”) Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a “.” Character (as specified in TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>), except when used in a reference Parameter (see <a href="02-index-architecture.html#sec:reference-following" class="heading">Reference Following</a>). When addressing a Table in the Agent’s Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence “{i}” is used as a placeholder (see <a href="07-index-messages.html#sec:the-getsupporteddm-message" class="heading">The GetSupportedDM Message</a>).</p></li>
+<li><p>Object Instance Path - This is a Path Name to a Row in a Table in the Agent’s Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object. An Object Instance Path ends in a “.” Character (as specified in TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>), except when used in a reference Parameter (see <a href="02-index-architecture.html#sec:reference-following" class="heading">Reference Following</a>).</p></li>
+<li><p>Parameter Path - This is a Path Name of a particular Parameter of an Object.</p></li>
+<li><p>Command Path - This is a Path Name of an Object defined <a href="02-index-architecture.html#sec:operations-and-command-path-names" class="heading">Operation</a>.</p></li>
+<li><p>Event Path - This is a Path Name of an Object defined <a href="02-index-architecture.html#sec:event-path-names" class="heading">Event</a>.</p></li>
+<li><p>Search Path - This is a Path Name that contains search criteria for addressing a set of Multi-Instance Objects and/or their Parameters. A Search Path may contain a Search Expression or Wildcard.</p></li>
+</ol>
+<p>This creates two functions of Path Names: Addressing and Searching. The first five Path Names are used for addressing a particular Object, Parameter, Command, or Event. A Search Path uses Searching to return a set of Object Instances and/or their Parameters. When addressing, the expectation is that the Path Name will resolve to either 0 or 1 instance (and depending on the context, 0 instances could be an error). When searching, the expectation is that the Search Path will resolve to 0, 1, or many instances (and depending on the context, 0 instances is often not an error).</p>
+<p><em>Note: When resolving a Path Name, the Agent is expected to use locally cached information and/or information that can be obtained rapidly and cheaply. Specifically, there is no expectation that the Agent would issue a network request in order to resolve a Path Name.</em></p>
+<p><em>Note: Obviously only one form of addressing or searching can be used for a given Instance Identifier in a Path Name, but different forms of addressing can be used if more than one Instance Identifier needs to be specified in a Path Name.</em></p>
+<p>For example, the following Path Name uses Unique Key Addressing for the Interface table but a Search Expression for the IPv4Address table to select Enabled IPv4 Addresses associated with the “eth0” IP Interface:</p>
+<p><code>Device.IP.Interface.[Name=="eth0"].IPv4Address.[Status=="Enabled"].IPAddress</code></p>
+<h3 id="sec:relative-paths">2.5.1 Relative Paths <a href="02-index-architecture.html#sec:relative-paths" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Several USP Messages make use of Relative Paths to address Objects or Parameters. A Relative Path is used to address the child Objects and Parameters of a given Object Path or Object Instance Path. To build a Path Name using a Relative Path, a USP Endpoint uses a specified Object Path or Object Instance Path, and concatenates the Relative Path. This allows some efficiency in Requests and Responses when passing large numbers of repetitive Path Names. This Relative Path may include <a href="02-index-architecture.html#sec:using-instance-identifiers-in-path-names" class="heading">instance identifiers</a> to Multi-Instance Objects.</p>
+<p>For example, for an Object Path of:</p>
+<pre><code>Device.WiFi.Radio.1.</code></pre>
+<p>Relative Paths would include Parameters:</p>
+<pre><code>Status
+SupportedStandards
+OperatingStandards</code></pre>
+<p>Etc., as well as the following Sub-Object and its Parameters:</p>
+<pre><code>Stats.BytesSent
+Stats.BytesReceived</code></pre>
+<p>Etc.</p>
+<h3 id="sec:using-instance-identifiers-in-path-names">2.5.2 Using Instance Identifiers in Path Names <a href="02-index-architecture.html#sec:using-instance-identifiers-in-path-names" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<h4 id="sec:addressing-by-instance-number">2.5.2.1 Addressing by Instance Number <a href="02-index-architecture.html#sec:addressing-by-instance-number" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Instance Number Addressing allows an Object Instance to be addressed by using its Instance Number in the Path Name. An Instance Number is expressed in the Path Name as a positive integer (&gt;=1) with no additional surrounding characters. The Instance Number assigned by the Agent is arbitrary.</p>
+<p><strong><span id="r-arc.8">R-ARC.8 <a href="02-index-architecture.html#r-arc.8" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - The assigned Instance Number MUST persist unchanged until the Object Instance is subsequently deleted (either by the USP Delete Message or through some external mechanism). This implies that the Instance Number MUST persist across a reboot of the Agent, and that the Agent MUST NOT allow the Instance Number of an existing Object Instance to be modified by an external source.</p>
+<p>For example, the <code>Device.IP.Interface</code> table entry with an Instance Number of 3 would be addressed with the following Path Name: <code>Device.IP.Interface.3</code>.</p>
+<h4 id="sec:addressing-by-unique-key">2.5.2.2 Addressing by Unique Key <a href="02-index-architecture.html#sec:addressing-by-unique-key" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Key-based addressing allows an Object Instance to be addressed by using a Unique Key (as defined in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href="01-index-introduction.html#ref-TR-181">[38]</a></span>) in the Path Name.</p>
+<p>Unique Keys used for addressing are expressed in the Path Name by using square brackets surrounding a string that contains the name and value of the Unique Key Parameter using the equality operator (==).</p>
+<p>For example, the <code>Device.IP.Interface</code> table has two separate unique keys: <code>Name</code> and <code>Alias</code>. It could be addressed with the following Path Names:</p>
+<p><code>Device.IP.Interface.[Name=="eth0"]</code><br />
+<code>Device.IP.Interface.[Alias=="WAN"]</code></p>
+<p>If an Object has a multi-parameter unique key, then the Instance Identifier specifies all of the key’s Parameters using the AND (&amp;&amp;) logical operator (the Parameter order is not significant).</p>
+<p>For example, the <code>Device.NAT.PortMapping</code> table has a multi-parameter unique key consisting of RemoteHost, ExternalPort, and Protocol. It could be addressed with the following Path Name:</p>
+<p><code>Device.NAT.PortMapping.[RemoteHost==""&amp;&amp;ExternalPort==0&amp;&amp;Protocol=="TCP"].</code></p>
+<p><em>Note: Addressing by Unique Key uses the same syntax as <a href="02-index-architecture.html#sec:searching-with-expressions" class="heading">Searching with Expressions</a>. If a multi-parameter unique key expression omits any of the key’s Parameters then it’s a search (which might match multiple instances) rather than an address (which can’t match multiple instances).</em></p>
+<h3 id="sec:searching">2.5.3 Searching <a href="02-index-architecture.html#sec:searching" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Searching is a means of matching 0, 1 or many instances of a Multi-Instance Object by using the properties of Object. Searching can be done with Expressions or Wildcards.</p>
+<h3 id="sec:searching-with-expressions">2.5.4 Searching with Expressions <a href="02-index-architecture.html#sec:searching-with-expressions" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Search Paths that use expressions are enclosed in square brackets as the Instance Identifier within a Path Name.</p>
+<p><strong><span id="r-arc.9">R-ARC.9 <a href="02-index-architecture.html#r-arc.9" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - An Agent MUST return Path Names that include all Object Instances that match the criteria of a given Search Path.</p>
+<p>The basic format of a Search Path is:</p>
+<p><code>Device.IP.Interface.[&lt;expression&gt;].Status</code></p>
+<p>An Expression consists of one or more Expression Components that are concatenated by the AND (&amp;&amp;) logical operator <em>(Note: the OR logical operator is not supported)</em>.</p>
+<p>The basic format of a Search Path with the Expression element expanded is:</p>
+<p><code>Device.IP.Interface.[&lt;expression component&gt;&amp;&amp;&lt;expression component&gt;].Status</code></p>
+<p>An Expression Component is a combination of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.</p>
+<p>The basic format of a Search Path with the Expression Component element expanded is:</p>
+<p><code>Device.IP.Interface.[&lt;expression parameter&gt;&lt;expression operator&gt;&lt;expression constant&gt;].Status</code></p>
+<p>Further, this Relative Path can’t include any child tables. <em>(Note: this is never necessary because any child tables that need to be referenced in the Search Path can and should have their own Expression)</em></p>
+<p>An Expression Operator dictates how the Expression Component will be evaluated. The supported operators are equals (==), not equals (!=), contains (~=), less than (&lt;), greater than (&gt;), less than or equal (&lt;=) and greater than or equal (&gt;=).</p>
+<p>An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in TR-106 <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>. <strong>For string, boolean and enumeration types, only the ‘==’ and ‘!=’ operators are valid.</strong></p>
+<p>The ‘~=’ operator is only valid for comma-separated lists. It is used to check whether a list contains a certain element using an exact match of the element. The Expression Constant used in the Search Expression must be of the same type as the values in the list. For example, for a list of integers, the Expression Constant must also be an integer.</p>
+<p><em>Note: Literal values are conceptually converted to their internal representations before comparison. For example, <code>dateTime</code> values are converted to their numeric equivalents, <code>int</code> values <code>123</code>, <code>+123</code> and <code>0123</code> all represent the same value, and so do <code>boolean</code> values <code>1</code> and <code>true</code>.</em></p>
+<p>The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in the Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href="01-index-introduction.html#ref-TR-181">[38]</a></span>.</p>
+<p><em>Note: String values are enclosed in double quotes. In order to allow a string value to contain double quotes, quote characters can be percent-escaped as %22 (double quote). Therefore, a literal percent character has to be quoted as %25.</em></p>
+<p>The use of whitespace on either side of an Expression Operator is allowed, but its support is not required. Controllers cannot assume that an Agent tolerates whitespace. An example of an Expression with whitespace would be <code>[Type == "Normal"]</code> (which would be <code>[Type=="Normal"]</code> without whitespace).</p>
+<p><strong><span id="r-arc.9a">R-ARC.9a <a href="02-index-architecture.html#r-arc.9a" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - Agents SHOULD tolerate whitespace on either side of an Expression Operator.</p>
+<p><strong><span id="r-arc.9b">R-ARC.9b <a href="02-index-architecture.html#r-arc.9b" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - Controllers SHOULD NOT include whitespace on either side of an Expression Operator.</p>
+<h5 id="sec:search-expression-examples">2.5.4.0.1 Search Expression Examples <a href="02-index-architecture.html#sec:search-expression-examples" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h5>
+<p><em>Valid Searches:</em></p>
+<ul>
+<li><p>Status for all IP Interfaces with a “Normal” type:</p>
+<p><code>Device.IP.Interface.[Type=="Normal"].Status</code></p></li>
+<li><p>IPv4 Addresses for all IP Interfaces with a Normal type and a Static addressing type:</p>
+<p><code>Device.IP.Interface.[Type=="Normal"].IPv4Address.[AddressingType=="Static"].IPAddress</code></p></li>
+<li><p>IPv4 Addresses for all IP Interfaces with a Normal type and Static addressing type that have at least 1 Error Sent:</p>
+<p><code>Device.IP.Interface.[Type=="Normal"&amp;&amp;Stats.ErrorsSent&gt;0].IPv4Address.[AddressingType=="Static"].IPAddress</code></p></li>
+<li><p>Current profiles used by all DSL lines which are enabled:</p>
+<p><code>Device.DSL.Line.[Enable==true].CurrentProfile</code></p>
+<p>or</p>
+<p><code>Device.DSL.Line.[Enable==1].CurrentProfile</code></p></li>
+<li><p>All IPv6 Addresses of all interfaces with a lifetime expiring before 2021-06-06 08:00 UTC:</p>
+<p><code>Device.IP.Interface.*.IPv6Address.[ValidLifetime&lt;2021-06-06T08:00:00Z].IPAddress</code></p></li>
+<li><p>All Parameters of all connected USB devices of class 0x08 (Mass Storage Device):</p>
+<p><code>Device.USB.USBHosts.Host.*.Device.[DeviceClass==08].</code></p></li>
+<li><p>All Parameters of all PCP servers with IPv6Firewall capabilities:</p>
+<p><code>Device.PCP.Client.*.Server.[Capabilities~="IPv6Firewall"].</code></p></li>
+<li><p>All Parameters of all PeriodicStatistics SampleSets that collected data for 5 seconds:</p>
+<p><code>Device.PeriodicStatistics.SampleSet.[SampleSeconds~=5].</code></p></li>
+</ul>
+<p><em>Searches that are NOT VALID:</em></p>
+<ul>
+<li><p>Invalid because the Expression is empty:</p>
+<p><code>Device.IP.Interface.[].</code></p></li>
+<li><p>Invalid because the Expression Component has an Expression Parameter that descends into a child table (always need to use a separate Expression Variable for each child table instance):</p>
+<p><code>Device.IP.Interface.[Type=="Normal"&amp;&amp;IPv4Address.*.AddressingType=="Static"].Status</code></p></li>
+<li><p>Invalid because the search expression uses curly brackets:</p>
+<p><code>Device.IP.Interface.{Type=="Normal"}.Status</code></p></li>
+<li><p>Invalid because the <code>Enable</code> Parameter is of type <code>boolean</code> and not a <code>string</code> or derived from <code>string</code>:</p>
+<p><code>Device.DSL.Line.[Enable=="true"].CurrentProfile</code></p></li>
+</ul>
+<h3 id="sec:searching-by-wildcard">2.5.5 Searching by Wildcard <a href="02-index-architecture.html#sec:searching-by-wildcard" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Wildcard-based searching is a means of matching all currently existing Instances (whether that be 0, 1 or many instances) of a Multi-Instance Object by using a wildcard character “*” in place of the Instance Identifier.</p>
+<p><strong><span id="r-arc.10">R-ARC.10 <a href="02-index-architecture.html#r-arc.10" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - An Agent MUST return Path Names that include all Object Instances that are matched by the use of a Wildcard.</p>
+<p>Examples:</p>
+<p>All Parameters for all IP Interfaces that currently exist</p>
+<p><code>Device.IP.Interface.*.</code></p>
+<p>Type of each IP Interface that currently exists</p>
+<p><code>Device.IP.Interface.*.Type</code></p>
+<h2 id="sec:other-path-decorators">2.6 Other Path Decorators <a href="02-index-architecture.html#sec:other-path-decorators" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<h3 id="sec:reference-following">2.6.1 Reference Following <a href="02-index-architecture.html#sec:reference-following" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The Device:2 Data Model <span class="cite" data-citation-ids="TR-181"><a href="01-index-introduction.html#ref-TR-181">[38]</a></span> contains Parameters that reference other Parameters or Objects. The Reference Following mechanism allows references to Objects (not Parameters) to be followed from inside a single Path Name. Reference Following is indicated by a “+” character after the Parameter Path, referencing the Object followed by a “.”, optionally followed by a Relative Object or Parameter Path that are children of the Referenced Object.</p>
+<p>For example, <code>Device.NAT.PortMapping.{i}.Interface</code> references an IP Interface Object (<code>Device.IP.Interface.{i}.</code>) and that Object has a Parameter called “<code>Name</code>”. With Reference Following, a Path Name of <code>Device.NAT.PortMapping.1.Interface+.Name</code> references the “<code>Name</code>” Parameter of the <code>Interface</code> Object that the <code>PortMapping</code> is associated with (i.e. it is the equivalent of using <code>Device.IP.Interface.1.Name</code> as the Path Name).</p>
+<p>The steps that are executed by the Agent when following the reference in this example would be:</p>
+<ol>
+<li><p>Retrieve the appropriate instance of the <code>PortMapping</code> Object based on the Instance Number Addressing information</p></li>
+<li><p>Retrieve the value of the reference Parameter that contains the reference, Interface, which in this case has the value “<code>Device.IP.Interface.1</code>”</p></li>
+<li><p>Replace the preceding Path Name (<code>Device.NAT.PortMapping.1.Interface+</code>) with the value retrieved in Step 2</p></li>
+<li><p>Append the remainder of the Path Name (<code>.Name</code>), which builds the Path Name: <code>Device.IP.Interface.1.Name</code></p></li>
+<li><p>Use <code>Device.IP.Interface.1.Name</code> as the Path Name for the action</p></li>
+</ol>
+<p><em>Note: It should be noted that according to the Device:2 Schema <span class="cite" data-citation-ids="TR-106"><a href="01-index-introduction.html#ref-TR-106">[37]</a></span>, reference Parameters:</em></p>
+<ul>
+<li><em>Always contain Path Names (not Search Expressions)</em></li>
+<li><em>When configured, can be configured using Path Names using Instance Number Addressing or Unique-Key Addressing, however:</em></li>
+<li><em>When the value of a reference Parameter is read, all Instance Identifiers are returned as Instance Numbers.</em></li>
+</ul>
+<p><strong><span id="r-arc.11">R-ARC.11 <a href="02-index-architecture.html#r-arc.11" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - A USP Agent MUST support the ability to use Key-based addressing in reference values.</p>
+<p>For example, the following Path Names might illustrate a reference to the same Object (defined as having the Parameter named <code>KeyParam</code> as unique key) instance using an Instance Number and then a key value:</p>
+<ul>
+<li>Object.SomeReferenceParameter = “Object.FooObject.5”</li>
+<li>Object.SomeReferenceParameter = ‘Object.FooObject.[KeyParam==“KeyValueForInstance5”]’</li>
+</ul>
+<p>In the first example, the reference points to the FooObject with Instance Number 5. In the second example, the reference points to the FooObject with a <code>KeyParam</code> value of “KeyValueForInstance5”.</p>
+<p><strong><span id="r-arc.12">R-ARC.12 <a href="02-index-architecture.html#r-arc.12" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong> - The following requirements relate to reference types and the associated Agent behavior:</p>
+<ul>
+<li>An Agent MUST reject an attempt to set a strong reference Parameter if the new value does not reference an existing Parameter or Object.</li>
+<li>An Agent MUST NOT reject an attempt to set a weak reference Parameter because the new value does not reference an existing Parameter or Object.</li>
+<li>An Agent MUST change the value of a non-list-valued strong reference Parameter to a null reference when a referenced Parameter or Object is deleted.</li>
+<li>An Agent MUST remove the corresponding list item from a list-valued strong reference Parameter when a referenced Parameter or Object is deleted.</li>
+<li>An Agent MUST NOT change the value of a weak reference Parameter when a referenced Parameter or Object is deleted.</li>
+</ul>
+<h4 id="sec:list-of-references">2.6.1.1 List of References <a href="02-index-architecture.html#sec:list-of-references" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>The USP data models have Parameters whose values contain a list of references to other Parameters or Objects. This section explains how the Reference Following mechanism allows those references to be followed from inside a single Path Name. The Reference Following syntax as defined above still applies, but the “<code>+</code>” character is preceded by a means of referencing a list item or items.</p>
+<ul>
+<li><p>The additional syntax consists of a “<code>#</code>” character followed by a list item number (1-indexed), which is placed between the Parameter name and the “<code>+</code>” character.</p>
+<ul>
+<li>The “<code>#</code>” and list item number are optional. If they are omitted, the first list item is used, i.e., “<code>ReferenceParameter+</code>” means the same as “<code>ReferenceParameter#1+</code>”.</li>
+</ul></li>
+<li><p>To follow <em>all</em> references in the list, use a wildcard (“<code>*</code>”) character instead of a list item number, i.e., “<code>ReferenceParameter#*+</code>”.</p></li>
+</ul>
+<p>For example, <code>Device.WiFi.SSID.{i}.LowerLayers</code> references a list of Wi-Fi Radio Object (defined as <code>Device.WiFi.Radio.{i}.</code>) Instances that are associated with the SSID. This Object has a <code>Name</code> Parameter; so when following the first reference in the list of references a Path Name of <code>Device.WiFi.SSID.1.LowerLayers#1+.Name</code> references the Name of the Wi-Fi Radio associated with this SSID Object Instance.</p>
+<p>The steps that are executed by the Agent when following the reference in this example would be:</p>
+<ol>
+<li><p>Retrieve the appropriate <code>Device.WiFi.SSID.{i}</code> instance based on the Instance Number Addressing information</p></li>
+<li><p>Retrieve the value of the LowerLayers Parameter, which in this case has a value of “<code>Device.WiFi.Radio.1, Device.WiFi.Radio.2</code>”</p></li>
+<li><p>Retrieve the first list item within the value retrieved in Step 2 (i.e., “<code>Device.WiFi.Radio.1</code>”)</p></li>
+<li><p>Replace the preceding Path Name (<code>Device.WiFi.SSID.1.LowerLayers#1+</code>) with the value retrieved in Step 3</p></li>
+<li><p>Append the remainder of the Path Name (<code>.Name</code>), resulting in a Path Name of: <code>Device.WiFi.Radio.1.Name</code></p></li>
+<li><p>Use <code>Device.WiFi.Radio.1.Name</code> as the Path Name for the action</p></li>
+</ol>
+<h4 id="sec:search-expressions-and-reference-following">2.6.1.2 Search Expressions and Reference Following <a href="02-index-architecture.html#sec:search-expressions-and-reference-following" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>The Reference Following and Search Expression mechanisms can be combined.</p>
+<p>For example, reference the Signal Strength of all Wi-Fi Associated Devices using the “ac” Operating Standard on the “MyHome” SSID, you would use the Path Name:</p>
+<p><code>Device.WiFi.AccessPoint.[SSIDReference+.SSID=="MyHome"].AssociatedDevice.[OperatingStandard=="ac"].SignalStrength</code></p>
+<h3 id="sec:operations-and-command-path-names">2.6.2 Operations and Command Path Names <a href="02-index-architecture.html#sec:operations-and-command-path-names" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The <a href="07-index-messages.html#sec:operate" class="heading">Operate Message</a> allows a USP Controller to execute Commands defined in the USP data models. Commands are synchronous or asynchronous operations that don’t fall into the typical REST-based concepts of CRUD-N that have been incorporated into the protocol as specific Messages. Commands are addressed like Parameter Paths that end with parentheses “()” to symbolize that it is a Command.</p>
+<p>For example: <code>Device.IP.Interface.[Name=="eth0"].Reset()</code></p>
+<h3 id="sec:event-path-names">2.6.3 Event Path Names <a href="02-index-architecture.html#sec:event-path-names" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The Notify request allows a type of generic event (called Event) message that allows a USP Agent to emit events defined in the USP data models. Events are defined in and related to Objects in the USP data models like commands. Events are addressed like Parameter Paths that end with an exclamation point “!” to symbolize that it is an Event.</p>
+<p>For example: <code>Device.Boot!</code></p>
+<h2 id="sec:data-model-path-grammar">2.7 Data Model Path Grammar <a href="02-index-architecture.html#sec:data-model-path-grammar" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<p>Expressed as a <a href="https://en.wikipedia.org/wiki/Backus-Naur_form">Backus-Naur Form (BNF)</a> for context-free grammars, the Path Name lexical rules for referencing the Instantiated Data Model are:</p>
+<pre><code>idmpath   ::= objpath | parampath | cmdpath | evntpath
+objpath   ::= name &#39;.&#39; (name ((&#39;.&#39; inst)|(reffollow &#39;.&#39; name) )? &#39;.&#39;)*
+parampath ::= objpath name
+cmdpath   ::= objpath  name &#39;()&#39;
+evntpath  ::= objpath  name &#39;!&#39;
+inst      ::= posnum | expr | &#39;*&#39;
+expr      ::= &#39;[&#39; (exprcomp ( &#39;&amp;&amp;&#39; exprcomp )*) &#39;]&#39;
+exprcomp  ::= relpath oper value
+relpath   ::= name (reffollow? &#39;.&#39; name )*
+reffollow ::=  ( &#39;#&#39; (posnum | &#39;*&#39;) &#39;+&#39; )|  &#39;+&#39;
+oper      ::= &#39;==&#39; | &#39;!=&#39; | &#39;~=&#39; | &#39;&lt;&#39; | &#39;&gt;&#39; | &#39;&lt;=&#39; | &#39;&gt;=&#39;
+value     ::= literal | number
+name      ::= [A-Za-z_] [A-Za-z_0-9]*
+literal   ::= &#39;&quot;&#39; [^&quot;]* &#39;&quot;&#39;
+posnum    ::= [1-9] [0-9]*
+number    ::= &#39;0&#39; | ( &#39;-&#39;? posnum )</code></pre>
+<p>The Path Name lexical rules for referencing the Supported Data Model are:</p>
+<pre><code>sdmpath   ::= name &#39;.&#39; ( name &#39;.&#39; ( ( posnum | &#39;{i}&#39; ) &#39;.&#39; )? )* name?
+name      ::= [A-Za-z_] [A-Za-z_0-9]*
+posnum    ::= [1-9] [0-9]*</code></pre>
+<h3 id="sec:bnf-diagrams-for-instantiated-data-model">2.7.1 BNF Diagrams for Instantiated Data Model <a href="02-index-architecture.html#sec:bnf-diagrams-for-instantiated-data-model" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p><strong><span id="bnf:idmpath">idmpath <a href="02-index-architecture.html#bnf:idmpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/idmpath.png" /></p>
+<div class="ebnf">
+<p>idmpath ::= objpath | parampath | cmdpath | evntpath</p>
+</div>
+<p><br />
+<strong><span id="bnf:objpath">objpath <a href="02-index-architecture.html#bnf:objpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/objpath.png" /></p>
+<div class="ebnf">
+<p>objpath ::= name ‘.’ ( name ( ‘.’ inst | reffollow ‘.’ name)? ‘.’ )*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:cmdpath">cmdpath</a></li>
+<li><a href="02-index-architecture.html#bnf:evntpath">evntpath</a></li>
+<li><a href="02-index-architecture.html#bnf:idmpath">idmpath</a></li>
+<li><a href="02-index-architecture.html#bnf:parampath">parampath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:parampath">parampath <a href="02-index-architecture.html#bnf:parampath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/parampath.png" /></p>
+<div class="ebnf">
+<p>parampath ::= objpath name</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:idmpath">idmpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:cmdpath">cmdpath <a href="02-index-architecture.html#bnf:cmdpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/cmdpath.png" /></p>
+<div class="ebnf">
+<p>cmdpath ::= objpath name ‘()’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:idmpath">idmpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:evntpath">evntpath <a href="02-index-architecture.html#bnf:evntpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/evntpath.png" /></p>
+<div class="ebnf">
+<p>evntpath ::= objpath name ‘!’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:idmpath">idmpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:inst">inst <a href="02-index-architecture.html#bnf:inst" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/inst.png" /></p>
+<div class="ebnf">
+<p>inst ::= posnum | expr | ’*’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:objpath">objpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:expr">expr <a href="02-index-architecture.html#bnf:expr" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/expr.png" /></p>
+<div class="ebnf">
+<p>expr ::= ‘[’ exprcomp ( ’&amp;&amp;’ exprcomp )* ’]’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:inst">inst</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:exprcomp">exprcomp <a href="02-index-architecture.html#bnf:exprcomp" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/exprcomp.png" /></p>
+<div class="ebnf">
+<p>exprcomp ::= relpath oper value</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:expr">expr</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:relpath">relpath <a href="02-index-architecture.html#bnf:relpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/relpath.png" /></p>
+<div class="ebnf">
+<p>relpath ::= name ( reffollow? ‘.’ name )*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:exprcomp">exprcomp</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:reffollow">reffollow <a href="02-index-architecture.html#bnf:reffollow" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/reffollow.png" /></p>
+<div class="ebnf">
+<p>reffollow ::= ( ‘#’ ( posnum | ’*’ ) )? ‘+’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:objpath">objpath</a></li>
+<li><a href="02-index-architecture.html#bnf:relpath">relpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:oper">oper <a href="02-index-architecture.html#bnf:oper" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/oper.png" /></p>
+<div class="ebnf">
+<p>oper ::= ‘==’ | ‘!=’ | ‘~=’ | ‘&lt;’ | ‘&gt;’ | ‘&lt;=’ | ‘&gt;=’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:exprcomp">exprcomp</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:value">value <a href="02-index-architecture.html#bnf:value" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/value.png" /></p>
+<div class="ebnf">
+<p>value ::= literal | number</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:exprcomp">exprcomp</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:name">name <a href="02-index-architecture.html#bnf:name" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/name.png" /></p>
+<div class="ebnf">
+<p>name ::= [A-Za-z_] [A-Za-z_0-9]*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:cmdpath">cmdpath</a></li>
+<li><a href="02-index-architecture.html#bnf:evntpath">evntpath</a></li>
+<li><a href="02-index-architecture.html#bnf:objpath">objpath</a></li>
+<li><a href="02-index-architecture.html#bnf:parampath">parampath</a></li>
+<li><a href="02-index-architecture.html#bnf:relpath">relpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:literal">literal <a href="02-index-architecture.html#bnf:literal" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/literal.png" /></p>
+<div class="ebnf">
+<p>literal ::= ‘“’ [^"]* ‘“’</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:value">value</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:number">number <a href="02-index-architecture.html#bnf:number" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/number.png" /></p>
+<div class="ebnf">
+<p>number ::= ‘0’ | ‘-’? posnum</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:value">value</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:posnum">posnum <a href="02-index-architecture.html#bnf:posnum" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/posnum.png" /></p>
+<div class="ebnf">
+<p>posnum ::= [1-9] [0-9]*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:inst">inst</a></li>
+<li><a href="02-index-architecture.html#bnf:number">number</a></li>
+<li><a href="02-index-architecture.html#bnf:reffollow">reffollow</a></li>
+</ul>
+<h3 id="sec:bnf-diagrams-for-supported-data-model">2.7.2 BNF Diagrams for Supported Data Model <a href="02-index-architecture.html#sec:bnf-diagrams-for-supported-data-model" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p><strong><span id="bnf:sdmpath">sdmpath <a href="02-index-architecture.html#bnf:sdmpath" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/sdmpath.png" /></p>
+<div class="ebnf">
+<p>sdmpath ::= name ‘.’ ( name ‘.’ ( ( posnum | ‘{i}’ ) ‘.’ )? )* name?</p>
+</div>
+<p><br />
+<strong><span id="bnf:name-1">name <a href="02-index-architecture.html#bnf:name-1" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/name.png" /></p>
+<div class="ebnf">
+<p>name ::= [A-Za-z_] [A-Za-z_0-9]*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:sdmpath">sdmpath</a></li>
+</ul>
+<p><br />
+<strong><span id="bnf:posnum-1">posnum <a href="02-index-architecture.html#bnf:posnum-1" class="headerlink" title="Permalink to this span"><img src="permalink.png" style="width:0.8em" /></a></span></strong>:</p>
+<p><img src="architecture/diagram/posnum.png" /></p>
+<div class="ebnf">
+<p>posnum ::= [1-9] [0-9]*</p>
+</div>
+<p>referenced by:</p>
+<ul>
+<li><a href="02-index-architecture.html#bnf:sdmpath">sdmpath</a></li>
+</ul>
+    <div style="clear: both;"/>
+    <footer class="site-footer">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-introduction.html#sec:introduction">1 Introduction</a>
+ | <a href="02-index-architecture.html#sec:architecture">2 Architecture</a>
+ | <a href="03-index-discovery.html#sec:discovery">3 Discovery and Advertisement</a>
+ | <a href="04-index-mtp.html#sec:mtp">4 Message Transfer Protocols</a>
+ | <a href="05-index-encoding.html#sec:encoding">5 Message Encoding</a>
+ | <a href="06-index-e2e-message-exchange.html#sec:e2e-message-exchange">6 End to End Message Exchange</a>
+ | <a href="07-index-messages.html#sec:messages">7 Messages</a>
+ | <a href="08-index-auth.html#sec:auth">8 Authentication and Authorization</a>
+ | <a href="09-index-bulk-data-collection.html#sec:bulk-data-collection">Annex A: Bulk Data Collection</a>
+ | <a href="10-index-software-module-management.html#sec:software-module-management">Appendix I: Software Module Management</a>
+ | <a href="11-index-firmware-management-of-devices-with-usp-agents.html#sec:firmware-management-of-devices-with-usp-agents">Appendix II: Firmware Management of Devices with USP Agents</a>
+ | <a href="12-index-device-proxy.html#sec:device-proxy">Appendix III: Device Proxy</a>
+ | <a href="13-index-proxying.html#sec:proxying">Appendix IV: Proxying</a>
+ | <a href="14-index-iot-data-model-theory-of-operation.html#sec:iot-data-model-theory-of-operation">Appendix V: IoT Data Model Theory of Operation</a>
+ | <a href="99-index-footnotes.html#footnotes">Footnotes</a>
+</p>
+</nav>
+
+      <span class="site-footer-owner">
+        USP is developed and maintained
+        by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
+        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+      </span>
+      <span class="site-footer-credits">
+        This page was generated by <a href="https://pandoc.org">pandoc</a>
+        and <a href="https://pages.github.com">GitHub Pages</a>.
+        View the <a href="https://github.com/BroadbandForum/usp">specification source on GitHub</a>.
+        <span class="release"/>
+      </span>
+    </footer>
+  </section>
+</body>
+</html>

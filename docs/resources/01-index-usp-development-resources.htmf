@@ -1,0 +1,35 @@
+<!-- <h1 class="unnumbered display-none" id="sec:usp-development-resources">USP Development Resources<a class="headerlink" href="01-index-usp-development-resources.html#sec:usp-development-resources" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h1> -->
+
+<p>In addition to the TR-369 specification and data models, a number of resources are available to those building and deploying USP based solutions.</p>
+
+<ul>
+<li><p><strong><a href='https://github.com/BroadbandForum/obuspa' title=''>OB-USP-Agent</a></strong> - This is the
+official Open Broadband project, operated by the Broadband Forum, for an open-
+source reference implementation of a USP Agent.</p></li>
+<li><p><strong><a href='https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification' title=''>BBF.369 USP Agent Certification Program</a></strong> - Here you can
+learn how to get your products tested and listed as certified for use with USP.</p></li>
+<li><p><strong><a href='../specification/usp-record-1-2.proto' title=''>USP Record Protocol Buffers Schema</a></strong> - A direct link to the USP specification’s protocol
+buffers schema for USP Records.</p></li>
+<li><p><strong><a href='../specification/usp-msg-1-2.proto' title=''>USP Message Protocol Buffers Schema</a></strong> - A direct link to the USP specification’s protocol
+buffers schema for USP Messages contained in USP Records.</p></li>
+<li><p><strong><a href='https://github.com/BroadbandForum/usp/blob/master/api/swagger-usp-controller-v1.yaml' title=''>Controller REST API definition</a></strong> - A direct link to the USP
+Controller’s REST API definition, which can also be opened in a Swagger / Open
+API viewer or editor (such as <a href='https://editor.swagger.io' title=''>editor.swagger.io</a>).</p></li>
+<li><p><strong><a href='https://github.com/BroadbandForum/usp/tree/master/mtp-proxy' title=''>MTP Proxy</a></strong> - The direct link to the MTP Proxy python code that is used as a reference
+implementation for proxying between USP Controllers and USP Agents that utilize
+different MTPs.</p></li>
+<li><p><strong><a href='https://github.com/BroadbandForum/cwmp-xml-tools/wiki/Report-Tool' title=''>Data Model Report Tool</a></strong> - The Broadband Forum’s tool for validating XML used to build CWMP and USP data
+models and device type definitions, as well as producing HTML reports of a data
+model.</p></li>
+</ul>
+
+<h2 class="unnumbered" id="sec:bbf-members-only-resources">BBF Members only resources<a class="headerlink" href="01-index-usp-development-resources.html#sec:bbf-members-only-resources" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The following resources are accessible to Broadband Forum members:</p>
+
+<ul>
+<li><a href='https://wiki.broadband-forum.org/display/BBF/User+Services+Platform+Project+Stream' title=''>USP Project Wiki</a></li>
+<li><a href='https://issues.broadband-forum.org/projects/USP/' title=''>USP JIRA Issues</a></li>
+<li><a href='https://code.broadband-forum.org/projects/USP/repos/wt-369/browse' title=''>USP Development Area</a></li>
+<li><a href='https://broadband-forum.slack.com/archives/C017V6HCYMN' title=''>USP channel on BBF Slack</a></li>
+</ul>

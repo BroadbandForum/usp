@@ -1,0 +1,50 @@
+@startuml
+
+
+robust "Value" as V
+robust "Sensor reading" as SR
+
+
+@0
+V  is False
+SR is 25
+
+@+1
+SR is 35
+
+@+1
+SR is 45
+
+V@+1 <-> @+5 : {5s hold time}
+SR is 55
+V  is True
+SR-> V : Trigger 
+
+@+2
+SR is 70
+
+@+2
+SR is 25
+SR-> V : Reset (Delayed)
+
+@+1
+SR is 25
+V  is False
+
+
+V@+4 <-> @+5 : {5s hold time}
+SR is 55
+V  is True
+SR-> V : Trigger
+
+@+6
+SR is 25
+V  is False
+SR-> V : Reset
+
+legend bottom left
+Trigger at 50%
+HoldTime is 5s
+endlegend
+
+@enduml

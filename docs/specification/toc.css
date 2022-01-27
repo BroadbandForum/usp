@@ -1,0 +1,73 @@
+/* BBF CSS to be used in addition to baseline CSS */
+
+/* experimental sidebar ToC placement */
+
+:root {
+    --toc-width: 15rem;
+    --toc-padding-left-extra: 1rem;
+    --toc-padding-left: calc(var(--toc-width) + var(--toc-padding-left-extra));
+}
+
+@media screen and (min-width: 924px) {
+    body {
+        padding-left: var(--toc-padding-left);
+    }
+
+    #TOCFULL::before, #TOC::before {
+        content: "Table of Contents";
+        font-weight: bold;
+    }
+
+    #TOCFULL, #TOC {
+        position: fixed;
+        margin: 0 0;
+        top: 0px;
+        left: 0px;
+        width: var(--toc-width);
+        height: 100vh;
+        line-height: 1.4;
+        font-size: smaller;
+        overflow: auto;
+        overscroll-behavior: contain;
+        /* background-color: white; */
+        border: 1px solid #73AD21;
+    }
+
+    #TOCFULL ul, #TOC ul {
+        margin: 0.35em 0;
+        padding: 0 0 0 1em;
+        list-style-type: none;
+    }
+
+    #TOCFULL ul ul, #TOC ul ul {
+        margin: 0.25em 0;
+    }
+
+    #TOCFULL ul ul ul, #TOC ul ul ul {
+        margin: 0.15em 0;
+    }
+
+    #TOCFULL li p:last-child, #TOC li p:last-child {
+        margin-bottom: 0;
+    }
+
+    #TOCFULL {
+        z-index: 2;
+    }
+
+    #TOC {
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 923px) {
+    #TOCFULL {
+        display: none;
+    }
+}
+
+@media not screen {
+    #TOCFULL {
+        display: none;
+    }
+}

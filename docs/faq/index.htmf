@@ -1,0 +1,23 @@
+<h3 class="unnumbered unlisted" id="table-of-contents">Table of Contents<a class="headerlink" href="01-index-faq.html#table-of-contents" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<nav>
+<ul>
+  <li><a href="01-index-faq.html#sec:faq">FAQ</a></li>
+  <ul>
+    <li><a href="01-index-faq.html#sec:what-is-usp">What is USP?</a></li>
+    <li><a href="01-index-faq.html#sec:what-do-i-need-to-get-started">What do I need to get started?</a></li>
+    <li><a href="01-index-faq.html#sec:what-are-the-major-features-of-usp">What are the major features of USP?</a></li>
+    <li><a href="01-index-faq.html#sec:who-makes-the-user-services-platform">Who makes the User Services Platform?</a></li>
+    <li><a href="01-index-faq.html#sec:how-does-usp-relate-to-tr-069">How does USP relate to TR-069?</a></li>
+    <li><a href="01-index-faq.html#sec:is-usp-a-replacement-for-tr-069">Is USP a replacement for TR-069?</a></li>
+    <li><a href="01-index-faq.html#sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the BBF deprecating or ending support for TR-069?</a></li>
+    <li><a href="01-index-faq.html#sec:is-bbf-building-a-new-data-model-for-usp">Is BBF building a new data model for USP?</a></li>
+    <li><a href="01-index-faq.html#sec:what-sorts-of-devices-can-implement-usp">What sorts of devices can implement USP?</a></li>
+    <li><a href="01-index-faq.html#sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can USP be used to managed virtual network functions or containers?</a></li>
+    <li><a href="01-index-faq.html#sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do I need to support all of USP’s message transfer protocols to be compliant?</a></li>
+    <li><a href="01-index-faq.html#sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m building a USP Agent. How do I get certified?</a></li>
+    <li><a href="01-index-faq.html#sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?</a></li>
+  </ul>
+</ul>
+</nav>
+

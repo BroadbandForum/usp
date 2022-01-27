@@ -1,0 +1,20 @@
+@startuml
+
+box "USP Controller"
+participant "USP Layer\n(Controller)" as C
+participant "WebSocket Server" as WS
+end box
+box "USP Agent"
+participant "WebSocket Client" as WC
+participant "USP Layer\n(Agent)" as A
+end box
+
+WS <-> WC : Session Established (v1.usp)
+C -> WS : CRUD-O request
+WS -> WC : Binary Data (CRUD-O request)
+WC -> A : CRUD-O request
+A -> WC : CRUD-O response
+WC -> WS : Binary Data (CRUD-O response)
+WS -> C : CRUD-O response
+
+@enduml

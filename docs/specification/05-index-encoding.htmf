@@ -1,0 +1,60 @@
+<!-- <h1 class="display-none" id="sec:encoding">5 Message Encoding<a class="headerlink" href="05-index-encoding.html#sec:encoding" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h1> -->
+
+<p>USP requires a mechanism to serialize data to be sent over a Message Transfer Protocol. The description of each individual Message and the USP Record encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:</p>
+
+<ul>
+<li>Protocol Buffers Version 3 <span class="cite" data-citation-ids="PROTOBUF"><a href='01-index-introduction.html#ref-PROTOBUF' title=''>[6]</a></span></li>
+</ul>
+
+<p><strong><span id="r-enc.0">R-ENC.0<a class="headerlink" href="05-index-encoding.html#r-enc.0" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in <a href='../specification/usp-msg-1-2.proto' title=''>usp-msg-1-2.proto</a>.</p>
+
+<p><strong><span id="r-enc.1">R-ENC.1<a class="headerlink" href="05-index-encoding.html#r-enc.1" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in <a href='../specification/usp-record-1-2.proto' title=''>usp-record-1-2.proto</a>.</p>
+
+<p>Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.</p>
+
+<p><strong><span id="r-enc.2">R-ENC.2<a class="headerlink" href="05-index-encoding.html#r-enc.2" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a &ldquo;bad request&rdquo; and do no further processing of the USP Record or USP Message.</p>
+
+<p>Protocol Buffers uses a datatype called <code>oneof</code>. This means that the element
+contains elements of one or more varying types.</p>
+
+<p><strong><span id="r-enc.3">R-ENC.3<a class="headerlink" href="05-index-encoding.html#r-enc.3" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - USP Records and USP Messages that contain an element of type
+<code>oneof</code> MUST include 1 and only 1 instance of the element, which MUST contain
+one of the possible elements.</p>
+
+<p><strong><span id="r-enc.4">R-ENC.4<a class="headerlink" href="05-index-encoding.html#r-enc.4" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A USP Record that violates <a href='05-index-encoding.html#r-enc.3' title='' class="requirement">R-ENC.3</a> MUST be discarded.</p>
+
+<p><strong><span id="r-enc.5">R-ENC.5<a class="headerlink" href="05-index-encoding.html#r-enc.5" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - A USP Message that violates <a href='05-index-encoding.html#r-enc.3' title='' class="requirement">R-ENC.3</a> SHOULD return an error of
+type 7004 (Invalid Arguments).</p>
+
+<h2 id="sec:parameter-value-encoding">5.1 Parameter and Argument Value Encoding<a class="headerlink" href="05-index-encoding.html#sec:parameter-value-encoding" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p><a href='../specification/usp-msg-1-2.proto' title=''>usp-msg-1-2.proto</a> specifies that Parameter
+and argument values in USP Messages are represented as Protocol Buffers Version
+3 strings (which are UTF-8-encoded).</p>
+
+<p>This section specifies how Parameter and argument values are converted to and
+from Protocol Buffers Version 3 strings.</p>
+
+<p><strong><span id="r-enc.6">R-ENC.6<a class="headerlink" href="05-index-encoding.html#r-enc.6" title="Permalink to this span"> <img src='permalink.png' title='' width="0.8em"/></a></span></strong> - Parameter and argument values MUST be converted to and from
+Protocol Buffers Version 3 strings using the string representations of the
+TR-106 Appendix I.4 <span class="cite" data-citation-ids="TR-106"><a href='01-index-introduction.html#ref-TR-106' title=''>[37]</a></span> data types.</p>
+
+<p>TR-106 Appendix I.4 states that &ldquo;Parameters make use of a limited subset of the
+default SOAP data types&rdquo;. The
+SOAP 1.1 specification <span class="cite" data-citation-ids="SOAP-1-1"><a href='01-index-introduction.html#ref-SOAP-1-1' title=''>[34]</a></span> states
+that all SOAP simple types are defined by the
+XML Schema Part 2: Datatypes specification <span class="cite" data-citation-ids="XMLSCHEMA-2"><a href='01-index-introduction.html#ref-XMLSCHEMA-2' title=''>[39]</a></span>,
+and this is the ultimate reference.</p>
+
+<p>In practice there should be few surprises, e.g.,
+XML Schema Part 2, Section 3.3.22 <span class="cite" data-citation-ids="XMLSCHEMA-2"><a href='01-index-introduction.html#ref-XMLSCHEMA-2' title=''>[39]</a></span>
+states that it has a lexical representation consisting of a finite-length
+sequence of decimal digits (#x30-#x39).</p>
+
+<p>Some of the encoding rules are quite complicated,
+e.g. SOAP 1.1, Section 5.2.3 <span class="cite" data-citation-ids="SOAP-1-1"><a href='01-index-introduction.html#ref-SOAP-1-1' title=''>[34]</a></span>
+states that <code>base64</code> line length restrictions don’t apply to SOAP, and
+XML Schema Part 2, Section 3.2.7 <span class="cite" data-citation-ids="XMLSCHEMA-2"><a href='01-index-introduction.html#ref-XMLSCHEMA-2' title=''>[39]</a></span>
+has a lot of detail about which aspects of ISO 8601 are and are not supported
+by the <code>dateTime</code> data type.</p>
+

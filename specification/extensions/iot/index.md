@@ -1,29 +1,4 @@
-[1]: https://usp-data-models.broadband-forum.org "TR-181 Issue 2 Device:2 Data Model for USP Agents"
-[2]: https://www.broadband-forum.org/technical/download/TR-069.pdf "TR-069 Amendment 6 CPE WAN Management Protocol"
-[3]: https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8 Data Model Template for TR-069 Enabled Devices"
-[4]: https://tools.ietf.org/html/rfc7228 "RFC 7228 Terminology for Constrained-Node Networks"
-[5]: https://tools.ietf.org/html/rfc2136 "RFC 2136 Dynamic Updates in the Domain Name System"
-[6]: https://tools.ietf.org/html/rfc3007 "RFC 3007 Secure Domain Name System Dynamic Update"
-[7]: https://tools.ietf.org/html/rfc6763 "RFC 6763 DNS-Based Service Discovery"
-[8]: https://tools.ietf.org/html/rfc6762 "RFC 6762 Multicast DNS"
-[9]: https://tools.ietf.org/html/rfc7252 "RFC 7252 The Constrained Application Protocol (CoAP)"
-[10]: https://tools.ietf.org/html/rfc7390 "RFC 7390 Group Communication for the Constrained Application Protocol (CoAP)"
-[11]: https://tools.ietf.org/html/rfc4033 "RFC 4033 DNS Security Introduction and Requirements"
-[12]: https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3 Protocol Buffers Mechanism for Serializing Structured Data Version 3"
-[13]: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries "IEEE Registration Authority"
-[14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
-[15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
-[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
-[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
-[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
-[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
-[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
-
-# Appendix V - IoT Data Model Theory of Operation
+# IoT Data Model Theory of Operation {.appendix1}
 
 ## Introduction
 
@@ -32,7 +7,7 @@ Since there are thousands of different Internet of Things (IoT) devices, the dat
 * Sensor capabilities, which allow reading a state, e.g. a temperature value, a battery level, a light color, etc.
 * Control capabilities, which allow changing a value, e.g. set a temperature, switch a light etc.
 
-The [Device:2 data model][1] defines capability objects that reflect capabilities found on many different devices (example: BinaryControl). By using these objects, a large ecosystem of devices can be described using a small set of capabilities (see table below).
+The Device:2 Data Model [@TR-181] defines capability Objects that reflect capabilities found on many different devices (example: BinaryControl). By using these Objects, a large ecosystem of devices can be described using a small set of capabilities (see table below).
 
 ##  IoT data model overview
 
@@ -40,17 +15,15 @@ The figure shows the overall structure of the IoT data model:
 
 ![IoT Data Model](./figure-73.png)
 
-Figure 73 - IoT data model structure
-
-The data model defines an IoT Capability table, whose instances describe the IoT device's exposed capabilities. The capability table can appear directly under the `Device.` object (if the IoT device hosts a USP Agent) or under a `Device.ProxiedDevice.{i}.`  or `Device.ProxiedDevice.{i}.Node.{i}.` instance.
+The data model defines an IoT Capability table, whose instances describe the IoT device's exposed capabilities. The capability table can appear directly under the `Device.` Object (if the IoT device hosts a USP Agent) or under a `Device.ProxiedDevice.{i}.`  or `Device.ProxiedDevice.{i}.Node.{i}.` instance.
 
 ### IoT Capability table
 
-A capability is represented in the `Device.IoTCapability.` table as a generic Object Instance with a specific class, and an instantiated sub-object depending on this class. The class name is defined by the sub-object name in a `Class` parameter for each IoT Capability table entry, to allow the Controller to detect the instantiated sub-object.
+A capability is represented in the `Device.IoTCapability.` table as a generic Object Instance with a specific class, and an instantiated Sub-Object depending on this class. The class name is defined by the Sub-Object name in a `Class` Parameter for each IoT Capability table entry, to allow the Controller to detect the instantiated Sub-Object.
 
-Only one out of the following sub-objects can exist per instance:
+Only one out of the following Sub-Objects can exist per instance:
 
-| Capability Sub-object | Description                              |
+| Capability Sub-Object | Description                              |
 | --------------------- | ---------------------------------------- |
 | `BinaryControl`       | Allows setting a binary value (e.g. on or off) |
 | `LevelControl`        | Allows setting a continuous value in a predefined range |
@@ -59,11 +32,11 @@ Only one out of the following sub-objects can exist per instance:
 | `LevelSensor`         | Provides a continuous reading value      |
 | `MultiLevelSensor`    | Provides multiple reading values, which belong together |
 
-Each IoT capability sub-object has a `Type` parameter to identify the functionality the capability is representing. See the [Type definition] section for details.
+Each IoT capability Sub-Object has a `Type` Parameter to identify the functionality the capability is representing. See the [Type definition](#sec:) section for details.
 
-### Node object table
+### Node Object table
 
-The `Device.Node.{i}.` and `Device.ProxiedDevice.{i}.Node.{i}.` objects are mount points that provide the ability to support complex devices - that is, a group of capabilities. Each node is a container for a group of device capabilities that have a direct relationship with each other (sub-device) and a hierarchal relationship with the top-level. A node may have the same capabilities as the top-level, but applicable only for the node, with no impact to the top-level. Capabilities for the top-level node may have an effect on the lower level nodes, such as power.
+The `Device.Node.{i}.` and `Device.ProxiedDevice.{i}.Node.{i}.` Objects are mount points that provide the ability to support complex devices - that is, a group of capabilities. Each node is a container for a group of device capabilities that have a direct relationship with each other (sub-device) and a hierarchal relationship with the top-level. A node may have the same capabilities as the top-level, but applicable only for the node, with no impact to the top-level. Capabilities for the top-level node may have an effect on the lower level nodes, such as power.
 
 ## Architecture mappings
 
@@ -71,37 +44,33 @@ The `Device.Node.{i}.` and `Device.ProxiedDevice.{i}.Node.{i}.` objects are moun
 
 Stand-alone IoT devices, which are capable of supporting their own USP Agent, provide their own data models, which expose the IoT sensor and control capabilities of the device:
 
-![Figure 74 - IoT individual device models](./figure-74.png)
+![IoT individual device models](./figure-74.png)
 
-Figure 74 - IoT individual device models
-
-Each device registers as an individual entity to the USP Controller. With the help of `Node` objects, the capabilities can be additionally structured (not shown in the picture).
+Each device registers as an individual entity to the USP Controller. With the help of `Node` Objects, the capabilities can be additionally structured (not shown in the picture).
 
 ### Proxied IoT devices
 
 IoT devices connected over a proxy protocol (e.g. ZigBee) with an IoT control device hosting the USP Agent are modeled as proxied devices (i.e., using the `Device.ProxiedDevice.` table) in the data model of the control device's USP Agent:
 
-![Figure 75 - IoT proxied device model](./figure-75.png)
+![IoT proxied device model](./figure-75.png)
 
-Figure 75 - IoT proxied device model
+Each IoT device is represented as a `Device.ProxiedDevice.{i}.` instance in the data model of the control device, which exposes its IoT capabilities in the corresponding Objects. The capabilities can be additionally structured with the help of `Node` Object (not shown in the picture).
 
-Each IoT device is represented as a `Device.ProxiedDevice.{i}.` instance in the data model of the control device, which exposes its IoT capabilities in the corresponding objects. The capabilities can be additionally structured with the help of `Node` object (not shown in the picture).
+## IoT data model Object details
 
-## IoT data model object details
+### Common capability Parameters
 
-### Common capability parameters
-
-These parameters have the same behavior for all capability sub-objects, where defined.
+These Parameters have the same behavior for all capability Sub-Objects, where defined.
 
 #### Type definition
 
-**Applies to:** All capability sub-objects
+**Applies to:** All capability Sub-Objects
 
-All capability objects contain a mandatory `Type` enumeration value.
+All capability Objects contain a mandatory `Type` enumeration value.
 
-The `Type` value is a predefined enumeration value with the goal of giving a unified description of the capability object.  If the `Type`  value requires further detail, the `Description` parameter may provided a further definition.
+The `Type` value is a predefined enumeration value with the goal of giving a unified description of the capability Object.  If the `Type`  value requires further detail, the `Description` Parameter may provided a further definition.
 
-*Note: The `Type` enumeration in the data model can also be extended with vendor-specific values like all TR-181 parameters, using the rules defined in [TR-106][3].*
+*Note: The `Type` enumeration in the data model can also, like all Parameters, be extended using the rules defined in TR-106 [@TR-106].*
 
 #### Unit definition
 
@@ -111,14 +80,14 @@ To define the used unit a similar concept as for the type definition is used. Th
 
 The `Unit` value is a predefined enumeration value with the goal of giving a unified representation of the used unit.
 
-*Note: The `Unit` enumeration in the data model can also be extended with vendor-specific values like all TR-181 parameters, using the rules defined in [TR-106][3].*
+*Note: The `Unit` enumeration in the data model can also, like all Parameters, be extended using the rules defined in TR-106 [@TR-106].*
 
-*Note - Imperial units are intentionally not modeled in favor of the metric system to increase the inter-working. If the Controller needs imperial units, it can easily convert the metric units into imperial ones by using the well-defined conversion routines.*
+*Note:  Imperial units are intentionally not modeled in favor of the metric system to increase the inter-working. If the Controller needs imperial units, it can easily convert the metric units into imperial ones by using the well-defined conversion routines.*
 
 
 ### Control Objects
 
-Control objects represent IoT capabilities that involve the manipulation of device or application states. They include Binary Controls, Level Controls, and Enumerated Controls.
+Control Objects represent IoT capabilities that involve the manipulation of device or application states. They include Binary Controls, Level Controls, and Enumerated Controls.
 
 #### BinaryControl
 
@@ -136,7 +105,7 @@ The value can be changed either directly by a USP Set operation, or via The `Tog
 
 #### LevelControl
 
-The level controller capability allows a continuous change of a value within a predefined range. Its capabilities are defined by these three mandatory parameters:
+The level controller capability allows a continuous change of a value within a predefined range. Its capabilities are defined by these three mandatory Parameters:
 
 * `Unit` - The unit used for the value
 * `MinValue` - The minimum value the value can be set
@@ -157,7 +126,7 @@ The minimum definition of a "LevelControl" consists of:
 
 The value can be changed either directly by a USP Set operation, or via the step commands.
 
-If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command would exceed the defined range, the operation does not result in a failure - instead, the result is set to the range limit value.
+If the `StepUp()` command and/or the `StepDown()` command are implemented, the `StepValue` Parameter has to be implemented, which indicates the amount of change triggered by a step command. If resulting value of a step command would exceed the defined range, the operation does not result in a failure - instead, the result is set to the range limit value.
 
 For example, if a temperature range is defined from 5.5 degC to 25 degC with a step value of 1 degC, a step down from 6 degC would result in 5.5 degC and not in 5 degC.
 
@@ -165,7 +134,7 @@ Additionally, if the lowest possible value is already set, a `StepDown()` will n
 
 #### EnumControl
 
-The enumeration controller capability allows setting one of a set of predefined values. Examples are mode selections, with more than two modes. If only two values exist, the binary controller object is preferred.
+The enumeration controller capability allows setting one of a set of predefined values. Examples are mode selections, with more than two modes. If only two values exist, the binary controller Object is preferred.
 
 The minimum definition of an "EnumControl" consists of:
 
@@ -178,13 +147,13 @@ The minimum definition of an "EnumControl" consists of:
 
 The value can be changed either directly by a USP Set operation, or via the step commands.
 
-The step commands will cycle through the value range, meaning that if the last valid value is reached, the next `StepUp()` command will select the first value of the valid values and vice versa for the `StepDown()` command. The valid values are stored in the parameter `ValidValues` as a comma-separated list; that order of the list will be followed by the step commands.
+The step commands will cycle through the value range, meaning that if the last valid value is reached, the next `StepUp()` command will select the first value of the valid values and vice versa for the `StepDown()` command. The valid values are stored in the Parameter `ValidValues` as a comma-separated list; that order of the list will be followed by the step commands.
 
 It is possible to implement only one of the step commands, if only one direction is needed.
 
 ### Sensor Objects
 
-Sensor objects represent IoT capabilities that involve reading or reporting on a device or application state. They include Binary Sensors, Level Sensors, and Enumerated Sensors, along with support for thresholds and triggering events.
+Sensor Objects represent IoT capabilities that involve reading or reporting on a device or application state. They include Binary Sensors, Level Sensors, and Enumerated Sensors, along with support for thresholds and triggering events.
 
 #### Binary Sensor
 
@@ -196,7 +165,7 @@ The binary sensor Object Instance supports different kinds of binary sensor oper
 
 ##### Simple binary state sensor
 
-To model a simple sensor, which changes between two distinct states (e.g. a window or door open/close sensor), only the `Value` parameter is needed.
+To model a simple sensor, which changes between two distinct states (e.g. a window or door open/close sensor), only the `Value` Parameter is needed.
 
 The minimum definition of a BinarySensor consists of:
 
@@ -220,7 +189,7 @@ Note that binary sensor types are meaningful for binary state behavior, e.g., "W
 
 ##### Threshold trigger sensor
 
-To model a sensor, which additionally triggers on a certain threshold, add the `Sensitivity` parameter to the definition:
+To model a sensor, which additionally triggers on a certain threshold, add the `Sensitivity` Parameter to the definition:
 
 ```
     IoTCapability.1.Class                    = "BinarySensor"
@@ -229,17 +198,15 @@ To model a sensor, which additionally triggers on a certain threshold, add the `
     IoTCapability.1.BinarySensor.Sensitivity = 50
 ```
 
-With the `Sensitivity` parameter, the threshold is controlled. As soon as the measured value exceeds the threshold, the `Value` parameter is set to `true`. As soon as the measured value goes below the threshold the `Value` parameter is set to `false`.
+With the `Sensitivity` Parameter, the threshold is controlled. As soon as the measured value exceeds the threshold, the `Value` Parameter is set to `true`. As soon as the measured value goes below the threshold the `Value` Parameter is set to `false`.
 
-![Figure 76 - IoT threshold trigger sensitivity](./figure-76.png)
-
-Figure 76 - IoT threshold trigger sensitivity
+![IoT threshold trigger sensitivity](./figure-76.png)
 
 The sensitivity value is a relative value in the range 0 to 100 percent. The exact meaning depends on the implementation.
 
 ##### Trigger time control
 
-If the sensor state, after being triggered, should stay active for a minimum period, the `HoldTime` parameter is used:
+If the sensor state, after being triggered, should stay active for a minimum period, the `HoldTime` Parameter is used:
 
 ```
     IoTCapability.1.Class                    = "BinarySensor"
@@ -249,17 +216,15 @@ If the sensor state, after being triggered, should stay active for a minimum per
     IoTCapability.1.BinarySensor.HoldTime    = 5000
 ```
 
-This figure shows the effect of the `HoldTime` parameter on the resulting value:
+This figure shows the effect of the `HoldTime` Parameter on the resulting value:
 
-![Figure 77 - IoT threshold trigger hold time](./figure-77.png)
+![IoT threshold trigger hold time](./figure-77.png)
 
-Figure 77 - IoT threshold trigger hold time
-
-If the `HoldTime` parameter is not implemented or is set to `0`, the handling is disabled.
+If the `HoldTime` Parameter is not implemented or is set to `0`, the handling is disabled.
 
 ##### Repeated trigger with grace period
 
-Some sensors might produce too many triggers, e.g. continuous movement, when only one trigger in a specific time period is needed. To filter these the `RestTime` parameter is used:
+Some sensors might produce too many triggers, e.g. continuous movement, when only one trigger in a specific time period is needed. To filter these the `RestTime` Parameter is used:
 
 ```
     IoTCapability.1.Class                    = "BinarySensor"
@@ -271,11 +236,9 @@ Some sensors might produce too many triggers, e.g. continuous movement, when onl
 
 With this setting, new trigger events are ignored for 10 seconds (10000 miliseconds) after the first trigger has been detected, resulting in the following pattern:
 
-![Figure 78 - IoT threshold trigger rest time](./figure-78.png)
+![IoT threshold trigger rest time](./figure-78.png)
 
-Figure 78 - IoT threshold trigger rest time
-
-If the `RestTime` parameter is not implemented or is set to `0`, the handling is disabled.
+If the `RestTime` Parameter is not implemented or is set to `0`, the handling is disabled.
 
 ##### Repeated trigger with minimum duration
 
@@ -292,13 +255,11 @@ To get readings with a minimum duration, combine rest and hold times:
 
 Which results in the following pattern:
 
-![Figure 79 - IoT threshold trigger minimum duration](./figure-79.png)
-
-Figure 79 - IoT threshold trigger minimum duration
+![IoT threshold trigger minimum duration](./figure-79.png)
 
 #### Level Sensor
 
-The `LevelSensor` object provides a template for modeling devices that report various levels. `LevelSensor` is used to reflect the functionality of a sensor that reports a level in units and supports different kinds of sensor operation:
+The `LevelSensor` Object provides a template for modeling devices that report various levels. `LevelSensor` is used to reflect the functionality of a sensor that reports a level in units and supports different kinds of sensor operation:
 
 * Level reading
 * Additional Threshold trigger: e.g., a Battery Alarm is triggered.
@@ -338,7 +299,7 @@ This expresses a total remaining load of 63.26 percent.
 
 ##### Threshold trigger
 
-In cases where not only the actual value is of interest, but also important to know if a predefined threshold is reached or undershot, the `LevelSensor` object can be extended with threshold parameters. Once the `LowLevel` or `HighLevel` parameter is `true`, it will remain `true` until the device is reset or the condition no longer exists. This will depend on the particular device.
+In cases where not only the actual value is of interest, but also important to know if a predefined threshold is reached or undershot, the `LevelSensor` Object can be extended with threshold Parameters. Once the `LowLevel` or `HighLevel` Parameter is `true`, it will remain `true` until the device is reset or the condition no longer exists. This will depend on the particular device.
 
 | Parameter            | Type    | R/W  | Description                              |
 | -------------------- | ------- | ---- | ---------------------------------------- |
@@ -347,9 +308,9 @@ In cases where not only the actual value is of interest, but also important to k
 | `HighLevel`          | boolean | R    | True means that the high level threshold is reached or exceeded. |
 | `HighLevelThreshold` | decimal | R/W  | The defined high level value.            |
 
-Table 17 – IoT LevelSensor threshold parameters
+Table 17 – IoT LevelSensor threshold Parameters
 
-When modeling a battery with a `LevelSensor` object, an additional low level warning (Boolean) may be supported along with a Low Level threshold that provides a setting for the warning. The resulting object looks like this:
+When modeling a battery with a `LevelSensor` Object, an additional low level warning (Boolean) may be supported along with a Low Level threshold that provides a setting for the warning. The resulting Object looks like this:
 
 ```
     IoTCapability.1.Class                         = "LevelSensor"
@@ -360,7 +321,7 @@ When modeling a battery with a `LevelSensor` object, an additional low level war
     IoTCapability.1.LevelSensor.LowLevel          = true
 ```
 
-*Note - For more complex scenarios, like having a grace period, the binary sensor object can be used instead of the LowLevel or HighLevel Threshold parameters.*
+*Note:  For more complex scenarios, like having a grace period, the binary sensor Object can be used instead of the LowLevel or HighLevel Threshold Parameters.*
 
 ##### Multi Level Sensor
 
@@ -386,7 +347,7 @@ An example is a location reading consisting of the two values longitude and lati
     IoTCapability.1.MultiLevelSensor.ValueNames = "Latitude,Longitude"
 ```
 
-This example uses the parameter `ValueNames` to provide information about the individual value meanings.
+This example uses the Parameter `ValueNames` to provide information about the individual value meanings.
 
 #### Enum Sensor
 
@@ -402,7 +363,7 @@ The minimum definition of an "EnumSensor" consists of:
     IoTCapability.i.EnumSensor.Value       = ...
 ```
 
-The `ValidValues` parameter determines the set of values, which will be delivered by the sensor.
+The `ValidValues` Parameter determines the set of values, which will be delivered by the sensor.
 
 For example, a traffic light could be modeled as:
 
@@ -733,15 +694,13 @@ Structure elements:
 * IoTCapability.5 (LevelSensor): Valve position
 * IoTCapability.6 (LevelSensor): Battery status
 
-*Note - All temperature settings are modeled as "EnumControl" to define a range between 4 and 23° degC in steps of 0.5° or an "Off" value.*
+*Note:  All temperature settings are modeled as "EnumControl" to define a range between 4 and 23° degC in steps of 0.5° or an "Off" value.*
 
 Instantiated data model:
 
 ```
     Device.DeviceInfo.Description                  = "Battery powered radiator
                                                       thermostat"
-
-    :
 
     Device.IoTCapabilityNumberOfEntries            = 6
 

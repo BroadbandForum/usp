@@ -1,0 +1,32 @@
+@startuml
+
+participant Controller as C
+participant "STOMP Broker\n(MTU:64kB)" as S
+participant Agent as A
+
+
+Activate C
+
+C -> C : USP Message (150kB)\nSegment in max size 64kB
+
+Deactivate C
+
+C -> S : USP Record (64kB)\n sequence_id: 4000 \n payload_sar_state: 1 - BEGIN\n payloadrec_sar_state: 1 - BEGIN\n payload record: USP Message \n (64kB - USP Record header size)
+
+S -> A : USP Record:\n sequence_id: 4000\n payload_sar_state: 1 - BEGIN...
+
+C -> S : USP Record (64kB)\n sequence_id: 4001 \n payload_sar_state: 2 - INPROCESS\n payloadrec_sar_state: 2 - INPROCESS\n payload record: USP Message \n (64kB - USP Record header size)
+
+S -> A : USP Record:\n sequence_id: 4001\n payload_sar_state: 2 - INPROCESS...
+
+C -> S : USP Record\n(size of USP Record + remaining payload)\n sequence_id: 4002 \n payload_sar_state: 3 - COMPLETE\n payloadrec_sar_state: 3 - COMPLETE\n payload record: USP Message \n (bytes remaining)
+
+S -> A : USP Record:\n sequence_id: 4002\n payload_sar_state: 3 - COMPLETE...
+
+Activate A
+
+A -> A: Reassemble segments\nUSP Message (150kB)
+
+Deactivate A
+
+@enduml

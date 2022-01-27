@@ -13,13 +13,13 @@ A --> C : [ send_resp == true ]\nOperate Response (req_object_path)
 A -> A : Operation started
 deactivate A
 
-note over C : The Controller can use\nthe Request Object Path\nin order to retrieve\noperation-related parameters\nuntil the operation completes.
+note over C : The Controller can use\nthe Request Object Path\nin order to retrieve\noperation-related Parameters\nuntil the operation completes.
 
 A -> A : Operation completed and returned (success or failure)
 A -> A : Remove Request Object
 activate A
 
-A -> C : [ controller has subscribed to this operation ]\nNotify Request ("OperationComplete", req_output_args)
+A -> C : [ Controller has subscribed to this operation ]\nNotify Request ("OperationComplete", req_output_args)
 deactivate A
 
 @enduml

@@ -1,0 +1,14 @@
+/* example local CSS */
+
+/* this is taken from the bbf.css pre settings */
+.ebnf {
+    color: #000;
+    font-family: monospace, monospace;
+    _font-family: 'courier new', monospace;
+    font-size: 0.98em;
+    /* XXX this doesn't seem to work as expected; at least not in Chrome
+           (the words wrap and vertical whitespace corresponding to the
+           space that would have been occupied is inserted)
+    white-space: pre; */
+    word-wrap: break-word;
+}

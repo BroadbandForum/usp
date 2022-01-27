@@ -1,0 +1,64 @@
+<h1 class="unnumbered" id="sec:faq">FAQ<a class="headerlink" href="#sec:faq" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h1>
+
+<h2 class="unnumbered" id="sec:what-is-usp">What is USP?<a class="headerlink" href="#sec:what-is-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>USP stands for the User Services Platform, a standardized platform to manage, monitor, update, and control connected devices, services, IoT, and home networks. USP consists of an architecture, protocol, and set of data models that create a network of Controllers and Agents that allow applications to manipulate the hardware and software capabilities of an end-user’s network and devices (network interfaces, consumer electronics platforms, smart objects, virtualized network functions, etc.).</p>
+
+<h2 class="unnumbered" id="sec:what-do-i-need-to-get-started">What do I need to get started?<a class="headerlink" href="#sec:what-do-i-need-to-get-started" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>Checkout our <a href='/resources/' title=''>development resources</a> for schemas, code, certification, and more.</p>
+
+<h2 class="unnumbered" id="sec:what-are-the-major-features-of-usp">What are the major features of USP?<a class="headerlink" href="#sec:what-are-the-major-features-of-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The User Services Protocol is designed with four major features in mind:</p>
+
+<ul>
+<li>Flexibility - USP is applicable to many different use cases or deployment scenarios, and able to be implemented by new and varied kinds of devices.</li>
+<li>Scaling - With the increase in the kinds of devices that can now be managed, monitored, or controlled, comes an increase in the raw numbers of those devices. USP is able to scale to a very large number of managed devices, services, and connections.</li>
+<li>Standardization and ease of migration - USP meets the challenges of connected device (network gateways, whole-home and enterprise Wi-Fi, and IoT) management and control with an interoperable, non-proprietary standard, that easily evolves from existing TR-069 deployments.</li>
+<li>Security - USP is designed with application layer security, authentication, integrity, and privacy from the ground up.</li>
+</ul>
+
+<p>For an in-depth look at the high level benefits of USP, read our whitepaper, &ldquo;<a href='https://www.broadband-forum.org/technical/download/MU-461.pdf' title=''>Realizing the Promise of the Connected Home with USP</a>&rdquo;.</p>
+
+<h2 class="unnumbered" id="sec:who-makes-the-user-services-platform">Who makes the User Services Platform?<a class="headerlink" href="#sec:who-makes-the-user-services-platform" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<img src="./broadband-forum-logo.png" alt=""/>
+
+<p>USP is developed by the <a href='http://www.broadband-forum.org' title=''>Broadband Forum</a>, an international standards organization of network service providers/MSOs, end user device manufacturers, government and university organizations, and test laboratories. It is developed in the &ldquo;Broadband User Services&rdquo; <a href='https://www.broadband-forum.org/standards-and-software/downloads/work-areas-projects' title=''>Work Area</a>.</p>
+
+<h2 class="unnumbered" id="sec:how-does-usp-relate-to-tr-069">How does USP relate to TR-069?<a class="headerlink" href="#sec:how-does-usp-relate-to-tr-069" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>USP is a natural evolution of the <a href='https://www.broadband-forum.org/technical/download/TR-069.pdf' title=''>CPE WAN Management Protocol</a> (more commonly known as TR-069). It was developed to improve on the use cases met by TR-069, expand the number and kinds of devices it can be deployed on, and leverage the lessons learned in the 15 years of TR-069 being deployed in real-world environments.</p>
+
+<h2 class="unnumbered" id="sec:is-usp-a-replacement-for-tr-069">Is USP a replacement for TR-069?<a class="headerlink" href="#sec:is-usp-a-replacement-for-tr-069" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>While USP represents significant advancements in scalability and scope over TR-069, it is designed to co-exist with TR-069 and offer an easy migration path for those who want to make the switch.</p>
+
+<h2 class="unnumbered" id="sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the BBF deprecating or ending support for TR-069?<a class="headerlink" href="#sec:is-the-bbf-deprecating-or-ending-support-for-tr-069" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>No. The TR-069 project is still accepting new contributions and has had its most recent version (Amendment 6, defining CWMP 1.5) published at the same time as USP.</p>
+
+<h2 class="unnumbered" id="sec:is-bbf-building-a-new-data-model-for-usp">Is BBF building a new data model for USP?<a class="headerlink" href="#sec:is-bbf-building-a-new-data-model-for-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>No. USP is designed to re-use the <a href='http://usp-data-models.broadband-forum.org' title=''>Device:2 data model</a> and associated Service data models produced for TR-069. There are minor alterations to the way USP handles commands, events, and proxying, but it is otherwise identical. This helps those looking to migrate to USP make the change with little alteration to back-end services that rely on the Device:2 data model.</p>
+
+<h2 class="unnumbered" id="sec:what-sorts-of-devices-can-implement-usp">What sorts of devices can implement USP?<a class="headerlink" href="#sec:what-sorts-of-devices-can-implement-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>Any device capable of an IP connection can implement a USP Agent, including Wi-Fi, fixed wireline, and fixed wireless (i.e. 5G) devices. In addition, smart hubs that aggregate other connection schemes such as ZigBee, Zwave, Bluetooth, and others can be easily managed via USP’s proxy mechanism. USP Controllers can be implemented anywhere from large scale management servers (like TR-069 ACS) or to enable user applications on a smart phone or other user-facing interfaces.</p>
+
+<h2 class="unnumbered" id="sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can USP be used to managed virtual network functions or containers?<a class="headerlink" href="#sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>USP objects can represent hardware-independent elements via either abstraction or proxy, and re-uses the Software Module Management mechanism designed for TR-069 to manage both execution and deployment units.</p>
+
+<h2 class="unnumbered" id="sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do I need to support all of USP’s message transfer protocols to be compliant?<a class="headerlink" href="#sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>No. Each supported transport is meant for a different core use case. In addition, transport proxy functions are in development that will make co-existence and interoperability of implementations of different transports simple.</p>
+
+<h2 class="unnumbered" id="sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m building a USP Agent. How do I get certified?<a class="headerlink" href="#sec:im-building-a-usp-agent.-how-do-i-get-certified" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The conformance test plan for USP Agents is defined in <a href='https://usp-compliance.broadband-forum.org' title=''>TP-469</a>. This test plan evolves, and forms the basis for the Broadband Forum’s <a href='https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification' title=''>USP Agent Certification Program</a>.</p>
+
+<h2 class="unnumbered" id="sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?<a class="headerlink" href="#sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>Feedback and questions can always be given via <a href='https://github.com/BroadbandForum/usp' title=''>GitHub</a>. Due to the standards process adopted by the Broadband Forum, a contributing Broadband Forum member must adopt suggested changes and present them to the Forum as a contribution from their company. An even easier way is to <a href='https://www.broadband-forum.org/about-the-broadband-forum/membership/becoming-a-bbf-member' title=''>become a member</a> and contribute directly. The Broadband Forum has membership levels for large businesses, small businesses, and individuals.</p>

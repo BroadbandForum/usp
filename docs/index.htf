@@ -1,0 +1,81 @@
+<div style="width:45%; float:left;">
+<h2 class="unnumbered unlisted" id="sec:what-is-usp">What is USP?<a class="headerlink" href="#sec:what-is-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<p>The <strong>User Services Platform</strong> is a standardized <strong>protocol for managing,
+monitoring, upgrading, and controlling connected devices</strong>. USP allows service
+providers and consumer electronics manufacturers to:</p>
+
+<ul>
+<li><p>Create interoperable and vendor-independent <strong>managed Wi-Fi systems</strong>.</p></li>
+<li><p>Perform <strong>lifecycle management</strong> of consumer connected devices.</p></li>
+<li><p>Support <strong>independent applications</strong> for smart networking products.</p></li>
+<li><p>Enable <strong>IoT and consumer electronics upgradability</strong> for critical security
+patches.</p></li>
+<li><p>Develop applications that gather the telemetry necessary to <strong>mass data
+processing, AI, and machine learning</strong>.</p></li>
+<li><p><strong>Bootstrap and configure</strong> newly installed or purchased devices and virtual
+services.</p></li>
+<li><p>Let customer support <strong>monitor and troubleshoot</strong> connected devices,
+services, and home network links.</p></li>
+<li><p>Easily map the home network to <strong>control service quality and monitor
+threats</strong>.</p></li>
+<li><p>Securely <strong>control IoT, smart home, and smart networking functions</strong> locally
+or from the Cloud</p></li>
+</ul>
+
+<p>USP represents the natural evolution of the Broadband Forum’s <a href='https://www.broadband-forum.org/cwmp' title=''>CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, events, and service functions (IoT functions, VoIP, etc.).</p>
+
+<h2 class="unnumbered unlisted" id="sec:how-to-use-this-site">How to use this site:<a class="headerlink" href="#sec:how-to-use-this-site" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<ul>
+<li><p>The <em><a href='specification/index.html' title=''>specification</a></em> directory contains the full
+text of the current version of the protocol, and the schema (currently in
+Protocol Buffers) for the syntax of USP messages. Use this section when
+developing your USP protocol stack.</p></li>
+<li><p>The <em><a href='https://usp-data-models.broadband-forum.org' title=''>data models</a></em> link will
+take you to the generated versions of the Device:2 data model (also known as
+&ldquo;TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents&rdquo;) specific
+to USP. The raw xml used in development can be found in this directory. Use
+these to find the Objects necessary to the USP protocol stack, and when
+developing the Objects, interfaces, services, etc. that you want to manage
+and control with USP.</p></li>
+<li><p>The USP Agent <em><a href='https://usp-compliance.broadband-forum.org' title=''>Test Plan</a></em>
+provides a list of the test cases executed to validate USP Agent
+implementations and seek certification.</p></li>
+<li><p><em><a href='./resources/01-index-usp-development-resources.html' title=''>Dev Resources</a></em> provides several links for how to
+build, test, certify, and bring to market USP based solutions.</p></li>
+<li><p>The <em><a href='./faq/01-index-faq.html' title=''>FAQ</a></em> page gives information on frequently asked
+questions. Use this section to learn more about USP and getting involved in
+its ongoing development.</p></li>
+</ul></div>
+
+<div style="width:45%; float:right;">
+<h2 class="unnumbered unlisted" id="sec:current-version-versionnumber">Current Version: 1.2<a class="headerlink" href="#sec:current-version-versionnumber" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
+
+<h4 class="unnumbered unlisted" id="sec:about-this-version">About this version:<a class="headerlink" href="#sec:about-this-version" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
+
+<p>This specification includes:</p>
+
+<ul>
+<li>Architectural overview</li>
+<li>Discovery mechanisms for Controllers and Agents</li>
+<li>Basic CRUD messages between Controllers and Agents</li>
+<li>Use of USP Record encapsulation for end to end integrity, security, and
+privacy</li>
+<li>Data model Objects specific to protocol functionality, object defined
+operations, and notifications/events</li>
+<li>Protocol buffers encoding schema</li>
+<li>Use of WebSockets, MQTT, and STOMP as message transfer protocols (MTP)</li>
+<li>A system for authentication and authorization</li>
+<li>Extensions for bulk data collection, firmware management, software module
+management, and device proxying</li>
+<li>Theory of operations for using a USP Agent to control IoT devices and systems</li>
+</ul>
+
+<div style="text-align:center;">
+<p><a href='https://www.broadband-forum.org' title=''><img src='broadband-forum-logo.png' title=''/></a></p>
+
+<p>USP is developed by the Broadband Forum. For more information, visit <a href='https://www.broadband-forum.org' title=''>https://www.broadband-forum.org</a></p></div></div>
+
+<div style="clear:both;">
+</div>

@@ -1,52 +1,57 @@
-<!-- Reference Links -->
-[1]:	https://usp-data-models.broadband-forum.org/ "Device Data Model"
-[2]: https://www.broadband-forum.org/technical/download/TR-069.pdf	"TR-069 Amendment 6	CPE WAN Management Protocol"
-[3]:	https://www.broadband-forum.org/technical/download/TR-106_Amendment-8.pdf "TR-106 Amendment 8	Data Model Template for CWMP Endpoints and USP Agents"
-[4]:	https://tools.ietf.org/html/rfc7228 "RFC 7228	Terminology for Constrained-Node Networks"
-[5]:	https://tools.ietf.org/html/rfc2136	"RFC 2136 Dynamic Updates in the Domain Name System"
-[6]:	https://tools.ietf.org/html/rfc3007	"RFC 3007 Secure Domain Name System Dynamic Update"
-[7]:	https://tools.ietf.org/html/rfc6763	"RFC 6763 DNS-Based Service Discovery"
-[8]:	https://tools.ietf.org/html/rfc6762	"RFC 6762 Multicast DNS"
-[9]:	https://tools.ietf.org/html/rfc7252	"RFC 7252 The Constrained Application Protocol (CoAP)"
-[10]:	https://tools.ietf.org/html/rfc7390	"RFC 7390 Group Communication for the Constrained Application Protocol (CoAP)"
-[11]:	https://tools.ietf.org/html/rfc4033	"RFC 4033 DNS Security Introduction and Requirements"
-[12]:	https://developers.google.com/protocol-buffers/docs/proto3 "Protocol Buffers v3	Protocol Buffers Mechanism for Serializing Structured Data Version 3"
-[13]: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries "IEEE Registration Authority"
-[14]: https://tools.ietf.org/html/rfc4122 "RFC 4122 A Universally Unique IDentifier (UUID) URN Namespace"
-[15]: https://tools.ietf.org/html/rfc5280 "RFC 5290 Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[16]: https://tools.ietf.org/html/rfc6818 "RFC 6818 Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"
-[17]: https://tools.ietf.org/html/rfc2234 "RFC 2234 Augmented BNF for Syntax Specifications: ABNF"
-[18]: https://tools.ietf.org/html/rfc3986 "RFC 3986 Uniform Resource Identifier (URI): Generic Syntax"
-[19]: https://tools.ietf.org/html/rfc2141 "RFC 2141 URN Syntax"
-[20]: https://tools.ietf.org/html/rfc6455 "RFC 6455 The WebSocket Protocol"
-[21]: https://stomp.github.io/stomp-specification-1.2.html "Simple Text Oriented Message Protocol"
-[22]: https://tools.ietf.org/html/rfc5246 "The Transport Layer Security (TLS) Protocol Version 1.2"
-[23]: https://tools.ietf.org/html/rfc6347 "Datagram Transport Layer Security Version 1.2"
-[Conventions]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
+# Message Encoding {#sec:encoding}
 
+USP requires a mechanism to serialize data to be sent over a Message Transfer Protocol. The description of each individual Message and the USP Record encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
 
-# Message Encoding
+* Protocol Buffers Version 3 [@PROTOBUF]
 
-USP requires a mechanism to serialize data to be sent over a message transfer protocol. The description of each individual message and the USP Record encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
+**[R-ENC.0]{}** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [%usp-msg-proto-file%](%usp-msg-proto-url%).
 
-* [Protocol Buffers Version 3][12]
-
-**R-ENC.0** - An implementation using protocol buffers encoding to encode USP Messages (Requests, Responses, and Errors) MUST conform to the schema defined in [usp-msg-1-1.proto](/specification/usp-msg-1-1.proto).
-
-**R-ENC.1** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [usp-record-1-1.proto](/specification/usp-record-1-1.proto).
+**[R-ENC.1]{}** - An implementation using protocol buffers encoding to encode USP Records MUST conform to the schema defined in [%usp-record-proto-file%](%usp-record-proto-url%).
 
 Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.
 
-**R-ENC.2** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
+**[R-ENC.2]{}** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
 
 Protocol Buffers uses a datatype called `oneof`. This means that the element
 contains elements of one or more varying types.
 
-**R-ENC.3** - USP Records and USP Messages that contain an element of type
+**[R-ENC.3]{}** - USP Records and USP Messages that contain an element of type
 `oneof` MUST include 1 and only 1 instance of the element, which MUST contain
 one of the possible elements.
 
-**R-ENC.4** - A USP Record that violates R-ENC.3 MUST be discarded.
+**[R-ENC.4]{}** - A USP Record that violates [R-ENC.3]() MUST be discarded.
 
-**R-ENC.5** - A USP Message that violates R-ENC.3 SHOULD return an error of
+**[R-ENC.5]{}** - A USP Message that violates [R-ENC.3]() SHOULD return an error of
 type 7004 (Invalid Arguments).
+
+## Parameter and Argument Value Encoding {#parameter-value-encoding}
+
+[%usp-msg-proto-file%](%usp-msg-proto-url%) specifies that Parameter
+and argument values in USP Messages are represented as Protocol Buffers Version
+3 strings (which are UTF-8-encoded).
+
+This section specifies how Parameter and argument values are converted to and
+from Protocol Buffers Version 3 strings.
+
+**[R-ENC.6]{}** - Parameter and argument values MUST be converted to and from
+Protocol Buffers Version 3 strings using the string representations of the
+TR-106 Appendix I.4 [@TR-106] data types.
+
+TR-106 Appendix I.4 states that "Parameters make use of a limited subset of the
+default SOAP data types". The
+SOAP 1.1 specification [@SOAP-1-1] states
+that all SOAP simple types are defined by the
+XML Schema Part 2: Datatypes specification [@XMLSCHEMA-2],
+and this is the ultimate reference.
+
+In practice there should be few surprises, e.g.,
+XML Schema Part 2, Section 3.3.22 [@XMLSCHEMA-2]
+states that it has a lexical representation consisting of a finite-length
+sequence of decimal digits (#x30-#x39).
+
+Some of the encoding rules are quite complicated,
+e.g. SOAP 1.1, Section 5.2.3 [@SOAP-1-1]
+states that `base64` line length restrictions don't apply to SOAP, and
+XML Schema Part 2, Section 3.2.7 [@XMLSCHEMA-2]
+has a lot of detail about which aspects of ISO 8601 are and are not supported
+by the `dateTime` data type.

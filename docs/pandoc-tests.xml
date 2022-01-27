@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="0" tests="23" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="pandoc" skipped="0" tests="23" time="0">
+		<testcase name="cant-expand-macro-in"/>
+		<testcase name="cant-find-file"/>
+		<testcase name="class-indicates-annex-but-currently-in-appendix-ignored"/>
+		<testcase name="class-indicates-annex-but-currently-in-ordinary-section-ignored"/>
+		<testcase name="class-indicates-appendix-but-currently-in-annex-ignored"/>
+		<testcase name="code-block-filter-doesnt-specify-prog"/>
+		<testcase name="code-block-filter-failed-invalid-arguments"/>
+		<testcase name="code-block-filter-failed-modulenotfounderror-no-module-named"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-1"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-2"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-message-type-has-no-field-named"/>
+		<testcase name="error-yaml-line"/>
+		<testcase name="invalid-figure-identifier-must-start-with-fig"/>
+		<testcase name="invalid-table-identifier-must-start-with-tbl"/>
+		<testcase name="results-in-recursive-macro-reference"/>
+		<testcase name="undefined-anchor-referenced-from"/>
+		<testcase name="undefined-metadata-bbflist-content"/>
+		<testcase name="undefined-metadata-bbftable-content"/>
+		<testcase name="unknown-error"/>
+		<testcase name="warning-citeproc-citation-not-found"/>
+		<testcase name="warning-duplicate-identifier-input-line-column"/>
+		<testcase name="warning-duplicate-identifier-md-line-column"/>
+		<testcase name="warning-failed-to-load-ignore"/>
+	</testsuite>
+</testsuites>
+

@@ -1,0 +1,4 @@
+<ol class="footnotes">
+<li id="fn1"><p>This state machine diagram refers to the successful transitions caused by the USP commands that change the DU state and does not model the error cases. <a href="10-index-software-module-management.html#fnref1">&#8617;</a></p></li>
+<li id="fn2"><p>This state machine diagram refers to the successful transitions caused by the <code>SetRequestedState()</code> command within the <code>ExecutionUnit</code> table and does not model the error cases. <a href="10-index-software-module-management.html#fnref2">&#8617;</a></p></li>
+</ol>
