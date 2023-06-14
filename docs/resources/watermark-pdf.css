@@ -1,0 +1,9 @@
+/* XXX a separate file is used for PDF because wkhtmltopdf doesn't seem to
+       support media types for background images? */
+
+body {
+    background-image: url("watermark.png");
+    background-origin: content-box;
+    background-repeat: repeat-y;
+    background-size: 100%;
+}

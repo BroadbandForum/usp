@@ -4,26 +4,239 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="generator" content="pandoc"/>
-  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks"/>
-  <meta name="theme-color" content="#157878"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>BBF – TR-369a2 – User Services Platform (USP)</title>
+  <meta name="description" content="TR-369 – The User Services Platform:
+A standardized protocol to manage, monitor, update, and control
+connected devices, IoT endpoints, user services and home networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <title>BBF – TR-369 – The User Services Platform</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="github.css"/>
   <link rel="stylesheet" href="extra.css"/>
   <link rel="stylesheet" href="release.css"/>
+  <!-- Automatic hover links scripts -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var hoverlink = null;
+
+    var elems = document.querySelectorAll('.auto-hoverlink:not(section)');
+      for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+
+        elem.addEventListener('mouseenter', event => {
+          var target = event.target;
+          var info_attr = target.attributes.getNamedItem('data-info');
+          var anchor_attr = target.attributes.getNamedItem('data-anchor');
+          var thing = info_attr ? info_attr.value : target.localName
+          /* we check the parent to cover the case where pandoc has moved the
+             id from a header to its parent section */
+          var anchor = target.id || target.parentElement.id ||
+                                    (anchor_attr ? anchor_attr.value : null);
+
+          if (hoverlink) {
+            hoverlink.remove();
+            hoverlink = null;
+          }
+
+          if (!anchor) {
+              console.warn('%s %s has no id or data-anchor',
+                           thing, target.textContent);
+          } else {
+            hoverlink = document.createElement('a');
+            hoverlink.href = '#' + anchor;
+            hoverlink.className = 'hoverlink';
+            hoverlink.title = 'Permalink to this ' + thing;
+            target.appendChild(hoverlink);
+          }
+        });
+
+        elem.addEventListener('mouseleave', () => {
+          if (hoverlink) {
+            setTimeout(function(href) {
+              if (hoverlink && hoverlink.href == href) {
+                hoverlink.remove();
+                hoverlink = null;
+              }
+            }, 1000, hoverlink.href);
+          }
+        });
+      }
+  });
+  </script>
+  <!-- Automatic hover links styles -->
+  <style>
+  :root {
+      --hoverlink-size: 0.9em;
+  }
+
+  .hoverlink {
+      text-decoration: none;
+  }
+
+  .hoverlink::before {
+      content: " ";
+  }
+
+  .hoverlink::after {
+      display: inline-block;
+      content: "";
+      width: var(--hoverlink-size);
+      height: var(--hoverlink-size);
+      background-size: var(--hoverlink-size) var(--hoverlink-size);
+      /* https://icon-library.com/images/permalink-icon/permalink-icon-17.jpg
+         (resized from 512x512 to 64x64) */
+      background-image: url(permalink.png);
+  }
+  </style>
+  <!-- Automatic sections scripts -->
+  <script>
+  /* 1. Find all sections, i.e., elements with class "new-section"
+     2. If a section has no id (shouldn't happen), auto-assign one
+     3. For each element with an id, set "data-section" to its section id
+     4. For each internal link, similarly set "data-section" to its section id
+   */
+  window.addEventListener('DOMContentLoaded', () => {
+      var target_sections = new Map();
+      var sections = document.getElementsByClassName('new-section');
+      for (var i = 0; i < sections.length; i++) {
+          var section = sections[i];
+          if (!section.id) {
+              section.id = 'section-' + i;
+          }
+          target_sections.set(section.id, section.id);
+          section.setAttribute('data-section', section.id)
+          var targets = section.querySelectorAll('[id]');
+          for (var j = 0; j < targets.length; j++) {
+              var target = targets[j];
+              target_sections.set(target.id, section.id);
+              target.setAttribute('data-section', section.id)
+          }
+      }
+
+      var doc_url = new URL(document.URL);
+      var links = document.querySelectorAll('a[href]');
+      var warned = new Map()
+      for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          var url = new URL(link.href, document.URL);
+          if (url.hostname == doc_url.hostname &&
+              url.pathname == doc_url.pathname && url.hash) {
+              var href = url.hash.substring(1);
+              var section_id = target_sections.get(href)
+              if (!section_id) {
+                  if (!warned.get(href)) {
+                      console.warn("href %s undefined or not within a section",
+                                   href);
+                      warned.set(href, true);
+                  }
+              } else {
+                  link.setAttribute('data-section', section_id);
+              }
+          }
+      }
+  });
+
+  /* Create a new scope to avoid using a global variable */
+  (function() {
+
+      /* Show the section with the given id, which is assumed to be valid */
+      function show_section(section_id) {
+          var section = document.getElementById(section_id);
+
+          /* The "cover-only" class indicates elements that should only be
+             shown when the cover page section is shown */
+          var cover_onlys = document.getElementsByClassName('cover-only');
+          if (section) {
+              for (var i = 0; i < cover_onlys.length; i++) {
+                  var cover_only = cover_onlys[i];
+                  if (section_id != 'sec:cover-page') {
+                      cover_only.classList.add('hidden')
+                  } else {
+                      cover_only.classList.remove('hidden')
+                  }
+              }
+          }
+
+          /* Hide all sections, then un-hide this one */
+          var sections = document.getElementsByClassName('new-section');
+          for (var i = 0; i < sections.length; i++) {
+              sections[i].classList.add('hidden');
+          }
+          section.classList.remove('hidden')
+      }
+
+      /* Add click events to all links, using the "data-section" attribute
+         (set earlier) to show the associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var links = document.querySelectorAll('a[data-section]');
+          for (var i = 0; i < links.length; i++) {
+              links[i].addEventListener('click', event => {
+                  var link = event.currentTarget;
+                  var section_id = link.attributes['data-section'].value;
+                  show_section(section_id);
+              });
+          }
+      });
+
+      /* Ensure that loading the page with a URL fragment (hash) will show the
+         associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var url = new URL(document.URL);
+          if (url.hash.length > 1) {
+              var href = url.hash.substring(1);
+              var target = document.getElementById(href);
+              if (!target) {
+                  var fallback = 'sec:executive-summary';
+                  console.warn("target %s undefined; falling back on %s",
+                               href, fallback);
+                  href = fallback;
+                  target = document.getElementById(href);
+                  if (!target) {
+                      var fallback = 'sec:cover-page';
+                      console.warn("target %s undefined; falling back on %s",
+                                   href, fallback);
+                      href = fallback;
+                      target = document.getElementById(href);
+                  }
+              }
+              if (!target) {
+                  console.warn("target %s undefined", href);
+              } else {
+                  var section_id = target.attributes['data-section'].value;
+                  if (!section_id) {
+                      console.warn("target %s not within a section", href);
+                  } else {
+                      show_section(section_id);
+                  }
+              }
+          }
+      });
+
+  /* End of new scope */
+  })();
+  </script>
+  <!-- Automatic sections styles -->
+  <style>
+  h1.cover-page, .hidden, aside.footnotes-end-of-document {
+      display: none;
+  }
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  <!-- XXX header includes are included just before the ToC (below) -->
 </head>
 
 <body>
@@ -34,117 +247,148 @@
         The User Services Platform
       </a>
     </h1>
-    <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks</h2>
+    <h2 class="project-tagline">A standardized protocol to manage,
+monitor, update, and control connected devices, IoT endpoints, user
+services and home networks</h2>
     <p></p>
     <p></p>
     <div class="project-buttons">
-      <a class="btn" href="./specification/index.html" title="USP Specification">Specification</a>
-      <a class="btn" href="./specification/index.htm" title="USP Specification Single-file HTML">HTML</a>
-      <a class="btn" href="./specification/index.pdf" title="USP Specification PDF">PDF</a>
-      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP Data Models">Data Models</a>
-      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP Test Plan">Test Plan</a>
-      <a class="btn" href="./resources/01-index-usp-development-resources.html" title="USP Development Resources">Resources</a>
-      <a class="btn" href="./faq/01-index-faq.html" title="USP Frequently Asked Questions">FAQ</a>
+      <a class="btn" href="./specification/index.html" title="USP
+Specification">Specification</a>
+      <a class="btn" href="./specification/index.htm" title="USP
+Specification Single-file HTML">HTML</a>
+      <a class="btn" href="./specification/index.pdf" title="USP
+Specification PDF">PDF</a>
+      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP
+Data Models">Data Models</a>
+      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP
+Test Plan">Test Plan</a>
+      <a class="btn" href="./resources/index.html#sec:executive-summary" title="USP
+Development Resources">Resources</a>
+      <a class="btn" href="./faq/index.html#sec:executive-summary" title="USP
+Frequently Asked Questions">FAQ</a>
     </div>
   </section>
 
   <section class="main-content">
+<section class="new-section">
+<h1 class="cover-page unnumbered" id="sec:cover-page">Cover Page</h1>
+<section id="sec:executive-summary"
+class="unnumbered hidden-header auto-hoverlink" data-info="header"
+style="width:45%; float:left;">
+<h1 class="unnumbered hidden-header auto-hoverlink"
+data-info="header">The User Services Platform</h1>
+<h2 class="auto-hoverlink" data-info="header" id="sec:what-is-usp">What
+is USP?</h2>
+<p>The <strong>User Services Platform</strong> is a standardized
+<strong>protocol for managing, monitoring, upgrading, and controlling
+connected devices</strong>. USP allows service providers, consumer
+electronics manufacturers, and end users to:</p>
+<ul>
+<li>Create interoperable and vendor-independent <strong>managed Wi-Fi
+systems</strong>.</li>
+<li>Perform <strong>lifecycle management</strong> of consumer connected
+devices and containerized microservices.</li>
+<li>Support <strong>independent applications</strong> for
+application-enabled services gateways.</li>
+<li>Enable <strong>IoT and consumer electronics upgradability</strong>
+for critical security patches.</li>
+<li>Develop applications that gather the telemetry necessary to
+<strong>mass data processing, AI, and machine learning</strong>.</li>
+<li><strong>Bootstrap and configure</strong> newly installed or
+purchased devices and applications.</li>
+<li>Let customer support <strong>monitor and troubleshoot</strong>
+connected devices, services, and home network links.</li>
+<li>Easily map the home network to <strong>control service quality and
+monitor threats</strong>.</li>
+<li>Securely <strong>control IoT, smart home, and smart networking
+functions</strong> locally or from the Cloud.</li>
+<li><strong>Enable multi-tenant</strong> (i.e., multi-stakeholder)
+management and control.</li>
+</ul>
+<p>USP represents the natural evolution of the Broadband Forum’s <a
+href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol
+(CWMP)</a>, commonly known as TR-069. It uses an expanded version of the
+Device:2 Data Model to represent device operations (firmware upgrades,
+reboots, etc.), network interfaces, and service functions (IoT
+functions, VoIP, etc.).</p>
+<h2 class="auto-hoverlink" data-info="header"
+id="sec:how-to-use-this-site">How to use this site:</h2>
+<ul>
+<li><p>The <em><a href="specification/index.html">specification</a></em>
+directory contains the full text of the current version of the protocol,
+and the schema (currently in Protocol Buffers) for the syntax of USP
+messages. Use this section when developing your USP protocol
+stack.</p></li>
+<li><p>The <em><a
+href="https://usp-data-models.broadband-forum.org">data models</a></em>
+link will take you to the generated versions of the Device:2 data model
+(also known as “TR-181i2 - Device:2 Data Model for TR-069 devices and
+USP Agents”) specific to USP. The raw xml used in development can be
+found in this directory. Use these to find the Objects necessary to the
+USP protocol stack, and when developing the Objects, interfaces,
+services, etc. that you want to manage and control with USP.</p></li>
+<li><p>The USP Agent <em><a
+href="https://usp-test.broadband-forum.org">Test Plan</a></em> provides
+a list of the test cases executed to validate USP Agent implementations
+and seek certification.</p></li>
+<li><p><em><a href="./resources/index.html#sec:executive-summary">Dev
+Resources</a></em> provides several links for how to build, test,
+certify, and bring to market USP based solutions.</p></li>
+<li><p>The <em><a
+href="./faq/index.html#sec:executive-summary">FAQ</a></em> page gives
+information on frequently asked questions. Use this section to learn
+more about USP and getting involved in its ongoing development.</p></li>
+</ul>
+</section>
+<section id="sec:current-version-versionnumber" class="auto-hoverlink"
+data-info="header" style="width:45%; float:right;">
+<h2 class="auto-hoverlink" data-info="header">Current Version: 1.3</h2>
+<h3 class="auto-hoverlink" data-info="header"
+id="sec:about-this-version">About this version:</h3>
+<p>This specification includes:</p>
+<ul>
+<li>Architectural overview</li>
+<li>Discovery mechanisms for Controllers and Agents</li>
+<li>Basic CRUD messages between Controllers and Agents</li>
+<li>Use of USP Record encapsulation for end to end integrity, security,
+and privacy</li>
+<li>Data model Objects specific to protocol functionality, object
+defined operations, and notifications/events</li>
+<li>Protocol buffers encoding schema</li>
+<li>Use of WebSockets, MQTT, STOMP, and UNIX Domain Sockets as message
+transfer protocols (MTP)</li>
+<li>A system for authentication and authorization</li>
+<li>Extensions for bulk data collection, firmware management, software
+module management, containerized microservices, and device proxying</li>
+<li>Theory of operations for using a USP Agent to control IoT devices
+and systems</li>
+</ul>
+<div style="text-align:center;">
+<p><a href="https://www.broadband-forum.org"><img
+src="broadband-forum-logo.png" /></a></p>
+<p>USP is developed by the Broadband Forum. For more information, visit
+<a
+href="https://www.broadband-forum.org">https://www.broadband-forum.org</a></p>
+</div>
+</section>
+<div style="clear:both;">
 
-  <div style="width:45%; float:left;">
-  <h2 class="unnumbered unlisted" id="sec:what-is-usp">What is USP?<a class="headerlink" href="00-index-contents.html#sec:what-is-usp" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
-
-  <p>The <strong>User Services Platform</strong> is a standardized <strong>protocol for managing,
-  monitoring, upgrading, and controlling connected devices</strong>. USP allows service
-  providers and consumer electronics manufacturers to:</p>
-
-  <ul>
-  <li><p>Create interoperable and vendor-independent <strong>managed Wi-Fi systems</strong>.</p></li>
-  <li><p>Perform <strong>lifecycle management</strong> of consumer connected devices.</p></li>
-  <li><p>Support <strong>independent applications</strong> for smart networking products.</p></li>
-  <li><p>Enable <strong>IoT and consumer electronics upgradability</strong> for critical security
-  patches.</p></li>
-  <li><p>Develop applications that gather the telemetry necessary to <strong>mass data
-  processing, AI, and machine learning</strong>.</p></li>
-  <li><p><strong>Bootstrap and configure</strong> newly installed or purchased devices and virtual
-  services.</p></li>
-  <li><p>Let customer support <strong>monitor and troubleshoot</strong> connected devices,
-  services, and home network links.</p></li>
-  <li><p>Easily map the home network to <strong>control service quality and monitor
-  threats</strong>.</p></li>
-  <li><p>Securely <strong>control IoT, smart home, and smart networking functions</strong> locally
-  or from the Cloud</p></li>
-  </ul>
-
-  <p>USP represents the natural evolution of the Broadband Forum’s <a href='https://www.broadband-forum.org/cwmp' title=''>CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, events, and service functions (IoT functions, VoIP, etc.).</p>
-
-  <h2 class="unnumbered unlisted" id="sec:how-to-use-this-site">How to use this site:<a class="headerlink" href="00-index-contents.html#sec:how-to-use-this-site" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
-
-  <ul>
-  <li><p>The <em><a href='specification/index.html' title=''>specification</a></em> directory contains the full
-  text of the current version of the protocol, and the schema (currently in
-  Protocol Buffers) for the syntax of USP messages. Use this section when
-  developing your USP protocol stack.</p></li>
-  <li><p>The <em><a href='https://usp-data-models.broadband-forum.org' title=''>data models</a></em> link will
-  take you to the generated versions of the Device:2 data model (also known as
-  &ldquo;TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents&rdquo;) specific
-  to USP. The raw xml used in development can be found in this directory. Use
-  these to find the Objects necessary to the USP protocol stack, and when
-  developing the Objects, interfaces, services, etc. that you want to manage
-  and control with USP.</p></li>
-  <li><p>The USP Agent <em><a href='https://usp-compliance.broadband-forum.org' title=''>Test Plan</a></em>
-  provides a list of the test cases executed to validate USP Agent
-  implementations and seek certification.</p></li>
-  <li><p><em><a href='./resources/01-index-usp-development-resources.html' title=''>Dev Resources</a></em> provides several links for how to
-  build, test, certify, and bring to market USP based solutions.</p></li>
-  <li><p>The <em><a href='./faq/01-index-faq.html' title=''>FAQ</a></em> page gives information on frequently asked
-  questions. Use this section to learn more about USP and getting involved in
-  its ongoing development.</p></li>
-  </ul></div>
-
-  <div style="width:45%; float:right;">
-  <h2 class="unnumbered unlisted" id="sec:current-version-versionnumber">Current Version: 1.2<a class="headerlink" href="00-index-contents.html#sec:current-version-versionnumber" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2>
-
-  <h4 class="unnumbered unlisted" id="sec:about-this-version">About this version:<a class="headerlink" href="00-index-contents.html#sec:about-this-version" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h4>
-
-  <p>This specification includes:</p>
-
-  <ul>
-  <li>Architectural overview</li>
-  <li>Discovery mechanisms for Controllers and Agents</li>
-  <li>Basic CRUD messages between Controllers and Agents</li>
-  <li>Use of USP Record encapsulation for end to end integrity, security, and
-  privacy</li>
-  <li>Data model Objects specific to protocol functionality, object defined
-  operations, and notifications/events</li>
-  <li>Protocol buffers encoding schema</li>
-  <li>Use of WebSockets, MQTT, and STOMP as message transfer protocols (MTP)</li>
-  <li>A system for authentication and authorization</li>
-  <li>Extensions for bulk data collection, firmware management, software module
-  management, and device proxying</li>
-  <li>Theory of operations for using a USP Agent to control IoT devices and systems</li>
-  </ul>
-
-  <div style="text-align:center;">
-  <p><a href='https://www.broadband-forum.org' title=''><img src='broadband-forum-logo.png' title=''/></a></p>
-
-  <p>USP is developed by the Broadband Forum. For more information, visit <a href='https://www.broadband-forum.org' title=''>https://www.broadband-forum.org</a></p></div></div>
-
-  <div style="clear:both;">
-  </div>
-
-    <div style="clear: both;"/>
+</div>
+</section>
+    <div style="clear: both;"></div>
     <footer class="site-footer">
-
       <span class="site-footer-owner">
         USP is developed and maintained
         by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
-        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+        &copy; The Broadband Forum 2023</a>. All Rights Reserved.
       </span>
       <span class="site-footer-credits">
         This page was generated by <a href="https://pandoc.org">pandoc</a>
         and <a href="https://pages.github.com">GitHub Pages</a>.
-        View the <a href="https://github.com/BroadbandForum/usp">specification source on GitHub</a>.
-        <span class="release"/>
+        View the <a href="https://github.com/BroadbandForum/usp">specification
+source on GitHub</a>.
+        <span class="release"></span>
       </span>
     </footer>
   </section>

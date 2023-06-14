@@ -1,0 +1,243 @@
+<!-- do not edit! this file was created from PROJECT.yaml by project-parser.py -->
+<h1 id="tr-369-user-services-platform-change-log">TR-369: User Services
+Platform Change Log</h1>
+<p>See <a href="https://usp.technology"
+class="uri">https://usp.technology</a> for the current USP
+specification.</p>
+<h2 id="release-1.3tr-369-amendment-3">2023-06-14: <a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf">Release
+1.3</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.3.0">v1.3.0</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.3.0">v1.3.0</a>
+(data models)</em></p>
+<h3 id="tr-369-document">TR-369 Document</h3>
+<p>Release contains the specification for the User Services Platform
+1.3</p>
+<ul>
+<li>Adds Appendix VI, “Software Modularization and USP-Enabled
+Applications Theory of Operation”</li>
+<li>Adds new Unix Domain Socket MTP</li>
+<li>Adds two new messages, “Register” and “Deregister”, and associated
+error codes (primarily for use with Appendix VI but can be used in many
+scenarios)</li>
+<li>Adds new Software Module Management features</li>
+<li>Adds a note about the use of the new TriggerAction parameter in
+Subscription objects</li>
+<li>Updates “Authentication and Authorization” to include the use of new
+SecuredRole</li>
+<li>Updates the Add message to allow for Search Paths and clarifies the
+application of permissions during Add messages</li>
+<li>Obsoletes CoAP as an MTP</li>
+<li>Adds two new requirements regarding Unique Key immutability</li>
+<li>Clarifies how Set should respond when using a Search Path where one
+or more objects fail to update</li>
+<li>Updates the use of EndpointID in WebSocket arguments and adds an
+fqdn authority scheme</li>
+<li>Addesses a potential attack vector with using MQTT, and updates
+other MQTT behavior</li>
+<li>Updates Annex A to explain use of the “Exclude” parameter</li>
+<li>Updates Discovery to include the use of DHCP options for
+agent-device association</li>
+<li>Adds a note about USP protocol versioning and Controller/Agent
+behavior</li>
+<li>Clarifies and updates the use of certain error codes</li>
+<li>Clarifies the behavior of Get messages when asking for specific
+Multi-Instance Objects that don’t exist</li>
+<li>Clarifies some behavior when responding via USP Records</li>
+<li>Updates message flow diagrams to remove the implication of ordered
+responses</li>
+<li>Adds new requirement R-SEC.4b for Trusted Brokers</li>
+</ul>
+<h3 id="usp-protocol-buffers-schemas">USP Protocol Buffers Schemas</h3>
+<p>USP v1.3 Record Schema * Adds UDSConnectRecord</p>
+<p>USP v1.3 Message Schema * Adds Register and Deregister messages</p>
+<h2 id="release-1.2tr-369-amendment-2">2022-01-27: <a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf">Release
+1.2</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.2.0">v1.2.0</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.2.0">v1.2.0</a>
+(data models)</em></p>
+<h3 id="tr-369-document-1">TR-369 Document</h3>
+<p>Release contains specification for the User Services Platform 1.2</p>
+<ul>
+<li>Clarify the expected responses in result of an <code>Operate</code>
+message (R-OPR.4)</li>
+<li>Deprecates the use of COAP as an MTP</li>
+<li>GetSupportedDM
+<ul>
+<li>now provides the data types for parameter values</li>
+<li>now allows the Agent to provide information about whether or not it
+will ignore ValueChange subscriptions on a given parameter</li>
+<li>now provides information about whether a command is synchronous
+vs. asynchronous</li>
+<li>now allows requests on specific object instances and handles
+divergent data models</li>
+</ul></li>
+<li>Defines discovery mechanisms for Endpoints connected to STOMP and
+MQTT brokers</li>
+<li>Clarifies the use of search paths vs. unique key addressing in the
+Add message</li>
+<li>Clarifies the use of required parameters and defaults for unique
+keys in the Add message</li>
+<li>Annex A
+<ul>
+<li>now provides a theory of operations for use of the USPEventNotif
+mechanism for bulk data collection using the Push! event</li>
+<li>defines a new bulk data collection over MQTT mechanism</li>
+</ul></li>
+<li>DHCP discovery mechanism now provides a Controller Endpoint ID to
+the Agent</li>
+<li>Enhances ease of use and clarifies requirements for use of TLS in
+USP Record integrity</li>
+<li>New USP records
+<ul>
+<li>adds USP connect and disconnect records for use independent of
+MTP</li>
+<li>adds USP Record specific error mechanism and error codes</li>
+<li>MQTT and STOMP no longer silently drop errors; they now report
+errors in the USP Record.</li>
+<li>USP Records can now include an empty payload</li>
+</ul></li>
+<li>Get requests
+<ul>
+<li>can now include a max_depth flag to limit response size</li>
+<li>Get response format has been clarified to return separate elements
+for sub-object</li>
+</ul></li>
+<li>Clarifies the requirements around processing an entire message in
+the event of a failed operation when allow_partial is true vs.
+false</li>
+<li>Clarifies the response behavior for Get, Set, and Delete when using
+a path that matches no instances</li>
+<li>Fixes and enhances the use of error codes for the Operate
+message</li>
+<li>Clarifies and updates Controller credential/authentication theory of
+operations and flow diagrams</li>
+<li>Clarifies the use of subjectAltName in certificates</li>
+<li>Clarifies R-E2E.4</li>
+<li>Deprecated and Obsolete terms are now defined in the References and
+Terminology section</li>
+<li>Updated R-E3E.43</li>
+<li>Deprecates R-MSG.2</li>
+<li>Deprecates R-E2E.2</li>
+<li>R-E2E.42 now makes TLS renegotiation forbidden</li>
+<li>Modifies R-NOT.9 and adds R-NOT.10 adjusting how the Agent and
+Controller should handle the subscription_id field</li>
+</ul>
+<p>Corresponds to <a
+href="https://github.com/BroadbandForum/data-model-template/releases/tag/v1.11.0">TR-106
+Amendment 11</a> and <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.2.0">TR-181
+Issue 2 Amendment 15</a></p>
+<h3 id="usp-protocol-buffers-schemas-1">USP Protocol Buffers
+Schemas</h3>
+<p>USP v1.2 Record Schema * Added Connect and Disconnect Record
+Types</p>
+<p>USP v1.2 Message Schema * Added max_depth as a new input argument to
+the Get message * Enhanced the GetSupportedDM response to allow return
+of parameter types, parameters that will be ignored for value change
+notifications, divergent object paths, and command types</p>
+<h2 id="release-1.1.4">2020-11-18: Release 1.1.4</h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.1.2">v1.1.2</a>
+(USP specification didn’t change), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.2">v1.1.2</a>
+(data models didn’t change)</em></p>
+<p>Corresponds to <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.4">TR-181
+Issue 2 Amendment 14 Corrigendum 1</a></p>
+<h2 id="release-1.1.3">2020-11-05: Release 1.1.3</h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.1.2">v1.1.2</a>
+(USP specification didn’t change), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.2">v1.1.2</a>
+(data models didn’t change)</em></p>
+<p>Corresponds to <a
+href="https://github.com/BroadbandForum/data-model-template/releases/tag/v1.10.0">TR-106
+Amendment 10</a> and <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.3">TR-181
+Issue 2 Amendment 14</a></p>
+<h2 id="release-1.1.2">2020-08-04: Release 1.1.2</h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.1.2">v1.1.2</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.2">v1.1.2</a>
+(data models)</em></p>
+<p>Clarifies several examples, requirements, and error types</p>
+<h2 id="release-1.1.1">2020-04-06: Release 1.1.1</h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.1.0">v1.1.0</a>
+(USP specification didn’t change), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.0">v1.1.0</a>
+(data models didn’t change)</em></p>
+<p>Regenerated data model HTML using fixed version of the BBF report
+tool</p>
+<h2 id="release-1.1tr-369-amendment-1">2019-10-18: <a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf">Release
+1.1</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.1.0">v1.1.0</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.0">v1.1.0</a>
+(data models)</em></p>
+<h3 id="tr-369-document-2">TR-369 Document</h3>
+<p>Release contains specification for the User Services Platform 1.1</p>
+<ul>
+<li>Adds MQTT support as a Message Transfer Protocol</li>
+<li>Adds a theory of operations for IoT control using USP Agents</li>
+<li>Clarifications on protocol functions, error messages, and updates to
+examples</li>
+</ul>
+<p>Corresponds to <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.0">TR-181
+Issue 2 Amendment 13</a></p>
+<h3 id="usp-protocol-buffers-schemas-2">USP Protocol Buffers
+Schemas</h3>
+<p>USP v1.1 Record Schema (no changes from v1.0)</p>
+<p>USP v1.1 Message Schema (no changes from v1.0)</p>
+<h2 id="release-1.0.2tr-369-corrigendum-2">2018-11-01: <a
+href="https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf">Release
+1.0.2</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.0.2">v1.0.2</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.0.2">v1.0.2</a>
+(data models)</em></p>
+<h3 id="tr-369-document-3">TR-369 Document</h3>
+<ul>
+<li>Typographical and example fixes</li>
+</ul>
+<h2 id="release-1.0.1tr-369-corrigendum-1">2018-08-02: <a
+href="https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf">Release
+1.0.1</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.0.1">v1.0.1</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.0.1">v1.0.1</a>
+(data models)</em></p>
+<h3 id="tr-369-document-4">TR-369 Document</h3>
+<ul>
+<li>Added examples and clarifications to end-to-end messaging, use of
+endpoint ID, typographical fixes</li>
+</ul>
+<h2 id="release-1.0tr-369-issue-1">2018-04-17: <a
+href="https://www.broadband-forum.org/download/TR-369_Issue-1.pdf">Release
+1.0</a></h2>
+<p><em>Tags: <a
+href="https://github.com/BroadbandForum/usp/releases/tag/v1.0.0">v1.0.0</a>
+(USP specification), <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.0.0">v1.0.0</a>
+(data models)</em></p>
+<h3 id="tr-369-document-5">TR-369 Document</h3>
+<p>Release contains specification for the User Services Platform 1.0</p>
+<p>Corresponds to <a
+href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.0.0">TR-181
+Issue 2 Amendment 12</a></p>
+<h3 id="usp-protocol-buffers-schemas-3">USP Protocol Buffers
+Schemas</h3>
+<p>USP v1.0 Record Schema</p>
+<p>USP v1.0 Message Schema</p>

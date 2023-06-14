@@ -1,0 +1,374 @@
+name: WT-369
+
+title: The User Services Platform
+
+shorttitle: User Services Platform
+
+shortertitle: USP specification
+
+tagline: |
+  A standardized protocol to manage, monitor, update, and control
+  connected devices, IoT endpoints, user services and home networks
+
+summary: |
+  See <https://usp.technology> for the current USP specification.
+
+description: |
+  ## What is USP?
+
+  The **User Services Platform** is a standardized **protocol for managing,
+  monitoring, upgrading, and controlling connected devices**. USP allows
+  service providers, consumer electronics manufacturers, and end users to:
+
+  * Create interoperable and vendor-independent **managed Wi-Fi systems**.
+  * Perform **lifecycle management** of consumer connected devices and
+    containerized microservices.
+  * Support **independent applications** for application-enabled services
+    gateways.
+  * Enable **IoT and consumer electronics upgradability** for critical
+    security patches.
+  * Develop applications that gather the telemetry necessary to **mass data
+    processing, AI, and machine learning**.
+  * **Bootstrap and configure** newly installed or purchased devices and
+    applications.
+  * Let customer support **monitor and troubleshoot** connected devices,
+    services, and home network links.
+  * Easily map the home network to **control service quality and monitor
+    threats**.
+  * Securely **control IoT, smart home, and smart networking functions**
+    locally or from the Cloud.
+  * **Enable multi-tenant** (i.e., multi-stakeholder) management and control.
+
+  USP represents the natural evolution of the Broadband Forum's [CPE WAN
+  Management Protocol (CWMP)](http://www.broadband-forum.org/cwmp), commonly
+  known as TR-069. It uses an expanded version of the Device:2 Data Model to
+  represent device operations (firmware upgrades, reboots, etc.), network
+  interfaces, and service functions (IoT functions, VoIP, etc.).
+
+reponame: usp
+
+website: https://usp.technology
+
+resources:
+  specification:
+    title: TR-369 Document
+  usp-record-schema:
+    title: &usp-schema-title USP Protocol Buffers Schemas
+    restype: schema
+  usp-msg-schema:
+    title: *usp-schema-title
+    restype: schema
+
+versions:
+  v1.3.0:
+    date: 2023-06-14
+    title: |
+      [Release 1.3][TR-369 Amendment 3]
+    depends-on:
+      usp-data-models: v1.3.0
+    changes:
+      specification:
+        text: |
+          Release contains the specification for the User Services Platform 1.3
+
+          * Adds Appendix VI, "Software Modularization and USP-Enabled
+            Applications Theory of Operation"
+          * Adds new Unix Domain Socket MTP
+          * Adds two new messages, "Register" and "Deregister", and associated
+            error codes (primarily for use with Appendix VI but can be
+            used in many scenarios)
+          * Adds new Software Module Management features
+          * Adds a note about the use of the new TriggerAction parameter in
+            Subscription objects
+          * Updates "Authentication and Authorization" to include the use of
+            new SecuredRole
+          * Updates the Add message to allow for Search Paths and clarifies the
+            application of permissions during Add messages
+          * Obsoletes CoAP as an MTP
+          * Adds two new requirements regarding Unique Key immutability
+          * Clarifies how Set should respond when using a Search Path where one
+            or more objects fail to update
+          * Updates the use of EndpointID in WebSocket arguments
+            and adds an fqdn authority scheme
+          * Addesses a potential attack vector with using MQTT, and updates other
+            MQTT behavior
+          * Updates Annex A to explain use of the "Exclude" parameter
+          * Updates Discovery to include the use of DHCP options for agent-device
+            association
+          * Adds a note about USP protocol versioning and Controller/Agent
+            behavior
+          * Clarifies and updates the use of certain error codes
+          * Clarifies the behavior of Get messages when asking for specific
+            Multi-Instance Objects that don't exist
+          * Clarifies some behavior when responding via USP Records
+          * Updates message flow diagrams to remove the implication of ordered
+            responses
+          * Adds new requirement R-SEC.4b for Trusted Brokers
+      usp-record-schema:
+        resname: usp-record-1-3.proto
+        text: |
+          USP v1.3 Record Schema
+          * Adds UDSConnectRecord
+      usp-msg-schema:
+        resname: usp-msg-1-3.proto
+        text: |
+          USP v1.3 Message Schema
+          * Adds Register and Deregister messages
+  v1.2.0:
+    date: 2022-01-27
+    title: |
+      [Release 1.2][TR-369 Amendment 2]
+    depends-on:
+      usp-data-models: v1.2.0
+    changes:
+      specification:
+        text: |
+          Release contains specification for the User Services Platform 1.2
+
+          * Clarify the expected responses in result of an `Operate` message
+            (R-OPR.4)
+          * Deprecates the use of COAP as an MTP
+          * GetSupportedDM
+            - now provides the data types for parameter values
+            - now allows the Agent to provide information about whether or not
+              it will ignore ValueChange subscriptions on a given parameter
+            - now provides information about whether a command is synchronous
+              vs. asynchronous
+            - now allows requests on specific object instances and handles
+              divergent data models
+          * Defines discovery mechanisms for Endpoints connected to STOMP and
+            MQTT brokers
+          * Clarifies the use of search paths vs. unique key addressing in the
+            Add message
+          * Clarifies the use of required parameters and defaults for unique
+            keys in the Add message
+          * Annex A
+            - now provides a theory of operations for use of the USPEventNotif
+              mechanism for bulk data collection using the Push! event
+            - defines a new bulk data collection over MQTT mechanism
+          * DHCP discovery mechanism now provides a Controller Endpoint ID to
+            the Agent
+          * Enhances ease of use and clarifies requirements for use of TLS in
+            USP Record integrity
+          * New USP records
+            - adds USP connect and disconnect records for use independent of
+              MTP
+            - adds USP Record specific error mechanism and error codes
+            - MQTT and STOMP no longer silently drop errors; they now report
+              errors in the USP Record.
+            - USP Records can now include an empty payload
+          * Get requests
+            - can now include a max_depth flag to limit response size
+            - Get response format has been clarified to return separate
+              elements for sub-object
+          * Clarifies the requirements around processing an entire message in
+            the event of a failed operation when allow_partial is true vs.
+            false
+          * Clarifies the response behavior for Get, Set, and Delete when
+            using a path that matches no instances
+          * Fixes and enhances the use of error codes for the Operate message
+          * Clarifies and updates Controller credential/authentication theory
+            of operations and flow diagrams
+          * Clarifies the use of subjectAltName in certificates
+          * Clarifies R-E2E.4
+          * Deprecated and Obsolete terms are now defined in the References and
+            Terminology section
+          * Updated R-E3E.43
+          * Deprecates R-MSG.2
+          * Deprecates R-E2E.2
+          * R-E2E.42 now makes TLS renegotiation forbidden
+          * Modifies R-NOT.9 and adds R-NOT.10 adjusting how the Agent and
+            Controller should handle the subscription_id field
+
+          Corresponds to
+          [TR-106 Amendment 11](https://github.com/BroadbandForum/\
+                  data-model-template/releases/tag/v1.11.0) and
+          [TR-181 Issue 2 Amendment 15](https://github.com/BroadbandForum/\
+                  usp-data-models/releases/tag/v1.2.0)
+      usp-record-schema:
+        resname: usp-record-1-2.proto
+        text: |
+          USP v1.2 Record Schema
+          * Added Connect and Disconnect Record Types
+      usp-msg-schema:
+        resname: usp-msg-1-2.proto
+        text: |
+          USP v1.2 Message Schema
+          * Added max_depth as a new input argument to the Get message
+          * Enhanced the GetSupportedDM response to allow return of parameter
+            types, parameters that will be ignored for value change
+            notifications, divergent object paths, and command types
+
+  v1.1.4:
+    date: 2020-11-18
+    title: Release 1.1.4
+    depends-on:
+      usp-data-models: v1.1.4
+    changes: |
+      Corresponds to [TR-181 Issue 2 Amendment 14 Corrigendum 1]\
+      (https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.4)
+
+  v1.1.3:
+    date: 2020-11-05
+    title: Release 1.1.3
+    depends-on:
+      usp-data-models: v1.1.3
+    changes: |
+      Corresponds to [TR-106 Amendment 10](https://github.com/BroadbandForum/\
+      data-model-template/releases/tag/v1.10.0) and
+      [TR-181 Issue 2 Amendment 14](https://github.com/BroadbandForum/\
+      usp-data-models/releases/tag/v1.1.3)
+
+  v1.1.2:
+    date: 2020-08-04
+    title: Release 1.1.2
+    depends-on:
+      usp-data-models: v1.1.2
+    changes: |
+      Clarifies several examples, requirements, and error types
+
+  v1.1.1:
+    date: 2020-04-06
+    title: Release 1.1.1
+    depends-on:
+      usp-data-models: v1.1.1
+    changes: |
+      Regenerated data model HTML using fixed version of the BBF report tool
+
+  v1.1.0:
+    date: 2019-10-18
+    title: |
+      [Release 1.1][TR-369 Amendment 1]
+    depends-on:
+      usp-data-models: v1.1.0
+    changes:
+      specification:
+        text: |
+          Release contains specification for the User Services Platform 1.1
+
+          * Adds MQTT support as a Message Transfer Protocol
+          * Adds a theory of operations for IoT control using USP Agents
+          * Clarifications on protocol functions, error messages, and updates
+            to examples
+
+          Corresponds to [TR-181 Issue 2 Amendment 13](https://github.com/\
+          BroadbandForum/usp-data-models/releases/tag/v1.1.0)
+      usp-record-schema:
+        resname: usp-record-1-1.proto
+        text: |
+          USP v1.1 Record Schema (no changes from v1.0)
+      usp-msg-schema:
+        resname: usp-msg-1-1.proto
+        text: |
+          USP v1.1 Message Schema (no changes from v1.0)
+
+  v1.0.2:
+    date: 2018-11-01
+    title: |
+      [Release 1.0.2][TR-369 Corrigendum 2]
+    depends-on:
+      usp-data-models: v1.0.2
+    changes:
+      specification: |
+        * Typographical and example fixes
+
+  v1.0.1:
+    date: 2018-08-02
+    title: |
+      [Release 1.0.1][TR-369 Corrigendum 1]
+    depends-on:
+      usp-data-models: v1.0.1
+    changes:
+      specification: |
+        * Added examples and clarifications to end-to-end messaging, use of
+          endpoint ID, typographical fixes
+
+  v1.0.0:
+    date: 2018-04-17
+    title: |
+      [Release 1.0][TR-369 Issue 1]
+    depends-on:
+      usp-data-models: v1.0.0
+    changes:
+      specification:
+        text: |
+          Release contains specification for the User Services Platform 1.0
+
+          Corresponds to [TR-181 Issue 2 Amendment 12](https://github.com/\
+          BroadbandForum/usp-data-models/releases/tag/v1.0.0)
+      usp-record-schema:
+        resname: usp-record-1-0.proto
+        text: |
+          USP v1.0 Record Schema
+      usp-msg-schema:
+        resname: usp-msg-1-0.proto
+        text: |
+          USP v1.0 Message Schema
+
+# XXX these are USP-style editors; are they appropriate here?
+editors:
+  - name: Barbara Stark
+    company: AT&T
+    email: barbara.stark@att.com
+    role: Editor/USP Project Lead
+
+  - name: Tim Spets
+    company: Assia
+    email: tspets@assia-inc.com
+    role: Editor/USP Project Lead
+
+  - name: Jason Walls
+    company: QA Cafe, LLC
+    email: jason@qacafe.com
+    role: Editor/Broadband User Services Work Area Director
+
+  - name: John Blackford
+    company: Commscope
+    email: john.blackford@commscope.com
+    role: Editor/Broadband User Services Work Area Director
+
+# XXX these are USP-style acknowledgments; are they appropriate here?
+acknowledgments:
+  - name: Jean-Didier Ott
+    company: Orange
+    email: jeandidier.ott@orange.com
+
+  - name: Timothy Carey
+    company: Nokia
+    email: timothy.carey@nokia.com
+
+  - name: Steven Nicolai
+    company: Arris
+    email: Steven.Nicolai@arris.com
+
+  - name: Apostolos Papageorgiou
+    company: NEC
+    email: apostolos.Papageorgiou@neclab.eu
+
+  - name: Mark Tabry
+    company: Google
+    email: mtab@google.com
+
+  - name: Klaus Wich
+    company: Huawei
+    email: klaus.wich@huawei.com
+
+  - name: Daniel Egger
+    company: Axiros
+    email: daniel.egger@axiros.com
+
+  - name: Bahadir Danisik
+    company: Nokia
+    email: bahadir.danisik@nokia.com
+
+  - name: William Lupton
+    company: Broadband Forum
+    email: wlupton@broadband-forum.org
+
+  - name: Matthieu Anne
+    company: Orange
+    email: matthieu.anne@orange.com
+
+  - name: Thales Fragoso
+    company: Axiros
+    email: thales.fragoso@axiros.com

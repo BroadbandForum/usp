@@ -1,0 +1,64 @@
+# JSON pandoc defaults file (YAML)
+
+# XXX environment variable substitution only works for file paths, and doesn't
+#     work for PDF engine options, so in fact we preprocess this file to
+#     substitute ../../../install/pandoc/ etc.
+
+from: markdown-raw_html
+
+strip-comments: true
+
+metadata-files:
+  - bbf-metadata.yaml
+
+# XXX the resource path includes the data directory but this is only intended
+#     for bibliography files, which surely should be searched for in the data
+#     directory? it also includes PROJECTYAMLTARGETDIR for PROJECT.yaml build
+#     products and TARGETDIR for regular build products
+resource-path:
+  - .
+  - ../docs
+  - ../docs/faq
+  - ../../../install/pandoc//csl
+  - ../../../install/pandoc//css
+  - ../../../install/pandoc//markdown
+
+filters:
+  # XXX remove-toc-token.lua is barely worth it
+  - remove-toc-token.lua
+  - add-description.lua
+  - expand-macros.lua
+  - pandoc-include-basic.lua
+  - expand-macros.lua
+  - list-table.lua
+  # XXX expand-divs.lua is obsolete and should be retired
+  - expand-divs.lua
+  - code-block-filters.lua
+  - auto-identifiers.lua
+  - pandoc-crossref-basic.lua
+  - special-headers.lua
+  - auto-references.lua
+  - citeproc
+  - add-hyperlinks.lua
+  - save-metadata.lua
+
+# metadata values specified here are parsed as literal strings, not markdown
+metadata:
+
+  # these are auto-generated from the corresponding DM XML and IETF bibxml
+  # files (the order only matters if there are conflicts, so the supposedly
+  # more definitive definitions are listed last)
+  bibliography:
+    - tr-069-biblio-csl.json
+    - ansi-biblio-csl.json
+    - iso-biblio-csl.json
+    - w3c-biblio-csl.json
+    - 3gpp-biblio-csl.json
+    - ieee-biblio-csl.json
+    - ietf-biblio-csl.json
+    - itu-biblio-csl.json
+
+  citation-style: bbf.csl
+
+  # this can be passed to filters, which can add it to PYTHONPATH
+  PYTHONDIR: ../../../install/pandoc//../python

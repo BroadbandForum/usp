@@ -1,6 +1,8 @@
-## CoAP Binding (DEPRECATED)
+## CoAP Binding (OBSOLETED)
 
 *Note: The CoAP MTP was deprecated in USP 1.2. Due to the way it is specified this MTP can only be used in local area networks under narrow conditions. Please see @sec:websocket for a suitable alternative.*
+
+*Note: The CoAP MTP was obsoleted in USP 1.3 as a natural progression from being deprecated in USP 1.2.*
 
 The Constrained Application Protocol (CoAP) MTP transfers USP Records between USP Endpoints using the CoAP protocol as defined in RFC 7252 [@RFC7252]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP Records between USP Endpoints.
 

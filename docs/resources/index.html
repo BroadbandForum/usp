@@ -4,26 +4,239 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="generator" content="pandoc"/>
-  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks"/>
-  <meta name="theme-color" content="#157878"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>BBF – TR-369a2 – User Services Platform (USP)</title>
+  <meta name="description" content="TR-369 – The User Services Platform:
+A standardized protocol to manage, monitor, update, and control
+connected devices, IoT endpoints, user services and home networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <title>BBF – TR-369 – The User Services Platform</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="github.css"/>
   <link rel="stylesheet" href="extra.css"/>
   <link rel="stylesheet" href="release.css"/>
+  <!-- Automatic hover links scripts -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var hoverlink = null;
+
+    var elems = document.querySelectorAll('.auto-hoverlink:not(section)');
+      for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+
+        elem.addEventListener('mouseenter', event => {
+          var target = event.target;
+          var info_attr = target.attributes.getNamedItem('data-info');
+          var anchor_attr = target.attributes.getNamedItem('data-anchor');
+          var thing = info_attr ? info_attr.value : target.localName
+          /* we check the parent to cover the case where pandoc has moved the
+             id from a header to its parent section */
+          var anchor = target.id || target.parentElement.id ||
+                                    (anchor_attr ? anchor_attr.value : null);
+
+          if (hoverlink) {
+            hoverlink.remove();
+            hoverlink = null;
+          }
+
+          if (!anchor) {
+              console.warn('%s %s has no id or data-anchor',
+                           thing, target.textContent);
+          } else {
+            hoverlink = document.createElement('a');
+            hoverlink.href = '#' + anchor;
+            hoverlink.className = 'hoverlink';
+            hoverlink.title = 'Permalink to this ' + thing;
+            target.appendChild(hoverlink);
+          }
+        });
+
+        elem.addEventListener('mouseleave', () => {
+          if (hoverlink) {
+            setTimeout(function(href) {
+              if (hoverlink && hoverlink.href == href) {
+                hoverlink.remove();
+                hoverlink = null;
+              }
+            }, 1000, hoverlink.href);
+          }
+        });
+      }
+  });
+  </script>
+  <!-- Automatic hover links styles -->
+  <style>
+  :root {
+      --hoverlink-size: 0.9em;
+  }
+
+  .hoverlink {
+      text-decoration: none;
+  }
+
+  .hoverlink::before {
+      content: " ";
+  }
+
+  .hoverlink::after {
+      display: inline-block;
+      content: "";
+      width: var(--hoverlink-size);
+      height: var(--hoverlink-size);
+      background-size: var(--hoverlink-size) var(--hoverlink-size);
+      /* https://icon-library.com/images/permalink-icon/permalink-icon-17.jpg
+         (resized from 512x512 to 64x64) */
+      background-image: url(permalink.png);
+  }
+  </style>
+  <!-- Automatic sections scripts -->
+  <script>
+  /* 1. Find all sections, i.e., elements with class "new-section"
+     2. If a section has no id (shouldn't happen), auto-assign one
+     3. For each element with an id, set "data-section" to its section id
+     4. For each internal link, similarly set "data-section" to its section id
+   */
+  window.addEventListener('DOMContentLoaded', () => {
+      var target_sections = new Map();
+      var sections = document.getElementsByClassName('new-section');
+      for (var i = 0; i < sections.length; i++) {
+          var section = sections[i];
+          if (!section.id) {
+              section.id = 'section-' + i;
+          }
+          target_sections.set(section.id, section.id);
+          section.setAttribute('data-section', section.id)
+          var targets = section.querySelectorAll('[id]');
+          for (var j = 0; j < targets.length; j++) {
+              var target = targets[j];
+              target_sections.set(target.id, section.id);
+              target.setAttribute('data-section', section.id)
+          }
+      }
+
+      var doc_url = new URL(document.URL);
+      var links = document.querySelectorAll('a[href]');
+      var warned = new Map()
+      for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          var url = new URL(link.href, document.URL);
+          if (url.hostname == doc_url.hostname &&
+              url.pathname == doc_url.pathname && url.hash) {
+              var href = url.hash.substring(1);
+              var section_id = target_sections.get(href)
+              if (!section_id) {
+                  if (!warned.get(href)) {
+                      console.warn("href %s undefined or not within a section",
+                                   href);
+                      warned.set(href, true);
+                  }
+              } else {
+                  link.setAttribute('data-section', section_id);
+              }
+          }
+      }
+  });
+
+  /* Create a new scope to avoid using a global variable */
+  (function() {
+
+      /* Show the section with the given id, which is assumed to be valid */
+      function show_section(section_id) {
+          var section = document.getElementById(section_id);
+
+          /* The "cover-only" class indicates elements that should only be
+             shown when the cover page section is shown */
+          var cover_onlys = document.getElementsByClassName('cover-only');
+          if (section) {
+              for (var i = 0; i < cover_onlys.length; i++) {
+                  var cover_only = cover_onlys[i];
+                  if (section_id != 'sec:cover-page') {
+                      cover_only.classList.add('hidden')
+                  } else {
+                      cover_only.classList.remove('hidden')
+                  }
+              }
+          }
+
+          /* Hide all sections, then un-hide this one */
+          var sections = document.getElementsByClassName('new-section');
+          for (var i = 0; i < sections.length; i++) {
+              sections[i].classList.add('hidden');
+          }
+          section.classList.remove('hidden')
+      }
+
+      /* Add click events to all links, using the "data-section" attribute
+         (set earlier) to show the associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var links = document.querySelectorAll('a[data-section]');
+          for (var i = 0; i < links.length; i++) {
+              links[i].addEventListener('click', event => {
+                  var link = event.currentTarget;
+                  var section_id = link.attributes['data-section'].value;
+                  show_section(section_id);
+              });
+          }
+      });
+
+      /* Ensure that loading the page with a URL fragment (hash) will show the
+         associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var url = new URL(document.URL);
+          if (url.hash.length > 1) {
+              var href = url.hash.substring(1);
+              var target = document.getElementById(href);
+              if (!target) {
+                  var fallback = 'sec:executive-summary';
+                  console.warn("target %s undefined; falling back on %s",
+                               href, fallback);
+                  href = fallback;
+                  target = document.getElementById(href);
+                  if (!target) {
+                      var fallback = 'sec:cover-page';
+                      console.warn("target %s undefined; falling back on %s",
+                                   href, fallback);
+                      href = fallback;
+                      target = document.getElementById(href);
+                  }
+              }
+              if (!target) {
+                  console.warn("target %s undefined", href);
+              } else {
+                  var section_id = target.attributes['data-section'].value;
+                  if (!section_id) {
+                      console.warn("target %s not within a section", href);
+                  } else {
+                      show_section(section_id);
+                  }
+              }
+          }
+      });
+
+  /* End of new scope */
+  })();
+  </script>
+  <!-- Automatic sections styles -->
+  <style>
+  h1.cover-page, .hidden, aside.footnotes-end-of-document {
+      display: none;
+  }
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  <!-- XXX header includes are included just before the ToC (below) -->
 </head>
 
 <body>
@@ -34,52 +247,130 @@
         The User Services Platform
       </a>
     </h1>
-    <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks</h2>
+    <h2 class="project-tagline">A standardized protocol to manage,
+monitor, update, and control connected devices, IoT endpoints, user
+services and home networks</h2>
     <p></p>
     <p></p>
     <div class="project-buttons">
-      <a class="btn" href="../specification/index.html" title="USP Specification">Specification</a>
-      <a class="btn" href="../specification/index.htm" title="USP Specification Single-file HTML">HTML</a>
-      <a class="btn" href="../specification/index.pdf" title="USP Specification PDF">PDF</a>
-      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP Data Models">Data Models</a>
-      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP Test Plan">Test Plan</a>
-      <a class="btn" href="../resources/01-index-usp-development-resources.html" title="USP Development Resources">Resources</a>
-      <a class="btn" href="../faq/01-index-faq.html" title="USP Frequently Asked Questions">FAQ</a>
+      <a class="btn" href="../specification/index.html" title="USP
+Specification">Specification</a>
+      <a class="btn" href="../specification/index.htm" title="USP
+Specification Single-file HTML">HTML</a>
+      <a class="btn" href="../specification/index.pdf" title="USP
+Specification PDF">PDF</a>
+      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP
+Data Models">Data Models</a>
+      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP
+Test Plan">Test Plan</a>
+      <a class="btn" href="../resources/index.html#sec:executive-summary" title="USP
+Development Resources">Resources</a>
+      <a class="btn" href="../faq/index.html#sec:executive-summary" title="USP
+Frequently Asked Questions">FAQ</a>
     </div>
   </section>
 
   <section class="main-content">
-
-    <header id="title-block-header">
-      <h1 class="title">TR-369a2 – User Services Platform (USP)</h1>
-      <p class="subtitle">Issue: 1 Amendment 2 <span class="release"></span></p>
-      <p class="date">Issue Date: January 2022</p>
+    <header id="title-block-header" class="cover-only">
+      <h1 class="title auto-hoverlink" id="title">TR-369 – The User
+Services Platform</h1>
+      <p class="subtitle">Issue: 1 Amendment 3 <span
+class="release"></span></p>
+      <p class="date">Issue Date: June 2023</p>
     </header>
-  <h3 class="unnumbered unlisted" id="table-of-contents">Table of Contents<a class="headerlink" href="01-index-usp-development-resources.html#table-of-contents" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
-
-  <nav>
-  <ul>
-    <li><a href="01-index-usp-development-resources.html#sec:usp-development-resources">USP Development Resources</a></li>
-    <ul>
-      <li><a href="01-index-usp-development-resources.html#sec:bbf-members-only-resources">BBF Members only resources</a></li>
-    </ul>
-  </ul>
-  </nav>
-
-
-    <div style="clear: both;"/>
+    <nav id="TOC" class="cover-only" role="doc-toc">
+      <h2 id="toc-title">Table of Contents</h2>
+<ul>
+<li><a href="#sec:cover-page" id="toc-sec:cover-page">Cover
+Page</a></li>
+<li><a href="#sec:executive-summary" id="toc-sec:executive-summary">USP
+Development Resources</a>
+<ul>
+<li><a href="#sec:bbf-members-only-resources"
+id="toc-sec:bbf-members-only-resources">BBF Members only
+resources</a></li>
+</ul></li>
+</ul>
+    </nav>
+<section id="sec:cover-page" class="cover-page unnumbered new-section">
+<h1 class="cover-page unnumbered">Cover Page</h1>
+</section>
+<section id="sec:executive-summary"
+class="unnumbered auto-hoverlink new-section hidden" data-info="header">
+<h1 class="unnumbered auto-hoverlink" data-info="header">USP Development
+Resources</h1>
+<ul>
+<li><a href="#sec:bbf-members-only-resources">BBF Members only
+resources</a></li>
+</ul>
+<p>In addition to the TR-369 specification and data models, a number of
+resources are available to those building and deploying USP based
+solutions.</p>
+<ul>
+<li><p><strong><a
+href="https://github.com/BroadbandForum/obuspa">OB-USP-Agent</a></strong>
+- This is the official Open Broadband project, operated by the Broadband
+Forum, for an open- source reference implementation of a USP
+Agent.</p></li>
+<li><p><strong><a
+href="https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification">BBF.369
+USP Agent Certification Program</a></strong> - Here you can learn how to
+get your products tested and listed as certified for use with
+USP.</p></li>
+<li><p><strong><a href="../specification/usp-record-1-3.proto">USP
+Record Protocol Buffers Schema</a></strong> - A direct link to the USP
+specification’s protocol buffers schema for USP Records.</p></li>
+<li><p><strong><a href="../specification/usp-msg-1-3.proto">USP Message
+Protocol Buffers Schema</a></strong> - A direct link to the USP
+specification’s protocol buffers schema for USP Messages contained in
+USP Records.</p></li>
+<li><p><strong><a
+href="https://github.com/BroadbandForum/usp/blob/master/api/swagger-usp-controller-v1.yaml">Controller
+REST API definition</a></strong> - A direct link to the USP Controller’s
+REST API definition, which can also be opened in a Swagger / Open API
+viewer or editor (such as <a
+href="https://editor.swagger.io">editor.swagger.io</a>).</p></li>
+<li><p><strong><a
+href="https://github.com/BroadbandForum/usp/tree/master/mtp-proxy">MTP
+Proxy</a></strong> - The direct link to the MTP Proxy python code that
+is used as a reference implementation for proxying between USP
+Controllers and USP Agents that utilize different MTPs.</p></li>
+<li><p><strong><a
+href="https://github.com/BroadbandForum/cwmp-xml-tools/wiki/Report-Tool">Data
+Model Report Tool</a></strong> - The Broadband Forum’s tool for
+validating XML used to build CWMP and USP data models and device type
+definitions, as well as producing HTML reports of a data model.</p></li>
+</ul>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:bbf-members-only-resources">BBF Members only resources</h2>
+<p>The following resources are accessible to Broadband Forum
+members:</p>
+<ul>
+<li><a
+href="https://wiki.broadband-forum.org/display/BBF/User+Services+Platform+Project+Stream">USP
+Project Wiki</a></li>
+<li><a href="https://issues.broadband-forum.org/projects/USP/">USP Jira
+Issues</a></li>
+<li><a
+href="https://code.broadband-forum.org/projects/USP/repos/wt-369/browse">USP
+Development Area</a></li>
+<li><a href="https://broadband-forum.slack.com/archives/C017V6HCYMN">USP
+channel on BBF Slack</a></li>
+</ul>
+</section>
+    <div style="clear: both;"></div>
     <footer class="site-footer">
-
       <span class="site-footer-owner">
         USP is developed and maintained
         by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
-        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+        &copy; The Broadband Forum 2023</a>. All Rights Reserved.
       </span>
       <span class="site-footer-credits">
         This page was generated by <a href="https://pandoc.org">pandoc</a>
         and <a href="https://pages.github.com">GitHub Pages</a>.
-        View the <a href="https://github.com/BroadbandForum/usp">specification source on GitHub</a>.
-        <span class="release"/>
+        View the <a href="https://github.com/BroadbandForum/usp">specification
+source on GitHub</a>.
+        <span class="release"></span>
       </span>
     </footer>
   </section>

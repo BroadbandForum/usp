@@ -1,6 +1,4 @@
-/* BBF CSS to be used in addition to baseline CSS */
-
-/* experimental sidebar ToC placement */
+/* BBF ToC (table of contents) CSS */
 
 :root {
     --toc-width: 15rem;
@@ -8,17 +6,34 @@
     --toc-padding-left: calc(var(--toc-width) + var(--toc-padding-left-extra));
 }
 
+/* these are pandoc's default ToC settings */
+#TOC li {
+    list-style: none;
+}
+
+#TOC ul {
+    padding-left: 1.3em;
+}
+
+#TOC > ul {
+    padding-left: 0;
+}
+
+#TOC a:not(:hover) {
+    text-decoration: none;
+}
+
 @media screen and (min-width: 924px) {
     body {
         padding-left: var(--toc-padding-left);
     }
 
-    #TOCFULL::before, #TOC::before {
+    #SIDEBAR::before {
         content: "Table of Contents";
         font-weight: bold;
     }
 
-    #TOCFULL, #TOC {
+    #SIDEBAR {
         position: fixed;
         margin: 0 0;
         top: 0px;
@@ -33,41 +48,41 @@
         border: 1px solid #73AD21;
     }
 
-    #TOCFULL ul, #TOC ul {
+    #SIDEBAR ul {
         margin: 0.35em 0;
         padding: 0 0 0 1em;
         list-style-type: none;
     }
 
-    #TOCFULL ul ul, #TOC ul ul {
+    #SIDEBAR ul ul {
         margin: 0.25em 0;
     }
 
-    #TOCFULL ul ul ul, #TOC ul ul ul {
+    #SIDEBAR ul ul ul {
         margin: 0.15em 0;
     }
 
-    #TOCFULL li p:last-child, #TOC li p:last-child {
+    #SIDEBAR li p:last-child {
         margin-bottom: 0;
     }
 
-    #TOCFULL {
+    #SIDEBAR {
         z-index: 2;
     }
 
-    #TOC {
-        z-index: 1;
+    #SIDEBAR a:not(:hover) {
+        text-decoration: none;
     }
 }
 
 @media screen and (max-width: 923px) {
-    #TOCFULL {
+    #SIDEBAR {
         display: none;
     }
 }
 
 @media not screen {
-    #TOCFULL {
+    #SIDEBAR {
         display: none;
     }
 }

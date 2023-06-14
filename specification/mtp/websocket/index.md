@@ -36,23 +36,25 @@ While WebSocket sessions can be established by either USP Controllers or USP Age
 
 During the establishment of the WebSocket session, the WebSocket client informs the WebSocket server in the `Sec-WebSocket-Protocol` header about the type of USP Records that will be exchanged across the established WebSocket connection. For USP Records, the `Sec-WebSocket-Protocol` header contains the value `v1.usp`.  When presented with a `Sec-WebSocket-Protocol` header containing `v1.usp`, the WebSocket Server serving a USP Endpoint returns `v1.usp` in the response's Sec-WebSocket-Protocol header. If the WebSocket client doesn't receive a `Sec-WebSocket-Protocol` header with a value of `v1.usp`, the WebSocket client does not establish the WebSocket session.
 
-When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the WebSocket Extension `bbf-usp-protocol` has been registered. The extension parameter of `eid` is defined for use with this extension. The value of the `eid` parameter will be the Endpoint ID of the Endpoint sending the WebSocket header.
-
-*Note: When using an Endpoint ID as the value of the `eid` parameter in the `Sec-WebSocket-Extensions` header, it will need to be in the `quoted-string` form as referenced in section 9 of RFC 6455 [@RFC6455].*
+When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the request URI of the opening handshake contains a `key=value` pair in its `query` component to provide the Endpoint ID of the client. `eid` is used as the key to the pair, while the value is the Endpoint ID of the client, e.g. `eid=doc::agent`.
 
 **[R-WS.9]{}** - The WebSocket's handshake `Sec-WebSocket-Protocol` header for exchange of USP Records using the protocol-buffers encoding mechanism MUST be `v1.usp`.
 
 **[R-WS.10]{}** - A WebSocket client MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when initiating a WebSocket session.
 
-**[R-WS.10a]{}** - A WebSocket client MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the client's Endpoint ID when initiating a WebSocket session.
+**[R-WS.10a]{}** (DEPRECATED) - A WebSocket client MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the client's Endpoint ID when initiating a WebSocket session.
+
+*Note: Requirement [R-WS.10a]() was removed in USP 1.3, due to the impossibility of setting WebSocket Extensions in some environments.*
+
+**[R-WS.10b]{}** - A WebSocket client MUST include its Endpoint ID, via a `key=value` pair, in the query component of the request URI in its opening handshake, defined in section 1.3 of RFC 6455 [@RFC6455]. The `key` part of the pair MUST have a value of `eid` and the `value` part MUST be the client's Endpoint ID. This pair MUST be separated from other query data by the `&` character.
 
 **[R-WS.11]{}** - A WebSocket server that supports USP Endpoints MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when responding to an initiation of a WebSocket session.
 
-**[R-WS.11a]{}** - A WebSocket server MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the server's Endpoint ID when responding to an initiation of a WebSocket session that includes the `bbf-usp-protocol` extension.
+**[R-WS.11a]{}** - A WebSocket server SHOULD include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the server's Endpoint ID when responding to an initiation of a WebSocket session that includes the `bbf-usp-protocol` extension.
 
-**[R-WS.11b]{}** - WebSocket clients SHOULD NOT consider WebSocket responses that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
+**[R-WS.11b]{}** - WebSocket clients MUST NOT consider WebSocket responses that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
 
-**[R-WS.11c]{}** - WebSocket servers SHOULD NOT consider WebSocket session initiation requests that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
+**[R-WS.11c]{}** - WebSocket servers MUST NOT consider WebSocket session initiation requests that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
 
 **[R-WS.12]{}** - A WebSocket client MUST NOT establish a WebSocket session if the response to a WebSocket session initiation request does not include the `Sec-WebSocket-Protocol` header for exchange of USP Records in response to an initiation of a WebSocket session.
 

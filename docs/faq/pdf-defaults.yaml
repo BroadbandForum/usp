@@ -1,0 +1,67 @@
+# PDF pandoc defaults file (YAML)
+
+# XXX environment variable substitution only works for file paths, and doesn't
+#     work for PDF engine options, so in fact we preprocess this file to
+#     substitute ../../../install/pandoc/ etc.
+
+standalone: true
+
+# wkhtmltopdf PDF generation uses the default HTML template
+
+# PDF generation requires valid paths at build time
+# (the make rules copy CSS files to TARGETDIR but we don't assume this here)
+css:
+  - ../../../install/pandoc//css/bbf.css
+  - ../../../install/pandoc//css/extra.css
+  - ../../../install/pandoc//css/release.css
+
+pdf-engine: wkhtmltopdf
+
+# wkhtmltopdf doesn't support --option=value, so each such is two options
+# (and all options have to be strings)
+pdf-engine-opts:
+  - --print-media-type
+
+  - --page-size
+  - Letter
+
+  - --minimum-font-size
+  - '10'
+
+  # XXX the built-in table of contents needs more work:
+  #     - need to honor the .unlisted class (unfortunately it's not supplied)
+  # - --outline-depth
+  # - '3' (needs to come from the PANDOCTOCDEPTH makefile variable)
+
+  - --header-html
+  - ../../../install/pandoc//css/pdf-header.html
+
+  - --header-spacing
+  - '4'
+
+  - --footer-html
+  - ../../../install/pandoc//css/pdf-footer.html
+
+  - --footer-spacing
+  - '4'
+
+  # XXX on Bamboo, headers and footers can be missing from the first 10-20
+  #     pages; could this be fixed by --window-status or --javascript-delay?
+  #     see https://stackoverflow.com/questions/23649780
+  # this is the delay in milliseconds
+  # - --javascript-delay
+  # - '5000' (needs to come from the PANDOCPDFENGINEDELAY makefile variable)
+
+  # JavaScript debugging; enable this if something isn't working
+  - --debug-javascript
+
+  # XXX cover page needs more work:
+  #     - need to generate it (because it's not passed query parameters)
+  #     - need to honor the watermark background
+  #     - need to adjust page-1 header hiding?
+  #     - need to suppress the title and subtitle
+  # - cover ../../../install/pandoc//css/pdf-cover.html
+
+  # XXX see above for built-in table of contents notes
+  # - toc
+  # - --enable-toc-back-links

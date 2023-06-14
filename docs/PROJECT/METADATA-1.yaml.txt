@@ -1,0 +1,59 @@
+# do not edit! this file was created from PROJECT.yaml by project-parser.py
+
+# BBF-specific metadata; cf. Word properties
+bbfNumber: TR-369
+bbfTitle: The User Services Platform
+bbfIssue: Issue
+bbfVersion: 1 Amendment 3
+bbfMonth: June
+bbfYear: 2023
+bbfType: Technical Report
+bbfStatus: ''
+bbfContrib: ''
+bbfMajor: 1
+bbfMinor: 3
+bbfPatch: 0
+bbfDraft: ''
+bbfBuild: ''
+
+# other top-level variables
+notice: tr
+reponame: usp
+"tagline": |-
+  A standardized protocol to manage, monitor, update, and control
+  connected devices, IoT endpoints, user services and home networks
+"summary": |
+  See <https://usp.technology> for the current USP specification.
+"description": |
+  ## What is USP?
+
+  The **User Services Platform** is a standardized **protocol for managing,
+  monitoring, upgrading, and controlling connected devices**. USP allows
+  service providers, consumer electronics manufacturers, and end users to:
+
+  * Create interoperable and vendor-independent **managed Wi-Fi systems**.
+  * Perform **lifecycle management** of consumer connected devices and
+    containerized microservices.
+  * Support **independent applications** for application-enabled services
+    gateways.
+  * Enable **IoT and consumer electronics upgradability** for critical
+    security patches.
+  * Develop applications that gather the telemetry necessary to **mass data
+    processing, AI, and machine learning**.
+  * **Bootstrap and configure** newly installed or purchased devices and
+    applications.
+  * Let customer support **monitor and troubleshoot** connected devices,
+    services, and home network links.
+  * Easily map the home network to **control service quality and monitor
+    threats**.
+  * Securely **control IoT, smart home, and smart networking functions**
+    locally or from the Cloud.
+  * **Enable multi-tenant** (i.e., multi-stakeholder) management and control.
+
+  USP represents the natural evolution of the Broadband Forum's [CPE WAN
+  Management Protocol (CWMP)](http://www.broadband-forum.org/cwmp), commonly
+  known as TR-069. It uses an expanded version of the Device:2 Data Model to
+  represent device operations (firmware upgrades, reboots, etc.), network
+  interfaces, and service functions (IoT functions, VoIP, etc.).
+bbfWorkArea: ''
+bbfProjectStream: ''

@@ -1,12 +1,12 @@
 # Discovery and Advertisement {#sec:discovery}
 
-Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
+Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller's USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
 
 Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints.
 
 ## Controller Information
 
-An Agent that has a USP relationship with a Controller needs to know that Controller’s Endpoint Identifier, credentials, and authorized Role.
+An Agent that has a USP relationship with a Controller needs to know that Controller's Endpoint Identifier, credentials, and authorized Role.
 
 An Agent that has a USP relationship with a Controller needs to obtain information that allows it to determine at least one MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
 
@@ -23,9 +23,9 @@ The Agent can be pre-configured with trusted root certificates or trusted certif
 
 ## Required Agent Information
 
-A Controller that has a relationship with an Agent needs to know the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
+A Controller that has a relationship with an Agent needs to know the Agent's Endpoint Identifier, connectivity information for the Agent's MTP(s), and credentials.
 
-Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.
+Controllers acquire this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent's MTP information through mDNS Discovery. It is each Controller's responsibility to maintain a record of known Agents.
 
 ## Use of DHCP for Acquiring Controller Information {#sec:using-dhcp}
 
@@ -57,6 +57,45 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 | USP retry interval multiplier | `28` | `28` |	`Device.LocalAgent.Controller.{i}.USPNotifRetryIntervalMultiplier` |
 | Endpoint ID of the Controller | `29` | `29` | `Device.LocalAgent.Controller.{i}.EndpointID` |
 
+## Use of DHCP for Exchanging GatewayInfo {#sec:gatewayinfo}
+
+
+
+This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provides an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
+
+### Exchanging DHCP Options
+
+This section outlines the DHCP information USP Agents exchange to provide details about the devices on the LAN, as well as the Service Elements that are updated. This allows a USP Agent to recognize a CWMP Client that supports the Device-Gateway Association within the LAN, and a CWMP Client to recognize a USP Agent.
+
+**[R-DIS.2a]{}** - When an Agent sends a DHCPv4 requests (DHCPDISCOVER, DHCPREQUEST, and DHCPINFORM) or DHCPv6 requests (SOLICIT, REQUEST, RENEW, and INFORMATION-REQUEST) it MUST include the Encapsulation Options for requests below.
+
+### DHCP Encapsulated Vendor-Specific Option-Data fields for DHCP requests
+
+|Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in the Device:2 Data Model [@TR-181] |
+| ----------: | :---------: | :----------: | :--------- |
+| DeviceManufacturerOUI | `1` | `11` | `Device.DeviceInfo.ManufacturerOUI` |
+| DeviceSerialNumber | `2` | `12` | `Device.DeviceInfo.SerialNumber` |
+| DeviceProductClass | `3` | `13` | `Device.DeviceInfo.ProductClass` |
+
+These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
+
+
+**[R-DIS.2b]{}** - If an Agent recieves the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are recieved.
+
+### DHCP Encapsulated Vendor-Specific Option-Data fields for Agent
+
+|Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in the Device:2 Data Model [@TR-181] |
+| ----------: | :---------: | :----------: | :--------- |
+| DeviceManufacturerOUI | `4` | `14` | `Device.DeviceInfo.ManufacturerOUI` |
+| DeviceSerialNumber | `5` | `15` | `Device.DeviceInfo.SerialNumber` |
+| DeviceProductClass | `6` | `16` | `Device.DeviceInfo.ProductClass` |
+
+These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
+
+**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesnt recieve this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
+
+**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and recieves a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record. 
+
 ## Using mDNS {#sec:using-mdns}
 
 **[R-DIS.3]{}** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in RFC 6762 [@RFC6762].
@@ -79,7 +118,7 @@ If the Endpoint is programmatically set to request other resource records, it wi
 
 ## DNS-SD Records {#sec:dns-sd-records}
 
-DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries RFC 1035 [@RFC1035] or Multicast DNS (mDNS) RFC 6762 [@RFC6762]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. RFC 6762 [@RFC6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
+DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and structuring DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries RFC 1035 [@RFC1035] or Multicast DNS (mDNS) RFC 6762 [@RFC6762]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. RFC 6762 [@RFC6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is "`<Instance>.<Service>.<Domain>`". `<Instance>` will be the USP Endpoint Identifier of the USP Endpoint.
 

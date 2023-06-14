@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="0" tests="27" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="project-parser-py" skipped="0" tests="27" time="0">
+		<testcase name="project-parser"/>
+		<testcase name="project-parser-2"/>
+		<testcase name="project-parser-already-defined"/>
+		<testcase name="project-parser-cant-create-block-at-overlaps-with"/>
+		<testcase name="project-parser-cant-set-to-span-overlaps-with"/>
+		<testcase name="project-parser-date-invalid-value"/>
+		<testcase name="project-parser-dependency-file-not-found"/>
+		<testcase name="project-parser-depends-on-new-version"/>
+		<testcase name="project-parser-expand-not-found"/>
+		<testcase name="project-parser-expand-not-found-2"/>
+		<testcase name="project-parser-file-not-found"/>
+		<testcase name="project-parser-ignored-remaining-resources"/>
+		<testcase name="project-parser-invalid-keys"/>
+		<testcase name="project-parser-invalid-keys-2"/>
+		<testcase name="project-parser-invalid-resource-keys"/>
+		<testcase name="project-parser-invalid-value-should-be-a-dict"/>
+		<testcase name="project-parser-name-not-in-depends-on"/>
+		<testcase name="project-parser-no-project-name-in"/>
+		<testcase name="project-parser-no-tags-is-an-invalid-boolean-value"/>
+		<testcase name="project-parser-revision-omits-minor-and-or-patch-versions"/>
+		<testcase name="project-parser-status-invalid-value"/>
+		<testcase name="project-parser-unnecessary-dependency"/>
+		<testcase name="project-parser-validation-failed"/>
+		<testcase name="project-parser-version-not-found"/>
+		<testcase name="project-parser-version-not-found-2"/>
+		<testcase name="project-parser-versions-invalid-value"/>
+		<testcase name="unknown-error"/>
+	</testsuite>
+</testsuites>
+

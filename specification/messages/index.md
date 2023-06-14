@@ -14,9 +14,11 @@ All USP Messages are encapsulated by a USP Record. The definition of the USP Rec
 
 The three types of USP Messages are Request, Response, and Error.
 
-A request is a Message sent from a source USP Endpoint to a target USP Endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify Message follows the same format as a request but is sent from an Agent to a Controller.
+A request is a Message sent from a source USP Endpoint to a target USP Endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify and Register Messages follow the same format as a request but is sent from an Agent to a Controller.
 
 **[R-MSG.0]{}** - The target USP Endpoint MUST respond to a request Message from the source USP Endpoint with either a response Message or Error Message, unless otherwise specified (see [](#sec:operate) and [](#sec:notify)).
+
+**[R-MSG.0a]{}** - The associated response or error Message MUST be sent through the same type of USP Record (i.e. A `record_type` of [`session_context`](#sec:exchange-of-usp-records-within-an-e2e-session-context) or [`no_session_context`](#sec:exchange-of-usp-records-without-an-e2e-session-context)) used along the associated request Message.
 
 **[R-MSG.1]{}** - The target USP Endpoint MUST ignore or send an Error Message in response to Messages it does not understand.
 
@@ -32,7 +34,7 @@ Circumstances may arise (such as multiple Message Transfer Protocols) that cause
 
 For Messages that require no response, it is up to the target Endpoint implementation when to allow the same Message ID to be re-used by the same source USP Endpoint.
 
-### Handling search expressions
+### Handling Search Expressions
 
 Many USP Messages allow for search expressions to be used in the request. To
 help make Controller requests more flexible, it is desired that requests using
@@ -51,6 +53,8 @@ Objects in the Agent's Instantiated Data Model.
 
 Successful request/response: In this successful Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, the Message is understood, and the Agent sends a response with the relevant information in the body.
 
+*Note: this is not meant to imply that all request/response operations will be synchronous. Controllers can and should expect that Responses may be received in a different order than that in which Requests were made.*
+
 ![A successful request/response sequence](successful_response.png)
 
 Failed request/response: In this failed Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, but the Agent throws an error. The error arguments are generated and sent in an Error Message.
@@ -59,15 +63,15 @@ Failed request/response: In this failed Message sequence, a Controller sends an 
 
 ## Message Structure
 
-A Message consists of a header and body. When using [@PROTOBUF], the fields of the header and body for different Messages are defined in a schema and sent in an encoded format from one USP Endpoint to another.
+A Message consists of a header and body. When using Protocol Buffers [@PROTOBUF], the fields of the header and body for different Messages are defined in a schema and sent in an encoded format from one USP Endpoint to another.
 
 **[R-MSG.5]{}** - A Message MUST conform to the schemas defined in [%usp-msg-proto-file%](%usp-msg-proto-url%).
 
-*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a `oneof` field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in the "Default Values" section of [@PROTOBUF].*
+*See the section on [USP Record Encapsulation](#sec:usp-record-encapsulation) for information about Protocol Buffers default behavior and required fields.*
 
 Every USP Message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
-Each of the Message types and fields below are described with the field type according to Protocol Buffers version 3 [@PROTOBUF], followed by its name.
+Each of the Message types and fields below are described with the field type according to Protocol Buffers [@PROTOBUF], followed by its name.
 
 ### The USP Message
 
@@ -87,7 +91,7 @@ The Message Header includes a Message ID to associate Requests with Responses or
 
 The purpose of the Message Header is to provide basic information necessary for the target Endpoint to process the message.
 
-#### Message Header fields
+#### Message Header Fields
 
 `string msg_id`
 
@@ -120,6 +124,10 @@ This field contains an enumeration indicating the type of message contained in t
     NOTIFY_RESP (16)
     GET_SUPPORTED_PROTO (17)
     GET_SUPPORTED_PROTO_RESP (18)
+    REGISTER (19)
+    REGISTER_RESP (20)
+    DEREGISTER (21)
+    DEREGISTER_RESP (22)
 ```
 
 **[R-MSG.10]{}** - The `msg_type` field MUST be present in every Header. Though
@@ -133,7 +141,7 @@ The Message body contains the intended message and the appropriate fields for th
 
 Every Message body contains exactly one message and its fields. When an Agent is the target Endpoint, these messages can be used to create, read, update, and delete Objects, or execute Object-defined operations. When a Controller is the target Endpoint, the Message will contain a notification, response, or an error.
 
-#### Message Body fields
+#### Message Body Fields
 
 `oneof msg_body`
 
@@ -151,7 +159,7 @@ This field indicates that the Message contains a response of a type given in the
 
 This field indicates that the Message contains an Error Message.
 
-#### Request fields
+#### Request Fields
 
 `oneof req_type`
 
@@ -167,9 +175,11 @@ This field contains one of the types given below. Each indicates that the Messag
     Operate operate
     Notify notify
     GetSupportedProtocol get_supported_protocol
+    Register register
+    Deregister deregister
 ```
 
-#### Response fields
+#### Response Fields
 
 `oneof resp_type`
 
@@ -185,9 +195,11 @@ This field contains one of the types given below. Each indicates that the Messag
     OperateResp operate_resp
     NotifyResp notify_resp
     GetSupportedProtocolResp get_supported_protocol_resp
+    RegisterResp register_resp
+    DeregisterResp deregister_resp
 ```
 
-#### Error fields
+#### Error Fields
 
 `fixed32 err_code`
 
@@ -199,9 +211,9 @@ This field contains additional information about the reason behind the error.
 
 `repeated ParamError param_errs`
 
-This field is present in an Error Message in response to an Add, Set, or Delete Message when the allow_partial field is false and detailed error information is available for each Object or Parameter that have caused the Message to report an Error.
+This field is present in an Error Message in response to an Add, Set, or Delete Message when the `allow_partial` field is false and detailed error information is available for each Object or Parameter that have caused the Message to report an Error.
 
-##### ParamError fields
+##### ParamError Fields
 
 `string param_path`
 
@@ -280,6 +292,13 @@ The Agent’s response would include the Object created (with its instance ident
       }
     }
 ```
+### Unique Key Immutability
+
+In order to maintain addressing integrity of Multi-Instance Objects, the following prescriptions are made on the use of Unique Keys.
+
+**[R-KEY.1]{}** - Non-functional Unique Keys (as defined in TR-106 [@TR-106]) MUST NOT change in the Agent's Instantiated Data Model after creation, as defined in [R-ADD.5]().
+
+**[R-KEY.2]{}** - Functional Unique Keys (as defined in TR-106 [@TR-106]) MAY change incidentally as part of normal operation, but any change MUST abide by the uniqueness rules (i.e., no conflict with other instances).
 
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
@@ -315,6 +334,10 @@ The logic can be described as follows:
 | `true`/`false` | Yes | No | Yes | Response | `oper_success` | Yes |
 | `true` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `false` | Yes | Yes | - | Error | N/A | Yes |
+
+#### Search Paths and allow_partial in Set {#sec:search-paths-in-set}
+
+In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for any one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
 
 ### The Add Message {#sec:add}
 
@@ -380,7 +403,7 @@ body {
 }
 ```
 
-#### Add Request fields
+#### Add Request Fields
 
 `bool allow_partial`
 
@@ -394,23 +417,31 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of CreateObject fields.
 
-##### CreateObject fields
+##### CreateObject Fields
 
 `string obj_path`
 
 This field contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.
 
-**[R-ADD.2]{}** - The `obj_path` field in the `CreateObject` Message of an Add Request MUST specify or match exactly one Object Path.
+**[R-ADD.2]{}** - The `obj_path` field in the `CreateObject` Message of an Add Request MUST specify or match exactly one Object Path. (DEPRECATED)
+
+*Note: The R-ADD.2 requirement was deprecated in USP 1.3 because previous USP versions too narrowly restricted the usage of various paths in the obj_path field. If multiple paths are impacted, then the AddResp can contain multiple CreatedObjectResult instances that include the same requested_path.*
 
 `repeated CreateParamSetting param_settings`
 
 This field contains a repeated set of CreateParamSetting fields.
 
-###### CreateParamSetting fields
+###### CreateParamSetting Fields
 
 `string param`
 
 This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or  any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
+
+*Note: The Parameters that can be set in an Add Message are still governed by the permissions allowed to the Controller. Should a Controller attempt to create an Object when it does not have permission on one or more Parameters of that Object, the expected behavior is as follows:*
+
+- *If the Add Message omits Parameters for which the Controller does not have write permission, those parameters will be set to their default (if any) by the Agent, and the Add Message succeeds.*
+
+- *If the Add Message includes Parameters for which the Controller does not have write permission, the Message proceeds in accordance with the rules for allow_partial and required parameters.*
 
 `string value`
 
@@ -423,15 +454,17 @@ This field specifies whether the Agent should treat the creation of the Object s
 
 *Note: Any Unique Key Parameter contained in the Add Message will be considered as required regardless of how this field is set. This is to ensure that Unique Key constraints are met when creating the instance of the Object.*
 
+**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
+
 **[R-ADD.3]{}** - If the `required` field is set to true, a failure to update this Parameter MUST result in a failure to create the Object.
 
-#### Add Response fields
+#### Add Response Fields
 
 `repeated CreatedObjectResult created_obj_results`
 
 A repeated set of `CreatedObjectResult` fields for each `CreateObject` field in the Add Message.
 
-##### CreatedObjectResult fields
+##### CreatedObjectResult Fields
 
 `string requested_path`
 
@@ -441,7 +474,7 @@ This field returns the value of `obj_paths` in the `CreateObject` Message associ
 
 The field contains a Message of type `OperationStatus` that specifies the overall status for the creation of the Object specified in `requested_path`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -455,7 +488,7 @@ Used when the Object given in `requested_path` failed to be created.
 
 Used when the `Add` Message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -465,7 +498,7 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains additional information about the reason behind the error.
 
-###### Operation Success fields
+###### Operation Success Fields
 
 `string instantiated_path`
 
@@ -485,7 +518,7 @@ This field contains a map of the Relative Path and value for all of this Object'
 
 **[R-ADD.6]{}** - If the Controller does not have Read permission on any of the Parameters returned in `unique_keys`, these Parameters MUST NOT be returned in this field.
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -560,7 +593,7 @@ body {
 }
 ```
 
-#### Set Request fields
+#### Set Request Fields
 
 `bool allow_partial`
 
@@ -576,7 +609,7 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of UpdateObject messages.
 
-##### UpdateObject fields
+##### UpdateObject Fields
 
 `string obj_path`
 
@@ -586,7 +619,7 @@ This field contains an Object Path, Object Instance Path, or Search Path to Obje
 
 The field contains a repeated set of `UpdatedParamSetting` messages.
 
-###### UpdateParamSetting fields
+###### UpdateParamSetting Fields
 
 `string param`
 
@@ -603,13 +636,21 @@ This field specifies whether the Agent should treat the update of the Object spe
 
 **[R-SET.2]{}** - If the `required` field is set to `true`, a failure to update this Parameter MUST result in a failure to update the Object (see [](#sec:using-allow-partial-and-required-parameters)).
 
+**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a Set Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically, regardless of the value of the `allow_partial` field. That is, if any object that matches the Search Path fails to be updated due to an error, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent MUST return a Set Response with an UpdatedObjectResult containing:
+
+  * A `requested_path` equal to the `obj_path` in the request.
+  * An `oper_status` field containing an OperationFailure message.
+  * At least one UpdatedInstanceFailure message with an `affected_path` that reflects the object that failed to update.
+
+**[R-SET.2b]{}** - The Agent MAY terminate processing a Set Request with an `obj_path` field in the `UpdateObject` message that contains a Search Path matching more than one object after encountering any number of errors.
+
 #### Set Response
 
 `repeated UpdatedObjectResult updated_obj_results`
 
 This field contains a repeated set of `UpdatedObjectResult` messages for each `UpdateObject` message in the associated Set Request.
 
-##### UpdatedObjectResult fields
+##### UpdatedObjectResult Fields
 
 `string requested_path`
 
@@ -619,7 +660,7 @@ This field returns the value of `updated_obj_results` in the `UpdateObject` mess
 
 The field contains a message of type `OperationStatus` that specifies the overall status for the update of the Object specified in `requested_path`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -633,7 +674,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 Used when the `Set` message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -647,7 +688,7 @@ This field contains additional information about the reason behind the error.
 
 This field contains a repeated set of messages of type `UpdatedInstanceFailure`.
 
-###### UpdatedInstanceFailure fields
+###### UpdatedInstanceFailure Fields
 
 `string affected_path`
 
@@ -657,7 +698,7 @@ This field returns the Object Path or Object Instance Path of the Object that fa
 
 This field contains a repeated set of `ParameterError` messages.
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -671,13 +712,13 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains text related to the error specified by `err_code`.
 
-###### OperationSuccess fields
+###### OperationSuccess Fields
 
 `repeated UpdatedInstanceResult updated_inst_results`
 
 This field contains a repeated set of `UpdatedInstanceResult` messages.
 
-###### UpdatedInstanceResult fields
+###### UpdatedInstanceResult Fields
 
 `string affected_path`
 
@@ -696,7 +737,7 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 *Note: If the Set Request configured a Parameter to the same value it already had, this Parameter is still returned in the `updated_params`.*
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -758,7 +799,7 @@ body {
 }
 ```
 
-#### Delete Request fields
+#### Delete Request Fields
 
 `bool allow_partial`
 
@@ -772,13 +813,13 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of Object Instance Paths or Search Paths.
 
-#### Delete Response fields
+#### Delete Response Fields
 
 `repeated DeletedObjectResult deleted_obj_results`
 
 This field contains a repeated set of `DeletedObjectResult` messages.
 
-##### DeletedObjectResult fields
+##### DeletedObjectResult Fields
 
 `string requested_path`
 
@@ -788,7 +829,7 @@ This field returns the value of the entry of `obj_paths` (in the Delete Request)
 
 This field contains a message of type `OperationStatus`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -802,7 +843,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 Used when the `Delete` Message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -812,7 +853,7 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains additional information about the reason behind the error.
 
-###### OperationSuccess fields
+###### OperationSuccess Fields
 
 `repeated string affected_paths`
 
@@ -830,7 +871,7 @@ This field contains a repeated set of messages of type `UnaffectedPathError`.
 
 **[R-DEL.4]{}** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this field.
 
-###### UnaffectedPathError fields
+###### UnaffectedPathError Fields
 
 `string unaffected_path`
 
@@ -865,7 +906,7 @@ The response returns a `req_path_results` entry for each Path Name given in `par
 Each `req_path_results` message given in the response contains a set of `resolved_path_results` messages for each Object and Sub-Object relative to the Path resolved by the `param_paths` element. Each results is followed by a list of Parameters (`result_params`) and their values. If there are no Parameters, `result_params` may be empty.  These Parameter Paths are Relative Paths to the `resolved_path`.
 *Note: This behavior has been clarified as of USP 1.2. Previous versions implied that Sub-Object Parameters be returned as Relative Paths to the original `resolved_path` in a single `result_params` list. In USP 1.2, each Sub-Object is returned in its own `resolved_path`.*
 
-The tree depth of a Get `result_params` tree can be limited by specifying a non-zero value for the `max_depth` field in Get request. If `max_depth` field is present and not `0` then the Agent will limit the maximum depth of each returned `result_params` tree to the depth specified by `max_depth` value.
+The tree depth of a Get response can be limited by specifying a non-zero value for the `max_depth` field in Get request. If `max_depth` field is present and not `0` then the Agent will limit the maximum depth of each returned `req_path_results` to a tree rooted in `requested_path` with a depth specified by `max_depth` value.
 
 *Note: The `max_depth` field was introduced in USP 1.2. If this field is not present in a Get request or has a value of `0`, the Agent returns the complete tree of all Objects and Sub-Objects of all the Path Names mentioned in `param_paths`. This is the same as the behavior specified for prior USP versions. An Agent implementing a prior version of the USP specification will ignore the field and behave as if the `max_depth` field was set to `0`.*
 
@@ -891,7 +932,7 @@ For example, a Controller wants to read the data model to learn the settings and
     }
 ```
 
-In response to this request the Agent returns all Parameters, plus Sub-Objects and their Parameters, of the addressed instance. The `max_depth` value of `2` has no impact on the returned result in this case since the SSID Object only contains the `Stats` Sub-Object which has no Sub-Objects of its own. Had `max_depth` been set to `1` then all of the SSID Parameters and their values would have been returned, as well as the `Stats` Sub-Object, but the Sub-Object's Parameters and values would have been omitted. The Agent returns this data in the Get response using a field for each of the requested Path Names. In this case:
+In response to this request the Agent returns all Parameters, plus the Parameters of any Sub-Objects, of the addressed instance. Had `max_depth` been set to `1` then all of the SSID Parameters and their values would have been returned, but the `Stats` Sub-Object and its Parameters would have been omitted. The Agent returns this data in the Get response using a field for each of the requested Path Names. In this case:
 
 ```{filter=pbv type=Response}
     get_resp {
@@ -1093,7 +1134,7 @@ body {
 }
 ```
 
-#### Get Request fields
+#### Get Request Fields
 
 `repeated string param_paths`
 
@@ -1105,13 +1146,13 @@ This field limits the maximum depth of each returned `result_params` tree to the
 
 **[R-GET.5]{}** - If the `max_depth` field is present and contains a value other than 0, then the Agent MUST limit the tree depth of the resolved Sub-Objects included in the `resolved_path_results` field of the Response to the specified value.
 
-#### Get Response fields
+#### Get Response Fields
 
 `repeated RequestedPathResult req_path_results`
 
 A repeated set of `RequestedPathResult` messages for each of the Path Names given in the associated Get request.
 
-##### RequestedPathResult field
+##### RequestedPathResult Field
 
 `string requested_path`
 
@@ -1121,7 +1162,7 @@ This field contains one of the Path Names or Search Paths given in the `param_pa
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the Get to fail on this Path Names. A value of 0 indicates the Path Name could be read successfully.
 
-**[R-GET.0]{}** - If `requested_path` contains a Path Name that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
+**[R-GET.0]{}** - If `requested_path` contains a Path Name (that is not a Search Path) that does not match any Object or Parameter in the Agent's Instantiated Data Model, or `requested_path` contains a Search Path that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
 
 **[R-GET.1]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.
 
@@ -1133,9 +1174,11 @@ This field contains additional information about the reason behind the error.
 
 This field contains one message of type ResolvedPathResult for each Path Name resolved by the Path Name or Search Path given by `requested_path`.
 
-**[R-GET.1a]{}** - If the requested_path is valid (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any Objects in the Agent's instantiated data model, the resolved_path_results set MUST be empty and is not considered an error.
+**[R-GET.1a]{}** - If the `requested_path` is a valid Search Path (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any Objects in the Agent's Instantiated Data Model, the `resolved_path_results` set MUST be empty and is not considered an error.
 
-###### ResolvedPathResult fields
+**[R-GET.1b]{}** - If the `requested_path` is a valid Object Path (i.e., properly formatted and in the Agent's supported data model), which is not a Search Path, but the Object does not have any Sub-Objects or Parameters, the `resolved_path_results` set MUST be empty and is not considered an error.
+
+###### ResolvedPathResult Fields
 
 `string resolved_path`
 
@@ -1152,9 +1195,9 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 **[R-GET.4]{}** - If the Controller does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
 
-###### Get Message Supported Error Codes
+#### Get Message Supported Error Codes
 
-Appropriate error codes for the Get Message include `7000-7006`, `7008`, `7010`, `7026` and `7800-7999`.
+Appropriate error codes for the Get Message include `7000-7006`, `7008`, `7010`, `7016`, `7026` and `7800-7999`.
 
 ### The GetInstances Message {#sec:getinstances}
 
@@ -1286,7 +1329,7 @@ The Agent's Response will contain an entry in `curr_insts` for all of the Instan
 
 Or more, if more Object Instances exist.
 
-#### GetInstances Request fields
+#### GetInstances Request Fields
 
 `repeated string obj_paths`
 
@@ -1296,7 +1339,7 @@ This field contains a repeated set of Path Names or Search Paths to Multi-Instan
 
 This field, if `true`, indicates that the Agent returns only those instances in the Object(s) matched by the Path Name or Search Path in `obj_path`, and not return any child Objects.
 
-#### GetInstances Response fields
+#### GetInstances Response Fields
 
 `repeated RequestedPathResult req_path_results`
 
@@ -1320,7 +1363,7 @@ This field contains additional information about the reason behind the error.
 
 This field contains a message of type `CurrInstance` for each Instance of *all* of the Objects matched by `requested_path` that exists in the Agent's Instantiated Data Model.
 
-###### CurrInstance fields
+###### CurrInstance Fields
 
 `string instantiated_obj_path`
 
@@ -1338,7 +1381,7 @@ Appropriate error codes for the GetInstances Message include `7000-7006`, `7008`
 
 ### The GetSupportedDM Message {#sec:the-getsupporteddm-message}
 
-GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
+GetSupportedDM (referred to informally as GSDM) is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
 
 The GetSupportedDM Message is different from other USP Messages in that it only returns information about the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance Objects in the Path Name use the `{i}` identifier to indicate their place in the Path Name as specified in TR-106 [@TR-106].
 
@@ -1350,7 +1393,13 @@ Alternatively an Instantiated Data Model Object Path can be used as long as the 
 
 If the Agent encounters a diverging Supported Data Model, e.g. due to the use of different Mounted Objects underneath a Mountpoint, the Agent will skip the traversal of the children Objects, populate the Response's `divergent_paths` element with all divergent Object Instance Paths, and continue processing with the next unambiguous Object. The Supported Data Model of such divergent Objects can only be obtained by specifically using Object Instance Paths in the `obj_paths` field of a GetSupportedDM request.
 
-The Agent's Response returns all Path Names in the `supported_obj_path` field according to the associated Device Type document as specified in TR-106 [@TR-106].
+The Agent's Response returns all Path Names in the `supported_obj_path` field according to its Supported Data Model.
+
+To clarify the difference between an Instantiated Data Model Object Path and a Supported Data Model Object Path:
+
+*	If a `{i}` is encountered in the Object Path, it cannot be followed by an Instance Identifier.
+*	If the Object Path ends with an Instance Identifier, it is treated as an Instantiated Data Model Object Path.
+*	If the Object Path contains a `{i}`, it is a Supported Data Model Object Path.
 
 #### GetSupportedDM Examples
 
@@ -1529,7 +1578,7 @@ The Agent's response would be:
     }
 ```
 
-#### GetSupportedDM Request fields
+#### GetSupportedDM Request Fields
 
 `repeated obj_paths`
 
@@ -1551,13 +1600,13 @@ This field, if `true`, indicates that, in the `supported_objs`, the Agent should
 
 This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` field containing Parameters supported by the reported Object(s).
 
-#### GetSupportedDMResp fields
+#### GetSupportedDMResp Fields
 
 `repeated RequestedObjectResult req_obj_results`
 
 This field contains a repeated set of messages of type `RequestedObjectResult`.
 
-##### RequestedObjectResult fields
+##### RequestedObjectResult Fields
 
 `string req_obj_path`
 
@@ -1581,7 +1630,7 @@ This field contains a Uniform Resource Identifier (URI) to the Data Model associ
 
 The field contains a message of type `SupportedObjectResult` for each reported Object.
 
-###### SupportedObjectResult fields
+###### SupportedObjectResult Fields
 
 In the case of a diverging Supported Data Model, only the `supported_obj_path`, `access`, `is_multi_instance`, and `divergent_paths` fields will be populated for the divergent Object.
 
@@ -1622,7 +1671,7 @@ The field contains an Object Instance Path for each divergent Path Name.
 
 *Note: The `divergent_paths` field was added in USP 1.2. An Agent that supports versions before USP 1.2 would not know to send the `divergent_paths` field and thus an empty list will be seen by the Controller.*
 
-###### SupportedParamResult fields
+###### SupportedParamResult Fields
 
 `string param_name`
 
@@ -1660,7 +1709,7 @@ This field contains an enumeration of type ParamValueType specifying the *primit
 
 `ValueChangeType value_change`
 
-This field contains an enumeration of type ValueChangeType specifying whether or not the Parameter will honor or ignore a ValueChange Subscription.  The value of this field does not impact the ability for a Controller to create a ValueChange Subscription that references the associated Parameter, it only impacts how the Agent handles the Subscription. It is an enumeration of:
+This field contains an enumeration of type ValueChangeType specifying whether or not the Agent will honor or ignore a ValueChange Subscription for this Parameter. The value of this field does not impact the ability for a Controller to create a ValueChange Subscription that references the associated Parameter, it only impacts how the Agent handles the Subscription. It is an enumeration of:
 ```
     VALUE_CHANGE_UNKNOWN (0)
     VALUE_CHANGE_ALLOWED (1)
@@ -1669,7 +1718,7 @@ This field contains an enumeration of type ValueChangeType specifying whether or
 *Note: The value_change field was added in USP 1.2, and the VALUE_CHANGE_UNKNOWN enumerated value is present for backwards compatibility purposes. An Agent that supports versions before USP 1.2 would not know to send the value_change and thus a 0 value (VALUE_CHANGE_UNKNOWN) will be seen by the Controller.*
 
 
-###### SupportedCommandResult fields
+###### SupportedCommandResult Fields
 
 `string command_name`
 
@@ -1717,27 +1766,336 @@ The GetSupportedProtocol Message is used as a simple way for the Controller and 
 which versions of USP each supports to aid in interoperability and backwards
 compatibility.
 
-#### GetSupportedProtocol Request fields
+#### GetSupportedProtocol Request Fields
 
 `string controller_supported_protocol_versions`
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Controller.
 
-#### GetSupportedProtocolResponse fields
+#### GetSupportedProtocolResponse Fields
 
 `string agent_supported_protocol_versions`
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
+### The Register Message {#sec:register}
+
+The Register message is an Agent to Controller message used to register new Service Elements.
+
+See [Software Modularization and USP-Enabled Applications Theory of Operation appendix](#sec:software-modularization-theory-of-operations) for more information on when to use the Register message.
+
+#### Register Examples
+
+A USP Agent can register several Service Elements with one or multiple Register Request messages.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER
+}
+body {
+  request {
+    register {
+      allow_partial: true
+      reg_paths {
+        path: "Device.Time."
+      }
+      reg_paths {
+        path: "Device.WiFi.DataElements."
+      }
+    }
+  }
+}
+```
+
+In case the registration was successful, the USP Controller will respond with a Register Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER_RESP
+}
+body {
+  response {
+    register_resp {
+      registered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            registered_path: "Device.Time."
+          }
+        }
+      }
+
+      registered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_success {
+            registered_path: "Device.WiFi.DataElements."
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+In case the registration failed partially, because the "Device.WiFi.DataElements." object was already registered, the USP Controller will respond with the following Register Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER_RESP
+}
+body {
+  response {
+    register_resp {
+      registered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            registered_path: "Device.Time."
+          }
+        }
+      }
+
+      registered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_failure {
+            err_code: 7029
+            err_msg: "Device.WiFi.DataElements. object path has already been registered"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+If `allow_partial` was set to `false` in the Register Request and the registration failed, the USP Controller would instead respond with a USP Error message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: ERROR
+}
+body {
+  error {
+    err_code: 7029
+    err_msg: "Device.WiFi.DataElements. object path has already been registered"
+  }
+}
+```
+
+#### Register Request Fields
+
+`bool allow_partial`
+
+The Register message contains a boolean `allow_partial` to indicate whether the registration must succeed completely or is allowed to fail partially. If `allow_partial` is `false`, nothing will be registered if one of the provided paths fails to be registered (e.g. due to an already existing registration) and the USP Controller will respond with a USP Error message. If `allow_partial` is `true`, the USP Controller will try to register every path individually and will always respond with a RegisterResp message, even if none of the requested paths can be registered.
+
+**[R-REG.0]{}** - If the `allow_partial` field is set to `true` and no other exceptions are encountered, the Controller treats each of the reg_paths independently. The Controller MUST complete the registration of each reg_path regardless of the inability to register one of the others.
+
+**[R-REG.1]{}** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Controller treats each of the reg_paths holistically. A failure to handle one of the reg_paths will cause the Register Message to fail and return an Error Message.
+
+`repeated RegistrationPath reg_paths`
+
+This field contains a repeated set of RegistrationPaths for each path the USP Agent wants to register.
+
+##### RegistrationPath Fields
+
+`string path`
+
+This field contains the Object Path the USP Agent wants to register.
+
+**[R-REG.2]{}** - The path field MUST contain an Object Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
+
+#### Register Response Fields
+
+`repeated RegisteredPathResult registered_path_results`
+
+This field contains a repeated set of RegisteredPathResults for each path the USP Agent tried to register.
+
+#### RegisteredPathResult Fields
+
+`string requested_path`
+
+This field contains the value of the entry of the path (in the Register Request) associated with this RegisteredPathResult.
+
+`OperationStatus oper_status`
+
+This field contains a message of type OperationStatus.
+
+##### OperationStatus Fields
+
+`oneof oper_status`
+
+This field contains a message of one of the following types.
+
+`OperationFailure oper_failure`
+
+Used when the path specified in requested_path failed to be registered.
+
+`OperationSuccess oper_success`
+
+Used when the path specified in requested_path was successfully registered.
+
+##### OperationFailure Fields
+
+`fixed32 err_code`
+
+This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the registration to fail.
+
+`string err_msg`
+
+This field contains additional information about the reason behind the error.
+
+##### OperationSuccess Fields
+
+`string registered_path`
+
+This field returns the path that was registered.
+
+#### Register Message Supported Error Codes
+
+Appropriate error codes for the Register Message include 7000-7008, 7016, 7028-7029 and 7800-7999.
+
+### The Deregister Message {#sec:deregister}
+
+The Deregister message is an Agent to Controller message used to deregister a previously registered data model at the USP Controller. When a USP Agent terminates, all Services elements will be deregistered automatically by the USP Controller.
+
+A USP Agent can choose to deregister its Service Elements during normal operation or when it terminates.
+
+*Note: A Deregister Request does not contain a boolean `allow_partial`, but the Controller will handle each path in the Deregister Request individually. In other words, `allow_partial` is implicitly set to `true` during the deregistration. The USP Controller will provide information about the success or failure to deregister each requested path in the Deregister Response message.*
+
+#### Deregister Examples
+
+A USP Agent can deregister several Service Elements with a Deregister Request message.
+
+```{filter=pbv}
+header {
+  msg_id: "94522"
+  msg_type: DEREGISTER
+}
+body {
+  request {
+    deregister {
+      paths: "Device.Time."
+      paths: "Device.WiFi.DataElements."
+    }
+  }
+}
+```
+
+In case the deregistration was successful, the USP Controller will respond with a Deregister Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94522"
+  msg_type: DEREGISTER_RESP
+}
+body {
+  response {
+    deregister_resp {
+      deregistered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            deregistered_path: "Device.Time."
+          }
+        }
+      }
+
+      deregistered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_success {
+            deregistered_path: "Device.WiFi.DataElements."
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+#### Deregister Request Fields
+
+`repeated string paths`
+
+This field contains a set of paths that the USP Agent wants to deregister.
+
+**[R-DEREG.1]{}** - A USP Agent MUST *only* deregister Service Elements that it registered with a previous Register message.
+
+**[R-DEREG.2]{}** - An empty path field MUST be interpreted to deregister all Service Elements belonging to the USP Agent.
+
+**[R-DEREG.3]{}** - A USP Agent MAY deregister one or more Service Elements with one Deregister Request message containing multiple path fields.
+
+*Note: The path field contains an Object Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
+
+#### Deregister Response Fields
+
+`repeated DeregisteredPathResult deregistered_path_results`
+
+This field contains a repeated set of DeregisteredPathResults for each path the USP Agent tried to deregister.
+
+**[R-DEREG.4]{}** - A USP Controller MUST always respond with a Deregister Response message to a Deregister Request. USP Error messages are not used.
+
+#### DeregisteredPathResult Fields
+
+`string requested_path`
+
+This field contains the value of the entry of the path (in the Deregister Request) associated with this DeregisteredPathResult.
+
+`OperationStatus oper_status`
+
+This field contains a message of type OperationStatus.
+
+##### OperationStatus Fields
+
+`oneof oper_status`
+
+This field contains a message of one of the following types.
+
+`OperationFailure oper_failure`
+
+Used when the path specified in requested_path failed to be deregistered.
+
+`OperationSuccess oper_success`
+
+Used when the path specified in requested_path was successfully deregistered.
+
+##### OperationFailure Fields
+
+`fixed32 err_code`
+
+This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the deregistration to fail.
+
+`string err_msg`
+
+This field contains additional information about the reason behind the error.
+
+##### OperationSuccess Fields
+
+`string deregistered_path`
+
+This field returns the path that was deregistered.
+
+#### Deregister Message Supported Error Codes
+
+Appropriate error codes for the Deregister Message include 7000-7008, 7016, 7030 and 7800-7999.
+
 ## Notifications and Subscription Mechanism {#sec:notifications-and-subscriptions}
 
-A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a Parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify Message](#sec:notify) to the Controller.
+A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a Parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent may either send a [Notify Message](#sec:notify) to the Controller, update its own configuration, or perform both actions depending on the Subscription's configuration.
 
 ### Using Subscription Objects
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model Parameter descriptions for `Device.LocalAgent.Subscription.{i}.` in the Device:2 Data Model [@TR-181].
 
 **[R-NOT.0]{}** - The Agent and Controller MUST follow the normative requirements defined in the `Device.LocalAgent.Subscription.{i}.` Object specified in the Device:2 Data Model [@TR-181].
+
+**[R-NOT.0a]{}** - When considering the time needed to make a state change and trigger a Notification, an implementation SHOULD make changes to its state and initiate a Notification with a window no longer than 10 seconds.
 
 *Note: Those familiar with Broadband Forum TR-069 [@TR-069] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
@@ -1748,6 +2106,13 @@ All subscriptions apply to one or more Objects or Parameters in the Agent’s In
 For example, a Controller wants to be notified when a new Wi-Fi station joins the Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` Parameter and `ObjectCreation` as the `NotificationType`.
 
 In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
+
+#### TriggerAction Parameter
+
+Subscriptions can be used to define the actions to be performed by the Agent when an event occurs. This is defined in the `TriggerAction` Parameter. The default is for the Agent to send a [Notify Message](#sec:notify), but it could also perform an update of its own configuration, or both sending the Notify and performing the configuration.
+
+For example, an Agent may be configure with a Subscription for the `Device.LocalAgent.Threshold.{i}.Triggered!` event such that when it occurs the Agent both sends a Notify message and configures the `Device.BulkData.Profile.{i}.Enable` to start sending BukData reports (if defined to do so in the `TriggerConfigSettings` Parameter of the Subscription).
+
 
 ### Responses to Notifications and Notification Retry {#sec:responses-and-retry}
 
@@ -1791,8 +2156,9 @@ There are several types events that can cause a Notify request. These include th
 
 The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of Parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.
 
-####	 ObjectCreation and ObjectDeletion
-These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.
+#### ObjectCreation and ObjectDeletion
+
+These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion or the instance was created or deleted implicitly, e.g. due to a configuration or status change or indirectly via an unrelated USP Message.
 
 The `ObjectCreation` notification also includes the Object’s Unique Key Parameters and their values.
 
@@ -1816,6 +2182,8 @@ An `OnBoardRequest` notification is used by the Agent when it is triggered by an
 
 #### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what Parameters, if any, are returned as part of the notification.
+
+### The Notify Message {#sec:notify}
 
 #### Notify Examples
 
@@ -1905,9 +2273,7 @@ body {
 }
 ```
 
-### The Notify Message {#sec:notify}
-
-#### Notify Request fields
+#### Notify Request Fields
 
 `string subscription_id`
 
@@ -1919,7 +2285,7 @@ This field contains the locally unique opaque identifier that was set by the Con
 
 This field lets the Agent indicate to the Controller whether or not it expects a response in association with the Notify request.
 
-**[R-NOT.8]{}** - When `send_response` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
+**[R-NOT.8]{}** - When `send_resp` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
 
 `oneof notification`
 
@@ -1932,7 +2298,7 @@ Contains one of the following Notification messages:
     OperationComplete oper_complete
     OnBoardRequest on_board_req
 
-##### Event fields
+##### Event Fields
 
 `string obj_path`
 
@@ -1947,7 +2313,7 @@ This field contains the name of the Object defined event that caused this notifi
 This field contains a set of key/value pairs of Parameters associated with this event.
 Refer to [](#sec:parameter-value-encoding) for details of how Parameter values are encoded as Protocol Buffers v3 strings.
 
-##### ValueChange fields
+##### ValueChange Fields
 
 `string param_path`
 
@@ -1958,7 +2324,7 @@ This field contains the Path Name of the changed Parameter.
 This field contains the value of the Parameter specified in `param_path`.
 Refer to [](#sec:parameter-value-encoding) for details of how Parameter values are encoded as Protocol Buffers v3 strings.
 
-##### ObjectCreation fields
+##### ObjectCreation Fields
 
 `string obj_path`
 
@@ -1968,13 +2334,13 @@ This field contains the Path Name of the created Object Instance.
 
 This field contains a map of key/value pairs for all of this Object's Unique Key Parameters that are supported by the Agent.
 
-##### ObjectDeletion fields
+##### ObjectDeletion Fields
 
 `string obj_path`
 
 This field contains the Path Name of the deleted Object Instance.
 
-##### OperationComplete fields
+##### OperationComplete Fields
 
 `string command_name`
 
@@ -1995,14 +2361,14 @@ Contains one of the following messages:
     OutputArgs req_output_args
     CommandFailure cmd_failure
 
-###### OutputArgs fields
+###### OutputArgs Fields
 
 `map<string, string> output_args`
 
 This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command_name` field) returned by the method invoked in the Operate Message.
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-###### CommandFailure fields
+###### CommandFailure Fields
 
 `fixed32 err_code`
 
@@ -2014,7 +2380,7 @@ a Controller invoking the Cancel() command on the appropriate Request Object (se
 
 This field contains additional (human readable) information about the reason behind the error.
 
-##### OnBoardRequest fields
+##### OnBoardRequest Fields
 
 `string oui`
 
@@ -2032,7 +2398,7 @@ This field contains a string used to provide additional context about the Agent.
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
-#### Notify Response fields
+#### Notify Response Fields
 
 `string subscription_id`
 
@@ -2131,7 +2497,7 @@ body {
   response {
     operate_resp {
       operation_results {
-        executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
+        executed_command: "Device.SelfTestDiagnostics()"
         req_obj_path: "Device.LocalAgent.Request.1"
       }
     }
@@ -2141,7 +2507,7 @@ body {
 
 ### The Operate Message {#sec:operate}
 
-#### Operate Request fields
+#### Operate Request Fields
 
 `string command`
 
@@ -2171,13 +2537,13 @@ This field contains a map of key/value pairs indicating the input arguments (rel
 
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-#### Operate Response fields
+#### Operate Response Fields
 
 `repeated OperationResult operation_results`
 
 This field contains a repeated set of `OperationResult` messages.
 
-##### OperationResult fields
+##### OperationResult Fields
 
 `string executed_command`
 
@@ -2197,14 +2563,14 @@ This field contains a message of one of the following types.
 
 The req_obj_path field, when used as the `operate_resp`, contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.
 
-###### OutputArgs fields
+###### OutputArgs Fields
 
 `map<string, string> output_args`
 
 This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` field) returned by the method invoked in the Operate Message.
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-###### CommandFailure fields
+###### CommandFailure Fields
 
 `fixed32 err_code`
 
@@ -2234,14 +2600,14 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. |
 | `7009` | Parameter action failed | Set | This error indicates that the Parameter failed to update for a general reason described in an err_msg field. |
 | `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated Parameters. |
-| `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the Parameter. |
+| `7011` | Invalid type | Add, Set | This error indicates that the received string can not be interpreted as a value of the correct type expected for the Parameter. |
 | `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the Parameter. |
 | `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source Endpoint attempted to update a Parameter that is not defined as a writeable Parameter. |
 | `7014` | Value conflict | Add, Set | This error indicates that the requested value would result in an invalid configuration based on other Parameter values. |
 | `7015` | Operation error | Add, Set, Delete | This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.
-| `7016` | Object does not exist | Add, Set, Operate | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
+| `7016` | Object does not exist | Any | This error indicates that the requested Path Name did not address an Object in the Agent's Instantiated Data Model. |
 | `7017` | Object could not be created | Add | This error indicates that the operation failed to create an instance of the specified Object. |
-| `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
+| `7018` | Object is not a table | Add, GetInstances | This error indicates that the requested Path Name is not a Multi-Instance Object. |
 | `7019` | Attempt to create non-creatable object | Add | This error indicates that the source Endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
 | `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required Parameters failed to update. Details on the failed Parameters are included in an associated ParamError or ParameterError message. |
@@ -2251,6 +2617,10 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7025` | Object exists with duplicate key | Add, Set | This error indicates that an Object already exists with the Unique Keys specified in an Add or Set Message. |
 | `7026` | Invalid path | Any | This error indicates that the Object, Parameter, or Command Path Name specified does not match any Objects, Parameters, or Commands in the Agent's Supported Data Model |
 | `7027` | Invalid command arguments | Operate | This error indicates that an Operate Message failed due to invalid or unknown arguments specified in the command. |
+| `7028` | Register failure | Register | This error indicates that a path in a Register Request failed to be registered for one or more reasons explained in the err_msg field. |
+| `7029` | Already in use | Register | This error indicates that a path in a Register Request failed to be registered, because it was registered by a different USP Agent |
+| `7030` | Deregister failure | Deregister | This error indicates that a path in a Deregister Request failed to be deregistered for one or more reasons explained in the err_msg field. |
+| `7031` | Path already registered | Deregister | This error indicates that a path in a Deregister Request failed to be deregistered, because it was registered by a different USP Agent. |
 | `7100-7199` | USP Record error codes | - | These errors are listed and described in [](#sec:usp-record-errors). |
 | `7200-7299`| Data model defined error codes | - | These errors are described in the data model. |
 | `7800-7999`| Vendor defined error codes | - | These errors are described in [](#sec:vendor-defined-error-codes). |

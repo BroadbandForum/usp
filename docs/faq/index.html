@@ -4,26 +4,239 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="generator" content="pandoc"/>
-  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks"/>
-  <meta name="theme-color" content="#157878"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>BBF – TR-369a2 – User Services Platform (USP)</title>
+  <meta name="description" content="TR-369 – The User Services Platform:
+A standardized protocol to manage, monitor, update, and control
+connected devices, IoT endpoints, user services and home networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <title>BBF – TR-369 – The User Services Platform</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="github.css"/>
   <link rel="stylesheet" href="extra.css"/>
   <link rel="stylesheet" href="release.css"/>
+  <!-- Automatic hover links scripts -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var hoverlink = null;
+
+    var elems = document.querySelectorAll('.auto-hoverlink:not(section)');
+      for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+
+        elem.addEventListener('mouseenter', event => {
+          var target = event.target;
+          var info_attr = target.attributes.getNamedItem('data-info');
+          var anchor_attr = target.attributes.getNamedItem('data-anchor');
+          var thing = info_attr ? info_attr.value : target.localName
+          /* we check the parent to cover the case where pandoc has moved the
+             id from a header to its parent section */
+          var anchor = target.id || target.parentElement.id ||
+                                    (anchor_attr ? anchor_attr.value : null);
+
+          if (hoverlink) {
+            hoverlink.remove();
+            hoverlink = null;
+          }
+
+          if (!anchor) {
+              console.warn('%s %s has no id or data-anchor',
+                           thing, target.textContent);
+          } else {
+            hoverlink = document.createElement('a');
+            hoverlink.href = '#' + anchor;
+            hoverlink.className = 'hoverlink';
+            hoverlink.title = 'Permalink to this ' + thing;
+            target.appendChild(hoverlink);
+          }
+        });
+
+        elem.addEventListener('mouseleave', () => {
+          if (hoverlink) {
+            setTimeout(function(href) {
+              if (hoverlink && hoverlink.href == href) {
+                hoverlink.remove();
+                hoverlink = null;
+              }
+            }, 1000, hoverlink.href);
+          }
+        });
+      }
+  });
+  </script>
+  <!-- Automatic hover links styles -->
+  <style>
+  :root {
+      --hoverlink-size: 0.9em;
+  }
+
+  .hoverlink {
+      text-decoration: none;
+  }
+
+  .hoverlink::before {
+      content: " ";
+  }
+
+  .hoverlink::after {
+      display: inline-block;
+      content: "";
+      width: var(--hoverlink-size);
+      height: var(--hoverlink-size);
+      background-size: var(--hoverlink-size) var(--hoverlink-size);
+      /* https://icon-library.com/images/permalink-icon/permalink-icon-17.jpg
+         (resized from 512x512 to 64x64) */
+      background-image: url(permalink.png);
+  }
+  </style>
+  <!-- Automatic sections scripts -->
+  <script>
+  /* 1. Find all sections, i.e., elements with class "new-section"
+     2. If a section has no id (shouldn't happen), auto-assign one
+     3. For each element with an id, set "data-section" to its section id
+     4. For each internal link, similarly set "data-section" to its section id
+   */
+  window.addEventListener('DOMContentLoaded', () => {
+      var target_sections = new Map();
+      var sections = document.getElementsByClassName('new-section');
+      for (var i = 0; i < sections.length; i++) {
+          var section = sections[i];
+          if (!section.id) {
+              section.id = 'section-' + i;
+          }
+          target_sections.set(section.id, section.id);
+          section.setAttribute('data-section', section.id)
+          var targets = section.querySelectorAll('[id]');
+          for (var j = 0; j < targets.length; j++) {
+              var target = targets[j];
+              target_sections.set(target.id, section.id);
+              target.setAttribute('data-section', section.id)
+          }
+      }
+
+      var doc_url = new URL(document.URL);
+      var links = document.querySelectorAll('a[href]');
+      var warned = new Map()
+      for (var i = 0; i < links.length; i++) {
+          var link = links[i];
+          var url = new URL(link.href, document.URL);
+          if (url.hostname == doc_url.hostname &&
+              url.pathname == doc_url.pathname && url.hash) {
+              var href = url.hash.substring(1);
+              var section_id = target_sections.get(href)
+              if (!section_id) {
+                  if (!warned.get(href)) {
+                      console.warn("href %s undefined or not within a section",
+                                   href);
+                      warned.set(href, true);
+                  }
+              } else {
+                  link.setAttribute('data-section', section_id);
+              }
+          }
+      }
+  });
+
+  /* Create a new scope to avoid using a global variable */
+  (function() {
+
+      /* Show the section with the given id, which is assumed to be valid */
+      function show_section(section_id) {
+          var section = document.getElementById(section_id);
+
+          /* The "cover-only" class indicates elements that should only be
+             shown when the cover page section is shown */
+          var cover_onlys = document.getElementsByClassName('cover-only');
+          if (section) {
+              for (var i = 0; i < cover_onlys.length; i++) {
+                  var cover_only = cover_onlys[i];
+                  if (section_id != 'sec:cover-page') {
+                      cover_only.classList.add('hidden')
+                  } else {
+                      cover_only.classList.remove('hidden')
+                  }
+              }
+          }
+
+          /* Hide all sections, then un-hide this one */
+          var sections = document.getElementsByClassName('new-section');
+          for (var i = 0; i < sections.length; i++) {
+              sections[i].classList.add('hidden');
+          }
+          section.classList.remove('hidden')
+      }
+
+      /* Add click events to all links, using the "data-section" attribute
+         (set earlier) to show the associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var links = document.querySelectorAll('a[data-section]');
+          for (var i = 0; i < links.length; i++) {
+              links[i].addEventListener('click', event => {
+                  var link = event.currentTarget;
+                  var section_id = link.attributes['data-section'].value;
+                  show_section(section_id);
+              });
+          }
+      });
+
+      /* Ensure that loading the page with a URL fragment (hash) will show the
+         associated section */
+      window.addEventListener('DOMContentLoaded', () => {
+          var url = new URL(document.URL);
+          if (url.hash.length > 1) {
+              var href = url.hash.substring(1);
+              var target = document.getElementById(href);
+              if (!target) {
+                  var fallback = 'sec:executive-summary';
+                  console.warn("target %s undefined; falling back on %s",
+                               href, fallback);
+                  href = fallback;
+                  target = document.getElementById(href);
+                  if (!target) {
+                      var fallback = 'sec:cover-page';
+                      console.warn("target %s undefined; falling back on %s",
+                                   href, fallback);
+                      href = fallback;
+                      target = document.getElementById(href);
+                  }
+              }
+              if (!target) {
+                  console.warn("target %s undefined", href);
+              } else {
+                  var section_id = target.attributes['data-section'].value;
+                  if (!section_id) {
+                      console.warn("target %s not within a section", href);
+                  } else {
+                      show_section(section_id);
+                  }
+              }
+          }
+      });
+
+  /* End of new scope */
+  })();
+  </script>
+  <!-- Automatic sections styles -->
+  <style>
+  h1.cover-page, .hidden, aside.footnotes-end-of-document {
+      display: none;
+  }
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  <!-- XXX header includes are included just before the ToC (below) -->
 </head>
 
 <body>
@@ -34,64 +247,274 @@
         The User Services Platform
       </a>
     </h1>
-    <h2 class="project-tagline">A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks</h2>
+    <h2 class="project-tagline">A standardized protocol to manage,
+monitor, update, and control connected devices, IoT endpoints, user
+services and home networks</h2>
     <p></p>
     <p></p>
     <div class="project-buttons">
-      <a class="btn" href="../specification/index.html" title="USP Specification">Specification</a>
-      <a class="btn" href="../specification/index.htm" title="USP Specification Single-file HTML">HTML</a>
-      <a class="btn" href="../specification/index.pdf" title="USP Specification PDF">PDF</a>
-      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP Data Models">Data Models</a>
-      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP Test Plan">Test Plan</a>
-      <a class="btn" href="../resources/01-index-usp-development-resources.html" title="USP Development Resources">Resources</a>
-      <a class="btn" href="../faq/01-index-faq.html" title="USP Frequently Asked Questions">FAQ</a>
+      <a class="btn" href="../specification/index.html" title="USP
+Specification">Specification</a>
+      <a class="btn" href="../specification/index.htm" title="USP
+Specification Single-file HTML">HTML</a>
+      <a class="btn" href="../specification/index.pdf" title="USP
+Specification PDF">PDF</a>
+      <a class="btn" href="https://usp-data-models.broadband-forum.org" title="USP
+Data Models">Data Models</a>
+      <a class="btn" href="https://usp-test.broadband-forum.org" title="USP
+Test Plan">Test Plan</a>
+      <a class="btn" href="../resources/index.html#sec:executive-summary" title="USP
+Development Resources">Resources</a>
+      <a class="btn" href="../faq/index.html#sec:executive-summary" title="USP
+Frequently Asked Questions">FAQ</a>
     </div>
   </section>
 
   <section class="main-content">
-
-    <header id="title-block-header">
-      <h1 class="title">TR-369a2 – User Services Platform (USP)</h1>
-      <p class="subtitle">Issue: 1 Amendment 2 <span class="release"></span></p>
-      <p class="date">Issue Date: January 2022</p>
+    <header id="title-block-header" class="cover-only">
+      <h1 class="title auto-hoverlink" id="title">TR-369 – The User
+Services Platform</h1>
+      <p class="subtitle">Issue: 1 Amendment 3 <span
+class="release"></span></p>
+      <p class="date">Issue Date: June 2023</p>
     </header>
-  <h3 class="unnumbered unlisted" id="table-of-contents">Table of Contents<a class="headerlink" href="01-index-faq.html#table-of-contents" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
-
-  <nav>
-  <ul>
-    <li><a href="01-index-faq.html#sec:faq">FAQ</a></li>
-    <ul>
-      <li><a href="01-index-faq.html#sec:what-is-usp">What is USP?</a></li>
-      <li><a href="01-index-faq.html#sec:what-do-i-need-to-get-started">What do I need to get started?</a></li>
-      <li><a href="01-index-faq.html#sec:what-are-the-major-features-of-usp">What are the major features of USP?</a></li>
-      <li><a href="01-index-faq.html#sec:who-makes-the-user-services-platform">Who makes the User Services Platform?</a></li>
-      <li><a href="01-index-faq.html#sec:how-does-usp-relate-to-tr-069">How does USP relate to TR-069?</a></li>
-      <li><a href="01-index-faq.html#sec:is-usp-a-replacement-for-tr-069">Is USP a replacement for TR-069?</a></li>
-      <li><a href="01-index-faq.html#sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the BBF deprecating or ending support for TR-069?</a></li>
-      <li><a href="01-index-faq.html#sec:is-bbf-building-a-new-data-model-for-usp">Is BBF building a new data model for USP?</a></li>
-      <li><a href="01-index-faq.html#sec:what-sorts-of-devices-can-implement-usp">What sorts of devices can implement USP?</a></li>
-      <li><a href="01-index-faq.html#sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can USP be used to managed virtual network functions or containers?</a></li>
-      <li><a href="01-index-faq.html#sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do I need to support all of USP’s message transfer protocols to be compliant?</a></li>
-      <li><a href="01-index-faq.html#sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m building a USP Agent. How do I get certified?</a></li>
-      <li><a href="01-index-faq.html#sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I have suggestions on USP or things that I would like to see added to the data models. How do I get involved?</a></li>
-    </ul>
-  </ul>
-  </nav>
-
-
-    <div style="clear: both;"/>
+    <nav id="TOC" class="cover-only" role="doc-toc">
+      <h2 id="toc-title">Table of Contents</h2>
+<ul>
+<li><a href="#sec:cover-page" id="toc-sec:cover-page">Cover
+Page</a></li>
+<li><a href="#sec:executive-summary"
+id="toc-sec:executive-summary">FAQ</a>
+<ul>
+<li><a href="#sec:what-is-usp" id="toc-sec:what-is-usp">What is
+USP?</a></li>
+<li><a href="#sec:what-do-i-need-to-get-started"
+id="toc-sec:what-do-i-need-to-get-started">What do I need to get
+started?</a></li>
+<li><a href="#sec:what-are-the-major-features-of-usp"
+id="toc-sec:what-are-the-major-features-of-usp">What are the major
+features of USP?</a></li>
+<li><a href="#sec:who-makes-the-user-services-platform"
+id="toc-sec:who-makes-the-user-services-platform">Who makes the User
+Services Platform?</a></li>
+<li><a href="#sec:how-does-usp-relate-to-tr-069"
+id="toc-sec:how-does-usp-relate-to-tr-069">How does USP relate to
+TR-069?</a></li>
+<li><a href="#sec:is-usp-a-replacement-for-tr-069"
+id="toc-sec:is-usp-a-replacement-for-tr-069">Is USP a replacement for
+TR-069?</a></li>
+<li><a href="#sec:is-the-bbf-deprecating-or-ending-support-for-tr-069"
+id="toc-sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the
+BBF deprecating or ending support for TR-069?</a></li>
+<li><a href="#sec:is-bbf-building-a-new-data-model-for-usp"
+id="toc-sec:is-bbf-building-a-new-data-model-for-usp">Is BBF building a
+new data model for USP?</a></li>
+<li><a href="#sec:what-sorts-of-devices-can-implement-usp"
+id="toc-sec:what-sorts-of-devices-can-implement-usp">What sorts of
+devices can implement USP?</a></li>
+<li><a
+href="#sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers"
+id="toc-sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can
+USP be used to managed virtual network functions or containers?</a></li>
+<li><a
+href="#sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant"
+id="toc-sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do
+I need to support all of USP’s message transfer protocols to be
+compliant?</a></li>
+<li><a href="#sec:im-building-a-usp-agent.-how-do-i-get-certified"
+id="toc-sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m
+building a USP Agent. How do I get certified?</a></li>
+<li><a
+href="#sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved"
+id="toc-sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I
+have suggestions on USP or things that I would like to see added to the
+data models. How do I get involved?</a></li>
+</ul></li>
+</ul>
+    </nav>
+<section id="sec:cover-page" class="cover-page unnumbered new-section">
+<h1 class="cover-page unnumbered">Cover Page</h1>
+</section>
+<section id="sec:executive-summary"
+class="unnumbered auto-hoverlink new-section hidden" data-info="header">
+<h1 class="unnumbered auto-hoverlink" data-info="header">FAQ</h1>
+<ul>
+<li><a href="#sec:what-is-usp">What is USP?</a></li>
+<li><a href="#sec:what-do-i-need-to-get-started">What do I need to get
+started?</a></li>
+<li><a href="#sec:what-are-the-major-features-of-usp">What are the major
+features of USP?</a></li>
+<li><a href="#sec:who-makes-the-user-services-platform">Who makes the
+User Services Platform?</a></li>
+<li><a href="#sec:how-does-usp-relate-to-tr-069">How does USP relate to
+TR-069?</a></li>
+<li><a href="#sec:is-usp-a-replacement-for-tr-069">Is USP a replacement
+for TR-069?</a></li>
+<li><a
+href="#sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the
+BBF deprecating or ending support for TR-069?</a></li>
+<li><a href="#sec:is-bbf-building-a-new-data-model-for-usp">Is BBF
+building a new data model for USP?</a></li>
+<li><a href="#sec:what-sorts-of-devices-can-implement-usp">What sorts of
+devices can implement USP?</a></li>
+<li><a
+href="#sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can
+USP be used to managed virtual network functions or containers?</a></li>
+<li><a
+href="#sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do
+I need to support all of USP’s message transfer protocols to be
+compliant?</a></li>
+<li><a href="#sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m
+building a USP Agent. How do I get certified?</a></li>
+<li><a
+href="#sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I
+have suggestions on USP or things that I would like to see added to the
+data models. How do I get involved?</a></li>
+</ul>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:what-is-usp">What is USP?</h2>
+<p>USP stands for the User Services Platform, a standardized platform to
+manage, monitor, update, and control connected devices, services, IoT,
+and home networks. USP consists of an architecture, protocol, and set of
+data models that create a network of Controllers and Agents that allow
+applications to manipulate the hardware and software capabilities of an
+end-user’s network and devices (network interfaces, consumer electronics
+platforms, smart objects, virtualized network functions, etc.).</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:what-do-i-need-to-get-started">What do I need to get
+started?</h2>
+<p>Checkout our <a href="/resources/">development resources</a> for
+schemas, code, certification, and more.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:what-are-the-major-features-of-usp">What are the major features
+of USP?</h2>
+<p>The User Services Protocol is designed with four major features in
+mind:</p>
+<ul>
+<li>Flexibility - USP is applicable to many different use cases or
+deployment scenarios, and able to be implemented by new and varied kinds
+of devices.</li>
+<li>Scaling - With the increase in the kinds of devices that can now be
+managed, monitored, or controlled, comes an increase in the raw numbers
+of those devices. USP is able to scale to a very large number of managed
+devices, services, and connections.</li>
+<li>Standardization and ease of migration - USP meets the challenges of
+connected device (network gateways, whole-home and enterprise Wi-Fi, and
+IoT) management and control with an interoperable, non-proprietary
+standard, that easily evolves from existing TR-069 deployments.</li>
+<li>Security - USP is designed with application layer security,
+authentication, integrity, and privacy from the ground up.</li>
+</ul>
+<p>For an in-depth look at the high level benefits of USP, read our
+whitepaper, “<a
+href="https://www.broadband-forum.org/technical/download/MU-461.pdf">Realizing
+the Promise of the Connected Home with USP</a>”.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:who-makes-the-user-services-platform">Who makes the User
+Services Platform?</h2>
+<p><img src="./broadband-forum-logo.png" /></p>
+<p>USP is developed by the <a
+href="http://www.broadband-forum.org">Broadband Forum</a>, an
+international standards organization of network service providers/MSOs,
+end user device manufacturers, government and university organizations,
+and test laboratories. It is developed in the “Broadband User Services”
+<a
+href="https://www.broadband-forum.org/standards-and-software/downloads/work-areas-projects">Work
+Area</a>.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:how-does-usp-relate-to-tr-069">How does USP relate to
+TR-069?</h2>
+<p>USP is a natural evolution of the <a
+href="https://www.broadband-forum.org/technical/download/TR-069.pdf">CPE
+WAN Management Protocol</a> (more commonly known as TR-069). It was
+developed to improve on the use cases met by TR-069, expand the number
+and kinds of devices it can be deployed on, and leverage the lessons
+learned in the 15 years of TR-069 being deployed in real-world
+environments.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:is-usp-a-replacement-for-tr-069">Is USP a replacement for
+TR-069?</h2>
+<p>While USP represents significant advancements in scalability and
+scope over TR-069, it is designed to co-exist with TR-069 and offer an
+easy migration path for those who want to make the switch.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:is-the-bbf-deprecating-or-ending-support-for-tr-069">Is the BBF
+deprecating or ending support for TR-069?</h2>
+<p>No. The TR-069 project is still accepting new contributions and has
+had its most recent version (Amendment 6, defining CWMP 1.5) published
+at the same time as USP.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:is-bbf-building-a-new-data-model-for-usp">Is BBF building a new
+data model for USP?</h2>
+<p>No. USP is designed to re-use the <a
+href="http://usp-data-models.broadband-forum.org">Device:2 data
+model</a> and associated Service data models produced for TR-069. There
+are minor alterations to the way USP handles commands, events, and
+proxying, but it is otherwise identical. This helps those looking to
+migrate to USP make the change with little alteration to back-end
+services that rely on the Device:2 data model.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:what-sorts-of-devices-can-implement-usp">What sorts of devices
+can implement USP?</h2>
+<p>Any device capable of an IP connection can implement a USP Agent,
+including Wi-Fi, fixed wireline, and fixed wireless (i.e. 5G) devices.
+In addition, smart hubs that aggregate other connection schemes such as
+ZigBee, Zwave, Bluetooth, and others can be easily managed via USP’s
+proxy mechanism. USP Controllers can be implemented anywhere from large
+scale management servers (like TR-069 ACS) or to enable user
+applications on a smart phone or other user-facing interfaces.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:can-usp-be-used-to-managed-virtual-network-functions-or-containers">Can
+USP be used to managed virtual network functions or containers?</h2>
+<p>USP objects can represent hardware-independent elements via either
+abstraction or proxy. USP greatly expands on the Software Module
+Management mechanism designed for TR-069 to create a <a
+href="/specification/15-index-software-modularization-theory-of-operations.html#sec:software-modularization-theory-of-operations">framwork
+in which containerized microservices can be managed</a> and that can
+communicate their capabilities to other applications.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:do-i-need-to-support-all-of-usps-message-transfer-protocols-to-be-compliant">Do
+I need to support all of USP’s message transfer protocols to be
+compliant?</h2>
+<p>No. Each supported transport is meant for a different core use case.
+In addition, transport proxy functions are in development that will make
+co-existence and interoperability of implementations of different
+transports simple.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:im-building-a-usp-agent.-how-do-i-get-certified">I’m building a
+USP Agent. How do I get certified?</h2>
+<p>The conformance test plan for USP Agents is defined in <a
+href="https://usp-test.broadband-forum.org">TP-469</a>. This test plan
+evolves, and forms the basis for the Broadband Forum’s <a
+href="https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification">USP
+Agent Certification Program</a>.</p>
+<h2 class="unnumbered auto-hoverlink" data-info="header"
+id="sec:i-have-suggestions-on-usp-or-things-that-i-would-like-to-see-added-to-the-data-models.-how-do-i-get-involved">I
+have suggestions on USP or things that I would like to see added to the
+data models. How do I get involved?</h2>
+<p>Feedback and questions can always be given via <a
+href="https://github.com/BroadbandForum/usp">GitHub</a>. Due to the
+standards process adopted by the Broadband Forum, a contributing
+Broadband Forum member must adopt suggested changes and present them to
+the Forum as a contribution from their company. An even easier way is to
+<a
+href="https://www.broadband-forum.org/about-the-broadband-forum/membership/becoming-a-bbf-member">become
+a member</a> and contribute directly. The Broadband Forum has membership
+levels for large businesses, small businesses, and individuals.</p>
+</section>
+    <div style="clear: both;"></div>
     <footer class="site-footer">
-
       <span class="site-footer-owner">
         USP is developed and maintained
         by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
-        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+        &copy; The Broadband Forum 2023</a>. All Rights Reserved.
       </span>
       <span class="site-footer-credits">
         This page was generated by <a href="https://pandoc.org">pandoc</a>
         and <a href="https://pages.github.com">GitHub Pages</a>.
-        View the <a href="https://github.com/BroadbandForum/usp">specification source on GitHub</a>.
-        <span class="release"/>
+        View the <a href="https://github.com/BroadbandForum/usp">specification
+source on GitHub</a>.
+        <span class="release"></span>
       </span>
     </footer>
   </section>

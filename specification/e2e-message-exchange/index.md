@@ -28,6 +28,8 @@ USP makes use of USP Records to exchange USP Messages between Endpoints, see [](
 
 When exchanging USP Records within an E2E Session Context, `record_type` of `session_context` is used, and all required parameters for `record_type` of `session_context` are supplied.
 
+When a USP Record that is received within an E2E Session Context contains a USP Message request, its associated response or error message is sent within an E2E Session Context, unless otherwise specified (see [](#sec:requests-responses-and-errors)).
+
 ### Establishing an E2E Session Context
 
 For the exchange of USP Records within an E2E Session Context to happen between two USP Endpoints, an E2E Session Context (Session Context) is established between the participating USP Endpoints. The Session Context is uniquely identified within the USP Endpoint by the combination of the Session Identifier and remote USP Endpoint's Identifier.
@@ -42,7 +44,7 @@ When a Session Context had been previously established between an Agent and Cont
 
 **[R-E2E.5]{}** – At most one (1) Session Context is established between an Agent and Controller.
 
-**[R-E2E.6]{}** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint, and initialize the `sequence_id` field to `1`.
+**[R-E2E.6]{}** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the receiving USP Endpoint MUST start a new Session Context for the remote USP Endpoint, using the `session_id` from the received USP Record, and initialize the `sequence_id` field to `1`.
 
 *Note: Implementations need to consider if outstanding USP Messages that have not been transmitted to the remote USP Endpoint need to be transmitted within the newly established Session Context.*
 
@@ -169,7 +171,7 @@ The originating Endpoint is responsible for determining the policy for recoverin
 
 **[R-E2E.22]{}** – The receiving USP Endpoint MUST successfully process the USP Record through the `expected_id` field that it last transmitted in the previous session.
 
-When a USP Endpoint receives a USP Record that cannot pass an integrity check or that has an incorrect value in the `session_id` element, the Session Context is restarted.
+When a USP Endpoint receives a USP Record that cannot pass an integrity check or that has an incorrect value in the `session_id` field, the Session Context is restarted.
 
 **[R-E2E.23]{}** – USP Records that do not pass integrity checks MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
 
@@ -179,14 +181,18 @@ This allows keys to be distributed and enabled under the old session keys and th
 
 ### Segmented Message Exchange
 
-Since USP can use different types of MTPs, some MTPs place a constraint on the size of the USP Message that it can transport. To handle this, USP has a Segmentation and Reassembly function. When this Segmentation and Reassembly function is performed by Controller and Agent, it removes the possibly that the message may be blocked (and typically) dropped by the intermediate transport servers. A Segmentation and Reassembly example is shown in the figure below where the ACS Controller segments the USP Message within the USP Record into segments of 64K bytes because the STOMP MTP Endpoint (in this example) can only handle messages up to 64K bytes.
+Since USP can use different types of MTPs, some MTPs place a constraint on the size of the USP Record that it can transport. To handle this, USP has a Segmentation and Reassembly function. When this Segmentation and Reassembly function is performed by Controller and Agent, it removes the possibly that the message may be blocked (and typically) dropped by the intermediate transport servers. A Segmentation and Reassembly example is shown in the figure below where the ACS Controller segments the USP Message within the USP Record of 64K bytes because the STOMP MTP Endpoint (in this example) can only handle frame body up to 64K bytes.
 
-While the `sequence_id` field identifies the USP Record sequence identifier within the context of a Session Context and the `retransmit_id` field provides a means of a receiving USP Endpoint to indicate to the transmitting USP Endpoint that it needs a specific USP Record to ensure information fields are processed in a first-in-first-out (FIFO) manner, the Segmentation and Reassembly function allows multiple payloads to be segmented by the transmitting USP Endpoint and reassembled by the receiving USP Endpoint by augmenting the USP Record with additional information fields without changing the current semantics of the USP Record's field definitions. This is done using the `payload_sar_state` and `payloadrec_sar_state` fields in the USP Record to indicate status of the segmentation and reassembly procedure. This status along with the existing `sequence_id`, `expected_id` and `retransmit_id` fields and the foreknowledge of the E2E maximum transmission unit `MaxUSPRecordSize` Parameter in the Agent's Controller table provide the information needed for two USP Endpoints to perform segmentation and reassembly of payloads conveyed by USP Records. In doing so, the constraint imposed by MTP Endpoints (that could be intermediate MTP Endpoints) that do not have segmentation and reassembly capabilities are alleviated. USP Records of any size can now be conveyed across any USP MTP Endpoint as depicted below:
+While the `sequence_id` field identifies the USP Record sequence identifier within the context of a Session Context and the `retransmit_id` field provides a means of a receiving USP Endpoint to indicate to the transmitting USP Endpoint that it needs a specific USP Record to ensure information fields are processed in a first-in-first-out (FIFO) manner, the Segmentation and Reassembly function allows multiple payloads to be segmented by the transmitting USP Endpoint and reassembled by the receiving USP Endpoint by augmenting the USP Record with additional information fields without changing the current semantics of the USP Record's field definitions. This is done using the `payload_sar_state` and `payloadrec_sar_state` fields in the USP Record to indicate status of the segmentation and reassembly procedure. This status along with the existing `sequence_id`, `expected_id` and `retransmit_id` fields and the foreknowledge of the maximum allowed USP Record size (configurable by the `Device.LocalAgent.Controller.{i}.E2ESession.MaxUSPRecordSize` parameter) provide the information needed for two USP Endpoints to perform segmentation and reassembly of payloads conveyed by USP Records. In doing so, the constraint imposed by MTP Endpoints (that could be intermediate MTP Endpoints) that do not have segmentation and reassembly capabilities are alleviated. USP Messages of any size can now be conveyed across any USP MTP Endpoint as depicted below:
 
 ![E2E Segmentation and Reassembly](segmentation-and-reassembly.png){#fig:segmentation-and-reassembly}
 
 *Note: the 64k size limit is not inherent to the STOMP protocol. It is merely
 provided here as an example.*
+
+*Note: for other protocols (e.g., MQTT), the maximum allowed size by the MTP may also include its own header size,
+not only the conveyed payload (e.g., MQTT packet size). In this case, the `MaxUSPRecordSize` value must be
+a smaller value than the maximal size of the MTP.*
 
 #### SAR function algorithm
 
@@ -198,11 +204,11 @@ For each USP Message segment the Payload:
 
 1. Compose the USP Message.
 2. If `payload_security` is `TLS12`, encrypt the USP Message. TLS will segment the encrypted Message per the maximum allowed TLS record size.
-    1. If all TLS records + Record header elements are less than the maximum allowed USP Record size, then a single USP Record is sent.
+    1. If all TLS records + Record header fields are less than the maximum allowed USP Record size, then a single USP Record is sent.
     2. Otherwise segmentation of the USP Record will need to be done.
-        1. If the record size of a single TLS record + USP Record header elements is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
-        2. If the TLS record size + Record header elements is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
-3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header elements are greater than the maximum allowed USP Record size, the USP Record is segmented.
+        1. If the record size of a single TLS record + USP Record header fields is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
+        2. If the TLS record size + Record header fields is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
+3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header fields are greater than the maximum allowed USP Record size, the USP Record is segmented.
 4. Set the `payload_sar_state` field for each transmitted Record.
     1. If there is only one Record, `payload_sar_state` = `NONE (0)`.
     2. If there is more than one USP Record, the `payload_sar_state` field is set to `BEGIN (1)` on the first Record, `COMPLETE (3)` on the last Record, and `INPROCESS (2)` on all Records between the two.
@@ -213,7 +219,7 @@ For each USP Message segment the Payload:
 
 The effect of the above rules for `PLAINTEXT` payloads or for Secure Message Exchange with a single TLS record is that `payloadrec_sar_state` will be the same as `payload_sar_state` for all Records used to communicate the USP Message.
 
-*Note: The maximum allowed USP Record size can be exposed via the data model using the `MaxUSPRecordSize` Parameter.*
+*Note: The maximum allowed USP Record size can be exposed via the data model using the `Device.LocalAgent.Controller.{i}.E2ESession.MaxUSPRecordSize` Parameter.*
 
 ##### Receiving Endpoint
 
@@ -302,13 +308,17 @@ Circumstances may arise (such as multiple Message Transfer Protocols, retransmis
 
 When the exchange of USP Records without an E2E Session Context is used, the `record_type` is set to `no_session_context`.
 
+When a USP Record that is received without an E2E Session Context contains a USP Message request, its associated response or error message is sent without an E2E Session Context, unless otherwise specified (see [](#sec:requests-responses-and-errors)).
+
 **[R-E2E.26]{}** - A `record_type` of `no_session_context` MUST be used for exchange of USP Records without an E2E Session Context. A non-zero `payload` MUST be included.
 
 ### Failure Handling of Received USP Records Without a Session Context
 
 When a receiving USP Endpoint fails to either buffer or successfully process a USP Record, the receiving USP Endpoint reports a failure.
 
-**[R-E2E.27]{}** – When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint SHOULD send a `DisconnectRecord` (as described in [R-MTP.7]() for Agents).
+**[R-E2E.27]{}** (DEPRECATED) - When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint SHOULD send a `DisconnectRecord` (as described in [R-MTP.7]() for Agents).
+
+*Note: Requirement [R-E2E.27]() was removed in USP 1.3, replaced by the behavior defined in [R-MTP.5]()*
 
 Note that [R-MTP.7]() says Agents should send a `DisconnectRecord` when terminating an MTP. Controllers can also send a `DisconnectRecord` in this case. The MTP can stay connected. Brokered MTP sessions are expected to remain but other MTP connections could be closed.
 

@@ -1,52 +1,31 @@
 # WT-369 common metadata
 
-# each makefile must set ROOTDIR to be the relative path to the root target
-# directory; as it happens, it will typically be the same as TOPDIR
+# defs.mk sets the ROOTDIR metadata variable to be the relative path to the
+# root target directory
 
-# USP major, minor, patch and draft versions
-# XXX could improve how these are referenced
-uspMajor: 1
-uspMinor: 2
-uspPatch: 0
-uspDraft: ''
-
-# BBF-specific metadata; c.f. Word properties
-bbfNumber: TR-369a%uspMinor%%uspDraft%
-bbfTitle: User Services Platform (USP)
-bbfIssue: Issue
-bbfVersion: '%uspMajor% Amendment %uspMinor%'
-bbfMonth: January
-bbfYear: 2022
-bbfType: Technical Report
-bbfStatus:
-bbfContrib:
-
-# default title is 'shortname -- bbfTitle', but shortname is set below; without
+# default title is 'shortname -- project', but shortname is set below; without
 # this override, the title wouldn't include the number
 title: '%bbfNumber% -- %bbfTitle%'
 
 # information shown on each page header
 siteurl: '%ROOTDIR%/index.html'
 
+# this defaults to 'bbfTitle'
 project: The User Services Platform
 
-tagline: A standardized protocol to manage, monitor, update, and control
-         connected devices, IoT endpoints, user services and home networks
-
 # displayed version number
-versionNumber: '%uspMajor%.%uspMinor%'
+versionNumber: '%bbfMajor%.%bbfMinor%'
 
 # don't display these in the banner
 version: ''
 status: ''
 
-# information shown in the footer
+# this defaults to bbfNumber
 shortname: USP
-reponame: usp
 
 # Protobuf files and URLs
-usp-msg-proto-file: 'usp-msg-%uspMajor%-%uspMinor%.proto'
-usp-record-proto-file: 'usp-record-%uspMajor%-%uspMinor%.proto'
+usp-msg-proto-file: 'usp-msg-%bbfMajor%-%bbfMinor%.proto'
+usp-record-proto-file: 'usp-record-%bbfMajor%-%bbfMinor%.proto'
 usp-msg-proto-url: '%ROOTDIR%/specification/%usp-msg-proto-file%'
 usp-record-proto-url: '%ROOTDIR%/specification/%usp-record-proto-file%'
 
@@ -58,15 +37,15 @@ code-block-filters:
       path:
         - '%PYTHONDIR%'
       import:
-        - 'usp.usp_record_%uspMajor%_%uspMinor%_pb2'
-        - 'usp.usp_msg_%uspMajor%_%uspMinor%_pb2'
+        - 'usp.usp_record_%bbfMajor%_%bbfMinor%_pb2'
+        - 'usp.usp_msg_%bbfMajor%_%bbfMinor%_pb2'
       type: '!attributes.type'
       from: '!attributes.from'
       to: '!classes.protobuf|json|yaml'
 
 # Dev Resources and FAQ URLs (also used in top-level index.md)
-resurl: '%ROOTDIR%/resources/01-index-usp-development-resources.html'
-faqurl: '%ROOTDIR%/faq/01-index-faq.html'
+resurl: '%ROOTDIR%/resources/index.html#sec:executive-summary'
+faqurl: '%ROOTDIR%/faq/index.html#sec:executive-summary'
 
 buttons:
 - label: Specification
@@ -365,6 +344,18 @@ references:
   URL: https://usp-data-models.broadband-forum.org#Device:2
 
 # other
+
+- id: IANA
+  call-number: IANA
+  title: Internet Assigned Numbers Authority
+  publisher: IANA
+  URL: https://www.iana.org/
+
+- id: IMEI
+  call-number: IMEI Database
+  title: International Mobile Equipment Identity
+  publisher: GSMA
+  URL: https://imeidb.gsma.com/imei/index#
 
 - id: IEEEREG
   call-number: Assignments

@@ -1,5 +1,5 @@
 
-# FAQ {.unnumbered}
+# FAQ {#executive-summary .unnumbered}
 
 ## What is USP? {.unnumbered}
 
@@ -48,7 +48,7 @@ Any device capable of an IP connection can implement a USP Agent, including Wi-F
 
 ## Can USP be used to managed virtual network functions or containers? {.unnumbered}
 
-USP objects can represent hardware-independent elements via either abstraction or proxy, and re-uses the Software Module Management mechanism designed for TR-069 to manage both execution and deployment units.
+USP objects can represent hardware-independent elements via either abstraction or proxy. USP greatly expands on the Software Module Management mechanism designed for TR-069 to create a [framwork in which containerized microservices can be managed](/specification/15-index-software-modularization-theory-of-operations.html#sec:software-modularization-theory-of-operations) and that can communicate their capabilities to other applications.
 
 ## Do I need to support all of USP's message transfer protocols to be compliant? {.unnumbered}
 
@@ -56,7 +56,7 @@ No. Each supported transport is meant for a different core use case. In addition
 
 ## I'm building a USP Agent. How do I get certified? {.unnumbered}
 
-The conformance test plan for USP Agents is defined in [TP-469](https://usp-compliance.broadband-forum.org). This test plan evolves, and forms the basis for the Broadband Forum's [USP Agent Certification Program](https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification).
+The conformance test plan for USP Agents is defined in [TP-469](https://usp-test.broadband-forum.org). This test plan evolves, and forms the basis for the Broadband Forum's [USP Agent Certification Program](https://www.broadband-forum.org/testing-and-certification-programs/bbf-369-usp-certification).
 
 ## I have suggestions on USP or things that I would like to see added to the data models. How do I get involved? {.unnumbered}
 

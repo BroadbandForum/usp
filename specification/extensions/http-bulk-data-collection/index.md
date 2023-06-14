@@ -6,7 +6,7 @@ This section discusses the Theory of Operation for USP specific mechanisms relat
 
 ## Introduction
 
-The general concept behind the USP Bulk Data collection mechanism is that a USP Controller can configure an Agent to consistently deliver a bulk data report at a specific interval. For large CPE populations, this is a more efficient mechanism when compared to the alternative of polling each individual CPE for the data. There are four key aspects of configuring the bulk data collection mechanism on an Agent:
+The general concept behind the USP Bulk Data collection mechanism is that a USP Controller can configure an Agent to consistently deliver a bulk data report at a specific interval. For large populations, this is a more efficient mechanism when compared to the alternative of polling each individual Agent for the data. There are four key aspects of configuring the bulk data collection mechanism on an Agent:
 
 * **What data needs to be collected** :: The set of Object/Parameter Path Names that dictate the set of Parameters that will be included in each Bulk Data report.  Anything included in this set should be considered a filter that is applied against the Instantiated Data Model at the time of report generation, which means that the generation of the report is not contingent upon the Path Name being present in the Instantiated Data Model at the time of report generation.
 
@@ -339,6 +339,17 @@ Using this configuration a device that has 1 Wi-Fi Access Point (with instance i
     WiFi_AP_Assoc.1.11.FailedRetransCount
     WiFi_AP_Assoc.1.11.RetryCount
     WiFi_AP_Assoc.1.11.MultipleRetryCount
+
+**[R-BULK.10a]{}** - When the value of the Exclude Parameter is True, the Parameter Path of the Reference Parameter MUST be excluded from the Report.
+
+For example, for a device to report all the objects and parameters of a Wi-Fi Data Elements device and all sub objects and their parameters EXCEPT the MultiAPDevice object, the following would be configured:
+
+    .BulkData.Profile.1.Parameter.1.Name = "DE Device"
+    .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.DataElements.Network.Device."
+
+    .BulkData.Profile.1.Parameter.2.Name = "Remove MultiapDevice"
+    .BulkData.Profile.1.Parameter.2.Reference = "Device.WiFi.DataElements.Network.Device.*.MultiAPDevice."
+    .BulkData.Profile.1.Parameter.2.Exclude = True
 
 
 ## Encoding of Bulk Data

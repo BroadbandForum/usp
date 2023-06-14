@@ -67,7 +67,7 @@ MQTT 3.1.1 does not provide a simple mechanism for a USP MQTT client to provide 
 1. Support Endpoint ID as ClientId.
 2. Get Endpoint ID from client TLS certificate.
 
-MQTT 3.1.1 also does not provide a mechanism for the MQTT server to tell a client what Topic other Endpoints should use to send it a message (the "reply to" Topic). This information would need to be pre-configured or provided in some manner not specified here.
+MQTT 3.1.1 also does not provide a mechanism for the MQTT server to tell a client what Topic other Endpoints should use to send the client a message (the "reply to" Topic). This information would need to be pre-configured or provided in some manner not specified here.
 
 MQTT 5.0 includes additional properties that deployments can choose to use.
 
@@ -104,9 +104,9 @@ USP Endpoints can be configured with one or more specific MQTT Topics or Topic F
 * All configured Topic Filter values for use with this MQTT server MUST be included in a `SUBSCRIBE` packet. For a USP Agent, the `.MQTT.Client.{i}.Subscription.{i}. ` table can be used to configure Topic Filter values.
 * If an MQTT 5.0 USP Endpoint received one or more User Property in the `CONNACK` packet where the name of the name-value pair is "subscribe-topic", the USP Endpoint MUST include the value of all such name-value pairs in its `SUBSCRIBE` packet as a Topic Filter.
 * If an MQTT 5.0 Endpoint received a Response Information property in the `CONNACK` packet, and the topic from that Response Information property is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the previous 2 bullets, the Endpoint MUST include the value of the Response Information property in its `SUBSCRIBE` packet.
-* If an Endpoint has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` Parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Endpoint MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet.
+* If a USP Agent has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` Parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Agent MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet. For MQTT 5.0 clients, the subscription topic is set to the value of `ResponseTopicConfigured`. For MQTT 3.1.1 clients, the subscription topic is set to a wildcarded topic filter based on the value of `ResponseTopicConfigured`.
 
-**[R-MQTT.16]{}** - USP Agents that have NOT received a "subscribe-topic" User Property in the `CONNACK` and do NOT have a configured Topic Filter (`Device.MQTT.Client.{i}.Subscription.{i}.Topic` Parameter for this Client instance in the data model) MUST terminate the MQTT communications session (via the `DISCONNECT` packet) and consider the MTP disabled.
+**[R-MQTT.16]{}** - USP Agents that have NOT received any Subscriptions outlined in [R-MQTT.15]() "subscribe-topic" User Property in the `CONNACK` and do NOT have a configured Topic Filter (`Device.MQTT.Client.{i}.Subscription.{i}.Topic` Parameter for this Client instance in the data model) MUST terminate the MQTT communications session (via the `DISCONNECT` packet) and consider the MTP disabled.
 
 **[R-MQTT.17]{}** - If a USP Endpoint does not successfully subscribe to at least one Topic, it MUST NOT publish a packet with a USP Record in its Application Message, and MUST disconnect from the MQTT server.
 
@@ -129,6 +129,8 @@ The USP Controller's MQTT Topic needs to be known by any USP Agent expected to s
 The USP Agent will also need to know an exact Topic where it can be reached (and not just a Topic Filter) in order to provide a Controller with the Agent’s "reply to" Topic.
 
 **[R-MQTT.21]{}** - An MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
+
+*Note: By using a single "reply to" Topic for all USP connections, an Agent on the MQTT server may become a DoS attack vector and cannot be unsubscribed from because this would cause the Agent to lose all "reply to" traffic. *
 
 **[R-MQTT.22]{}** - USP Endpoints MUST include a "reply to" Topic in all `PUBLISH` packets transporting USP Records.
 

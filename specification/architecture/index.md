@@ -19,7 +19,7 @@ USP is made up of several architectural components:
 
 ## Endpoints
 
-A USP Endpoint can act as Agent or a Controller. Controllers only send messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other Endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.
+A USP Endpoint can act as Agent or a Controller. Controllers only send messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates with other Endpoints over one or more Message Transfer Protocols (MTP). This communication is secured by the MTP, or by the use of a [USP Session Context](#sec:exchange-of-usp-records-within-an-e2e-session-context), or both.
 
 ![USP Agent and Controller Architecture](usp_architecture.png){#fig:usp-agent-and-controller-architecture}
 
@@ -59,19 +59,19 @@ When used anywhere else (e.g. in the `to_id` and `from_id` of a USP Record), the
 
 The authority-scheme follows the following syntax:
 
-`authority-scheme = "oui" | "cid" | "pen" | "self"  | "user" | "os" | "ops" | "uuid" | "imei" | "proto" | "doc"`
+`authority-scheme = "oui" | "cid" | "pen" | "self"  | "user" | "os" | "ops" | "uuid" | "imei" | "proto" | "doc" | "fqdn"`
 
 How these authority-scheme values impact the format and values of authority-id and instance-id is described below.
 
-The authority defined by an OUI, CID, or Private Enterprise Number (including OUI used in "ops" and "os" authority scheme) is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the "user" authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the "self" authority scheme, the Endpoint is responsible for ensuring uniqueness.
+The authority defined by an OUI, CID, Private Enterprise Number (including OUI used in "ops" and "os" authority scheme), or fully qualified domain name is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the "user" authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the "self" authority scheme, the Endpoint is responsible for ensuring uniqueness.
 
-**[R-ARC.0]{}** - A Controller and Agent within the same ecosystem MAY use the same Endpoint ID.
+**[R-ARC.0]{}** - A Controller and Agent within the same USP Domain MAY use the same Endpoint ID.
 
-**[R-ARC.1]{}** - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same ecosystem.
+**[R-ARC.1]{}** - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same USP Domain.
 
 **[R-ARC.2]{}** - Endpoints that share the same Endpoint ID MUST NOT communicate with each other via USP.
 
-No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever ecosystem it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.
+No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever USP Domain it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.
 
 Unless the authority responsible for assigning an Endpoint ID assigns meaning to an Agent and Controller having the same Endpoint ID, no meaning can be construed. That is, unless the assigning authority specifically states that an Agent and Controller with the same Endpoint ID are somehow related, no relationship can be assumed to exist.
 
@@ -79,11 +79,11 @@ Unless the authority responsible for assigning an Endpoint ID assigns meaning to
 
 | authority-scheme | usage and rules for authority-id and instance-id |
 | ---------------: | :----------------------------------------------- |
-|`oui`             | `authority-id` MUST be an OUI assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
+|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block Large" or "MA-L") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
 | `cid`            | `authority-id` MUST be a CID assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. `authority-id` MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters).\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the CID.\
 Example: cid:3AA3F8:my-unique-usp-id-42 |
-| `pen`            | `authority-id` MUST be a Private Enterprise Number assigned and registered by the [IANA](http://pen.iana.org/pen/PenApplication.page) to the entity responsible for this Endpoint. `authority-id` MUST use decimal encoding of the IANA-assigned number.\
+| `pen`            | `authority-id` MUST be a Private Enterprise Number assigned and registered by IANA [@IANA] to the entity responsible for this Endpoint. `authority-id` MUST use decimal encoding of the IANA-assigned number.\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the Private Enterprise Number.\
 Example: `pen:3561:my-unique-bbf-id-42` |
 | `self`           | When present, an `authority-id` for "`self`" MUST be between 1 and 6 non-reserved characters in length. When present, it is generated by the Endpoint. It is not required to have an `authority-id` for "`self`".\
@@ -93,28 +93,33 @@ Example: `self::my-Agent` |
 | `user`           | An `authority-id` for "`user`" MUST be between 0 and 6 non-reserved characters in length.\
 The Endpoint ID, including `instance-id`, is assigned to the Endpoint via a user or management interface. |
 | `os`             | `authority-id` MUST be zero-length.\
-`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069, Section 3.4.4].\
+`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
 Example: `os::00256D-0123456789` |
 | `ops`            | `authority-id` MUST be zero-length.\
-`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069, Section 3.4.4].\
+`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
 Example: `ops::00256D-STB-0123456789` |
 | `uuid`           | `authority-id` MUST be zero-length.\
 `instance-id` is a UUID [@RFC4122]\
 Example:`uuid::f81d4fae-7dec-11d0-a765-00a0c91e6bf6` |
 | `imei`           | `authority-id` MUST be zero-length.\
-`instance-id` is an IMEI as defined by GSMA (https://imeidb.gsma.com/imei/index).\
+`instance-id` is an IMEI [@IMEI] as defined by GSMA.\
 Example: `imei::990000862471854` |
 | `proto`          | `authority-id` MUST be between 0 and 6 non-reserved characters (except ".") in length.\
 "`proto`" is used for prototyping purposes only. Any `authority-id` and `instance-id` value (or scheme for creating the value) is left to the prototyper.\
 Example: `proto::my-Agent` |
 | `doc`            | `authority-id` MUST be between 0 and 6 non-reserved characters in length.\
 "`doc`" is used for documentation purposes only (for creating examples in slide decks, tutorials, and other explanatory documents). Any `authority-id` and `instance-id` value (or scheme for creating the value) is left to the document creator. |
+| `fqdn`           | `authority-id` MUST be zero-length.\
+`instance-id` is a valid fully qualified domain name, wildcards are not permitted.\
+Example:`fqdn::www.example.org` |
 
 **[R-ARC.3]{}** - BBF OUI (`00256D`) and Private Enterprise Number (`3561`) are reserved for use in BBF documentation and BBF prototyping and MUST NOT be used by any entity other than BBF.
 
 **[R-ARC.4]{}** - The "`proto`" and "`doc`" authority-scheme values MUST NOT be used in production environments.
 
 The "`proto`" and "`doc`" values are intended only for prototyping and documentation (tutorials, examples, etc.), respectively.
+
+**[R-ARC.4a]{}** - If the `authority-scheme` `fqdn` is specified, the TLS certificates presented by this endpoint MUST contain a `subjectAltName` extension, allowing the use of the FQDN specified by the `instance-id` value.
 
 ### Use of instance-id
 
@@ -132,7 +137,7 @@ Shorter values are preferred, as end users could be exposed to Endpoint IDs. Lon
 
 ## Service Elements
 
-"Service Element" is a general term referring to the set of Objects, Sub-Objects, commands, events, and Parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent's Service Elements are represented in a Data Model - the data model representing an Agent's current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. The Supported Data Model is described in a Device Type Definition (DT). An Agent's Data Model is referenced using Path Names.
+"Service Element" is a general term referring to the set of Objects, Sub-Objects, Commands, Events, and Parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent's Service Elements are represented in a Data Model - the data model representing an Agent's current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. An Agent's Data Model is referenced using Path Names.
 
 ## Data Models
 
@@ -144,7 +149,7 @@ This version of the specification defines support for the following Data Model(s
 
 * The Device:2 Data Model [@TR-181]
 
-This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model [@TR-181], and for creating Device Type Definitions based on that Data Model, are defined in Broadband Forum TR-106 [@TR-106].
+This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model [@TR-181] are defined in Broadband Forum TR-106 [@TR-106].
 
 The use of USP with any of the above data models creates some dependencies on specific Objects and Parameters that must be included for base functionality.
 
@@ -154,19 +159,19 @@ An Agent's Instantiated Data Model represents the Service Elements (and their st
 
 ### Supported Data Model
 
-An Agent's Support Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents. A Supported Data Model consists of the union of all Device Type Definitions used by the Agent.
+An Agent's Supported Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents.
 
 ### Objects
 
-Objects are data structures that are defined by their Sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be static (single-instance) or dynamic (a multi-instance Object, or "table").
+Objects are data structures that are defined by their Sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be Single-Instance or Multi-Instance (also called a "Table").
 
 #### Single-Instance Objects
 
-Static Objects, or "single instance" Objects, are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.
+Single-Instance Objects are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.
 
 #### Multi-Instance Objects
 
-Dynamic Objects, or "multi-instance" Objects, are those Objects that can be the subject of "create" and "delete" operations (using the Add and Delete Messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a "Table", with each instance of the Object referred to as a "Row". Multi-Instance Objects can be also the subject of a search.
+Multi-Instance" Objects are those Objects that can be the subject of "create" and "delete" operations (using the Add and Delete Messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a "Table", with each instance of the Object referred to as a "Row". Multi-Instance Objects can be also the subject of a search.
 
 ### Parameters
 
@@ -174,7 +179,7 @@ Parameters define the attributes or variables of an Object. They are retrieved b
 
 ### Commands
 
-Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the "Operate" Message in USP (i.e., the Operate Message). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.
+Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the Operate Message (see [](#sec:defined-operations-mechanism). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.
 
 ### Events
 
@@ -188,7 +193,7 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 Path Names are represented by a hierarchy of Objects ("parents") and Sub-Objects ("children"), separated by the dot "." character, ending with a Parameter if referencing a Parameter Path. There are six different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a single-instance ("static") Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
+1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
 
 2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)).
 
@@ -245,6 +250,8 @@ For example, the `Device.IP.Interface` table entry with an Instance Number of 3 
 
 Key-based addressing allows an Object Instance to be addressed by using a Unique Key (as defined in the Device:2 Data Model [@TR-181]) in the Path Name.
 
+*Note: Controller and Agent interoperability is greatly affected by an Agent's implementation of Unique Keys. While this specification does not aim to overlap its requirements to those of TR-181 [@TR-181], it is* ***imperative*** *that an Agent implements Unique Keys for every Multi-Instance object in its Supported Data Model.*
+
 Unique Keys used for addressing are expressed in the Path Name by using square brackets surrounding a string that contains the name and value of the Unique Key Parameter using the equality operator (==).
 
 For example, the `Device.IP.Interface` table has two separate unique keys: `Name` and `Alias`. It could be addressed with the following Path Names:
@@ -290,11 +297,11 @@ Further, this Relative Path can't include any child tables. *(Note: this is neve
 
 An Expression Operator dictates how the Expression Component will be evaluated. The supported operators are equals (==), not equals (!=), contains (~=), less than (<), greater than (>), less than or equal (<=) and greater than or equal (>=).
 
-An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in TR-106 [@TR-106]. **For string, boolean and enumeration types, only the '==' and '!=' operators are valid.**
+An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in TR-106 [@TR-106]. **For string and boolean types, and also the Unknown Time dateTime value (cf. TR-106 Section 3.2.1 [@TR-106]), only the '==' and '!=' operators are valid.**
 
 The '~=' operator is only valid for comma-separated lists. It is used to check whether a list contains a certain element using an exact match of the element. The Expression Constant used in the Search Expression must be of the same type as the values in the list. For example, for a list of integers, the Expression Constant must also be an integer.
 
-*Note: Literal values are conceptually converted to their internal representations before comparison. For example, `dateTime` values are converted to their numeric equivalents, `int` values `123`, `+123` and `0123` all represent the same value, and so do `boolean` values `1` and `true`.*
+*Note: Literal values are conceptually converted to a suitable internal representation before comparison. For example, `int` values `123`, `+123` and `0123` all represent the same value, and so do `boolean` values `1` and `true`.*
 
 The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in the Device:2 Data Model [@TR-181].
 

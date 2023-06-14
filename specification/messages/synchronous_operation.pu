@@ -3,7 +3,7 @@
 participant Controller as C
 participant Agent as A
 
-C -> A : Operate Request (command)
+C ->> A : Operate Request (command)
 activate A
 
 A -> A : Perform operation

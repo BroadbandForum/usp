@@ -1,5 +1,4 @@
-
-# USP Development Resources {.unnumbered}
+# USP Development Resources {#executive-summary .unnumbered}
 
 In addition to the TR-369 specification and data models, a number of resources are available to those building and deploying USP based solutions.
 
@@ -33,7 +32,7 @@ model.
 The following resources are accessible to Broadband Forum members:
 
 * [USP Project Wiki](https://wiki.broadband-forum.org/display/BBF/User+Services+Platform+Project+Stream)
-* [USP JIRA Issues](https://issues.broadband-forum.org/projects/USP/)
+* [USP Jira Issues](https://issues.broadband-forum.org/projects/USP/)
 * [USP Development Area](https://code.broadband-forum.org/projects/USP/repos/wt-369/browse)
 * [USP channel on BBF Slack](https://broadband-forum.slack.com/archives/C017V6HCYMN)
 

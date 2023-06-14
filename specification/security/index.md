@@ -6,18 +6,20 @@ USP contains mechanisms for Authentication and Authorization, and Encryption. En
 
 Authentication of Controllers is done using X.509 certificates as defined in [@RFC5280] and [@RFC6818]. Authentication of Agents is done either by using X.509 certificates or shared secrets. X.509 certificates, at a minimum, need to be usable for [](#sec:securing-mtps) with TLS or DTLS protocols. It is recommended that Agents implement the ability to encrypt all MTPs using one of these two protocols, enable it by default, and not implement the ability to disable it.
 
-In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that MTP connection is being made to a member of a trusted domain as verified by a trusted Certificate Authority (CA)), this specification provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or certificates of trusted CAs. The `Device.LocalAgent.Certificate.` Object can be implemented if choosing to expose these stored certificates through the data model. See the Theory of Operations, Certificate Management subsection, below for additional information.
+In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that MTP connection is being made to a member of a trusted domain as verified by a trusted Certificate Authority (CA)), this specification provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or certificates of trusted CAs. The `Device.LocalAgent.Certificate.` Object can be implemented if choosing to expose these stored certificates through the data model. See the [](#sec:theory-of-operations), [](#sec:certificate-management) subsection, below for additional information.
 
 **[R-SEC.0]{}** - Prior to processing a USP Message from a Controller, the Agent MUST either:
 
 * have the Controller's certificate information and have a cryptographically protected connection between the two Endpoints, or
 * have a Trusted Broker's certificate information and have a cryptographically protected connection between the Agent and the Trusted Broker
 
+**[R-SEC.0a]{}** - Whenever a X.509 certificate is used to authenticate a USP Endpoint, the certificate MUST contain a representation of the Endpoint ID in the `subjectAltName` extension. This representation MUST be either the URN form of the Endpoint ID with a type `uniformResourceIdentifier` attribute OR, in the specific case where the Endpoint ID has an `authority-scheme` of `fqdn`, the `instance-id` portion of the Endpoint ID with a type `dNSName` attribute. When this type of authentication is used at the MTP layer, USP Endpoints MUST check the `from_id` field of received USP Records and MUST NOT process Records that do not match the Endpoint ID found in the certificate.
+
 TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (for example, without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use `payload_security` "PLAINTEXT" encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [](#sec:e2e-message-exchange).
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
 
-## Role Based Access Control (RBAC)
+## Role Based Access Control (RBAC) {#sec:rbac}
 
 It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This specification refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
 
@@ -25,7 +27,7 @@ It is expected that Agents will have some sort of Access Control List (ACL) that
 
 **[R-SEC.1a]{}** - Agents SHOULD implement the `Controller` Object with the `AssignedRole` Parameter (with at least read-only data model definition) and `InheritedRole` Parameter (if allowed Roles can come from a trusted CA), so users can see what Controllers have access to the Agent and their permissions. This will help users identify rogue Controllers that may have gained access to the Agent.
 
-See the Theory of Operations, Roles (Access Control) and Assigning Controller Roles subsections, below for additional information on data model elements that can be implemented to expose information and allow control of Role definition and assignment.
+See the [](#sec:theory-of-operations), [](#sec:roles-access-control) and [](#sec:assigning-controller-roles) subsections, below for additional information on data model elements that can be implemented to expose information and allow control of Role definition and assignment.
 
 ## Trusted Certificate Authorities
 
@@ -33,15 +35,15 @@ An Endpoint can have a configured list of trusted Certificate Authority (CA) cer
 
 **[R-SEC.2]{}** - To confirm a certificate was signed by a trusted CA, the Endpoint MUST contain information from one or more trusted CA certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. At a minimum, this stored information will include a certificate fingerprint and fingerprint algorithm used to generate the fingerprint. The stored information MAY be the entire certificate.
 
-This secure means can be accomplished through USP (see [](#sec:theory-of-operations)), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate.` Object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
+This secure means can be accomplished through USP (see [](#sec:theory-of-operations)), [](#sec:certificate-management) subsection, making use of the `Device.LocalAgent.Certificate.` Object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
 
-**[R-SEC.3]{}** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
+**[R-SEC.3]{}** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure that the Controller certificate conforms with the [R-SEC.0a]() requirement.
 
-**[R-SEC.4]{}** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure either that the Controller certificate matches the certificate stored in the `Credential` Parameter of the `Device.LocalAgent.Controller.` entry specific to that Controller OR that the URN form of the Controller Endpoint ID (that matches the USP Record `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.4]{}** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure either that the Controller certificate matches the certificate stored in the `Credential` Parameter of the `Device.LocalAgent.Controller.` entry specific to that Controller OR that the Controller certificate itself is suitable for authentication as per the [R-SEC.0a]() requirement.
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller. The `Device.LocalAgent.ControllerTrust.Credential.` Object can be implemented to expose and allow control over trust and authorization of CAs.
 
-Note that if an Agent supports and has enabled a Trust on First Use (TOFU) policy, it is possible for Controllers signed by unknown CAs to be granted the "untrusted role". See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
+Note that if an Agent supports and has enabled a Trust on First Use (TOFU) policy, it is possible for Controllers signed by unknown CAs to be granted the "untrusted role". See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the [](#sec:assigning-controller-roles) section below for more information related to TOFU and the "untrusted" role.
 
 ## Trusted Brokers
 
@@ -49,19 +51,23 @@ An Endpoint can have a configured list of Trusted Broker certificates. The Endpo
 
 **[R-SEC.4a]{}** - To confirm a certificate belongs to a Trusted Broker, the Endpoint MUST contain information from one or more Trusted Broker certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. This stored information MUST be sufficient to determine if a presented certificate is the Trusted Broker certificate.
 
-This secure means of loading certificate information into an Agent can be accomplished through USP (see Theory of Operations section related to Certificate Management), or through a mechanism external to USP.
+This secure means of loading certificate information into an Agent can be accomplished through USP (see [](#sec:theory-of-operations) section related to [](#sec:certificate-management)), or through a mechanism external to USP.
 
 Note that trusting a broker to authorize a Controller Role requires the Agent to maintain an association between a Trusted Broker certificate and the Role(s) that Trusted Broker is trusted to authorize. The `Device.LocalAgent.ControllerTrust.Credential.` Object can be implemented to expose and allow control over identifying Trusted Brokers. The `AllowedUses` Parameter is used to indicate whether an entry is a Trusted Broker.
 
+**[R-SEC.4b]{}** - A Trusted Broker MUST confirm the identity of all clients by exclusively allowing authentication via unique client certificates that identify the USP Endpoint. Also the confidentiality of all communications MUST be guaranteed by a Trusted Broker, i.e. there MUST NOT be any possibility to forward the communication between Endpoints to another party.
+
+**[R-SEC.4c]{}** - A Trusted Broker MUST guarantee that USP Records sent from clients contain the correct value for the `from_id` field, tying it to the identity provided during the connection establishment. A Trusted Broker MUST NOT inspect USP payloads contained in USP Records.
+
 ## Self-Signed Certificates
 
-**[R-SEC.5]{}** - An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.5]{}** - An Endpoint that generates a self-signed certificate MUST ensure that the certificate is suitable for USP authentication as per the [R-SEC.0a]() requirement.
 
 Self-signed certificates supplied by Controllers can only be meaningfully used in cases where a person is in a position to provide Authorization (what Role the Controller is trusted to have). Whether or not an Agent allows self-signed certificates from a Controller is a matter of Agent policy.
 
 **[R-SEC.6]{}** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an "untrusted" Role on first use.
 
-That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do. See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
+That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do. See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the [](#sec:assigning-controller-roles) section below for more information related to TOFU and the "untrusted" role.
 
 **[R-SEC.7]{}** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
 
@@ -79,19 +85,19 @@ When authentication is done using X.509 certificates, it is up to Controller pol
 
 Note that allowing use of, method for transmitting, and procedure for handling shared secrets is specific to the MTP used, as described in [](#sec:mtp). Shared secrets that are not unique per device are not recommended as they leave devices highly vulnerable to various attacks -- especially devices exposed to the Internet.
 
-**[R-SEC.10]{}** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.10]{}** - An Agent certificate MUST be suitable for USP authentication as per the [R-SEC.0a]() requirement.
 
-**[R-SEC.10a]{}** - The certificate `subjectaltName` value MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate.
+**[R-SEC.10a]{}** - The certificate `subjectAltName` extension MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate.
 
 Agent certificates can be used to secure Records by encrypting at the [MTP layer](#sec:mtp) and/or encrypting at the [USP layer](#sec:e2e-message-exchange).
 
 Some Controller implementations may allow multiple Agents to share a single certificate with a wildcarded Endpoint ID.
 
-**[R-SEC.11]{}** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectaltName` with identical `authority-scheme` and `authority-id`.
+**[R-SEC.11]{}** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectAltName` extension with identical `authority-scheme` and `authority-id`.
 
 Use of a shared certificate is not recommended, and which portion of the `instance-id` can be wildcarded may be specific to the authorizing CA or to the `authority-id` and `authority-scheme` values of the Endpoint ID. Wildcards can only be allowed in cases where the assigning entity is explicitly identified. Controllers are not required to support wildcarded certificates.
 
-**[R-SEC.12]{}** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
+**[R-SEC.12]{}** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectAltName` extension, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
 
 ## Challenge Strings and Images
 
@@ -107,7 +113,7 @@ It is possible for the Agent to allow an external entity to change a Controller 
 
 **[R-SEC.17]{}** - The Agent SHOULD have policy to lock out all use of Challenge values for some time, or indefinitely, if the number of tries limit is exceeded.
 
-See the Theory of Operations, Challenges subsection, below for a description of data model elements that need to be implemented and are used when doing challenges through USP operations.
+See the [](#sec:theory-of-operations), [](#sec:challenges) subsection, below for a description of data model elements that need to be implemented and are used when doing challenges through USP operations.
 
 ## Analysis of Controller Certificates {#sec:analysis-controller-certificates}
 
@@ -184,7 +190,7 @@ These data model elements play a role in reporting on and allowing control of tr
 From component `ControllerTrust`:
 
 * Object `LocalAgent.ControllerTrust.`
-* Parameters `UntrustedRole`, `BannedRole`, `TOFUAllowed`, `TOFUInactivityTimer`
+* Parameters `UntrustedRole`, `BannedRole`, `SecuredRoles`, `TOFUAllowed`, `TOFUInactivityTimer`
 * Commands `RequestChallenge()`, `ChallengeResponse()`
 * Object `LocalAgent.ControllerTrust.Role.{i}.`
 * Object `LocalAgent.ControllerTrust.Credential.{i}.`
@@ -210,11 +216,13 @@ A simple Agent that only wants to inform Controllers of pre-defined Roles (with 
 
 #### Special Roles
 
-Two special Roles are identified by the `UntrustedRole` and `BannedRole` Parameters under the `ControllerTrust.` Object. An Agent can expose these Parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
+Three special Roles are identified by the `UntrustedRole`, `BannedRole` and `SecuredRoles` Parameters under the `ControllerTrust.` Object. An Agent can expose these Parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
 
 The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.AssignedRole`, or through some other external means) and that allows "unknown" Controllers to attach will need to have an "untrusted" Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` Parameter.
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
+
+The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to secured parameter values.
 
 #### A Controller’s Role
 

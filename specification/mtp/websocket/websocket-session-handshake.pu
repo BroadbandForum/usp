@@ -3,7 +3,7 @@
 participant "USP Controller\n WebSocket Server" as C
 participant "USP Agent\n WebSocket Client" as A
 
-A -> C : Get /endpointresource HTTP/1.1 \n Host: controller.example.com \n Upgrade: websocket \n Connection: Upgrade \n Sec-WebSocket-Key: dGhllHNhbXBsZSBub25jZQ== \n Sec-WebSocket-Version: 13 \n Sec-WebSocket-Protocol: v1.usp \n Sec-WebSocket-Extensions: bbf-usp-protocol; eid="<Agent Endpoint ID>"
-C -> A : HTTP/1.1 101 Switching Protocols \n Upgrade:websocket \n Connection: Upgrade \n Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo= \n Sec-WebSocket-Protocol: v1.usp \n Sec-WebSocket-Extensions: bbf-usp-protocol; eid="<Controller Endpoint ID>"
+A -> C : Get /endpointresource?eid=doc::agent HTTP/1.1 \n Host: controller.example.com \n Upgrade: websocket \n Connection: Upgrade \n Sec-WebSocket-Key: dGhllHNhbXBsZSBub25jZQ== \n Sec-WebSocket-Version: 13 \n Sec-WebSocket-Protocol: v1.usp
+C -> A : HTTP/1.1 101 Switching Protocols \n Upgrade:websocket \n Connection: Upgrade \n Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo= \n Sec-WebSocket-Protocol: v1.usp
 C <-> A : Session Established (v1.usp)
 @enduml

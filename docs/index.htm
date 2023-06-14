@@ -4,20 +4,101 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="description" content="TR-369a2 – User Services Platform (USP): A standardized protocol to manage, monitor, update, and control connected devices, IoT endpoints, user services and home networks" />
-  <title>BBF – TR-369a2 – User Services Platform (USP)</title>
+  <meta name="description" content="TR-369 – The User Services Platform:
+A standardized protocol to manage, monitor, update, and control
+connected devices, IoT endpoints, user services and home networks" />
+  <title>BBF – TR-369 – The User Services Platform</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="bbf.css" />
   <link rel="stylesheet" href="extra.css" />
   <link rel="stylesheet" href="release.css" />
+  <!-- Automatic hover links scripts -->
+  <script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var hoverlink = null;
+
+    var elems = document.querySelectorAll('.auto-hoverlink:not(section)');
+      for (var i = 0; i < elems.length; i++) {
+        var elem = elems[i];
+
+        elem.addEventListener('mouseenter', event => {
+          var target = event.target;
+          var info_attr = target.attributes.getNamedItem('data-info');
+          var anchor_attr = target.attributes.getNamedItem('data-anchor');
+          var thing = info_attr ? info_attr.value : target.localName
+          /* we check the parent to cover the case where pandoc has moved the
+             id from a header to its parent section */
+          var anchor = target.id || target.parentElement.id ||
+                                    (anchor_attr ? anchor_attr.value : null);
+
+          if (hoverlink) {
+            hoverlink.remove();
+            hoverlink = null;
+          }
+
+          if (!anchor) {
+              console.warn('%s %s has no id or data-anchor',
+                           thing, target.textContent);
+          } else {
+            hoverlink = document.createElement('a');
+            hoverlink.href = '#' + anchor;
+            hoverlink.className = 'hoverlink';
+            hoverlink.title = 'Permalink to this ' + thing;
+            target.appendChild(hoverlink);
+          }
+        });
+
+        elem.addEventListener('mouseleave', () => {
+          if (hoverlink) {
+            setTimeout(function(href) {
+              if (hoverlink && hoverlink.href == href) {
+                hoverlink.remove();
+                hoverlink = null;
+              }
+            }, 1000, hoverlink.href);
+          }
+        });
+      }
+  });
+  </script>
+  <!-- Automatic hover links styles -->
+  <style>
+  :root {
+      --hoverlink-size: 0.9em;
+  }
+
+  .hoverlink {
+      text-decoration: none;
+  }
+
+  .hoverlink::before {
+      content: " ";
+  }
+
+  .hoverlink::after {
+      display: inline-block;
+      content: "";
+      width: var(--hoverlink-size);
+      height: var(--hoverlink-size);
+      background-size: var(--hoverlink-size) var(--hoverlink-size);
+      /* https://icon-library.com/images/permalink-icon/permalink-icon-17.jpg
+         (resized from 512x512 to 64x64) */
+      background-image: url(permalink.png);
+  }
+  </style>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -25,53 +106,127 @@
 <body>
 <div class="main-content">
 <header id="title-block-header">
-<h1 class="title">TR-369a2 – User Services Platform (USP)</h1>
-<p class="subtitle">Issue: 1 Amendment 2 <span class="release"></span></p>
-<p class="date">Issue Date: January 2022</p>
+<h1 class="title auto-hoverlink" id="title">TR-369 – The User Services
+Platform</h1>
+<p class="subtitle">Issue: 1 Amendment 3 <span
+class="release"></span></p>
+<p class="date">Issue Date: June 2023</p>
 </header>
-<div style="width:45%; float:left;">
-<h2 class="unnumbered unlisted" id="sec:what-is-usp">What is USP? <a href="#sec:what-is-usp" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
-<p>The <strong>User Services Platform</strong> is a standardized <strong>protocol for managing, monitoring, upgrading, and controlling connected devices</strong>. USP allows service providers and consumer electronics manufacturers to:</p>
+<nav id="SIDEBAR" role="doc-toc">
 <ul>
-<li><p>Create interoperable and vendor-independent <strong>managed Wi-Fi systems</strong>.</p></li>
-<li><p>Perform <strong>lifecycle management</strong> of consumer connected devices.</p></li>
-<li><p>Support <strong>independent applications</strong> for smart networking products.</p></li>
-<li><p>Enable <strong>IoT and consumer electronics upgradability</strong> for critical security patches.</p></li>
-<li><p>Develop applications that gather the telemetry necessary to <strong>mass data processing, AI, and machine learning</strong>.</p></li>
-<li><p><strong>Bootstrap and configure</strong> newly installed or purchased devices and virtual services.</p></li>
-<li><p>Let customer support <strong>monitor and troubleshoot</strong> connected devices, services, and home network links.</p></li>
-<li><p>Easily map the home network to <strong>control service quality and monitor threats</strong>.</p></li>
-<li><p>Securely <strong>control IoT, smart home, and smart networking functions</strong> locally or from the Cloud</p></li>
-</ul>
-<p>USP represents the natural evolution of the Broadband Forum’s <a href="https://www.broadband-forum.org/cwmp">CPE WAN Management Protocol</a> (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, events, and service functions (IoT functions, VoIP, etc.).</p>
-<h2 class="unnumbered unlisted" id="sec:how-to-use-this-site">How to use this site: <a href="#sec:how-to-use-this-site" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
+<li><a href="#sec:executive-summary" id="toc-sec:executive-summary">The
+User Services Platform</a>
 <ul>
-<li><p>The <em><a href="specification/index.html">specification</a></em> directory contains the full text of the current version of the protocol, and the schema (currently in Protocol Buffers) for the syntax of USP messages. Use this section when developing your USP protocol stack.</p></li>
-<li><p>The <em><a href="https://usp-data-models.broadband-forum.org">data models</a></em> link will take you to the generated versions of the Device:2 data model (also known as “TR-181i2 - Device:2 Data Model for TR-069 devices and USP Agents”) specific to USP. The raw xml used in development can be found in this directory. Use these to find the Objects necessary to the USP protocol stack, and when developing the Objects, interfaces, services, etc. that you want to manage and control with USP.</p></li>
-<li><p>The USP Agent <em><a href="https://usp-compliance.broadband-forum.org">Test Plan</a></em> provides a list of the test cases executed to validate USP Agent implementations and seek certification.</p></li>
-<li><p><em><a href="./resources/01-index-usp-development-resources.html">Dev Resources</a></em> provides several links for how to build, test, certify, and bring to market USP based solutions.</p></li>
-<li><p>The <em><a href="./faq/01-index-faq.html">FAQ</a></em> page gives information on frequently asked questions. Use this section to learn more about USP and getting involved in its ongoing development.</p></li>
+<li><a href="#sec:what-is-usp" id="toc-sec:what-is-usp">What is
+USP?</a></li>
+<li><a href="#sec:how-to-use-this-site"
+id="toc-sec:how-to-use-this-site">How to use this site:</a></li>
+</ul></li>
+<li><a href="#sec:current-version-versionnumber"
+id="toc-sec:current-version-versionnumber">Current Version: 1.3</a>
+<ul>
+<li><a href="#sec:about-this-version"
+id="toc-sec:about-this-version">About this version:</a></li>
+</ul></li>
 </ul>
-</div>
-<section id="sec:current-version-versionnumber" class="unnumbered unlisted" style="width:45%; float:right;">
-<h2 class="unnumbered unlisted">Current Version: 1.2 <a href="#sec:current-version-versionnumber" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h2>
-<h4 class="unnumbered unlisted" id="sec:about-this-version">About this version: <a href="#sec:about-this-version" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+</nav>
+<section id="sec:executive-summary"
+class="unnumbered hidden-header auto-hoverlink" data-info="header"
+style="width:45%; float:left;">
+<h1 class="unnumbered hidden-header auto-hoverlink"
+data-info="header">The User Services Platform</h1>
+<h2 class="auto-hoverlink" data-info="header" id="sec:what-is-usp">What
+is USP?</h2>
+<p>The <strong>User Services Platform</strong> is a standardized
+<strong>protocol for managing, monitoring, upgrading, and controlling
+connected devices</strong>. USP allows service providers, consumer
+electronics manufacturers, and end users to:</p>
+<ul>
+<li>Create interoperable and vendor-independent <strong>managed Wi-Fi
+systems</strong>.</li>
+<li>Perform <strong>lifecycle management</strong> of consumer connected
+devices and containerized microservices.</li>
+<li>Support <strong>independent applications</strong> for
+application-enabled services gateways.</li>
+<li>Enable <strong>IoT and consumer electronics upgradability</strong>
+for critical security patches.</li>
+<li>Develop applications that gather the telemetry necessary to
+<strong>mass data processing, AI, and machine learning</strong>.</li>
+<li><strong>Bootstrap and configure</strong> newly installed or
+purchased devices and applications.</li>
+<li>Let customer support <strong>monitor and troubleshoot</strong>
+connected devices, services, and home network links.</li>
+<li>Easily map the home network to <strong>control service quality and
+monitor threats</strong>.</li>
+<li>Securely <strong>control IoT, smart home, and smart networking
+functions</strong> locally or from the Cloud.</li>
+<li><strong>Enable multi-tenant</strong> (i.e., multi-stakeholder)
+management and control.</li>
+</ul>
+<p>USP represents the natural evolution of the Broadband Forum’s <a
+href="http://www.broadband-forum.org/cwmp">CPE WAN Management Protocol
+(CWMP)</a>, commonly known as TR-069. It uses an expanded version of the
+Device:2 Data Model to represent device operations (firmware upgrades,
+reboots, etc.), network interfaces, and service functions (IoT
+functions, VoIP, etc.).</p>
+<h2 class="auto-hoverlink" data-info="header"
+id="sec:how-to-use-this-site">How to use this site:</h2>
+<ul>
+<li><p>The <em><a href="specification/index.html">specification</a></em>
+directory contains the full text of the current version of the protocol,
+and the schema (currently in Protocol Buffers) for the syntax of USP
+messages. Use this section when developing your USP protocol
+stack.</p></li>
+<li><p>The <em><a
+href="https://usp-data-models.broadband-forum.org">data models</a></em>
+link will take you to the generated versions of the Device:2 data model
+(also known as “TR-181i2 - Device:2 Data Model for TR-069 devices and
+USP Agents”) specific to USP. The raw xml used in development can be
+found in this directory. Use these to find the Objects necessary to the
+USP protocol stack, and when developing the Objects, interfaces,
+services, etc. that you want to manage and control with USP.</p></li>
+<li><p>The USP Agent <em><a
+href="https://usp-test.broadband-forum.org">Test Plan</a></em> provides
+a list of the test cases executed to validate USP Agent implementations
+and seek certification.</p></li>
+<li><p><em><a href="./resources/index.html#sec:executive-summary">Dev
+Resources</a></em> provides several links for how to build, test,
+certify, and bring to market USP based solutions.</p></li>
+<li><p>The <em><a
+href="./faq/index.html#sec:executive-summary">FAQ</a></em> page gives
+information on frequently asked questions. Use this section to learn
+more about USP and getting involved in its ongoing development.</p></li>
+</ul>
+</section>
+<section id="sec:current-version-versionnumber" class="auto-hoverlink"
+data-info="header" style="width:45%; float:right;">
+<h2 class="auto-hoverlink" data-info="header">Current Version: 1.3</h2>
+<h3 class="auto-hoverlink" data-info="header"
+id="sec:about-this-version">About this version:</h3>
 <p>This specification includes:</p>
 <ul>
 <li>Architectural overview</li>
 <li>Discovery mechanisms for Controllers and Agents</li>
 <li>Basic CRUD messages between Controllers and Agents</li>
-<li>Use of USP Record encapsulation for end to end integrity, security, and privacy</li>
-<li>Data model Objects specific to protocol functionality, object defined operations, and notifications/events</li>
+<li>Use of USP Record encapsulation for end to end integrity, security,
+and privacy</li>
+<li>Data model Objects specific to protocol functionality, object
+defined operations, and notifications/events</li>
 <li>Protocol buffers encoding schema</li>
-<li>Use of WebSockets, MQTT, and STOMP as message transfer protocols (MTP)</li>
+<li>Use of WebSockets, MQTT, STOMP, and UNIX Domain Sockets as message
+transfer protocols (MTP)</li>
 <li>A system for authentication and authorization</li>
-<li>Extensions for bulk data collection, firmware management, software module management, and device proxying</li>
-<li>Theory of operations for using a USP Agent to control IoT devices and systems</li>
+<li>Extensions for bulk data collection, firmware management, software
+module management, containerized microservices, and device proxying</li>
+<li>Theory of operations for using a USP Agent to control IoT devices
+and systems</li>
 </ul>
 <div style="text-align:center;">
-<p><a href="https://www.broadband-forum.org"><img src="broadband-forum-logo.png" /></a></p>
-<p>USP is developed by the Broadband Forum. For more information, visit <a href="https://www.broadband-forum.org">https://www.broadband-forum.org</a></p>
+<p><a href="https://www.broadband-forum.org"><img
+src="broadband-forum-logo.png" /></a></p>
+<p>USP is developed by the Broadband Forum. For more information, visit
+<a
+href="https://www.broadband-forum.org">https://www.broadband-forum.org</a></p>
 </div>
 </section>
 <div style="clear:both;">

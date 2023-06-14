@@ -91,15 +91,17 @@ Below is the state machine diagram[^2] for the lifecycle of EUs.
 
 ![Execution Unit State Diagram](eu_state.png)
 
-This state machine shows 4 states (2 of them transitory) and two explicitly triggered state transitions.
+This state machine shows 5 states (3 of them transitory) and four explicitly triggered state transitions.
 
-The state transitions between the non-transitory states are triggered by executing the `SoftwareModules.ExecutionUnit.{i}.SetRequestedState()` command.  The explicit transitions are as follows:
+The state transitions between the non-transitory states are triggered by executing the `SoftwareModules.ExecutionUnit.{i}.SetRequestedState()`  or the `SoftwareModules.ExecutionUnit.{i}.Restart()` command.  The explicit transitions are as follows:
 
 * In order to Start an EU, the Controller sends a `SetRequestedState()` command with the `RequestedState` Parameter set to Active.  The EU enters the Starting state, during which it takes any necessary steps to move to the Active state, and it will transition to that state unless prevented by a fault.  Note that an EU can only be successfully started if the DU with which it is associated has all dependencies Resolved.  If this is not the case, then the EU’s status remains as Idle, and the `ExecutionFaultCode` and `ExecutionFaultMessage` Parameters are updated appropriately.
 
 * In order to Stop an EU, the Controller sends a `SetRequestedState()` command with the `RequestedState` Parameter set to Idle.   The EU enters the Stopping state, during which it takes any necessary steps to move to the Idle state, and then transitions to that state.
 
-* It is also possible that the EU could transition to the Active or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` Object Instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter.
+* In order to Restart an EU, the Controller sends a `Restart()` command. The EU enters the Restarting state, during which it stops execution and then re-starts before transitioning back to the Active state. The command may be rejected with error code 7230 (Invalid Execution Environment State) if the EU is currently in a state of Stopping.
+
+* It is also possible that the EU could transition to the Active, Restarting, or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if an AutoRestart mechanism is enabled, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` Object Instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter.
 
 The inventory of available EUs along with their current state can be found in the `SoftwareModules` service element found in the Root data model; i.e., the `SoftwareModules.ExecutionUnit.{i}.` Object.  This Object contains a list of all the EUs currently on the device along with accompanying status and any current errors as well as resource utilization related to the EU, including memory and disk space in use.
 
@@ -113,7 +115,7 @@ EUs have a number of identifiers, each contributed by a different actor in the e
 
 The creation of a particular EU instance in the data model occurs during the Installation process of the associated DU.  It is at this time that the EUID is assigned by the EE as well. The configuration exposed by a particular EU is available from the time the EU is created in the data model, whether or not the EU is Active.  Upon Uninstall of the associated DU, it is expected that the EU would transition to the Idle State, and the data model instance would be removed from the EU table once the associated resources had been removed from the device.  Garbage clean up, however, is EE and implementation dependent.
 
-Although the majority of EUs represent resources such as scripts that can be started or stopped, there are some inert resources, such as libraries, which are represented as EUs.  In this case, these EUs behave with respect to the management interface as a "regular" EU.  In other words, they respond successfully to Stop and Start commands, even though they have no operational meaning and update the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter accordingly. In most cases the `Status` would not be expected to transition to another state on its own, except in cases where its associated DU is Updated or Uninstalled or its associated EE is Enabled or Disabled, in which cases the library EU acts as any other EU.
+Although the majority of EUs represent resources such as scripts that can be started or stopped, there are some inert resources, such as libraries, which are represented as EUs.  In this case, these EUs behave with respect to the management interface as a "regular" EU.  In other words, they respond successfully to Stop and Start commands, even though they have no operational meaning and update the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter accordingly. In most cases the `Status` would not be expected to transition to another state on its own, except in cases where its associated DU is Updated or Uninstalled or its associated EE is Enabled or Disabled, in which cases the library EU acts as any other EU.  Restarting such an EU will result in a successful response but the state remains unchanged.
 
 The EUs created by the Installation of a particular DU might provide functionality to the device that requires configuration by a Controller.  This configuration could be exposed via the USP data model in five ways:
 
@@ -139,9 +141,11 @@ It is also possible that applications could have dedicated log files.  The EU Ob
 
 As discussed above, an EE is a software platform that supports the dynamic loading and unloading of modules. A given device can have multiple EEs of various types and these EEs can be layered on top of each other.  The following diagram gives a possible implementation of multiple EEs.
 
-![Possible Multi-Execution Environment Implementation](smm_concepts.png)
+![Possible Multi-Execution Environment Implementation](smm_concepts.png){#fig:multi-exec-env}
 
 In this example, the device exposes its Linux Operating System as an EE and has two different OSGi frameworks layered on top of it, all of which are modeled as separate ExecEnv Object Instances. In order to indicate the layering to a Controller, the two OSGi framework Objects (`.ExecEnv.2` and `.ExecEnv.3`) would populate the `Exec.Env.{i}.Parent` Parameter with a path reference to the Linux Object (`.ExecEnv.1`).  The Linux EE Object would populate that Parameter with an empty string to indicate that it is not layered on top of any managed EE.
+
+*Note that the above is merely an example; whether a device supports multiple frameworks of the same type and whether it exposes its Operating System as an Execution Environment for the purposes of management is implementation specific.*
 
 Multiple versions of a DU can be installed within a single EE instance, but there can only be one instance of a given version at a time.  In the above diagram, there are two versions of DU1, v1.0 and v1.2 installed on `.ExecEnv.2.`  If an attempt is made to update DU1 to version 1.2, or to install another DU with version 1.0 or 1.2, on `ExecEnv.2`, the operation will fail.
 
@@ -151,9 +155,37 @@ When DUs are Updated, the DU instances on all EEs are affected.  For example, in
 
 For Uninstall, a Controller can either indicate the specific EE from which the DU should be removed, or not indicate a specific EE, in which case the DU is removed from all EEs.
 
-An EE can be enabled and disabled by a Controller.  Reboot of an EE is accomplished by first disabling and then later enabling the EE.  When an EE instance is disabled by a Controller, the EE itself shuts down.  Additionally, any EUs associated with the EE automatically transition to Stopped and the `ExecutionFaultCode` Parameter value is `Unstartable`. The state of the associated DUs remains the same. If a USP command that changes the DU state is attempted on any of the DUs associated with a disabled EE, the operation fails and an "`Invalid value`" error is returned in the `DUStateChange!` event for the affected DU instance. It should be noted if the Operating System of the device is exposed as an EE, disabling it could result in the device being put into a non-operational and non-manageable state.  It should also be noted that disabling the EE on which the USP Agent resides can result in the device becoming unmanageable via USP.
+An EE can be enabled and disabled by a Controller.  Sending a `SoftwareModules.ExecEnv.{i}.Restart()` command is equivalent to first disabling and then later enabling the EE, but also allows the reason for and the time of the restart to be recorded in `SoftwareModules.ExecEnc.{i}.RestartReason` and `SoftwareModules.ExecEnc.{i}.LastRestarted` respectively.
 
-*Note that the above is merely an example; whether a device supports multiple frameworks of the same type and whether it exposes its Operating System as an Execution Environment for the purposes of management is implementation specific.*
+![Execution Environment State Diagram](ee_state.png)
+
+When an EE instance is disabled by a Controller, the EE itself shuts down.  Additionally, any EUs associated with the EE automatically transition to Stopped and the `ExecutionFaultCode` Parameter value is `Unstartable`. The state of the associated DUs remains the same. If a USP command that changes the DU state is attempted on any of the DUs associated with a disabled EE, the operation fails and an "`Invalid value`" error is returned in the `DUStateChange!` event for the affected DU instance. It should be noted if the Operating System of the device is exposed as an EE, disabling it could result in the device being put into a non-operational and non-manageable state.  It should also be noted that disabling the EE on which the USP Agent resides can result in the device becoming unmanageable via USP.
+
+### Managing Execution Environments
+
+An implementation may provide for Execution Environments to be added or removed at run-time. These implementations should provide the `SoftwareModules.ExecEnvClass` table and its associated `AddExecEnv()` command. For example in @fig:multi-exec-env the `ExecEnvClassRef` of the Linux EE would point to one entry in `SoftwareModules.ExecEnvClass` while the two OSGI Frameworks would point to to another entry. A new OSGI Framework instance could be created using `SoftwareModules.ExecEnvClass.{i}.AddExecEnv()`, or an instance could be removed using `SoftwareModules.ExecEnv.{i}.Remove()`.
+
+The `ExecEnvClass.{i}.Capability` table describes the class of EE in terms of the kinds of DUs it supports. For example a web services framework would probably support the installation of WAR files, but it may also support OSGi Bundles as a DU format.
+
+(Note: In the example shown in @fig:multi-exec-env the `ExecEnvClassRef` of the Linux EE could also be left blank, as apparently this EE does not support the installation of any kind of DU nor is it possible to add new instances.)
+
+### Application Data Volumes
+
+An Execution Environment may offer filesystem storage facilities to the software modules which are installed into it; these EEs should provide the `SoftwareModules.ExecEnv.{i}.ApplicationData` table which exposes the storage volumes which currently exist.
+
+Each application data volume is associated with an "`application`" and a volume Name (so that an application may own multiple volumes). The application is identified by the UUID of its DU, and hence by the Vendor and Name of a Deployment Unit. This makes it possible for a data volume to persist across an Update of the DU or even across an Uninstall and subsequent re-Install, if desired. At the opposite extreme, an application data volume may be marked "`Retain Until Stopped`", meaning that the data will be lost when application no longer has any Active EUs (conceptually these volumes are destroyed, and will be re-created when an EU becomes Active).
+
+The set of application data volumes needed by an application are specified in an optional parameter of the `InstallDU()` command, and can be modified by the `Update()` command. Note that the parameter specifies the retention policy for each volume, but not where it is stored - a volume might be stored on the local flash of one device while another device would store the same volume in the cloud. This makes it easier to design applications which can be deployed across a wide range of devices without needing to know the detailed storage layout of each device.
+
+By default the `Update()` and `Uninstall()` commands cause all application data volumes associated with the affected DUs to be lost. This can be prevented by setting the optional `RetainData` argument to `true`; in the case of `Uninstall()` this will result in an "`orphaned`" volume with an `ApplicationUUID` which does not match any DU installed in the EE. The `SoftwareModules.ExecEnv.{i}.ApplicationData.{i}.Remove()` command is available to clean up orphaned data volumes if they are no longer needed. Implementations are advised to reject any attempt to invoke this command on a data volume with an `ApplicationUUID` which matches that of a DU which is currently installed in the EE, with error code 7229 (Invalid Deployment Unit State).
+
+### Signing Deployment Units
+
+An Execution Environment may require any DU which is Installed into it to be signed by an authorized principal. A signature may take many forms, such as a JSON Web Signature (JWS, RFC 7515) or GNU Privacy Guard (GPG, RFC 4880); however in essence it always amounts to a cryptographically-signed statement that a certain artifact is authentic.  Typically the document is identified by a hash of its contents (so the signature also provides assurance of integrity), and asymmetric encryption is used so that both the signature itself and the public key which can be used to verify its authenticity can be transmitted over an insecure channel without risk of compromise.
+
+It may be possible to derive the URL of the signature from the URL of the DU itself, for example by appending a suffix such as ".sig". Alternatively an optional `Signature` argument can be included in the `Install` or `Update` command, providing greater operational flexibility.
+
+If the public key(s) which are used to verify signatures are distributed in the form of X.509 certificates, these may be stored in the `Device.Security.Certificate` table. the Execution Environment may then list the relevant entries in its `Signers` parameter.
 
 ## Fault Model
 
@@ -252,4 +284,4 @@ When the EU is not currently in fault, this Parameter returns the value `NoFault
 The `ExecutionFaultCode` and `ExecutionFaultMessage` Parameters are triggered Parameters.  In other words, it is not expected that an Controller could read this Parameter before issuing a USP Message and see that there was a Dependency Failure that it would attempt to resolve first.  If a Controller wants a notification when these Parameters change, the Controller can subscribe to the ValueChange notification type with the Parameters for the referenced EU.
 
 [^1]: This state machine diagram refers to the successful transitions caused by the USP commands that change the DU state and does not model the error cases.
-[^2]: This state machine diagram refers to the successful transitions caused by the `SetRequestedState()` command within the `ExecutionUnit` table and does not model the error cases.
+[^2]: This state machine diagram refers to the successful transitions caused by the `SetRequestedState()` or the `Restart()` command within the `ExecutionUnit` table and does not model the error cases.

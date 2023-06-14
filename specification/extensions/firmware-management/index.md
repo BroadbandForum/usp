@@ -40,6 +40,8 @@ Another benefit of having multiple firmware images on a device is that if a devi
 
 When there are two images, the device would simply try booting the alternate image (which, ideally, holds the previous version of the firmware). If there are more than two images, the device could try booting from any of the other available images. Ideally, the device would keep track of and try to boot from the previously known working firmware (assuming that firmware is still installed on the device).
 
+If the activation of a firmware image causes the device to lose its USP Agent connectivity to the controller for any reason (i.e., the USP Agent fails to send messages to the Controller, or the messages are not understood by the Controller), the device is expected to roll back to the previously activated image and add appropriate information to the `Device.DeviceInfo.FirmwareImage.{i}.BootFailureLog` parameter of the failed image.
+
 Should the device boot a firmware image other than that specified via the `Device.DeviceInfo.BootFirmwareImage` Parameter, it is important that the device not change the value of the `Device.DeviceInfo.BootFirmwareImage` Parameter to point to the currently-running firmware image Object. If the device was to change this Parameter value, it could make troubleshooting problems with a firmware image switch more difficult.
 
 It was recommended above that the Controller keep track of the value of `Device.DeviceInfo.SoftwareVersion` Parameter or the `FirmwareUpdated` flag in the `Boot!` event. If the version changes unexpectedly or the `FirmwareUpdated` flag is set to `true`, it could be an indication that the device had problems booting a particular firmware image.

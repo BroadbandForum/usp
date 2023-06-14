@@ -6,39 +6,11 @@ doctitle: ''
 
 :::::: {style="width:45%; float:left;"}
 
-## What is USP? {.unnumbered .unlisted}
+# The User Services Platform {#executive-summary .unnumbered .hidden-header}
 
-The **User Services Platform** is a standardized **protocol for managing,
-monitoring, upgrading, and controlling connected devices**. USP allows service
-providers and consumer electronics manufacturers to:
+%description%
 
-* Create interoperable and vendor-independent **managed Wi-Fi systems**.
-
-* Perform **lifecycle management** of consumer connected devices.
-
-* Support **independent applications** for smart networking products.
-
-* Enable **IoT and consumer electronics upgradability** for critical security
-  patches.
-
-* Develop applications that gather the telemetry necessary to **mass data
-processing, AI, and machine learning**.
-
-* **Bootstrap and configure** newly installed or purchased devices and virtual
-  services.
-
-* Let customer support **monitor and troubleshoot** connected devices,
-  services, and home network links.
-
-* Easily map the home network to **control service quality and monitor
-  threats**.
-
-* Securely **control IoT, smart home, and smart networking functions** locally
-  or from the Cloud
-
-USP represents the natural evolution of the Broadband Forum's [CPE WAN Management Protocol](https://www.broadband-forum.org/cwmp) (CWMP), commonly known as TR-069. It uses an expanded version of the Device:2 Data Model to represent device operations (firmware upgrades, reboots, etc.), network interfaces, events, and service functions (IoT functions, VoIP, etc.).
-
-## How to use this site: {.unnumbered .unlisted}
+## How to use this site:
 
 * The *[specification](specification/index.html)* directory contains the full
   text of the current version of the protocol, and the schema (currently in
@@ -53,7 +25,7 @@ USP represents the natural evolution of the Broadband Forum's [CPE WAN Managemen
   developing the Objects, interfaces, services, etc. that you want to manage
   and control with USP.
 
-* The USP Agent *[Test Plan](https://usp-compliance.broadband-forum.org)*
+* The USP Agent *[Test Plan](https://usp-test.broadband-forum.org)*
   provides a list of the test cases executed to validate USP Agent
   implementations and seek certification.
 
@@ -68,9 +40,9 @@ USP represents the natural evolution of the Broadband Forum's [CPE WAN Managemen
 
 :::::: {style="width:45%; float:right;"}
 
-## Current Version: %versionNumber% {.unnumbered .unlisted}
+## Current Version: %versionNumber%
 
-#### About this version: {.unnumbered .unlisted}
+### About this version:
 
 This specification includes:
 
@@ -82,15 +54,16 @@ This specification includes:
 * Data model Objects specific to protocol functionality, object defined
   operations, and notifications/events
 * Protocol buffers encoding schema
-* Use of WebSockets, MQTT, and STOMP as message transfer protocols (MTP)
+* Use of WebSockets, MQTT, STOMP, and UNIX Domain Sockets as message transfer
+protocols (MTP)
 * A system for authentication and authorization
 * Extensions for bulk data collection, firmware management, software module
-  management, and device proxying
+  management, containerized microservices, and device proxying
 * Theory of operations for using a USP Agent to control IoT devices and systems
 
 ::: {style="text-align:center;"}
 
-[![](/broadband-forum-logo.png)](https://www.broadband-forum.org)
+[![](broadband-forum-logo.png)](https://www.broadband-forum.org)
 
 USP is developed by the Broadband Forum. For more information, visit [https://www.broadband-forum.org]()
 

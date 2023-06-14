@@ -2,35 +2,23 @@
 comment: |
  common.yaml contains common definitions shared by specification, resources
  and faq
-
- index.yaml contains definitions needed only by this file (a separate file
- is used in order to ensure that syntax errors are detected)
 ...
 
 !include cover-page.md
 
-!include tr-notice.md
+!include %notice%-notice.md
 
-!include front-matter.md
-
-::: {bbfTable=uspRevisionHistory}
-:::
-
-::: {bbfTable=uspEditors}
-:::
-
-::: {bbfTable=uspAcknowledgments}
-:::
+!include METADATA-%bbfMajor%.md
 
 # Introduction {.new-page}
 
 ## Executive Summary
 
-This document describes the architecture, protocol, and data model that build an intelligent User Services Platform. It is targeted towards application developers, application service providers, CPE vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user's network connection and their connected devices.
+This document describes the architecture, protocol, and data model that build an intelligent User Services Platform. It is targeted towards application developers, application service providers, vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user's network connection and their connected devices.
 
-The term "connected device" is a broad one, applying to the vast array of network connected CPE, consumer electronics, and computing resources that today's consumers are using at an increasing rate. With the advent of "smart" platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
+The term "connected device" is a broad one, applying to the vast array of network connected devices, consumer electronics, and computing resources that today's consumers are using at an increasing rate. With the advent of "smart" platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
 
-In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the entertainment, productivity, and storage applications they want.
+In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the security, entertainment, productivity, and storage applications they want.
 
 These realities have created an opportunity for consumer electronics vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create a system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
@@ -39,6 +27,7 @@ To address this opportunity, use cases supported by USP include:
 * Management of IoT devices through re-usable data model objects.
 * Allowing the user to interact with their devices and services using customer
   portals or control points on their own smart devices.
+* The ability to deploy and manage containerized microservices for end-users via software modulization and USP-enabled applications."
 * The ability to have both the application and network service provider manage,
   troubleshoot, and control different aspects of the services they are
   responsible for, and enabling provider partnerships.
@@ -51,17 +40,19 @@ To address this opportunity, use cases supported by USP include:
 
 ### Purpose
 
-This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wi-Fi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
+This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wi-Fi systems, and deploying and managing other value-added services and applications. It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 ### Scope
 
 This document identifies the USP:
 
 * Architecture
+* Data model interaction
 * Record structure, syntax, and rules
 * Message structure, syntax, and rules
 * Bindings that allow specific protocols to carry USP Records in their payloads
 * Discovery and advertisement mechanisms
+* Extensions for proxying, software module management, device modularization, firmware lifecycle management, bulk data collection, device-agent association, and an IoT theory of operations.
 * Security credentials and logic
 * Encryption mechanisms
 
@@ -140,10 +131,6 @@ Connection Capabilities are information related to an Endpoint that describe how
 **Controller**
 
 A Controller is an Endpoint that manipulates Service Elements through one or more Agents.
-
-**Device Type (DT) Definition**
-
-A Device Type Definition (DT) is a description of the Service Elements an Agent is able to support, defining its Supported Data Model.
 
 **Discovery**
 
@@ -264,7 +251,7 @@ A Parameter Path is a Path Name that addresses a Parameter of an Object or Objec
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's instantiated or Supported Data Model. See [](#sec:path-names).
+A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
 
 **Path Reference**
 
@@ -274,17 +261,29 @@ A Path Reference is a Parameter data type that contains a Path Name to an Object
 
 The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
+**Register**
+
+To Register means to use the Register message to inform a Controller of Service Elements that this Agent represents.
+
+**Registered**
+
+Registered Service Elements are those elements represented by an Agent that have been the subject of a Register message.
+
 **Relative Path**
 
 A Relative Path is the remaining Path Name information necessary to form a Path Name given a parent Object Path. It is used for message efficiency when addressing Path Names.
 
 **Request**
 
-A Request is a type of Message that either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications from the Agent to the Controller. A Request usually requires a Response.
+A Request is a type of Message that either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications and Register Messages from the Agent to the Controller. A Request usually requires a Response.
 
 **Response**
 
 A Response is a type of Message that provides return information about the successful processing of a Request.
+
+**Role**
+
+A Role refers to the set of permissions (i.e., an access control list) that a Controller is granted by an Agent to interact with objects in its Instantiated Data Model.
 
 **Row**
 
@@ -338,6 +337,14 @@ A Parameter that is a member of any of a Multi-Instance Object's Unique Keys.
 
 The User Services Platform consists of a data model, architecture, and communications protocol to transform consumer broadband networks into a platform for the development, deployment, and support of broadband enabled applications and services.
 
+**USP Domain**
+
+The USP Domain is a set of all Controllers and Agents that are likely to communicate with each other in a given network or internetwork with the goal of supporting a specific application or set of applications.
+
+**USP Relationship**
+
+A Controller and Agent are considered to have a USP Relationship when they are capable of sending and accepting messages to/from each other. This usually means the Controller is added to the Agent's Controller table in its Instantiated Data Model.
+
 **Wildcard**
 
 A Wildcard is used in a Search Path to address all Object Instances of a Multi-Instance Object.
@@ -349,32 +356,47 @@ This specification uses the following abbreviations:
 | abbreviation | term |
 | :----------- | :-------------- |
 |ABNF | Augmented Backus-Naur Form |
-|CoAP |	Constrained Application Protocol |
+|CID  | Company Identifier |
+|CSV | Comma-Separated Values |
 |CWMP	| CPE WAN Management Protocol|
 |DNS	| Domain Name Service |
 |DNS-SD	| Domain Name Service - Service Discovery |
-|DT	| Device Type Definition |
+|DU | Deployment Unit |
 |E2E | End to End (Message Exchange) |
+|EE | Execution Environment |
+|EU | Execution Unit |
+|FIFO | First-In-First-Out |
+|FQDN | Fully-Qualified Domain Name |
+|GSDM | Get Supported Data Model (informal of GetSupportedDM message) |
 |HMAC | Hash Message Authentication Code |
 |HTTP	| Hypertext Transport Protocol |
 |IPv4/v6 |	Internet Protocol (version 4 or version 6) |
+|JSON | Java Script Object Notation |
 |LAN	| Local Area Network |
 |MAC | Message Authentication Code |
 |mDNS	| Multicast Domain Name Service |
 |MTP	| Message Transfer Protocol |
+|MQTT | Message Queue Telemetry Transport |
 |OUI | Organizationally Unique Identifier |
+|PEN | Private Enterprise Number |
+|Protobuf | Protocol Buffers |
 |PSS | Probabilistic Signature Scheme |
 |SAR | Segmentation And Reassembly |
 |SMM | Software Module Management |
 |SOAP| Simple Object Access Protocol |
+|SSID | Service Set Identifier |
+|STOMP | Simple Text-Oriented Messaging Protocol |
 |TLS | Tranport Layer Security |
+|TLV | Type-Length-Value |
 |TOFU	| Trust on First Use |
 |TR	| Technical Report |
+|UDS | UNIX Domain Socket |
 |URI | Uniform Resource Identifier |
 |URL | Uniform Resource Locator |
 |USP	| User Services Platform |
 |UUID | Universally Unique Identifier |
 |WAN |	Wide Area Network|
+|XML | eXtensible Markup Language |
 
 ## Specification Impact
 
@@ -417,7 +439,7 @@ USP is made up of several architectural components:
 
 ## Endpoints
 
-A USP Endpoint can act as Agent or a Controller. Controllers only send messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates over a secure session between other Endpoints, over one or more Message Transfer Protocols (MTP) that may or may not be secured.
+A USP Endpoint can act as Agent or a Controller. Controllers only send messages to Agents, and Agents send messages to Controllers. A USP Endpoint communicates with other Endpoints over one or more Message Transfer Protocols (MTP). This communication is secured by the MTP, or by the use of a [USP Session Context](#sec:exchange-of-usp-records-within-an-e2e-session-context), or both.
 
 ![USP Agent and Controller Architecture](architecture/usp_architecture.png){#fig:usp-agent-and-controller-architecture}
 
@@ -457,19 +479,19 @@ When used anywhere else (e.g. in the `to_id` and `from_id` of a USP Record), the
 
 The authority-scheme follows the following syntax:
 
-`authority-scheme = "oui" | "cid" | "pen" | "self"  | "user" | "os" | "ops" | "uuid" | "imei" | "proto" | "doc"`
+`authority-scheme = "oui" | "cid" | "pen" | "self"  | "user" | "os" | "ops" | "uuid" | "imei" | "proto" | "doc" | "fqdn"`
 
 How these authority-scheme values impact the format and values of authority-id and instance-id is described below.
 
-The authority defined by an OUI, CID, or Private Enterprise Number (including OUI used in "ops" and "os" authority scheme) is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the "user" authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the "self" authority scheme, the Endpoint is responsible for ensuring uniqueness.
+The authority defined by an OUI, CID, Private Enterprise Number (including OUI used in "ops" and "os" authority scheme), or fully qualified domain name is responsible for ensuring the uniqueness of the resulting Endpoint ID. Uniqueness can be global, local, unique across all Endpoints, or unique among all Controllers or all Agents. For the "user" authority scheme, the assigning user or machine is responsible for ensuring uniqueness. For the "self" authority scheme, the Endpoint is responsible for ensuring uniqueness.
 
-**[R-ARC.0]{}** - A Controller and Agent within the same ecosystem MAY use the same Endpoint ID.
+**[R-ARC.0]{}** - A Controller and Agent within the same USP Domain MAY use the same Endpoint ID.
 
-**[R-ARC.1]{}** - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same ecosystem.
+**[R-ARC.1]{}** - Endpoints MUST tolerate the same Endpoint ID being used by an Agent and a Controller in the same USP Domain.
 
 **[R-ARC.2]{}** - Endpoints that share the same Endpoint ID MUST NOT communicate with each other via USP.
 
-No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever ecosystem it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.
+No conflict identification or resolution process is defined in USP to deal with a situation where an Endpoint ID is not unique among either all Agents or all Controllers in whatever USP Domain it operates. Therefore, a non-unique Endpoint ID will result in unpredictable behavior. An Endpoint ID that changes after having been used to identify an Endpoint can also result in unpredictable behavior.
 
 Unless the authority responsible for assigning an Endpoint ID assigns meaning to an Agent and Controller having the same Endpoint ID, no meaning can be construed. That is, unless the assigning authority specifically states that an Agent and Controller with the same Endpoint ID are somehow related, no relationship can be assumed to exist.
 
@@ -477,11 +499,11 @@ Unless the authority responsible for assigning an Endpoint ID assigns meaning to
 
 | authority-scheme | usage and rules for authority-id and instance-id |
 | ---------------: | :----------------------------------------------- |
-|`oui`             | `authority-id` MUST be an OUI assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
+|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block Large" or "MA-L") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
 | `cid`            | `authority-id` MUST be a CID assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. `authority-id` MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters).\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the CID.\
 Example: cid:3AA3F8:my-unique-usp-id-42 |
-| `pen`            | `authority-id` MUST be a Private Enterprise Number assigned and registered by the [IANA](http://pen.iana.org/pen/PenApplication.page) to the entity responsible for this Endpoint. `authority-id` MUST use decimal encoding of the IANA-assigned number.\
+| `pen`            | `authority-id` MUST be a Private Enterprise Number assigned and registered by IANA [@IANA] to the entity responsible for this Endpoint. `authority-id` MUST use decimal encoding of the IANA-assigned number.\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the Private Enterprise Number.\
 Example: `pen:3561:my-unique-bbf-id-42` |
 | `self`           | When present, an `authority-id` for "`self`" MUST be between 1 and 6 non-reserved characters in length. When present, it is generated by the Endpoint. It is not required to have an `authority-id` for "`self`".\
@@ -491,28 +513,33 @@ Example: `self::my-Agent` |
 | `user`           | An `authority-id` for "`user`" MUST be between 0 and 6 non-reserved characters in length.\
 The Endpoint ID, including `instance-id`, is assigned to the Endpoint via a user or management interface. |
 | `os`             | `authority-id` MUST be zero-length.\
-`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069, Section 3.4.4].\
+`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
 Example: `os::00256D-0123456789` |
 | `ops`            | `authority-id` MUST be zero-length.\
-`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069, Section 3.4.4].\
+`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
 Example: `ops::00256D-STB-0123456789` |
 | `uuid`           | `authority-id` MUST be zero-length.\
 `instance-id` is a UUID [@RFC4122]\
 Example:`uuid::f81d4fae-7dec-11d0-a765-00a0c91e6bf6` |
 | `imei`           | `authority-id` MUST be zero-length.\
-`instance-id` is an IMEI as defined by GSMA (https://imeidb.gsma.com/imei/index).\
+`instance-id` is an IMEI [@IMEI] as defined by GSMA.\
 Example: `imei::990000862471854` |
 | `proto`          | `authority-id` MUST be between 0 and 6 non-reserved characters (except ".") in length.\
 "`proto`" is used for prototyping purposes only. Any `authority-id` and `instance-id` value (or scheme for creating the value) is left to the prototyper.\
 Example: `proto::my-Agent` |
 | `doc`            | `authority-id` MUST be between 0 and 6 non-reserved characters in length.\
 "`doc`" is used for documentation purposes only (for creating examples in slide decks, tutorials, and other explanatory documents). Any `authority-id` and `instance-id` value (or scheme for creating the value) is left to the document creator. |
+| `fqdn`           | `authority-id` MUST be zero-length.\
+`instance-id` is a valid fully qualified domain name, wildcards are not permitted.\
+Example:`fqdn::www.example.org` |
 
 **[R-ARC.3]{}** - BBF OUI (`00256D`) and Private Enterprise Number (`3561`) are reserved for use in BBF documentation and BBF prototyping and MUST NOT be used by any entity other than BBF.
 
 **[R-ARC.4]{}** - The "`proto`" and "`doc`" authority-scheme values MUST NOT be used in production environments.
 
 The "`proto`" and "`doc`" values are intended only for prototyping and documentation (tutorials, examples, etc.), respectively.
+
+**[R-ARC.4a]{}** - If the `authority-scheme` `fqdn` is specified, the TLS certificates presented by this endpoint MUST contain a `subjectAltName` extension, allowing the use of the FQDN specified by the `instance-id` value.
 
 ### Use of instance-id
 
@@ -530,7 +557,7 @@ Shorter values are preferred, as end users could be exposed to Endpoint IDs. Lon
 
 ## Service Elements
 
-"Service Element" is a general term referring to the set of Objects, Sub-Objects, commands, events, and Parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent's Service Elements are represented in a Data Model - the data model representing an Agent's current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. The Supported Data Model is described in a Device Type Definition (DT). An Agent's Data Model is referenced using Path Names.
+"Service Element" is a general term referring to the set of Objects, Sub-Objects, Commands, Events, and Parameters that comprise a set of functionality that is manipulated by a Controller on an Agent. An Agent's Service Elements are represented in a Data Model - the data model representing an Agent's current state is referred to as its Instantiated Data Model, and the data model representing the Service Elements it supports is called its Supported Data Model. An Agent's Data Model is referenced using Path Names.
 
 ## Data Models
 
@@ -542,7 +569,7 @@ This version of the specification defines support for the following Data Model(s
 
 * The Device:2 Data Model [@TR-181]
 
-This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model [@TR-181], and for creating Device Type Definitions based on that Data Model, are defined in Broadband Forum TR-106 [@TR-106].
+This Data Model is specified in XML. The schema and normative requirements for defining Objects, Parameters, Events, and Commands for the Device:2 Data Model [@TR-181] are defined in Broadband Forum TR-106 [@TR-106].
 
 The use of USP with any of the above data models creates some dependencies on specific Objects and Parameters that must be included for base functionality.
 
@@ -552,19 +579,19 @@ An Agent's Instantiated Data Model represents the Service Elements (and their st
 
 ### Supported Data Model
 
-An Agent's Support Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents. A Supported Data Model consists of the union of all Device Type Definitions used by the Agent.
+An Agent's Supported Data Model represents the Service Elements that an Agent understands. It includes references to the Data Model(s) that define the Objects, Parameters, Events, and Commands implemented by the Service Elements the Agent represents.
 
 ### Objects
 
-Objects are data structures that are defined by their Sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be static (single-instance) or dynamic (a multi-instance Object, or "table").
+Objects are data structures that are defined by their Sub-Objects, Parameters, Events, Commands, and creation criteria. They are used to model resources represented by the Agent. Objects may be Single-Instance or Multi-Instance (also called a "Table").
 
 #### Single-Instance Objects
 
-Static Objects, or "single instance" Objects, are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.
+Single-Instance Objects are not tables and do not have more than one instance of them in the Agent. They are usually used to group Service Element functionality together to allow for easy definition and addressing.
 
 #### Multi-Instance Objects
 
-Dynamic Objects, or "multi-instance" Objects, are those Objects that can be the subject of "create" and "delete" operations (using the Add and Delete Messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a "Table", with each instance of the Object referred to as a "Row". Multi-Instance Objects can be also the subject of a search.
+Multi-Instance" Objects are those Objects that can be the subject of "create" and "delete" operations (using the Add and Delete Messages, respectively), with each instance of the Object represented in the Instantiated Data Model with an Instance Identifier (see below). A Multi-Instance Object is also referred to as a "Table", with each instance of the Object referred to as a "Row". Multi-Instance Objects can be also the subject of a search.
 
 ### Parameters
 
@@ -572,7 +599,7 @@ Parameters define the attributes or variables of an Object. They are retrieved b
 
 ### Commands
 
-Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the "Operate" Message in USP (i.e., the Operate Message). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.
+Commands define Object specific methods within the Data Model. A Controller can invoke these methods using the Operate Message (see [](#sec:defined-operations-mechanism). Commands have associated input and output arguments that are defined in the Data Model and used when the method is invoked and returned.
 
 ### Events
 
@@ -586,7 +613,7 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 Path Names are represented by a hierarchy of Objects ("parents") and Sub-Objects ("children"), separated by the dot "." character, ending with a Parameter if referencing a Parameter Path. There are six different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a single-instance ("static") Object, or the Path Name to a Data Model Table (i.e., a Multi-Instance Object). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
+1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
 
 2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)).
 
@@ -643,6 +670,8 @@ For example, the `Device.IP.Interface` table entry with an Instance Number of 3 
 
 Key-based addressing allows an Object Instance to be addressed by using a Unique Key (as defined in the Device:2 Data Model [@TR-181]) in the Path Name.
 
+*Note: Controller and Agent interoperability is greatly affected by an Agent's implementation of Unique Keys. While this specification does not aim to overlap its requirements to those of TR-181 [@TR-181], it is* ***imperative*** *that an Agent implements Unique Keys for every Multi-Instance object in its Supported Data Model.*
+
 Unique Keys used for addressing are expressed in the Path Name by using square brackets surrounding a string that contains the name and value of the Unique Key Parameter using the equality operator (==).
 
 For example, the `Device.IP.Interface` table has two separate unique keys: `Name` and `Alias`. It could be addressed with the following Path Names:
@@ -688,11 +717,11 @@ Further, this Relative Path can't include any child tables. *(Note: this is neve
 
 An Expression Operator dictates how the Expression Component will be evaluated. The supported operators are equals (==), not equals (!=), contains (~=), less than (<), greater than (>), less than or equal (<=) and greater than or equal (>=).
 
-An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in TR-106 [@TR-106]. **For string, boolean and enumeration types, only the '==' and '!=' operators are valid.**
+An Expression Parameter will always be of the type defined in the data model. Expression operators will only evaluate for appropriate data types. The literal value representations for all data types are found in TR-106 [@TR-106]. **For string and boolean types, and also the Unknown Time dateTime value (cf. TR-106 Section 3.2.1 [@TR-106]), only the '==' and '!=' operators are valid.**
 
 The '~=' operator is only valid for comma-separated lists. It is used to check whether a list contains a certain element using an exact match of the element. The Expression Constant used in the Search Expression must be of the same type as the values in the list. For example, for a list of integers, the Expression Constant must also be an integer.
 
-*Note: Literal values are conceptually converted to their internal representations before comparison. For example, `dateTime` values are converted to their numeric equivalents, `int` values `123`, `+123` and `0123` all represent the same value, and so do `boolean` values `1` and `true`.*
+*Note: Literal values are conceptually converted to a suitable internal representation before comparison. For example, `int` values `123`, `+123` and `0123` all represent the same value, and so do `boolean` values `1` and `true`.*
 
 The Expression Constant is the value that the Expression Parameter is being evaluated against; Expression Parameters must match the type as defined for the associated Parameter in the Device:2 Data Model [@TR-181].
 
@@ -1164,13 +1193,13 @@ referenced by:
 
 # Discovery and Advertisement {#sec:discovery}
 
-Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller’s USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
+Discovery is the process by which USP Endpoints learn the USP properties and MTP connection details of another Endpoint, either for sending USP Messages in the context of an existing relationship (where the Controller's USP Endpoint Identifier, credentials, and authorized Role are all known to the Agent) or for the establishment of a new relationship.
 
 Advertisement is the process by which USP Endpoints make their presence known (or USP Endpoint presence is made known) to other USP Endpoints.
 
 ## Controller Information
 
-An Agent that has a USP relationship with a Controller needs to know that Controller’s Endpoint Identifier, credentials, and authorized Role.
+An Agent that has a USP relationship with a Controller needs to know that Controller's Endpoint Identifier, credentials, and authorized Role.
 
 An Agent that has a USP relationship with a Controller needs to obtain information that allows it to determine at least one MTP, IP address, port, and resource path (if required by the MTP) of the Controller. This may be a URL with all of these components, a FQDN that resolves to provide all of these components via DNS-SD records, or mDNS discovery in the LAN.
 
@@ -1187,9 +1216,9 @@ The Agent can be pre-configured with trusted root certificates or trusted certif
 
 ## Required Agent Information
 
-A Controller that has a relationship with an Agent needs to know the Agent’s Endpoint Identifier, connectivity information for the Agent’s MTP(s), and credentials.
+A Controller that has a relationship with an Agent needs to know the Agent's Endpoint Identifier, connectivity information for the Agent's MTP(s), and credentials.
 
-Controllers acquires this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent’s MTP information through mDNS Discovery. It is each Controller’s responsibility to maintain a record of known Agents.
+Controllers acquire this information upon initial connection by an Agent, though a LAN based Controller may acquire an Agent's MTP information through mDNS Discovery. It is each Controller's responsibility to maintain a record of known Agents.
 
 ## Use of DHCP for Acquiring Controller Information {#sec:using-dhcp}
 
@@ -1221,6 +1250,45 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 | USP retry interval multiplier | `28` | `28` |	`Device.LocalAgent.Controller.{i}.USPNotifRetryIntervalMultiplier` |
 | Endpoint ID of the Controller | `29` | `29` | `Device.LocalAgent.Controller.{i}.EndpointID` |
 
+## Use of DHCP for Exchanging GatewayInfo {#sec:gatewayinfo}
+
+
+
+This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provides an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
+
+### Exchanging DHCP Options
+
+This section outlines the DHCP information USP Agents exchange to provide details about the devices on the LAN, as well as the Service Elements that are updated. This allows a USP Agent to recognize a CWMP Client that supports the Device-Gateway Association within the LAN, and a CWMP Client to recognize a USP Agent.
+
+**[R-DIS.2a]{}** - When an Agent sends a DHCPv4 requests (DHCPDISCOVER, DHCPREQUEST, and DHCPINFORM) or DHCPv6 requests (SOLICIT, REQUEST, RENEW, and INFORMATION-REQUEST) it MUST include the Encapsulation Options for requests below.
+
+### DHCP Encapsulated Vendor-Specific Option-Data fields for DHCP requests
+
+|Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in the Device:2 Data Model [@TR-181] |
+| ----------: | :---------: | :----------: | :--------- |
+| DeviceManufacturerOUI | `1` | `11` | `Device.DeviceInfo.ManufacturerOUI` |
+| DeviceSerialNumber | `2` | `12` | `Device.DeviceInfo.SerialNumber` |
+| DeviceProductClass | `3` | `13` | `Device.DeviceInfo.ProductClass` |
+
+These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
+
+
+**[R-DIS.2b]{}** - If an Agent recieves the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are recieved.
+
+### DHCP Encapsulated Vendor-Specific Option-Data fields for Agent
+
+|Encapsulated Option |DHCPv4 Option 125 | DHCPv6 Option 17	| Parameter in the Device:2 Data Model [@TR-181] |
+| ----------: | :---------: | :----------: | :--------- |
+| DeviceManufacturerOUI | `4` | `14` | `Device.DeviceInfo.ManufacturerOUI` |
+| DeviceSerialNumber | `5` | `15` | `Device.DeviceInfo.SerialNumber` |
+| DeviceProductClass | `6` | `16` | `Device.DeviceInfo.ProductClass` |
+
+These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
+
+**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesnt recieve this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
+
+**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and recieves a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record. 
+
 ## Using mDNS {#sec:using-mdns}
 
 **[R-DIS.3]{}** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in RFC 6762 [@RFC6762].
@@ -1243,7 +1311,7 @@ If the Endpoint is programmatically set to request other resource records, it wi
 
 ## DNS-SD Records {#sec:dns-sd-records}
 
-DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and structuring of DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries RFC 1035 [@RFC1035] or Multicast DNS (mDNS) RFC 6762 [@RFC6762]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. RFC 6762 [@RFC6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
+DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and structuring DNS resource records to facilitate service discovery. It can be used to create DNS records for USP Endpoints, so they can be discoverable via DNS PTR queries RFC 1035 [@RFC1035] or Multicast DNS (mDNS) RFC 6762 [@RFC6762]. DNS-SD uses DNS SRV and TXT records to express information about "services", and DNS PTR records to help locate the SRV and TXT records. To discover these DNS records, DNS or mDNS queries can be used. RFC 6762 [@RFC6762] recommends using the query type PTR to get both the SRV and TXT records. A and AAAA records will also be returned, for address resolution.
 
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is "`<Instance>.<Service>.<Domain>`". `<Instance>` will be the USP Endpoint Identifier of the USP Endpoint.
 
@@ -1365,21 +1433,19 @@ This specification places the following requirement for encrypting MTP headers a
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however. If the device implementer can reasonably expect Messages to be transported across the Internet when the device is deployed, then the implementer needs to ensure the device supports encryption of all MTP protocols.
 
-MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [@RFC6347].
-
 MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [@RFC5246].
 
 Specific requirements for implementing these are provided in the individual MTP sections.
 
-**[R-MTP.1]{}** – When TLS or DTLS is used to secure an MTP, an Agent MUST require the MTP peer to provide an X.509 certificate.
+**[R-MTP.1]{}** – When TLS is used to secure an MTP, an Agent MUST require the MTP peer to provide an X.509 certificate.
 
-**[R-MTP.2]{}** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before establishing TLS or DTLS encryption to secure MTP communication.  If an Agent for any reason is unable to obtain absolute time, it can establish TLS or DTLS without waiting for accurate absolute time. If an Agent chooses to establish TLS or DTLS before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the received X.509 certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
+**[R-MTP.2]{}** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before establishing TLS encryption to secure MTP communication.  If an Agent for any reason is unable to obtain absolute time, it can establish TLS without waiting for accurate absolute time. If an Agent chooses to establish TLS before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the received X.509 certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
 **[R-MTP.3]{}** - An Agent that has obtained an accurate absolute time MUST validate those components of the received X.509 certificate that involve absolute time.
 
-**[R-MTP.4]{}** - When an Agent receives an X.509 certificate while establishing TLS or DTLS encryption of the MTP, the Agent MUST execute logic that achieves the same results as in the mandatory decision flow elements (identified with "MUST") from @fig:receiving-a-x509-certificate.
+**[R-MTP.4]{}** - When an Agent receives an X.509 certificate while establishing TLS encryption of the MTP, the Agent MUST execute logic that achieves the same results as in the mandatory decision flow elements (identified with "MUST") from @fig:receiving-a-x509-certificate.
 
-**[R-MTP.4a]{}** - When an Agent receives an X.509 certificate while establishing TLS or DTLS encryption of the MTP, the Agent SHOULD execute logic that achieves the same results as in the optional decision flow elements (identified with "OPT") from @fig:receiving-a-x509-certificate.
+**[R-MTP.4a]{}** - When an Agent receives an X.509 certificate while establishing TLS encryption of the MTP, the Agent SHOULD execute logic that achieves the same results as in the optional decision flow elements (identified with "OPT") from @fig:receiving-a-x509-certificate.
 
 ![Receiving a X.509 Certificate](mtp/validate-cert.png){#fig:receiving-a-x509-certificate}
 
@@ -1387,17 +1453,33 @@ Specific requirements for implementing these are provided in the individual MTP 
 
 ### USP Record Encapsulation {#sec:usp-record-encapsulation}
 
-The USP Record Message is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata fields are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
+The USP Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata fields are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
 
-Following are the fields contained within a USP Record. When not explicitly set or included in the Record, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For numbers (uint64) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. The term "Optional" means it is not necessary to include the field in a sent Record. The receiving Endpoint will use default values for fields not included in a received Record. "Required" fields are always included. A Record without a "Required" field will fail to be processed by a receiving Endpoint. "Repeated" fields can be included any number of times, including zero.
+When not explicitly set or included in a USP Record or USP Message, the fields have a default value based on the type of field:
+
+* For strings, the default value is the empty string.
+* For bytes, the default value is empty bytes.
+* For bools, the default value is `false`.
+* For numeric types, the default value is zero.
+* For enums, the default value is the first defined enum value, which must be 0.
+* For a `oneof` field, none of the allowed values are assumed if the field is absent.
+* `repeated` fields can be included any number of times, including zero.
+
+If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Record or Message. The receiving Endpoint will use default values for fields not included in a received Record or Message.
+
+**[R-MTP.4b]{}** - Any field that is noted as "Required" in its description MUST be sent.
+
+A Record or Message without a required field will fail to be processed by a receiving Endpoint. For additional information, default values (when fields are missing) are described in the "Default Values" section of Protocol Buffers [@PROTOBUF].
 
 #### Record Definition {#sec:record-definition}
 
-*Note: This version of the specification defines Record in [Protocol Buffers v3](#sec:encoding). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
+*Note: This version of the specification defines the USP Record in [Protocol Buffers v3](#sec:encoding). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
 `string version`
 
-Required. Version (Major.Minor) of the USP Protocol (i.e., "1.0" or "1.1").
+Required. Version (Major.Minor) of the USP Protocol (e.g., "1.3").
+
+*Note: The version field is used for USP Endpoints to set expectations about their behavior for other USP Endpoints.* ***A USP Endpoint that receives a Record indicating a version higher than it supports can expect to receive messages it may not understand or encounter other unexpected behavior.*** *USP Endpoints are expected to handle these inconsistencies gracefully (For example, using the 7001 Message Not Supported Error).*
 
 `string to_id`
 
@@ -1409,10 +1491,7 @@ Required. Originating/Source USP Endpoint Identifier.
 
 `enum PayloadSecurity payload_security`
 
-Optional. An enumeration of type PayloadSecurity. When the payload is present,
-this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message.
-The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be
-used to secure the payload (see [](#sec:tls-payload-encapsulation) for more information).
+Optional. An enumeration of type PayloadSecurity. When the payload is present, this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message. The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be used to secure the payload (see [](#sec:tls-payload-encapsulation) for more information).
 
 Valid values are:
 
@@ -1442,6 +1521,8 @@ Required. This field contains one of the types given below:
 `MQTTConnectRecord mqtt_connect`
 
 `STOMPConnectRecord stomp_connect`
+
+`UDSConnectRecord uds_connect`
 
 `DisconnectRecord disconnect`
 
@@ -1520,7 +1601,7 @@ V5 (1)
 
 `string subscribed_topic`
 
-Required. A MQTT Topic where the USP Endpoint sending this Record can be reached (i.e. a MQTT Topic it is subscribed to).
+Required. A MQTT Topic where the USP Endpoint sending this Record can be reached (i.e. a non-wildcarded MQTT Topic it is subscribed to).
 
 ##### STOMPConnectRecord fields
 
@@ -1537,6 +1618,10 @@ V1_2 (0)
 `string subscribed_destination`
 
 Required. A STOMP Destination where the USP Endpoint sending this Record can be reached (i.e. a STOMP Destination it is subscribed to).
+
+##### UDSConnectRecord fields
+
+This Record type has no fields.
 
 ##### DisconnectRecord fields
 
@@ -1556,7 +1641,7 @@ A variety of errors can occur while establishing and during a USP communication 
 
 For this mechanism to work and to prevent information leakage, the sender causing the problem needs to be able to create a valid USP Record containing a valid source Endpoint ID and a correct destination Endpoint ID. In addition a MTP specific return path needs to be known so the error can be delivered.
 
-**[R-MTP.5]{}** - A recipient of an erroneous USP Record MUST create a Record with a Message of type Error and deliver it to sender if the source Endpoint ID is valid, the destination Endpoint ID is its own, and a MTP-specific return path is known. If any of those criteria on the erroneous Record are not met or the Record is known to contain a USP Message of types Response or Error, it MUST be ignored.
+**[R-MTP.5]{}** - A recipient of an erroneous USP Record MUST create a Record with a Message of type Error and deliver it to sender if the source Endpoint ID is valid, the destination Endpoint ID is its own, the Record contains a USP Message of type Request, the Message ID can be extracted, and a MTP-specific return path is known. If any of those criteria on the erroneous Record are not met, it MUST be ignored.
 
 The following error codes (in the range 7100-7199) are defined to allow the Error to be more specifically indicated. Additional requirements for these error codes are included in the specific MTP definition, where appropriate.
 
@@ -1586,9 +1671,11 @@ It is not mandatory for a USP Endpoint to close its MTP connection after sending
 
 **[R-MTP.9]{}** - A `DisconnectRecord` SHOULD include the `reason_code` and `reason` fields with an applicable code from [](#sec:usp-record-errors).
 
-## CoAP Binding (DEPRECATED)
+## CoAP Binding (OBSOLETED)
 
 *Note: The CoAP MTP was deprecated in USP 1.2. Due to the way it is specified this MTP can only be used in local area networks under narrow conditions. Please see @sec:websocket for a suitable alternative.*
+
+*Note: The CoAP MTP was obsoleted in USP 1.3 as a natural progression from being deprecated in USP 1.2.*
 
 The Constrained Application Protocol (CoAP) MTP transfers USP Records between USP Endpoints using the CoAP protocol as defined in RFC 7252 [@RFC7252]. Messages that are transferred between CoAP clients and servers utilize a request/response messaging interaction based on RESTful architectural principles. The following figure depicts the transfer of the USP Records between USP Endpoints.
 
@@ -1717,23 +1804,25 @@ While WebSocket sessions can be established by either USP Controllers or USP Age
 
 During the establishment of the WebSocket session, the WebSocket client informs the WebSocket server in the `Sec-WebSocket-Protocol` header about the type of USP Records that will be exchanged across the established WebSocket connection. For USP Records, the `Sec-WebSocket-Protocol` header contains the value `v1.usp`.  When presented with a `Sec-WebSocket-Protocol` header containing `v1.usp`, the WebSocket Server serving a USP Endpoint returns `v1.usp` in the response's Sec-WebSocket-Protocol header. If the WebSocket client doesn't receive a `Sec-WebSocket-Protocol` header with a value of `v1.usp`, the WebSocket client does not establish the WebSocket session.
 
-When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the WebSocket Extension `bbf-usp-protocol` has been registered. The extension parameter of `eid` is defined for use with this extension. The value of the `eid` parameter will be the Endpoint ID of the Endpoint sending the WebSocket header.
-
-*Note: When using an Endpoint ID as the value of the `eid` parameter in the `Sec-WebSocket-Extensions` header, it will need to be in the `quoted-string` form as referenced in section 9 of RFC 6455 [@RFC6455].*
+When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the request URI of the opening handshake contains a `key=value` pair in its `query` component to provide the Endpoint ID of the client. `eid` is used as the key to the pair, while the value is the Endpoint ID of the client, e.g. `eid=doc::agent`.
 
 **[R-WS.9]{}** - The WebSocket's handshake `Sec-WebSocket-Protocol` header for exchange of USP Records using the protocol-buffers encoding mechanism MUST be `v1.usp`.
 
 **[R-WS.10]{}** - A WebSocket client MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when initiating a WebSocket session.
 
-**[R-WS.10a]{}** - A WebSocket client MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the client's Endpoint ID when initiating a WebSocket session.
+**[R-WS.10a]{}** (DEPRECATED) - A WebSocket client MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the client's Endpoint ID when initiating a WebSocket session.
+
+*Note: Requirement [R-WS.10a]() was removed in USP 1.3, due to the impossibility of setting WebSocket Extensions in some environments.*
+
+**[R-WS.10b]{}** - A WebSocket client MUST include its Endpoint ID, via a `key=value` pair, in the query component of the request URI in its opening handshake, defined in section 1.3 of RFC 6455 [@RFC6455]. The `key` part of the pair MUST have a value of `eid` and the `value` part MUST be the client's Endpoint ID. This pair MUST be separated from other query data by the `&` character.
 
 **[R-WS.11]{}** - A WebSocket server that supports USP Endpoints MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when responding to an initiation of a WebSocket session.
 
-**[R-WS.11a]{}** - A WebSocket server MUST include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the server's Endpoint ID when responding to an initiation of a WebSocket session that includes the `bbf-usp-protocol` extension.
+**[R-WS.11a]{}** - A WebSocket server SHOULD include the `Sec-WebSocket-Extensions` header with `bbf-usp-protocol` WebSocket Extension and extension parameter `eid` equal to the server's Endpoint ID when responding to an initiation of a WebSocket session that includes the `bbf-usp-protocol` extension.
 
-**[R-WS.11b]{}** - WebSocket clients SHOULD NOT consider WebSocket responses that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
+**[R-WS.11b]{}** - WebSocket clients MUST NOT consider WebSocket responses that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
 
-**[R-WS.11c]{}** - WebSocket servers SHOULD NOT consider WebSocket session initiation requests that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
+**[R-WS.11c]{}** - WebSocket servers MUST NOT consider WebSocket session initiation requests that do not include the `bbf-usp-protocol` WebSocket Extension to be an error.
 
 **[R-WS.12]{}** - A WebSocket client MUST NOT establish a WebSocket session if the response to a WebSocket session initiation request does not include the `Sec-WebSocket-Protocol` header for exchange of USP Records in response to an initiation of a WebSocket session.
 
@@ -2047,7 +2136,7 @@ MQTT 3.1.1 does not provide a simple mechanism for a USP MQTT client to provide 
 1. Support Endpoint ID as ClientId.
 2. Get Endpoint ID from client TLS certificate.
 
-MQTT 3.1.1 also does not provide a mechanism for the MQTT server to tell a client what Topic other Endpoints should use to send it a message (the "reply to" Topic). This information would need to be pre-configured or provided in some manner not specified here.
+MQTT 3.1.1 also does not provide a mechanism for the MQTT server to tell a client what Topic other Endpoints should use to send the client a message (the "reply to" Topic). This information would need to be pre-configured or provided in some manner not specified here.
 
 MQTT 5.0 includes additional properties that deployments can choose to use.
 
@@ -2084,9 +2173,9 @@ USP Endpoints can be configured with one or more specific MQTT Topics or Topic F
 * All configured Topic Filter values for use with this MQTT server MUST be included in a `SUBSCRIBE` packet. For a USP Agent, the `.MQTT.Client.{i}.Subscription.{i}. ` table can be used to configure Topic Filter values.
 * If an MQTT 5.0 USP Endpoint received one or more User Property in the `CONNACK` packet where the name of the name-value pair is "subscribe-topic", the USP Endpoint MUST include the value of all such name-value pairs in its `SUBSCRIBE` packet as a Topic Filter.
 * If an MQTT 5.0 Endpoint received a Response Information property in the `CONNACK` packet, and the topic from that Response Information property is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the previous 2 bullets, the Endpoint MUST include the value of the Response Information property in its `SUBSCRIBE` packet.
-* If an Endpoint has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` Parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Endpoint MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet.
+* If a USP Agent has a `ResponseTopicConfigured` value and did not receive a Response Information property in the `CONNACK` packet, and the topic in the `ResponseTopicConfigured` Parameter is not included (directly or as a subset of a Topic Filter) among the Topic Filters of the first 2 bullets, the Agent MUST include the value of the `ResponseTopicConfigured` in its `SUBSCRIBE` packet. For MQTT 5.0 clients, the subscription topic is set to the value of `ResponseTopicConfigured`. For MQTT 3.1.1 clients, the subscription topic is set to a wildcarded topic filter based on the value of `ResponseTopicConfigured`.
 
-**[R-MQTT.16]{}** - USP Agents that have NOT received a "subscribe-topic" User Property in the `CONNACK` and do NOT have a configured Topic Filter (`Device.MQTT.Client.{i}.Subscription.{i}.Topic` Parameter for this Client instance in the data model) MUST terminate the MQTT communications session (via the `DISCONNECT` packet) and consider the MTP disabled.
+**[R-MQTT.16]{}** - USP Agents that have NOT received any Subscriptions outlined in [R-MQTT.15]() "subscribe-topic" User Property in the `CONNACK` and do NOT have a configured Topic Filter (`Device.MQTT.Client.{i}.Subscription.{i}.Topic` Parameter for this Client instance in the data model) MUST terminate the MQTT communications session (via the `DISCONNECT` packet) and consider the MTP disabled.
 
 **[R-MQTT.17]{}** - If a USP Endpoint does not successfully subscribe to at least one Topic, it MUST NOT publish a packet with a USP Record in its Application Message, and MUST disconnect from the MQTT server.
 
@@ -2109,6 +2198,8 @@ The USP Controller's MQTT Topic needs to be known by any USP Agent expected to s
 The USP Agent will also need to know an exact Topic where it can be reached (and not just a Topic Filter) in order to provide a Controller with the Agent’s "reply to" Topic.
 
 **[R-MQTT.21]{}** - An MQTT 5.0 USP Endpoint that receives Response Information in the `CONNACK` packet MUST use this as its "reply to" Topic.
+
+*Note: By using a single "reply to" Topic for all USP connections, an Agent on the MQTT server may become a DoS attack vector and cannot be unsubscribed from because this would cause the Agent to lose all "reply to" traffic. *
 
 **[R-MQTT.22]{}** - USP Endpoints MUST include a "reply to" Topic in all `PUBLISH` packets transporting USP Records.
 
@@ -2233,6 +2324,143 @@ MQTT MTP message encryption is provided using TLS certificates.
 
 **[R-MQTT.49]{}** - MQTT server certificates MAY contain domain names and those domain names MAY contain domain names with wildcard characters per RFC 6125 [@RFC6125] guidance.
 
+## UNIX Domain Socket Binding {#sec:unix-domain-socket}
+
+This is an internal Message Transfer Protocol (MTP) for communicating between a USP Agent and a USP Controller that reside on separate processes within a single device.  This MTP uses UNIX domain sockets to send Frames between the UNIX domain socket clients and servers.  The Frame contains a Header field and one or more Type-Length-Value (TLV) fields to transport USP Records and other information related to the use of this transport as a USP MTP.
+
+![Unix Domain Socket Binding](mtp/unix-domain-socket/unix-domain-socket-binding.png)
+
+### Handling UNIX Domain Socket Connections
+
+UNIX domain socket concepts are broken down into two key aspects: server and client.  A UNIX domain socket server is responsible for listening on an UNIX domain socket for incoming connections and then accepting those connections such that the server can then send and receive messages over the connection.  A UNIX domain socket client is responsible for establishing a connection to a server such that the client can then send and receive messages over the established communications session.
+
+UNIX domain sockets are different than other sockets as they aren't governed by a host and port.  Instead, the UNIX domain socket is associated to a local file path (and its internal file descriptor).
+
+A USP Agent communicating over UNIX domain sockets as the USP MTP can act as either a UNIX domain socket server or a UNIX domain socket client, but not both.
+
+A USP Controller communicating over UNIX domain sockets as the USP MTP can act as either a UNIX domain socket server or a UNIX domain socket client, but not both.
+
+Since UNIX domain sockets and this type of internal MTP is completely contained within the device itself, there is no need to advertise the USP Agent or USP Controller details via mDNS.
+
+**[R-UDS.1]{}** - USP Agents utilizing UNIX domain socket servers or clients for message transport MUST support the UDSAgent:1 and UDSController:1 data model profiles.
+
+#### Establishing a UNIX Domain Socket Connection
+
+This section contains requirements related to setting up a UNIX domain socket connection between a USP Agent and a USP Controller that reside on two separate processes within the same device.
+
+**[R-UDS.2]{}** - A USP Endpoint acting as a UNIX domain socket server MUST bind to a UNIX domain socket and listen for incoming connections.
+
+**[R-UDS.3]{}** - A USP Endpoint acting as a UNIX domain socket server MUST accept incoming connections from UNIX domain socket clients.
+
+To get to this point, a connection to the server's listen socket must be made from the USP Endpoint acting as a UNIX domain socket client.
+
+**[R-UDS.4]{}** - A USP Endpoint acting as a UNIX domain socket client MUST connect to a known UNIX domain socket server.
+
+At this point we have a bidirectional UNIX domain socket connection, which can be used to send USP Records between a USP Agent and a USP Controller.
+
+#### Retrying a UNIX Domain Socket Connection
+
+UNIX domain sockets don't often get disconnected after the connection has been established on both ends, but there are cases where a retry algorithm is valuable:
+
+* Many UNIX domain socket clients are simultaneously attempting to establish a connection with the UNIX domain socket server, and that limit exceeds the "backlog" value that the UNIX domain socket server used when calling the "listen" system call.
+* A UNIX domain socket is terminated by the USP Agent or USP Controller due to some failure to deliver or handle a frame message (see Section 4.6.2.1 Handling Failures to Handshake, Section 4.6.3.1 Handling Failures to Deliver USP Records, Section 4.6.5 Handling Other UNIX Domain Socket Failures, and Section 4.6.6 Error Handling)
+
+If for any reason a UNIX domain socket connection fails to be established or is closed, the USP Endpoint acting as a client will attempt to re-establish the UNIX domain socket connection.
+
+**[R-UDS.5]{}** - When a UNIX domain socket connection is closed or fails to be established, the USP Endpoint acting as a client MUST attempt to re-establish the UNIX domain socket within a random amount of time between 1 and 5 seconds.
+
+#### Sending a Message over a UNIX Domain Socket
+
+This MTP uses UNIX domain sockets to send Frames between the UNIX domain socket clients and servers.  The UNIX domain socket Frame contains a Header field and one or more Type-Length-Value (TLV) fields to transport the information related to the use of this transport as a USP MTP.  The Header field contains a Synchronization part (which includes the hexadecimal version of "_USP") and a Length part that contains the length of the remainder of the Frame (i.e. the length of the entire Frame excluding the size of the Header).  The Type part of the TLV field will always be 1 byte, the Length part of the TLV field will always be 4 bytes, and the Value part of the TLV field is based on the Type.  
+
+**[R-UDS.6]{}** - A Frame sent across a UNIX domain socket that is being used as an MTP MUST have a Header field and one or more TLV fields.
+
+**[R-UDS.7]{}** - The Header of a Frame sent across a UNIX domain socket that is being used as an MTP MUST have a synchronization part and a length part.
+
+**[R-UDS.8]{}** - The synchronization portion of the Frame's Header MUST contain the following 4 bytes: 0x5f 0x55 0x53 0x50 (the hexadecimal version of "_USP").
+
+**[R-UDS.9]{}** - The length portion of the Frame's Header MUST contain the length of the remainder of the Frame (i.e. the length of the entire Frame excluding the size of the Header) as a 4 byte unsigned integer in network byte order.
+
+**[R-UDS.10]{}** - A TLV field contained in a Frame sent across a UNIX domain socket that is being used as an MTP MUST have a 1 byte Type.
+
+**[R-UDS.11]{}** - A TLV field contained in a Frame sent across a UNIX domain socket that is being used as an MTP MUST have a 4 byte Length in network byte order.
+
+The following set of Types are defined as allowable types in the TLV fields:
+
+| Type | Name | Description of Value
+| :----- | :------------ | :---------------------- |
+| `1` | Handshake  | The Handshake contains a UTF-8 string that represents the Endpoint ID of the USP Endpoint sending the message. |
+| `2` | Error      | The Error contains a UTF-8 string that provides the error message related to the communications failure. |
+| `3` | USP Record | The USP Record contains the Google Protocol Buffer binary-encoded USP Record being sent between a USP Agent and USP Controller. |
+
+**[R-UDS.12]{}** - A Frame sent across a UNIX domain socket that is being used as an MTP MUST contain a TLV with Type 1 for any Handshake negotiation messages
+
+**[R-UDS.13]{}** - A Frame sent across a UNIX domain socket that is being used as an MTP MUST contain a TLV with Type 2 for any Error messages
+
+**[R-UDS.14]{}** - A Frame sent across a UNIX domain socket that is being used as an MTP MUST contain a TLV with Type 3 for any USP Record messages
+
+**[R-UDS.15]{}** - A Frame sent across a UNIX domain socket that is being used as an MTP MUST ignore any TLVs that have unexpected Types
+
+### Handshaking with UNIX Domain Sockets
+
+After a UNIX domain socket is established between a server (either a USP Agent acting as a server or a USP Controller acting as a server) and a client (either a USP Agent acting as a client or a USP Controller acting as a client), the USP Endpoints need to exchange Handshake Frames to provide each other with their identities because every USP Record contains the from and to Endpoint ID.  This means that both the USP Agent and USP Controller will send a Frame with a Type 1 TLV and their own Endpoint ID before sending any USP Record across the newly established UNIX domain socket connection.
+
+**[R-UDS.16]{}** - A USP Endpoint acting as a UNIX domain socket client MUST send a Unix domain socket Frame containing a Type 1 (Handshake) TLV field once it establishes a UNIX domain socket connection.  This message MUST contain the Endpoint ID of the USP Endpoint sending the message.
+
+**[R-UDS.17]{}** - A USP Endpoint acting as a UNIX domain socket server MUST send a Unix domain socket Frame containing a Type 1 (Handshake) TLV field once it receives a Unix domain socket Frame containing a Type 1 (Handshake) TLV field from a USP Endpoint acting as a UNIX domain socket client. This message MUST contain the Endpoint ID of the USP Endpoint sending the message.
+
+**[R-UDS.18]{}** - A USP Endpoint acting as a UNIX domain socket client MUST terminate the UNIX domain socket connection if it doesn't receive a Unix domain socket Frame containing a Type 1 (Handshake) TLV field within 30 seconds of when it sent its own Unix domain socket Frame containing a Type 1 (Handshake) TLV field.
+
+Once both sides of the UNIX domain socket have successfully completed the handshake process, which is done by the USP Agent and the USP Controller exchanging Unix domain socket Frames that contain a Type 1 (Handshake) TLV field, then either the USP Agent or USP Controller may begin sending USP Record messages.
+
+**[R-UDS.19]{}** - A USP Endpoint acting as a UNIX domain socket client or server MUST ignore an unexpected UNIX domain socket Frame that contains a Type 2 (Handshake) TLV field.
+
+**[R-UDS.20]{}** - A USP Endpoint acting as a UNIX domain socket client or server MUST ignore any UNIX domain socket Frames that contain a Type 3 (USP Record) TLV field until it has successfully completed the handshake process.
+
+The following image shows an example of a UNIX domain socket Frame that contains a Type 1 (Handshake) TLV field used for handshaking between a USP Agent and USP Controller.  In this example, the Endpoint ID being used is "os::00256D-0123456789".
+
+![UNIX Domain Socket Frame with Handshake Message](mtp/unix-domain-socket/./USP-UDS-Handshake.png)
+
+#### Handling Failures to Handshake
+
+If for any reason the handshake process fails on one side of the UNIX domain socket or the other, then the side that fails the handshake process is responsible for sending a UNIX domain socket Frame containing an Error (using a Type 2 TLV field) that explains why the handshake process has failed .
+
+**[R-UDS.21]{}** - A USP Endpoint acting as a UNIX domain socket client or server MUST send a UNIX domain socket Frame containing a Type 2 (Error) TLV field if it can not process an incoming UNIX domain socket Frame that contains a Type 1 (Handshake) TLV field.
+
+### Sending USP Records across UNIX Domain Sockets
+
+Once a UNIX domain socket is established between a server (either a USP Agent acting as a server or a USP Controller acting as a server) and a client (either a USP Agent acting as a client or a USP Controller acting as a client), and the USP Endpoints have successfully completed the handshake process, then either the USP Agent or USP Controller may begin sending UNIX domain socket Frames that contain a USP Record.  A USP Endpoint sends a USP Record by sending a UNIX domain socket Frame with a Type 3 (USP Record) TLV field that contains the Google Protocol Buffer binary-encoded USP Record across the established UNIX domain socket connection.
+
+**[R-UDS.22]{}** - A USP Endpoint MUST send Google Protocol Buffer binary-encoded USP Records by utilizing a UNIX domain socket Frame that contains a Type 3 (USP Record) TLV field.
+
+The following image shows an example of a UNIX domain socket Frame that contains a Type 3 (USP Record) TLV field, which is used for sending a USP Record between a USP Agent and USP Controller.
+
+![UNIX Domain Socket Frame with USP Record Message](mtp/unix-domain-socket/./USP-UDS-Record.png)
+
+#### Handling Failures to Deliver USP Records
+
+If a USP Endpoint acting as a UNIX domain socket client or server receives a UNIX domain socket Frame that contains a USP Record that cannot be extracted for processing (e.g., a UNIX domain socket Frame that includes a Type 3 TLV with text instead of a binary data, a malformed USP Record), a UNIX domain socket Frame containing a Type 2 (Error) TLV field is sent in response and the UNIX domain socket connection gets closed.  
+
+**[R-UDS.23]{}** - A USP Endpoint acting as a UNIX domain socket client or server MUST send a UNIX domain socket Frame containing a Type 2 (Error) TLV field and terminate the UNIX Domain Socket connection, if it receives an incoming UNIX domain socket Frame containing a USP Record that cannot be extracted for processing.
+
+Other USP Record processing failures (where the USP Record can be extracted, but other issues exist) are handled by [R-MTP.5]().
+
+### MTP Message Encryption
+
+Encryption is not required for the UNIX domain socket MTP as all messages are exchanged between processes that reside internally within the device.
+
+### Handling Other UNIX Domain Socket Failures
+
+If a USP Endpoint acting as a UNIX domain socket client or server receives a TLV Message that cannot be parsed, a UNIX domain socket Frame containing a Type 2 (Error) TLV field is sent in response and the UNIX domain socket connection gets closed.  
+
+**[R-UDS.24]{}** - A USP Endpoint acting as a UNIX domain socket client or server MUST send a UNIX domain socket Frame containing a Type 2 (Error) TLV field and terminate the UNIX Domain Socket connection, if it can not parse an incoming UNIX domain socket Frame.
+
+### Error Handling
+
+If a USP Endpoint receives a UNIX domain socket Frame containing a Type 2 (Error) TLV field, then it closes the UNIX domain socket connection.
+
+**[R-UDS.25]{}** - A USP Endpoint acting as a UNIX domain socket client or server that receives a UNIX domain socket Frame containing a Type 2 (Error) TLV field MUST terminate the UNIX domain socket connection.
+
 # Message Encoding {#sec:encoding}
 
 USP requires a mechanism to serialize data to be sent over a Message Transfer Protocol. The description of each individual Message and the USP Record encoding scheme is covered in a section of this document and/or in the referenced specification. This version of the specification includes support for:
@@ -2245,7 +2473,7 @@ USP requires a mechanism to serialize data to be sent over a Message Transfer Pr
 
 Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.
 
-**[R-ENC.2]{}** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
+**[R-ENC.2]{}** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure as described in [R-MTP.5]().
 
 Protocol Buffers uses a datatype called `oneof`. This means that the element
 contains elements of one or more varying types.
@@ -2321,6 +2549,8 @@ USP makes use of USP Records to exchange USP Messages between Endpoints, see [](
 
 When exchanging USP Records within an E2E Session Context, `record_type` of `session_context` is used, and all required parameters for `record_type` of `session_context` are supplied.
 
+When a USP Record that is received within an E2E Session Context contains a USP Message request, its associated response or error message is sent within an E2E Session Context, unless otherwise specified (see [](#sec:requests-responses-and-errors)).
+
 ### Establishing an E2E Session Context
 
 For the exchange of USP Records within an E2E Session Context to happen between two USP Endpoints, an E2E Session Context (Session Context) is established between the participating USP Endpoints. The Session Context is uniquely identified within the USP Endpoint by the combination of the Session Identifier and remote USP Endpoint's Identifier.
@@ -2335,7 +2565,7 @@ When a Session Context had been previously established between an Agent and Cont
 
 **[R-E2E.5]{}** – At most one (1) Session Context is established between an Agent and Controller.
 
-**[R-E2E.6]{}** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the USP Endpoint MUST start a new Session Context for the remote USP Endpoint, and initialize the `sequence_id` field to `1`.
+**[R-E2E.6]{}** – When a USP Endpoint receives a USP Record from a remote USP Endpoint with a different Session Context identifier than was previously established, the receiving USP Endpoint MUST start a new Session Context for the remote USP Endpoint, using the `session_id` from the received USP Record, and initialize the `sequence_id` field to `1`.
 
 *Note: Implementations need to consider if outstanding USP Messages that have not been transmitted to the remote USP Endpoint need to be transmitted within the newly established Session Context.*
 
@@ -2462,7 +2692,7 @@ The originating Endpoint is responsible for determining the policy for recoverin
 
 **[R-E2E.22]{}** – The receiving USP Endpoint MUST successfully process the USP Record through the `expected_id` field that it last transmitted in the previous session.
 
-When a USP Endpoint receives a USP Record that cannot pass an integrity check or that has an incorrect value in the `session_id` element, the Session Context is restarted.
+When a USP Endpoint receives a USP Record that cannot pass an integrity check or that has an incorrect value in the `session_id` field, the Session Context is restarted.
 
 **[R-E2E.23]{}** – USP Records that do not pass integrity checks MUST be silently ignored and the receiving USP Endpoint MUST restart the Session Context.
 
@@ -2472,14 +2702,18 @@ This allows keys to be distributed and enabled under the old session keys and th
 
 ### Segmented Message Exchange
 
-Since USP can use different types of MTPs, some MTPs place a constraint on the size of the USP Message that it can transport. To handle this, USP has a Segmentation and Reassembly function. When this Segmentation and Reassembly function is performed by Controller and Agent, it removes the possibly that the message may be blocked (and typically) dropped by the intermediate transport servers. A Segmentation and Reassembly example is shown in the figure below where the ACS Controller segments the USP Message within the USP Record into segments of 64K bytes because the STOMP MTP Endpoint (in this example) can only handle messages up to 64K bytes.
+Since USP can use different types of MTPs, some MTPs place a constraint on the size of the USP Record that it can transport. To handle this, USP has a Segmentation and Reassembly function. When this Segmentation and Reassembly function is performed by Controller and Agent, it removes the possibly that the message may be blocked (and typically) dropped by the intermediate transport servers. A Segmentation and Reassembly example is shown in the figure below where the ACS Controller segments the USP Message within the USP Record of 64K bytes because the STOMP MTP Endpoint (in this example) can only handle frame body up to 64K bytes.
 
-While the `sequence_id` field identifies the USP Record sequence identifier within the context of a Session Context and the `retransmit_id` field provides a means of a receiving USP Endpoint to indicate to the transmitting USP Endpoint that it needs a specific USP Record to ensure information fields are processed in a first-in-first-out (FIFO) manner, the Segmentation and Reassembly function allows multiple payloads to be segmented by the transmitting USP Endpoint and reassembled by the receiving USP Endpoint by augmenting the USP Record with additional information fields without changing the current semantics of the USP Record's field definitions. This is done using the `payload_sar_state` and `payloadrec_sar_state` fields in the USP Record to indicate status of the segmentation and reassembly procedure. This status along with the existing `sequence_id`, `expected_id` and `retransmit_id` fields and the foreknowledge of the E2E maximum transmission unit `MaxUSPRecordSize` Parameter in the Agent's Controller table provide the information needed for two USP Endpoints to perform segmentation and reassembly of payloads conveyed by USP Records. In doing so, the constraint imposed by MTP Endpoints (that could be intermediate MTP Endpoints) that do not have segmentation and reassembly capabilities are alleviated. USP Records of any size can now be conveyed across any USP MTP Endpoint as depicted below:
+While the `sequence_id` field identifies the USP Record sequence identifier within the context of a Session Context and the `retransmit_id` field provides a means of a receiving USP Endpoint to indicate to the transmitting USP Endpoint that it needs a specific USP Record to ensure information fields are processed in a first-in-first-out (FIFO) manner, the Segmentation and Reassembly function allows multiple payloads to be segmented by the transmitting USP Endpoint and reassembled by the receiving USP Endpoint by augmenting the USP Record with additional information fields without changing the current semantics of the USP Record's field definitions. This is done using the `payload_sar_state` and `payloadrec_sar_state` fields in the USP Record to indicate status of the segmentation and reassembly procedure. This status along with the existing `sequence_id`, `expected_id` and `retransmit_id` fields and the foreknowledge of the maximum allowed USP Record size (configurable by the `Device.LocalAgent.Controller.{i}.E2ESession.MaxUSPRecordSize` parameter) provide the information needed for two USP Endpoints to perform segmentation and reassembly of payloads conveyed by USP Records. In doing so, the constraint imposed by MTP Endpoints (that could be intermediate MTP Endpoints) that do not have segmentation and reassembly capabilities are alleviated. USP Messages of any size can now be conveyed across any USP MTP Endpoint as depicted below:
 
 ![E2E Segmentation and Reassembly](e2e-message-exchange/segmentation-and-reassembly.png){#fig:segmentation-and-reassembly}
 
 *Note: the 64k size limit is not inherent to the STOMP protocol. It is merely
 provided here as an example.*
+
+*Note: for other protocols (e.g., MQTT), the maximum allowed size by the MTP may also include its own header size,
+not only the conveyed payload (e.g., MQTT packet size). In this case, the `MaxUSPRecordSize` value must be
+a smaller value than the maximal size of the MTP.*
 
 #### SAR function algorithm
 
@@ -2491,11 +2725,11 @@ For each USP Message segment the Payload:
 
 1. Compose the USP Message.
 2. If `payload_security` is `TLS12`, encrypt the USP Message. TLS will segment the encrypted Message per the maximum allowed TLS record size.
-    1. If all TLS records + Record header elements are less than the maximum allowed USP Record size, then a single USP Record is sent.
+    1. If all TLS records + Record header fields are less than the maximum allowed USP Record size, then a single USP Record is sent.
     2. Otherwise segmentation of the USP Record will need to be done.
-        1. If the record size of a single TLS record + USP Record header elements is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
-        2. If the TLS record size + Record header elements is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
-3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header elements are greater than the maximum allowed USP Record size, the USP Record is segmented.
+        1. If the record size of a single TLS record + USP Record header fields is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
+        2. If the TLS record size + Record header fields is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
+3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header fields are greater than the maximum allowed USP Record size, the USP Record is segmented.
 4. Set the `payload_sar_state` field for each transmitted Record.
     1. If there is only one Record, `payload_sar_state` = `NONE (0)`.
     2. If there is more than one USP Record, the `payload_sar_state` field is set to `BEGIN (1)` on the first Record, `COMPLETE (3)` on the last Record, and `INPROCESS (2)` on all Records between the two.
@@ -2506,7 +2740,7 @@ For each USP Message segment the Payload:
 
 The effect of the above rules for `PLAINTEXT` payloads or for Secure Message Exchange with a single TLS record is that `payloadrec_sar_state` will be the same as `payload_sar_state` for all Records used to communicate the USP Message.
 
-*Note: The maximum allowed USP Record size can be exposed via the data model using the `MaxUSPRecordSize` Parameter.*
+*Note: The maximum allowed USP Record size can be exposed via the data model using the `Device.LocalAgent.Controller.{i}.E2ESession.MaxUSPRecordSize` Parameter.*
 
 ##### Receiving Endpoint
 
@@ -2595,13 +2829,17 @@ Circumstances may arise (such as multiple Message Transfer Protocols, retransmis
 
 When the exchange of USP Records without an E2E Session Context is used, the `record_type` is set to `no_session_context`.
 
+When a USP Record that is received without an E2E Session Context contains a USP Message request, its associated response or error message is sent without an E2E Session Context, unless otherwise specified (see [](#sec:requests-responses-and-errors)).
+
 **[R-E2E.26]{}** - A `record_type` of `no_session_context` MUST be used for exchange of USP Records without an E2E Session Context. A non-zero `payload` MUST be included.
 
 ### Failure Handling of Received USP Records Without a Session Context
 
 When a receiving USP Endpoint fails to either buffer or successfully process a USP Record, the receiving USP Endpoint reports a failure.
 
-**[R-E2E.27]{}** – When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint SHOULD send a `DisconnectRecord` (as described in [R-MTP.7]() for Agents).
+**[R-E2E.27]{}** (DEPRECATED) - When a USP Endpoint that receives a USP Record without a Session Context that fails to buffer or successfully process (e.g., decode, decrypt, retransmit) the USP Endpoint SHOULD send a `DisconnectRecord` (as described in [R-MTP.7]() for Agents).
+
+*Note: Requirement [R-E2E.27]() was removed in USP 1.3, replaced by the behavior defined in [R-MTP.5]()*
 
 Note that [R-MTP.7]() says Agents should send a `DisconnectRecord` when terminating an MTP. Controllers can also send a `DisconnectRecord` in this case. The MTP can stay connected. Brokered MTP sessions are expected to remain but other MTP connections could be closed.
 
@@ -2715,9 +2953,11 @@ All USP Messages are encapsulated by a USP Record. The definition of the USP Rec
 
 The three types of USP Messages are Request, Response, and Error.
 
-A request is a Message sent from a source USP Endpoint to a target USP Endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify Message follows the same format as a request but is sent from an Agent to a Controller.
+A request is a Message sent from a source USP Endpoint to a target USP Endpoint that includes fields to be processed and returns a response or error. Unless otherwise specified, all requests have an associated response. Though the majority of requests are made from a Controller to an Agent, the Notify and Register Messages follow the same format as a request but is sent from an Agent to a Controller.
 
 **[R-MSG.0]{}** - The target USP Endpoint MUST respond to a request Message from the source USP Endpoint with either a response Message or Error Message, unless otherwise specified (see [](#sec:operate) and [](#sec:notify)).
+
+**[R-MSG.0a]{}** - The associated response or error Message MUST be sent through the same type of USP Record (i.e. A `record_type` of [`session_context`](#sec:exchange-of-usp-records-within-an-e2e-session-context) or [`no_session_context`](#sec:exchange-of-usp-records-without-an-e2e-session-context)) used along the associated request Message.
 
 **[R-MSG.1]{}** - The target USP Endpoint MUST ignore or send an Error Message in response to Messages it does not understand.
 
@@ -2733,7 +2973,7 @@ Circumstances may arise (such as multiple Message Transfer Protocols) that cause
 
 For Messages that require no response, it is up to the target Endpoint implementation when to allow the same Message ID to be re-used by the same source USP Endpoint.
 
-### Handling search expressions
+### Handling Search Expressions
 
 Many USP Messages allow for search expressions to be used in the request. To
 help make Controller requests more flexible, it is desired that requests using
@@ -2752,6 +2992,8 @@ Objects in the Agent's Instantiated Data Model.
 
 Successful request/response: In this successful Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, the Message is understood, and the Agent sends a response with the relevant information in the body.
 
+*Note: this is not meant to imply that all request/response operations will be synchronous. Controllers can and should expect that Responses may be received in a different order than that in which Requests were made.*
+
 ![A successful request/response sequence](messages/successful_response.png)
 
 Failed request/response: In this failed Message sequence, a Controller sends an Agent a request. The Message header and body are parsed, but the Agent throws an error. The error arguments are generated and sent in an Error Message.
@@ -2760,15 +3002,15 @@ Failed request/response: In this failed Message sequence, a Controller sends an 
 
 ## Message Structure
 
-A Message consists of a header and body. When using [@PROTOBUF], the fields of the header and body for different Messages are defined in a schema and sent in an encoded format from one USP Endpoint to another.
+A Message consists of a header and body. When using Protocol Buffers [@PROTOBUF], the fields of the header and body for different Messages are defined in a schema and sent in an encoded format from one USP Endpoint to another.
 
 **[R-MSG.5]{}** - A Message MUST conform to the schemas defined in [%usp-msg-proto-file%](%usp-msg-proto-url%).
 
-*Note: When not explicitly set or included in the Message, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For booleans, the default value is "false". For numbers (fixed32) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. For a `oneof` field, none of the allowed values is assumed if the field is absent. If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Message. The receiving Endpoint will use default values for fields not included in a received Message. Any field with a requirement indicating it must be present is required to always be included. A Message without a required field will fail to be processed by a receiving Endpoint. “Repeated” fields can be included any number of times, including zero. For additional information,  default values (when fields are missing) are described in the "Default Values" section of [@PROTOBUF].*
+*See the section on [USP Record Encapsulation](#sec:usp-record-encapsulation) for information about Protocol Buffers default behavior and required fields.*
 
 Every USP Message contains a header and a body. The header contains basic destination and coordination information, and is separated to allow security and discovery mechanisms to operate. The body contains the message itself and its arguments.
 
-Each of the Message types and fields below are described with the field type according to Protocol Buffers version 3 [@PROTOBUF], followed by its name.
+Each of the Message types and fields below are described with the field type according to Protocol Buffers [@PROTOBUF], followed by its name.
 
 ### The USP Message
 
@@ -2788,7 +3030,7 @@ The Message Header includes a Message ID to associate Requests with Responses or
 
 The purpose of the Message Header is to provide basic information necessary for the target Endpoint to process the message.
 
-#### Message Header fields
+#### Message Header Fields
 
 `string msg_id`
 
@@ -2821,6 +3063,10 @@ This field contains an enumeration indicating the type of message contained in t
     NOTIFY_RESP (16)
     GET_SUPPORTED_PROTO (17)
     GET_SUPPORTED_PROTO_RESP (18)
+    REGISTER (19)
+    REGISTER_RESP (20)
+    DEREGISTER (21)
+    DEREGISTER_RESP (22)
 ```
 
 **[R-MSG.10]{}** - The `msg_type` field MUST be present in every Header. Though
@@ -2834,7 +3080,7 @@ The Message body contains the intended message and the appropriate fields for th
 
 Every Message body contains exactly one message and its fields. When an Agent is the target Endpoint, these messages can be used to create, read, update, and delete Objects, or execute Object-defined operations. When a Controller is the target Endpoint, the Message will contain a notification, response, or an error.
 
-#### Message Body fields
+#### Message Body Fields
 
 `oneof msg_body`
 
@@ -2852,7 +3098,7 @@ This field indicates that the Message contains a response of a type given in the
 
 This field indicates that the Message contains an Error Message.
 
-#### Request fields
+#### Request Fields
 
 `oneof req_type`
 
@@ -2868,9 +3114,11 @@ This field contains one of the types given below. Each indicates that the Messag
     Operate operate
     Notify notify
     GetSupportedProtocol get_supported_protocol
+    Register register
+    Deregister deregister
 ```
 
-#### Response fields
+#### Response Fields
 
 `oneof resp_type`
 
@@ -2886,9 +3134,11 @@ This field contains one of the types given below. Each indicates that the Messag
     OperateResp operate_resp
     NotifyResp notify_resp
     GetSupportedProtocolResp get_supported_protocol_resp
+    RegisterResp register_resp
+    DeregisterResp deregister_resp
 ```
 
-#### Error fields
+#### Error Fields
 
 `fixed32 err_code`
 
@@ -2900,9 +3150,9 @@ This field contains additional information about the reason behind the error.
 
 `repeated ParamError param_errs`
 
-This field is present in an Error Message in response to an Add, Set, or Delete Message when the allow_partial field is false and detailed error information is available for each Object or Parameter that have caused the Message to report an Error.
+This field is present in an Error Message in response to an Add, Set, or Delete Message when the `allow_partial` field is false and detailed error information is available for each Object or Parameter that have caused the Message to report an Error.
 
-##### ParamError fields
+##### ParamError Fields
 
 `string param_path`
 
@@ -2981,6 +3231,13 @@ The Agent’s response would include the Object created (with its instance ident
       }
     }
 ```
+### Unique Key Immutability
+
+In order to maintain addressing integrity of Multi-Instance Objects, the following prescriptions are made on the use of Unique Keys.
+
+**[R-KEY.1]{}** - Non-functional Unique Keys (as defined in TR-106 [@TR-106]) MUST NOT change in the Agent's Instantiated Data Model after creation, as defined in [R-ADD.5]().
+
+**[R-KEY.2]{}** - Functional Unique Keys (as defined in TR-106 [@TR-106]) MAY change incidentally as part of normal operation, but any change MUST abide by the uniqueness rules (i.e., no conflict with other instances).
 
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
@@ -3016,6 +3273,10 @@ The logic can be described as follows:
 | `true`/`false` | Yes | No | Yes | Response | `oper_success` | Yes |
 | `true` | Yes | Yes | - | Response | `oper_failure` | Yes |
 | `false` | Yes | Yes | - | Error | N/A | Yes |
+
+#### Search Paths and allow_partial in Set {#sec:search-paths-in-set}
+
+In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for any one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
 
 ### The Add Message {#sec:add}
 
@@ -3081,7 +3342,7 @@ body {
 }
 ```
 
-#### Add Request fields
+#### Add Request Fields
 
 `bool allow_partial`
 
@@ -3095,23 +3356,31 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of CreateObject fields.
 
-##### CreateObject fields
+##### CreateObject Fields
 
 `string obj_path`
 
 This field contains an Object Path to a writeable Table in the Agent’s Instantiated Data Model.
 
-**[R-ADD.2]{}** - The `obj_path` field in the `CreateObject` Message of an Add Request MUST specify or match exactly one Object Path.
+**[R-ADD.2]{}** - The `obj_path` field in the `CreateObject` Message of an Add Request MUST specify or match exactly one Object Path. (DEPRECATED)
+
+*Note: The R-ADD.2 requirement was deprecated in USP 1.3 because previous USP versions too narrowly restricted the usage of various paths in the obj_path field. If multiple paths are impacted, then the AddResp can contain multiple CreatedObjectResult instances that include the same requested_path.*
 
 `repeated CreateParamSetting param_settings`
 
 This field contains a repeated set of CreateParamSetting fields.
 
-###### CreateParamSetting fields
+###### CreateParamSetting Fields
 
 `string param`
 
 This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or  any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
+
+*Note: The Parameters that can be set in an Add Message are still governed by the permissions allowed to the Controller. Should a Controller attempt to create an Object when it does not have permission on one or more Parameters of that Object, the expected behavior is as follows:*
+
+- *If the Add Message omits Parameters for which the Controller does not have write permission, those parameters will be set to their default (if any) by the Agent, and the Add Message succeeds.*
+
+- *If the Add Message includes Parameters for which the Controller does not have write permission, the Message proceeds in accordance with the rules for allow_partial and required parameters.*
 
 `string value`
 
@@ -3124,15 +3393,17 @@ This field specifies whether the Agent should treat the creation of the Object s
 
 *Note: Any Unique Key Parameter contained in the Add Message will be considered as required regardless of how this field is set. This is to ensure that Unique Key constraints are met when creating the instance of the Object.*
 
+**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
+
 **[R-ADD.3]{}** - If the `required` field is set to true, a failure to update this Parameter MUST result in a failure to create the Object.
 
-#### Add Response fields
+#### Add Response Fields
 
 `repeated CreatedObjectResult created_obj_results`
 
 A repeated set of `CreatedObjectResult` fields for each `CreateObject` field in the Add Message.
 
-##### CreatedObjectResult fields
+##### CreatedObjectResult Fields
 
 `string requested_path`
 
@@ -3142,7 +3413,7 @@ This field returns the value of `obj_paths` in the `CreateObject` Message associ
 
 The field contains a Message of type `OperationStatus` that specifies the overall status for the creation of the Object specified in `requested_path`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -3156,7 +3427,7 @@ Used when the Object given in `requested_path` failed to be created.
 
 Used when the `Add` Message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -3166,7 +3437,7 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains additional information about the reason behind the error.
 
-###### Operation Success fields
+###### Operation Success Fields
 
 `string instantiated_path`
 
@@ -3186,7 +3457,7 @@ This field contains a map of the Relative Path and value for all of this Object'
 
 **[R-ADD.6]{}** - If the Controller does not have Read permission on any of the Parameters returned in `unique_keys`, these Parameters MUST NOT be returned in this field.
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -3261,7 +3532,7 @@ body {
 }
 ```
 
-#### Set Request fields
+#### Set Request Fields
 
 `bool allow_partial`
 
@@ -3277,7 +3548,7 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of UpdateObject messages.
 
-##### UpdateObject fields
+##### UpdateObject Fields
 
 `string obj_path`
 
@@ -3287,7 +3558,7 @@ This field contains an Object Path, Object Instance Path, or Search Path to Obje
 
 The field contains a repeated set of `UpdatedParamSetting` messages.
 
-###### UpdateParamSetting fields
+###### UpdateParamSetting Fields
 
 `string param`
 
@@ -3304,13 +3575,21 @@ This field specifies whether the Agent should treat the update of the Object spe
 
 **[R-SET.2]{}** - If the `required` field is set to `true`, a failure to update this Parameter MUST result in a failure to update the Object (see [](#sec:using-allow-partial-and-required-parameters)).
 
+**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a Set Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically, regardless of the value of the `allow_partial` field. That is, if any object that matches the Search Path fails to be updated due to an error, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent MUST return a Set Response with an UpdatedObjectResult containing:
+
+  * A `requested_path` equal to the `obj_path` in the request.
+  * An `oper_status` field containing an OperationFailure message.
+  * At least one UpdatedInstanceFailure message with an `affected_path` that reflects the object that failed to update.
+
+**[R-SET.2b]{}** - The Agent MAY terminate processing a Set Request with an `obj_path` field in the `UpdateObject` message that contains a Search Path matching more than one object after encountering any number of errors.
+
 #### Set Response
 
 `repeated UpdatedObjectResult updated_obj_results`
 
 This field contains a repeated set of `UpdatedObjectResult` messages for each `UpdateObject` message in the associated Set Request.
 
-##### UpdatedObjectResult fields
+##### UpdatedObjectResult Fields
 
 `string requested_path`
 
@@ -3320,7 +3599,7 @@ This field returns the value of `updated_obj_results` in the `UpdateObject` mess
 
 The field contains a message of type `OperationStatus` that specifies the overall status for the update of the Object specified in `requested_path`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -3334,7 +3613,7 @@ Used when the Object specified in `requested_path` failed to be updated.
 
 Used when the `Set` message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -3348,7 +3627,7 @@ This field contains additional information about the reason behind the error.
 
 This field contains a repeated set of messages of type `UpdatedInstanceFailure`.
 
-###### UpdatedInstanceFailure fields
+###### UpdatedInstanceFailure Fields
 
 `string affected_path`
 
@@ -3358,7 +3637,7 @@ This field returns the Object Path or Object Instance Path of the Object that fa
 
 This field contains a repeated set of `ParameterError` messages.
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -3372,13 +3651,13 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains text related to the error specified by `err_code`.
 
-###### OperationSuccess fields
+###### OperationSuccess Fields
 
 `repeated UpdatedInstanceResult updated_inst_results`
 
 This field contains a repeated set of `UpdatedInstanceResult` messages.
 
-###### UpdatedInstanceResult fields
+###### UpdatedInstanceResult Fields
 
 `string affected_path`
 
@@ -3397,7 +3676,7 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 *Note: If the Set Request configured a Parameter to the same value it already had, this Parameter is still returned in the `updated_params`.*
 
-###### ParameterError fields
+###### ParameterError Fields
 
 `string param`
 
@@ -3459,7 +3738,7 @@ body {
 }
 ```
 
-#### Delete Request fields
+#### Delete Request Fields
 
 `bool allow_partial`
 
@@ -3473,13 +3752,13 @@ This field tells the Agent how to process the Message in the event that one or m
 
 This field contains a repeated set of Object Instance Paths or Search Paths.
 
-#### Delete Response fields
+#### Delete Response Fields
 
 `repeated DeletedObjectResult deleted_obj_results`
 
 This field contains a repeated set of `DeletedObjectResult` messages.
 
-##### DeletedObjectResult fields
+##### DeletedObjectResult Fields
 
 `string requested_path`
 
@@ -3489,7 +3768,7 @@ This field returns the value of the entry of `obj_paths` (in the Delete Request)
 
 This field contains a message of type `OperationStatus`.
 
-###### OperationStatus fields
+###### OperationStatus Fields
 
 `oneof oper_status`
 
@@ -3503,7 +3782,7 @@ Used when the Object specified in `requested_path` failed to be deleted.
 
 Used when the `Delete` Message was (at least partially) successful.
 
-###### OperationFailure fields
+###### OperationFailure Fields
 
 `fixed32 err_code`
 
@@ -3513,7 +3792,7 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 This field contains additional information about the reason behind the error.
 
-###### OperationSuccess fields
+###### OperationSuccess Fields
 
 `repeated string affected_paths`
 
@@ -3531,7 +3810,7 @@ This field contains a repeated set of messages of type `UnaffectedPathError`.
 
 **[R-DEL.4]{}** - If the Controller does not have Read permission on any of the Objects specified in `unaffected_paths`, these Objects MUST NOT be returned in this field.
 
-###### UnaffectedPathError fields
+###### UnaffectedPathError Fields
 
 `string unaffected_path`
 
@@ -3566,7 +3845,7 @@ The response returns a `req_path_results` entry for each Path Name given in `par
 Each `req_path_results` message given in the response contains a set of `resolved_path_results` messages for each Object and Sub-Object relative to the Path resolved by the `param_paths` element. Each results is followed by a list of Parameters (`result_params`) and their values. If there are no Parameters, `result_params` may be empty.  These Parameter Paths are Relative Paths to the `resolved_path`.
 *Note: This behavior has been clarified as of USP 1.2. Previous versions implied that Sub-Object Parameters be returned as Relative Paths to the original `resolved_path` in a single `result_params` list. In USP 1.2, each Sub-Object is returned in its own `resolved_path`.*
 
-The tree depth of a Get `result_params` tree can be limited by specifying a non-zero value for the `max_depth` field in Get request. If `max_depth` field is present and not `0` then the Agent will limit the maximum depth of each returned `result_params` tree to the depth specified by `max_depth` value.
+The tree depth of a Get response can be limited by specifying a non-zero value for the `max_depth` field in Get request. If `max_depth` field is present and not `0` then the Agent will limit the maximum depth of each returned `req_path_results` to a tree rooted in `requested_path` with a depth specified by `max_depth` value.
 
 *Note: The `max_depth` field was introduced in USP 1.2. If this field is not present in a Get request or has a value of `0`, the Agent returns the complete tree of all Objects and Sub-Objects of all the Path Names mentioned in `param_paths`. This is the same as the behavior specified for prior USP versions. An Agent implementing a prior version of the USP specification will ignore the field and behave as if the `max_depth` field was set to `0`.*
 
@@ -3592,7 +3871,7 @@ For example, a Controller wants to read the data model to learn the settings and
     }
 ```
 
-In response to this request the Agent returns all Parameters, plus Sub-Objects and their Parameters, of the addressed instance. The `max_depth` value of `2` has no impact on the returned result in this case since the SSID Object only contains the `Stats` Sub-Object which has no Sub-Objects of its own. Had `max_depth` been set to `1` then all of the SSID Parameters and their values would have been returned, as well as the `Stats` Sub-Object, but the Sub-Object's Parameters and values would have been omitted. The Agent returns this data in the Get response using a field for each of the requested Path Names. In this case:
+In response to this request the Agent returns all Parameters, plus the Parameters of any Sub-Objects, of the addressed instance. Had `max_depth` been set to `1` then all of the SSID Parameters and their values would have been returned, but the `Stats` Sub-Object and its Parameters would have been omitted. The Agent returns this data in the Get response using a field for each of the requested Path Names. In this case:
 
 ```{filter=pbv type=Response}
     get_resp {
@@ -3794,7 +4073,7 @@ body {
 }
 ```
 
-#### Get Request fields
+#### Get Request Fields
 
 `repeated string param_paths`
 
@@ -3806,13 +4085,13 @@ This field limits the maximum depth of each returned `result_params` tree to the
 
 **[R-GET.5]{}** - If the `max_depth` field is present and contains a value other than 0, then the Agent MUST limit the tree depth of the resolved Sub-Objects included in the `resolved_path_results` field of the Response to the specified value.
 
-#### Get Response fields
+#### Get Response Fields
 
 `repeated RequestedPathResult req_path_results`
 
 A repeated set of `RequestedPathResult` messages for each of the Path Names given in the associated Get request.
 
-##### RequestedPathResult field
+##### RequestedPathResult Field
 
 `string requested_path`
 
@@ -3822,7 +4101,7 @@ This field contains one of the Path Names or Search Paths given in the `param_pa
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the Get to fail on this Path Names. A value of 0 indicates the Path Name could be read successfully.
 
-**[R-GET.0]{}** - If `requested_path` contains a Path Name that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
+**[R-GET.0]{}** - If `requested_path` contains a Path Name (that is not a Search Path) that does not match any Object or Parameter in the Agent's Instantiated Data Model, or `requested_path` contains a Search Path that does not match any Object or Parameter in the Agent's Supported Data Model, the Agent MUST use the `7026 - Invalid Path` error in this `RequestedPathResult`.
 
 **[R-GET.1]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.
 
@@ -3834,9 +4113,11 @@ This field contains additional information about the reason behind the error.
 
 This field contains one message of type ResolvedPathResult for each Path Name resolved by the Path Name or Search Path given by `requested_path`.
 
-**[R-GET.1a]{}** - If the requested_path is valid (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any Objects in the Agent's instantiated data model, the resolved_path_results set MUST be empty and is not considered an error.
+**[R-GET.1a]{}** - If the `requested_path` is a valid Search Path (i.e., properly formatted and in the Agent's supported data model) but did not resolve to any Objects in the Agent's Instantiated Data Model, the `resolved_path_results` set MUST be empty and is not considered an error.
 
-###### ResolvedPathResult fields
+**[R-GET.1b]{}** - If the `requested_path` is a valid Object Path (i.e., properly formatted and in the Agent's supported data model), which is not a Search Path, but the Object does not have any Sub-Objects or Parameters, the `resolved_path_results` set MUST be empty and is not considered an error.
+
+###### ResolvedPathResult Fields
 
 `string resolved_path`
 
@@ -3853,9 +4134,9 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 **[R-GET.4]{}** - If the Controller does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
 
-###### Get Message Supported Error Codes
+#### Get Message Supported Error Codes
 
-Appropriate error codes for the Get Message include `7000-7006`, `7008`, `7010`, `7026` and `7800-7999`.
+Appropriate error codes for the Get Message include `7000-7006`, `7008`, `7010`, `7016`, `7026` and `7800-7999`.
 
 ### The GetInstances Message {#sec:getinstances}
 
@@ -3987,7 +4268,7 @@ The Agent's Response will contain an entry in `curr_insts` for all of the Instan
 
 Or more, if more Object Instances exist.
 
-#### GetInstances Request fields
+#### GetInstances Request Fields
 
 `repeated string obj_paths`
 
@@ -3997,7 +4278,7 @@ This field contains a repeated set of Path Names or Search Paths to Multi-Instan
 
 This field, if `true`, indicates that the Agent returns only those instances in the Object(s) matched by the Path Name or Search Path in `obj_path`, and not return any child Objects.
 
-#### GetInstances Response fields
+#### GetInstances Response Fields
 
 `repeated RequestedPathResult req_path_results`
 
@@ -4021,7 +4302,7 @@ This field contains additional information about the reason behind the error.
 
 This field contains a message of type `CurrInstance` for each Instance of *all* of the Objects matched by `requested_path` that exists in the Agent's Instantiated Data Model.
 
-###### CurrInstance fields
+###### CurrInstance Fields
 
 `string instantiated_obj_path`
 
@@ -4039,7 +4320,7 @@ Appropriate error codes for the GetInstances Message include `7000-7006`, `7008`
 
 ### The GetSupportedDM Message {#sec:the-getsupporteddm-message}
 
-GetSupportedDM is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
+GetSupportedDM (referred to informally as GSDM) is used to retrieve the Objects, Parameters, Events, and Commands in the Agent's Supported Data Model. This allows a Controller to learn what an Agent understands, rather than its current state.
 
 The GetSupportedDM Message is different from other USP Messages in that it only returns information about the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance Objects in the Path Name use the `{i}` identifier to indicate their place in the Path Name as specified in TR-106 [@TR-106].
 
@@ -4051,7 +4332,13 @@ Alternatively an Instantiated Data Model Object Path can be used as long as the 
 
 If the Agent encounters a diverging Supported Data Model, e.g. due to the use of different Mounted Objects underneath a Mountpoint, the Agent will skip the traversal of the children Objects, populate the Response's `divergent_paths` element with all divergent Object Instance Paths, and continue processing with the next unambiguous Object. The Supported Data Model of such divergent Objects can only be obtained by specifically using Object Instance Paths in the `obj_paths` field of a GetSupportedDM request.
 
-The Agent's Response returns all Path Names in the `supported_obj_path` field according to the associated Device Type document as specified in TR-106 [@TR-106].
+The Agent's Response returns all Path Names in the `supported_obj_path` field according to its Supported Data Model.
+
+To clarify the difference between an Instantiated Data Model Object Path and a Supported Data Model Object Path:
+
+*	If a `{i}` is encountered in the Object Path, it cannot be followed by an Instance Identifier.
+*	If the Object Path ends with an Instance Identifier, it is treated as an Instantiated Data Model Object Path.
+*	If the Object Path contains a `{i}`, it is a Supported Data Model Object Path.
 
 #### GetSupportedDM Examples
 
@@ -4230,7 +4517,7 @@ The Agent's response would be:
     }
 ```
 
-#### GetSupportedDM Request fields
+#### GetSupportedDM Request Fields
 
 `repeated obj_paths`
 
@@ -4252,13 +4539,13 @@ This field, if `true`, indicates that, in the `supported_objs`, the Agent should
 
 This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` field containing Parameters supported by the reported Object(s).
 
-#### GetSupportedDMResp fields
+#### GetSupportedDMResp Fields
 
 `repeated RequestedObjectResult req_obj_results`
 
 This field contains a repeated set of messages of type `RequestedObjectResult`.
 
-##### RequestedObjectResult fields
+##### RequestedObjectResult Fields
 
 `string req_obj_path`
 
@@ -4282,7 +4569,7 @@ This field contains a Uniform Resource Identifier (URI) to the Data Model associ
 
 The field contains a message of type `SupportedObjectResult` for each reported Object.
 
-###### SupportedObjectResult fields
+###### SupportedObjectResult Fields
 
 In the case of a diverging Supported Data Model, only the `supported_obj_path`, `access`, `is_multi_instance`, and `divergent_paths` fields will be populated for the divergent Object.
 
@@ -4323,7 +4610,7 @@ The field contains an Object Instance Path for each divergent Path Name.
 
 *Note: The `divergent_paths` field was added in USP 1.2. An Agent that supports versions before USP 1.2 would not know to send the `divergent_paths` field and thus an empty list will be seen by the Controller.*
 
-###### SupportedParamResult fields
+###### SupportedParamResult Fields
 
 `string param_name`
 
@@ -4361,7 +4648,7 @@ This field contains an enumeration of type ParamValueType specifying the *primit
 
 `ValueChangeType value_change`
 
-This field contains an enumeration of type ValueChangeType specifying whether or not the Parameter will honor or ignore a ValueChange Subscription.  The value of this field does not impact the ability for a Controller to create a ValueChange Subscription that references the associated Parameter, it only impacts how the Agent handles the Subscription. It is an enumeration of:
+This field contains an enumeration of type ValueChangeType specifying whether or not the Agent will honor or ignore a ValueChange Subscription for this Parameter. The value of this field does not impact the ability for a Controller to create a ValueChange Subscription that references the associated Parameter, it only impacts how the Agent handles the Subscription. It is an enumeration of:
 ```
     VALUE_CHANGE_UNKNOWN (0)
     VALUE_CHANGE_ALLOWED (1)
@@ -4370,7 +4657,7 @@ This field contains an enumeration of type ValueChangeType specifying whether or
 *Note: The value_change field was added in USP 1.2, and the VALUE_CHANGE_UNKNOWN enumerated value is present for backwards compatibility purposes. An Agent that supports versions before USP 1.2 would not know to send the value_change and thus a 0 value (VALUE_CHANGE_UNKNOWN) will be seen by the Controller.*
 
 
-###### SupportedCommandResult fields
+###### SupportedCommandResult Fields
 
 `string command_name`
 
@@ -4418,27 +4705,336 @@ The GetSupportedProtocol Message is used as a simple way for the Controller and 
 which versions of USP each supports to aid in interoperability and backwards
 compatibility.
 
-#### GetSupportedProtocol Request fields
+#### GetSupportedProtocol Request Fields
 
 `string controller_supported_protocol_versions`
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Controller.
 
-#### GetSupportedProtocolResponse fields
+#### GetSupportedProtocolResponse Fields
 
 `string agent_supported_protocol_versions`
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
+### The Register Message {#sec:register}
+
+The Register message is an Agent to Controller message used to register new Service Elements.
+
+See [Software Modularization and USP-Enabled Applications Theory of Operation appendix](#sec:software-modularization-theory-of-operations) for more information on when to use the Register message.
+
+#### Register Examples
+
+A USP Agent can register several Service Elements with one or multiple Register Request messages.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER
+}
+body {
+  request {
+    register {
+      allow_partial: true
+      reg_paths {
+        path: "Device.Time."
+      }
+      reg_paths {
+        path: "Device.WiFi.DataElements."
+      }
+    }
+  }
+}
+```
+
+In case the registration was successful, the USP Controller will respond with a Register Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER_RESP
+}
+body {
+  response {
+    register_resp {
+      registered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            registered_path: "Device.Time."
+          }
+        }
+      }
+
+      registered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_success {
+            registered_path: "Device.WiFi.DataElements."
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+In case the registration failed partially, because the "Device.WiFi.DataElements." object was already registered, the USP Controller will respond with the following Register Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: REGISTER_RESP
+}
+body {
+  response {
+    register_resp {
+      registered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            registered_path: "Device.Time."
+          }
+        }
+      }
+
+      registered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_failure {
+            err_code: 7029
+            err_msg: "Device.WiFi.DataElements. object path has already been registered"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+If `allow_partial` was set to `false` in the Register Request and the registration failed, the USP Controller would instead respond with a USP Error message.
+
+```{filter=pbv}
+header {
+  msg_id: "94521"
+  msg_type: ERROR
+}
+body {
+  error {
+    err_code: 7029
+    err_msg: "Device.WiFi.DataElements. object path has already been registered"
+  }
+}
+```
+
+#### Register Request Fields
+
+`bool allow_partial`
+
+The Register message contains a boolean `allow_partial` to indicate whether the registration must succeed completely or is allowed to fail partially. If `allow_partial` is `false`, nothing will be registered if one of the provided paths fails to be registered (e.g. due to an already existing registration) and the USP Controller will respond with a USP Error message. If `allow_partial` is `true`, the USP Controller will try to register every path individually and will always respond with a RegisterResp message, even if none of the requested paths can be registered.
+
+**[R-REG.0]{}** - If the `allow_partial` field is set to `true` and no other exceptions are encountered, the Controller treats each of the reg_paths independently. The Controller MUST complete the registration of each reg_path regardless of the inability to register one of the others.
+
+**[R-REG.1]{}** - If the `allow_partial` field is set to `false`, and no other exceptions are encountered, the Controller treats each of the reg_paths holistically. A failure to handle one of the reg_paths will cause the Register Message to fail and return an Error Message.
+
+`repeated RegistrationPath reg_paths`
+
+This field contains a repeated set of RegistrationPaths for each path the USP Agent wants to register.
+
+##### RegistrationPath Fields
+
+`string path`
+
+This field contains the Object Path the USP Agent wants to register.
+
+**[R-REG.2]{}** - The path field MUST contain an Object Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
+
+#### Register Response Fields
+
+`repeated RegisteredPathResult registered_path_results`
+
+This field contains a repeated set of RegisteredPathResults for each path the USP Agent tried to register.
+
+#### RegisteredPathResult Fields
+
+`string requested_path`
+
+This field contains the value of the entry of the path (in the Register Request) associated with this RegisteredPathResult.
+
+`OperationStatus oper_status`
+
+This field contains a message of type OperationStatus.
+
+##### OperationStatus Fields
+
+`oneof oper_status`
+
+This field contains a message of one of the following types.
+
+`OperationFailure oper_failure`
+
+Used when the path specified in requested_path failed to be registered.
+
+`OperationSuccess oper_success`
+
+Used when the path specified in requested_path was successfully registered.
+
+##### OperationFailure Fields
+
+`fixed32 err_code`
+
+This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the registration to fail.
+
+`string err_msg`
+
+This field contains additional information about the reason behind the error.
+
+##### OperationSuccess Fields
+
+`string registered_path`
+
+This field returns the path that was registered.
+
+#### Register Message Supported Error Codes
+
+Appropriate error codes for the Register Message include 7000-7008, 7016, 7028-7029 and 7800-7999.
+
+### The Deregister Message {#sec:deregister}
+
+The Deregister message is an Agent to Controller message used to deregister a previously registered data model at the USP Controller. When a USP Agent terminates, all Services elements will be deregistered automatically by the USP Controller.
+
+A USP Agent can choose to deregister its Service Elements during normal operation or when it terminates.
+
+*Note: A Deregister Request does not contain a boolean `allow_partial`, but the Controller will handle each path in the Deregister Request individually. In other words, `allow_partial` is implicitly set to `true` during the deregistration. The USP Controller will provide information about the success or failure to deregister each requested path in the Deregister Response message.*
+
+#### Deregister Examples
+
+A USP Agent can deregister several Service Elements with a Deregister Request message.
+
+```{filter=pbv}
+header {
+  msg_id: "94522"
+  msg_type: DEREGISTER
+}
+body {
+  request {
+    deregister {
+      paths: "Device.Time."
+      paths: "Device.WiFi.DataElements."
+    }
+  }
+}
+```
+
+In case the deregistration was successful, the USP Controller will respond with a Deregister Response message.
+
+```{filter=pbv}
+header {
+  msg_id: "94522"
+  msg_type: DEREGISTER_RESP
+}
+body {
+  response {
+    deregister_resp {
+      deregistered_path_results {
+        requested_path: "Device.Time."
+        oper_status {
+          oper_success {
+            deregistered_path: "Device.Time."
+          }
+        }
+      }
+
+      deregistered_path_results {
+        requested_path: "Device.WiFi.DataElements."
+        oper_status {
+          oper_success {
+            deregistered_path: "Device.WiFi.DataElements."
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+#### Deregister Request Fields
+
+`repeated string paths`
+
+This field contains a set of paths that the USP Agent wants to deregister.
+
+**[R-DEREG.1]{}** - A USP Agent MUST *only* deregister Service Elements that it registered with a previous Register message.
+
+**[R-DEREG.2]{}** - An empty path field MUST be interpreted to deregister all Service Elements belonging to the USP Agent.
+
+**[R-DEREG.3]{}** - A USP Agent MAY deregister one or more Service Elements with one Deregister Request message containing multiple path fields.
+
+*Note: The path field contains an Object Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
+
+#### Deregister Response Fields
+
+`repeated DeregisteredPathResult deregistered_path_results`
+
+This field contains a repeated set of DeregisteredPathResults for each path the USP Agent tried to deregister.
+
+**[R-DEREG.4]{}** - A USP Controller MUST always respond with a Deregister Response message to a Deregister Request. USP Error messages are not used.
+
+#### DeregisteredPathResult Fields
+
+`string requested_path`
+
+This field contains the value of the entry of the path (in the Deregister Request) associated with this DeregisteredPathResult.
+
+`OperationStatus oper_status`
+
+This field contains a message of type OperationStatus.
+
+##### OperationStatus Fields
+
+`oneof oper_status`
+
+This field contains a message of one of the following types.
+
+`OperationFailure oper_failure`
+
+Used when the path specified in requested_path failed to be deregistered.
+
+`OperationSuccess oper_success`
+
+Used when the path specified in requested_path was successfully deregistered.
+
+##### OperationFailure Fields
+
+`fixed32 err_code`
+
+This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the deregistration to fail.
+
+`string err_msg`
+
+This field contains additional information about the reason behind the error.
+
+##### OperationSuccess Fields
+
+`string deregistered_path`
+
+This field returns the path that was deregistered.
+
+#### Deregister Message Supported Error Codes
+
+Appropriate error codes for the Deregister Message include 7000-7008, 7016, 7030 and 7800-7999.
+
 ## Notifications and Subscription Mechanism {#sec:notifications-and-subscriptions}
 
-A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a Parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent sends a [Notify Message](#sec:notify) to the Controller.
+A Controller can use the Subscription mechanism to subscribe to certain events that occur on the Agent, such as a Parameter change, Object removal, wake-up, etc. When such event conditions are met, the Agent may either send a [Notify Message](#sec:notify) to the Controller, update its own configuration, or perform both actions depending on the Subscription's configuration.
 
 ### Using Subscription Objects
 
 Subscriptions are maintained in instances of the Multi-Instance Subscription Object in the USP data model. The normative requirements for these Objects are described in the data model Parameter descriptions for `Device.LocalAgent.Subscription.{i}.` in the Device:2 Data Model [@TR-181].
 
 **[R-NOT.0]{}** - The Agent and Controller MUST follow the normative requirements defined in the `Device.LocalAgent.Subscription.{i}.` Object specified in the Device:2 Data Model [@TR-181].
+
+**[R-NOT.0a]{}** - When considering the time needed to make a state change and trigger a Notification, an implementation SHOULD make changes to its state and initiate a Notification with a window no longer than 10 seconds.
 
 *Note: Those familiar with Broadband Forum TR-069 [@TR-069] will recall that a notification for a value change caused by an Auto-Configuration Server (ACS - the CWMP equivalent of a Controller) are not sent to the ACS. Since there is only a single ACS notifying the ACS of value changes it requested is unnecessary. This is not the case in USP: an Agent should follow the behavior specified by a subscription, regardless of the originator of that subscription.*
 
@@ -4449,6 +5045,13 @@ All subscriptions apply to one or more Objects or Parameters in the Agent’s In
 For example, a Controller wants to be notified when a new Wi-Fi station joins the Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with `Device.WiFi.AccessPoint.1.AssociatedDevice.` specified in the `ReferenceList` Parameter and `ObjectCreation` as the `NotificationType`.
 
 In another example, a Controller wants to be notified whenever an outside source changes the SSID of a Wi-Fi network. It uses the Add Message to create an instance of a Subscription Object with `Device.WiFi.SSID.1.SSID` specified in the `ReferenceList` and `ValueChange` as the `NotificationType`.
+
+#### TriggerAction Parameter
+
+Subscriptions can be used to define the actions to be performed by the Agent when an event occurs. This is defined in the `TriggerAction` Parameter. The default is for the Agent to send a [Notify Message](#sec:notify), but it could also perform an update of its own configuration, or both sending the Notify and performing the configuration.
+
+For example, an Agent may be configure with a Subscription for the `Device.LocalAgent.Threshold.{i}.Triggered!` event such that when it occurs the Agent both sends a Notify message and configures the `Device.BulkData.Profile.{i}.Enable` to start sending BukData reports (if defined to do so in the `TriggerConfigSettings` Parameter of the Subscription).
+
 
 ### Responses to Notifications and Notification Retry {#sec:responses-and-retry}
 
@@ -4492,8 +5095,9 @@ There are several types events that can cause a Notify request. These include th
 
 The `ValueChange` notification is subscribed to by a Controller when it wants to know that the value of a single or set of Parameters has changed from the state it was in at the time of the subscription or to a state as described in an expression, and then each time it transitions from then on for the life of the subscription. It is triggered when the defined change occurs, even if it is caused by the originating Controller.
 
-####	 ObjectCreation and ObjectDeletion
-These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion.
+#### ObjectCreation and ObjectDeletion
+
+These notifications are used for when an instance of the subscribed to Multi-Instance Objects is added or removed from the Agent’s Instantiated Data Model. Like `ValueChange`, this notification is triggered even if the subscribing Controller is the originator of the creation or deletion or the instance was created or deleted implicitly, e.g. due to a configuration or status change or indirectly via an unrelated USP Message.
 
 The `ObjectCreation` notification also includes the Object’s Unique Key Parameters and their values.
 
@@ -4517,6 +5121,8 @@ An `OnBoardRequest` notification is used by the Agent when it is triggered by an
 
 #### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what Parameters, if any, are returned as part of the notification.
+
+### The Notify Message {#sec:notify}
 
 #### Notify Examples
 
@@ -4606,9 +5212,7 @@ body {
 }
 ```
 
-### The Notify Message {#sec:notify}
-
-#### Notify Request fields
+#### Notify Request Fields
 
 `string subscription_id`
 
@@ -4620,7 +5224,7 @@ This field contains the locally unique opaque identifier that was set by the Con
 
 This field lets the Agent indicate to the Controller whether or not it expects a response in association with the Notify request.
 
-**[R-NOT.8]{}** - When `send_response` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
+**[R-NOT.8]{}** - When `send_resp` is set to false, the Controller SHOULD NOT send a response or error to the Agent. If a response is still sent, the responding Controller MUST expect that any such response will be ignored.
 
 `oneof notification`
 
@@ -4633,7 +5237,7 @@ Contains one of the following Notification messages:
     OperationComplete oper_complete
     OnBoardRequest on_board_req
 
-##### Event fields
+##### Event Fields
 
 `string obj_path`
 
@@ -4648,7 +5252,7 @@ This field contains the name of the Object defined event that caused this notifi
 This field contains a set of key/value pairs of Parameters associated with this event.
 Refer to [](#sec:parameter-value-encoding) for details of how Parameter values are encoded as Protocol Buffers v3 strings.
 
-##### ValueChange fields
+##### ValueChange Fields
 
 `string param_path`
 
@@ -4659,7 +5263,7 @@ This field contains the Path Name of the changed Parameter.
 This field contains the value of the Parameter specified in `param_path`.
 Refer to [](#sec:parameter-value-encoding) for details of how Parameter values are encoded as Protocol Buffers v3 strings.
 
-##### ObjectCreation fields
+##### ObjectCreation Fields
 
 `string obj_path`
 
@@ -4669,13 +5273,13 @@ This field contains the Path Name of the created Object Instance.
 
 This field contains a map of key/value pairs for all of this Object's Unique Key Parameters that are supported by the Agent.
 
-##### ObjectDeletion fields
+##### ObjectDeletion Fields
 
 `string obj_path`
 
 This field contains the Path Name of the deleted Object Instance.
 
-##### OperationComplete fields
+##### OperationComplete Fields
 
 `string command_name`
 
@@ -4696,14 +5300,14 @@ Contains one of the following messages:
     OutputArgs req_output_args
     CommandFailure cmd_failure
 
-###### OutputArgs fields
+###### OutputArgs Fields
 
 `map<string, string> output_args`
 
 This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command_name` field) returned by the method invoked in the Operate Message.
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-###### CommandFailure fields
+###### CommandFailure Fields
 
 `fixed32 err_code`
 
@@ -4715,7 +5319,7 @@ a Controller invoking the Cancel() command on the appropriate Request Object (se
 
 This field contains additional (human readable) information about the reason behind the error.
 
-##### OnBoardRequest fields
+##### OnBoardRequest Fields
 
 `string oui`
 
@@ -4733,7 +5337,7 @@ This field contains a string used to provide additional context about the Agent.
 
 A comma separated list of USP Protocol Versions (major.minor) supported by this Agent.
 
-#### Notify Response fields
+#### Notify Response Fields
 
 `string subscription_id`
 
@@ -4832,7 +5436,7 @@ body {
   response {
     operate_resp {
       operation_results {
-        executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
+        executed_command: "Device.SelfTestDiagnostics()"
         req_obj_path: "Device.LocalAgent.Request.1"
       }
     }
@@ -4842,7 +5446,7 @@ body {
 
 ### The Operate Message {#sec:operate}
 
-#### Operate Request fields
+#### Operate Request Fields
 
 `string command`
 
@@ -4872,13 +5476,13 @@ This field contains a map of key/value pairs indicating the input arguments (rel
 
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-#### Operate Response fields
+#### Operate Response Fields
 
 `repeated OperationResult operation_results`
 
 This field contains a repeated set of `OperationResult` messages.
 
-##### OperationResult fields
+##### OperationResult Fields
 
 `string executed_command`
 
@@ -4898,14 +5502,14 @@ This field contains a message of one of the following types.
 
 The req_obj_path field, when used as the `operate_resp`, contains an Object Instance Path to the Request Object created as a result of this asynchronous operation.
 
-###### OutputArgs fields
+###### OutputArgs Fields
 
 `map<string, string> output_args`
 
 This field contains a map of key/value pairs indicating the output arguments (relative to the command specified in the `command` field) returned by the method invoked in the Operate Message.
 Refer to [](#sec:parameter-value-encoding) for details of how argument values are encoded as Protocol Buffers v3 strings.
 
-###### CommandFailure fields
+###### CommandFailure Fields
 
 `fixed32 err_code`
 
@@ -4935,14 +5539,14 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. |
 | `7009` | Parameter action failed | Set | This error indicates that the Parameter failed to update for a general reason described in an err_msg field. |
 | `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated Parameters. |
-| `7011` | Invalid type | Add, Set | This error indicates that the requested value was not of the correct data type for the Parameter. |
+| `7011` | Invalid type | Add, Set | This error indicates that the received string can not be interpreted as a value of the correct type expected for the Parameter. |
 | `7012` | Invalid value | Add, Set | This error indicates that the requested value was not within the acceptable values for the Parameter. |
 | `7013` | Attempt to update non-writeable parameter | Add, Set | This error indicates that the source Endpoint attempted to update a Parameter that is not defined as a writeable Parameter. |
 | `7014` | Value conflict | Add, Set | This error indicates that the requested value would result in an invalid configuration based on other Parameter values. |
 | `7015` | Operation error | Add, Set, Delete | This error indicates a general failure in the creation, update, or deletion of an Object that is described in an err_msg field.
-| `7016` | Object does not exist | Add, Set, Operate | This error indicates that the requested Path Name associated with this OperationStatus did not match any instantiated Objects. |
+| `7016` | Object does not exist | Any | This error indicates that the requested Path Name did not address an Object in the Agent's Instantiated Data Model. |
 | `7017` | Object could not be created | Add | This error indicates that the operation failed to create an instance of the specified Object. |
-| `7018` | Object is not a table | Add | This error indicates that the requested Path Name associated with this OperationStatus is not a Multi-Instance Object. |
+| `7018` | Object is not a table | Add, GetInstances | This error indicates that the requested Path Name is not a Multi-Instance Object. |
 | `7019` | Attempt to create non-creatable object | Add | This error indicates that the source Endpoint attempted to create an Object that is not defined as able to be created. |
 | `7020` | Object could not be updated | Set | This error indicates that the requested Object in a Set request failed to update. |
 | `7021` | Required parameter failed | Add, Set | This error indicates that the request failed on this Object because one or more required Parameters failed to update. Details on the failed Parameters are included in an associated ParamError or ParameterError message. |
@@ -4952,6 +5556,10 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | `7025` | Object exists with duplicate key | Add, Set | This error indicates that an Object already exists with the Unique Keys specified in an Add or Set Message. |
 | `7026` | Invalid path | Any | This error indicates that the Object, Parameter, or Command Path Name specified does not match any Objects, Parameters, or Commands in the Agent's Supported Data Model |
 | `7027` | Invalid command arguments | Operate | This error indicates that an Operate Message failed due to invalid or unknown arguments specified in the command. |
+| `7028` | Register failure | Register | This error indicates that a path in a Register Request failed to be registered for one or more reasons explained in the err_msg field. |
+| `7029` | Already in use | Register | This error indicates that a path in a Register Request failed to be registered, because it was registered by a different USP Agent |
+| `7030` | Deregister failure | Deregister | This error indicates that a path in a Deregister Request failed to be deregistered for one or more reasons explained in the err_msg field. |
+| `7031` | Path already registered | Deregister | This error indicates that a path in a Deregister Request failed to be deregistered, because it was registered by a different USP Agent. |
 | `7100-7199` | USP Record error codes | - | These errors are listed and described in [](#sec:usp-record-errors). |
 | `7200-7299`| Data model defined error codes | - | These errors are described in the data model. |
 | `7800-7999`| Vendor defined error codes | - | These errors are described in [](#sec:vendor-defined-error-codes). |
@@ -4968,18 +5576,20 @@ USP contains mechanisms for Authentication and Authorization, and Encryption. En
 
 Authentication of Controllers is done using X.509 certificates as defined in [@RFC5280] and [@RFC6818]. Authentication of Agents is done either by using X.509 certificates or shared secrets. X.509 certificates, at a minimum, need to be usable for [](#sec:securing-mtps) with TLS or DTLS protocols. It is recommended that Agents implement the ability to encrypt all MTPs using one of these two protocols, enable it by default, and not implement the ability to disable it.
 
-In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that MTP connection is being made to a member of a trusted domain as verified by a trusted Certificate Authority (CA)), this specification provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or certificates of trusted CAs. The `Device.LocalAgent.Certificate.` Object can be implemented if choosing to expose these stored certificates through the data model. See the Theory of Operations, Certificate Management subsection, below for additional information.
+In order to support various authentication models (e.g., trust Endpoint identity and associated certificate on first use; precise Endpoint identity is indicated in a certificate issued by a trusted Certificate Authority; trust that MTP connection is being made to a member of a trusted domain as verified by a trusted Certificate Authority (CA)), this specification provides guidance based on conditions under which the Endpoint is operating, and on the Endpoint's policy for storing certificates of other Endpoints or certificates of trusted CAs. The `Device.LocalAgent.Certificate.` Object can be implemented if choosing to expose these stored certificates through the data model. See the [](#sec:theory-of-operations), [](#sec:certificate-management) subsection, below for additional information.
 
 **[R-SEC.0]{}** - Prior to processing a USP Message from a Controller, the Agent MUST either:
 
 * have the Controller's certificate information and have a cryptographically protected connection between the two Endpoints, or
 * have a Trusted Broker's certificate information and have a cryptographically protected connection between the Agent and the Trusted Broker
 
+**[R-SEC.0a]{}** - Whenever a X.509 certificate is used to authenticate a USP Endpoint, the certificate MUST contain a representation of the Endpoint ID in the `subjectAltName` extension. This representation MUST be either the URN form of the Endpoint ID with a type `uniformResourceIdentifier` attribute OR, in the specific case where the Endpoint ID has an `authority-scheme` of `fqdn`, the `instance-id` portion of the Endpoint ID with a type `dNSName` attribute. When this type of authentication is used at the MTP layer, USP Endpoints MUST check the `from_id` field of received USP Records and MUST NOT process Records that do not match the Endpoint ID found in the certificate.
+
 TLS and DTLS both have handshake mechanisms that allow for exchange of certificate information. If the MTP connection is between the Agent and Controller (for example, without going through any application-layer proxy or other intermediate application-layer middle-box), then a secure MTP connection will be sufficient to ensure end-to-end protection, and the USP Record can use `payload_security` "PLAINTEXT" encoding of the Message. If the middle-box is part of a trusted end-to-end ecosystem, the MTP connection may also be considered sufficient. Otherwise, the USP Record will use [](#sec:e2e-message-exchange).
 
 Whether a Controller requires Agent certificates is left up to the Controller implementation.
 
-## Role Based Access Control (RBAC)
+## Role Based Access Control (RBAC) {#sec:rbac}
 
 It is expected that Agents will have some sort of Access Control List (ACL) that will define different levels of authorization for interacting with the Agent's data model. This specification refers to different levels of authorization as "Roles". The Agent may be so simple as to only support a single Role that gives full access to its data model; or it may have just an "untrusted" Role and a "full access" Role. Or it may be significantly more complex with, for example, "untrusted" Role, different Roles for parents and children in a customer household, and a different Role for the service provider Controller. These Roles may be fully defined in the Agent's code, or Role definition may be allowed via the data model.
 
@@ -4987,7 +5597,7 @@ It is expected that Agents will have some sort of Access Control List (ACL) that
 
 **[R-SEC.1a]{}** - Agents SHOULD implement the `Controller` Object with the `AssignedRole` Parameter (with at least read-only data model definition) and `InheritedRole` Parameter (if allowed Roles can come from a trusted CA), so users can see what Controllers have access to the Agent and their permissions. This will help users identify rogue Controllers that may have gained access to the Agent.
 
-See the Theory of Operations, Roles (Access Control) and Assigning Controller Roles subsections, below for additional information on data model elements that can be implemented to expose information and allow control of Role definition and assignment.
+See the [](#sec:theory-of-operations), [](#sec:roles-access-control) and [](#sec:assigning-controller-roles) subsections, below for additional information on data model elements that can be implemented to expose information and allow control of Role definition and assignment.
 
 ## Trusted Certificate Authorities
 
@@ -4995,15 +5605,15 @@ An Endpoint can have a configured list of trusted Certificate Authority (CA) cer
 
 **[R-SEC.2]{}** - To confirm a certificate was signed by a trusted CA, the Endpoint MUST contain information from one or more trusted CA certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. At a minimum, this stored information will include a certificate fingerprint and fingerprint algorithm used to generate the fingerprint. The stored information MAY be the entire certificate.
 
-This secure means can be accomplished through USP (see [](#sec:theory-of-operations)), Certificate Management subsection, making use of the `Device.LocalAgent.Certificate.` Object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
+This secure means can be accomplished through USP (see [](#sec:theory-of-operations)), [](#sec:certificate-management) subsection, making use of the `Device.LocalAgent.Certificate.` Object), or through a mechanism external to USP. The stored CA certificates can be root or intermediate CAs.
 
-**[R-SEC.3]{}** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure the URN form of the Controller Endpoint ID is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute, and this matches the USP Record `from_id`.
+**[R-SEC.3]{}** - Where a CA is trusted to authenticate Controller identity, the Agent MUST ensure that the Controller certificate conforms with the [R-SEC.0a]() requirement.
 
-**[R-SEC.4]{}** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure either that the Controller certificate matches the certificate stored in the `Credential` Parameter of the `Device.LocalAgent.Controller.` entry specific to that Controller OR that the URN form of the Controller Endpoint ID (that matches the USP Record `from_id`) is in the Controller certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.4]{}** - Where a CA is trusted to authorize a Controller Role, the Agent MUST ensure either that the Controller certificate matches the certificate stored in the `Credential` Parameter of the `Device.LocalAgent.Controller.` entry specific to that Controller OR that the Controller certificate itself is suitable for authentication as per the [R-SEC.0a]() requirement.
 
 Note that trusting a CA to authorize a Controller Role requires the Agent to maintain an association between a CA certificate and the Role(s) that CA is trusted to authorize. If the Agent allows CAs to authorize Roles, the Agent will need to identify specific CA certificates in a Controller’s chain of trust that can authorize Roles. The specific Role(s) associated with such a CA certificate can then be inherited by the Controller. The `Device.LocalAgent.ControllerTrust.Credential.` Object can be implemented to expose and allow control over trust and authorization of CAs.
 
-Note that if an Agent supports and has enabled a Trust on First Use (TOFU) policy, it is possible for Controllers signed by unknown CAs to be granted the "untrusted role". See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
+Note that if an Agent supports and has enabled a Trust on First Use (TOFU) policy, it is possible for Controllers signed by unknown CAs to be granted the "untrusted role". See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the [](#sec:assigning-controller-roles) section below for more information related to TOFU and the "untrusted" role.
 
 ## Trusted Brokers
 
@@ -5011,19 +5621,23 @@ An Endpoint can have a configured list of Trusted Broker certificates. The Endpo
 
 **[R-SEC.4a]{}** - To confirm a certificate belongs to a Trusted Broker, the Endpoint MUST contain information from one or more Trusted Broker certificates that are either pre-loaded in the Endpoint or provided to the Endpoint by a secure means. This stored information MUST be sufficient to determine if a presented certificate is the Trusted Broker certificate.
 
-This secure means of loading certificate information into an Agent can be accomplished through USP (see Theory of Operations section related to Certificate Management), or through a mechanism external to USP.
+This secure means of loading certificate information into an Agent can be accomplished through USP (see [](#sec:theory-of-operations) section related to [](#sec:certificate-management)), or through a mechanism external to USP.
 
 Note that trusting a broker to authorize a Controller Role requires the Agent to maintain an association between a Trusted Broker certificate and the Role(s) that Trusted Broker is trusted to authorize. The `Device.LocalAgent.ControllerTrust.Credential.` Object can be implemented to expose and allow control over identifying Trusted Brokers. The `AllowedUses` Parameter is used to indicate whether an entry is a Trusted Broker.
 
+**[R-SEC.4b]{}** - A Trusted Broker MUST confirm the identity of all clients by exclusively allowing authentication via unique client certificates that identify the USP Endpoint. Also the confidentiality of all communications MUST be guaranteed by a Trusted Broker, i.e. there MUST NOT be any possibility to forward the communication between Endpoints to another party.
+
+**[R-SEC.4c]{}** - A Trusted Broker MUST guarantee that USP Records sent from clients contain the correct value for the `from_id` field, tying it to the identity provided during the connection establishment. A Trusted Broker MUST NOT inspect USP payloads contained in USP Records.
+
 ## Self-Signed Certificates
 
-**[R-SEC.5]{}** - An Endpoint that generates a self-signed certificate MUST place the URN form of its Endpoint ID in a certificate `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.5]{}** - An Endpoint that generates a self-signed certificate MUST ensure that the certificate is suitable for USP authentication as per the [R-SEC.0a]() requirement.
 
 Self-signed certificates supplied by Controllers can only be meaningfully used in cases where a person is in a position to provide Authorization (what Role the Controller is trusted to have). Whether or not an Agent allows self-signed certificates from a Controller is a matter of Agent policy.
 
 **[R-SEC.6]{}** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST assign such Controllers an "untrusted" Role on first use.
 
-That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do. See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the Assigning Controller Roles section below for more information related to TOFU and the "untrusted" role.
+That is, the Agent will trust the certificate for purpose of encryption, but will heavily restrict what the Controller is authorized to do. See [@fig:check-cert; @fig:determine-role] and the penultimate bullet in the [](#sec:assigning-controller-roles) section below for more information related to TOFU and the "untrusted" role.
 
 **[R-SEC.7]{}** - If an Agent allows Controllers to provide self-signed certificates, the Agent MUST have a means of allowing an external entity to change the Role of each such Controller.
 
@@ -5041,19 +5655,19 @@ When authentication is done using X.509 certificates, it is up to Controller pol
 
 Note that allowing use of, method for transmitting, and procedure for handling shared secrets is specific to the MTP used, as described in [](#sec:mtp). Shared secrets that are not unique per device are not recommended as they leave devices highly vulnerable to various attacks -- especially devices exposed to the Internet.
 
-**[R-SEC.10]{}** - An Agent certificate MUST contain the URN form of the Agent Endpoint ID in the `subjectaltName` with a type `uniformResourceIdentifier` attribute.
+**[R-SEC.10]{}** - An Agent certificate MUST be suitable for USP authentication as per the [R-SEC.0a]() requirement.
 
-**[R-SEC.10a]{}** - The certificate `subjectaltName` value MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate.
+**[R-SEC.10a]{}** - The certificate `subjectAltName` extension MUST be used to authenticate the USP Record `from_id` for any Records secured with an Agent certificate.
 
 Agent certificates can be used to secure Records by encrypting at the [MTP layer](#sec:mtp) and/or encrypting at the [USP layer](#sec:e2e-message-exchange).
 
 Some Controller implementations may allow multiple Agents to share a single certificate with a wildcarded Endpoint ID.
 
-**[R-SEC.11]{}** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectaltName` with identical `authority-scheme` and `authority-id`.
+**[R-SEC.11]{}** - If a single certificate is shared among multiple Agents, those Agents MUST include a wild-carded `instance-id` in the Endpoint ID in the `subjectAltName` extension with identical `authority-scheme` and `authority-id`.
 
 Use of a shared certificate is not recommended, and which portion of the `instance-id` can be wildcarded may be specific to the authorizing CA or to the `authority-id` and `authority-scheme` values of the Endpoint ID. Wildcards can only be allowed in cases where the assigning entity is explicitly identified. Controllers are not required to support wildcarded certificates.
 
-**[R-SEC.12]{}** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectaltName`, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
+**[R-SEC.12]{}** - If a wildcard character is present in the `instance-id` of an Endpoint ID in a certificate `subjectAltName` extension, the `authority-scheme` MUST be one of "oui", "cid", "pen", "os", or "ops". In the case of "os" and "ops", the portion of the `instance-id` that identifies the assigning entity MUST NOT be wildcarded.
 
 ## Challenge Strings and Images
 
@@ -5069,7 +5683,7 @@ It is possible for the Agent to allow an external entity to change a Controller 
 
 **[R-SEC.17]{}** - The Agent SHOULD have policy to lock out all use of Challenge values for some time, or indefinitely, if the number of tries limit is exceeded.
 
-See the Theory of Operations, Challenges subsection, below for a description of data model elements that need to be implemented and are used when doing challenges through USP operations.
+See the [](#sec:theory-of-operations), [](#sec:challenges) subsection, below for a description of data model elements that need to be implemented and are used when doing challenges through USP operations.
 
 ## Analysis of Controller Certificates {#sec:analysis-controller-certificates}
 
@@ -5146,7 +5760,7 @@ These data model elements play a role in reporting on and allowing control of tr
 From component `ControllerTrust`:
 
 * Object `LocalAgent.ControllerTrust.`
-* Parameters `UntrustedRole`, `BannedRole`, `TOFUAllowed`, `TOFUInactivityTimer`
+* Parameters `UntrustedRole`, `BannedRole`, `SecuredRoles`, `TOFUAllowed`, `TOFUInactivityTimer`
 * Commands `RequestChallenge()`, `ChallengeResponse()`
 * Object `LocalAgent.ControllerTrust.Role.{i}.`
 * Object `LocalAgent.ControllerTrust.Credential.{i}.`
@@ -5172,11 +5786,13 @@ A simple Agent that only wants to inform Controllers of pre-defined Roles (with 
 
 #### Special Roles
 
-Two special Roles are identified by the `UntrustedRole` and `BannedRole` Parameters under the `ControllerTrust.` Object. An Agent can expose these Parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
+Three special Roles are identified by the `UntrustedRole`, `BannedRole` and `SecuredRoles` Parameters under the `ControllerTrust.` Object. An Agent can expose these Parameters with read-only data model implementation if it simply wants to tell Controllers the names of these specific Roles.
 
 The `UntrustedRole` is the Role the Agent will automatically assign to any Controller that has not been authorized for a different Role. Any Agent that has a means of allowing a Controller’s Role to be changed (by users through a Challenge string, by other Controllers through modification of `Controller.{i}.AssignedRole`, or through some other external means) and that allows "unknown" Controllers to attach will need to have an "untrusted" Role defined; even if the identity of this Role is not exposed to Controllers through implementation of the `UntrustedRole` Parameter.
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
+
+The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to secured parameter values.
 
 #### A Controller’s Role
 
@@ -5268,7 +5884,7 @@ This section discusses the Theory of Operation for USP specific mechanisms relat
 
 ## Introduction
 
-The general concept behind the USP Bulk Data collection mechanism is that a USP Controller can configure an Agent to consistently deliver a bulk data report at a specific interval. For large CPE populations, this is a more efficient mechanism when compared to the alternative of polling each individual CPE for the data. There are four key aspects of configuring the bulk data collection mechanism on an Agent:
+The general concept behind the USP Bulk Data collection mechanism is that a USP Controller can configure an Agent to consistently deliver a bulk data report at a specific interval. For large populations, this is a more efficient mechanism when compared to the alternative of polling each individual Agent for the data. There are four key aspects of configuring the bulk data collection mechanism on an Agent:
 
 * **What data needs to be collected** :: The set of Object/Parameter Path Names that dictate the set of Parameters that will be included in each Bulk Data report.  Anything included in this set should be considered a filter that is applied against the Instantiated Data Model at the time of report generation, which means that the generation of the report is not contingent upon the Path Name being present in the Instantiated Data Model at the time of report generation.
 
@@ -5601,6 +6217,17 @@ Using this configuration a device that has 1 Wi-Fi Access Point (with instance i
     WiFi_AP_Assoc.1.11.FailedRetransCount
     WiFi_AP_Assoc.1.11.RetryCount
     WiFi_AP_Assoc.1.11.MultipleRetryCount
+
+**[R-BULK.10a]{}** - When the value of the Exclude Parameter is True, the Parameter Path of the Reference Parameter MUST be excluded from the Report.
+
+For example, for a device to report all the objects and parameters of a Wi-Fi Data Elements device and all sub objects and their parameters EXCEPT the MultiAPDevice object, the following would be configured:
+
+    .BulkData.Profile.1.Parameter.1.Name = "DE Device"
+    .BulkData.Profile.1.Parameter.1.Reference = "Device.WiFi.DataElements.Network.Device."
+
+    .BulkData.Profile.1.Parameter.2.Name = "Remove MultiapDevice"
+    .BulkData.Profile.1.Parameter.2.Reference = "Device.WiFi.DataElements.Network.Device.*.MultiAPDevice."
+    .BulkData.Profile.1.Parameter.2.Exclude = True
 
 
 ## Encoding of Bulk Data
@@ -5995,15 +6622,17 @@ Below is the state machine diagram[^2] for the lifecycle of EUs.
 
 ![Execution Unit State Diagram](extensions/software-module-management/eu_state.png)
 
-This state machine shows 4 states (2 of them transitory) and two explicitly triggered state transitions.
+This state machine shows 5 states (3 of them transitory) and four explicitly triggered state transitions.
 
-The state transitions between the non-transitory states are triggered by executing the `SoftwareModules.ExecutionUnit.{i}.SetRequestedState()` command.  The explicit transitions are as follows:
+The state transitions between the non-transitory states are triggered by executing the `SoftwareModules.ExecutionUnit.{i}.SetRequestedState()`  or the `SoftwareModules.ExecutionUnit.{i}.Restart()` command.  The explicit transitions are as follows:
 
 * In order to Start an EU, the Controller sends a `SetRequestedState()` command with the `RequestedState` Parameter set to Active.  The EU enters the Starting state, during which it takes any necessary steps to move to the Active state, and it will transition to that state unless prevented by a fault.  Note that an EU can only be successfully started if the DU with which it is associated has all dependencies Resolved.  If this is not the case, then the EU’s status remains as Idle, and the `ExecutionFaultCode` and `ExecutionFaultMessage` Parameters are updated appropriately.
 
 * In order to Stop an EU, the Controller sends a `SetRequestedState()` command with the `RequestedState` Parameter set to Idle.   The EU enters the Stopping state, during which it takes any necessary steps to move to the Idle state, and then transitions to that state.
 
-* It is also possible that the EU could transition to the Active or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` Object Instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter.
+* In order to Restart an EU, the Controller sends a `Restart()` command. The EU enters the Restarting state, during which it stops execution and then re-starts before transitioning back to the Active state. The command may be rejected with error code 7230 (Invalid Execution Environment State) if the EU is currently in a state of Stopping.
+
+* It is also possible that the EU could transition to the Active, Restarting, or Idle state without being explicitly instructed to do so by a Controller (e.g., if the EU is allowed to AutoStart, in combination with the run level mechanism, or if an AutoRestart mechanism is enabled, or if operation of the EU is disrupted because of a later dependency error).  A Controller can be notified of these autonomous state changes by creating a `Subscription.{i}.` Object Instance for a `ValueChange` notification type that references the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter.
 
 The inventory of available EUs along with their current state can be found in the `SoftwareModules` service element found in the Root data model; i.e., the `SoftwareModules.ExecutionUnit.{i}.` Object.  This Object contains a list of all the EUs currently on the device along with accompanying status and any current errors as well as resource utilization related to the EU, including memory and disk space in use.
 
@@ -6017,7 +6646,7 @@ EUs have a number of identifiers, each contributed by a different actor in the e
 
 The creation of a particular EU instance in the data model occurs during the Installation process of the associated DU.  It is at this time that the EUID is assigned by the EE as well. The configuration exposed by a particular EU is available from the time the EU is created in the data model, whether or not the EU is Active.  Upon Uninstall of the associated DU, it is expected that the EU would transition to the Idle State, and the data model instance would be removed from the EU table once the associated resources had been removed from the device.  Garbage clean up, however, is EE and implementation dependent.
 
-Although the majority of EUs represent resources such as scripts that can be started or stopped, there are some inert resources, such as libraries, which are represented as EUs.  In this case, these EUs behave with respect to the management interface as a "regular" EU.  In other words, they respond successfully to Stop and Start commands, even though they have no operational meaning and update the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter accordingly. In most cases the `Status` would not be expected to transition to another state on its own, except in cases where its associated DU is Updated or Uninstalled or its associated EE is Enabled or Disabled, in which cases the library EU acts as any other EU.
+Although the majority of EUs represent resources such as scripts that can be started or stopped, there are some inert resources, such as libraries, which are represented as EUs.  In this case, these EUs behave with respect to the management interface as a "regular" EU.  In other words, they respond successfully to Stop and Start commands, even though they have no operational meaning and update the `SoftwareModules.ExecutionUnit.{i}.Status` Parameter accordingly. In most cases the `Status` would not be expected to transition to another state on its own, except in cases where its associated DU is Updated or Uninstalled or its associated EE is Enabled or Disabled, in which cases the library EU acts as any other EU.  Restarting such an EU will result in a successful response but the state remains unchanged.
 
 The EUs created by the Installation of a particular DU might provide functionality to the device that requires configuration by a Controller.  This configuration could be exposed via the USP data model in five ways:
 
@@ -6043,9 +6672,11 @@ It is also possible that applications could have dedicated log files.  The EU Ob
 
 As discussed above, an EE is a software platform that supports the dynamic loading and unloading of modules. A given device can have multiple EEs of various types and these EEs can be layered on top of each other.  The following diagram gives a possible implementation of multiple EEs.
 
-![Possible Multi-Execution Environment Implementation](extensions/software-module-management/smm_concepts.png)
+![Possible Multi-Execution Environment Implementation](extensions/software-module-management/smm_concepts.png){#fig:multi-exec-env}
 
 In this example, the device exposes its Linux Operating System as an EE and has two different OSGi frameworks layered on top of it, all of which are modeled as separate ExecEnv Object Instances. In order to indicate the layering to a Controller, the two OSGi framework Objects (`.ExecEnv.2` and `.ExecEnv.3`) would populate the `Exec.Env.{i}.Parent` Parameter with a path reference to the Linux Object (`.ExecEnv.1`).  The Linux EE Object would populate that Parameter with an empty string to indicate that it is not layered on top of any managed EE.
+
+*Note that the above is merely an example; whether a device supports multiple frameworks of the same type and whether it exposes its Operating System as an Execution Environment for the purposes of management is implementation specific.*
 
 Multiple versions of a DU can be installed within a single EE instance, but there can only be one instance of a given version at a time.  In the above diagram, there are two versions of DU1, v1.0 and v1.2 installed on `.ExecEnv.2.`  If an attempt is made to update DU1 to version 1.2, or to install another DU with version 1.0 or 1.2, on `ExecEnv.2`, the operation will fail.
 
@@ -6055,9 +6686,37 @@ When DUs are Updated, the DU instances on all EEs are affected.  For example, in
 
 For Uninstall, a Controller can either indicate the specific EE from which the DU should be removed, or not indicate a specific EE, in which case the DU is removed from all EEs.
 
-An EE can be enabled and disabled by a Controller.  Reboot of an EE is accomplished by first disabling and then later enabling the EE.  When an EE instance is disabled by a Controller, the EE itself shuts down.  Additionally, any EUs associated with the EE automatically transition to Stopped and the `ExecutionFaultCode` Parameter value is `Unstartable`. The state of the associated DUs remains the same. If a USP command that changes the DU state is attempted on any of the DUs associated with a disabled EE, the operation fails and an "`Invalid value`" error is returned in the `DUStateChange!` event for the affected DU instance. It should be noted if the Operating System of the device is exposed as an EE, disabling it could result in the device being put into a non-operational and non-manageable state.  It should also be noted that disabling the EE on which the USP Agent resides can result in the device becoming unmanageable via USP.
+An EE can be enabled and disabled by a Controller.  Sending a `SoftwareModules.ExecEnv.{i}.Restart()` command is equivalent to first disabling and then later enabling the EE, but also allows the reason for and the time of the restart to be recorded in `SoftwareModules.ExecEnc.{i}.RestartReason` and `SoftwareModules.ExecEnc.{i}.LastRestarted` respectively.
 
-*Note that the above is merely an example; whether a device supports multiple frameworks of the same type and whether it exposes its Operating System as an Execution Environment for the purposes of management is implementation specific.*
+![Execution Environment State Diagram](extensions/software-module-management/ee_state.png)
+
+When an EE instance is disabled by a Controller, the EE itself shuts down.  Additionally, any EUs associated with the EE automatically transition to Stopped and the `ExecutionFaultCode` Parameter value is `Unstartable`. The state of the associated DUs remains the same. If a USP command that changes the DU state is attempted on any of the DUs associated with a disabled EE, the operation fails and an "`Invalid value`" error is returned in the `DUStateChange!` event for the affected DU instance. It should be noted if the Operating System of the device is exposed as an EE, disabling it could result in the device being put into a non-operational and non-manageable state.  It should also be noted that disabling the EE on which the USP Agent resides can result in the device becoming unmanageable via USP.
+
+### Managing Execution Environments
+
+An implementation may provide for Execution Environments to be added or removed at run-time. These implementations should provide the `SoftwareModules.ExecEnvClass` table and its associated `AddExecEnv()` command. For example in @fig:multi-exec-env the `ExecEnvClassRef` of the Linux EE would point to one entry in `SoftwareModules.ExecEnvClass` while the two OSGI Frameworks would point to to another entry. A new OSGI Framework instance could be created using `SoftwareModules.ExecEnvClass.{i}.AddExecEnv()`, or an instance could be removed using `SoftwareModules.ExecEnv.{i}.Remove()`.
+
+The `ExecEnvClass.{i}.Capability` table describes the class of EE in terms of the kinds of DUs it supports. For example a web services framework would probably support the installation of WAR files, but it may also support OSGi Bundles as a DU format.
+
+(Note: In the example shown in @fig:multi-exec-env the `ExecEnvClassRef` of the Linux EE could also be left blank, as apparently this EE does not support the installation of any kind of DU nor is it possible to add new instances.)
+
+### Application Data Volumes
+
+An Execution Environment may offer filesystem storage facilities to the software modules which are installed into it; these EEs should provide the `SoftwareModules.ExecEnv.{i}.ApplicationData` table which exposes the storage volumes which currently exist.
+
+Each application data volume is associated with an "`application`" and a volume Name (so that an application may own multiple volumes). The application is identified by the UUID of its DU, and hence by the Vendor and Name of a Deployment Unit. This makes it possible for a data volume to persist across an Update of the DU or even across an Uninstall and subsequent re-Install, if desired. At the opposite extreme, an application data volume may be marked "`Retain Until Stopped`", meaning that the data will be lost when application no longer has any Active EUs (conceptually these volumes are destroyed, and will be re-created when an EU becomes Active).
+
+The set of application data volumes needed by an application are specified in an optional parameter of the `InstallDU()` command, and can be modified by the `Update()` command. Note that the parameter specifies the retention policy for each volume, but not where it is stored - a volume might be stored on the local flash of one device while another device would store the same volume in the cloud. This makes it easier to design applications which can be deployed across a wide range of devices without needing to know the detailed storage layout of each device.
+
+By default the `Update()` and `Uninstall()` commands cause all application data volumes associated with the affected DUs to be lost. This can be prevented by setting the optional `RetainData` argument to `true`; in the case of `Uninstall()` this will result in an "`orphaned`" volume with an `ApplicationUUID` which does not match any DU installed in the EE. The `SoftwareModules.ExecEnv.{i}.ApplicationData.{i}.Remove()` command is available to clean up orphaned data volumes if they are no longer needed. Implementations are advised to reject any attempt to invoke this command on a data volume with an `ApplicationUUID` which matches that of a DU which is currently installed in the EE, with error code 7229 (Invalid Deployment Unit State).
+
+### Signing Deployment Units
+
+An Execution Environment may require any DU which is Installed into it to be signed by an authorized principal. A signature may take many forms, such as a JSON Web Signature (JWS, RFC 7515) or GNU Privacy Guard (GPG, RFC 4880); however in essence it always amounts to a cryptographically-signed statement that a certain artifact is authentic.  Typically the document is identified by a hash of its contents (so the signature also provides assurance of integrity), and asymmetric encryption is used so that both the signature itself and the public key which can be used to verify its authenticity can be transmitted over an insecure channel without risk of compromise.
+
+It may be possible to derive the URL of the signature from the URL of the DU itself, for example by appending a suffix such as ".sig". Alternatively an optional `Signature` argument can be included in the `Install` or `Update` command, providing greater operational flexibility.
+
+If the public key(s) which are used to verify signatures are distributed in the form of X.509 certificates, these may be stored in the `Device.Security.Certificate` table. the Execution Environment may then list the relevant entries in its `Signers` parameter.
 
 ## Fault Model
 
@@ -6156,7 +6815,7 @@ When the EU is not currently in fault, this Parameter returns the value `NoFault
 The `ExecutionFaultCode` and `ExecutionFaultMessage` Parameters are triggered Parameters.  In other words, it is not expected that an Controller could read this Parameter before issuing a USP Message and see that there was a Dependency Failure that it would attempt to resolve first.  If a Controller wants a notification when these Parameters change, the Controller can subscribe to the ValueChange notification type with the Parameters for the referenced EU.
 
 [^1]: This state machine diagram refers to the successful transitions caused by the USP commands that change the DU state and does not model the error cases.
-[^2]: This state machine diagram refers to the successful transitions caused by the `SetRequestedState()` command within the `ExecutionUnit` table and does not model the error cases.
+[^2]: This state machine diagram refers to the successful transitions caused by the `SetRequestedState()` or the `Restart()` command within the `ExecutionUnit` table and does not model the error cases.
 
 # Firmware Management of Devices with USP Agents {.appendix1}
 
@@ -6200,6 +6859,8 @@ Another benefit of having multiple firmware images on a device is that if a devi
 
 When there are two images, the device would simply try booting the alternate image (which, ideally, holds the previous version of the firmware). If there are more than two images, the device could try booting from any of the other available images. Ideally, the device would keep track of and try to boot from the previously known working firmware (assuming that firmware is still installed on the device).
 
+If the activation of a firmware image causes the device to lose its USP Agent connectivity to the controller for any reason (i.e., the USP Agent fails to send messages to the Controller, or the messages are not understood by the Controller), the device is expected to roll back to the previously activated image and add appropriate information to the `Device.DeviceInfo.FirmwareImage.{i}.BootFailureLog` parameter of the failed image.
+
 Should the device boot a firmware image other than that specified via the `Device.DeviceInfo.BootFirmwareImage` Parameter, it is important that the device not change the value of the `Device.DeviceInfo.BootFirmwareImage` Parameter to point to the currently-running firmware image Object. If the device was to change this Parameter value, it could make troubleshooting problems with a firmware image switch more difficult.
 
 It was recommended above that the Controller keep track of the value of `Device.DeviceInfo.SoftwareVersion` Parameter or the `FirmwareUpdated` flag in the `Boot!` event. If the version changes unexpectedly or the `FirmwareUpdated` flag is set to `true`, it could be an indication that the device had problems booting a particular firmware image.
@@ -6217,7 +6878,7 @@ An implementation of the `Device.ProxiedDevice.` Object may be used in an IoT Ga
 
 For example, if `Device.WiFi.` and `Device.TemperatureStatus.` Objects are modeled by the Agent, then `Device.ProxiedDevice.1.WiFi.Radio.1.` models a distinctly separate hardware device and has no relationship with `Device.WiFi.Radio.1.`. The `ProxiedDevice` Objects may each represent entirely different types of devices each with a different set of Objects. The `ProxiedDevice.1.TemperatureStatus.TemperatureSensor.1.` Object has no physical relationship to `ProxiedDevice.2.TemperatureStatus.TemperatureSensor.1.` as they represent temperature sensors that exist on separate hardware. The mount point allows `Device.ProxiedDevice.1.WiFi.Radio.` and `Device.ProxiedDevice.1.TemperatureStatus.TemperatureSensor.` to represent the full set of capabilities for the device being proxied. This provides a Controller a distinct path to each `ProxiedDevice` Object.
 
-# Proxying {.appendix1}
+# Communications Proxying {.appendix1}
 
 This appendix describes a variety of proxies that can be created and deployed in order to enhance the USP experience.
 
@@ -6284,6 +6945,7 @@ The MTP Proxy can also include the *Caching Function* to support Endpoints with 
 ### MTP Header Translation Algorithms
 
 In order to implement a meaningful translation algorithm, the MTP Proxy will need to:
+
 1. Maintain mapping of discovered or configured Endpoint information to information the MTP Proxy generates or is configured with. This allows it to advertise that Endpoint on a different MTP and to translate the MTP when it receives a message destined for that Endpoint.
 1. Maintain a mapping of received "reply to" and other connection information to connection and "reply to" information included by the MTP Proxy in the sent message. This allows it to translate the MTP when it receives a response message destined for that Endpoint.
 1. Identify the target Endpoint for a received message.
@@ -7148,4 +7810,225 @@ Instantiated data model:
     Device.IoTCapability.6.LevelSensor.MaxValue    = 100
     Device.IoTCapability.6.LevelSensor.Value       = 82      # e.g. 82% battery load
 ```
+
+# Software Modularization and USP-Enabled Applications Theory of Operation {#sec:software-modularization-theory-of-operations .appendix1}
+
+This section discusses the Theory of Operation for Software Modularization and USP-Enabled Applications within Connected Devices.
+
+## Background
+
+Operators and manufacturers of connected devices are moving away from monolithic firmware images and toward a more modular approach to firmware architecture. The reasons for this trend are mostly related to the ability to more quickly adapt to subscriber demands. By moving to a more modularized software stack on the connected device, Operators are able to reduce the current device firmware versioning lead times (typically 12 to 18 months) and introduce new services at a much faster pace. To aid in this evolution, there needs to be a standard mechanism to install/update/uninstall software modules (see [Software Module Management appendix](#sec:software-module-management)) and there needs to be a standard communications mechanism that allows the services to expose their own data model to both internal components and remote management entities as well as consume other portions of the device's data model (the purpose of this Appendix). A side-effect of this software modularization is that certain individual services can also be updated independently of the overall firmware, which helps in both enhancing already enabled services and performing quick patches to address any security issues.
+
+## Basic Solution Concepts
+
+The following concepts are key components of the overall solution to enable connected device software modularization by deploying USP-enabled applications.
+
+- USP Broker:
+	- **An entity that is responsible for exposing a consolidated set of Service Elements for the device to external USP Controllers. This includes any data model elements exposed by the USP Agent contained within the USP Broker as well as any data model elements exposed by USP Services that have connected to the USP Broker. Furthermore, the USP Broker serves as an intermediary for USP Services looking to interact with data model elements that are maintained by other portions of the device (the USP Broker or other USP Services).**
+	- A USP Broker has both a USP Agent and a USP Controller embedded in it.
+	- The USP Agent serves as both the Agent that exposes the device’s management environment to the external world and the Agent to any USP Controllers that reside inside the device.
+	- The USP Controller serves as the Controller for all communications with USP services.
+	- For a USP Broker to recognize a USP Agent as a USP Service, it needs to register a portion of its data model via the Register message.
+
+- USP Service:
+	- **An entity that is responsible for implementing a portion of the device's overall functionality. A USP Service exposes a set of Service Elements related to the functionality that it is responsible for implementing. A USP Service could have a need to interact with Service Elements that are outside of its functional domain, whether that be Service Elements exposed by the USP Broker or some other USP Service.**
+	- A USP Service has a USP Agent and could have a USP Controller embedded in it.
+	- The USP Agent serves to expose the portion of the data model that is controlled by the USP Service to the USP Broker. (data model provider).
+	- The USP Controller serves to retrieve/configure portions of the data model that are not directly exposed by the USP Service. (data model consumer).
+	- If a USP Service has both a USP Agent and a USP Controller then it is highly recommended that they both use the same Endpoint ID.
+		- If the USP Agent and USP Controller don't use the same Endpoint ID then the USP Broker won't be able to correlate the two USP Endpoints as a single USP Service.
+	- Based on use cases (see below) not all USP Services will need a USP Controller.
+
+- UNIX Domain Socket MTP:
+	- **An internal MTP for communications within the device via UNIX Domain Sockets.**
+	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Controllers within  USP Services to connect.
+	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Agents within  USP Services to connect.
+	- TLVs are used to encapsulate any headers (e.g. identification, length of full message) and the USP Record itself in protobuf form.
+	- No authentication is needed as the installation of the software module itself will essentially grant access (assumption that you should only install trusted applications).
+		- This can be enhanced in later versions.
+
+
+## USP Service Use Cases
+
+The following 3 use cases represent 3 unique types of USP Services.
+
+1. Data Model Provider Application
+	1. **Description:** USP Service that exposes a data model
+	2. **Example:** A Software Module that implements a Speed Test
+	3. **Components:**
+		1. USP Agent (data model provider)
+2. Integrated Data Model Application
+	1. **Description:** USP Service that both exposes a data model and needs to interact with dependent portions of the data model being exposed by other entities
+	2. **Example:** A Software Module that implements a Network Topology View
+	3. **Components:**
+		1. USP Agent (data model provider)
+		2. USP Controller (data model consumer)
+3. Cloud Application
+	1. **Description:** USP Service that resides in the cloud
+	2. **Example:** A Software Module that implements a cloud-based Wi-Fi mesh controller
+	3. **Components:** Could be any Agent/Controller combination as described in use case 1 or 2
+
+The following image depicts the first 2 use cases where the USP Service number corresponds to the use case number (i.e., USP Service 1 is a reflection of use case 1).
+
+![Software Modularization Use Cases](extensions/device-modularization/./use-cases.png)
+
+## USP Broker Responsibilities
+
+A USP Broker generally has 3 main responsibilities:
+
+* Track the Service Elements (portions of the data model) that the USP Services wish to expose to other entities.
+* Proxy USP communications internally within the device based on the Service Elements that the USP Services have exposed.
+* Provide a consolidated view of the device's Service Elements to USP Controllers that reside externally to the device.
+
+When a USP Service is started, there will be a data model registration to inform the USP Broker which Service Elements (portions of the data model) should be exposed for this USP Service. This means that one of the key responsibilities of the USP Broker is to track the portion of the data model associated with each USP Service, which is facilitated by receiving a Register USP message from the USP Agent of the USP Service.
+
+The USP Agent portion of the USP Broker provides a consolidated view of the device's Service Elements (including all Service Elements exposed by USP Services) to USP Controllers that are external to the device, and those USP Controllers will send USP messages to the device that require the USP Broker to proxy either the entire USP message or a portion of the USP message to one or more USP Services based on the Service Elements being exposed by the various USP Services. These USP messages can come in many forms:
+
+* A Get message to retrieve various portions of the data model that could be distributed across multiple USP Services.
+* A Set message to configure various portions of the data model that could be distributed across multiple USP Services.
+* An Add message to create and configure a new instance of a data model object, and while each data model object is only served by a single USP Service, the Add message could be creating instances of multiple data model objects that could be distributed across multiple USP Services.
+* A Delete message to remove an existing instance of a data model object, and while each data model object is only served by a single USP Service, the Delete message could be removing instances from multiple data model objects that could be distributed across multiple USP Services.
+* An Operate message to execute a data model command, which would be handled by a single USP Service.
+
+The USP Agent portion of the USP Broker might also need to handle notifications and subscriptions. These subscriptions might be created by either USP Controllers that are external to the device or USP Services that are internal to the device, where they are looking for notifications related to a part of the device's Service Elements where some portions of that subscription could be distributed across multiple USP Services. This means that the USP Agent portion of the USP Broker might need to send USP Notify messages to external USP Controllers or internal USP Controllers associated with USP Services that have created associated Subscriptions.
+
+## Data Model Implications for USP Brokers and USP Services
+
+### UNIX Domain Socket Data Model Table and the UDS MTP Objects
+
+The MTP table of the LocalAgent object represents the Message Transfer Protocols (MTPs) that a USP Agent is currently using. So an MTP instance with a Protocol of UNIX Domain Socket means that the USP Broker or USP Service has an Agent that is configured to use the UNIX Domain Socket MTP for communications within the device between the USP Broker and one or more USP Services.
+
+Each instance of the LocalAgent.Controller table represents a USP Controller that has access to the associated USP Agent. For a USP Service that would be the USP Broker's Controller, which means that a USP Service will only have 1 instance of the LocalAgent.Controller table and the UDS MTP object will contain a Reference to the UnixDomainSocket Object instance containing the Path to the Controller portion of the USP Broker and be in a Connect Mode. For a USP Broker that would be the USP Service's Controller (if it exists), which means that a USP Broker will have an instance of the LocalAgent.Controller table for each USP Service that contains a Controller. Each LocalAgent.Controller instance would have a UDS MTP object that contains a reference to the USPService Object instance containing details about the USP Service itself.
+
+The LocalAgent.MTP.UDS instance will be auto-created based on the USP Broker or USP Service supporting the UNIX Domain Socket MTP. The LocalAgent.Controller instances for a USP Broker and USP Services will be automatically created with the UDS instance based on USP Service startup procedures. Given that and the USP Broker has well-known paths for the Agent and Controller UNIX Domain Socket MTP, the UDS objects are read-only.
+
+Due to the lack of a discovery mechanism and to ensure a interoperable environment where 3rd party USP Services can communicate with the USP Broker, it is highly recommended that the USP Broker's UNIX Domain Socket paths used for both its USP Agent and USP Controller be preset as follows:
+
+* USP Broker's USP Agent: /var/run/usp/broker_agent_path
+* USP Broker's USP Controller: /var/run/usp/broker_controller_path
+
+### USPService Data Model Table
+
+The USP Broker should keep track of all USP Services it has an active connection to, which includes the following parameters:
+
+* **EndpointID:** the Endpoint ID of the USP Agent within the USP Service
+* **DataModelPaths:** a list of data model paths that have been registered by the USP Service
+* **DeploymentUnitRef:** a reference to the Software Module Deployment Unit, if applicable
+* **HasController:** a flag that indicates whether or not the USP Service has an embedded USP Controller (NOTE: this can be determined when the USP Service's USP Controller connects to the USP Broker's USP Agent if it is using the same Endpoint ID as the USP Service's USP Agent)
+
+When a USP Service disconnects then the associated USPService table instance is removed.
+
+### Example Data Models for a USP Broker and USP Services
+
+Here's an example set of data models for a USP Broker and 2 USP Services that matches the use cases depicted in the Figure shown in the previous section.
+
+USP Broker (NOTE: there isn't a Controller.1 instance because USP Service 1 doesn't have a Controller):
+
+    UnixDomainSocket.1.Path = /tmp/broker_agent_path
+    UnixDomainSocket.1.Mode = Listen
+    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Mode = Listen
+    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.1
+    LocalAgent.Controller.2.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.Controller.2.MTP.1.UDS.USPServiceRef = USPService.2
+    USPService.1.EndpointID = doc::Service1
+    USPService.1.DataModelPaths = PathA, PathB, PathC
+    USPService.1.DeploymentUnitRef = SoftwareModules.DeploymentUnit.1
+    USPService.1.HasController = false
+    USPService.2.EndpointID = doc::Service2
+    USPService.2.DataModelPaths = PathX, PathY, PathZ
+    USPService.2.DeploymentUnitRef = SoftwareModules.DeploymentUnit.2
+    USPService.2.HasController = true
+
+USP Service 1 (NOTE: USP Service 1 doesn't have a Controller, so there isn't a Controller instance in the USP Broker for this USP Service):
+
+    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Mode = Connect
+    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
+    LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = <empty>
+
+USP Service 2 (has both an Agent and a Controller):
+
+    UnixDomainSocket.1.Path = /tmp/broker_agent_path
+    UnixDomainSocket.1.Mode = Connect
+    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Mode = Connect
+    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
+    LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = <empty>
+
+## Startup and Shutdown Procedures
+
+### Device Boot Procedures
+
+When the device boots up, the USP Broker comes online.  The USP Broker exposes both a USP Agent (communicating externally and internally; listening on a well-known internal path for communications via the Unix Domain Socket MTP) and an internal USP Controller (listening on a well-known internal path for communications via the Unix Domain Socket MTP).  The USP Agent communicates externally via one or more of the USP defined MTPs (MQTT, STOMP,  or WebSocket).  The USP Agent also communicates internally via the Unix Domain Socket MTP and begins to listen on a well-known internal path.  The USP Controller communicates internally via the Unix Domain Socket MTP and begins to listen on a well-known internal path.  Each installed and enabled USP Service also starts up - see the next section.
+
+### USP Service Startup Procedures
+
+*Use Case 1 - Data Model Provider Application:*
+
+As the USP Service starts up, it begins to connect to the USP Broker...
+
+- The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
+	 - Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	 - Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
+	 - Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
+	 - After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
+
+*Use Case 2 - Integrated Data Model Application:*
+
+As the USP Service starts up, it begins to connect to the USP Broker...
+
+- The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal port
+	- Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	- Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
+	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
+	- After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
+- The Controller within the USP Service initiates the UNIX Domain Socket connection to the Agent on the USP Broker and the well-known internal port
+	- Once the UNIX Domain Socket is connected, the USP Service's Controller will initiate the UNIX Domain Socket MTP Handshake mechanism
+	- Once the USP Broker's Agent receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
+	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Broker sends an empty UnixDomainSocketConnectRecord
+	- Once the USP Service identifies that it is connected to the USP Broker, the USP Service’s Controller can issue a GSDM to retrieve portions of the USP Broker’s supported data model that it might need to interact with
+
+*Use Case 3 - Cloud Application:*
+
+**Note:** One of the key tenets of USP was that multiple MTPs were defined not for general preferences but because each of them serves a different kind of use case.  So when we define a new use case (like this one), it is certainly conceivable that some MTPs might not be appropriate.  In this case, the WebSocket MTP is less appropriate, because it would require 2 socket connections to a WebSocket server.
+
+As the USP Service starts up, it begins to connect to the USP Broker...
+
+- The Cloud USP Service establishes a connection to the STOMP/MQTT Broker based on the Agent's data model (STOMP.Connection / MQTT.Client)
+	- The Agent within the Cloud USP Service send a STOMP/MQTT Connect Record to the Controller of the USP Broker
+	- After sending the appropriate Connect Record, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
+- The USP Broker establishes a connection to the STOMP/MQTT Broker based on the Agent's data model (STOMP.Connection / MQTT.Client)
+	- **Note:** The USP Controller will need to configure the USP Broker to communicate with the Cloud USP Service by setting up the associated MTP connection details.
+	- The Agent within the USP Broker sends a STOMP/MQTT Connect Record to the Controller of the Cloud USP Service
+		- **Note:** This looks just like any other external USP Controller that is configured within the USP Broker's Agent.
+	- Once the Controller within the Cloud USP Service receives the appropriate Connect Record, the Cloud USP Service’s Controller can issue a GSDM to retrieve portions of the USP Broker’s supported data model that it might need to interact with
+
+### USP Service Shutdown Procedures
+
+When a USP Service terminates (either gracefully by sending a Disconnect Record or abruptly by closing the UNIX Domain Socket connection), the USP Broker will remove the portion of the data model that was being exposed for the given USP Service.
+
+## USP Services and Software Modules
+
+USP Services have a rough correlation to Software Modules and the Software Module Management concepts defined within USP.  This means that the installation of a Software Module might cause a USP Service to come into existence, and that the removal of a Software Module might cause a USP Service to cease to exist.  That being said, not all Software Modules will contain a USP Service and not all USP Services will be part of a Software Module.
+
+If the USP Service includes a Controller, its access to the data model will be subject to the permissions described in [](#sec:rbac). The Roles which the Service needs in order to function at all, and the Roles which are not essential but would enable the Service to offer more functionality, can be included in the `InstallDU()` command using the `RequiredRoles` and `OptionalRoles` arguments respectively; these arguments can also be included in the `Update()` command if needed. The `AvailableRoles` parameter of the Execution Environment into which the Service is being installed lists the Roles which are available to Services according to the security policy of the EE.
+
+Note: Special care needs to be taken when processing requests to create a new EE or to change the `AvailableRoles` of an existing EE, for example to prevent a Controller from creating an EE with Roles which it does not itself have and thereby enabling privilege escalation.
+
+Once the Controller has connected to the USP Broker, a reference to the resulting instance of `LocalAgent.Controller` will be exposed in parameter `InternalController` of the Deployment Unit.
+
+### Installing a Software Module
+
+Installing a Software Module that contains a USP Service will cause the USP Service to startup (see @sec:usp-service-startup-procedures) once the Software Module is installed and running.
+
+### Updating a Software Module
+
+Updating a Software Module that contains a USP Service will cause the USP Service to be stopped (see @sec:usp-service-shutdown-procedures) and then restarted (see "USP Service Startup Procedures") once the Software Module is updated and running once again.
+
+### Deleting a Software Module
+
+Deleting a Software Module that contains a USP Service will  cause the USP  Service to be removed (see @sec:usp-service-shutdown-procedures).
 

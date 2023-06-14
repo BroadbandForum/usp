@@ -10,7 +10,7 @@ USP requires a mechanism to serialize data to be sent over a Message Transfer Pr
 
 Protocol Buffers Version 3 uses a set of enumerated elements to coordinate encoding and decoding during transmission. It is intended that these remain backwards compatible, but new versions of the schema may contain new enumerated elements.
 
-**[R-ENC.2]{}** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure to the receiving MTP to indicate a “bad request” and do no further processing of the USP Record or USP Message.
+**[R-ENC.2]{}** - If an Endpoint receives a USP payload containing an unknown enumeration value for a known field, the Endpoint MUST report the failure as described in [R-MTP.5]().
 
 Protocol Buffers uses a datatype called `oneof`. This means that the element
 contains elements of one or more varying types.

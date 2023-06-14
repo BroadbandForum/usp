@@ -1,4 +1,4 @@
-# Proxying {.appendix1}
+# Communications Proxying {.appendix1}
 
 This appendix describes a variety of proxies that can be created and deployed in order to enhance the USP experience.
 
@@ -65,6 +65,7 @@ The MTP Proxy can also include the *Caching Function* to support Endpoints with 
 ### MTP Header Translation Algorithms
 
 In order to implement a meaningful translation algorithm, the MTP Proxy will need to:
+
 1. Maintain mapping of discovered or configured Endpoint information to information the MTP Proxy generates or is configured with. This allows it to advertise that Endpoint on a different MTP and to translate the MTP when it receives a message destined for that Endpoint.
 1. Maintain a mapping of received "reply to" and other connection information to connection and "reply to" information included by the MTP Proxy in the sent message. This allows it to translate the MTP when it receives a response message destined for that Endpoint.
 1. Identify the target Endpoint for a received message.

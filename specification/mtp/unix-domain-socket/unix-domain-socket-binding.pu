@@ -1,0 +1,15 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+participant "UNIX Domain Socket\n Client" as C
+participant "UNIX Domain Socket\n Server" as S
+
+note over S, C: Establish UNIX Domain Socket Connection
+C -> S : USP Handshake Frame
+S -> C : USP Handshake Frame
+
+note over S, C: <USP Handshake process complete>
+note over S, C: <USP Record Frames can now be sent>
+
+@enduml

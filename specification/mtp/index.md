@@ -20,21 +20,19 @@ This specification places the following requirement for encrypting MTP headers a
 
 For example, it may not be necessary to use MTP layer security when within an end-user’s local area network (LAN). It is necessary to secure transport to and from the Internet, however. If the device implementer can reasonably expect Messages to be transported across the Internet when the device is deployed, then the implementer needs to ensure the device supports encryption of all MTP protocols.
 
-MTPs that operate over UDP will be expected to implement, at least, DTLS 1.2 as defined in [@RFC6347].
-
 MTPs that operate over TCP will be expected to implement, at least, TLS 1.2 as defined in [@RFC5246].
 
 Specific requirements for implementing these are provided in the individual MTP sections.
 
-**[R-MTP.1]{}** – When TLS or DTLS is used to secure an MTP, an Agent MUST require the MTP peer to provide an X.509 certificate.
+**[R-MTP.1]{}** – When TLS is used to secure an MTP, an Agent MUST require the MTP peer to provide an X.509 certificate.
 
-**[R-MTP.2]{}** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before establishing TLS or DTLS encryption to secure MTP communication.  If an Agent for any reason is unable to obtain absolute time, it can establish TLS or DTLS without waiting for accurate absolute time. If an Agent chooses to establish TLS or DTLS before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the received X.509 certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
+**[R-MTP.2]{}** - An Agent capable of obtaining absolute time SHOULD wait until it has accurate absolute time before establishing TLS encryption to secure MTP communication.  If an Agent for any reason is unable to obtain absolute time, it can establish TLS without waiting for accurate absolute time. If an Agent chooses to establish TLS before it has accurate absolute time (or if it does not support absolute time), it MUST ignore those components of the received X.509 certificate that involve absolute time, e.g. not-valid-before and not-valid-after certificate restrictions.
 
 **[R-MTP.3]{}** - An Agent that has obtained an accurate absolute time MUST validate those components of the received X.509 certificate that involve absolute time.
 
-**[R-MTP.4]{}** - When an Agent receives an X.509 certificate while establishing TLS or DTLS encryption of the MTP, the Agent MUST execute logic that achieves the same results as in the mandatory decision flow elements (identified with "MUST") from @fig:receiving-a-x509-certificate.
+**[R-MTP.4]{}** - When an Agent receives an X.509 certificate while establishing TLS encryption of the MTP, the Agent MUST execute logic that achieves the same results as in the mandatory decision flow elements (identified with "MUST") from @fig:receiving-a-x509-certificate.
 
-**[R-MTP.4a]{}** - When an Agent receives an X.509 certificate while establishing TLS or DTLS encryption of the MTP, the Agent SHOULD execute logic that achieves the same results as in the optional decision flow elements (identified with "OPT") from @fig:receiving-a-x509-certificate.
+**[R-MTP.4a]{}** - When an Agent receives an X.509 certificate while establishing TLS encryption of the MTP, the Agent SHOULD execute logic that achieves the same results as in the optional decision flow elements (identified with "OPT") from @fig:receiving-a-x509-certificate.
 
 ![Receiving a X.509 Certificate](validate-cert.png){#fig:receiving-a-x509-certificate}
 
@@ -42,17 +40,33 @@ Specific requirements for implementing these are provided in the individual MTP 
 
 ### USP Record Encapsulation {#sec:usp-record-encapsulation}
 
-The USP Record Message is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata fields are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
+The USP Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise the USP Message as well as providing additional metadata needed for integrity protection, payload protection and delivery of fragmented USP Messages. Additional metadata fields are used to identify the E2E session context, determine the state of the segmentation and reassembly function, acknowledge received datagrams, request retransmissions, and determine the type of encoding and security mechanism used to encode the USP Message.
 
-Following are the fields contained within a USP Record. When not explicitly set or included in the Record, the fields have a default value based on the type of field. For strings, the default value is an empty byte string. For numbers (uint64) and enumerations, the default value is 0. For repeated bytes, the default value is an empty byte string. The term "Optional" means it is not necessary to include the field in a sent Record. The receiving Endpoint will use default values for fields not included in a received Record. "Required" fields are always included. A Record without a "Required" field will fail to be processed by a receiving Endpoint. "Repeated" fields can be included any number of times, including zero.
+When not explicitly set or included in a USP Record or USP Message, the fields have a default value based on the type of field:
+
+* For strings, the default value is the empty string.
+* For bytes, the default value is empty bytes.
+* For bools, the default value is `false`.
+* For numeric types, the default value is zero.
+* For enums, the default value is the first defined enum value, which must be 0.
+* For a `oneof` field, none of the allowed values are assumed if the field is absent.
+* `repeated` fields can be included any number of times, including zero.
+
+If there is no requirement stating a field must be present, it is not necessary to include the field in a sent Record or Message. The receiving Endpoint will use default values for fields not included in a received Record or Message.
+
+**[R-MTP.4b]{}** - Any field that is noted as "Required" in its description MUST be sent.
+
+A Record or Message without a required field will fail to be processed by a receiving Endpoint. For additional information, default values (when fields are missing) are described in the "Default Values" section of Protocol Buffers [@PROTOBUF].
 
 #### Record Definition {#sec:record-definition}
 
-*Note: This version of the specification defines Record in [Protocol Buffers v3](#sec:encoding). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
+*Note: This version of the specification defines the USP Record in [Protocol Buffers v3](#sec:encoding). This part of the specification may change to a more generic description (normative and non-normative) if further encodings are specified in future versions.*
 
 `string version`
 
-Required. Version (Major.Minor) of the USP Protocol (i.e., "1.0" or "1.1").
+Required. Version (Major.Minor) of the USP Protocol (e.g., "1.3").
+
+*Note: The version field is used for USP Endpoints to set expectations about their behavior for other USP Endpoints.* ***A USP Endpoint that receives a Record indicating a version higher than it supports can expect to receive messages it may not understand or encounter other unexpected behavior.*** *USP Endpoints are expected to handle these inconsistencies gracefully (For example, using the 7001 Message Not Supported Error).*
 
 `string to_id`
 
@@ -64,10 +78,7 @@ Required. Originating/Source USP Endpoint Identifier.
 
 `enum PayloadSecurity payload_security`
 
-Optional. An enumeration of type PayloadSecurity. When the payload is present,
-this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message.
-The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be
-used to secure the payload (see [](#sec:tls-payload-encapsulation) for more information).
+Optional. An enumeration of type PayloadSecurity. When the payload is present, this indicates the protocol or mechanism used to secure the payload (if any) of the USP Message. The value of `TLS12` means TLS 1.2 or later (with backward compatibility to TLS 1.2) will be used to secure the payload (see [](#sec:tls-payload-encapsulation) for more information).
 
 Valid values are:
 
@@ -97,6 +108,8 @@ Required. This field contains one of the types given below:
 `MQTTConnectRecord mqtt_connect`
 
 `STOMPConnectRecord stomp_connect`
+
+`UDSConnectRecord uds_connect`
 
 `DisconnectRecord disconnect`
 
@@ -175,7 +188,7 @@ V5 (1)
 
 `string subscribed_topic`
 
-Required. A MQTT Topic where the USP Endpoint sending this Record can be reached (i.e. a MQTT Topic it is subscribed to).
+Required. A MQTT Topic where the USP Endpoint sending this Record can be reached (i.e. a non-wildcarded MQTT Topic it is subscribed to).
 
 ##### STOMPConnectRecord fields
 
@@ -192,6 +205,10 @@ V1_2 (0)
 `string subscribed_destination`
 
 Required. A STOMP Destination where the USP Endpoint sending this Record can be reached (i.e. a STOMP Destination it is subscribed to).
+
+##### UDSConnectRecord fields
+
+This Record type has no fields.
 
 ##### DisconnectRecord fields
 
@@ -211,7 +228,7 @@ A variety of errors can occur while establishing and during a USP communication 
 
 For this mechanism to work and to prevent information leakage, the sender causing the problem needs to be able to create a valid USP Record containing a valid source Endpoint ID and a correct destination Endpoint ID. In addition a MTP specific return path needs to be known so the error can be delivered.
 
-**[R-MTP.5]{}** - A recipient of an erroneous USP Record MUST create a Record with a Message of type Error and deliver it to sender if the source Endpoint ID is valid, the destination Endpoint ID is its own, and a MTP-specific return path is known. If any of those criteria on the erroneous Record are not met or the Record is known to contain a USP Message of types Response or Error, it MUST be ignored.
+**[R-MTP.5]{}** - A recipient of an erroneous USP Record MUST create a Record with a Message of type Error and deliver it to sender if the source Endpoint ID is valid, the destination Endpoint ID is its own, the Record contains a USP Message of type Request, the Message ID can be extracted, and a MTP-specific return path is known. If any of those criteria on the erroneous Record are not met, it MUST be ignored.
 
 The following error codes (in the range 7100-7199) are defined to allow the Error to be more specifically indicated. Additional requirements for these error codes are included in the specific MTP definition, where appropriate.
 

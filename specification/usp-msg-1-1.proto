@@ -47,13 +47,8 @@ syntax = "proto3";
 //   Any moral rights which are necessary to exercise under the above
 //   license grant are also deemed granted under this license.
 //
-// | Version           | Name                   | Date       |
-// | TR-369 1.0.0      | User Services Platform | APR, 2018  |
-// | TR-369 1.0.1      | User Services Platform | JUN, 2018  |
-// | TR-369 1.0.2      | User Services Platform | OCT, 2018  |
-// | TR-369 1.1        | User Services Platform | SEP, 2019  |
-//
-// BBF software release registry: http://www.broadband-forum.org/software
+// BBF software release registry:
+//   https://www.broadband-forum.org/software-releases
 //**************************************************************************
 
 package usp;

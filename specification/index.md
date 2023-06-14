@@ -2,35 +2,23 @@
 comment: |
  common.yaml contains common definitions shared by specification, resources
  and faq
-
- index.yaml contains definitions needed only by this file (a separate file
- is used in order to ensure that syntax errors are detected)
 ...
 
 !include cover-page.md
 
-!include tr-notice.md
+!include %notice%-notice.md
 
-!include front-matter.md
-
-::: {bbfTable=uspRevisionHistory}
-:::
-
-::: {bbfTable=uspEditors}
-:::
-
-::: {bbfTable=uspAcknowledgments}
-:::
+!include METADATA-%bbfMajor%.md
 
 # Introduction {.new-page}
 
 ## Executive Summary
 
-This document describes the architecture, protocol, and data model that build an intelligent User Services Platform. It is targeted towards application developers, application service providers, CPE vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user's network connection and their connected devices.
+This document describes the architecture, protocol, and data model that build an intelligent User Services Platform. It is targeted towards application developers, application service providers, vendors, consumer electronics manufacturers, and broadband and mobile network providers who want to expand the value of the end user's network connection and their connected devices.
 
-The term "connected device" is a broad one, applying to the vast array of network connected CPE, consumer electronics, and computing resources that today's consumers are using at an increasing rate. With the advent of "smart" platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
+The term "connected device" is a broad one, applying to the vast array of network connected devices, consumer electronics, and computing resources that today's consumers are using at an increasing rate. With the advent of "smart" platforms (phones, tablets, and wearables) plus the emerging Internet of Things, the number of connected devices the average user or household contains is growing by several orders of magnitude.
 
-In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the entertainment, productivity, and storage applications they want.
+In addition, users of the fixed and mobile broadband network are hungry for advanced broadband and intelligent cloud services. As this desire increases, users are turning towards over-the-top providers to consume the security, entertainment, productivity, and storage applications they want.
 
 These realities have created an opportunity for consumer electronics vendors, application developers, and broadband and mobile network providers. These connected devices and services need to be managed, monitored, troubleshot, and controlled in an easy to develop and interoperable way. A unified framework for these is attractive if we want to enable providers, developers, and vendors to create value for the end user. The goal should be to create a system for developing, deploying, and supporting these services for end users on the platform created by their connectivity and components, that is, to be able to treat the connected user herself as a platform for applications.
 
@@ -39,6 +27,7 @@ To address this opportunity, use cases supported by USP include:
 * Management of IoT devices through re-usable data model objects.
 * Allowing the user to interact with their devices and services using customer
   portals or control points on their own smart devices.
+* The ability to deploy and manage containerized microservices for end-users via software modulization and USP-enabled applications."
 * The ability to have both the application and network service provider manage,
   troubleshoot, and control different aspects of the services they are
   responsible for, and enabling provider partnerships.
@@ -51,17 +40,19 @@ To address this opportunity, use cases supported by USP include:
 
 ### Purpose
 
-This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wi-Fi systems, and virtual services (though could theoretically be used for any connected device in many different verticals). It is targeted towards developers, application providers, and network service providers looking to deploy those products.
+This document provides the normative requirements and operational description of the User Services Platform (USP). USP is designed for consumer electronics/IoT, home network/gateways, smart Wi-Fi systems, and deploying and managing other value-added services and applications. It is targeted towards developers, application providers, and network service providers looking to deploy those products.
 
 ### Scope
 
 This document identifies the USP:
 
 * Architecture
+* Data model interaction
 * Record structure, syntax, and rules
 * Message structure, syntax, and rules
 * Bindings that allow specific protocols to carry USP Records in their payloads
 * Discovery and advertisement mechanisms
+* Extensions for proxying, software module management, device modularization, firmware lifecycle management, bulk data collection, device-agent association, and an IoT theory of operations.
 * Security credentials and logic
 * Encryption mechanisms
 
@@ -140,10 +131,6 @@ Connection Capabilities are information related to an Endpoint that describe how
 **Controller**
 
 A Controller is an Endpoint that manipulates Service Elements through one or more Agents.
-
-**Device Type (DT) Definition**
-
-A Device Type Definition (DT) is a description of the Service Elements an Agent is able to support, defining its Supported Data Model.
 
 **Discovery**
 
@@ -264,7 +251,7 @@ A Parameter Path is a Path Name that addresses a Parameter of an Object or Objec
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's instantiated or Supported Data Model. See [](#sec:path-names).
+A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
 
 **Path Reference**
 
@@ -274,17 +261,29 @@ A Path Reference is a Parameter data type that contains a Path Name to an Object
 
 The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
+**Register**
+
+To Register means to use the Register message to inform a Controller of Service Elements that this Agent represents.
+
+**Registered**
+
+Registered Service Elements are those elements represented by an Agent that have been the subject of a Register message.
+
 **Relative Path**
 
 A Relative Path is the remaining Path Name information necessary to form a Path Name given a parent Object Path. It is used for message efficiency when addressing Path Names.
 
 **Request**
 
-A Request is a type of Message that either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications from the Agent to the Controller. A Request usually requires a Response.
+A Request is a type of Message that either requests the Agent perform some action (create, update, delete, operate, etc.), requests information about an Agent or one or more Service Elements, or acts as a means to deliver Notifications and Register Messages from the Agent to the Controller. A Request usually requires a Response.
 
 **Response**
 
 A Response is a type of Message that provides return information about the successful processing of a Request.
+
+**Role**
+
+A Role refers to the set of permissions (i.e., an access control list) that a Controller is granted by an Agent to interact with objects in its Instantiated Data Model.
 
 **Row**
 
@@ -338,6 +337,14 @@ A Parameter that is a member of any of a Multi-Instance Object's Unique Keys.
 
 The User Services Platform consists of a data model, architecture, and communications protocol to transform consumer broadband networks into a platform for the development, deployment, and support of broadband enabled applications and services.
 
+**USP Domain**
+
+The USP Domain is a set of all Controllers and Agents that are likely to communicate with each other in a given network or internetwork with the goal of supporting a specific application or set of applications.
+
+**USP Relationship**
+
+A Controller and Agent are considered to have a USP Relationship when they are capable of sending and accepting messages to/from each other. This usually means the Controller is added to the Agent's Controller table in its Instantiated Data Model.
+
 **Wildcard**
 
 A Wildcard is used in a Search Path to address all Object Instances of a Multi-Instance Object.
@@ -349,32 +356,47 @@ This specification uses the following abbreviations:
 | abbreviation | term |
 | :----------- | :-------------- |
 |ABNF | Augmented Backus-Naur Form |
-|CoAP |	Constrained Application Protocol |
+|CID  | Company Identifier |
+|CSV | Comma-Separated Values |
 |CWMP	| CPE WAN Management Protocol|
 |DNS	| Domain Name Service |
 |DNS-SD	| Domain Name Service - Service Discovery |
-|DT	| Device Type Definition |
+|DU | Deployment Unit |
 |E2E | End to End (Message Exchange) |
+|EE | Execution Environment |
+|EU | Execution Unit |
+|FIFO | First-In-First-Out |
+|FQDN | Fully-Qualified Domain Name |
+|GSDM | Get Supported Data Model (informal of GetSupportedDM message) |
 |HMAC | Hash Message Authentication Code |
 |HTTP	| Hypertext Transport Protocol |
 |IPv4/v6 |	Internet Protocol (version 4 or version 6) |
+|JSON | Java Script Object Notation |
 |LAN	| Local Area Network |
 |MAC | Message Authentication Code |
 |mDNS	| Multicast Domain Name Service |
 |MTP	| Message Transfer Protocol |
+|MQTT | Message Queue Telemetry Transport |
 |OUI | Organizationally Unique Identifier |
+|PEN | Private Enterprise Number |
+|Protobuf | Protocol Buffers |
 |PSS | Probabilistic Signature Scheme |
 |SAR | Segmentation And Reassembly |
 |SMM | Software Module Management |
 |SOAP| Simple Object Access Protocol |
+|SSID | Service Set Identifier |
+|STOMP | Simple Text-Oriented Messaging Protocol |
 |TLS | Tranport Layer Security |
+|TLV | Type-Length-Value |
 |TOFU	| Trust on First Use |
 |TR	| Technical Report |
+|UDS | UNIX Domain Socket |
 |URI | Uniform Resource Identifier |
 |URL | Uniform Resource Locator |
 |USP	| User Services Platform |
 |UUID | Universally Unique Identifier |
 |WAN |	Wide Area Network|
+|XML | eXtensible Markup Language |
 
 ## Specification Impact
 

@@ -7,7 +7,7 @@ participant Agent as A
 
 Activate C
 
-C -> C : USP Message (150kB)\nSegment in max size 64kB
+C -> C : USP Message (150kB)\nUSP Record max size: 64kB
 
 Deactivate C
 
@@ -19,7 +19,7 @@ C -> S : USP Record (64kB)\n sequence_id: 4001 \n payload_sar_state: 2 - INPROCE
 
 S -> A : USP Record:\n sequence_id: 4001\n payload_sar_state: 2 - INPROCESS...
 
-C -> S : USP Record\n(size of USP Record + remaining payload)\n sequence_id: 4002 \n payload_sar_state: 3 - COMPLETE\n payloadrec_sar_state: 3 - COMPLETE\n payload record: USP Message \n (bytes remaining)
+C -> S : USP Record\n(size of USP Record header + remaining payload)\n sequence_id: 4002 \n payload_sar_state: 3 - COMPLETE\n payloadrec_sar_state: 3 - COMPLETE\n payload record: USP Message \n (bytes remaining)
 
 S -> A : USP Record:\n sequence_id: 4002\n payload_sar_state: 3 - COMPLETE...
 
