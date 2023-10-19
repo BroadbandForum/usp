@@ -16,8 +16,11 @@ connected devices, IoT endpoints, user services and home networks"/>
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -100,6 +103,7 @@ connected devices, IoT endpoints, user services and home networks"/>
   <!-- Automatic hover links styles -->
   <style>
   :root {
+      --hoverlink-gap: 0.2em;
       --hoverlink-size: 0.9em;
   }
 
@@ -107,13 +111,11 @@ connected devices, IoT endpoints, user services and home networks"/>
       text-decoration: none;
   }
 
-  .hoverlink::before {
-      content: " ";
-  }
-
   .hoverlink::after {
+      position: absolute;
       display: inline-block;
       content: "";
+      margin-left: var(--hoverlink-gap);
       width: var(--hoverlink-size);
       height: var(--hoverlink-size);
       background-size: var(--hoverlink-size) var(--hoverlink-size);
@@ -295,9 +297,9 @@ Frequently Asked Questions">FAQ</a>
     <header id="title-block-header" class="cover-only">
       <h1 class="title auto-hoverlink" id="title">TR-369 – The User
 Services Platform</h1>
-      <p class="subtitle">Issue: 1 Amendment 3 <span
+      <p class="subtitle">Issue: 1 Amendment 3 Corrigendum 1 <span
 class="release"></span></p>
-      <p class="date">Issue Date: June 2023</p>
+      <p class="date">Issue Date: October 2023</p>
     </header>
     <nav id="NAVTOP" role="doc-toc">
 <p><a href="#sec:cover-page">Cover Page</a> | <a
@@ -857,16 +859,21 @@ ALL SUCH ASSERTIONS THAT HAVE OR MAY BE MADE ARE SO LISTED.</p>
 include the notices, legends, and other provisions set forth on this
 page.</p>
 <!-- do not edit! this file was created from PROJECT.yaml by project-parser.py -->
-<h3 class="unnumbered unlisted new-page auto-hoverlink"
-data-info="header" id="sec:issue-history">Issue History</h3>
-<table class="usp-revision-history">
+<div class="new-page">
+
+</div>
+<h3 class="unnumbered unlisted auto-hoverlink" data-info="header"
+id="sec:issue-history">Issue History</h3>
+<table class="issue-history">
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 82%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 69%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Issue Number</th>
+<th style="text-align: left;">Approval Date</th>
 <th style="text-align: left;">Changes</th>
 </tr>
 </thead>
@@ -875,6 +882,7 @@ data-info="header" id="sec:issue-history">Issue History</h3>
 <td style="text-align: left;"><p><a
 href="https://www.broadband-forum.org/download/TR-369_Issue-1.pdf">Release
 1.0</a></p></td>
+<td style="text-align: left;"><p>April 2018</p></td>
 <td style="text-align: left;"><p>Release contains specification for the
 User Services Platform 1.0</p>
 <p>Corresponds to <a
@@ -885,6 +893,7 @@ Issue 2 Amendment 12</a></p></td>
 <td style="text-align: left;"><a
 href="https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf">Release
 1.0.1</a></td>
+<td style="text-align: left;">August 2018</td>
 <td style="text-align: left;"><ul>
 <li>Added examples and clarifications to end-to-end messaging, use of
 endpoint ID, typographical fixes</li>
@@ -894,6 +903,7 @@ endpoint ID, typographical fixes</li>
 <td style="text-align: left;"><a
 href="https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf">Release
 1.0.2</a></td>
+<td style="text-align: left;">November 2018</td>
 <td style="text-align: left;"><ul>
 <li>Typographical and example fixes</li>
 </ul></td>
@@ -902,6 +912,7 @@ href="https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf">Release
 <td style="text-align: left;"><p><a
 href="https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf">Release
 1.1</a></p></td>
+<td style="text-align: left;"><p>October 2019</p></td>
 <td style="text-align: left;"><p>Release contains specification for the
 User Services Platform 1.1</p>
 <ul>
@@ -916,16 +927,19 @@ Issue 2 Amendment 13</a></p></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Release 1.1.1</td>
+<td style="text-align: left;">April 2020</td>
 <td style="text-align: left;">Regenerated data model HTML using fixed
 version of the BBF report tool</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Release 1.1.2</td>
+<td style="text-align: left;">August 2020</td>
 <td style="text-align: left;">Clarifies several examples, requirements,
 and error types</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Release 1.1.3</td>
+<td style="text-align: left;">November 2020</td>
 <td style="text-align: left;">Corresponds to <a
 href="https://github.com/BroadbandForum/data-model-template/releases/tag/v1.10.0">TR-106
 Amendment 10</a> and <a
@@ -934,6 +948,7 @@ Issue 2 Amendment 14</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Release 1.1.4</td>
+<td style="text-align: left;">November 2020</td>
 <td style="text-align: left;">Corresponds to <a
 href="https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.4">TR-181
 Issue 2 Amendment 14 Corrigendum 1</a></td>
@@ -942,6 +957,7 @@ Issue 2 Amendment 14 Corrigendum 1</a></td>
 <td style="text-align: left;"><p><a
 href="https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf">Release
 1.2</a></p></td>
+<td style="text-align: left;"><p>January 2022</p></td>
 <td style="text-align: left;"><p>Release contains specification for the
 User Services Platform 1.2</p>
 <ul>
@@ -1019,6 +1035,7 @@ Issue 2 Amendment 15</a></p></td>
 <td style="text-align: left;"><p><a
 href="https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf">Release
 1.3</a></p></td>
+<td style="text-align: left;"><p>June 2023</p></td>
 <td style="text-align: left;"><p>Release contains the specification for
 the User Services Platform 1.3</p>
 <ul>
@@ -1057,11 +1074,24 @@ responses</li>
 <li>Adds new requirement R-SEC.4b for Trusted Brokers</li>
 </ul></td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;"><a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-1.pdf">Release
+1.3.1</a></td>
+<td style="text-align: left;">October 2023</td>
+<td style="text-align: left;">This Corrigendum has the following fixes
+<ul>
+<li>Fix example by populating the empty UNIX Domain Socket
+references</li>
+<li>Small fixes to UDS example images</li>
+<li>Fix UnixDomainSocket path in example</li>
+</ul></td>
+</tr>
 </tbody>
 </table>
 <h3 class="unnumbered unlisted auto-hoverlink" data-info="header"
 id="sec:editors">Editors</h3>
-<table class="usp-editors">
+<table class="editors">
 <colgroup>
 <col style="width: 20%" />
 <col style="width: 17%" />
@@ -1107,7 +1137,7 @@ Director</td>
 </table>
 <h3 class="unnumbered unlisted auto-hoverlink" data-info="header"
 id="sec:acknowledgments">Acknowledgments</h3>
-<table class="usp-acknowledgments">
+<table class="acknowledgments">
 <colgroup>
 <col style="width: 32%" />
 <col style="width: 27%" />
@@ -1237,7 +1267,7 @@ partnerships.</li>
 <li>Providing a consistent user experience from mobile to home.</li>
 <li>Simple migration from the CPE WAN Management Protocol <span
 class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[37]</a></span> (CWMP) – commonly known by its
+role="doc-biblioref">[1]</a></span> (CWMP) – commonly known by its
 document number, “TR-069” – through use of the same data model and data
 modeling tools.</li>
 </ul>
@@ -1270,7 +1300,7 @@ device-agent association, and an IoT theory of operations.</li>
 </ul>
 <p>Lastly, USP makes use of and expands the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>. While particular Objects and
+role="doc-biblioref">[3]</a></span>. While particular Objects and
 Parameters necessary to the function of USP are mentioned here, their
 normative description can be found in that document.</p>
 <h2 class="auto-hoverlink" data-info="header"
@@ -1281,7 +1311,7 @@ Conventions</h3>
 requirements of the specification. These words are always capitalized.
 More information can be found in RFC 2119 <span class="citation"
 data-cites="RFC2119"><a href="#ref-RFC2119"
-role="doc-biblioref">[10]</a></span> for key words defined there.
+role="doc-biblioref">[9]</a></span> for key words defined there.
 Additional key words defined in the context of this specification are
 DEPRECATED and OBSOLETED.</p>
 <p><strong>MUST</strong></p>
@@ -1336,225 +1366,253 @@ recent edition of the references listed below.</p>
 published at <a
 href="https://www.broadband-forum.org">www.broadband-forum.org</a>.</p>
 <div id="refs" class="references csl-bib-body" role="list">
-<div id="ref-IEEEREG" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a
-href="https://regauth.standards.ieee.org">Assignments</a>, <em>IEEE
-Registration Authority</em>, IEEE</div>
-</div>
-<div id="ref-FIPS-180.4" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a
-href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf">FIPS
-PUB 180-4</a>, <em>Secure Hash Standard (SHS)</em>, NIST</div>
-</div>
-<div id="ref-FIPS-186.4" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a
-href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf">FIPS
-PUB 186-4</a>, <em>Digital Signature Standard (DSS)</em>, NIST</div>
-</div>
-<div id="ref-IANA" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[4] </div><div class="csl-right-inline"><a
-href="https://www.iana.org/">IANA</a>, <em>Internet Assigned Numbers
-Authority</em>, IANA</div>
-</div>
-<div id="ref-IMEI" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline"><a
-href="https://imeidb.gsma.com/imei/index#">IMEI Database</a>,
-<em>International Mobile Equipment Identity</em>, GSMA</div>
-</div>
-<div id="ref-MQTT-3-1-1" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline"><a
-href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">MQTT
-3.1.1</a>, <em>MQ Telemetry Transport 3.1.1</em>, OASIS</div>
-</div>
-<div id="ref-MQTT-5-0" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[7] </div><div class="csl-right-inline"><a
-href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html">MQTT
-5.0</a>, <em>MQ Telemetry Transport 5.0</em>, OASIS</div>
-</div>
-<div id="ref-PROTOBUF" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[8] </div><div class="csl-right-inline"><a
-href="https://developers.google.com/protocol-buffers/docs/proto3">Protocol
-Buffers v3</a>, <em>Protocol Buffers Mechanism for Serializing
-Structured Data Version 3</em>, Google</div>
-</div>
-<div id="ref-RFC1035" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[9] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc1035">RFC 1035</a>, <em>Domain
-Names - Implementation and Specification</em>, IETF, 1987</div>
-</div>
-<div id="ref-RFC2119" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[10] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc2119">RFC 2119</a>, <em>Key words
-for use in RFCs to Indicate Requirement Levels</em>, IETF, 1997</div>
-</div>
-<div id="ref-RFC2141" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[11] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc2141">RFC 2141</a>, <em>URN
-Syntax</em>, IETF, 1997</div>
-</div>
-<div id="ref-RFC2234" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[12] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc2234">RFC 2234</a>, <em>Augmented
-BNF for Syntax Specifications: ABNF</em>, IETF, 1997</div>
-</div>
-<div id="ref-RFC3279" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[13] </div><div class="csl-right-inline"><a
-href="https://datatracker.ietf.org/doc/html/rfc3279">RFC 3279</a>,
-<em>Algorithms and Identifiers for the Internet X.509 Public Key
-Infrastructure Certificate and Certificate Revocation List (CRL)
-Profile</em>, IETF, 2002</div>
-</div>
-<div id="ref-RFC3315" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[14] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc3315">RFC 3315</a>, <em>Dynamic
-Host Configuration Protocol for IPv6 (DHCPv6)</em>, IETF, 2003</div>
-</div>
-<div id="ref-RFC3925" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[15] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc3925">RFC 3925</a>,
-<em>Vendor-Identifying Vendor Options for Dynamic Host Configuration
-Protocol version 4 (DHCPv4)</em>, IETF, 2004</div>
-</div>
-<div id="ref-RFC3986" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[16] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>, <em>Uniform
-Resource Identifier (URI): Generic Syntax</em>, IETF, 2005</div>
-</div>
-<div id="ref-RFC4122" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[17] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc4122">RFC 4122</a>, <em>A
-Universally Unique IDentifier (UUID) URN Namespace</em>, 2005</div>
-</div>
-<div id="ref-RFC4180" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[18] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc4180">RFC 4180</a>, <em>Common
-Format and MIME Type for Comma-Separated Values (CSV) Files</em>,
-2005</div>
-</div>
-<div id="ref-RFC5246" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[19] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc5246">RFC 5246</a>, <em>The
-Transport Layer Security (TLS) Protocol Version 1.2</em>, 2008</div>
-</div>
-<div id="ref-RFC5280" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[20] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>, <em>Internet
-X.509 Public Key Infrastructure Certificate and Certificate Revocation
-List (CRL) Profile</em>, 2008</div>
-</div>
-<div id="ref-RFC5705" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[21] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc5705">RFC 5705</a>, <em>Keying
-Material Exporters for Transport Layer Security (TLS)</em>, IETF,
-2010</div>
-</div>
-<div id="ref-RFC6066" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[22] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6066">RFC 6066</a>, <em>Transport
-Layer Security (TLS) Extensions: Extension Definitions</em>, IETF,
-2011</div>
-</div>
-<div id="ref-RFC6125" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[23] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6125">RFC 6125</a>,
-<em>Representation and Verification of Domain-Based Application Service
-Identity within Internet Public Key Infrastructure Using X.509 (PKIX)
-Certificates in the Context of Transport Layer Security (TLS)</em>,
-IETF, 2011</div>
-</div>
-<div id="ref-RFC6455" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[24] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6455">RFC 6455</a>, <em>The
-WebSocket Protocol</em>, IETF, 2011</div>
-</div>
-<div id="ref-RFC6762" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[25] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6762">RFC 6762</a>, <em>Multicast
-DNS</em>, IETF, 2013</div>
-</div>
-<div id="ref-RFC6763" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[26] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6763">RFC 6763</a>, <em>DNS-Based
-Service Discovery</em>, IETF, 2013</div>
-</div>
-<div id="ref-RFC6818" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[27] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6818">RFC 6818</a>, <em>Updates to
-the Internet X.509 Public Key Infrastructure Certificate and Certificate
-Revocation List (CRL) Profile</em>, IETF, 2013</div>
-</div>
-<div id="ref-RFC6979" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[28] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc6979">RFC 6979</a>,
-<em>Deterministic Usage of the Digital Signature Algorithm (DSA) and
-Elliptic Curve Digital Signature Algorithm (ECDSA)</em>, IETF,
-2013</div>
-</div>
-<div id="ref-RFC7159" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[29] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc7159">RFC 7159</a>, <em>The
-JavaScript Object Notation (JSON) Data Interchange Format</em>,
-2014</div>
-</div>
-<div id="ref-RFC7252" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[30] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc7252">RFC 7252</a>, <em>The
-Constrained Application Protocol (CoAP)</em>, 2014</div>
-</div>
-<div id="ref-RFC7925" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[31] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc7925">RFC 7925</a>, <em>Transport
-Layer Security (TLS) / Datagram Transport Layer Security (DTLS) Profiles
-for the Internet of Things</em>, 2016</div>
-</div>
-<div id="ref-RFC7959" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[32] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc7959">RFC 7959</a>, <em>Block-Wise
-Transfers in the Constrained Application Protocol (CoAP)</em>,
-2016</div>
-</div>
-<div id="ref-RFC8446" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[33] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc8446">RFC 8446</a>, <em>The
-Transport Layer Security (TLS) Protocol Version 1.3</em>, IETF,
-2018</div>
-</div>
-<div id="ref-RFC8766" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[34] </div><div class="csl-right-inline"><a
-href="https://tools.ietf.org/html/rfc8766">RFC 8766</a>, <em>Discovery
-Proxy for Multicast DNS-Based Service Discovery</em>, 2020</div>
-</div>
-<div id="ref-SOAP-1-1" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[35] </div><div class="csl-right-inline"><a
-href="https://www.w3.org/TR/2000/NOTE-SOAP-20000508/">SOAP 1.1</a>,
-<em>Simple Object Access Protocol (SOAP) 1.1</em>, W3C, 2000</div>
-</div>
-<div id="ref-STOMP-1-2" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[36] </div><div class="csl-right-inline"><a
-href="https://stomp.github.io/stomp-specification-1.2.html">STOMP-1-2</a>,
-<em>Simple Text Oriented Message Protocol</em></div>
-</div>
 <div id="ref-TR-069" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[37] </div><div class="csl-right-inline"><a
-href="https://www.broadband-forum.org/technical/download/TR-069.pdf">TR-069
-Amendment 6</a>, <em>CPE WAN Management Protocol</em>, Broadband Forum,
-2018</div>
+<div class="csl-left-margin">[1] </div><div
+class="csl-right-inline">TR-069 Amendment 6, <em><a
+href="https://www.broadband-forum.org/technical/download/TR-069.pdf">CPE
+WAN Management Protocol</a></em>, Broadband Forum, 2018</div>
 </div>
 <div id="ref-TR-106" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[38] </div><div class="csl-right-inline"><a
-href="https://data-model-template.broadband-forum.org">TR-106</a>,
-<em>Data Model Template for CWMP Endpoints and USP Agents</em>,
-Broadband Forum</div>
+<div class="csl-left-margin">[2] </div><div
+class="csl-right-inline">TR-106, <em><a
+href="https://data-model-template.broadband-forum.org">Data Model
+Template for CWMP Endpoints and USP Agents</a></em>, Broadband
+Forum</div>
 </div>
 <div id="ref-TR-181" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[39] </div><div class="csl-right-inline"><a
-href="https://usp-data-models.broadband-forum.org#Device:2">TR-181 Issue
-2</a>, <em>Device Data Model</em>, Broadband Forum</div>
+<div class="csl-left-margin">[3] </div><div
+class="csl-right-inline">TR-181 Issue 2, <em><a
+href="https://usp-data-models.broadband-forum.org#Device:2">Device Data
+Model</a></em>, Broadband Forum</div>
+</div>
+<div id="ref-PROTOBUF" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div
+class="csl-right-inline">Protocol Buffers v3, <em><a
+href="https://developers.google.com/protocol-buffers/docs/proto3">Protocol
+Buffers Mechanism for Serializing Structured Data Version 3</a></em>,
+Google</div>
+</div>
+<div id="ref-IMEI" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div
+class="csl-right-inline">IMEI Database, <em><a
+href="https://imeidb.gsma.com/imei/index#">International Mobile
+Equipment Identity</a></em>, GSMA</div>
+</div>
+<div id="ref-IANA" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div
+class="csl-right-inline">IANA, <em><a
+href="https://www.iana.org/">Internet Assigned Numbers
+Authority</a></em>, IANA</div>
+</div>
+<div id="ref-IEEEREG" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div
+class="csl-right-inline">Assignments, <em><a
+href="https://regauth.standards.ieee.org">IEEE Registration
+Authority</a></em>, IEEE</div>
+</div>
+<div id="ref-RFC1035" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">RFC
+1035, <em><a href="https://tools.ietf.org/html/rfc1035">Domain Names -
+Implementation and Specification</a></em>, IETF, 1987</div>
+</div>
+<div id="ref-RFC2119" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">RFC
+2119, <em><a href="https://tools.ietf.org/html/rfc2119">Key words for
+use in RFCs to Indicate Requirement Levels</a></em>, IETF, 1997</div>
+</div>
+<div id="ref-RFC2141" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div
+class="csl-right-inline">RFC 2141, <em><a
+href="https://tools.ietf.org/html/rfc2141">URN Syntax</a></em>, IETF,
+1997</div>
+</div>
+<div id="ref-RFC2234" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div
+class="csl-right-inline">RFC 2234, <em><a
+href="https://tools.ietf.org/html/rfc2234">Augmented BNF for Syntax
+Specifications: ABNF</a></em>, IETF, 1997</div>
+</div>
+<div id="ref-RFC3279" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div
+class="csl-right-inline">RFC 3279, <em><a
+href="https://datatracker.ietf.org/doc/html/rfc3279">Algorithms and
+Identifiers for the Internet X.509 Public Key Infrastructure Certificate
+and Certificate Revocation List (CRL) Profile</a></em>, IETF, 2002</div>
+</div>
+<div id="ref-RFC3315" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div
+class="csl-right-inline">RFC 3315, <em><a
+href="https://tools.ietf.org/html/rfc3315">Dynamic Host Configuration
+Protocol for IPv6 (DHCPv6)</a></em>, IETF, 2003</div>
+</div>
+<div id="ref-RFC3925" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[14] </div><div
+class="csl-right-inline">RFC 3925, <em><a
+href="https://tools.ietf.org/html/rfc3925">Vendor-Identifying Vendor
+Options for Dynamic Host Configuration Protocol version 4
+(DHCPv4)</a></em>, IETF, 2004</div>
+</div>
+<div id="ref-RFC3986" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[15] </div><div
+class="csl-right-inline">RFC 3986, <em><a
+href="https://tools.ietf.org/html/rfc3986">Uniform Resource Identifier
+(URI): Generic Syntax</a></em>, IETF, 2005</div>
+</div>
+<div id="ref-RFC5705" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[16] </div><div
+class="csl-right-inline">RFC 5705, <em><a
+href="https://tools.ietf.org/html/rfc5705">Keying Material Exporters for
+Transport Layer Security (TLS)</a></em>, IETF, 2010</div>
+</div>
+<div id="ref-RFC6066" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[17] </div><div
+class="csl-right-inline">RFC 6066, <em><a
+href="https://tools.ietf.org/html/rfc6066">Transport Layer Security
+(TLS) Extensions: Extension Definitions</a></em>, IETF, 2011</div>
+</div>
+<div id="ref-RFC6125" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[18] </div><div
+class="csl-right-inline">RFC 6125, <em><a
+href="https://tools.ietf.org/html/rfc6125">Representation and
+Verification of Domain-Based Application Service Identity within
+Internet Public Key Infrastructure Using X.509 (PKIX) Certificates in
+the Context of Transport Layer Security (TLS)</a></em>, IETF, 2011</div>
+</div>
+<div id="ref-RFC6455" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[19] </div><div
+class="csl-right-inline">RFC 6455, <em><a
+href="https://tools.ietf.org/html/rfc6455">The WebSocket
+Protocol</a></em>, IETF, 2011</div>
+</div>
+<div id="ref-RFC6762" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[20] </div><div
+class="csl-right-inline">RFC 6762, <em><a
+href="https://tools.ietf.org/html/rfc6762">Multicast DNS</a></em>, IETF,
+2013</div>
+</div>
+<div id="ref-RFC6763" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[21] </div><div
+class="csl-right-inline">RFC 6763, <em><a
+href="https://tools.ietf.org/html/rfc6763">DNS-Based Service
+Discovery</a></em>, IETF, 2013</div>
+</div>
+<div id="ref-RFC6818" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[22] </div><div
+class="csl-right-inline">RFC 6818, <em><a
+href="https://tools.ietf.org/html/rfc6818">Updates to the Internet X.509
+Public Key Infrastructure Certificate and Certificate Revocation List
+(CRL) Profile</a></em>, IETF, 2013</div>
+</div>
+<div id="ref-RFC6979" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[23] </div><div
+class="csl-right-inline">RFC 6979, <em><a
+href="https://tools.ietf.org/html/rfc6979">Deterministic Usage of the
+Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature
+Algorithm (ECDSA)</a></em>, IETF, 2013</div>
+</div>
+<div id="ref-RFC8446" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[24] </div><div
+class="csl-right-inline">RFC 8446, <em><a
+href="https://tools.ietf.org/html/rfc8446">The Transport Layer Security
+(TLS) Protocol Version 1.3</a></em>, IETF, 2018</div>
+</div>
+<div id="ref-FIPS-180.4" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[25] </div><div
+class="csl-right-inline">FIPS PUB 180-4, <em><a
+href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf">Secure
+Hash Standard (SHS)</a></em>, NIST</div>
+</div>
+<div id="ref-FIPS-186.4" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[26] </div><div
+class="csl-right-inline">FIPS PUB 186-4, <em><a
+href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf">Digital
+Signature Standard (DSS)</a></em>, NIST</div>
+</div>
+<div id="ref-MQTT-3-1-1" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[27] </div><div
+class="csl-right-inline">MQTT 3.1.1, <em><a
+href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">MQ
+Telemetry Transport 3.1.1</a></em>, OASIS</div>
+</div>
+<div id="ref-MQTT-5-0" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[28] </div><div
+class="csl-right-inline">MQTT 5.0, <em><a
+href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html">MQ
+Telemetry Transport 5.0</a></em>, OASIS</div>
+</div>
+<div id="ref-SOAP-1-1" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[29] </div><div
+class="csl-right-inline">SOAP 1.1, <em><a
+href="https://www.w3.org/TR/2000/NOTE-SOAP-20000508/">Simple Object
+Access Protocol (SOAP) 1.1</a></em>, W3C, 2000</div>
 </div>
 <div id="ref-XMLSCHEMA-2" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[40] </div><div class="csl-right-inline"><a
-href="https://www.w3.org/TR/xmlschema-2/">XML Schema Part 2</a>, <em>XML
-Schema Part 2: Datatypes Second Edition</em>, W3C, 2004</div>
+<div class="csl-left-margin">[30] </div><div
+class="csl-right-inline">XML Schema Part 2, <em><a
+href="https://www.w3.org/TR/xmlschema-2/">XML Schema Part 2: Datatypes
+Second Edition</a></em>, W3C, 2004</div>
+</div>
+<div id="ref-RFC4122" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[31] </div><div
+class="csl-right-inline">RFC 4122, <em><a
+href="https://tools.ietf.org/html/rfc4122">A Universally Unique
+IDentifier (UUID) URN Namespace</a></em>, 2005</div>
+</div>
+<div id="ref-RFC4180" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[32] </div><div
+class="csl-right-inline">RFC 4180, <em><a
+href="https://tools.ietf.org/html/rfc4180">Common Format and MIME Type
+for Comma-Separated Values (CSV) Files</a></em>, 2005</div>
+</div>
+<div id="ref-RFC5246" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[33] </div><div
+class="csl-right-inline">RFC 5246, <em><a
+href="https://tools.ietf.org/html/rfc5246">The Transport Layer Security
+(TLS) Protocol Version 1.2</a></em>, 2008</div>
+</div>
+<div id="ref-RFC5280" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[34] </div><div
+class="csl-right-inline">RFC 5280, <em><a
+href="https://tools.ietf.org/html/rfc5280">Internet X.509 Public Key
+Infrastructure Certificate and Certificate Revocation List (CRL)
+Profile</a></em>, 2008</div>
+</div>
+<div id="ref-RFC7159" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[35] </div><div
+class="csl-right-inline">RFC 7159, <em><a
+href="https://tools.ietf.org/html/rfc7159">The JavaScript Object
+Notation (JSON) Data Interchange Format</a></em>, 2014</div>
+</div>
+<div id="ref-RFC7252" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[36] </div><div
+class="csl-right-inline">RFC 7252, <em><a
+href="https://tools.ietf.org/html/rfc7252">The Constrained Application
+Protocol (CoAP)</a></em>, 2014</div>
+</div>
+<div id="ref-RFC7925" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[37] </div><div
+class="csl-right-inline">RFC 7925, <em><a
+href="https://tools.ietf.org/html/rfc7925">Transport Layer Security
+(TLS) / Datagram Transport Layer Security (DTLS) Profiles for the
+Internet of Things</a></em>, 2016</div>
+</div>
+<div id="ref-RFC7959" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[38] </div><div
+class="csl-right-inline">RFC 7959, <em><a
+href="https://tools.ietf.org/html/rfc7959">Block-Wise Transfers in the
+Constrained Application Protocol (CoAP)</a></em>, 2016</div>
+</div>
+<div id="ref-RFC8766" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[39] </div><div
+class="csl-right-inline">RFC 8766, <em><a
+href="https://tools.ietf.org/html/rfc8766">Discovery Proxy for Multicast
+DNS-Based Service Discovery</a></em>, 2020</div>
+</div>
+<div id="ref-STOMP-1-2" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[40] </div><div
+class="csl-right-inline">STOMP-1-2, <em><a
+href="https://stomp.github.io/stomp-specification-1.2.html">Simple Text
+Oriented Message Protocol</a></em></div>
 </div>
 </div>
 <h2 class="auto-hoverlink" data-info="header" id="sec:definitions">1.4
@@ -2055,8 +2113,7 @@ id="img:usp-agent-and-controller-architecture"
 alt="USP Agent and Controller Architecture" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-agent-and-controller-architecture">
-Figure 1:
-USP Agent and Controller Architecture
+Figure 1: USP Agent and Controller Architecture
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header" id="sec:agents">2.1.1
@@ -2157,7 +2214,7 @@ instance-id</th>
 (now called “MAC Address Block Large” or “MA-L”) assigned and registered
 by the IEEE Registration Authority <span class="citation"
 data-cites="IEEEREG"><a href="#ref-IEEEREG"
-role="doc-biblioref">[1]</a></span> to the entity responsible for this
+role="doc-biblioref">[7]</a></span> to the entity responsible for this
 Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting
 in 6 hex characters). <code>instance-id</code> syntax is defined by this
 entity, who is also responsible for determining instance-id assignment
@@ -2170,7 +2227,7 @@ Example:<code>oui:00256D:my-unique-bbf-id-42</code></td>
 <td style="text-align: left;"><code>authority-id</code> MUST be a CID
 assigned and registered by the IEEE Registration Authority <span
 class="citation" data-cites="IEEEREG"><a href="#ref-IEEEREG"
-role="doc-biblioref">[1]</a></span> to the entity responsible for this
+role="doc-biblioref">[7]</a></span> to the entity responsible for this
 Endpoint. <code>authority-id</code> MUST use hex encoding of the 24-bit
 ID (resulting in 6 hex characters).<br />
 <code>instance-id</code> syntax is defined by this entity, who is also
@@ -2184,7 +2241,7 @@ Example: cid:3AA3F8:my-unique-usp-id-42</td>
 <td style="text-align: left;"><code>authority-id</code> MUST be a
 Private Enterprise Number assigned and registered by IANA <span
 class="citation" data-cites="IANA"><a href="#ref-IANA"
-role="doc-biblioref">[4]</a></span> to the entity responsible for this
+role="doc-biblioref">[6]</a></span> to the entity responsible for this
 Endpoint. <code>authority-id</code> MUST use decimal encoding of the
 IANA-assigned number.<br />
 <code>instance-id</code> syntax is defined by this entity, who is also
@@ -2221,7 +2278,7 @@ zero-length.<br />
 <code>instance-id</code>is
 <code>&lt;OUI&gt; "-" &lt;SerialNumber&gt;</code>, as defined in TR-069
 <span class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[37]</a></span> Section 3.4.4.<br />
+role="doc-biblioref">[1]</a></span> Section 3.4.4.<br />
 Example: <code>os::00256D-0123456789</code></td>
 </tr>
 <tr class="odd">
@@ -2231,7 +2288,7 @@ zero-length.<br />
 <code>instance-id</code> is
 <code>&lt;OUI&gt; "-" &lt;ProductClass&gt; "-" &lt;SerialNumber&gt;</code>,
 as defined in TR-069 <span class="citation" data-cites="TR-069"><a
-href="#ref-TR-069" role="doc-biblioref">[37]</a></span> Section
+href="#ref-TR-069" role="doc-biblioref">[1]</a></span> Section
 3.4.4.<br />
 Example: <code>ops::00256D-STB-0123456789</code></td>
 </tr>
@@ -2241,7 +2298,7 @@ Example: <code>ops::00256D-STB-0123456789</code></td>
 zero-length.<br />
 <code>instance-id</code> is a UUID <span class="citation"
 data-cites="RFC4122"><a href="#ref-RFC4122"
-role="doc-biblioref">[17]</a></span><br />
+role="doc-biblioref">[31]</a></span><br />
 Example:<code>uuid::f81d4fae-7dec-11d0-a765-00a0c91e6bf6</code></td>
 </tr>
 <tr class="odd">
@@ -2310,15 +2367,15 @@ characters:</p>
     pct-encoded = &quot;%&quot; HEXDIG HEXDIG</code></pre>
 <p>The above expression uses the Augmented Backus-Naur Form (ABNF)
 notation of RFC 2234 <span class="citation" data-cites="RFC2234"><a
-href="#ref-RFC2234" role="doc-biblioref">[12]</a></span>, including the
+href="#ref-RFC2234" role="doc-biblioref">[11]</a></span>, including the
 following core ABNF syntax rules defined by that specification: ALPHA
 (letters), DIGIT (decimal digits), HEXDIG (hexadecimal). It is taken
 from RFC 3986 <span class="citation" data-cites="RFC3986"><a
-href="#ref-RFC3986" role="doc-biblioref">[16]</a></span> as the set of
+href="#ref-RFC3986" role="doc-biblioref">[15]</a></span> as the set of
 unreserved characters and percent-encoded characters that are acceptable
 for all components of a URI. This set is also allowed for use in URNs
 RFC 2141 <span class="citation" data-cites="RFC2141"><a
-href="#ref-RFC2141" role="doc-biblioref">[11]</a></span>, and all MTP
+href="#ref-RFC2141" role="doc-biblioref">[10]</a></span>, and all MTP
 headers.</p>
 <p><strong><span id="r-arc.6"
 class="auto-hoverlink">R-ARC.6</span></strong> - An
@@ -2353,14 +2410,14 @@ Data Model(s):</p>
 <ul>
 <li>The Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span></li>
+role="doc-biblioref">[3]</a></span></li>
 </ul>
 <p>This Data Model is specified in XML. The schema and normative
 requirements for defining Objects, Parameters, Events, and Commands for
 the Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span> are defined in
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span> are defined in
 Broadband Forum TR-106 <span class="citation" data-cites="TR-106"><a
-href="#ref-TR-106" role="doc-biblioref">[38]</a></span>.</p>
+href="#ref-TR-106" role="doc-biblioref">[2]</a></span>.</p>
 <p>The use of USP with any of the above data models creates some
 dependencies on specific Objects and Parameters that must be included
 for base functionality.</p>
@@ -2429,12 +2486,12 @@ Path Names</h2>
 Instance, or Parameter in an Agent’s instantiated or Supported Data
 Model. The syntax for Path Names is defined in TR-106 <span
 class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>.</p>
+role="doc-biblioref">[2]</a></span>.</p>
 <p><strong><span id="r-arc.7"
 class="auto-hoverlink">R-ARC.7</span></strong> - All USP Endpoints MUST
 support the Path Name syntax as defined in TR-106 <span class="citation"
 data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>.</p>
+role="doc-biblioref">[2]</a></span>.</p>
 <p>Path Names are represented by a hierarchy of Objects (“parents”) and
 Sub-Objects (“children”), separated by the dot “.” character, ending
 with a Parameter if referencing a Parameter Path. There are six
@@ -2445,7 +2502,7 @@ Agent:</p>
 Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model
 Table). An Object Path ends in a “.” Character (as specified in TR-106
 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>), except when used in a reference
+role="doc-biblioref">[2]</a></span>), except when used in a reference
 Parameter (see <a href="#sec:reference-following"
 class="heading">Reference Following</a>). When addressing a Table in the
 Agent’s Supported Data Model that contains one or more Multi-Instance
@@ -2458,7 +2515,7 @@ Multi-Instance Object). It uses an Instance Identifier to address a
 particular Instance of the Object. An Object Instance Path ends in a “.”
 Character (as specified in TR-106 <span class="citation"
 data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>), except when used in a reference
+role="doc-biblioref">[2]</a></span>), except when used in a reference
 Parameter (see <a href="#sec:reference-following"
 class="heading">Reference Following</a>).</p></li>
 <li><p>Parameter Path - This is a Path Name of a particular Parameter of
@@ -2543,12 +2600,12 @@ id="sec:addressing-by-unique-key">2.5.2.2 Addressing by Unique Key</h4>
 <p>Key-based addressing allows an Object Instance to be addressed by
 using a Unique Key (as defined in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>) in the Path Name.</p>
+role="doc-biblioref">[3]</a></span>) in the Path Name.</p>
 <p><em>Note: Controller and Agent interoperability is greatly affected
 by an Agent’s implementation of Unique Keys. While this specification
 does not aim to overlap its requirements to those of TR-181 <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>, it is</em>
+role="doc-biblioref">[3]</a></span>, it is</em>
 <strong><em>imperative</em></strong> <em>that an Agent implements Unique
 Keys for every Multi-Instance object in its Supported Data
 Model.</em></p>
@@ -2614,10 +2671,10 @@ contains (~=), less than (&lt;), greater than (&gt;), less than or equal
 data model. Expression operators will only evaluate for appropriate data
 types. The literal value representations for all data types are found in
 TR-106 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>. <strong>For string and boolean
+role="doc-biblioref">[2]</a></span>. <strong>For string and boolean
 types, and also the Unknown Time dateTime value (cf. TR-106 Section
 3.2.1 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>), only the ‘==’ and ‘!=’ operators
+role="doc-biblioref">[2]</a></span>), only the ‘==’ and ‘!=’ operators
 are valid.</strong></p>
 <p>The ‘~=’ operator is only valid for comma-separated lists. It is used
 to check whether a list contains a certain element using an exact match
@@ -2633,7 +2690,7 @@ represent the same value, and so do <code>boolean</code> values
 being evaluated against; Expression Parameters must match the type as
 defined for the associated Parameter in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</p>
+role="doc-biblioref">[3]</a></span>.</p>
 <p><em>Note: String values are enclosed in double quotes. In order to
 allow a string value to contain double quotes, quote characters can be
 percent-escaped as %22 (double quote). Therefore, a literal percent
@@ -2714,7 +2771,7 @@ id="sec:other-path-decorators">2.6 Other Path Decorators</h2>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:reference-following">2.6.1 Reference Following</h3>
 <p>The Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span> contains
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span> contains
 Parameters that reference other Parameters or Objects. The Reference
 Following mechanism allows references to Objects (not Parameters) to be
 followed from inside a single Path Name. Reference Following is
@@ -2748,7 +2805,7 @@ the action</p></li>
 </ol>
 <p><em>Note: It should be noted that according to the Device:2 Schema
 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>, reference Parameters:</em></p>
+role="doc-biblioref">[2]</a></span>, reference Parameters:</em></p>
 <ul>
 <li><em>Always contain Path Names (not Search Expressions)</em></li>
 <li><em>When configured, can be configured using Path Names using
@@ -3171,7 +3228,7 @@ class="auto-hoverlink">R-DIS.0</span></strong> - An Agent that supports
 USP configuration of Controllers MUST implement the
 <code>Device.LocalAgent.Controller</code> Object as defined in the
 Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>.</p>
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>.</p>
 <p>The Agent can be pre-configured with trusted root certificates or
 trusted certificates to allow authentication of Controllers. Other trust
 models are also possible, where an Agent without a current Controller
@@ -3192,15 +3249,15 @@ Use of DHCP for Acquiring Controller Information</h2>
 <p>DHCP can be employed as a method for Agents to discover Controllers.
 The DHCPv4 Vendor-Identifying Vendor-Specific Information Option <span
 class="citation" data-cites="RFC3925"><a href="#ref-RFC3925"
-role="doc-biblioref">[15]</a></span> (option code 125) and DHCPv6
+role="doc-biblioref">[14]</a></span> (option code 125) and DHCPv6
 Vendor-specific Information Option <span class="citation"
 data-cites="RFC3315"><a href="#ref-RFC3315"
-role="doc-biblioref">[14]</a></span> (option code 17) can be used to
+role="doc-biblioref">[13]</a></span> (option code 17) can be used to
 provide information to Agents about a single Controller. The options
 that may be returned by DNS are shown below. Description of these
 options can be found in the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</p>
+role="doc-biblioref">[3]</a></span>.</p>
 <p><strong><span id="r-dis.1"
 class="auto-hoverlink">R-DIS.1</span></strong> - If an Agent is
 configured to request Controller DHCP information, the Agent MUST
@@ -3252,7 +3309,7 @@ Controller Discovery</h3>
 <th style="text-align: center;">DHCPv6 Option 17</th>
 <th style="text-align: left;">Parameter in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span></th>
+role="doc-biblioref">[3]</a></span></th>
 </tr>
 </thead>
 <tbody>
@@ -3297,7 +3354,7 @@ Use of DHCP for Exchanging GatewayInfo</h2>
 <p>This section contains a set of USP requirements related to a
 mechanism that was originally defined in the CPE WAN Management Protocol
 <span class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[37]</a></span> (CWMP), which provides a way for a
+role="doc-biblioref">[1]</a></span> (CWMP), which provides a way for a
 CWMP Gateway and an End Device to exchange information via DHCP options
 to populate data model objects with their reciprocal information. The
 purpose of populating this information is to provides an ACS or USP
@@ -3337,7 +3394,7 @@ requests</h3>
 <th style="text-align: center;">DHCPv6 Option 17</th>
 <th style="text-align: left;">Parameter in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span></th>
+role="doc-biblioref">[3]</a></span></th>
 </tr>
 </thead>
 <tbody>
@@ -3394,7 +3451,7 @@ DHCP Encapsulated Vendor-Specific Option-Data fields for Agent</h3>
 <th style="text-align: center;">DHCPv6 Option 17</th>
 <th style="text-align: left;">Parameter in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span></th>
+role="doc-biblioref">[3]</a></span></th>
 </tr>
 </thead>
 <tbody>
@@ -3433,7 +3490,7 @@ a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE
 or REPLY) with this information, it MUST populate the
 <code>Device.GatewayInfo</code> Object as defined in the Device:2 Data
 Model <span class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>. Specifically, it MUST set the the
+role="doc-biblioref">[3]</a></span>. Specifically, it MUST set the the
 parameters <code>ManufacturerOUI</code>, <code>ProductClass</code> and
 <code>SerialNumber</code>, if present and
 <code>ManagementProtocol</code> MUST be set to “CWMP”. If any of the
@@ -3458,7 +3515,7 @@ class="auto-hoverlink">R-DIS.3</span></strong> - If mDNS discovery is
 supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client
 and server functionality as defined in RFC 6762 <span class="citation"
 data-cites="RFC6762"><a href="#ref-RFC6762"
-role="doc-biblioref">[25]</a></span>.</p>
+role="doc-biblioref">[20]</a></span>.</p>
 <p><strong><span id="r-dis.4"
 class="auto-hoverlink">R-DIS.4</span></strong> - If mDNS advertisement
 for a MTP is enabled on an Endpoint, the Endpoint MUST listen for
@@ -3500,19 +3557,19 @@ programmatically set to request.</p>
 id="sec:dns-sd-records">3.7 DNS-SD Records</h2>
 <p>DNS Service Discovery (DNS-SD) RFC 6763 <span class="citation"
 data-cites="RFC6763"><a href="#ref-RFC6763"
-role="doc-biblioref">[26]</a></span> is a mechanism for naming and
+role="doc-biblioref">[21]</a></span> is a mechanism for naming and
 structuring DNS resource records to facilitate service discovery. It can
 be used to create DNS records for USP Endpoints, so they can be
 discoverable via DNS PTR queries RFC 1035 <span class="citation"
 data-cites="RFC1035"><a href="#ref-RFC1035"
-role="doc-biblioref">[9]</a></span> or Multicast DNS (mDNS) RFC 6762
+role="doc-biblioref">[8]</a></span> or Multicast DNS (mDNS) RFC 6762
 <span class="citation" data-cites="RFC6762"><a href="#ref-RFC6762"
-role="doc-biblioref">[25]</a></span>. DNS-SD uses DNS SRV and TXT
+role="doc-biblioref">[20]</a></span>. DNS-SD uses DNS SRV and TXT
 records to express information about “services”, and DNS PTR records to
 help locate the SRV and TXT records. To discover these DNS records, DNS
 or mDNS queries can be used. RFC 6762 <span class="citation"
 data-cites="RFC6762"><a href="#ref-RFC6762"
-role="doc-biblioref">[25]</a></span> recommends using the query type PTR
+role="doc-biblioref">[20]</a></span> recommends using the query type PTR
 to get both the SRV and TXT records. A and AAAA records will also be
 returned, for address resolution.</p>
 <p>The format of a DNS-SD Service Instance Name (which is the resource
@@ -3528,7 +3585,7 @@ the DNS-SD Service Instance Name.</p>
 href="http://www.broadband-forum.org/assignments">registered by BBF with
 IANA</a> used by USP are shown below. As described in RFC 6763 <span
 class="citation" data-cites="RFC6763"><a href="#ref-RFC6763"
-role="doc-biblioref">[26]</a></span>, the <code>&lt;Service&gt;</code>
+role="doc-biblioref">[21]</a></span>, the <code>&lt;Service&gt;</code>
 part of a Service Instance Name is constructed from these values as
 “<code>_&lt;Service Name&gt;._&lt;Transport Protocol&gt;</code>” (e.g.,
 “<code>_usp-agt-ws._tcp</code>”).</p>
@@ -3621,7 +3678,7 @@ class="auto-hoverlink">R-DIS.10</span></strong> - The “name” attribute
 included in the Agent DNS-SD records MUST be identical to the
 <code>FriendlyName</code> Parameter defined in the Device:2 Data Model
 <span class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>, if the <code>FriendlyName</code>
+role="doc-biblioref">[3]</a></span>, if the <code>FriendlyName</code>
 Parameter is implemented.</p>
 <p><strong><span id="r-dis.11"
 class="auto-hoverlink">R-DIS.11</span></strong> - Controller DNS-SD
@@ -3696,7 +3753,7 @@ largely driven by policy, but there is a mechanism other Controllers can
 use to ask an Agent to send “OnBoardRequest” to another Controller: the
 SendOnBoardRequest() command is defined in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>. See <a
+role="doc-biblioref">[3]</a></span>. See <a
 href="#sec:notification-types" class="heading">Notification Types</a>
 for additional information about the OnBoardRequest notification.</p>
 </section>
@@ -3755,7 +3812,7 @@ when the device is deployed, then the implementer needs to ensure the
 device supports encryption of all MTP protocols.</p>
 <p>MTPs that operate over TCP will be expected to implement, at least,
 TLS 1.2 as defined in <span class="citation" data-cites="RFC5246"><a
-href="#ref-RFC5246" role="doc-biblioref">[19]</a></span>.</p>
+href="#ref-RFC5246" role="doc-biblioref">[33]</a></span>.</p>
 <p>Specific requirements for implementing these are provided in the
 individual MTP sections.</p>
 <p><strong><span id="r-mtp.1"
@@ -3795,8 +3852,7 @@ href="#fig:receiving-a-x509-certificate" class="figure">Figure
 alt="Receiving a X.509 Certificate" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:receiving-a-x509-certificate">
-Figure 2:
-Receiving a X.509 Certificate
+Figure 2: Receiving a X.509 Certificate
 </div></figcaption>
 </figure>
 <p><em>Note: The .local and .home.arpa domains are defined by the IETF
@@ -3845,7 +3901,7 @@ processed by a receiving Endpoint. For additional information, default
 values (when fields are missing) are described in the “Default Values”
 section of Protocol Buffers <span class="citation"
 data-cites="PROTOBUF"><a href="#ref-PROTOBUF"
-role="doc-biblioref">[8]</a></span>.</p>
+role="doc-biblioref">[4]</a></span>.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:record-definition">4.1.3.1 Record Definition</h4>
 <p><em>Note: This version of the specification defines the USP Record in
@@ -4145,7 +4201,7 @@ progression from being deprecated in USP 1.2.</em></p>
 <p>The Constrained Application Protocol (CoAP) MTP transfers USP Records
 between USP Endpoints using the CoAP protocol as defined in RFC 7252
 <span class="citation" data-cites="RFC7252"><a href="#ref-RFC7252"
-role="doc-biblioref">[30]</a></span>. Messages that are transferred
+role="doc-biblioref">[36]</a></span>. Messages that are transferred
 between CoAP clients and servers utilize a request/response messaging
 interaction based on RESTful architectural principles. The following
 figure depicts the transfer of the USP Records between USP
@@ -4156,8 +4212,7 @@ id="img:example-usp-requestresponse-over-the-coap-mtp"
 alt="Example: USP Request/Response over the CoAP MTP" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-request-response-over-coap">
-Figure 3:
-Example: USP Request/Response over the CoAP MTP
+Figure 3: Example: USP Request/Response over the CoAP MTP
 </div></figcaption>
 </figure>
 <p>In this example, a USP Request is encoded within a USP Record and
@@ -4180,7 +4235,7 @@ response will always be sent.</p>
 id="sec:mapping-usp-endpoints-to-coap-uris">4.2.1 Mapping USP Endpoints
 to CoAP URIs</h3>
 <p>Section 6 of RFC 7262 <span class="citation" data-cites="RFC7252"><a
-href="#ref-RFC7252" role="doc-biblioref">[30]</a></span> discusses the
+href="#ref-RFC7252" role="doc-biblioref">[36]</a></span> discusses the
 URI schemes for identifying CoAP resources and provides a means of
 locating the resource. These resources are organized hierarchically and
 governed by a CoAP server listening for CoAP requests on a given port.
@@ -4191,7 +4246,7 @@ class="auto-hoverlink">R-COAP.0</span></strong> - As the USP Endpoint is
 a resource governed by a CoAP server, the CoAP server MUST also be
 identified as defined in section 6 of RFC 7262 <span class="citation"
 data-cites="RFC7252"><a href="#ref-RFC7252"
-role="doc-biblioref">[30]</a></span>.</p>
+role="doc-biblioref">[36]</a></span>.</p>
 <p><strong><span id="r-coap.1"
 class="auto-hoverlink">R-COAP.1</span></strong> - A USP Endpoint MUST be
 represented as a CoAP resource with the following resource
@@ -4213,7 +4268,7 @@ Endpoint that is the source of the CoAP request, formatted as
 <code>?reply-to=&lt;coap or coaps uri&gt;</code>. The coap and coaps
 URIs are defined in sections 6.1 and 6.2 of RFC 7262 <span
 class="citation" data-cites="RFC7252"><a href="#ref-RFC7252"
-role="doc-biblioref">[30]</a></span>. The URI MUST NOT include any
+role="doc-biblioref">[36]</a></span>. The URI MUST NOT include any
 optional queries at the end.</p>
 <p><strong><span id="r-coap.2a"
 class="auto-hoverlink">R-COAP.2a</span></strong> - When a USP Endpoint
@@ -4234,12 +4289,12 @@ class="auto-hoverlink">R-COAP.4</span></strong> - In order for USP
 Records to be transferred between a USP Controller and Agent using CoAP,
 the USP Record MUST be encapsulated within the CoAP message as defined
 in RFC 7262 <span class="citation" data-cites="RFC7252"><a
-href="#ref-RFC7252" role="doc-biblioref">[30]</a></span>.</p>
+href="#ref-RFC7252" role="doc-biblioref">[36]</a></span>.</p>
 <p><strong><span id="r-coap.5"
 class="auto-hoverlink">R-COAP.5</span></strong> – USP Records that
 exceed the CoAP message size MUST be block encapsulated in accordance
 with <span class="citation" data-cites="RFC7959"><a href="#ref-RFC7959"
-role="doc-biblioref">[32]</a></span>.</p>
+role="doc-biblioref">[38]</a></span>.</p>
 <p>USP Records are transferred using the CoAP resource that represents
 the receiving USP Endpoint using the CoAP POST method as defined in RFC
 7252.</p>
@@ -4263,7 +4318,7 @@ CoAP client (4.xx) or problems with the CoAP server implementation
 class="auto-hoverlink">R-COAP.8</span></strong> - CoAP clients and
 servers MUST implement the required CoAP response codes defined in
 section 5.9 of RFC 7262 <span class="citation" data-cites="RFC7252"><a
-href="#ref-RFC7252" role="doc-biblioref">[30]</a></span>.</p>
+href="#ref-RFC7252" role="doc-biblioref">[36]</a></span>.</p>
 <p><strong><span id="r-coap.9"
 class="auto-hoverlink">R-COAP.9</span></strong> - When a CoAP client
 receives a failure indication (e.g., timeout) from the underlying
@@ -4301,10 +4356,10 @@ with a <code>4.00</code> response code.</p>
 id="sec:mtp-message-encryption">4.2.3 MTP Message Encryption</h3>
 <p>CoAP MTP message encryption is provided using DTLS as described in
 Section 9 of RFC 7262 <span class="citation" data-cites="RFC7252"><a
-href="#ref-RFC7252" role="doc-biblioref">[30]</a></span>.</p>
+href="#ref-RFC7252" role="doc-biblioref">[36]</a></span>.</p>
 <p>In section 9 of RFC 7262 <span class="citation"
 data-cites="RFC7252"><a href="#ref-RFC7252"
-role="doc-biblioref">[30]</a></span>, CoAP messages are secured using
+role="doc-biblioref">[36]</a></span>, CoAP messages are secured using
 one of three modes:</p>
 <ul>
 <li>NoSec: DTLS is disabled</li>
@@ -4322,24 +4377,24 @@ key pair with an X.509 certificate.</li>
 class="auto-hoverlink">R-COAP.14</span></strong> - CoAP clients and
 servers MUST implement the NoSec and Certificate modes of CoAP security
 as defined in RFC 7262 <span class="citation" data-cites="RFC7252"><a
-href="#ref-RFC7252" role="doc-biblioref">[30]</a></span>.</p>
+href="#ref-RFC7252" role="doc-biblioref">[36]</a></span>.</p>
 <p>While section 9 of RFC 7262 <span class="citation"
 data-cites="RFC7252"><a href="#ref-RFC7252"
-role="doc-biblioref">[30]</a></span> provides guidance on securing CoAP,
+role="doc-biblioref">[36]</a></span> provides guidance on securing CoAP,
 further guidance related to DTLS implementations for the Internet of
 Things is provided by RFC 7925 <span class="citation"
 data-cites="RFC7925"><a href="#ref-RFC7925"
-role="doc-biblioref">[31]</a></span>.</p>
+role="doc-biblioref">[37]</a></span>.</p>
 <p><strong><span id="r-coap.15"
 class="auto-hoverlink">R-COAP.15</span></strong> - CoAP clients and
 servers MUST implement the mandatory statements of RFC 7925 <span
 class="citation" data-cites="RFC7925"><a href="#ref-RFC7925"
-role="doc-biblioref">[31]</a></span> with the exception that:</p>
+role="doc-biblioref">[37]</a></span> with the exception that:</p>
 <ul>
 <li>Section 4.4.1 USP Controller certificates can contain domain names
 with wildcard characters per RFC 6125 <span class="citation"
 data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span> guidance.</li>
+role="doc-biblioref">[18]</a></span> guidance.</li>
 <li>Section 4.4.2 Client certificate identifiers do not use EUI-64
 identifier but instead use the identifier defined for Client
 certificates in this Working Text.</li>
@@ -4365,7 +4420,7 @@ WebSocket Binding</h2>
 <p>The WebSockets MTP transfers USP Records between USP Endpoints using
 the WebSocket protocol as defined in RFC 6455 <span class="citation"
 data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>. Messages that are transferred
+role="doc-biblioref">[19]</a></span>. Messages that are transferred
 between WebSocket clients and servers utilize a request/response
 messaging interaction across an established WebSocket session.</p>
 <h3 class="auto-hoverlink" data-info="header"
@@ -4381,19 +4436,19 @@ class="auto-hoverlink">R-WS.1</span></strong> - As the USP Endpoint is a
 resource governed by a WebSocket origin server, the WebSocket server
 MUST also be identified as defined in section 3 of RFC 6455 <span
 class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.2"
 class="auto-hoverlink">R-WS.2</span></strong> - A USP Endpoint MUST be
 represented as a WebSocket resource using the path component as defined
 in section 3 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
-href="#ref-RFC6455" role="doc-biblioref">[24]</a></span>.</p>
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.3"
 class="auto-hoverlink">R-WS.3</span></strong> - When creating DNS-SD
 records (see <a href="#sec:discovery" class="heading">Discovery</a>), an
 Endpoint MUST set the DNS-SD TXT record “path” attribute equal to the
 value of the Websocket resource using the path component as defined in
 section 3 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
-href="#ref-RFC6455" role="doc-biblioref">[24]</a></span>.</p>
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:handling-of-the-websocket-session">4.3.2 Handling of the
 WebSocket Session</h3>
@@ -4411,8 +4466,7 @@ id="img:websocket-session-handshake"
 alt="WebSocket Session Handshake" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:websocket-session-handshake">
-Figure 4:
-WebSocket Session Handshake
+Figure 4: WebSocket Session Handshake
 </div></figcaption>
 </figure>
 <p>While WebSocket sessions can be established by either USP Controllers
@@ -4443,12 +4497,12 @@ class="auto-hoverlink">R-WS.7</span></strong> - A USP Endpoint MUST
 implement the WebSocket handshake protocol to establish a WebSocket
 connection as defined in section 4 of RFC 6455 <span class="citation"
 data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.8"
 class="auto-hoverlink">R-WS.8</span></strong> - A USP Endpoint MUST
 implement the procedures to close a WebSocket connection as defined in
 section 7 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
-href="#ref-RFC6455" role="doc-biblioref">[24]</a></span>.</p>
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:mapping-usp-records-to-websocket-messages">4.3.2.1 Mapping USP
 Records to WebSocket Messages</h4>
@@ -4498,7 +4552,7 @@ class="auto-hoverlink">R-WS.10b</span></strong> - A WebSocket client
 MUST include its Endpoint ID, via a <code>key=value</code> pair, in the
 query component of the request URI in its opening handshake, defined in
 section 1.3 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
-href="#ref-RFC6455" role="doc-biblioref">[24]</a></span>. The
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>. The
 <code>key</code> part of the pair MUST have a value of <code>eid</code>
 and the <code>value</code> part MUST be the client’s Endpoint ID. This
 pair MUST be separated from other query data by the <code>&amp;</code>
@@ -4546,7 +4600,7 @@ Data control frame.</p>
 class="auto-hoverlink">R-WS.13</span></strong> - A USP Endpoint MUST
 implement the WebSocket control frames defined in section 5.5 of RFC
 6455 <span class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p>USP Records can be transferred between USP Controllers and USP Agents
 over an established WebSocket session. These USP Records are
 encapsulated within a binary WebSocket data frame as depicted by the
@@ -4557,8 +4611,7 @@ id="img:usp-request-using-a-websocket-session"
 alt="USP Request using a WebSocket Session" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-request-using-a-websocket-session">
-Figure 5:
-USP Request using a WebSocket Session
+Figure 5: USP Request using a WebSocket Session
 </div></figcaption>
 </figure>
 <p><strong><span id="r-ws.14"
@@ -4567,13 +4620,13 @@ Records to be transferred between a USP Controller and Agent using
 WebSockets MUST be encapsulated within as a binary WebSocket data frame
 as defined in section 5.6 of RFC 6455 <span class="citation"
 data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.15"
 class="auto-hoverlink">R-WS.15</span></strong> - USP Records are
 transferred between USP Endpoints using message body procedures as
 defined in section 6 of RFC 6455 <span class="citation"
 data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:handling-failures-to-deliver-usp-records">4.3.3.1 Handling
 Failures to Deliver USP Records</h4>
@@ -4603,7 +4656,7 @@ implement a WebSocket keep-alive mechanism by periodically sending Ping
 control frames and responding to received Ping control frames with Pong
 control frames as described in section 5.5 of RFC 6455 <span
 class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.18"
 class="auto-hoverlink">R-WS.18</span></strong> - A USP Agent MUST
 provide the capability to assign a keep-alive interval in order to send
@@ -4738,13 +4791,13 @@ id="sec:mtp-message-encryption-1">4.3.4 MTP Message Encryption</h3>
 <p>WebSocket MTP message encryption is provided using certificates in
 TLS as described in section 10.5 and section 10.6 of RFC 6455 <span
 class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
-role="doc-biblioref">[24]</a></span>.</p>
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.22"
 class="auto-hoverlink">R-WS.22</span></strong> - USP Endpoints utilizing
 WebSockets clients and servers for message transport MUST implement the
 Certificate modes of TLS security as defined in sections 10.5 and 10.6
 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
-href="#ref-RFC6455" role="doc-biblioref">[24]</a></span>.</p>
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-ws.23"
 class="auto-hoverlink">R-WS.23</span></strong> - USP Endpoints capable
 of obtaining absolute time SHOULD wait until it has accurate absolute
@@ -4760,13 +4813,13 @@ certificate restrictions.</p>
 class="auto-hoverlink">R-WS.24</span></strong> - USP Controller
 certificates MAY contain domain names with wildcard characters per RFC
 6125 <span class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span> guidance.</p>
+role="doc-biblioref">[18]</a></span> guidance.</p>
 <h2 class="auto-hoverlink" data-info="header" id="sec:stomp-binding">4.4
 STOMP Binding</h2>
 <p>The STOMP MTP transfers USP Records between USP endpoints using
 version 1.2 of the STOMP protocol <span class="citation"
 data-cites="STOMP-1-2"><a href="#ref-STOMP-1-2"
-role="doc-biblioref">[36]</a></span>, further referred to as “STOMP
+role="doc-biblioref">[40]</a></span>, further referred to as “STOMP
 Specification”, or the Simple Text Oriented Message Protocol. Messages
 that are transferred between STOMP clients utilize a message bus
 interaction model where the STOMP server is the messaging broker that
@@ -4780,8 +4833,7 @@ id="img:usp-over-stomp-architecture"
 alt="USP over STOMP Architecture" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-over-stomp">
-Figure 6:
-USP over STOMP Architecture
+Figure 6: USP over STOMP Architecture
 </div></figcaption>
 </figure>
 <p>The basic steps for any USP Endpoint that utilizes a STOMP MTP
@@ -4994,7 +5046,7 @@ mandatory STOMP headers) a <code>content-type</code> STOMP header with a
 value of “<code>application/vnd.bbf.usp.msg</code>”, which signifies
 that the body included in the <code>SEND</code> frame contains a
 Protocol Buffer <span class="citation" data-cites="PROTOBUF"><a
-href="#ref-PROTOBUF" role="doc-biblioref">[8]</a></span> binary encoding
+href="#ref-PROTOBUF" role="doc-biblioref">[4]</a></span> binary encoding
 message.</p>
 <p><strong><span id="r-stomp.21"
 class="auto-hoverlink">R-STOMP.21</span></strong> - USP Endpoints
@@ -5008,7 +5060,7 @@ class="auto-hoverlink">R-STOMP.22</span></strong> - USP Endpoints
 sending a <code>SEND</code> frame with content-type of
 <code>application/vnd.bbf.usp.msg</code> MUST include the Protocol
 Buffer <span class="citation" data-cites="PROTOBUF"><a
-href="#ref-PROTOBUF" role="doc-biblioref">[8]</a></span> binary encoding
+href="#ref-PROTOBUF" role="doc-biblioref">[4]</a></span> binary encoding
 of the USP Record as the body of the <code>SEND</code> frame.</p>
 <p><strong><span id="r-stomp.23"
 class="auto-hoverlink">R-STOMP.23</span></strong> - When a USP Endpoint
@@ -5188,14 +5240,14 @@ id="sec:mtp-message-encryption-2">4.4.6 MTP Message Encryption</h3>
 class="auto-hoverlink">R-STOMP.36</span></strong> - USP Endpoints
 utilizing STOMP clients for message transport MUST implement TLS 1.2 RFC
 5246 <span class="citation" data-cites="RFC5246"><a href="#ref-RFC5246"
-role="doc-biblioref">[19]</a></span> or later with backward
+role="doc-biblioref">[33]</a></span> or later with backward
 compatibility to TLS 1.2.</p>
 <p><strong><span id="r-stomp.37"
 class="auto-hoverlink">R-STOMP.37</span></strong> - STOMP server
 certificates MAY contain domain names and those domain names MAY contain
 domain names with wildcard characters per RFC 6125 <span
 class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span> guidance.</p>
+role="doc-biblioref">[18]</a></span> guidance.</p>
 <h2 class="auto-hoverlink" data-info="header" id="sec:mqtt-binding">4.5
 MQTT Binding</h2>
 <p>The Message Queuing Telemetry Transport (MQTT) MTP transfers USP
@@ -5210,8 +5262,7 @@ USP Agents and Controllers.</p>
 <img src="mtp/mqtt/mqtt-architecture.png"
 id="img:usp-over-mqtt-architecture" alt="USP over MQTT Architecture" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:usp-over-mqtt">
-Figure 7:
-USP over MQTT Architecture
+Figure 7: USP over MQTT Architecture
 </div></figcaption>
 </figure>
 <p>The basic steps for any USP Endpoint that utilizes an MQTT MTP
@@ -5230,20 +5281,19 @@ this section for their use when MQTT is a USP MTP.</p>
 <img src="mtp/mqtt/mqtt-packets.png" id="img:mqtt-packets"
 alt="MQTT Packets" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:mqtt-packets">
-Figure 8:
-MQTT Packets
+Figure 8: MQTT Packets
 </div></figcaption>
 </figure>
 <p><strong><span id="r-mqtt.1"
 class="auto-hoverlink">R-MQTT.1</span></strong> - USP Endpoints
 utilizing MQTT clients for message transport MUST implement MQTT 5.0
 <span class="citation" data-cites="MQTT-5-0"><a href="#ref-MQTT-5-0"
-role="doc-biblioref">[7]</a></span>.</p>
+role="doc-biblioref">[28]</a></span>.</p>
 <p><strong><span id="r-mqtt.2"
 class="auto-hoverlink">R-MQTT.2</span></strong> - USP Endpoints
 utilizing MQTT clients for message transport MAY implement MQTT 3.1.1
 <span class="citation" data-cites="MQTT-3-1-1"><a href="#ref-MQTT-3-1-1"
-role="doc-biblioref">[6]</a></span>.</p>
+role="doc-biblioref">[27]</a></span>.</p>
 <p>Requirements in this MQTT MTP specification are common to both the
 MQTT 3.1.1 and MQTT 5.0 specifications unless an MQTT version is
 named.</p>
@@ -5502,10 +5552,10 @@ disconnect from the MQTT server.</p>
 <p>For each Topic listed in a <code>SUBSCRIBE</code> packet, the client
 will also provide a desired QoS level. See the MQTT specification (MQTT
 3.1.1 <span class="citation" data-cites="MQTT-3-1-1"><a
-href="#ref-MQTT-3-1-1" role="doc-biblioref">[6]</a></span> or MQTT 5.0
+href="#ref-MQTT-3-1-1" role="doc-biblioref">[27]</a></span> or MQTT 5.0
 <span class="citation" data-cites="MQTT-5-0"><a href="#ref-MQTT-5-0"
-role="doc-biblioref">[7]</a></span>, Section 4.3) for description of the
-three QoS levels (QoS 0, QoS 1, QoS 2). The usefulness of these QoS
+role="doc-biblioref">[28]</a></span>, Section 4.3) for description of
+the three QoS levels (QoS 0, QoS 1, QoS 2). The usefulness of these QoS
 levels in the context of USP depends on the particulars of the MQTT
 deployment. It is therefore up to the implementer / deployer to decide
 which QoS setting to use. In order to ensure deployments have the
@@ -5537,7 +5587,7 @@ the payload of a <code>PUBLISH</code> packet.</p>
 class="auto-hoverlink">R-MQTT.19</span></strong> - USP Endpoints MUST
 send USP Records using the Protocol Buffer <span class="citation"
 data-cites="PROTOBUF"><a href="#ref-PROTOBUF"
-role="doc-biblioref">[8]</a></span> binary encoding of the USP
+role="doc-biblioref">[4]</a></span> binary encoding of the USP
 Record.</p>
 <p><strong><span id="r-mqtt.20"
 class="auto-hoverlink">R-MQTT.20</span></strong> - USP Endpoints
@@ -5778,11 +5828,11 @@ id="sec:mqtt-server-requirements">4.5.7 MQTT Server Requirements</h3>
 <p><strong><span id="r-mqtt.39"
 class="auto-hoverlink">R-MQTT.39</span></strong> - MQTT servers MUST
 implement MQTT 5.0 <span class="citation" data-cites="MQTT-5-0"><a
-href="#ref-MQTT-5-0" role="doc-biblioref">[7]</a></span>.</p>
+href="#ref-MQTT-5-0" role="doc-biblioref">[28]</a></span>.</p>
 <p><strong><span id="r-mqtt.40"
 class="auto-hoverlink">R-MQTT.40</span></strong> - MQTT servers SHOULD
 implement MQTT 3.1.1 <span class="citation" data-cites="MQTT-3-1-1"><a
-href="#ref-MQTT-3-1-1" role="doc-biblioref">[6]</a></span>.</p>
+href="#ref-MQTT-3-1-1" role="doc-biblioref">[27]</a></span>.</p>
 <p><strong><span id="r-mqtt.41"
 class="auto-hoverlink">R-MQTT.41</span></strong> - MQTT servers MUST
 implement MQTT over TCP transport protocol.</p>
@@ -5822,14 +5872,14 @@ id="sec:mtp-message-encryption-3">4.5.8 MTP Message Encryption</h3>
 class="auto-hoverlink">R-MQTT.48</span></strong> - USP Endpoints
 utilizing MQTT clients for message transport MUST implement TLS 1.2
 <span class="citation" data-cites="RFC5246"><a href="#ref-RFC5246"
-role="doc-biblioref">[19]</a></span> or later with backward
+role="doc-biblioref">[33]</a></span> or later with backward
 compatibility to TLS 1.2.</p>
 <p><strong><span id="r-mqtt.49"
 class="auto-hoverlink">R-MQTT.49</span></strong> - MQTT server
 certificates MAY contain domain names and those domain names MAY contain
 domain names with wildcard characters per RFC 6125 <span
 class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span> guidance.</p>
+role="doc-biblioref">[18]</a></span> guidance.</p>
 <h2 class="auto-hoverlink" data-info="header"
 id="sec:unix-domain-socket">4.6 UNIX Domain Socket Binding</h2>
 <p>This is an internal Message Transfer Protocol (MTP) for communicating
@@ -5844,8 +5894,7 @@ of this transport as a USP MTP.</p>
 id="img:unix-domain-socket-binding" alt="Unix Domain Socket Binding" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-binding">
-Figure 9:
-Unix Domain Socket Binding
+Figure 9: Unix Domain Socket Binding
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -6069,8 +6118,7 @@ id="img:unix-domain-socket-frame-with-handshake-message"
 alt="UNIX Domain Socket Frame with Handshake Message" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-frame-with-handshake-message">
-Figure 10:
-UNIX Domain Socket Frame with Handshake Message
+Figure 10: UNIX Domain Socket Frame with Handshake Message
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
@@ -6114,8 +6162,7 @@ id="img:unix-domain-socket-frame-with-usp-record-message"
 alt="UNIX Domain Socket Frame with USP Record Message" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-frame-with-usp-record-message">
-Figure 11:
-UNIX Domain Socket Frame with USP Record Message
+Figure 11: UNIX Domain Socket Frame with USP Record Message
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
@@ -6182,7 +6229,7 @@ specification includes support for:</p>
 <ul>
 <li>Protocol Buffers Version 3 <span class="citation"
 data-cites="PROTOBUF"><a href="#ref-PROTOBUF"
-role="doc-biblioref">[8]</a></span></li>
+role="doc-biblioref">[4]</a></span></li>
 </ul>
 <p><strong><span id="r-enc.0"
 class="auto-hoverlink">R-ENC.0</span></strong> - An implementation using
@@ -6233,27 +6280,27 @@ class="auto-hoverlink">R-ENC.6</span></strong> - Parameter and argument
 values MUST be converted to and from Protocol Buffers Version 3 strings
 using the string representations of the TR-106 Appendix I.4 <span
 class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span> data types.</p>
+role="doc-biblioref">[2]</a></span> data types.</p>
 <p>TR-106 Appendix I.4 states that “Parameters make use of a limited
 subset of the default SOAP data types”. The SOAP 1.1 specification <span
 class="citation" data-cites="SOAP-1-1"><a href="#ref-SOAP-1-1"
-role="doc-biblioref">[35]</a></span> states that all SOAP simple types
+role="doc-biblioref">[29]</a></span> states that all SOAP simple types
 are defined by the XML Schema Part 2: Datatypes specification <span
 class="citation" data-cites="XMLSCHEMA-2"><a href="#ref-XMLSCHEMA-2"
-role="doc-biblioref">[40]</a></span>, and this is the ultimate
+role="doc-biblioref">[30]</a></span>, and this is the ultimate
 reference.</p>
 <p>In practice there should be few surprises, e.g., XML Schema Part 2,
 Section 3.3.22 <span class="citation" data-cites="XMLSCHEMA-2"><a
-href="#ref-XMLSCHEMA-2" role="doc-biblioref">[40]</a></span> states that
+href="#ref-XMLSCHEMA-2" role="doc-biblioref">[30]</a></span> states that
 it has a lexical representation consisting of a finite-length sequence
 of decimal digits (#x30-#x39).</p>
 <p>Some of the encoding rules are quite complicated, e.g. SOAP 1.1,
 Section 5.2.3 <span class="citation" data-cites="SOAP-1-1"><a
-href="#ref-SOAP-1-1" role="doc-biblioref">[35]</a></span> states that
+href="#ref-SOAP-1-1" role="doc-biblioref">[29]</a></span> states that
 <code>base64</code> line length restrictions don’t apply to SOAP, and
 XML Schema Part 2, Section 3.2.7 <span class="citation"
 data-cites="XMLSCHEMA-2"><a href="#ref-XMLSCHEMA-2"
-role="doc-biblioref">[40]</a></span> has a lot of detail about which
+role="doc-biblioref">[30]</a></span> has a lot of detail about which
 aspects of ISO 8601 are and are not supported by the
 <code>dateTime</code> data type.</p>
 </section>
@@ -6321,7 +6368,7 @@ restarting a Session Context</em></p>
 <p><em>Note: the requirements below reference Objects and Parameters
 used to manage the E2E Session. These are specified in the Device:2 Data
 Model <span class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</em></p>
+role="doc-biblioref">[3]</a></span>.</em></p>
 <p><em>Note: The USP Record Encapsulation section was moved to <a
 href="#sec:usp-record-encapsulation" class="heading">USP Record
 Encapsulation</a> in USP 1.2.</em></p>
@@ -6655,8 +6702,7 @@ id="img:processing-of-received-usp-records"
 alt="Processing of Received USP Records" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:processing-received-records">
-Figure 12:
-Processing of Received USP Records
+Figure 12: Processing of Received USP Records
 </div></figcaption>
 </figure>
 <p><strong><span id="r-e2e.19"
@@ -6799,8 +6845,7 @@ id="img:e2e-segmentation-and-reassembly"
 alt="E2E Segmentation and Reassembly" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:segmentation-and-reassembly">
-Figure 13:
-E2E Segmentation and Reassembly
+Figure 13: E2E Segmentation and Reassembly
 </div></figcaption>
 </figure>
 <p><em>Note: the 64k size limit is not inherent to the STOMP protocol.
@@ -7095,18 +7140,18 @@ Message Exchange.</p>
 <p>This signature method uses the SHA-256 hash algorithm, as defined in
 FIPS PUB 180-4 Secure Hash Standard (SHS) <span class="citation"
 data-cites="FIPS-180.4"><a href="#ref-FIPS-180.4"
-role="doc-biblioref">[2]</a></span>, and the NIST P-256 curve that
+role="doc-biblioref">[25]</a></span>, and the NIST P-256 curve that
 generates a signature for the hash using the Digital Signature Standard
 (DSS) scheme as defined in FIPS PUB 186-4 Digital Signature Standard
 (DSS) <span class="citation" data-cites="FIPS-186.4"><a
-href="#ref-FIPS-186.4" role="doc-biblioref">[3]</a></span>. To reduce
+href="#ref-FIPS-186.4" role="doc-biblioref">[26]</a></span>. To reduce
 the burden of requiring a strong source of randomness, the signature
 algorithm may apply the method described in RFC 6979 <span
 class="citation" data-cites="RFC6979"><a href="#ref-RFC6979"
-role="doc-biblioref">[28]</a></span> to deterministically derive
+role="doc-biblioref">[23]</a></span> to deterministically derive
 encryption parameters. The signature must be ASN.1 DER-encoded as
 described in RFC 3279 <span class="citation" data-cites="RFC3279"><a
-href="#ref-RFC3279" role="doc-biblioref">[13]</a></span>, we will refer
+href="#ref-RFC3279" role="doc-biblioref">[12]</a></span>, we will refer
 to this signature scheme as <code>ECDSA_P256_SHA256_ASN1</code> in this
 specification.</p>
 <p><strong><span id="r-e2e.31"
@@ -7131,10 +7176,10 @@ non-payload fields of the USP Record. The MAC mechanism used in USP for
 this purpose is the SHA-256 keyed-Hash Message Authentication Code
 (HMAC) algorithm. The keys used for the HMAC algorithm are derived in
 accordance with RFC 5705 <span class="citation" data-cites="RFC5705"><a
-href="#ref-RFC5705" role="doc-biblioref">[21]</a></span> when using TLS
+href="#ref-RFC5705" role="doc-biblioref">[16]</a></span> when using TLS
 1.2 or in accordance with the updated version found in RFC 8446 <span
 class="citation" data-cites="RFC8446"><a href="#ref-RFC8446"
-role="doc-biblioref">[33]</a></span> when using TLS 1.3. These
+role="doc-biblioref">[24]</a></span> when using TLS 1.3. These
 procedures require the following inputs: a label, a context and the
 length of the output keying material. The label used must be
 “<code>EXPORTER-BBF-USP-Record</code>”, the context must be empty (note
@@ -7144,7 +7189,7 @@ first 32 octets will be used as the client key and the other 32 octets
 as the server key (in TLS terms). When using TLS 1.2, the PRF used must
 be the one defined in RFC 5246 <span class="citation"
 data-cites="RFC5246"><a href="#ref-RFC5246"
-role="doc-biblioref">[19]</a></span> with SHA-256 Hash.</p>
+role="doc-biblioref">[33]</a></span> with SHA-256 Hash.</p>
 <p><strong><span id="r-e2e.32"
 class="auto-hoverlink">R-E2E.32</span></strong> – When generating or
 validating the MAC or signature to protect the integrity of the USP
@@ -7184,9 +7229,9 @@ method to protect the integrity of a USP Record, when generating or
 validating the MAC of the USP Record, the USP Endpoint MUST derive the
 keys in accordance with RFC 5705 <span class="citation"
 data-cites="RFC5705"><a href="#ref-RFC5705"
-role="doc-biblioref">[21]</a></span> when using TLS 1.2 or with
+role="doc-biblioref">[16]</a></span> when using TLS 1.2 or with
 accordance with RFC 8446 <span class="citation" data-cites="RFC8446"><a
-href="#ref-RFC8446" role="doc-biblioref">[33]</a></span> when using TLS
+href="#ref-RFC8446" role="doc-biblioref">[24]</a></span> when using TLS
 1.3.</p>
 <p><strong><span id="r-e2e.36"
 class="auto-hoverlink">R-E2E.36</span></strong> – If using the TLS MAC
@@ -7204,7 +7249,7 @@ class="auto-hoverlink">R-E2E.38</span></strong> – If using the TLS MAC
 method to protect the integrity of a USP Record, when generating or
 validating the MAC of the USP Record, the USP Endpoint MUST use the TLS
 PRF defined in RFC 5246 <span class="citation" data-cites="RFC5246"><a
-href="#ref-RFC5246" role="doc-biblioref">[19]</a></span> with SHA-256
+href="#ref-RFC5246" role="doc-biblioref">[33]</a></span> with SHA-256
 Hash when using TLS 1.2 for End-to-End security.</p>
 <p><strong><span id="r-e2e.39"
 class="auto-hoverlink">R-E2E.39</span></strong> – If using the TLS MAC
@@ -7266,8 +7311,7 @@ round-trips.</p>
 <img src="e2e-message-exchange/tls-session-handshake.png"
 id="img:tls-session-handshake" alt="TLS Session Handshake" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:handshake">
-Figure 14:
-TLS Session Handshake
+Figure 14: TLS Session Handshake
 </div></figcaption>
 </figure>
 <p><strong><span id="r-e2e.41"
@@ -7430,8 +7474,7 @@ id="img:a-successful-requestresponse-sequence"
 alt="A successful request/response sequence" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:a-successful-requestresponse-sequence">
-Figure 15:
-A successful request/response sequence
+Figure 15: A successful request/response sequence
 </div></figcaption>
 </figure>
 <p>Failed request/response: In this failed Message sequence, a
@@ -7444,15 +7487,14 @@ id="img:a-failed-requestresponse-sequence"
 alt="A failed request/response sequence" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:a-failed-requestresponse-sequence">
-Figure 16:
-A failed request/response sequence
+Figure 16: A failed request/response sequence
 </div></figcaption>
 </figure>
 <h2 class="auto-hoverlink" data-info="header"
 id="sec:message-structure">7.3 Message Structure</h2>
 <p>A Message consists of a header and body. When using Protocol Buffers
 <span class="citation" data-cites="PROTOBUF"><a href="#ref-PROTOBUF"
-role="doc-biblioref">[8]</a></span>, the fields of the header and body
+role="doc-biblioref">[4]</a></span>, the fields of the header and body
 for different Messages are defined in a schema and sent in an encoded
 format from one USP Endpoint to another.</p>
 <p><strong><span id="r-msg.5"
@@ -7469,7 +7511,7 @@ the message itself and its arguments.</p>
 <p>Each of the Message types and fields below are described with the
 field type according to Protocol Buffers <span class="citation"
 data-cites="PROTOBUF"><a href="#ref-PROTOBUF"
-role="doc-biblioref">[8]</a></span>, followed by its name.</p>
+role="doc-biblioref">[4]</a></span>, followed by its name.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:the-usp-message">7.3.1 The USP Message</h3>
 <p><code>Header header</code></p>
@@ -7672,7 +7714,7 @@ Agent. It could use an Add Message with the following fields:</p>
 instance identifier) and the Unique Key Parameters of the created Object
 as defined in the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>:</p>
+role="doc-biblioref">[3]</a></span>:</p>
 <pre data-filter="pbv" type="Response"><code>    add_resp {
       created_obj_results {
         requested_path: &quot;Device.WiFi.SSID.&quot;
@@ -7702,13 +7744,13 @@ the following prescriptions are made on the use of Unique Keys.</p>
 <p><strong><span id="r-key.1"
 class="auto-hoverlink">R-KEY.1</span></strong> - Non-functional Unique
 Keys (as defined in TR-106 <span class="citation" data-cites="TR-106"><a
-href="#ref-TR-106" role="doc-biblioref">[38]</a></span>) MUST NOT change
+href="#ref-TR-106" role="doc-biblioref">[2]</a></span>) MUST NOT change
 in the Agent’s Instantiated Data Model after creation, as defined in <a
 href="#r-add.5" class="requirement">R-ADD.5</a>.</p>
 <p><strong><span id="r-key.2"
 class="auto-hoverlink">R-KEY.2</span></strong> - Functional Unique Keys
 (as defined in TR-106 <span class="citation" data-cites="TR-106"><a
-href="#ref-TR-106" role="doc-biblioref">[38]</a></span>) MAY change
+href="#ref-TR-106" role="doc-biblioref">[2]</a></span>) MAY change
 incidentally as part of normal operation, but any change MUST abide by
 the uniqueness rules (i.e., no conflict with other instances).</p>
 <h3 class="auto-hoverlink" data-info="header"
@@ -8495,7 +8537,7 @@ Search Paths specified in a Get request can also target individual
 Parameters within Objects to be returned.</p>
 <p><em>Note: Those familiar with Broadband Forum TR-069 <span
 class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[37]</a></span> will recognize this behavior as the
+role="doc-biblioref">[1]</a></span> will recognize this behavior as the
 difference between “Partial Paths” and “Complete Paths”. This behavior
 is replicated in USP for the Get Message for each Path Name that is
 matched by the expression(s) supplied in the request.</em></p>
@@ -9102,7 +9144,7 @@ Object itself, rather than Instances of the Object, and those Path Names
 that contain Multi-Instance Objects in the Path Name use the
 <code>{i}</code> identifier to indicate their place in the Path Name as
 specified in TR-106 <span class="citation" data-cites="TR-106"><a
-href="#ref-TR-106" role="doc-biblioref">[38]</a></span>.</p>
+href="#ref-TR-106" role="doc-biblioref">[2]</a></span>.</p>
 <p>The <code>obj_paths</code> field takes a list of Object Paths, either
 from the Supported Data Model or the Instantiated Data Model.</p>
 <p>For example, a Path Name to the <code>AssociatedDevice</code> Object
@@ -9853,13 +9895,13 @@ Subscription Object in the USP data model. The normative requirements
 for these Objects are described in the data model Parameter descriptions
 for <code>Device.LocalAgent.Subscription.{i}.</code> in the Device:2
 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>.</p>
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>.</p>
 <p><strong><span id="r-not.0"
 class="auto-hoverlink">R-NOT.0</span></strong> - The Agent and
 Controller MUST follow the normative requirements defined in the
 <code>Device.LocalAgent.Subscription.{i}.</code> Object specified in the
 Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>.</p>
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>.</p>
 <p><strong><span id="r-not.0a"
 class="auto-hoverlink">R-NOT.0a</span></strong> - When considering the
 time needed to make a state change and trigger a Notification, an
@@ -9867,7 +9909,7 @@ implementation SHOULD make changes to its state and initiate a
 Notification with a window no longer than 10 seconds.</p>
 <p><em>Note: Those familiar with Broadband Forum TR-069 <span
 class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[37]</a></span> will recall that a notification for
+role="doc-biblioref">[1]</a></span> will recall that a notification for
 a value change caused by an Auto-Configuration Server (ACS - the CWMP
 equivalent of a Controller) are not sent to the ACS. Since there is only
 a single ACS notifying the ACS of value changes it requested is
@@ -10101,7 +10143,7 @@ This sends the notification request to the Controller that is the
 subject of that operation. The <code>SendOnBoardRequest()</code>
 operation is defined in the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>. This requirement applies only to
+role="doc-biblioref">[3]</a></span>. This requirement applies only to
 those Controller table instances that have their <code>Enabled</code>
 Parameter set to <code>true</code>.</p></li>
 <li><p>When instructed to do so by internal application policy (for
@@ -10345,7 +10387,7 @@ Mechanism</h2>
 data model. Operations are generally defined on an Object, using the
 “command” attribute, as defined in <span class="citation"
 data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>. The mechanism is controlled using
+role="doc-biblioref">[2]</a></span>. The mechanism is controlled using
 the <a href="#sec:operate" class="heading">Operate Message</a> in
 conjunction with the Multi-Instance Request Object.</p>
 <h3 class="auto-hoverlink" data-info="header"
@@ -10361,8 +10403,7 @@ id="img:operate-message-flow-for-synchronous-operations"
 alt="Operate Message Flow for Synchronous Operations" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:operate-message-flow-for-synchronous-operations">
-Figure 17:
-Operate Message Flow for Synchronous Operations
+Figure 17: Operate Message Flow for Synchronous Operations
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -10388,7 +10429,7 @@ an Operate Request that addresses an asynchronous operation, it MUST
 create a Request Object in the Request table of its Instantiated Data
 Model (see the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>). When the Operation is complete
+role="doc-biblioref">[3]</a></span>). When the Operation is complete
 (either success or failure), it MUST remove this Object from the Request
 table.</p>
 <p>If any Controller wants a notification that an operation has
@@ -10409,8 +10450,7 @@ id="img:operate-message-flow-for-asynchronous-operations"
 alt="Operate Message Flow for Asynchronous Operations" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:operate-message-flow-for-asynchronous-operations">
-Figure 18:
-Operate Message Flow for Asynchronous Operations
+Figure 18: Operate Message Flow for Asynchronous Operations
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
@@ -10935,9 +10975,9 @@ part of the end-to-end ecosystem.</p>
 id="sec:authentication-1">8.1 Authentication</h2>
 <p>Authentication of Controllers is done using X.509 certificates as
 defined in <span class="citation" data-cites="RFC5280"><a
-href="#ref-RFC5280" role="doc-biblioref">[20]</a></span> and <span
+href="#ref-RFC5280" role="doc-biblioref">[34]</a></span> and <span
 class="citation" data-cites="RFC6818"><a href="#ref-RFC6818"
-role="doc-biblioref">[27]</a></span>. Authentication of Agents is done
+role="doc-biblioref">[22]</a></span>. Authentication of Agents is done
 either by using X.509 certificates or shared secrets. X.509
 certificates, at a minimum, need to be usable for <a
 href="#sec:securing-mtps" class="heading">Securing MTPs</a> with TLS or
@@ -11316,8 +11356,7 @@ and <a href="#fig:no-secure-message-exchange" class="figure">Figure
 alt="Receiving a USP Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:receive-record">
-Figure 19:
-Receiving a USP Record
+Figure 19: Receiving a USP Record
 </div></figcaption>
 </figure>
 <hr />
@@ -11327,8 +11366,7 @@ id="img:usp-record-without-usp-layer-secure-message-exchange"
 alt="USP Record without USP Layer Secure Message Exchange" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:no-secure-message-exchange">
-Figure 20:
-USP Record without USP Layer Secure Message Exchange
+Figure 20: USP Record without USP Layer Secure Message Exchange
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -11347,8 +11385,7 @@ results as in the optional decision flow elements (identified with
 <img src="security/send-record.png" id="img:sending-a-usp-record"
 alt="Sending a USP Record" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:send-record">
-Figure 21:
-Sending a USP Record
+Figure 21: Sending a USP Record
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -11375,8 +11412,7 @@ only the first matching CA in the chain will be used.</p>
 <img src="security/check-cert.png" id="img:checking-a-certificate"
 alt="Checking a Certificate" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:check-cert">
-Figure 22:
-Checking a Certificate
+Figure 22: Checking a Certificate
 </div></figcaption>
 </figure>
 <hr />
@@ -11385,8 +11421,7 @@ Checking a Certificate
 alt="Determining the Role" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:determine-role">
-Figure 23:
-Determining the Role
+Figure 23: Determining the Role
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -11418,8 +11453,7 @@ id="img:trusted-broker-with-received-record"
 alt="Trusted Broker with Received Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:broker-with-received-record">
-Figure 24:
-Trusted Broker with Received Record
+Figure 24: Trusted Broker with Received Record
 </div></figcaption>
 </figure>
 <hr />
@@ -11429,8 +11463,7 @@ id="img:trusted-broker-sending-a-record"
 alt="Trusted Broker Sending a Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:broker-with-sent-record">
-Figure 25:
-Trusted Broker Sending a Record
+Figure 25: Trusted Broker Sending a Record
 </div></figcaption>
 </figure>
 <h2 class="auto-hoverlink" data-info="header"
@@ -11438,7 +11471,7 @@ id="sec:theory-of-operations">8.9 Theory of Operations</h2>
 <p>The following theory of operations relies on Objects, Parameters,
 events, and operations from the <code>LocalAgent</code> Object of the
 Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>.</p>
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:data-model-elements">8.9.1 Data Model Elements</h3>
 <p>These data model elements play a role in reporting on and allowing
@@ -11823,7 +11856,7 @@ explanation of how the Agent can be configured to enable the collection
 of bulk data using HTTP, MQTT, or USP Event Notifications via the
 BulkData Objects, which are defined in the Device:2 Data Model <span
 class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</p>
+role="doc-biblioref">[3]</a></span>.</p>
 <h2 class="annex2 auto-hoverlink" data-info="header"
 id="sec:introduction-1">A.1 Introduction</h2>
 <p>The general concept behind the USP Bulk Data collection mechanism is
@@ -12166,7 +12199,7 @@ cipher suite.</em></p>
 <ul>
 <li>The Agent SHOULD use the <span class="citation"
 data-cites="RFC6066"><a href="#ref-RFC6066"
-role="doc-biblioref">[22]</a></span> Server Name TLS extension to send
+role="doc-biblioref">[17]</a></span> Server Name TLS extension to send
 the host portion of the Collection Server URL as the server name during
 the TLS handshake.</li>
 <li>If TLS 1.2 (or a later version) is used, the Agent MUST authenticate
@@ -12184,7 +12217,7 @@ pre-configured Collection Server URL.</li>
 <li>If the host portion of the Collection Server URL is a DNS name, this
 MUST be done according to the principles of RFC 6125 <span
 class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span>, using the host portion of the
+role="doc-biblioref">[18]</a></span>, using the host portion of the
 Collection Server URL as the reference identifier.</li>
 <li>If the host portion of the Collection Server URL is an IP address,
 this MUST be done by comparing the IP address against any presented
@@ -12192,10 +12225,10 @@ identifiers that are IP addresses.</li>
 </ul>
 <p><em>Note: the terms “reference identifier” and “presented identifier”
 are defined in RFC 6125 <span class="citation" data-cites="RFC6125"><a
-href="#ref-RFC6125" role="doc-biblioref">[23]</a></span>.</em></p>
+href="#ref-RFC6125" role="doc-biblioref">[18]</a></span>.</em></p>
 <p><em>Note: wildcard certificates are permitted as described in RFC
 6125 <span class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
-role="doc-biblioref">[23]</a></span>.</em></p>
+role="doc-biblioref">[18]</a></span>.</em></p>
 <ul>
 <li>An Agent capable of obtaining absolute time SHOULD wait until it has
 accurate absolute time before contacting the Collection Server. If a
@@ -12218,10 +12251,10 @@ Requirements</h3>
 type is sent as a media type within the report. For CSV the media type
 is <code>text/csv</code> as specified in RFC 4180 <span class="citation"
 data-cites="RFC4180"><a href="#ref-RFC4180"
-role="doc-biblioref">[18]</a></span> and for JSON the media type is
+role="doc-biblioref">[32]</a></span> and for JSON the media type is
 <code>application/json</code> as specified in RFC 7159 <span
 class="citation" data-cites="RFC7159"><a href="#ref-RFC7159"
-role="doc-biblioref">[29]</a></span>. For example, a CSV encoded report
+role="doc-biblioref">[35]</a></span>. For example, a CSV encoded report
 using <code>charset=UTF-8</code> would have the following Content-Type
 header:</p>
 <pre><code>Content-Type: text/csv; charset=UTF-8</code></pre>
@@ -12329,10 +12362,10 @@ Client connection, the encoding type is sent as a media type within the
 MQTT PUBLISH message header and the Content Type property. For CSV the
 media type is <code>text/csv</code> as specified in RFC 4180 <span
 class="citation" data-cites="RFC4180"><a href="#ref-RFC4180"
-role="doc-biblioref">[18]</a></span> and for JSON the media type is
+role="doc-biblioref">[32]</a></span> and for JSON the media type is
 <code>application/json</code> as specified in RFC 7159 <span
 class="citation" data-cites="RFC7159"><a href="#ref-RFC7159"
-role="doc-biblioref">[29]</a></span>. For example, a CSV encoded report
+role="doc-biblioref">[35]</a></span>. For example, a CSV encoded report
 using <code>charset=UTF-8</code> would have the following Content Type
 property:</p>
 <pre><code>text/csv; charset=UTF-8</code></pre>
@@ -12552,7 +12585,7 @@ id="sec:encoding-of-csv-bulk-data">A.7.1 Encoding of CSV Bulk Data</h3>
 class="auto-hoverlink">R-BULK.11</span></strong> - CSV Bulk Data SHOULD
 be encoded as per RFC 4180 <span class="citation"
 data-cites="RFC4180"><a href="#ref-RFC4180"
-role="doc-biblioref">[18]</a></span>, MUST contain a header line (column
+role="doc-biblioref">[32]</a></span>, MUST contain a header line (column
 headers), and the media type MUST indicate the presence of the header
 line.</p>
 <p>For example:
@@ -12560,7 +12593,7 @@ line.</p>
 <p>In addition, the characters used to separate fields and rows as well
 as identify the escape character can be configured from the characters
 used in RFC 4180 <span class="citation" data-cites="RFC4180"><a
-href="#ref-RFC4180" role="doc-biblioref">[18]</a></span>.</p>
+href="#ref-RFC4180" role="doc-biblioref">[32]</a></span>.</p>
 <p>Using the HTTP example above, the following configures the Agent to
 transfer data to the Bulk Data Collector using CSV encoding, separating
 the fields with a comma and the rows with a new line character, by
@@ -12593,7 +12626,7 @@ class="auto-hoverlink">R-BULK.12</span></strong> - The report format of
 class="auto-hoverlink">R-BULK.13</span></strong> - The
 <code>ParameterType</code> MUST be the Parameter’s base data type as
 described in TR-106 <span class="citation" data-cites="TR-106"><a
-href="#ref-TR-106" role="doc-biblioref">[38]</a></span>.</p>
+href="#ref-TR-106" role="doc-biblioref">[2]</a></span>.</p>
 <h4 class="annex4 auto-hoverlink" data-info="header"
 id="sec:layout-of-content-for-failed-report-transmissions">A.7.1.2
 Layout of Content for Failed Report Transmissions</h4>
@@ -12800,9 +12833,9 @@ id="sec:translating-data-types">A.7.2.5 Translating Data Types</h4>
 <p>JSON has a number of basic data types that are translated from the
 base data types defined in TR-106 <span class="citation"
 data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>. The encoding of JSON Data Types
+role="doc-biblioref">[2]</a></span>. The encoding of JSON Data Types
 MUST adhere to RFC 7159 <span class="citation" data-cites="RFC7159"><a
-href="#ref-RFC7159" role="doc-biblioref">[29]</a></span>.</p>
+href="#ref-RFC7159" role="doc-biblioref">[35]</a></span>.</p>
 <p>TR-106 named data types are translated into the underlying base
 TR-106 data types. Lists based on TR-106 base data types utilize the
 JSON String data type.</p>
@@ -13025,8 +13058,7 @@ id="img:deployment-unit-state-diagram"
 alt="Deployment Unit State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:deployment-unit-state-diagram">
-Figure 26:
-Deployment Unit State Diagram
+Figure 26: Deployment Unit State Diagram
 </div></figcaption>
 </figure>
 <p>This state machine shows 5 individual states (3 of which are
@@ -13152,9 +13184,9 @@ same whether generated by the Controller or the device. In order to
 ensure this, the UUID is generated (whether by Controller or device)
 according to the rules defined by RFC 4122 <span class="citation"
 data-cites="RFC4122"><a href="#ref-RFC4122"
-role="doc-biblioref">[17]</a></span> Version 5 (Name-Based) and the
+role="doc-biblioref">[31]</a></span> Version 5 (Name-Based) and the
 Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>. The following
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>. The following
 are some possible scenarios:</p>
 <ul>
 <li><p>The DU is Installed via USP with a Controller generated UUID and
@@ -13205,8 +13237,7 @@ id="img:execution-unit-state-diagram"
 alt="Execution Unit State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:execution-unit-state-diagram">
-Figure 27:
-Execution Unit State Diagram
+Figure 27: Execution Unit State Diagram
 </div></figcaption>
 </figure>
 <p>This state machine shows 5 states (3 of them transitory) and four
@@ -13303,7 +13334,7 @@ model defined in TR-104).</p></li>
 (if, for example, the EU provides port mapping capability, the
 configuration would be exposed via the port mapping table defined in the
 Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span>).</p></li>
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span>).</p></li>
 <li><p>Instances of standard Objects in the Root or any Service data
 model, (if, for example, the EU provides support for an additional Codec
 in a VoIP service).</p></li>
@@ -13359,8 +13390,7 @@ id="img:possible-multi-execution-environment-implementation"
 alt="Possible Multi-Execution Environment Implementation" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:multi-exec-env">
-Figure 28:
-Possible Multi-Execution Environment Implementation
+Figure 28: Possible Multi-Execution Environment Implementation
 </div></figcaption>
 </figure>
 <p>In this example, the device exposes its Linux Operating System as an
@@ -13411,8 +13441,7 @@ id="img:execution-environment-state-diagram"
 alt="Execution Environment State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:execution-environment-state-diagram">
-Figure 29:
-Execution Environment State Diagram
+Figure 29: Execution Environment State Diagram
 </div></figcaption>
 </figure>
 <p>When an EE instance is disabled by a Controller, the EE itself shuts
@@ -13577,7 +13606,7 @@ itself. These include:</p>
 <ul>
 <li>The UUID in the request not matching the format specified in RFC
 4122 <span class="citation" data-cites="RFC4122"><a href="#ref-RFC4122"
-role="doc-biblioref">[17]</a></span> Version 5 (Name-based).</li>
+role="doc-biblioref">[31]</a></span> Version 5 (Name-based).</li>
 <li>A corrupted DU resource, or the DU not being installable for other
 reasons, such as not being signed by any trusted entity</li>
 <li>The installation of the DU requiring more system resources, such as
@@ -13639,7 +13668,7 @@ itself. These include:</p>
 <ul>
 <li>The UUID in the request not matching the format specified in RFC
 4122 <span class="citation" data-cites="RFC4122"><a href="#ref-RFC4122"
-role="doc-biblioref">[17]</a></span> Version 5 (Name-Based).</li>
+role="doc-biblioref">[31]</a></span> Version 5 (Name-Based).</li>
 <li>A corrupted DU resource, or the DU not being installable for other
 reasons, such as not being signed by any trusted entity</li>
 <li>The DU cannot be found in the data model. This fault can occur when
@@ -13679,7 +13708,7 @@ when there is no DU with this combination of UUID and version on any EE
 in the data model.</li>
 <li>The UUID in the request not matching the format specified in RFC
 4122 <span class="citation" data-cites="RFC4122"><a href="#ref-RFC4122"
-role="doc-biblioref">[17]</a></span> Version 5 (Name- Based).</li>
+role="doc-biblioref">[31]</a></span> Version 5 (Name- Based).</li>
 <li>The DU caused an EE to come into existence on which at least 1 DU is
 Installed.</li>
 </ul>
@@ -13911,7 +13940,7 @@ Device Proxy</h1>
 <p>This appendix describes a Theory of Operations for the
 <code>Device.ProxiedDevice.</code> Object defined in the Device:2 Data
 Model <span class="citation" data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</p>
+role="doc-biblioref">[3]</a></span>.</p>
 <p>The <code>Device.ProxiedDevice</code> table is defined as:</p>
 <blockquote>
 <p>“Each entry in the table is a ProxiedDevice Object that is a mount
@@ -14048,7 +14077,7 @@ id="sec:discovery-proxy">IV.2 Discovery Proxy</h2>
 discovers from Endpoints. This is particularly useful in a multi-segment
 LAN, where mDNS messages do not cross segment boundaries. The DNS-SD
 Discovery Proxy <span class="citation" data-cites="RFC8766"><a
-href="#ref-RFC8766" role="doc-biblioref">[34]</a></span> functionality
+href="#ref-RFC8766" role="doc-biblioref">[39]</a></span> functionality
 is recommended as a component of a Discovery Proxy. When used inside a
 LAN, this would need the <em>Non-USP Discovery Function</em> and the
 <em>Non-USP Advertisement Function</em> described in <a
@@ -14290,8 +14319,7 @@ id="img:example-of-mtp-proxy-in-lan-with-wan-controller"
 alt="Example of MTP Proxy in LAN with WAN Controller" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:example-of-mtp-proxy-in-lan-with-wan-controller">
-Figure 30:
-Example of MTP Proxy in LAN with WAN Controller
+Figure 30: Example of MTP Proxy in LAN with WAN Controller
 </div></figcaption>
 </figure>
 <h3 class="appendix3 auto-hoverlink" data-info="header"
@@ -14319,8 +14347,7 @@ id="img:coap-stomp-mtp-proxy-example-flow"
 alt="CoAP-STOMP MTP Proxy Example Flow" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:coap-stomp-mtp-proxy-example-flow">
-Figure 31:
-CoAP-STOMP MTP Proxy Example Flow
+Figure 31: CoAP-STOMP MTP Proxy Example Flow
 </div></figcaption>
 </figure>
 <p><strong>Controller connects to the STOMP server</strong></p>
@@ -14397,7 +14424,7 @@ href="#sec:device-proxy" class="heading">Device Proxy appendix</a> for
 the Theory of Operations for the <code>Device.ProxiedDevice.</code>
 Object defined in the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
-role="doc-biblioref">[39]</a></span>.</p>
+role="doc-biblioref">[3]</a></span>.</p>
 <p>In order to serve as a USP to non-USP Proxy, the <em>USP to non-USP
 Translation Function</em> (from <a
 href="#tbl:proxy-building-block-functions" class="table">Table 1</a>) is
@@ -14430,7 +14457,7 @@ value, a battery level, a light color, etc.</li>
 temperature, switch a light etc.</li>
 </ul>
 <p>The Device:2 Data Model <span class="citation" data-cites="TR-181"><a
-href="#ref-TR-181" role="doc-biblioref">[39]</a></span> defines
+href="#ref-TR-181" role="doc-biblioref">[3]</a></span> defines
 capability Objects that reflect capabilities found on many different
 devices (example: BinaryControl). By using these Objects, a large
 ecosystem of devices can be described using a small set of capabilities
@@ -14443,8 +14470,7 @@ id="sec:iot-data-model-overview">V.2 IoT data model overview</h2>
 alt="IoT Data Model" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-data-model">
-Figure 32:
-IoT Data Model
+Figure 32: IoT Data Model
 </div></figcaption>
 </figure>
 <p>The data model defines an IoT Capability table, whose instances
@@ -14528,8 +14554,7 @@ id="img:iot-individual-device-models"
 alt="IoT individual device models" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-individual-device-models">
-Figure 33:
-IoT individual device models
+Figure 33: IoT individual device models
 </div></figcaption>
 </figure>
 <p>Each device registers as an individual entity to the USP Controller.
@@ -14546,8 +14571,7 @@ model of the control device’s USP Agent:</p>
 id="img:iot-proxied-device-model" alt="IoT proxied device model" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-proxied-device-model">
-Figure 34:
-IoT proxied device model
+Figure 34: IoT proxied device model
 </div></figcaption>
 </figure>
 <p>Each IoT device is represented as a
@@ -14576,7 +14600,7 @@ definition.</p>
 <p><em>Note: The <code>Type</code> enumeration in the data model can
 also, like all Parameters, be extended using the rules defined in TR-106
 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>.</em></p>
+role="doc-biblioref">[2]</a></span>.</em></p>
 <h4 class="appendix4 auto-hoverlink" data-info="header"
 id="sec:unit-definition">V.4.1.2 Unit definition</h4>
 <p><strong>Applies to:</strong> LevelControl, LevelSensor,
@@ -14589,7 +14613,7 @@ the goal of giving a unified representation of the used unit.</p>
 <p><em>Note: The <code>Unit</code> enumeration in the data model can
 also, like all Parameters, be extended using the rules defined in TR-106
 <span class="citation" data-cites="TR-106"><a href="#ref-TR-106"
-role="doc-biblioref">[38]</a></span>.</em></p>
+role="doc-biblioref">[2]</a></span>.</em></p>
 <p><em>Note: Imperial units are intentionally not modeled in favor of
 the metric system to increase the inter-working. If the Controller needs
 imperial units, it can easily convert the metric units into imperial
@@ -14724,8 +14748,7 @@ id="img:iot-threshold-trigger-sensitivity"
 alt="IoT threshold trigger sensitivity" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-sensitivity">
-Figure 35:
-IoT threshold trigger sensitivity
+Figure 35: IoT threshold trigger sensitivity
 </div></figcaption>
 </figure>
 <p>The sensitivity value is a relative value in the range 0 to 100
@@ -14747,8 +14770,7 @@ id="img:iot-threshold-trigger-hold-time"
 alt="IoT threshold trigger hold time" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-hold-time">
-Figure 36:
-IoT threshold trigger hold time
+Figure 36: IoT threshold trigger hold time
 </div></figcaption>
 </figure>
 <p>If the <code>HoldTime</code> Parameter is not implemented or is set
@@ -14773,8 +14795,7 @@ id="img:iot-threshold-trigger-rest-time"
 alt="IoT threshold trigger rest time" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-rest-time">
-Figure 37:
-IoT threshold trigger rest time
+Figure 37: IoT threshold trigger rest time
 </div></figcaption>
 </figure>
 <p>If the <code>RestTime</code> Parameter is not implemented or is set
@@ -14797,8 +14818,7 @@ id="img:iot-threshold-trigger-minimum-duration"
 alt="IoT threshold trigger minimum duration" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-minimum-duration">
-Figure 38:
-IoT threshold trigger minimum duration
+Figure 38: IoT threshold trigger minimum duration
 </div></figcaption>
 </figure>
 <h4 class="appendix4 auto-hoverlink" data-info="header"
@@ -15482,8 +15502,7 @@ id="img:software-modularization-use-cases"
 alt="Software Modularization Use Cases" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:software-modularization-use-cases">
-Figure 39:
-Software Modularization Use Cases
+Figure 39: Software Modularization Use Cases
 </div></figcaption>
 </figure>
 <h2 class="appendix2 auto-hoverlink" data-info="header"
@@ -15610,12 +15629,12 @@ Services that matches the use cases depicted in the Figure shown in the
 previous section.</p>
 <p>USP Broker (NOTE: there isn’t a Controller.1 instance because USP
 Service 1 doesn’t have a Controller):</p>
-<pre><code>UnixDomainSocket.1.Path = /tmp/broker_agent_path
+<pre><code>UnixDomainSocket.1.Path = /var/run/usp/broker_agent_path
 UnixDomainSocket.1.Mode = Listen
-UnixDomainSocket.2.Path = /tmp/broker_controller_path
+UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
 UnixDomainSocket.2.Mode = Listen
 LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.1
-LocalAgent.Controller.2.MTP.1.UDS.UnixDomainSocketRef = &lt;empty&gt;
+LocalAgent.Controller.2.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.1
 LocalAgent.Controller.2.MTP.1.UDS.USPServiceRef = USPService.2
 USPService.1.EndpointID = doc::Service1
 USPService.1.DataModelPaths = PathA, PathB, PathC
@@ -15628,17 +15647,17 @@ USPService.2.HasController = true</code></pre>
 <p>USP Service 1 (NOTE: USP Service 1 doesn’t have a Controller, so
 there isn’t a Controller instance in the USP Broker for this USP
 Service):</p>
-<pre><code>UnixDomainSocket.2.Path = /tmp/broker_controller_path
+<pre><code>UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
 UnixDomainSocket.2.Mode = Connect
-LocalAgent.MTP.1.UDS.UnixDomainSocketRef = &lt;empty&gt;
+LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
 LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
 LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = &lt;empty&gt;</code></pre>
 <p>USP Service 2 (has both an Agent and a Controller):</p>
-<pre><code>UnixDomainSocket.1.Path = /tmp/broker_agent_path
+<pre><code>UnixDomainSocket.1.Path = /var/run/usp/broker_agent_path
 UnixDomainSocket.1.Mode = Connect
-UnixDomainSocket.2.Path = /tmp/broker_controller_path
+UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
 UnixDomainSocket.2.Mode = Connect
-LocalAgent.MTP.1.UDS.UnixDomainSocketRef = &lt;empty&gt;
+LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
 LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
 LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = &lt;empty&gt;</code></pre>
 <h2 class="appendix2 auto-hoverlink" data-info="header"
@@ -15688,7 +15707,7 @@ Broker…</p>
 <ul>
 <li>The Agent within the USP Service initiates the UNIX Domain Socket
 connection to the Controller on the USP Broker and the well-known
-internal port
+internal path
 <ul>
 <li>Once the UNIX Domain Socket is connected, the USP Service’s Agent
 will initiate the UNIX Domain Socket MTP Handshake mechanism</li>
@@ -15704,7 +15723,7 @@ exposed by the USP Service.</li>
 </ul></li>
 <li>The Controller within the USP Service initiates the UNIX Domain
 Socket connection to the Agent on the USP Broker and the well-known
-internal port
+internal path
 <ul>
 <li>Once the UNIX Domain Socket is connected, the USP Service’s
 Controller will initiate the UNIX Domain Socket MTP Handshake

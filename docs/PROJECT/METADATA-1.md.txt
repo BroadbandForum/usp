@@ -1,25 +1,33 @@
 <!-- do not edit! this file was created from PROJECT.yaml by project-parser.py -->
 
-### Issue History {.unnumbered .unlisted .new-page}
+::: {.new-page}
+:::
 
-::: {.list-table .usp-revision-history aligns=l,l widths=14,65}
+### Issue History {.unnumbered .unlisted}
+
+::: {.list-table .issue-history aligns=l,l,l widths=14,14,65}
 
 * - Issue Number
+  - Approval Date
   - Changes
 
 * - [Release 1.0][TR-369 Issue 1]
+  - April 2018
   - Release contains specification for the User Services Platform 1.0
     
     Corresponds to [TR-181 Issue 2 Amendment 12](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.0.0)
 
 * - [Release 1.0.1][TR-369 Corrigendum 1]
+  - August 2018
   - * Added examples and clarifications to end-to-end messaging, use of
       endpoint ID, typographical fixes
 
 * - [Release 1.0.2][TR-369 Corrigendum 2]
+  - November 2018
   - * Typographical and example fixes
 
 * - [Release 1.1][TR-369 Amendment 1]
+  - October 2019
   - Release contains specification for the User Services Platform 1.1
     
     * Adds MQTT support as a Message Transfer Protocol
@@ -30,19 +38,24 @@
     Corresponds to [TR-181 Issue 2 Amendment 13](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.0)
 
 * - Release 1.1.1
+  - April 2020
   - Regenerated data model HTML using fixed version of the BBF report tool
 
 * - Release 1.1.2
+  - August 2020
   - Clarifies several examples, requirements, and error types
 
 * - Release 1.1.3
+  - November 2020
   - Corresponds to [TR-106 Amendment 10](https://github.com/BroadbandForum/data-model-template/releases/tag/v1.10.0) and
     [TR-181 Issue 2 Amendment 14](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.3)
 
 * - Release 1.1.4
+  - November 2020
   - Corresponds to [TR-181 Issue 2 Amendment 14 Corrigendum 1](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.4)
 
 * - [Release 1.2][TR-369 Amendment 2]
+  - January 2022
   - Release contains specification for the User Services Platform 1.2
     
     * Clarify the expected responses in result of an `Operate` message
@@ -105,6 +118,7 @@
     [TR-181 Issue 2 Amendment 15](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.2.0)
 
 * - [Release 1.3][TR-369 Amendment 3]
+  - June 2023
   - Release contains the specification for the User Services Platform 1.3
     
     * Adds Appendix VI, "Software Modularization and USP-Enabled
@@ -141,11 +155,18 @@
       responses
     * Adds new requirement R-SEC.4b for Trusted Brokers
 
+* - [Release 1.3.1][TR-369 Amendment 3 Corrigendum 1]
+  - October 2023
+  - This Corrigendum has the following fixes
+    * Fix example by populating the empty UNIX Domain Socket references
+    * Small fixes to UDS example images
+    * Fix UnixDomainSocket path in example  
+
 :::
 
 ### Editors {.unnumbered .unlisted}
 
-::: {.list-table .usp-editors aligns=l,l,l,l widths=12,10,15,21}
+::: {.list-table .editors aligns=l,l,l,l widths=12,10,15,21}
 
 * - Name
   - Company
@@ -176,7 +197,7 @@
 
 ### Acknowledgments {.unnumbered .unlisted}
 
-::: {.list-table .usp-acknowledgments aligns=l,l,l widths=12,10,15}
+::: {.list-table .acknowledgments aligns=l,l,l widths=12,10,15}
 
 * - Name
   - Company
@@ -231,6 +252,7 @@
 [TR-369 Amendment 1]: https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf
 [TR-369 Amendment 2]: https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf
 [TR-369 Amendment 3]: https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf
+[TR-369 Amendment 3 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-1.pdf
 [TR-369 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf
 [TR-369 Corrigendum 2]: https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf
 [TR-369 Issue 1]: https://www.broadband-forum.org/download/TR-369_Issue-1.pdf

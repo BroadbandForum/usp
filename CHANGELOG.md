@@ -4,6 +4,17 @@
 
 See <https://usp.technology> for the current USP specification.
 
+## 2023-10-20: [Release 1.3.1][TR-369 Amendment 3 Corrigendum 1]
+
+*Tags: [v1.3.1] (USP specification), 
+       [v1.3.0][usp-data-models-v1.3.0] (data models didn't change)*
+
+### TR-369 Document
+This Corrigendum has the following fixes
+* Fix example by populating the empty UNIX Domain Socket references
+* Small fixes to UDS example images
+* Fix UnixDomainSocket path in example  
+
 ## 2023-06-14: [Release 1.3][TR-369 Amendment 3]
 
 *Tags: [v1.3.0] (USP specification), 
@@ -132,14 +143,14 @@ USP v1.2 Message Schema
 
 ## 2020-11-18: Release 1.1.4
 
-*Tags: [v1.1.2] (USP specification didn't change), 
+*Tags: [v1.1.4] (USP specification), 
        [v1.1.2][usp-data-models-v1.1.2] (data models didn't change)*
 
 Corresponds to [TR-181 Issue 2 Amendment 14 Corrigendum 1](https://github.com/BroadbandForum/usp-data-models/releases/tag/v1.1.4)
 
 ## 2020-11-05: Release 1.1.3
 
-*Tags: [v1.1.2] (USP specification didn't change), 
+*Tags: [v1.1.3] (USP specification), 
        [v1.1.2][usp-data-models-v1.1.2] (data models didn't change)*
 
 Corresponds to [TR-106 Amendment 10](https://github.com/BroadbandForum/data-model-template/releases/tag/v1.10.0) and
@@ -154,7 +165,7 @@ Clarifies several examples, requirements, and error types
 
 ## 2020-04-06: Release 1.1.1
 
-*Tags: [v1.1.0] (USP specification didn't change), 
+*Tags: [v1.1.1] (USP specification), 
        [v1.1.0][usp-data-models-v1.1.0] (data models didn't change)*
 
 Regenerated data model HTML using fixed version of the BBF report tool
@@ -214,6 +225,7 @@ USP v1.0 Message Schema
 [TR-369 Amendment 1]: https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf
 [TR-369 Amendment 2]: https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf
 [TR-369 Amendment 3]: https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf
+[TR-369 Amendment 3 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-1.pdf
 [TR-369 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf
 [TR-369 Corrigendum 2]: https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf
 [TR-369 Issue 1]: https://www.broadband-forum.org/download/TR-369_Issue-1.pdf
@@ -228,6 +240,10 @@ USP v1.0 Message Schema
 [v1.0.1]: https://github.com/BroadbandForum/usp/releases/tag/v1.0.1
 [v1.0.2]: https://github.com/BroadbandForum/usp/releases/tag/v1.0.2
 [v1.1.0]: https://github.com/BroadbandForum/usp/releases/tag/v1.1.0
+[v1.1.1]: https://github.com/BroadbandForum/usp/releases/tag/v1.1.1
 [v1.1.2]: https://github.com/BroadbandForum/usp/releases/tag/v1.1.2
+[v1.1.3]: https://github.com/BroadbandForum/usp/releases/tag/v1.1.3
+[v1.1.4]: https://github.com/BroadbandForum/usp/releases/tag/v1.1.4
 [v1.2.0]: https://github.com/BroadbandForum/usp/releases/tag/v1.2.0
 [v1.3.0]: https://github.com/BroadbandForum/usp/releases/tag/v1.3.0
+[v1.3.1]: https://github.com/BroadbandForum/usp/releases/tag/v1.3.1

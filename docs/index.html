@@ -16,8 +16,11 @@ connected devices, IoT endpoints, user services and home networks"/>
     div.columns{display: flex; gap: min(4vw, 1.5em);}
     div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
     ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
       width: 0.8em;
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
@@ -79,6 +82,7 @@ connected devices, IoT endpoints, user services and home networks"/>
   <!-- Automatic hover links styles -->
   <style>
   :root {
+      --hoverlink-gap: 0.2em;
       --hoverlink-size: 0.9em;
   }
 
@@ -86,13 +90,11 @@ connected devices, IoT endpoints, user services and home networks"/>
       text-decoration: none;
   }
 
-  .hoverlink::before {
-      content: " ";
-  }
-
   .hoverlink::after {
+      position: absolute;
       display: inline-block;
       content: "";
+      margin-left: var(--hoverlink-gap);
       width: var(--hoverlink-size);
       height: var(--hoverlink-size);
       background-size: var(--hoverlink-size) var(--hoverlink-size);

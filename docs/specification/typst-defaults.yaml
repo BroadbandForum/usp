@@ -1,0 +1,22 @@
+# Typst pandoc defaults file (YAML)
+
+# --columns defaults to 72
+# - tables might work better with a lower value, because pandoc uses it to
+#   determine when a table occupies the full page width
+# - but too low a value might cause undesirable line splitting
+# - use PANDOCTYPSTFLAGS += --columns=N to override this
+
+standalone: true
+
+# XXX need the full path because it's used to find other lua modules
+to: ../../../install/pandoc//custom/typst-writer.lua-citations
+
+# this is the pandoc template
+template: extended-template.typ
+
+metadata:
+  # this is included by the above pandoc template
+  template: typst-template.typ
+
+filters:
+  - typst-reorder.lua

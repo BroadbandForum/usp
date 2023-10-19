@@ -111,12 +111,12 @@ Here's an example set of data models for a USP Broker and 2 USP Services that ma
 
 USP Broker (NOTE: there isn't a Controller.1 instance because USP Service 1 doesn't have a Controller):
 
-    UnixDomainSocket.1.Path = /tmp/broker_agent_path
+    UnixDomainSocket.1.Path = /var/run/usp/broker_agent_path
     UnixDomainSocket.1.Mode = Listen
-    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
     UnixDomainSocket.2.Mode = Listen
     LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.1
-    LocalAgent.Controller.2.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.Controller.2.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.1
     LocalAgent.Controller.2.MTP.1.UDS.USPServiceRef = USPService.2
     USPService.1.EndpointID = doc::Service1
     USPService.1.DataModelPaths = PathA, PathB, PathC
@@ -129,19 +129,19 @@ USP Broker (NOTE: there isn't a Controller.1 instance because USP Service 1 does
 
 USP Service 1 (NOTE: USP Service 1 doesn't have a Controller, so there isn't a Controller instance in the USP Broker for this USP Service):
 
-    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
     UnixDomainSocket.2.Mode = Connect
-    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
     LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
     LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = <empty>
 
 USP Service 2 (has both an Agent and a Controller):
 
-    UnixDomainSocket.1.Path = /tmp/broker_agent_path
+    UnixDomainSocket.1.Path = /var/run/usp/broker_agent_path
     UnixDomainSocket.1.Mode = Connect
-    UnixDomainSocket.2.Path = /tmp/broker_controller_path
+    UnixDomainSocket.2.Path = /var/run/usp/broker_controller_path
     UnixDomainSocket.2.Mode = Connect
-    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = <empty>
+    LocalAgent.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
     LocalAgent.Controller.1.MTP.1.UDS.UnixDomainSocketRef = UnixDomainSocket.2
     LocalAgent.Controller.1.MTP.1.UDS.USPServiceRef = <empty>
 
@@ -167,12 +167,12 @@ As the USP Service starts up, it begins to connect to the USP Broker...
 
 As the USP Service starts up, it begins to connect to the USP Broker...
 
-- The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal port
+- The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
 	- Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
 	- Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
 	- After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
-- The Controller within the USP Service initiates the UNIX Domain Socket connection to the Agent on the USP Broker and the well-known internal port
+- The Controller within the USP Service initiates the UNIX Domain Socket connection to the Agent on the USP Broker and the well-known internal path
 	- Once the UNIX Domain Socket is connected, the USP Service's Controller will initiate the UNIX Domain Socket MTP Handshake mechanism
 	- Once the USP Broker's Agent receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Broker sends an empty UnixDomainSocketConnectRecord

@@ -4,15 +4,17 @@
 bbfNumber: TR-369
 bbfTitle: The User Services Platform
 bbfIssue: Issue
-bbfVersion: 1 Amendment 3
-bbfMonth: June
+bbfVersion: 1 Amendment 3 Corrigendum 1
+bbfMonth: October
 bbfYear: 2023
 bbfType: Technical Report
 bbfStatus: ''
 bbfContrib: ''
 bbfMajor: 1
 bbfMinor: 3
-bbfPatch: 0
+bbfPatch: 1
+bbfMicro: 0
+bbfExtra: 0
 bbfDraft: ''
 bbfBuild: ''
 

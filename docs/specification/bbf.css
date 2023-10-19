@@ -190,28 +190,6 @@ ul ul, ol ol {
     margin: .3em 0;
 }
 
-dl {
-    border: 3px double #ccc; /* BBF: added */
-    margin-bottom: 1em;
-}
-
-dt {
-    float: left; /* BBF: added */
-    clear: left; /* BBF: added */
-    width: 10%;  /* BBF: added */
-    font-weight: bold;
-    margin-bottom: .8em;
-}
-
-/* BBF: TBD work out how to handle multi-paragraph dd elements */
-dd {
-    margin: 0 0 .8em 2em;
-}
-
-dd:last-child {
-    margin-bottom: 0;
-}
-
 img {
     border: 0;
     -ms-interpolation-mode: bicubic;
