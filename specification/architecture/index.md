@@ -79,7 +79,7 @@ Unless the authority responsible for assigning an Endpoint ID assigns meaning to
 
 | authority-scheme | usage and rules for authority-id and instance-id |
 | ---------------: | :----------------------------------------------- |
-|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block Large" or "MA-L") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
+|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24, 28, or 36-bit ID (resulting in 6, 7 or 9 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
 | `cid`            | `authority-id` MUST be a CID assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. `authority-id` MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters).\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the CID.\
 Example: cid:3AA3F8:my-unique-usp-id-42 |
@@ -93,10 +93,10 @@ Example: `self::my-Agent` |
 | `user`           | An `authority-id` for "`user`" MUST be between 0 and 6 non-reserved characters in length.\
 The Endpoint ID, including `instance-id`, is assigned to the Endpoint via a user or management interface. |
 | `os`             | `authority-id` MUST be zero-length.\
-`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
+`instance-id `is `<OUI> "-" <SerialNumber>`, with `OUI` as defined above.\
 Example: `os::00256D-0123456789` |
 | `ops`            | `authority-id` MUST be zero-length.\
-`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
+`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, with `OUI` as defined above.\
 Example: `ops::00256D-STB-0123456789` |
 | `uuid`           | `authority-id` MUST be zero-length.\
 `instance-id` is a UUID [@RFC4122]\
@@ -193,9 +193,9 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 Path Names are represented by a hierarchy of Objects ("parents") and Sub-Objects ("children"), separated by the dot "." character, ending with a Parameter if referencing a Parameter Path. There are six different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
+1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)). An Object Path, as with an Object Instance Path, is sometimes referred to as a "Partial Path".
 
-2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)).
+2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). An Object Instance Path, as with an Object Path, is sometimes referred to as a "Partial Path".
 
 3.	Parameter Path - This is a Path Name of a particular Parameter of an Object.
 

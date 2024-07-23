@@ -208,11 +208,71 @@ Controller permissions are conveyed in the data model through Roles.
 
 A Role is described in the data model through use of the `ControllerTrust.Role.{i}.` Object. Each entry in this Object identifies the Role it describes, and has a `Permission.` Sub-Object for the `Targets` (data model Path Names that the related permissions apply to), permissions related to Parameters, Objects, instantiated Objects, and commands identified by the `Targets` Parameter, and the relative `Order` of precedence among `Permission.` entries for the Role (the larger value of this Parameter takes priority over an entry with a smaller value in the case of overlapping `Targets` entries for the Role).
 
-The permissions of a Role for the specified `Target` entries are described by `Param`, `Obj`, `InstantiatedObj`, and `CommandEvent` Parameters. Each of these is expressed as a string of 4 characters where each character represents a permission ("`r`" for Read, "`w`" for Write, "`x`" for Execute", and "`n`" for Notify). The 4 characters are always presented in the same order in the string (`rwxn`) and the lack of a permission is signified by a "`-`" character (e.g., `r--n`). How these permissions are applied to Parameters, Objects, and various Messages is described in the data model description of these Parameters.
+The permissions of a Role for the specified `Target` entries are described by `Param`, `Obj`, `InstantiatedObj`, and `CommandEvent` Parameters. Each of these is expressed as a string of 4 characters where each character represents a permission ("`r`" for Read, "`w`" for Write, "`x`" for Execute", and "`n`" for Notify). The 4 characters are always presented in the same order in the string (`rwxn`) and the lack of a permission is signified by a "`-`" character (e.g., `r--n`). How these permissions are applied to the data model, be it the Supported Data Model or the Instantiated Data Model, is described in the data model description of these Parameters, Objects, and various Messages.
 
 An Agent that wants to allow Controllers to define and modify Roles will implement the `ControllerTrust.Role.{i}.` Object with all of the Parameters listed in the data model. In order for a Controller to define or modify Role entries, it will need to be assigned a Role that gives it the necessary permission. Care should be taken to avoid defining this Role’s permissions such that an Agent with this Role can modify the Role and no longer make future modifications to the `ControllerTrust.Role.{i}.` Object.
 
 A simple Agent that only wants to inform Controllers of pre-defined Roles (with no ability to modify or define additional Roles) can implement the `ControllerTrust.Role.` Object with read-only data model definition for all entries and Parameters. A simple Agent could even implement the Object with read-only data model definition and just the `Alias` and `Role` Parameters, and no `Permission.` Sub-Object; this could be sufficient in a case where the Role names convey enough information (e.g., there are only two pre-defined Roles named `"Untrusted"` and `"FullAccess"`).
+
+In this example, the device is configured with a single role that allows a Controller to access the entire Data Model.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Order = 1
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Targets = Device
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Param = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Obj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.InstantiatedObj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.CommandEvent = rwxn
+
+
+The next example builds upon the previous example where the device was configured with a role that allows a Controller to access the entire Data Model (`Permission.1`), but in this example there is an exception added that prevents the Controller from accessing the LocalAgent.ControllerTrust portion of the Data Model (`Permission.2`). The reason this works is due to the Order parameter. Since the Order parameter in the `Permission.2` instance (value of 2) is larger than (higher priority) the Order parameter in the `Permission.1` instance (value of 1), `Permission.2` is applied on top of `Permission.1`.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = ----
+
+Conversely, that role could have been configured to allow access to the permissions, but not allowed access to read, write, or receive ValueChange notifications for the `Order` parameter.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust.Role.*.Permission.*.Order
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = rwxn
+
+Based on the above example device settings, if a Controller was assigned the previously defined role and it attempted to perform an Add operation on the Permission table where param_settings included the `Order` parameter as a required setting, the Add operation would fail because the Controller does not have write permissions for the `Order` parameter.
+
+```{filter=pbv type=Request}
+ add {
+     allow_partial: false
+     create_objs {
+        obj_path: "Device.LocalAgent.ControllerTrust.Role.1.Permission."
+        param_settings {
+          param: "Order"
+          value: "12"
+          required: true
+        }
+      }
+    }
+```
+
+Now, if that same Controller attempted to perform that Add operation on the Permission table but this time the param_settings included the `Order` parameter as a non-required setting, the Add operation would NOT fail due to the lack of write permissions for the `Order` parameter, instead the value requested for the `Order` parameter would be ignored.
+
+```{filter=pbv type=Request}
+ add {
+     allow_partial: false
+      create_objs {
+        obj_path: "Device.LocalAgent.ControllerTrust.Role.1.Permission."
+        param_settings {
+          param: "Order"
+          value: "12"
+          required: false
+       }
+     }
+    }
+```
 
 #### Special Roles
 
@@ -222,7 +282,11 @@ The `UntrustedRole` is the Role the Agent will automatically assign to any Contr
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
 
-The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to secured parameter values.
+The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to `secured` parameter values. When the `SecuredRoles` Parameter references an instance of the Role table containing a Target with a Partial Path, then any included Parameters that are not identified as `secured` will be ignored. The Agent will have access to all `secured` parameters in that path.
+
+For example, if a Controller needed access to all `secured` Parameters in the Data Model, then the `SecuredRoles` Parameter could be set to the role that was defined in the previous example:
+
+    Device.LocalAgent.ControllerTrust.SecuredRoles = Device.LocalAgent.ControllerTrust.Role.1
 
 #### A Controller’s Role
 
@@ -232,15 +296,15 @@ For example,
  Given the following `ControllerTrust.Role.{i}.` entries:
 
 ```
-  i=1, Role = "A"; Permission.1.: Targets = "Device.LocalAgent.", Order = 3, Param = "r---"
-  i=1, Role = "A"; Permission.2.: Targets = "Device.LocalAgent.Controller.", Order = 55, Param = "r-xn"
-  i=3, Role = "B"; Permission.1: Targets = "Device.LocalAgent.", Order = 20, Param = "r---"
-  i=3, Role = "B"; Permission.5: Targets = "Device.LocalAgent.Controller.", Order = 78, Param = "----"
+  i=1, Role = "A"; Permission.1.: Targets = "Device.LocalAgent", Order = 3, Param = "r---"
+  i=1, Role = "A"; Permission.2.: Targets = "Device.LocalAgent.Controller", Order = 55, Param = "r-xn"
+  i=3, Role = "B"; Permission.1.: Targets = "Device.LocalAgent", Order = 20, Param = "r---"
+  i=3, Role = "B"; Permission.5.: Targets = "Device.LocalAgent.Controller", Order = 78, Param = "----"
 ```
 
- and `Device.LocalAgent.Controller.1.AssignedRole` = "Device.LocalAgent. ControllerTrust.Role.1., Device.LocalAgent. ControllerTrust.Role.3."
+ and `Device.LocalAgent.Controller.1.AssignedRole` = `"Device.LocalAgent.ControllerTrust.Role.1", "Device.LocalAgent. ControllerTrust.Role.3"`
 
-When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A Permission.2 takes precedence over Permission.1 (55 > 3). For B, Permission.5 takes precedence over Permission.1 (78 > 20). The union of A and B is "r-xn" + "----" = "r-xn".
+When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A `Permission.2` takes precedence over `Permission.1` (55 > 3). For B, `Permission.5` takes precedence over `Permission.1` (78 > 20). The union of A and B is `r-xn` + `----` = `r-xn`.
 
 #### Role Associated with a Credential or Challenge
 

@@ -124,6 +124,10 @@ A Binding is a means of sending Messages across an underlying Message Transfer P
 
 The term used to define and refer to an Object-specific Operation in the Agent's Instantiated or Supported Data Model.
 
+**Command Path**
+
+A Command Path is a Path Name that addresses a Command of an Object or Object Instance. See [](#sec:path-names).
+
 **Connection Capabilities**
 
 Connection Capabilities are information related to an Endpoint that describe how to communicate with that Endpoint, and provide a very basic idea of what sort of function the Endpoint serves.
@@ -156,6 +160,10 @@ An Error is a Message that contains failure information associated with a Reques
 **Event**
 
 An Event is a set of conditions that, when met, triggers the sending of a Notification.
+
+**Event Path**
+
+A Event Path is a Path Name that addresses an Event of an Object or Object Instance. See [](#sec:path-names).
 
 **Expression**
 
@@ -251,7 +259,7 @@ A Parameter Path is a Path Name that addresses a Parameter of an Object or Objec
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
+A Path Name is a fully qualified reference to an Object, Object Instance, Command, Event, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
 
 **Path Reference**
 
@@ -499,7 +507,7 @@ Unless the authority responsible for assigning an Endpoint ID assigns meaning to
 
 | authority-scheme | usage and rules for authority-id and instance-id |
 | ---------------: | :----------------------------------------------- |
-|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block Large" or "MA-L") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
+|`oui`             | `authority-id` MUST be an OUI (now called "MAC Address Block") assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. authority-id MUST use hex encoding of the 24, 28, or 36-bit ID (resulting in 6, 7 or 9 hex characters). `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the OUI. Example:` oui:00256D:my-unique-bbf-id-42` |
 | `cid`            | `authority-id` MUST be a CID assigned and registered by the IEEE Registration Authority [@IEEEREG] to the entity responsible for this Endpoint. `authority-id` MUST use hex encoding of the 24-bit ID (resulting in 6 hex characters).\
 `instance-id` syntax is defined by this entity, who is also responsible for determining instance-id assignment mechanisms and for ensuring uniqueness of the instance-id within the context of the CID.\
 Example: cid:3AA3F8:my-unique-usp-id-42 |
@@ -513,10 +521,10 @@ Example: `self::my-Agent` |
 | `user`           | An `authority-id` for "`user`" MUST be between 0 and 6 non-reserved characters in length.\
 The Endpoint ID, including `instance-id`, is assigned to the Endpoint via a user or management interface. |
 | `os`             | `authority-id` MUST be zero-length.\
-`instance-id `is `<OUI> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
+`instance-id `is `<OUI> "-" <SerialNumber>`, with `OUI` as defined above.\
 Example: `os::00256D-0123456789` |
 | `ops`            | `authority-id` MUST be zero-length.\
-`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, as defined in TR-069 [@TR-069] Section 3.4.4.\
+`instance-id` is `<OUI> "-" <ProductClass> "-" <SerialNumber>`, with `OUI` as defined above.\
 Example: `ops::00256D-STB-0123456789` |
 | `uuid`           | `authority-id` MUST be zero-length.\
 `instance-id` is a UUID [@RFC4122]\
@@ -613,9 +621,9 @@ A Path Name is a fully qualified reference to an Object, Object Instance, or Par
 
 Path Names are represented by a hierarchy of Objects ("parents") and Sub-Objects ("children"), separated by the dot "." character, ending with a Parameter if referencing a Parameter Path. There are six different types of Path Names used to address the data model of an Agent:
 
-1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)).
+1.	Object Path - This is a Path Name of either a Single-Instance Object, or the Path Name to a Multi-Instance Object (i.e., a Data Model Table). An Object Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). When addressing a Table in the Agent's Supported Data Model that contains one or more Multi-Instance Objects in the Path Name, the sequence "{i}" is used as a placeholder (see [](#sec:the-getsupporteddm-message)). An Object Path, as with an Object Instance Path, is sometimes referred to as a "Partial Path".
 
-2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)).
+2.	Object Instance Path - This is a Path Name to a Row in a Table in the Agent's Instantiated Data Model (i.e., an Instance of a Multi-Instance Object). It uses an Instance Identifier to address a particular Instance of the Object.  An Object Instance Path ends in a "." Character (as specified in TR-106 [@TR-106]), except when used in a reference Parameter (see [](#sec:reference-following)). An Object Instance Path, as with an Object Path, is sometimes referred to as a "Partial Path".
 
 3.	Parameter Path - This is a Path Name of a particular Parameter of an Object.
 
@@ -1806,6 +1814,8 @@ During the establishment of the WebSocket session, the WebSocket client informs 
 
 When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the request URI of the opening handshake contains a `key=value` pair in its `query` component to provide the Endpoint ID of the client. `eid` is used as the key to the pair, while the value is the Endpoint ID of the client, e.g. `eid=doc::agent`.
 
+*Note: USP Endpoint IDs can contain percent-encoded characters, which can create confusion when encoding it for URI use. The Endpoint ID needs to be treated as opaque data for it to be properly "roundtripable" when encoded/decoded for URI use, thus any percent character needs to be percent-encoded, e.g. `doc::agent%21` will be encoded as `doc::agent%2521`.*
+
 **[R-WS.9]{}** - The WebSocket's handshake `Sec-WebSocket-Protocol` header for exchange of USP Records using the protocol-buffers encoding mechanism MUST be `v1.usp`.
 
 **[R-WS.10]{}** - A WebSocket client MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when initiating a WebSocket session.
@@ -1815,6 +1825,8 @@ When a WebSocket connection is being initiated with TLS, no USP Record is sent u
 *Note: Requirement [R-WS.10a]() was removed in USP 1.3, due to the impossibility of setting WebSocket Extensions in some environments.*
 
 **[R-WS.10b]{}** - A WebSocket client MUST include its Endpoint ID, via a `key=value` pair, in the query component of the request URI in its opening handshake, defined in section 1.3 of RFC 6455 [@RFC6455]. The `key` part of the pair MUST have a value of `eid` and the `value` part MUST be the client's Endpoint ID. This pair MUST be separated from other query data by the `&` character.
+
+**[R-WS.10c]{}** - When encoding the USP Endpoint ID for URI use, it MUST be treated as opaque data and any percent character MUST itself be percent-encoded, i.e. as `%25`.
 
 **[R-WS.11]{}** - A WebSocket server that supports USP Endpoints MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when responding to an initiation of a WebSocket session.
 
@@ -1834,11 +1846,15 @@ RFC 6455 defines a number of type of WebSocket control frames (e.g., Ping, Pong,
 
 **[R-WS.13]{}** - A USP Endpoint MUST implement the WebSocket control frames defined in section 5.5 of RFC 6455 [@RFC6455].
 
-USP Records can be transferred between USP Controllers and USP Agents over an established WebSocket session. These USP Records are encapsulated within a binary WebSocket data frame as depicted by the figure below.
+USP Records can be transferred between USP Controllers and USP Agents over an established WebSocket session. These USP Records are encapsulated within a binary WebSocket data frame as depicted by the figure below. WebSocket message fragmentation should be avoided, because its main benefit does not apply for the case of sending USP Records.
 
 ![USP Request using a WebSocket Session](mtp/websocket/USP-request-over-websocket.png)
 
 **[R-WS.14]{}** - In order for USP Records to be transferred between a USP Controller and Agent using WebSockets MUST be encapsulated within as a binary WebSocket data frame as defined in section 5.6 of RFC 6455 [@RFC6455].
+
+**[R-WS.14a]{}** - USP Endpoints SHOULD NOT use WebSocket message fragmentation for sending USP Records.
+
+**[R-WS.14b]{}** - USP Endpoints MUST support WebSocket message fragmentation in received USP Records.
 
 **[R-WS.15]{}** - USP Records are transferred between USP Endpoints using message body procedures as defined in section 6 of RFC 6455 [@RFC6455].
 
@@ -2061,7 +2077,7 @@ The [USP Discovery](#sec:discovery) section details requirements about the gener
 
 ### MTP Message Encryption
 
-STOMP MTP message encryption is provided using TLS certificates.
+STOMP MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455 [@RFC6455].
 
 **[R-STOMP.36]{}** - USP Endpoints utilizing STOMP clients for message transport MUST implement TLS 1.2 RFC 5246 [@RFC5246] or later with backward compatibility to TLS 1.2.
 
@@ -2318,7 +2334,7 @@ This will allow support for Agents that try to subscribe to "+/\<Endpoint ID\>/#
 
 ### MTP Message Encryption
 
-MQTT MTP message encryption is provided using TLS certificates.
+MQTT MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455 [@RFC6455].
 
 **[R-MQTT.48]{}** - USP Endpoints utilizing MQTT clients for message transport MUST implement TLS 1.2 [@RFC5246] or later with backward compatibility to TLS 1.2.
 
@@ -2447,7 +2463,11 @@ Other USP Record processing failures (where the USP Record can be extracted, but
 
 ### MTP Message Encryption
 
-Encryption is not required for the UNIX domain socket MTP as all messages are exchanged between processes that reside internally within the device.
+Encryption is not required for the UNIX domain socket MTP as all messages are exchanged between processes that reside internally within the device, but UNIX domain socket MTP message encryption can optionally be provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455 [@RFC6455].
+
+**[R-UDS.23a]{}** - USP Endpoints utilizing UNIX domain sockets for message transport, that choose to use TLS for MTP message encryption, MUST implement TLS 1.2 RFC 5246 [@RFC5246] or later with backward compatibility to TLS 1.2.
+
+**[R-UDS.23b]{}** - USP Controller certificates MAY contain domain names with wildcard characters per RFC 6125 [@RFC6125] guidance.
 
 ### Handling Other UNIX Domain Socket Failures
 
@@ -3238,6 +3258,22 @@ In order to maintain addressing integrity of Multi-Instance Objects, the followi
 **[R-KEY.1]{}** - Non-functional Unique Keys (as defined in TR-106 [@TR-106]) MUST NOT change in the Agent's Instantiated Data Model after creation, as defined in [R-ADD.5]().
 
 **[R-KEY.2]{}** - Functional Unique Keys (as defined in TR-106 [@TR-106]) MAY change incidentally as part of normal operation, but any change MUST abide by the uniqueness rules (i.e., no conflict with other instances).
+
+### writeOnceReadOnly Parameter Access
+
+There are several parameter access types defined in [@TR-106] that specify what a Controller is allowed to do with 
+a particular Parameter as defined in [@TR-181]. Of these, `writeOnceReadOnly` affects the response of an Agent in 
+specific ways. A `writeOnceReadOnly` Parameter can be set only once by a Controller, and then becomes 
+read-only. In some cases, the value is assigned by the Agent upon Object creation if not specified by the Controller.
+The expected behavior is otherwise as follows:
+
+- When a `writeOnceReadyOnly` Parameter is set upon Object creation via the `Add` Message, the Controller making the 
+Add Request is considered to have set the Parameter.
+- When a `writeOnceReadOnly` Parameter is updated via a `Set` Message, an Agent will reject the update if the 
+Parameter has already been set.
+- `writeOnceReadyOnly` Parameters are reported as `PARAM_READ_WRITE (1)` in a `GetSupportedDM` Response. Controllers 
+should rely on knowledge of the Agent's data model through other means (i.e., officially published data models) 
+to determine that a parameter is `writeOnceReadOnly`.
 
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
@@ -4105,6 +4141,8 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 **[R-GET.1]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.
 
+*Note: Requiring Object Read permission is intended to act as a security feature. If a Controller does not have permission to obtain the names of the data model elements of an object via a `GetSupportedDM` request, then the Controller should not be able to discover these by probing with `Get` requests.*
+
 `string err_msg`
 
 This field contains additional information about the reason behind the error.
@@ -4132,7 +4170,7 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 **[R-GET.3]{}** - If the `requested_path` included a Path Name to a Parameter, `result_params` MUST contain only the Parameter included in that Path Name.
 
-**[R-GET.4]{}** - If the Controller does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
+**[R-GET.4]{}** - If the Controller has Read permission on the Object or Object Instance being returned in the `resolved_path`, but does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
 
 #### Get Message Supported Error Codes
 
@@ -4351,6 +4389,7 @@ For example, the Controller wishes to learn the Wi-Fi capabilities the Agent rep
       return_commands : false
       return_events : false
       return_params : false
+      return_unique_key_sets : false
     }
 ```
 
@@ -4447,6 +4486,7 @@ In another example request:
       return_commands : true
       return_events : true
       return_params : true
+      return_unique_key_sets : true
     }
 ```
 
@@ -4497,21 +4537,48 @@ The Agent's response would be:
           supported_obj_path: "Device.WiFi.Radio.{i}."
           access: OBJ_READ_ONLY
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "Name"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.SSID.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "Name"
+          }
+          unique_key_sets {
+            key_names: "BSSID"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.AccessPoint.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "SSIDReference"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.EndPoint.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "SSIDReference"
+          }
         }
       }
     }
@@ -4519,9 +4586,9 @@ The Agent's response would be:
 
 #### GetSupportedDM Request Fields
 
-`repeated obj_paths`
+`repeated string obj_paths`
 
-This field contains a repeated set of Path Names to Objects in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
+This field contains a repeated set of Path Names to Objects, Commands, Events, or Parameters in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
 
 `bool first_level_only`
 
@@ -4538,6 +4605,10 @@ This field, if `true`, indicates that, in the `supported_objs`, the Agent should
 `bool return_params`
 
 This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` field containing Parameters supported by the reported Object(s).
+
+`bool return_unique_key_sets`
+
+This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `unique_key_sets` field containing Parameters which uniquely identify an instance of the reported Object(s).
 
 #### GetSupportedDMResp Fields
 
@@ -4598,11 +4669,15 @@ The field contains a message of type `SupportedParamResult` for each Parameter s
 
 `repeated SupportedCommandResult supported_commands`
 
-The field contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
+The field contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Commands supported by the Object, this should be an empty list.
 
 `repeated SupportedEventResult supported_events`
 
-The field contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
+The field contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Events supported by the Object, this should be an empty list.
+
+`repeated SupportedUniqueKeySet unique_key_sets`
+
+The field contains a message of type `SupportedUniqueKeySet` for each UniqueKeySet supported by the reported Object. If the Object has no unique keys (for example a single instance object), this should be an empty list.
 
 `repeated string divergent_paths`
 
@@ -4618,7 +4693,7 @@ This field contains the Relative Path of the Parameter.
 
 `ParamAccessType access`
 
-The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
+The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. If the Data Model indicates that a Parameter is writeOnceReadOnly, the GetSupportedDM returns PARAM_READ_WRITE. It is an enumeration of:
 
 ```
     PARAM_READ_ONLY (0)
@@ -4692,6 +4767,13 @@ This field contains the Relative Path of the Event.
 `repeated string arg_names`
 
 This field contains a repeated set of Relative Paths for the arguments of the Event.
+
+###### SupportedUniqueKeySet
+
+`repeated string key_names`
+
+This field contains a repeated set of relative parameters, whose values together uniquely identify an instance of the object in the instantiated data model.
+
 
 #### GetSupportedDM Error Codes
 
@@ -4847,7 +4929,7 @@ This field contains a repeated set of RegistrationPaths for each path the USP Ag
 
 This field contains the Object Path the USP Agent wants to register.
 
-**[R-REG.2]{}** - The path field MUST contain an Object Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
+**[R-REG.2]{}** - The path field MUST contain an Object Path, Command Path, Event Path, or Parameter Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
 
 #### Register Response Fields
 
@@ -4970,7 +5052,7 @@ This field contains a set of paths that the USP Agent wants to deregister.
 
 **[R-DEREG.3]{}** - A USP Agent MAY deregister one or more Service Elements with one Deregister Request message containing multiple path fields.
 
-*Note: The path field contains an Object Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
+*Note: The path field contains an Object Path, Command Path, Event Path, or Parameter Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
 
 #### Deregister Response Fields
 
@@ -5107,17 +5189,23 @@ The `OperationComplete` notification is used to indicate that an asynchronous Ob
 
 #### OnBoardRequest
 
-An `OnBoardRequest` notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
+An `OnBoardRequest` notification is used by the Agent to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
 
 **[R-NOT.5]{}** - An Agent MUST send an `OnBoardRequest` notify request in the following circumstances:
 
-1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the Device:2 Data Model [@TR-181]. This requirement applies only to those Controller table instances that have their `Enabled` Parameter set to `true`.
+1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the Device:2 Data Model [@TR-181]. This requirement applies only to those Controller table instances that have their `Enabled` Parameter set to `true`. When the implementation supports the `Device.LocalAgent.Controller.{i}.OnBoardingComplete` parameter, executing this command will set the parameter value to `false`.
 
 2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
 
-*Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.*
+3.  When the implementation supports the `Device.LocalAgent.Controller.{i}.OnBoardingComplete` parameter and its value is set to false as this parameter signifies the Controller requires an `OnBoardRequest`. This parameter SHOULD be set to true by the Agent or Controller when the onboarding has been completed.
 
-**[R-NOT.6]{}** If a response is required, the OnBoardRequest MUST follow the Retry logic defined above.
+The value of the `OnBoardingRestartTime` parameter, if supported, describes how long the USP Agent must wait to send another `OnBoardRequest` when `OnBoardingComplete` remains `false`. This timer starts as soon as the Agent receives the `NotifyResponse` message for the original `OnBoardRequest`, because the Notification Retry mechanism needs to be completed first.
+
+*Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription. However it is important that the OnBoardRequest reaches its destination so it MUST be sent with `send_resp=true`. In other words, it behaves as a subscription with `NotifRetry` set to true. Because the Controller might be unreachable for a long time, the notification MUST not expire, so it MUST behave as a subscripton with `NotifExpiration` set to 0.*
+
+**[R-NOT.6]{}** The OnBoardRequest MUST be sent with send_resp=true and MUST follow the Retry logic defined above.
+
+**[R-NOT.6a]{}** The OnBoardRequest MUST be retried until the Controller confirms it has received it with a Notify Response message.
 
 #### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what Parameters, if any, are returned as part of the notification.
@@ -5379,7 +5467,7 @@ A Controller can cancel a request that is still present in the Agent's `Device.L
 
 ![Operate Message Flow for Asynchronous Operations](messages/asynchronous_operation.png)
 
-#### Persistance of Asynchronous Operations
+#### Persistence of Asynchronous Operations
 
 Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that  Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table, and is considered to have failed. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.
 
@@ -5409,7 +5497,7 @@ If an asynchronous operation is triggered multiple times by one or more Controll
 
 ### Operate Examples
 
-In this example, the Controller requests that the Agent initiate the SendOnBoardRequest() operation defined in the `Device.LocalAgent.Controller.` Object.
+In this example of a synchronous command, the Controller requests that the Agent initiate the SendOnBoardRequest() operation defined in the `Device.LocalAgent.Controller.` Object.
 
 ```{filter=pbv}
 header {
@@ -5430,6 +5518,40 @@ body {
 ```{filter=pbv}
 header {
   msg_id: "42314"
+  msg_type: OPERATE_RESP
+}
+body {
+  response {
+    operate_resp {
+      operation_results {
+        executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
+      }
+    }
+  }
+}
+```
+
+In this example of an asynchronous command, the Controller requests that the Agent initiate the SelfDiagnostics() operation defined in the `Device.` object. 
+
+```{filter=pbv}
+header {
+  msg_id: "42315"
+  msg_type: OPERATE
+}
+body {
+  request {
+    operate {
+      command: 'Device.SelfTestDiagnostics()'
+      command_key: "selftest_command_key"
+      send_resp: true
+    }
+  }
+}
+```
+
+```{filter=pbv}
+header {
+  msg_id: "42315"
   msg_type: OPERATE_RESP
 }
 body {
@@ -5460,7 +5582,7 @@ This field contains a string used as a reference by the Controller to match the 
 
 This field lets the Controller indicate to Agent whether or not it expects a response in association with the operation request.
 
-**[R-OPR.4]{}** - When `send_resp` is set to `false`, the target Endpoint SHOULD NOT send an `OperateResp` Message to the source Endpoint. If an error occurs during the processing of an `Operate` Message, the target Endpoint SHOULD send an `Error` Message to the source Endpoint. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.
+**[R-OPR.4]{}** - When `send_resp` is set to `false`, the target Endpoint SHOULD NOT send an `OperateResp` Message to the source Endpoint. If an error occurs during the processing of an `Operate` Message, the target Endpoint MAY send an `OperateResp` Message to the source Endpoint containing relevant `cmd_failure` elements. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.
 
 *Note: The requirement in the previous versions of the specification also discouraged the sending of an `Error` Message, however the Controller issuing the `Operate` might want to learn about and handle errors occurring during the processing of the `Operate` request but still ignore execution results.*
 
@@ -5468,7 +5590,7 @@ This field lets the Controller indicate to Agent whether or not it expects a res
 
 This field contains a map of key/value pairs indicating the input arguments (relative to the Command Path in the command field) to be passed to the method indicated in the command field.
 
-**[R-OPR.5]{}** - A `Command` can have mandatory `input_args` as defined in the Supported Data Model. When a mandatory Input argument is omitted from the `input_args` field, the Agent MUST respond with an `Error` of type `7004 Invalid arguments` and stop processing the `Operate` Message.
+**[R-OPR.5]{}** - A `Command` can have mandatory `input_args` as defined in the Supported Data Model. When a mandatory Input argument is omitted from the `input_args` field, the Agent MUST, in its `OperateResp`, include a `cmd_failure` element containg an `err_code` of type `7027` Invalid Command Arguments and stop processing the command.
 
 **[R-OPR.6]{}** - When an unrecognized Input argument is included in the `input_args` field, the Agent MUST ignore the Input argument and continue processing the `Operate` Message.
 
@@ -5530,13 +5652,13 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | :--- | :------------ | :------------ | :--------------------------------------------- |
 | `7000` | Message failed	| Error Message | This error indicates a general failure that is described in an err_msg field. |
 | `7001` | Message not supported | Error Message | This error indicates that the attempted message was not understood by the target Endpoint.|
-| `7002` | Request denied (no reason specified) | Error Message | This error indicates that the target Endpoint cannot or will not process the message. |
-| `7003` | Internal error | Error Message | This error indicates that the message failed due to internal hardware or software reasons. |
-| `7004` | Invalid arguments | Error Message | This error indicates that the message failed due to invalid values in the USP message. |
-| `7005` | Resources exceeded | Error Message | This error indicates that the message failed due to memory or processing limitations on the target Endpoint. |
-| `7006` | Permission denied  | Error Message | This error indicates that the source Endpoint does not have the authorization for this action. |
-| `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target Endpoint in an invalid or unrecoverable state. |
-| `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. |
+| `7002` | Request denied (no reason specified) | Any | This error indicates that the target Endpoint cannot or will not process the message or operation. |
+| `7003` | Internal error | Any | This error indicates that the message or operation failed due to internal hardware or software reasons. |
+| `7004` | Invalid arguments | Any | This error indicates that the message or operation failed due to invalid values in the USP message. |
+| `7005` | Resources exceeded | Any | This error indicates that the message or operation failed due to memory or processing limitations on the target Endpoint. |
+| `7006` | Permission denied  | Any | This error indicates that the source Endpoint does not have the authorization for this action. |
+| `7007` | Invalid configuration | Any | This error indicates that the message or operation failed because processing the message would put the target Endpoint in an invalid or unrecoverable state. |
+| `7008` | Invalid path syntax | Any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. | 
 | `7009` | Parameter action failed | Set | This error indicates that the Parameter failed to update for a general reason described in an err_msg field. |
 | `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated Parameters. |
 | `7011` | Invalid type | Add, Set | This error indicates that the received string can not be interpreted as a value of the correct type expected for the Parameter. |
@@ -5778,11 +5900,71 @@ Controller permissions are conveyed in the data model through Roles.
 
 A Role is described in the data model through use of the `ControllerTrust.Role.{i}.` Object. Each entry in this Object identifies the Role it describes, and has a `Permission.` Sub-Object for the `Targets` (data model Path Names that the related permissions apply to), permissions related to Parameters, Objects, instantiated Objects, and commands identified by the `Targets` Parameter, and the relative `Order` of precedence among `Permission.` entries for the Role (the larger value of this Parameter takes priority over an entry with a smaller value in the case of overlapping `Targets` entries for the Role).
 
-The permissions of a Role for the specified `Target` entries are described by `Param`, `Obj`, `InstantiatedObj`, and `CommandEvent` Parameters. Each of these is expressed as a string of 4 characters where each character represents a permission ("`r`" for Read, "`w`" for Write, "`x`" for Execute", and "`n`" for Notify). The 4 characters are always presented in the same order in the string (`rwxn`) and the lack of a permission is signified by a "`-`" character (e.g., `r--n`). How these permissions are applied to Parameters, Objects, and various Messages is described in the data model description of these Parameters.
+The permissions of a Role for the specified `Target` entries are described by `Param`, `Obj`, `InstantiatedObj`, and `CommandEvent` Parameters. Each of these is expressed as a string of 4 characters where each character represents a permission ("`r`" for Read, "`w`" for Write, "`x`" for Execute", and "`n`" for Notify). The 4 characters are always presented in the same order in the string (`rwxn`) and the lack of a permission is signified by a "`-`" character (e.g., `r--n`). How these permissions are applied to the data model, be it the Supported Data Model or the Instantiated Data Model, is described in the data model description of these Parameters, Objects, and various Messages.
 
 An Agent that wants to allow Controllers to define and modify Roles will implement the `ControllerTrust.Role.{i}.` Object with all of the Parameters listed in the data model. In order for a Controller to define or modify Role entries, it will need to be assigned a Role that gives it the necessary permission. Care should be taken to avoid defining this Role’s permissions such that an Agent with this Role can modify the Role and no longer make future modifications to the `ControllerTrust.Role.{i}.` Object.
 
 A simple Agent that only wants to inform Controllers of pre-defined Roles (with no ability to modify or define additional Roles) can implement the `ControllerTrust.Role.` Object with read-only data model definition for all entries and Parameters. A simple Agent could even implement the Object with read-only data model definition and just the `Alias` and `Role` Parameters, and no `Permission.` Sub-Object; this could be sufficient in a case where the Role names convey enough information (e.g., there are only two pre-defined Roles named `"Untrusted"` and `"FullAccess"`).
+
+In this example, the device is configured with a single role that allows a Controller to access the entire Data Model.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Order = 1
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Targets = Device
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Param = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Obj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.InstantiatedObj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.1.CommandEvent = rwxn
+
+
+The next example builds upon the previous example where the device was configured with a role that allows a Controller to access the entire Data Model (`Permission.1`), but in this example there is an exception added that prevents the Controller from accessing the LocalAgent.ControllerTrust portion of the Data Model (`Permission.2`). The reason this works is due to the Order parameter. Since the Order parameter in the `Permission.2` instance (value of 2) is larger than (higher priority) the Order parameter in the `Permission.1` instance (value of 1), `Permission.2` is applied on top of `Permission.1`.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = ----
+
+Conversely, that role could have been configured to allow access to the permissions, but not allowed access to read, write, or receive ValueChange notifications for the `Order` parameter.
+
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust.Role.*.Permission.*.Order
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = rwxn
+    Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = rwxn
+
+Based on the above example device settings, if a Controller was assigned the previously defined role and it attempted to perform an Add operation on the Permission table where param_settings included the `Order` parameter as a required setting, the Add operation would fail because the Controller does not have write permissions for the `Order` parameter.
+
+```{filter=pbv type=Request}
+ add {
+     allow_partial: false
+     create_objs {
+        obj_path: "Device.LocalAgent.ControllerTrust.Role.1.Permission."
+        param_settings {
+          param: "Order"
+          value: "12"
+          required: true
+        }
+      }
+    }
+```
+
+Now, if that same Controller attempted to perform that Add operation on the Permission table but this time the param_settings included the `Order` parameter as a non-required setting, the Add operation would NOT fail due to the lack of write permissions for the `Order` parameter, instead the value requested for the `Order` parameter would be ignored.
+
+```{filter=pbv type=Request}
+ add {
+     allow_partial: false
+      create_objs {
+        obj_path: "Device.LocalAgent.ControllerTrust.Role.1.Permission."
+        param_settings {
+          param: "Order"
+          value: "12"
+          required: false
+       }
+     }
+    }
+```
 
 #### Special Roles
 
@@ -5792,7 +5974,11 @@ The `UntrustedRole` is the Role the Agent will automatically assign to any Contr
 
 The `BannedRole` (if implemented) is assigned automatically by the Agent to Controllers whose certificates have been revoked. If it is not implemented, the Agent can use the `UntrustedRole` for this, as well. It is also possible to simply implement policy for treatment of invalid or revoked certificates (e.g., refuse to connect), rather than associate them with a specific Role. This is left to the Agent policy implementation.
 
-The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to secured parameter values.
+The `SecuredRoles` (if implemented) is the Role assigned to Controllers that are authorized to have access to `secured` Parameter values. If the `SecuredRoles` is not assigned to a given Controller, or if the `SecuredRoles` is not implemented, then `secured` Parameters are to be considered as `hidden`, in which case the Agent returns a null value, e.g. an empty string, to this Controller, regardless of the actual value. Only Controllers with a secured Role assigned (and the appropriate permissions set), are able to have access to `secured` parameter values. When the `SecuredRoles` Parameter references an instance of the Role table containing a Target with a Partial Path, then any included Parameters that are not identified as `secured` will be ignored. The Agent will have access to all `secured` parameters in that path.
+
+For example, if a Controller needed access to all `secured` Parameters in the Data Model, then the `SecuredRoles` Parameter could be set to the role that was defined in the previous example:
+
+    Device.LocalAgent.ControllerTrust.SecuredRoles = Device.LocalAgent.ControllerTrust.Role.1
 
 #### A Controller’s Role
 
@@ -5802,15 +5988,15 @@ For example,
  Given the following `ControllerTrust.Role.{i}.` entries:
 
 ```
-  i=1, Role = "A"; Permission.1.: Targets = "Device.LocalAgent.", Order = 3, Param = "r---"
-  i=1, Role = "A"; Permission.2.: Targets = "Device.LocalAgent.Controller.", Order = 55, Param = "r-xn"
-  i=3, Role = "B"; Permission.1: Targets = "Device.LocalAgent.", Order = 20, Param = "r---"
-  i=3, Role = "B"; Permission.5: Targets = "Device.LocalAgent.Controller.", Order = 78, Param = "----"
+  i=1, Role = "A"; Permission.1.: Targets = "Device.LocalAgent", Order = 3, Param = "r---"
+  i=1, Role = "A"; Permission.2.: Targets = "Device.LocalAgent.Controller", Order = 55, Param = "r-xn"
+  i=3, Role = "B"; Permission.1.: Targets = "Device.LocalAgent", Order = 20, Param = "r---"
+  i=3, Role = "B"; Permission.5.: Targets = "Device.LocalAgent.Controller", Order = 78, Param = "----"
 ```
 
- and `Device.LocalAgent.Controller.1.AssignedRole` = "Device.LocalAgent. ControllerTrust.Role.1., Device.LocalAgent. ControllerTrust.Role.3."
+ and `Device.LocalAgent.Controller.1.AssignedRole` = `"Device.LocalAgent.ControllerTrust.Role.1", "Device.LocalAgent. ControllerTrust.Role.3"`
 
-When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A Permission.2 takes precedence over Permission.1 (55 > 3). For B, Permission.5 takes precedence over Permission.1 (78 > 20). The union of A and B is "r-xn" + "----" = "r-xn".
+When determining permissions for the `Device.LocalAgent.Controller.` table, the Agent will first determine that for Role A `Permission.2` takes precedence over `Permission.1` (55 > 3). For B, `Permission.5` takes precedence over `Permission.1` (78 > 20). The union of A and B is `r-xn` + `----` = `r-xn`.
 
 #### Role Associated with a Credential or Challenge
 
@@ -6533,7 +6719,7 @@ If the value of the `.BulkData.Profile.1.JSONEncoding.ReportFormat` Parameter wa
 
 This section discusses the Theory of Operation for Software Module Management using USP and the Software Module Object defined in the Root data model.
 
-As the home networking market matures, devices in the home are becoming more sophisticated and more complex.  One trend in enhanced device functionality is the move towards more standardized platforms and execution environments (such as Java, Linux, OSGi, Docker, etc.).  Devices implementing these more robust platforms are often capable of downloading new applications dynamically, perhaps even from third-party software providers.  These new applications might enhance the existing capabilities of the device or enable the offering of new services.
+As the home networking market matures, devices in the home are becoming more sophisticated and more complex.  One trend in enhanced device functionality is the move towards more standardized platforms and execution environments (such as Java, Linux, Linux Containers, OSGi, Docker, crun, runC, etc.).  Devices implementing these more robust platforms are often capable of downloading new applications dynamically, perhaps even from third-party software providers.  These new applications might enhance the existing capabilities of the device or enable the offering of new services.
 
 This model differs from previous device software architectures that assumed one monolithic firmware that was downloaded and applied to the device in one action.
 
@@ -6549,9 +6735,11 @@ The specifics of how applications run in different environments vary from platfo
 
 ## Software Modules
 
-A Software Module is any software entity that will be installed on a device.  This includes modules that can be installed/uninstalled and those that can be started and stopped.  All software on the device is considered a software module, with the exception of the primary firmware, which plays a different enough role that it is considered a separate entity.
+A Software Module, managed through a USP-based Software Module Manager, is any software entity that will be installed on a device.  This includes modules that can be installed/uninstalled and those that can be started and stopped.  All software on the device is considered a software module, with the exception of the primary firmware, which plays a different enough role that it is considered a separate entity.
 
-A software module exists on an Execution Environment (EE), which is a software platform that supports the dynamic loading and unloading of modules.  It might also enable the dynamic sharing of resources among entities, but this differs across various execution environments.  Typical examples include Linux, Docker, OSGi, .NET, Android, and Java ME.  It is also likely that these environments could be "layered," i.e., that there could be one primary environment such as Linux on which one or more OSGi frameworks are stacked.  This is an implementation specific decision, however, and USP-based module management does not attempt to enable management of this layering beyond exposing which EE a given environment is layered on top of (if any).  USP-based Software Module Management also does not attempt to address the management of the primary firmware image, which is expected to be managed via the device's Firmware Image Objects defined in the Root data model.
+A software module exists on an Execution Environment (EE), which is a software platform that supports the dynamic loading and unloading of modules.  It might also enable the dynamic sharing of resources among entities, but this differs across various execution environments.  Typical examples include Linux Containers, Docker, crun, runC.  It is also likely that these environments could be "layered," i.e., that there could be one primary environment such as Linux on which one or more child environments such as Linux Containers or crun are stacked. It is the responsibility of a USP-based Software Module Manager to manage the layering and exposing the status of the EE through the Device:2 Data Model [@TR-181].
+
+USP-based Software Module Management does not attempt to address the management of the primary firmware image, which is expected to be managed via the device's Firmware Image Objects defined in the Root data model.
 
 Software modules come in two types: Deployment Units (DUs) and Execution Units (EUs). A DU is an entity that can be deployed on the EE.  It can consist of resources such as functional EUs, configuration files, or other resources.  Fundamentally it is an entity that can be Installed, Updated, or Uninstalled.  Each DU can contain zero or more EUs but the EUs contained within that DU cannot span across EEs.  An EU is an entity deployed by a DU, such as services, scripts, software components, or libraries.  The EU initiates processes to perform tasks or provide services.  Fundamentally it is an entity that can be Started or Stopped.  EUs also expose configuration for the services implemented, either via standard Software Module Management related data model Objects and Parameters or via EU specific Objects and Parameters.
 
@@ -6571,7 +6759,7 @@ The explicit transitions include:
 
 1 - Install, which initiates the process of Installing a DU.  The device might need to transfer a file from the location indicated by a URL in the method call. Once the resources are available on the device, the device begins the installation process:
 
-  * In the Installing state, the DU is in the process of being Installed and will transition to that state unless prevented by a fault.  Note that the Controller has the option to choose which EE to install a particular DU to, although it can also leave that choice up to the device.  If the Controller does specify the EE, it is up to the Controller to specify one that is compatible with the DU it is attempting to Install (e.g., an OSGi framework for an OSGi bundle).
+  * In the Installing state, the DU is in the process of being Installed and will transition to that state unless prevented by a fault.  Note that the Controller has the option to choose which EE to install a particular DU to, although it can also leave that choice up to the device.  If the Controller does specify the EE, it is up to the Controller to specify one that is compatible with the DU it is attempting to Install (e.g., Docker for an OCI image).
 
   * In the Installed state, the DU has been successfully downloaded and installed on the relevant EE.  At this point it might or might not be Resolved.  If it is Resolved, the associated EUs can be started; otherwise an attempt to start the associated EUs will result in a failure.  How dependencies are resolved is implementation and EE dependent.
 
@@ -7844,9 +8032,20 @@ The following concepts are key components of the overall solution to enable conn
 	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Controllers within  USP Services to connect.
 	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Agents within  USP Services to connect.
 	- TLVs are used to encapsulate any headers (e.g. identification, length of full message) and the USP Record itself in protobuf form.
-	- No authentication is needed as the installation of the software module itself will essentially grant access (assumption that you should only install trusted applications).
-		- This can be enhanced in later versions.
+	- While authentication is not required in the case of trusted applications being installed, there is an optional TLS-based authentication mechanism that is defined within the UNIX domain socket (UDS) MTP section.
 
+
+### Usage of the Register Operation
+
+The following rules detail the usage of the Register Operation by a USP Service as well as how that usage impacts other USP Services.
+
+1. A USP Service cannot register something that is already registered by another USP Service. For example: If Service 1 registers **Device.WiFi.DataElements** first, then Service 2 attempts to register **Device.WiFi.DataElements** - that results in a failure.
+
+2. A USP Service cannot register something that has a sub-object that is already registered by another USP Service.  For example: If Service 1 registers **Device.WiFi.DataElements** first, then Service 2 attempts to register **Device.WiFi** - that results in a failure; Service 2 should only register what it needs to instead of attempting to register all of WiFi.
+
+3. A USP Service cannot register something that is a sub-object of something that is already registered by another USP Service. For example: If Service 1 registers **Device.WiFi** first, then Service 2 attempts to register **Device.WiFi.DataElements** - that results in a failure; Service 1 should only register what it needs to instead of attempting to register all of WiFi.
+
+A USP Service is expected to only register the portion of the data model that it is responsible for implementing, but if that USP Service expects no overlap then it could register a sub-Object of the root data model object. For example, if Service 1 intends to implement all of **Device.WiFi** without any overlaps, then it would register **Device.WiFi**. However, if Service 1 and Service 2 expect an overlap at the **Device.WiFi** level (due to not implementing the full breadth of the Wi-Fi Object), then Service 1 would register **Device.WiFi.DataElements** and Service 2 would register **Device.WiFi.RadioNumberOfEntries**, **Device.WiFi.Radio**.
 
 ## USP Service Use Cases
 
@@ -7971,7 +8170,8 @@ When the device boots up, the USP Broker comes online.  The USP Broker exposes 
 As the USP Service starts up, it begins to connect to the USP Broker...
 
 - The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
-	 - Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	 - Once the UNIX Domain Socket is connected, the USP Agent and USP Controller can perform TLS handshaking, if desired 
+	 - Once the UNIX Domain Socket is connected (and TLS handshaking is complete, if desired), the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
 	 - Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	 - Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
 	 - After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
@@ -7981,7 +8181,8 @@ As the USP Service starts up, it begins to connect to the USP Broker...
 As the USP Service starts up, it begins to connect to the USP Broker...
 
 - The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
-	- Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	 - Once the UNIX Domain Socket is connected, the USP Agent and USP Controller can perform TLS handshaking, if desired 
+	 - Once the UNIX Domain Socket is connected (and TLS handshaking is complete, if desired), the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
 	- Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
 	- After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.

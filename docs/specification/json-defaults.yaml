@@ -47,17 +47,8 @@ filters:
 # metadata values specified here are parsed as literal strings, not markdown
 metadata:
 
-  # if there are duplicates, the latest occurrence wins, so more definitive
-  # definitions are listed last
   bibliography:
-    - tr-069-biblio-csl.json
-    - 3gpp-biblio-csl.json
-    - ansi-biblio-csl.json
-    - ieee-biblio-csl.json
-    - iso-biblio-csl.json
-    - itu-biblio-csl.json
-    - w3c-biblio-csl.json
-    - ietf-biblio-csl.json
+    - all.bib
     - bbf-biblio-csl.json
 
   citation-style: bbf.csl

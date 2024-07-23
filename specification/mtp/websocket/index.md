@@ -38,6 +38,8 @@ During the establishment of the WebSocket session, the WebSocket client informs 
 
 When a WebSocket connection is being initiated with TLS, no USP Record is sent until the TLS negotiation is complete. The WebSocket server will be unable to identify the Endpoint ID of the client unless it looks inside the certificate. To make it easier for the server to identify the client, the request URI of the opening handshake contains a `key=value` pair in its `query` component to provide the Endpoint ID of the client. `eid` is used as the key to the pair, while the value is the Endpoint ID of the client, e.g. `eid=doc::agent`.
 
+*Note: USP Endpoint IDs can contain percent-encoded characters, which can create confusion when encoding it for URI use. The Endpoint ID needs to be treated as opaque data for it to be properly "roundtripable" when encoded/decoded for URI use, thus any percent character needs to be percent-encoded, e.g. `doc::agent%21` will be encoded as `doc::agent%2521`.*
+
 **[R-WS.9]{}** - The WebSocket's handshake `Sec-WebSocket-Protocol` header for exchange of USP Records using the protocol-buffers encoding mechanism MUST be `v1.usp`.
 
 **[R-WS.10]{}** - A WebSocket client MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when initiating a WebSocket session.
@@ -47,6 +49,8 @@ When a WebSocket connection is being initiated with TLS, no USP Record is sent u
 *Note: Requirement [R-WS.10a]() was removed in USP 1.3, due to the impossibility of setting WebSocket Extensions in some environments.*
 
 **[R-WS.10b]{}** - A WebSocket client MUST include its Endpoint ID, via a `key=value` pair, in the query component of the request URI in its opening handshake, defined in section 1.3 of RFC 6455 [@RFC6455]. The `key` part of the pair MUST have a value of `eid` and the `value` part MUST be the client's Endpoint ID. This pair MUST be separated from other query data by the `&` character.
+
+**[R-WS.10c]{}** - When encoding the USP Endpoint ID for URI use, it MUST be treated as opaque data and any percent character MUST itself be percent-encoded, i.e. as `%25`.
 
 **[R-WS.11]{}** - A WebSocket server that supports USP Endpoints MUST include the `Sec-WebSocket-Protocol` header for exchange of USP Records when responding to an initiation of a WebSocket session.
 
@@ -66,11 +70,15 @@ RFC 6455 defines a number of type of WebSocket control frames (e.g., Ping, Pong,
 
 **[R-WS.13]{}** - A USP Endpoint MUST implement the WebSocket control frames defined in section 5.5 of RFC 6455 [@RFC6455].
 
-USP Records can be transferred between USP Controllers and USP Agents over an established WebSocket session. These USP Records are encapsulated within a binary WebSocket data frame as depicted by the figure below.
+USP Records can be transferred between USP Controllers and USP Agents over an established WebSocket session. These USP Records are encapsulated within a binary WebSocket data frame as depicted by the figure below. WebSocket message fragmentation should be avoided, because its main benefit does not apply for the case of sending USP Records.
 
 ![USP Request using a WebSocket Session](USP-request-over-websocket.png)
 
 **[R-WS.14]{}** - In order for USP Records to be transferred between a USP Controller and Agent using WebSockets MUST be encapsulated within as a binary WebSocket data frame as defined in section 5.6 of RFC 6455 [@RFC6455].
+
+**[R-WS.14a]{}** - USP Endpoints SHOULD NOT use WebSocket message fragmentation for sending USP Records.
+
+**[R-WS.14b]{}** - USP Endpoints MUST support WebSocket message fragmentation in received USP Records.
 
 **[R-WS.15]{}** - USP Records are transferred between USP Endpoints using message body procedures as defined in section 6 of RFC 6455 [@RFC6455].
 

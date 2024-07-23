@@ -300,6 +300,22 @@ In order to maintain addressing integrity of Multi-Instance Objects, the followi
 
 **[R-KEY.2]{}** - Functional Unique Keys (as defined in TR-106 [@TR-106]) MAY change incidentally as part of normal operation, but any change MUST abide by the uniqueness rules (i.e., no conflict with other instances).
 
+### writeOnceReadOnly Parameter Access
+
+There are several parameter access types defined in [@TR-106] that specify what a Controller is allowed to do with 
+a particular Parameter as defined in [@TR-181]. Of these, `writeOnceReadOnly` affects the response of an Agent in 
+specific ways. A `writeOnceReadOnly` Parameter can be set only once by a Controller, and then becomes 
+read-only. In some cases, the value is assigned by the Agent upon Object creation if not specified by the Controller.
+The expected behavior is otherwise as follows:
+
+- When a `writeOnceReadyOnly` Parameter is set upon Object creation via the `Add` Message, the Controller making the 
+Add Request is considered to have set the Parameter.
+- When a `writeOnceReadOnly` Parameter is updated via a `Set` Message, an Agent will reject the update if the 
+Parameter has already been set.
+- `writeOnceReadyOnly` Parameters are reported as `PARAM_READ_WRITE (1)` in a `GetSupportedDM` Response. Controllers 
+should rely on knowledge of the Agent's data model through other means (i.e., officially published data models) 
+to determine that a parameter is `writeOnceReadOnly`.
+
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
 The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether or not the Message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
@@ -1166,6 +1182,8 @@ This field contains a numeric code ([](#sec:error-codes)) indicating the type of
 
 **[R-GET.1]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter matched through the `requested_path` field, the Object or Parameter MUST be treated as if it is not present in the Agent’s Supported data model.
 
+*Note: Requiring Object Read permission is intended to act as a security feature. If a Controller does not have permission to obtain the names of the data model elements of an object via a `GetSupportedDM` request, then the Controller should not be able to discover these by probing with `Get` requests.*
+
 `string err_msg`
 
 This field contains additional information about the reason behind the error.
@@ -1193,7 +1211,7 @@ Refer to [](#sec:parameter-value-encoding) for details of how Parameter values a
 
 **[R-GET.3]{}** - If the `requested_path` included a Path Name to a Parameter, `result_params` MUST contain only the Parameter included in that Path Name.
 
-**[R-GET.4]{}** - If the Controller does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
+**[R-GET.4]{}** - If the Controller has Read permission on the Object or Object Instance being returned in the `resolved_path`, but does not have Read permission on any of the Parameters specified in `result_params`, these Parameters MUST NOT be returned in this field. This MAY result in this field being empty.
 
 #### Get Message Supported Error Codes
 
@@ -1412,6 +1430,7 @@ For example, the Controller wishes to learn the Wi-Fi capabilities the Agent rep
       return_commands : false
       return_events : false
       return_params : false
+      return_unique_key_sets : false
     }
 ```
 
@@ -1508,6 +1527,7 @@ In another example request:
       return_commands : true
       return_events : true
       return_params : true
+      return_unique_key_sets : true
     }
 ```
 
@@ -1558,21 +1578,48 @@ The Agent's response would be:
           supported_obj_path: "Device.WiFi.Radio.{i}."
           access: OBJ_READ_ONLY
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "Name"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.SSID.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "Name"
+          }
+          unique_key_sets {
+            key_names: "BSSID"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.AccessPoint.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "SSIDReference"
+          }
         }
         supported_objs {
           supported_obj_path: "Device.WiFi.EndPoint.{i}."
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: "Alias"
+          }
+          unique_key_sets {
+            key_names: "SSIDReference"
+          }
         }
       }
     }
@@ -1580,9 +1627,9 @@ The Agent's response would be:
 
 #### GetSupportedDM Request Fields
 
-`repeated obj_paths`
+`repeated string obj_paths`
 
-This field contains a repeated set of Path Names to Objects in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
+This field contains a repeated set of Path Names to Objects, Commands, Events, or Parameters in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
 
 `bool first_level_only`
 
@@ -1599,6 +1646,10 @@ This field, if `true`, indicates that, in the `supported_objs`, the Agent should
 `bool return_params`
 
 This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `supported_params` field containing Parameters supported by the reported Object(s).
+
+`bool return_unique_key_sets`
+
+This field, if `true`, indicates that, in the `supported_objs`, the Agent should include a `unique_key_sets` field containing Parameters which uniquely identify an instance of the reported Object(s).
 
 #### GetSupportedDMResp Fields
 
@@ -1659,11 +1710,15 @@ The field contains a message of type `SupportedParamResult` for each Parameter s
 
 `repeated SupportedCommandResult supported_commands`
 
-The field contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
+The field contains a message of type `SupportedCommandResult` for each Command supported by the reported Object. If there are no Commands supported by the Object, this should be an empty list.
 
 `repeated SupportedEventResult supported_events`
 
-The field contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Parameters in the Object, this should be an empty list.
+The field contains a message of type `SupportedEventResult` for each Event supported by the reported Object. If there are no Events supported by the Object, this should be an empty list.
+
+`repeated SupportedUniqueKeySet unique_key_sets`
+
+The field contains a message of type `SupportedUniqueKeySet` for each UniqueKeySet supported by the reported Object. If the Object has no unique keys (for example a single instance object), this should be an empty list.
 
 `repeated string divergent_paths`
 
@@ -1679,7 +1734,7 @@ This field contains the Relative Path of the Parameter.
 
 `ParamAccessType access`
 
-The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. It is an enumeration of:
+The field contains an enumeration of type ParamAccessType specifying the access permissions that are specified for this Parameter in the Agent's Supported Data Model. This may be further restricted to the Controller based on rules defined in the Agent's Access Control List. If the Data Model indicates that a Parameter is writeOnceReadOnly, the GetSupportedDM returns PARAM_READ_WRITE. It is an enumeration of:
 
 ```
     PARAM_READ_ONLY (0)
@@ -1753,6 +1808,13 @@ This field contains the Relative Path of the Event.
 `repeated string arg_names`
 
 This field contains a repeated set of Relative Paths for the arguments of the Event.
+
+###### SupportedUniqueKeySet
+
+`repeated string key_names`
+
+This field contains a repeated set of relative parameters, whose values together uniquely identify an instance of the object in the instantiated data model.
+
 
 #### GetSupportedDM Error Codes
 
@@ -1908,7 +1970,7 @@ This field contains a repeated set of RegistrationPaths for each path the USP Ag
 
 This field contains the Object Path the USP Agent wants to register.
 
-**[R-REG.2]{}** - The path field MUST contain an Object Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
+**[R-REG.2]{}** - The path field MUST contain an Object Path, Command Path, Event Path, or Parameter Path without any instance numbers. This path MUST NOT not use the Supported Data Model notation (with \{i\}), meaning that it is not allowed to register a sub-object to a multi-instance object.
 
 #### Register Response Fields
 
@@ -2031,7 +2093,7 @@ This field contains a set of paths that the USP Agent wants to deregister.
 
 **[R-DEREG.3]{}** - A USP Agent MAY deregister one or more Service Elements with one Deregister Request message containing multiple path fields.
 
-*Note: The path field contains an Object Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
+*Note: The path field contains an Object Path, Command Path, Event Path, or Parameter Path without any instance numbers. This path doesn't contain any sub-objects to a multi-instance object.*
 
 #### Deregister Response Fields
 
@@ -2168,17 +2230,23 @@ The `OperationComplete` notification is used to indicate that an asynchronous Ob
 
 #### OnBoardRequest
 
-An `OnBoardRequest` notification is used by the Agent when it is triggered by an external source to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
+An `OnBoardRequest` notification is used by the Agent to initiate the request in order to communicate with a Controller that can provide on-boarding procedures and communicate with that Controller (likely for the first time).
 
 **[R-NOT.5]{}** - An Agent MUST send an `OnBoardRequest` notify request in the following circumstances:
 
-1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the Device:2 Data Model [@TR-181]. This requirement applies only to those Controller table instances that have their `Enabled` Parameter set to `true`.
+1.	When the `SendOnBoardRequest()` command is executed. This sends the notification request to the Controller that is the subject of that operation. The `SendOnBoardRequest()` operation is defined in the Device:2 Data Model [@TR-181]. This requirement applies only to those Controller table instances that have their `Enabled` Parameter set to `true`. When the implementation supports the `Device.LocalAgent.Controller.{i}.OnBoardingComplete` parameter, executing this command will set the parameter value to `false`.
 
 2.	When instructed to do so by internal application policy (for example, when using DHCP discovery defined above).
 
-*Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription.*
+3.  When the implementation supports the `Device.LocalAgent.Controller.{i}.OnBoardingComplete` parameter and its value is set to false as this parameter signifies the Controller requires an `OnBoardRequest`. This parameter SHOULD be set to true by the Agent or Controller when the onboarding has been completed.
 
-**[R-NOT.6]{}** If a response is required, the OnBoardRequest MUST follow the Retry logic defined above.
+The value of the `OnBoardingRestartTime` parameter, if supported, describes how long the USP Agent must wait to send another `OnBoardRequest` when `OnBoardingComplete` remains `false`. This timer starts as soon as the Agent receives the `NotifyResponse` message for the original `OnBoardRequest`, because the Notification Retry mechanism needs to be completed first.
+
+*Note: as defined in the Subscription table, OnBoardRequest is not included as one of the enumerated types of a Subscription, i.e., it is not intended to be the subject of a Subscription. However it is important that the OnBoardRequest reaches its destination so it MUST be sent with `send_resp=true`. In other words, it behaves as a subscription with `NotifRetry` set to true. Because the Controller might be unreachable for a long time, the notification MUST not expire, so it MUST behave as a subscripton with `NotifExpiration` set to 0.*
+
+**[R-NOT.6]{}** The OnBoardRequest MUST be sent with send_resp=true and MUST follow the Retry logic defined above.
+
+**[R-NOT.6a]{}** The OnBoardRequest MUST be retried until the Controller confirms it has received it with a Notify Response message.
 
 #### Event
 The `Event` notification is used to indicate that an Object-defined event was triggered on the Agent. These events are defined in the data model and include what Parameters, if any, are returned as part of the notification.
@@ -2440,7 +2508,7 @@ A Controller can cancel a request that is still present in the Agent's `Device.L
 
 ![Operate Message Flow for Asynchronous Operations](asynchronous_operation.png)
 
-#### Persistance of Asynchronous Operations
+#### Persistence of Asynchronous Operations
 
 Synchronous Operations do not persist across a reboot or restart of the Agent or its underlying system. It is expected that  Asynchronous Operations do not persist, and a command that is in process when the Agent is rebooted can be expected to be removed from the Request table, and is considered to have failed. If a command is allowed or expected to be retained across a reboot, it will be noted in the command description.
 
@@ -2470,7 +2538,7 @@ If an asynchronous operation is triggered multiple times by one or more Controll
 
 ### Operate Examples
 
-In this example, the Controller requests that the Agent initiate the SendOnBoardRequest() operation defined in the `Device.LocalAgent.Controller.` Object.
+In this example of a synchronous command, the Controller requests that the Agent initiate the SendOnBoardRequest() operation defined in the `Device.LocalAgent.Controller.` Object.
 
 ```{filter=pbv}
 header {
@@ -2491,6 +2559,40 @@ body {
 ```{filter=pbv}
 header {
   msg_id: "42314"
+  msg_type: OPERATE_RESP
+}
+body {
+  response {
+    operate_resp {
+      operation_results {
+        executed_command: "Device.LocalAgent.Controller.1.SendOnBoardRequest()"
+      }
+    }
+  }
+}
+```
+
+In this example of an asynchronous command, the Controller requests that the Agent initiate the SelfDiagnostics() operation defined in the `Device.` object. 
+
+```{filter=pbv}
+header {
+  msg_id: "42315"
+  msg_type: OPERATE
+}
+body {
+  request {
+    operate {
+      command: 'Device.SelfTestDiagnostics()'
+      command_key: "selftest_command_key"
+      send_resp: true
+    }
+  }
+}
+```
+
+```{filter=pbv}
+header {
+  msg_id: "42315"
   msg_type: OPERATE_RESP
 }
 body {
@@ -2521,7 +2623,7 @@ This field contains a string used as a reference by the Controller to match the 
 
 This field lets the Controller indicate to Agent whether or not it expects a response in association with the operation request.
 
-**[R-OPR.4]{}** - When `send_resp` is set to `false`, the target Endpoint SHOULD NOT send an `OperateResp` Message to the source Endpoint. If an error occurs during the processing of an `Operate` Message, the target Endpoint SHOULD send an `Error` Message to the source Endpoint. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.
+**[R-OPR.4]{}** - When `send_resp` is set to `false`, the target Endpoint SHOULD NOT send an `OperateResp` Message to the source Endpoint. If an error occurs during the processing of an `Operate` Message, the target Endpoint MAY send an `OperateResp` Message to the source Endpoint containing relevant `cmd_failure` elements. If a response is still sent, the responding Endpoint MUST expect that any such response will be ignored.
 
 *Note: The requirement in the previous versions of the specification also discouraged the sending of an `Error` Message, however the Controller issuing the `Operate` might want to learn about and handle errors occurring during the processing of the `Operate` request but still ignore execution results.*
 
@@ -2529,7 +2631,7 @@ This field lets the Controller indicate to Agent whether or not it expects a res
 
 This field contains a map of key/value pairs indicating the input arguments (relative to the Command Path in the command field) to be passed to the method indicated in the command field.
 
-**[R-OPR.5]{}** - A `Command` can have mandatory `input_args` as defined in the Supported Data Model. When a mandatory Input argument is omitted from the `input_args` field, the Agent MUST respond with an `Error` of type `7004 Invalid arguments` and stop processing the `Operate` Message.
+**[R-OPR.5]{}** - A `Command` can have mandatory `input_args` as defined in the Supported Data Model. When a mandatory Input argument is omitted from the `input_args` field, the Agent MUST, in its `OperateResp`, include a `cmd_failure` element containg an `err_code` of type `7027` Invalid Command Arguments and stop processing the command.
 
 **[R-OPR.6]{}** - When an unrecognized Input argument is included in the `input_args` field, the Agent MUST ignore the Input argument and continue processing the `Operate` Message.
 
@@ -2591,13 +2693,13 @@ USP uses error codes with a range 7000-7999 for both Controller and Agent errors
 | :--- | :------------ | :------------ | :--------------------------------------------- |
 | `7000` | Message failed	| Error Message | This error indicates a general failure that is described in an err_msg field. |
 | `7001` | Message not supported | Error Message | This error indicates that the attempted message was not understood by the target Endpoint.|
-| `7002` | Request denied (no reason specified) | Error Message | This error indicates that the target Endpoint cannot or will not process the message. |
-| `7003` | Internal error | Error Message | This error indicates that the message failed due to internal hardware or software reasons. |
-| `7004` | Invalid arguments | Error Message | This error indicates that the message failed due to invalid values in the USP message. |
-| `7005` | Resources exceeded | Error Message | This error indicates that the message failed due to memory or processing limitations on the target Endpoint. |
-| `7006` | Permission denied  | Error Message | This error indicates that the source Endpoint does not have the authorization for this action. |
-| `7007` | Invalid configuration | Error Message | This error indicates that the message failed because processing the message would put the target Endpoint in an invalid or unrecoverable state. |
-| `7008` | Invalid path syntax | any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. |
+| `7002` | Request denied (no reason specified) | Any | This error indicates that the target Endpoint cannot or will not process the message or operation. |
+| `7003` | Internal error | Any | This error indicates that the message or operation failed due to internal hardware or software reasons. |
+| `7004` | Invalid arguments | Any | This error indicates that the message or operation failed due to invalid values in the USP message. |
+| `7005` | Resources exceeded | Any | This error indicates that the message or operation failed due to memory or processing limitations on the target Endpoint. |
+| `7006` | Permission denied  | Any | This error indicates that the source Endpoint does not have the authorization for this action. |
+| `7007` | Invalid configuration | Any | This error indicates that the message or operation failed because processing the message would put the target Endpoint in an invalid or unrecoverable state. |
+| `7008` | Invalid path syntax | Any requested_path | This error indicates that the Path Name used was not understood by the target Endpoint. | 
 | `7009` | Parameter action failed | Set | This error indicates that the Parameter failed to update for a general reason described in an err_msg field. |
 | `7010` | Unsupported parameter | Add, Set | This error indicates that the requested Path Name associated with this ParamError or ParameterError did not match any instantiated Parameters. |
 | `7011` | Invalid type | Add, Set | This error indicates that the received string can not be interpreted as a value of the correct type expected for the Parameter. |

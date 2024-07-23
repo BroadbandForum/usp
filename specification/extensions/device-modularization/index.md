@@ -31,9 +31,20 @@ The following concepts are key components of the overall solution to enable conn
 	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Controllers within  USP Services to connect.
 	- The USP Broker will maintain a well-known UNIX Domain Socket facilitating an easy place for Agents within  USP Services to connect.
 	- TLVs are used to encapsulate any headers (e.g. identification, length of full message) and the USP Record itself in protobuf form.
-	- No authentication is needed as the installation of the software module itself will essentially grant access (assumption that you should only install trusted applications).
-		- This can be enhanced in later versions.
+	- While authentication is not required in the case of trusted applications being installed, there is an optional TLS-based authentication mechanism that is defined within the UNIX domain socket (UDS) MTP section.
 
+
+### Usage of the Register Operation
+
+The following rules detail the usage of the Register Operation by a USP Service as well as how that usage impacts other USP Services.
+
+1. A USP Service cannot register something that is already registered by another USP Service. For example: If Service 1 registers **Device.WiFi.DataElements** first, then Service 2 attempts to register **Device.WiFi.DataElements** - that results in a failure.
+
+2. A USP Service cannot register something that has a sub-object that is already registered by another USP Service.  For example: If Service 1 registers **Device.WiFi.DataElements** first, then Service 2 attempts to register **Device.WiFi** - that results in a failure; Service 2 should only register what it needs to instead of attempting to register all of WiFi.
+
+3. A USP Service cannot register something that is a sub-object of something that is already registered by another USP Service. For example: If Service 1 registers **Device.WiFi** first, then Service 2 attempts to register **Device.WiFi.DataElements** - that results in a failure; Service 1 should only register what it needs to instead of attempting to register all of WiFi.
+
+A USP Service is expected to only register the portion of the data model that it is responsible for implementing, but if that USP Service expects no overlap then it could register a sub-Object of the root data model object. For example, if Service 1 intends to implement all of **Device.WiFi** without any overlaps, then it would register **Device.WiFi**. However, if Service 1 and Service 2 expect an overlap at the **Device.WiFi** level (due to not implementing the full breadth of the Wi-Fi Object), then Service 1 would register **Device.WiFi.DataElements** and Service 2 would register **Device.WiFi.RadioNumberOfEntries**, **Device.WiFi.Radio**.
 
 ## USP Service Use Cases
 
@@ -158,7 +169,8 @@ When the device boots up, the USP Broker comes online.  The USP Broker exposes 
 As the USP Service starts up, it begins to connect to the USP Broker...
 
 - The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
-	 - Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	 - Once the UNIX Domain Socket is connected, the USP Agent and USP Controller can perform TLS handshaking, if desired 
+	 - Once the UNIX Domain Socket is connected (and TLS handshaking is complete, if desired), the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
 	 - Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	 - Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
 	 - After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.
@@ -168,7 +180,8 @@ As the USP Service starts up, it begins to connect to the USP Broker...
 As the USP Service starts up, it begins to connect to the USP Broker...
 
 - The Agent within the USP Service initiates the UNIX Domain Socket connection to the Controller on the USP Broker and the well-known internal path
-	- Once the UNIX Domain Socket is connected, the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
+	 - Once the UNIX Domain Socket is connected, the USP Agent and USP Controller can perform TLS handshaking, if desired 
+	 - Once the UNIX Domain Socket is connected (and TLS handshaking is complete, if desired), the USP Service's Agent will initiate the UNIX Domain Socket MTP Handshake mechanism
 	- Once the USP Broker's Controller receives the UNIX Domain Socket MTP Handshake message, it will respond with its own Handshake message
 	- Once the UNIX Domain Socket MTP Handshake mechanism is successfully completed, the Agent within the USP Service sends an empty UnixDomainSocketConnectRecord
 	- After sending the empty UnixDomainSocketConnectRecord, the Agent within the USP Service sends a Register message to the Controller in the USP Broker that details the portion of the data model that is being exposed by the USP Service.

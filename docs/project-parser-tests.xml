@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="0" tests="32" time="0.0">
-	<testsuite disabled="0" errors="0" failures="0" name="project-parser-py" skipped="0" tests="32" time="0">
+<testsuites disabled="0" errors="0" failures="0" tests="33" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="project-parser-py" skipped="0" tests="33" time="0">
 		<testcase name="project-parser"/>
 		<testcase name="project-parser-2"/>
 		<testcase name="project-parser-3"/>
@@ -15,6 +15,7 @@
 		<testcase name="project-parser-file-not-found"/>
 		<testcase name="project-parser-has-multiple-resource-types"/>
 		<testcase name="project-parser-ignored-remaining-resources"/>
+		<testcase name="project-parser-invalid-contributed-to-not-a-list-of-strings"/>
 		<testcase name="project-parser-invalid-keys"/>
 		<testcase name="project-parser-invalid-keys-2"/>
 		<testcase name="project-parser-invalid-resource-keys"/>

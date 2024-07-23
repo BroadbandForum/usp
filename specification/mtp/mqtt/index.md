@@ -249,7 +249,7 @@ This will allow support for Agents that try to subscribe to "+/\<Endpoint ID\>/#
 
 ### MTP Message Encryption
 
-MQTT MTP message encryption is provided using TLS certificates.
+MQTT MTP message encryption is provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455 [@RFC6455].
 
 **[R-MQTT.48]{}** - USP Endpoints utilizing MQTT clients for message transport MUST implement TLS 1.2 [@RFC5246] or later with backward compatibility to TLS 1.2.
 

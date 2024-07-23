@@ -121,7 +121,11 @@ Other USP Record processing failures (where the USP Record can be extracted, but
 
 ### MTP Message Encryption
 
-Encryption is not required for the UNIX domain socket MTP as all messages are exchanged between processes that reside internally within the device.
+Encryption is not required for the UNIX domain socket MTP as all messages are exchanged between processes that reside internally within the device, but UNIX domain socket MTP message encryption can optionally be provided using certificates in TLS as described in section 10.5 and section 10.6 of RFC 6455 [@RFC6455].
+
+**[R-UDS.23a]{}** - USP Endpoints utilizing UNIX domain sockets for message transport, that choose to use TLS for MTP message encryption, MUST implement TLS 1.2 RFC 5246 [@RFC5246] or later with backward compatibility to TLS 1.2.
+
+**[R-UDS.23b]{}** - USP Controller certificates MAY contain domain names with wildcard characters per RFC 6125 [@RFC6125] guidance.
 
 ### Handling Other UNIX Domain Socket Failures
 

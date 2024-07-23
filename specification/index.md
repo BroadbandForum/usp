@@ -124,6 +124,10 @@ A Binding is a means of sending Messages across an underlying Message Transfer P
 
 The term used to define and refer to an Object-specific Operation in the Agent's Instantiated or Supported Data Model.
 
+**Command Path**
+
+A Command Path is a Path Name that addresses a Command of an Object or Object Instance. See [](#sec:path-names).
+
 **Connection Capabilities**
 
 Connection Capabilities are information related to an Endpoint that describe how to communicate with that Endpoint, and provide a very basic idea of what sort of function the Endpoint serves.
@@ -156,6 +160,10 @@ An Error is a Message that contains failure information associated with a Reques
 **Event**
 
 An Event is a set of conditions that, when met, triggers the sending of a Notification.
+
+**Event Path**
+
+A Event Path is a Path Name that addresses an Event of an Object or Object Instance. See [](#sec:path-names).
 
 **Expression**
 
@@ -251,7 +259,7 @@ A Parameter Path is a Path Name that addresses a Parameter of an Object or Objec
 
 **Path Name**
 
-A Path Name is a fully qualified reference to an Object, Object Instance, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
+A Path Name is a fully qualified reference to an Object, Object Instance, Command, Event, or Parameter in an Agent's Instantiated or Supported Data Model. See [](#sec:path-names).
 
 **Path Reference**
 

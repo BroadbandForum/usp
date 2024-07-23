@@ -160,9 +160,45 @@
   - This Corrigendum has the following fixes
     * Fix example by populating the empty UNIX Domain Socket references
     * Small fixes to UDS example images
-    * Fix UnixDomainSocket path in example  
+    * Fix UnixDomainSocket path in example
+
+* - [Release 1.4][TR-369 Amendment 4]
+  - July 2024
+  - Release contains the specification for the User Services Platform 1.4
+    
+    * Updated ResolvedPathResult Fields to clarify that R-GET.4 does not return parameters for which the Controller
+      does not have Read permission for.
+    * Added Appendix VI Usage of the Register Operation to define the Rules related to USP Services Registering data model paths.
+    * Added TLS Support to the UDS MTP impacting Section Handling Failures to Deliver USP Records with new requirements
+      (R-UDS.23a and R-UDS.23b) and updates to Appendix V1 Basic Solution Concepts.
+    * Expanded Error Codes Section Applicability to multiple error codes from Error Message to Any, to send an
+      operate response rather than USP error.
+    * Updated GetSupportedDM Request Fields Section to expand the Register Message for Commands, Events, and Parameters. Updated
+      Definitions Section with new definitions for Command Path and Event Path.
+    * Updated R-OPR.4 and R-OPR.5 to align with R-OPR.1.
+    * Updated Appendix 1 Basic Solution Concepts Section to define that the Execution Environment is no longer static,
+      and is managed via USP Software Module Management.
+    * Updated Handling of WebSocket Frames Section adding R-WS.14b to discourage the use of WebSocket fragmentation.
+    * Updated Handling of the WebSocket Session Section adding note to R-WS.8 to clarify the encoding of USP Endpoint ID
+      for URI use.
+    * Opened up the OUI definition and Use of authorityscheme and authorityid Section R-ARC.2a to allow for not only the old
+      24-bit OUIs but to also allow for 36-bit OUIs.
+    * Updated OnBoardRequest Section to state that the OnBoardRequest notification MUST be sent with send_resp=true,
+      which included updates to R-NOT.5 and R-NOT-6 as well as the addition of R-NOT-6a to insure the
+      Controller retries until a notification response is recieved.
+    * Defined the term "Partial Path" in Definitions Section.
+    * Fixed the Operate example in Operate Examples Section to include both sync and async data model commands.
+    * Updated the GetSupportedDM to now indicate the unique keys of a table, which caused updates to the
+      examples in GetSupportedDM Examples Section and the usp-msg-1-4.proto file within the GetSupportedDM message.
+    * Updated Role Definition Section with clarifications to Role permissions applying to Supported and Instantiated
+      Data model and the Secured Role as applying to "secured" parameter in the path(s), with examples
+      of both.
 
 :::
+
+Comments or questions about this Broadband Forum Technical Report should be directed to <info@broadband-forum.org>.
+
+::: nobreak
 
 ### Editors {.unnumbered .unlisted}
 
@@ -173,14 +209,9 @@
   - Email
   - Role
 
-* - Barbara Stark
-  - AT&T
-  - barbara.stark@att.com
-  - Editor/USP Project Lead
-
 * - Tim Spets
-  - Assia
-  - tspets@assia-inc.com
+  - Nokia
+  - timothy.spets@nokia.com
   - Editor/USP Project Lead
 
 * - Jason Walls
@@ -189,11 +220,15 @@
   - Editor/Broadband User Services Work Area Director
 
 * - John Blackford
-  - Commscope
-  - john.blackford@commscope.com
+  - Vantiva
+  - john.blackford@vantiva.com
   - Editor/Broadband User Services Work Area Director
 
 :::
+
+:::
+
+::: nobreak
 
 ### Acknowledgments {.unnumbered .unlisted}
 
@@ -239,6 +274,10 @@
   - Broadband Forum
   - wlupton@broadband-forum.org
 
+* - Barbara Stark
+  - AT&T
+  - barbara.stark@att.com
+
 * - Matthieu Anne
   - Orange
   - matthieu.anne@orange.com
@@ -249,10 +288,13 @@
 
 :::
 
+:::
+
 [TR-369 Amendment 1]: https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf
 [TR-369 Amendment 2]: https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf
 [TR-369 Amendment 3]: https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf
 [TR-369 Amendment 3 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-1.pdf
+[TR-369 Amendment 4]: https://www.broadband-forum.org/download/TR-369_Amendment-4.pdf
 [TR-369 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf
 [TR-369 Corrigendum 2]: https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf
 [TR-369 Issue 1]: https://www.broadband-forum.org/download/TR-369_Issue-1.pdf

@@ -1,21 +1,38 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="0" tests="16" time="0.0">
-	<testsuite disabled="0" errors="0" failures="0" name="pandoc" skipped="0" tests="16" time="0">
-		<testcase name="cant-expand-macro-in"/>
-		<testcase name="cant-expand-macro-in-2"/>
+<testsuites disabled="0" errors="0" failures="0" tests="33" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="pandoc" skipped="0" tests="33" time="0">
+		<testcase name="cant-expand-string-macro-in"/>
+		<testcase name="cant-expand-string-macro-in-2"/>
 		<testcase name="cant-find-file"/>
+		<testcase name="class-indicates-annex-but-currently-in-appendix-ignored"/>
+		<testcase name="class-indicates-annex-but-currently-in-ordinary-section-ignored"/>
+		<testcase name="class-indicates-appendix-but-currently-in-annex-ignored"/>
 		<testcase name="code-block-filter-doesnt-specify-prog"/>
-		<testcase name="error-running-protobuf-protobuf-verify-py-error-code-102-modulenotfounderror-no-module-named"/>
+		<testcase name="code-block-filter-failed-modulenotfounderror-no-module-named"/>
+		<testcase name="code-block-filter-failed-unknown-arguments"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-1"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-2-2"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-3-2"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-4-2"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-5-1"/>
+		<testcase name="code-block-filter-pbv-failed-parse-failed-message-type-has-no-field-named"/>
 		<testcase name="error-yaml-line"/>
+		<testcase name="invalid-figure-identifier-must-start-with-fig"/>
+		<testcase name="invalid-table-identifier-must-start-with-tbl"/>
+		<testcase name="invalid-table-identifier-must-start-with-tbl-2"/>
 		<testcase name="results-in-recursive-macro-reference"/>
 		<testcase name="results-in-recursive-macro-reference-2"/>
 		<testcase name="results-in-recursive-macro-reference-3"/>
 		<testcase name="this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-results-in-recursive-macro-reference"/>
 		<testcase name="this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-results-in-recursive-macro-reference-2"/>
 		<testcase name="this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-this-rather-stupidly-refers-back-to-this-my-macro-and-it-references-results-in-recursive-macro-reference"/>
+		<testcase name="undefined-anchor-referenced-from"/>
 		<testcase name="undefined-metadata-bbflist-content"/>
 		<testcase name="undefined-metadata-bbftable-content"/>
 		<testcase name="unknown-error"/>
+		<testcase name="warning-citeproc-citation-not-found"/>
+		<testcase name="warning-citeproc-citation-not-found-2"/>
+		<testcase name="warning-citeproc-citation-not-found-3"/>
 		<testcase name="warning-duplicate-identifier-md-line-column"/>
 	</testsuite>
 </testsuites>

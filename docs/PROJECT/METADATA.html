@@ -24,9 +24,6 @@
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="bbf.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
 </head>
 <body>
 <header id="title-block-header">
@@ -260,9 +257,63 @@ references</li>
 <li>Fix UnixDomainSocket path in example</li>
 </ul></td>
 </tr>
+<tr class="even">
+<td style="text-align: left;"><p><a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-4.pdf">Release
+1.4</a></p></td>
+<td style="text-align: left;"><p>July 2024</p></td>
+<td style="text-align: left;"><p>Release contains the specification for
+the User Services Platform 1.4</p>
+<ul>
+<li>Updated ResolvedPathResult Fields to clarify that R-GET.4 does not
+return parameters for which the Controller does not have Read permission
+for.</li>
+<li>Added Appendix VI Usage of the Register Operation to define the
+Rules related to USP Services Registering data model paths.</li>
+<li>Added TLS Support to the UDS MTP impacting Section Handling Failures
+to Deliver USP Records with new requirements (R-UDS.23a and R-UDS.23b)
+and updates to Appendix V1 Basic Solution Concepts.</li>
+<li>Expanded Error Codes Section Applicability to multiple error codes
+from Error Message to Any, to send an operate response rather than USP
+error.</li>
+<li>Updated GetSupportedDM Request Fields Section to expand the Register
+Message for Commands, Events, and Parameters. Updated Definitions
+Section with new definitions for Command Path and Event Path.</li>
+<li>Updated R-OPR.4 and R-OPR.5 to align with R-OPR.1.</li>
+<li>Updated Appendix 1 Basic Solution Concepts Section to define that
+the Execution Environment is no longer static, and is managed via USP
+Software Module Management.</li>
+<li>Updated Handling of WebSocket Frames Section adding R-WS.14b to
+discourage the use of WebSocket fragmentation.</li>
+<li>Updated Handling of the WebSocket Session Section adding note to
+R-WS.8 to clarify the encoding of USP Endpoint ID for URI use.</li>
+<li>Opened up the OUI definition and Use of authorityscheme and
+authorityid Section R-ARC.2a to allow for not only the old 24-bit OUIs
+but to also allow for 36-bit OUIs.</li>
+<li>Updated OnBoardRequest Section to state that the OnBoardRequest
+notification MUST be sent with send_resp=true, which included updates to
+R-NOT.5 and R-NOT-6 as well as the addition of R-NOT-6a to insure the
+Controller retries until a notification response is recieved.</li>
+<li>Defined the term “Partial Path” in Definitions Section.</li>
+<li>Fixed the Operate example in Operate Examples Section to include
+both sync and async data model commands.</li>
+<li>Updated the GetSupportedDM to now indicate the unique keys of a
+table, which caused updates to the examples in GetSupportedDM Examples
+Section and the usp-msg-1-4.proto file within the GetSupportedDM
+message.</li>
+<li>Updated Role Definition Section with clarifications to Role
+permissions applying to Supported and Instantiated Data model and the
+Secured Role as applying to “secured” parameter in the path(s), with
+examples of both.</li>
+</ul></td>
+</tr>
 </tbody>
 </table>
-<h3 class="unnumbered unlisted" id="editors">Editors</h3>
+<p>Comments or questions about this Broadband Forum Technical Report
+should be directed to <a href="mailto:info@broadband-forum.org"
+class="email">info@broadband-forum.org</a>.</p>
+<section id="editors" class="unnumbered unlisted nobreak">
+<h3 class="unnumbered unlisted">Editors</h3>
 <table class="editors">
 <colgroup>
 <col style="width: 20%" />
@@ -280,35 +331,30 @@ references</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Barbara Stark</td>
-<td style="text-align: left;">AT&amp;T</td>
-<td style="text-align: left;">barbara.stark@att.com</td>
+<td style="text-align: left;">Tim Spets</td>
+<td style="text-align: left;">Nokia</td>
+<td style="text-align: left;">timothy.spets@nokia.com</td>
 <td style="text-align: left;">Editor/USP Project Lead</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Tim Spets</td>
-<td style="text-align: left;">Assia</td>
-<td style="text-align: left;">tspets@assia-inc.com</td>
-<td style="text-align: left;">Editor/USP Project Lead</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Jason Walls</td>
 <td style="text-align: left;">QA Cafe, LLC</td>
 <td style="text-align: left;">jason@qacafe.com</td>
 <td style="text-align: left;">Editor/Broadband User Services Work Area
 Director</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">John Blackford</td>
-<td style="text-align: left;">Commscope</td>
-<td style="text-align: left;">john.blackford@commscope.com</td>
+<td style="text-align: left;">Vantiva</td>
+<td style="text-align: left;">john.blackford@vantiva.com</td>
 <td style="text-align: left;">Editor/Broadband User Services Work Area
 Director</td>
 </tr>
 </tbody>
 </table>
-<h3 class="unnumbered unlisted"
-id="acknowledgments">Acknowledgments</h3>
+</section>
+<section id="acknowledgments" class="unnumbered unlisted nobreak">
+<h3 class="unnumbered unlisted">Acknowledgments</h3>
 <table class="acknowledgments">
 <colgroup>
 <col style="width: 32%" />
@@ -369,16 +415,22 @@ id="acknowledgments">Acknowledgments</h3>
 <td style="text-align: left;">wlupton@broadband-forum.org</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Barbara Stark</td>
+<td style="text-align: left;">AT&amp;T</td>
+<td style="text-align: left;">barbara.stark@att.com</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">Matthieu Anne</td>
 <td style="text-align: left;">Orange</td>
 <td style="text-align: left;">matthieu.anne@orange.com</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Thales Fragoso</td>
 <td style="text-align: left;">Axiros</td>
 <td style="text-align: left;">thales.fragoso@axiros.com</td>
 </tr>
 </tbody>
 </table>
+</section>
 </body>
 </html>

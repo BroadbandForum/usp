@@ -29,13 +29,13 @@ div.see-also,
 div.tip {
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
     background-size: 12px;
     background-position: 10px 10px;
     background-repeat: no-repeat;
     border-radius: 5px;
-    line-height: 18px;
+    line-height: 1.2;
     overflow: hidden;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -75,6 +75,12 @@ div.see-also {
     background-color: #efe;
     background-image: url(right.png);
     border: solid 1px #8f8;
+}
+
+div.see-also ul {
+    margin-left: 10px;
+    margin-bottom: 0px;
+    padding-left: 10px;
 }
 
 div.tip {
@@ -152,6 +158,26 @@ table.codesecond td:nth-child(2),
 table.codethird td:nth-child(3)
 {
     font-family: 'Courier New', Courier, 'Liberation Mono', monospace;
+}
+
+/* vertical-align top/middle/bottom table styles */
+
+table.vertical-align-top td, table.valign-top td {
+    vertical-align: top;
+}
+
+table.vertical-align-middle td, table.valign-middle td {
+    vertical-align: middle;
+}
+
+table.vertical-align-bottom td, table.valign-bottom td {
+    vertical-align: bottom;
+}
+
+/* figure overrides (github.css doesn't center captions) */
+
+figure {
+    text-align: center;
 }
 
 /* "left" and "right" styles */

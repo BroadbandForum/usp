@@ -28,6 +28,7 @@ connected devices, IoT endpoints, user services and home networks" />
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
+      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -131,9 +132,9 @@ connected devices, IoT endpoints, user services and home networks" />
 <header id="title-block-header">
 <h1 class="title auto-hoverlink" id="title">TR-369 – The User Services
 Platform</h1>
-<p class="subtitle">Issue: 1 Amendment 3 Corrigendum 1 <span
-class="release"></span></p>
-<p class="date">Issue Date: October 2023</p>
+<p class="subtitle">Issue: 1 Amendment 4 <span id="section"
+class="release auto-hoverlink"></span></p>
+<p class="date">Issue Date: July 2024</p>
 </header>
 <nav id="SIDEBAR" role="doc-toc">
 <ul>
@@ -771,10 +772,65 @@ references</li>
 <li>Fix UnixDomainSocket path in example</li>
 </ul></td>
 </tr>
+<tr class="even">
+<td style="text-align: left;"><p><a
+href="https://www.broadband-forum.org/download/TR-369_Amendment-4.pdf">Release
+1.4</a></p></td>
+<td style="text-align: left;"><p>July 2024</p></td>
+<td style="text-align: left;"><p>Release contains the specification for
+the User Services Platform 1.4</p>
+<ul>
+<li>Updated ResolvedPathResult Fields to clarify that R-GET.4 does not
+return parameters for which the Controller does not have Read permission
+for.</li>
+<li>Added Appendix VI Usage of the Register Operation to define the
+Rules related to USP Services Registering data model paths.</li>
+<li>Added TLS Support to the UDS MTP impacting Section Handling Failures
+to Deliver USP Records with new requirements (R-UDS.23a and R-UDS.23b)
+and updates to Appendix V1 Basic Solution Concepts.</li>
+<li>Expanded Error Codes Section Applicability to multiple error codes
+from Error Message to Any, to send an operate response rather than USP
+error.</li>
+<li>Updated GetSupportedDM Request Fields Section to expand the Register
+Message for Commands, Events, and Parameters. Updated Definitions
+Section with new definitions for Command Path and Event Path.</li>
+<li>Updated R-OPR.4 and R-OPR.5 to align with R-OPR.1.</li>
+<li>Updated Appendix 1 Basic Solution Concepts Section to define that
+the Execution Environment is no longer static, and is managed via USP
+Software Module Management.</li>
+<li>Updated Handling of WebSocket Frames Section adding R-WS.14b to
+discourage the use of WebSocket fragmentation.</li>
+<li>Updated Handling of the WebSocket Session Section adding note to
+R-WS.8 to clarify the encoding of USP Endpoint ID for URI use.</li>
+<li>Opened up the OUI definition and Use of authorityscheme and
+authorityid Section R-ARC.2a to allow for not only the old 24-bit OUIs
+but to also allow for 36-bit OUIs.</li>
+<li>Updated OnBoardRequest Section to state that the OnBoardRequest
+notification MUST be sent with send_resp=true, which included updates to
+R-NOT.5 and R-NOT-6 as well as the addition of R-NOT-6a to insure the
+Controller retries until a notification response is recieved.</li>
+<li>Defined the term “Partial Path” in Definitions Section.</li>
+<li>Fixed the Operate example in Operate Examples Section to include
+both sync and async data model commands.</li>
+<li>Updated the GetSupportedDM to now indicate the unique keys of a
+table, which caused updates to the examples in GetSupportedDM Examples
+Section and the usp-msg-1-4.proto file within the GetSupportedDM
+message.</li>
+<li>Updated Role Definition Section with clarifications to Role
+permissions applying to Supported and Instantiated Data model and the
+Secured Role as applying to “secured” parameter in the path(s), with
+examples of both.</li>
+</ul></td>
+</tr>
 </tbody>
 </table>
-<h3 class="unnumbered unlisted auto-hoverlink" data-info="header"
-id="sec:editors">Editors</h3>
+<p>Comments or questions about this Broadband Forum Technical Report
+should be directed to <a href="mailto:info@broadband-forum.org"
+class="email">info@broadband-forum.org</a>.</p>
+<section id="sec:editors"
+class="unnumbered unlisted auto-hoverlink nobreak" data-info="header">
+<h3 class="unnumbered unlisted auto-hoverlink"
+data-info="header">Editors</h3>
 <table class="editors">
 <colgroup>
 <col style="width: 20%" />
@@ -792,35 +848,32 @@ id="sec:editors">Editors</h3>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Barbara Stark</td>
-<td style="text-align: left;">AT&amp;T</td>
-<td style="text-align: left;">barbara.stark@att.com</td>
+<td style="text-align: left;">Tim Spets</td>
+<td style="text-align: left;">Nokia</td>
+<td style="text-align: left;">timothy.spets@nokia.com</td>
 <td style="text-align: left;">Editor/USP Project Lead</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Tim Spets</td>
-<td style="text-align: left;">Assia</td>
-<td style="text-align: left;">tspets@assia-inc.com</td>
-<td style="text-align: left;">Editor/USP Project Lead</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Jason Walls</td>
 <td style="text-align: left;">QA Cafe, LLC</td>
 <td style="text-align: left;">jason@qacafe.com</td>
 <td style="text-align: left;">Editor/Broadband User Services Work Area
 Director</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">John Blackford</td>
-<td style="text-align: left;">Commscope</td>
-<td style="text-align: left;">john.blackford@commscope.com</td>
+<td style="text-align: left;">Vantiva</td>
+<td style="text-align: left;">john.blackford@vantiva.com</td>
 <td style="text-align: left;">Editor/Broadband User Services Work Area
 Director</td>
 </tr>
 </tbody>
 </table>
-<h3 class="unnumbered unlisted auto-hoverlink" data-info="header"
-id="sec:acknowledgments">Acknowledgments</h3>
+</section>
+<section id="sec:acknowledgments"
+class="unnumbered unlisted auto-hoverlink nobreak" data-info="header">
+<h3 class="unnumbered unlisted auto-hoverlink"
+data-info="header">Acknowledgments</h3>
 <table class="acknowledgments">
 <colgroup>
 <col style="width: 32%" />
@@ -881,17 +934,23 @@ id="sec:acknowledgments">Acknowledgments</h3>
 <td style="text-align: left;">wlupton@broadband-forum.org</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Barbara Stark</td>
+<td style="text-align: left;">AT&amp;T</td>
+<td style="text-align: left;">barbara.stark@att.com</td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">Matthieu Anne</td>
 <td style="text-align: left;">Orange</td>
 <td style="text-align: left;">matthieu.anne@orange.com</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Thales Fragoso</td>
 <td style="text-align: left;">Axiros</td>
 <td style="text-align: left;">thales.fragoso@axiros.com</td>
 </tr>
 </tbody>
 </table>
+</section>
 <h1 class="new-page auto-hoverlink" data-info="header"
 id="sec:introduction">1 Introduction</h1>
 <h2 class="auto-hoverlink" data-info="header"
@@ -1036,7 +1095,8 @@ recent edition of the references listed below.</p>
 <p>A list of currently valid Broadband Forum Technical Reports is
 published at <a
 href="https://www.broadband-forum.org">www.broadband-forum.org</a>.</p>
-<div id="refs" class="references csl-bib-body" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0"
+role="list">
 <div id="ref-TR-069" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div
 class="csl-right-inline">TR-069 Amendment 6, <em><a
@@ -1298,6 +1358,10 @@ Transfer Protocol.</p>
 <p><strong>Command</strong></p>
 <p>The term used to define and refer to an Object-specific Operation in
 the Agent’s Instantiated or Supported Data Model.</p>
+<p><strong>Command Path</strong></p>
+<p>A Command Path is a Path Name that addresses a Command of an Object
+or Object Instance. See <a href="#sec:path-names" class="heading">Path
+Names</a>.</p>
 <p><strong>Connection Capabilities</strong></p>
 <p>Connection Capabilities are information related to an Endpoint that
 describe how to communicate with that Endpoint, and provide a very basic
@@ -1322,6 +1386,10 @@ with a Request.</p>
 <p><strong>Event</strong></p>
 <p>An Event is a set of conditions that, when met, triggers the sending
 of a Notification.</p>
+<p><strong>Event Path</strong></p>
+<p>A Event Path is a Path Name that addresses an Event of an Object or
+Object Instance. See <a href="#sec:path-names" class="heading">Path
+Names</a>.</p>
 <p><strong>Expression</strong></p>
 <p>See also Search Expression.</p>
 <p><strong>Expression Component</strong></p>
@@ -1414,8 +1482,9 @@ Object or Object Instance. See <a href="#sec:path-names"
 class="heading">Path Names</a>.</p>
 <p><strong>Path Name</strong></p>
 <p>A Path Name is a fully qualified reference to an Object, Object
-Instance, or Parameter in an Agent’s Instantiated or Supported Data
-Model. See <a href="#sec:path-names" class="heading">Path Names</a>.</p>
+Instance, Command, Event, or Parameter in an Agent’s Instantiated or
+Supported Data Model. See <a href="#sec:path-names" class="heading">Path
+Names</a>.</p>
 <p><strong>Path Reference</strong></p>
 <p>A Path Reference is a Parameter data type that contains a Path Name
 to an Object or Parameter that may be automatically followed by using
@@ -1771,7 +1840,7 @@ id="img:usp-agent-and-controller-architecture"
 alt="USP Agent and Controller Architecture" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-agent-and-controller-architecture">
-Figure 1: USP Agent and Controller Architecture
+Figure 1 – USP Agent and Controller Architecture
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header" id="sec:agents">2.1.1
@@ -1869,15 +1938,14 @@ instance-id</th>
 <tr class="odd">
 <td style="text-align: right;"><code>oui</code></td>
 <td style="text-align: left;"><code>authority-id</code> MUST be an OUI
-(now called “MAC Address Block Large” or “MA-L”) assigned and registered
-by the IEEE Registration Authority <span class="citation"
-data-cites="IEEEREG"><a href="#ref-IEEEREG"
-role="doc-biblioref">[7]</a></span> to the entity responsible for this
-Endpoint. authority-id MUST use hex encoding of the 24-bit ID (resulting
-in 6 hex characters). <code>instance-id</code> syntax is defined by this
-entity, who is also responsible for determining instance-id assignment
-mechanisms and for ensuring uniqueness of the instance-id within the
-context of the OUI.
+(now called “MAC Address Block”) assigned and registered by the IEEE
+Registration Authority <span class="citation" data-cites="IEEEREG"><a
+href="#ref-IEEEREG" role="doc-biblioref">[7]</a></span> to the entity
+responsible for this Endpoint. authority-id MUST use hex encoding of the
+24, 28, or 36-bit ID (resulting in 6, 7 or 9 hex characters).
+<code>instance-id</code> syntax is defined by this entity, who is also
+responsible for determining instance-id assignment mechanisms and for
+ensuring uniqueness of the instance-id within the context of the OUI.
 Example:<code>oui:00256D:my-unique-bbf-id-42</code></td>
 </tr>
 <tr class="even">
@@ -1934,9 +2002,8 @@ Endpoint via a user or management interface.</td>
 <td style="text-align: left;"><code>authority-id</code> MUST be
 zero-length.<br />
 <code>instance-id</code>is
-<code>&lt;OUI&gt; "-" &lt;SerialNumber&gt;</code>, as defined in TR-069
-<span class="citation" data-cites="TR-069"><a href="#ref-TR-069"
-role="doc-biblioref">[1]</a></span> Section 3.4.4.<br />
+<code>&lt;OUI&gt; "-" &lt;SerialNumber&gt;</code>, with <code>OUI</code>
+as defined above.<br />
 Example: <code>os::00256D-0123456789</code></td>
 </tr>
 <tr class="odd">
@@ -1945,9 +2012,7 @@ Example: <code>os::00256D-0123456789</code></td>
 zero-length.<br />
 <code>instance-id</code> is
 <code>&lt;OUI&gt; "-" &lt;ProductClass&gt; "-" &lt;SerialNumber&gt;</code>,
-as defined in TR-069 <span class="citation" data-cites="TR-069"><a
-href="#ref-TR-069" role="doc-biblioref">[1]</a></span> Section
-3.4.4.<br />
+with <code>OUI</code> as defined above.<br />
 Example: <code>ops::00256D-STB-0123456789</code></td>
 </tr>
 <tr class="even">
@@ -2166,7 +2231,8 @@ class="heading">Reference Following</a>). When addressing a Table in the
 Agent’s Supported Data Model that contains one or more Multi-Instance
 Objects in the Path Name, the sequence “{i}” is used as a placeholder
 (see <a href="#sec:the-getsupporteddm-message" class="heading">The
-GetSupportedDM Message</a>).</p></li>
+GetSupportedDM Message</a>). An Object Path, as with an Object Instance
+Path, is sometimes referred to as a “Partial Path”.</p></li>
 <li><p>Object Instance Path - This is a Path Name to a Row in a Table in
 the Agent’s Instantiated Data Model (i.e., an Instance of a
 Multi-Instance Object). It uses an Instance Identifier to address a
@@ -2175,7 +2241,9 @@ Character (as specified in TR-106 <span class="citation"
 data-cites="TR-106"><a href="#ref-TR-106"
 role="doc-biblioref">[2]</a></span>), except when used in a reference
 Parameter (see <a href="#sec:reference-following"
-class="heading">Reference Following</a>).</p></li>
+class="heading">Reference Following</a>). An Object Instance Path, as
+with an Object Path, is sometimes referred to as a “Partial
+Path”.</p></li>
 <li><p>Parameter Path - This is a Path Name of a particular Parameter of
 an Object.</p></li>
 <li><p>Command Path - This is a Path Name of an Object defined <a
@@ -3476,7 +3544,7 @@ href="#fig:receiving-a-x509-certificate" class="figure">Figure
 alt="Receiving a X.509 Certificate" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:receiving-a-x509-certificate">
-Figure 2: Receiving a X.509 Certificate
+Figure 2 – Receiving a X.509 Certificate
 </div></figcaption>
 </figure>
 <p><em>Note: The .local and .home.arpa domains are defined by the IETF
@@ -3836,7 +3904,7 @@ id="img:example-usp-requestresponse-over-the-coap-mtp"
 alt="Example: USP Request/Response over the CoAP MTP" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-request-response-over-coap">
-Figure 3: Example: USP Request/Response over the CoAP MTP
+Figure 3 – Example: USP Request/Response over the CoAP MTP
 </div></figcaption>
 </figure>
 <p>In this example, a USP Request is encoded within a USP Record and
@@ -4090,7 +4158,7 @@ id="img:websocket-session-handshake"
 alt="WebSocket Session Handshake" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:websocket-session-handshake">
-Figure 4: WebSocket Session Handshake
+Figure 4 – WebSocket Session Handshake
 </div></figcaption>
 </figure>
 <p>While WebSocket sessions can be established by either USP Controllers
@@ -4152,6 +4220,12 @@ identify the client, the request URI of the opening handshake contains a
 provide the Endpoint ID of the client. <code>eid</code> is used as the
 key to the pair, while the value is the Endpoint ID of the client,
 e.g. <code>eid=doc::agent</code>.</p>
+<p><em>Note: USP Endpoint IDs can contain percent-encoded characters,
+which can create confusion when encoding it for URI use. The Endpoint ID
+needs to be treated as opaque data for it to be properly “roundtripable”
+when encoded/decoded for URI use, thus any percent character needs to be
+percent-encoded, e.g. <code>doc::agent%21</code> will be encoded as
+<code>doc::agent%2521</code>.</em></p>
 <p><strong><span id="r-ws.9"
 class="auto-hoverlink">R-WS.9</span></strong> - The WebSocket’s
 handshake <code>Sec-WebSocket-Protocol</code> header for exchange of USP
@@ -4181,6 +4255,11 @@ href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>. The
 and the <code>value</code> part MUST be the client’s Endpoint ID. This
 pair MUST be separated from other query data by the <code>&amp;</code>
 character.</p>
+<p><strong><span id="r-ws.10c"
+class="auto-hoverlink">R-WS.10c</span></strong> - When encoding the USP
+Endpoint ID for URI use, it MUST be treated as opaque data and any
+percent character MUST itself be percent-encoded, i.e. as
+<code>%25</code>.</p>
 <p><strong><span id="r-ws.11"
 class="auto-hoverlink">R-WS.11</span></strong> - A WebSocket server that
 supports USP Endpoints MUST include the
@@ -4228,14 +4307,15 @@ role="doc-biblioref">[19]</a></span>.</p>
 <p>USP Records can be transferred between USP Controllers and USP Agents
 over an established WebSocket session. These USP Records are
 encapsulated within a binary WebSocket data frame as depicted by the
-figure below.</p>
+figure below. WebSocket message fragmentation should be avoided, because
+its main benefit does not apply for the case of sending USP Records.</p>
 <figure id="fig:usp-request-using-a-websocket-session">
 <img src="mtp/websocket/USP-request-over-websocket.png"
 id="img:usp-request-using-a-websocket-session"
 alt="USP Request using a WebSocket Session" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-request-using-a-websocket-session">
-Figure 5: USP Request using a WebSocket Session
+Figure 5 – USP Request using a WebSocket Session
 </div></figcaption>
 </figure>
 <p><strong><span id="r-ws.14"
@@ -4245,6 +4325,12 @@ WebSockets MUST be encapsulated within as a binary WebSocket data frame
 as defined in section 5.6 of RFC 6455 <span class="citation"
 data-cites="RFC6455"><a href="#ref-RFC6455"
 role="doc-biblioref">[19]</a></span>.</p>
+<p><strong><span id="r-ws.14a"
+class="auto-hoverlink">R-WS.14a</span></strong> - USP Endpoints SHOULD
+NOT use WebSocket message fragmentation for sending USP Records.</p>
+<p><strong><span id="r-ws.14b"
+class="auto-hoverlink">R-WS.14b</span></strong> - USP Endpoints MUST
+support WebSocket message fragmentation in received USP Records.</p>
 <p><strong><span id="r-ws.15"
 class="auto-hoverlink">R-WS.15</span></strong> - USP Records are
 transferred between USP Endpoints using message body procedures as
@@ -4457,7 +4543,7 @@ id="img:usp-over-stomp-architecture"
 alt="USP over STOMP Architecture" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:usp-over-stomp">
-Figure 6: USP over STOMP Architecture
+Figure 6 – USP over STOMP Architecture
 </div></figcaption>
 </figure>
 <p>The basic steps for any USP Endpoint that utilizes a STOMP MTP
@@ -4859,7 +4945,10 @@ implementation SHOULD support both Client Certification Authentication
 and Username/Password Authentication mechanisms.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:mtp-message-encryption-2">4.4.6 MTP Message Encryption</h3>
-<p>STOMP MTP message encryption is provided using TLS certificates.</p>
+<p>STOMP MTP message encryption is provided using certificates in TLS as
+described in section 10.5 and section 10.6 of RFC 6455 <span
+class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-stomp.36"
 class="auto-hoverlink">R-STOMP.36</span></strong> - USP Endpoints
 utilizing STOMP clients for message transport MUST implement TLS 1.2 RFC
@@ -4886,7 +4975,7 @@ USP Agents and Controllers.</p>
 <img src="mtp/mqtt/mqtt-architecture.png"
 id="img:usp-over-mqtt-architecture" alt="USP over MQTT Architecture" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:usp-over-mqtt">
-Figure 7: USP over MQTT Architecture
+Figure 7 – USP over MQTT Architecture
 </div></figcaption>
 </figure>
 <p>The basic steps for any USP Endpoint that utilizes an MQTT MTP
@@ -4905,7 +4994,7 @@ this section for their use when MQTT is a USP MTP.</p>
 <img src="mtp/mqtt/mqtt-packets.png" id="img:mqtt-packets"
 alt="MQTT Packets" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:mqtt-packets">
-Figure 8: MQTT Packets
+Figure 8 – MQTT Packets
 </div></figcaption>
 </figure>
 <p><strong><span id="r-mqtt.1"
@@ -5491,7 +5580,10 @@ supporting all Endpoint ID characters (includes “-”, “.”, “_”, “%�
 “:”) and at least 64 characters length.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:mtp-message-encryption-3">4.5.8 MTP Message Encryption</h3>
-<p>MQTT MTP message encryption is provided using TLS certificates.</p>
+<p>MQTT MTP message encryption is provided using certificates in TLS as
+described in section 10.5 and section 10.6 of RFC 6455 <span
+class="citation" data-cites="RFC6455"><a href="#ref-RFC6455"
+role="doc-biblioref">[19]</a></span>.</p>
 <p><strong><span id="r-mqtt.48"
 class="auto-hoverlink">R-MQTT.48</span></strong> - USP Endpoints
 utilizing MQTT clients for message transport MUST implement TLS 1.2
@@ -5518,7 +5610,7 @@ of this transport as a USP MTP.</p>
 id="img:unix-domain-socket-binding" alt="Unix Domain Socket Binding" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-binding">
-Figure 9: Unix Domain Socket Binding
+Figure 9 – Unix Domain Socket Binding
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -5742,7 +5834,7 @@ id="img:unix-domain-socket-frame-with-handshake-message"
 alt="UNIX Domain Socket Frame with Handshake Message" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-frame-with-handshake-message">
-Figure 10: UNIX Domain Socket Frame with Handshake Message
+Figure 10 – UNIX Domain Socket Frame with Handshake Message
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
@@ -5786,7 +5878,7 @@ id="img:unix-domain-socket-frame-with-usp-record-message"
 alt="UNIX Domain Socket Frame with USP Record Message" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:unix-domain-socket-frame-with-usp-record-message">
-Figure 11: UNIX Domain Socket Frame with USP Record Message
+Figure 11 – UNIX Domain Socket Frame with USP Record Message
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
@@ -5813,7 +5905,22 @@ class="requirement">R-MTP.5</a>.</p>
 id="sec:mtp-message-encryption-4">4.6.4 MTP Message Encryption</h3>
 <p>Encryption is not required for the UNIX domain socket MTP as all
 messages are exchanged between processes that reside internally within
-the device.</p>
+the device, but UNIX domain socket MTP message encryption can optionally
+be provided using certificates in TLS as described in section 10.5 and
+section 10.6 of RFC 6455 <span class="citation" data-cites="RFC6455"><a
+href="#ref-RFC6455" role="doc-biblioref">[19]</a></span>.</p>
+<p><strong><span id="r-uds.23a"
+class="auto-hoverlink">R-UDS.23a</span></strong> - USP Endpoints
+utilizing UNIX domain sockets for message transport, that choose to use
+TLS for MTP message encryption, MUST implement TLS 1.2 RFC 5246 <span
+class="citation" data-cites="RFC5246"><a href="#ref-RFC5246"
+role="doc-biblioref">[33]</a></span> or later with backward
+compatibility to TLS 1.2.</p>
+<p><strong><span id="r-uds.23b"
+class="auto-hoverlink">R-UDS.23b</span></strong> - USP Controller
+certificates MAY contain domain names with wildcard characters per RFC
+6125 <span class="citation" data-cites="RFC6125"><a href="#ref-RFC6125"
+role="doc-biblioref">[18]</a></span> guidance.</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:handling-other-unix-domain-socket-failures">4.6.5 Handling Other
 UNIX Domain Socket Failures</h3>
@@ -5853,12 +5960,12 @@ role="doc-biblioref">[4]</a></span></li>
 class="auto-hoverlink">R-ENC.0</span></strong> - An implementation using
 protocol buffers encoding to encode USP Messages (Requests, Responses,
 and Errors) MUST conform to the schema defined in <a
-href="../specification/usp-msg-1-3.proto">usp-msg-1-3.proto</a>.</p>
+href="../specification/usp-msg-1-4.proto">usp-msg-1-4.proto</a>.</p>
 <p><strong><span id="r-enc.1"
 class="auto-hoverlink">R-ENC.1</span></strong> - An implementation using
 protocol buffers encoding to encode USP Records MUST conform to the
 schema defined in <a
-href="../specification/usp-record-1-3.proto">usp-record-1-3.proto</a>.</p>
+href="../specification/usp-record-1-4.proto">usp-record-1-4.proto</a>.</p>
 <p>Protocol Buffers Version 3 uses a set of enumerated elements to
 coordinate encoding and decoding during transmission. It is intended
 that these remain backwards compatible, but new versions of the schema
@@ -5887,7 +5994,7 @@ return an error of type 7004 (Invalid Arguments).</p>
 <h2 class="auto-hoverlink" data-info="header"
 id="sec:parameter-value-encoding">5.1 Parameter and Argument Value
 Encoding</h2>
-<p><a href="../specification/usp-msg-1-3.proto">usp-msg-1-3.proto</a>
+<p><a href="../specification/usp-msg-1-4.proto">usp-msg-1-4.proto</a>
 specifies that Parameter and argument values in USP Messages are
 represented as Protocol Buffers Version 3 strings (which are
 UTF-8-encoded).</p>
@@ -6305,7 +6412,7 @@ id="img:processing-of-received-usp-records"
 alt="Processing of Received USP Records" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:processing-received-records">
-Figure 12: Processing of Received USP Records
+Figure 12 – Processing of Received USP Records
 </div></figcaption>
 </figure>
 <p><strong><span id="r-e2e.19"
@@ -6448,7 +6555,7 @@ id="img:e2e-segmentation-and-reassembly"
 alt="E2E Segmentation and Reassembly" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:segmentation-and-reassembly">
-Figure 13: E2E Segmentation and Reassembly
+Figure 13 – E2E Segmentation and Reassembly
 </div></figcaption>
 </figure>
 <p><em>Note: the 64k size limit is not inherent to the STOMP protocol.
@@ -6914,7 +7021,7 @@ round-trips.</p>
 <img src="e2e-message-exchange/tls-session-handshake.png"
 id="img:tls-session-handshake" alt="TLS Session Handshake" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:handshake">
-Figure 14: TLS Session Handshake
+Figure 14 – TLS Session Handshake
 </div></figcaption>
 </figure>
 <p><strong><span id="r-e2e.41"
@@ -7059,7 +7166,7 @@ id="img:a-successful-requestresponse-sequence"
 alt="A successful request/response sequence" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:a-successful-requestresponse-sequence">
-Figure 15: A successful request/response sequence
+Figure 15 – A successful request/response sequence
 </div></figcaption>
 </figure>
 <p>Failed request/response: In this failed Message sequence, a
@@ -7072,7 +7179,7 @@ id="img:a-failed-requestresponse-sequence"
 alt="A failed request/response sequence" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:a-failed-requestresponse-sequence">
-Figure 16: A failed request/response sequence
+Figure 16 – A failed request/response sequence
 </div></figcaption>
 </figure>
 <h2 class="auto-hoverlink" data-info="header"
@@ -7085,7 +7192,7 @@ format from one USP Endpoint to another.</p>
 <p><strong><span id="r-msg.5"
 class="auto-hoverlink">R-MSG.5</span></strong> - A Message MUST conform
 to the schemas defined in <a
-href="../specification/usp-msg-1-3.proto">usp-msg-1-3.proto</a>.</p>
+href="../specification/usp-msg-1-4.proto">usp-msg-1-4.proto</a>.</p>
 <p><em>See the section on <a href="#sec:usp-record-encapsulation"
 class="heading">USP Record Encapsulation</a> for information about
 Protocol Buffers default behavior and required fields.</em></p>
@@ -7339,7 +7446,34 @@ href="#ref-TR-106" role="doc-biblioref">[2]</a></span>) MAY change
 incidentally as part of normal operation, but any change MUST abide by
 the uniqueness rules (i.e., no conflict with other instances).</p>
 <h3 class="auto-hoverlink" data-info="header"
-id="sec:using-allow-partial-and-required-parameters">7.4.3 Using Allow
+id="sec:writeoncereadonly-parameter-access">7.4.3 writeOnceReadOnly
+Parameter Access</h3>
+<p>There are several parameter access types defined in <span
+class="citation" data-cites="TR-106"><a href="#ref-TR-106"
+role="doc-biblioref">[2]</a></span> that specify what a Controller is
+allowed to do with a particular Parameter as defined in <span
+class="citation" data-cites="TR-181"><a href="#ref-TR-181"
+role="doc-biblioref">[3]</a></span>. Of these,
+<code>writeOnceReadOnly</code> affects the response of an Agent in
+specific ways. A <code>writeOnceReadOnly</code> Parameter can be set
+only once by a Controller, and then becomes read-only. In some cases,
+the value is assigned by the Agent upon Object creation if not specified
+by the Controller. The expected behavior is otherwise as follows:</p>
+<ul>
+<li>When a <code>writeOnceReadyOnly</code> Parameter is set upon Object
+creation via the <code>Add</code> Message, the Controller making the Add
+Request is considered to have set the Parameter.</li>
+<li>When a <code>writeOnceReadOnly</code> Parameter is updated via a
+<code>Set</code> Message, an Agent will reject the update if the
+Parameter has already been set.</li>
+<li><code>writeOnceReadyOnly</code> Parameters are reported as
+<code>PARAM_READ_WRITE (1)</code> in a <code>GetSupportedDM</code>
+Response. Controllers should rely on knowledge of the Agent’s data model
+through other means (i.e., officially published data models) to
+determine that a parameter is <code>writeOnceReadOnly</code>.</li>
+</ul>
+<h3 class="auto-hoverlink" data-info="header"
+id="sec:using-allow-partial-and-required-parameters">7.4.4 Using Allow
 Partial and Required Parameters</h3>
 <p>The Add, Set, and Delete requests contain a field called
 “<code>allow_partial</code>”. This field determines whether or not the
@@ -7461,7 +7595,7 @@ Agent returned a Response or Error Message.</p>
 </tbody>
 </table>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:search-paths-in-set">7.4.3.1 Search Paths and allow_partial in
+id="sec:search-paths-in-set">7.4.4.1 Search Paths and allow_partial in
 Set</h4>
 <p>In a Set Request that specifies a Search Path that matches multiple
 objects, it is intended that the Agent treats the requested path
@@ -7472,12 +7606,12 @@ be lost if an Error message was returned rather than a Response message
 containing OperationFailure elements. See <a href="#r-set.2a"
 class="requirement">R-SET.2a</a> and <a href="#r-set.2b"
 class="requirement">R-SET.2b</a> for the specific requirements.</p>
-<h3 class="auto-hoverlink" data-info="header" id="sec:add">7.4.4 The Add
+<h3 class="auto-hoverlink" data-info="header" id="sec:add">7.4.5 The Add
 Message</h3>
 <p>The Add Message is used to create new Instances of Multi-Instance
 Objects in the Agent’s Instantiated Data Model.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:add-example">7.4.4.1 Add Example</h4>
+id="sec:add-example">7.4.5.1 Add Example</h4>
 <p>In this example, the Controller requests that the Agent create a new
 instance in the <code>Device.LocalAgent.Controller</code> table.</p>
 <pre data-filter="pbv"><code>header {
@@ -7531,7 +7665,7 @@ body {
   }
 }</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:add-request-fields">7.4.4.2 Add Request Fields</h4>
+id="sec:add-request-fields">7.4.5.2 Add Request Fields</h4>
 <p><code>bool allow_partial</code></p>
 <p>This field tells the Agent how to process the Message in the event
 that one or more of the Objects specified in the
@@ -7557,7 +7691,7 @@ class="heading">Using Allow Partial and Required Parameters</a>).</p>
 <p><code>repeated CreateObject create_objs</code></p>
 <p>This field contains a repeated set of CreateObject fields.</p>
 <h5 class="auto-hoverlink" data-info="header"
-id="sec:createobject-fields">7.4.4.2.1 CreateObject Fields</h5>
+id="sec:createobject-fields">7.4.5.2.1 CreateObject Fields</h5>
 <p><code>string obj_path</code></p>
 <p>This field contains an Object Path to a writeable Table in the
 Agent’s Instantiated Data Model.</p>
@@ -7574,7 +7708,7 @@ requested_path.</em></p>
 <p><code>repeated CreateParamSetting param_settings</code></p>
 <p>This field contains a repeated set of CreateParamSetting fields.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:createparamsetting-fields">7.4.4.2.1.1 CreateParamSetting
+id="sec:createparamsetting-fields">7.4.5.2.1.1 CreateParamSetting
 Fields</h6>
 <p><code>string param</code></p>
 <p>This field contains a Relative Path to a Parameter of the Object
@@ -7624,12 +7758,12 @@ class="auto-hoverlink">R-ADD.3</span></strong> - If the
 <code>required</code> field is set to true, a failure to update this
 Parameter MUST result in a failure to create the Object.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:add-response-fields">7.4.4.3 Add Response Fields</h4>
+id="sec:add-response-fields">7.4.5.3 Add Response Fields</h4>
 <p><code>repeated CreatedObjectResult created_obj_results</code></p>
 <p>A repeated set of <code>CreatedObjectResult</code> fields for each
 <code>CreateObject</code> field in the Add Message.</p>
 <h5 class="auto-hoverlink" data-info="header"
-id="sec:createdobjectresult-fields">7.4.4.3.1 CreatedObjectResult
+id="sec:createdobjectresult-fields">7.4.5.3.1 CreatedObjectResult
 Fields</h5>
 <p><code>string requested_path</code></p>
 <p>This field returns the value of <code>obj_paths</code> in the
@@ -7640,7 +7774,7 @@ Fields</h5>
 that specifies the overall status for the creation of the Object
 specified in <code>requested_path</code>.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationstatus-fields">7.4.4.3.1.1 OperationStatus Fields</h6>
+id="sec:operationstatus-fields">7.4.5.3.1.1 OperationStatus Fields</h6>
 <p><code>oneof oper_status</code></p>
 <p>This field contains one of the types given below. Each indicates that
 the field contains a Message of the given type.</p>
@@ -7651,7 +7785,7 @@ be created.</p>
 <p>Used when the <code>Add</code> Message was (at least partially)
 successful.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationfailure-fields">7.4.4.3.1.2 OperationFailure
+id="sec:operationfailure-fields">7.4.5.3.1.2 OperationFailure
 Fields</h6>
 <p><code>fixed32 err_code</code></p>
 <p>This field contains a numeric code (<a href="#sec:error-codes"
@@ -7661,7 +7795,7 @@ caused the Object creation to fail.</p>
 <p>This field contains additional information about the reason behind
 the error.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operation-success-fields">7.4.4.3.1.3 Operation Success
+id="sec:operation-success-fields">7.4.5.3.1.3 Operation Success
 Fields</h6>
 <p><code>string instantiated_path</code></p>
 <p>This field contains the Object Instance Path of the created
@@ -7689,7 +7823,7 @@ not have Read permission on any of the Parameters returned in
 <code>unique_keys</code>, these Parameters MUST NOT be returned in this
 field.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:parametererror-fields">7.4.4.3.1.4 ParameterError Fields</h6>
+id="sec:parametererror-fields">7.4.5.3.1.4 ParameterError Fields</h6>
 <p><code>string param</code></p>
 <p>This field contains the Relative Parameter Path to the Parameter that
 failed to be set.</p>
@@ -7701,17 +7835,17 @@ set to fail.</p>
 <p>This field contains text related to the error specified by
 <code>err_code</code>.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:add-message-supported-error-codes">7.4.4.4 Add Message Supported
+id="sec:add-message-supported-error-codes">7.4.5.4 Add Message Supported
 Error Codes</h4>
 <p>Appropriate error codes for the Add Message include
 <code>7000-7019</code>, <code>7026</code>, and
 <code>7800-7999</code>.</p>
-<h3 class="auto-hoverlink" data-info="header" id="sec:set">7.4.5 The Set
+<h3 class="auto-hoverlink" data-info="header" id="sec:set">7.4.6 The Set
 Message</h3>
 <p>The Set Message is used to update the Parameters of existing Objects
 in the Agent’s Instantiated Data Model.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:set-example">7.4.5.1 Set Example</h4>
+id="sec:set-example">7.4.6.1 Set Example</h4>
 <p>In this example the Controller requests that the Agent change the
 value of the <code>FriendlyName</code> Parameter in the
 <code>Device.DeviceInfo.</code> Object.</p>
@@ -7759,7 +7893,7 @@ body {
   }
 }</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:set-request-fields">7.4.5.2 Set Request Fields</h4>
+id="sec:set-request-fields">7.4.6.2 Set Request Fields</h4>
 <p><code>bool allow_partial</code></p>
 <p>This field tells the Agent how to process the Message in the event
 that one or more of the Objects matched in the <code>obj_path</code>
@@ -7788,7 +7922,7 @@ class="heading">Using Allow Partial and Required Parameters</a>).</p>
 <p><code>repeated UpdateObject update_objs</code></p>
 <p>This field contains a repeated set of UpdateObject messages.</p>
 <h5 class="auto-hoverlink" data-info="header"
-id="sec:updateobject-fields">7.4.5.2.1 UpdateObject Fields</h5>
+id="sec:updateobject-fields">7.4.6.2.1 UpdateObject Fields</h5>
 <p><code>string obj_path</code></p>
 <p>This field contains an Object Path, Object Instance Path, or Search
 Path to Objects or Object Instances in the Agent’s Instantiated Data
@@ -7797,7 +7931,7 @@ Model.</p>
 <p>The field contains a repeated set of <code>UpdatedParamSetting</code>
 messages.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:updateparamsetting-fields">7.4.5.2.1.1 UpdateParamSetting
+id="sec:updateparamsetting-fields">7.4.6.2.1.1 UpdateParamSetting
 Fields</h6>
 <p><code>string param</code></p>
 <p>This field contains the Relative Path of a Parameter of the Object
@@ -7844,13 +7978,13 @@ in the <code>UpdateObject</code> message that contains a Search Path
 matching more than one object after encountering any number of
 errors.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:set-response">7.4.5.3 Set Response</h4>
+id="sec:set-response">7.4.6.3 Set Response</h4>
 <p><code>repeated UpdatedObjectResult updated_obj_results</code></p>
 <p>This field contains a repeated set of
 <code>UpdatedObjectResult</code> messages for each
 <code>UpdateObject</code> message in the associated Set Request.</p>
 <h5 class="auto-hoverlink" data-info="header"
-id="sec:updatedobjectresult-fields">7.4.5.3.1 UpdatedObjectResult
+id="sec:updatedobjectresult-fields">7.4.6.3.1 UpdatedObjectResult
 Fields</h5>
 <p><code>string requested_path</code></p>
 <p>This field returns the value of <code>updated_obj_results</code> in
@@ -7861,7 +7995,7 @@ the <code>UpdateObject</code> message associated with this
 that specifies the overall status for the update of the Object specified
 in <code>requested_path</code>.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationstatus-fields-1">7.4.5.3.1.1 OperationStatus
+id="sec:operationstatus-fields-1">7.4.6.3.1.1 OperationStatus
 Fields</h6>
 <p><code>oneof oper_status</code></p>
 <p>This field contains a message of one of the following types.</p>
@@ -7872,7 +8006,7 @@ to be updated.</p>
 <p>Used when the <code>Set</code> message was (at least partially)
 successful.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationfailure-fields-1">7.4.5.3.1.2 OperationFailure
+id="sec:operationfailure-fields-1">7.4.6.3.1.2 OperationFailure
 Fields</h6>
 <p><code>fixed32 err_code</code></p>
 <p>This field contains a numeric code (<a href="#sec:error-codes"
@@ -7885,7 +8019,7 @@ the error.</p>
 <p>This field contains a repeated set of messages of type
 <code>UpdatedInstanceFailure</code>.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:updatedinstancefailure-fields">7.4.5.3.1.3
+id="sec:updatedinstancefailure-fields">7.4.6.3.1.3
 UpdatedInstanceFailure Fields</h6>
 <p><code>string affected_path</code></p>
 <p>This field returns the Object Path or Object Instance Path of the
@@ -7894,7 +8028,7 @@ Object that failed to update.</p>
 <p>This field contains a repeated set of <code>ParameterError</code>
 messages.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:parametererror-fields-1">7.4.5.3.1.4 ParameterError Fields</h6>
+id="sec:parametererror-fields-1">7.4.6.3.1.4 ParameterError Fields</h6>
 <p><code>string param</code></p>
 <p>This field contains the Relative Parameter Path to the Parameter that
 failed to be set.</p>
@@ -7906,13 +8040,13 @@ caused the Parameter set to fail.</p>
 <p>This field contains text related to the error specified by
 <code>err_code</code>.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationsuccess-fields">7.4.5.3.1.5 OperationSuccess
+id="sec:operationsuccess-fields">7.4.6.3.1.5 OperationSuccess
 Fields</h6>
 <p><code>repeated UpdatedInstanceResult updated_inst_results</code></p>
 <p>This field contains a repeated set of
 <code>UpdatedInstanceResult</code> messages.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:updatedinstanceresult-fields">7.4.5.3.1.6 UpdatedInstanceResult
+id="sec:updatedinstanceresult-fields">7.4.6.3.1.6 UpdatedInstanceResult
 Fields</h6>
 <p><code>string affected_path</code></p>
 <p>This field returns the Object Path or Object Instance Path of the
@@ -7936,7 +8070,7 @@ this field.</p>
 it already had, this Parameter is still returned in the
 <code>updated_params</code>.</em></p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:parametererror-fields-2">7.4.5.3.1.7 ParameterError Fields</h6>
+id="sec:parametererror-fields-2">7.4.6.3.1.7 ParameterError Fields</h6>
 <p><code>string param</code></p>
 <p>This field contains the Parameter Path to the Parameter that failed
 to be set.</p>
@@ -7948,17 +8082,17 @@ caused the Parameter set to fail.</p>
 <p>This field contains text related to the error specified by
 <code>err_code</code>.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:set-message-supported-error-codes">7.4.5.4 Set Message Supported
+id="sec:set-message-supported-error-codes">7.4.6.4 Set Message Supported
 Error Codes</h4>
 <p>Appropriate error codes for the Set Message include
 <code>7000-7016</code>, <code>7020</code>, <code>7021</code>,
 <code>7026</code>, and <code>7800-7999</code>.</p>
-<h3 class="auto-hoverlink" data-info="header" id="sec:delete">7.4.6 The
+<h3 class="auto-hoverlink" data-info="header" id="sec:delete">7.4.7 The
 Delete Message</h3>
 <p>The Delete Message is used to remove Instances of Multi-Instance
 Objects in the Agent’s Instantiated Data Model.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:delete-example">7.4.6.1 Delete Example</h4>
+id="sec:delete-example">7.4.7.1 Delete Example</h4>
 <p>In this example, the Controller requests that the Agent remove the
 instance in <code>Device.LocalAgent.Controller</code> table that has the
 EndpointID value of “<code>controller-temp</code>”.</p>
@@ -7993,7 +8127,7 @@ body {
   }
 }</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:delete-request-fields">7.4.6.2 Delete Request Fields</h4>
+id="sec:delete-request-fields">7.4.7.2 Delete Request Fields</h4>
 <p><code>bool allow_partial</code></p>
 <p>This field tells the Agent how to process the Message in the event
 that one or more of the Objects specified in the <code>obj_path</code>
@@ -8017,12 +8151,12 @@ Message.</p>
 <p>This field contains a repeated set of Object Instance Paths or Search
 Paths.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:delete-response-fields">7.4.6.3 Delete Response Fields</h4>
+id="sec:delete-response-fields">7.4.7.3 Delete Response Fields</h4>
 <p><code>repeated DeletedObjectResult deleted_obj_results</code></p>
 <p>This field contains a repeated set of
 <code>DeletedObjectResult</code> messages.</p>
 <h5 class="auto-hoverlink" data-info="header"
-id="sec:deletedobjectresult-fields">7.4.6.3.1 DeletedObjectResult
+id="sec:deletedobjectresult-fields">7.4.7.3.1 DeletedObjectResult
 Fields</h5>
 <p><code>string requested_path</code></p>
 <p>This field returns the value of the entry of <code>obj_paths</code>
@@ -8032,7 +8166,7 @@ Fields</h5>
 <p>This field contains a message of type
 <code>OperationStatus</code>.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationstatus-fields-2">7.4.6.3.1.1 OperationStatus
+id="sec:operationstatus-fields-2">7.4.7.3.1.1 OperationStatus
 Fields</h6>
 <p><code>oneof oper_status</code></p>
 <p>This field contains a message of one of the following types.</p>
@@ -8043,7 +8177,7 @@ to be deleted.</p>
 <p>Used when the <code>Delete</code> Message was (at least partially)
 successful.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationfailure-fields-2">7.4.6.3.1.2 OperationFailure
+id="sec:operationfailure-fields-2">7.4.7.3.1.2 OperationFailure
 Fields</h6>
 <p><code>fixed32 err_code</code></p>
 <p>This field contains a numeric code (<a href="#sec:error-codes"
@@ -8053,7 +8187,7 @@ caused the delete to fail.</p>
 <p>This field contains additional information about the reason behind
 the error.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:operationsuccess-fields-1">7.4.6.3.1.3 OperationSuccess
+id="sec:operationsuccess-fields-1">7.4.7.3.1.3 OperationSuccess
 Fields</h6>
 <p><code>repeated string affected_paths</code></p>
 <p>This field returns a repeated set of Path Names to Object
@@ -8084,7 +8218,7 @@ not have Read permission on any of the Objects specified in
 <code>unaffected_paths</code>, these Objects MUST NOT be returned in
 this field.</p>
 <h6 class="auto-hoverlink" data-info="header"
-id="sec:unaffectedpatherror-fields">7.4.6.3.1.4 UnaffectedPathError
+id="sec:unaffectedpatherror-fields">7.4.7.3.1.4 UnaffectedPathError
 Fields</h6>
 <p><code>string unaffected_path</code></p>
 <p>This field returns the Path Name to the Object Instance that failed
@@ -8097,7 +8231,7 @@ caused the deletion of this Object to fail.</p>
 <p>This field contains text related to the error specified by
 <code>err_code</code>.</p>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:delete-message-supported-error-codes">7.4.6.4 Delete Message
+id="sec:delete-message-supported-error-codes">7.4.7.4 Delete Message
 Supported Error Codes</h4>
 <p>Appropriate error codes for the Delete Message include
 <code>7000-7008</code>, <code>7015</code>, <code>7016</code>,
@@ -8469,6 +8603,12 @@ making the Request does not have Read permission on an Object or
 Parameter matched through the <code>requested_path</code> field, the
 Object or Parameter MUST be treated as if it is not present in the
 Agent’s Supported data model.</p>
+<p><em>Note: Requiring Object Read permission is intended to act as a
+security feature. If a Controller does not have permission to obtain the
+names of the data model elements of an object via a
+<code>GetSupportedDM</code> request, then the Controller should not be
+able to discover these by probing with <code>Get</code>
+requests.</em></p>
 <p><code>string err_msg</code></p>
 <p>This field contains additional information about the reason behind
 the error.</p>
@@ -8516,10 +8656,12 @@ class="auto-hoverlink">R-GET.3</span></strong> - If the
 <code>result_params</code> MUST contain only the Parameter included in
 that Path Name.</p>
 <p><strong><span id="r-get.4"
-class="auto-hoverlink">R-GET.4</span></strong> - If the Controller does
-not have Read permission on any of the Parameters specified in
-<code>result_params</code>, these Parameters MUST NOT be returned in
-this field. This MAY result in this field being empty.</p>
+class="auto-hoverlink">R-GET.4</span></strong> - If the Controller has
+Read permission on the Object or Object Instance being returned in the
+<code>resolved_path</code>, but does not have Read permission on any of
+the Parameters specified in <code>result_params</code>, these Parameters
+MUST NOT be returned in this field. This MAY result in this field being
+empty.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:get-message-supported-error-codes">7.5.1.4 Get Message Supported
 Error Codes</h4>
@@ -8776,6 +8918,7 @@ the Agent represents. It could issue a GetSupportedDM Request as:</p>
       return_commands : false
       return_events : false
       return_params : false
+      return_unique_key_sets : false
     }</code></pre>
 <p>The Agent’s Response would be:</p>
 <pre data-filter="pbv" type="Response"><code>    get_supported_dm_resp {
@@ -8864,6 +9007,7 @@ the Agent represents. It could issue a GetSupportedDM Request as:</p>
       return_commands : true
       return_events : true
       return_params : true
+      return_unique_key_sets : true
     }</code></pre>
 <p>The Agent’s response would be:</p>
 <pre data-filter="pbv" type="Response"><code>    get_supported_dm_resp {
@@ -8910,32 +9054,59 @@ the Agent represents. It could issue a GetSupportedDM Request as:</p>
           supported_obj_path: &quot;Device.WiFi.Radio.{i}.&quot;
           access: OBJ_READ_ONLY
           is_multi_instance: true
+          unique_key_sets {
+            key_names: &quot;Alias&quot;
+          }
+          unique_key_sets {
+            key_names: &quot;Name&quot;
+          }
         }
         supported_objs {
           supported_obj_path: &quot;Device.WiFi.SSID.{i}.&quot;
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: &quot;Alias&quot;
+          }
+          unique_key_sets {
+            key_names: &quot;Name&quot;
+          }
+          unique_key_sets {
+            key_names: &quot;BSSID&quot;
+          }
         }
         supported_objs {
           supported_obj_path: &quot;Device.WiFi.AccessPoint.{i}.&quot;
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: &quot;Alias&quot;
+          }
+          unique_key_sets {
+            key_names: &quot;SSIDReference&quot;
+          }
         }
         supported_objs {
           supported_obj_path: &quot;Device.WiFi.EndPoint.{i}.&quot;
           access: OBJ_ADD_DELETE
           is_multi_instance: true
+          unique_key_sets {
+            key_names: &quot;Alias&quot;
+          }
+          unique_key_sets {
+            key_names: &quot;SSIDReference&quot;
+          }
         }
       }
     }</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:getsupporteddm-request-fields">7.5.3.2 GetSupportedDM Request
 Fields</h4>
-<p><code>repeated obj_paths</code></p>
-<p>This field contains a repeated set of Path Names to Objects in the
-Agent’s Supported or Instantiated Data Model. For Path Names from the
-Supported Data Model the omission of the final <code>{i}.</code> is
-allowed.</p>
+<p><code>repeated string obj_paths</code></p>
+<p>This field contains a repeated set of Path Names to Objects,
+Commands, Events, or Parameters in the Agent’s Supported or Instantiated
+Data Model. For Path Names from the Supported Data Model the omission of
+the final <code>{i}.</code> is allowed.</p>
 <p><code>bool first_level_only</code></p>
 <p>This field, if <code>true</code>, indicates that the Agent returns
 only those objects matched by the Path Name or Search Path in
@@ -8958,6 +9129,11 @@ reported Object(s).</p>
 <code>supported_objs</code>, the Agent should include a
 <code>supported_params</code> field containing Parameters supported by
 the reported Object(s).</p>
+<p><code>bool return_unique_key_sets</code></p>
+<p>This field, if <code>true</code>, indicates that, in the
+<code>supported_objs</code>, the Agent should include a
+<code>unique_key_sets</code> field containing Parameters which uniquely
+identify an instance of the reported Object(s).</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:getsupporteddmresp-fields">7.5.3.3 GetSupportedDMResp
 Fields</h4>
@@ -9021,13 +9197,18 @@ be an empty list.</p>
 <p><code>repeated SupportedCommandResult supported_commands</code></p>
 <p>The field contains a message of type
 <code>SupportedCommandResult</code> for each Command supported by the
-reported Object. If there are no Parameters in the Object, this should
-be an empty list.</p>
+reported Object. If there are no Commands supported by the Object, this
+should be an empty list.</p>
 <p><code>repeated SupportedEventResult supported_events</code></p>
 <p>The field contains a message of type
 <code>SupportedEventResult</code> for each Event supported by the
-reported Object. If there are no Parameters in the Object, this should
-be an empty list.</p>
+reported Object. If there are no Events supported by the Object, this
+should be an empty list.</p>
+<p><code>repeated SupportedUniqueKeySet unique_key_sets</code></p>
+<p>The field contains a message of type
+<code>SupportedUniqueKeySet</code> for each UniqueKeySet supported by
+the reported Object. If the Object has no unique keys (for example a
+single instance object), this should be an empty list.</p>
 <p><code>repeated string divergent_paths</code></p>
 <p>The field contains an Object Instance Path for each divergent Path
 Name.</p>
@@ -9044,8 +9225,9 @@ Fields</h6>
 <p>The field contains an enumeration of type ParamAccessType specifying
 the access permissions that are specified for this Parameter in the
 Agent’s Supported Data Model. This may be further restricted to the
-Controller based on rules defined in the Agent’s Access Control List. It
-is an enumeration of:</p>
+Controller based on rules defined in the Agent’s Access Control List. If
+the Data Model indicates that a Parameter is writeOnceReadOnly, the
+GetSupportedDM returns PARAM_READ_WRITE. It is an enumeration of:</p>
 <pre><code>    PARAM_READ_ONLY (0)
     PARAM_READ_WRITE (1)
     PARAM_WRITE_ONLY (2)</code></pre>
@@ -9123,6 +9305,12 @@ id="sec:supportedeventresult">7.5.3.3.1.4 SupportedEventResult</h6>
 <p><code>repeated string arg_names</code></p>
 <p>This field contains a repeated set of Relative Paths for the
 arguments of the Event.</p>
+<h6 class="auto-hoverlink" data-info="header"
+id="sec:supporteduniquekeyset">7.5.3.3.1.5 SupportedUniqueKeySet</h6>
+<p><code>repeated string key_names</code></p>
+<p>This field contains a repeated set of relative parameters, whose
+values together uniquely identify an instance of the object in the
+instantiated data model.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:getsupporteddm-error-codes">7.5.3.4 GetSupportedDM Error
 Codes</h4>
@@ -9288,9 +9476,10 @@ id="sec:registrationpath-fields">7.5.5.2.1 RegistrationPath Fields</h5>
 register.</p>
 <p><strong><span id="r-reg.2"
 class="auto-hoverlink">R-REG.2</span></strong> - The path field MUST
-contain an Object Path without any instance numbers. This path MUST NOT
-not use the Supported Data Model notation (with {i}), meaning that it is
-not allowed to register a sub-object to a multi-instance object.</p>
+contain an Object Path, Command Path, Event Path, or Parameter Path
+without any instance numbers. This path MUST NOT not use the Supported
+Data Model notation (with {i}), meaning that it is not allowed to
+register a sub-object to a multi-instance object.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:register-response-fields">7.5.5.3 Register Response Fields</h4>
 <p><code>repeated RegisteredPathResult registered_path_results</code></p>
@@ -9412,9 +9601,9 @@ USP Agent.</p>
 class="auto-hoverlink">R-DEREG.3</span></strong> - A USP Agent MAY
 deregister one or more Service Elements with one Deregister Request
 message containing multiple path fields.</p>
-<p><em>Note: The path field contains an Object Path without any instance
-numbers. This path doesn’t contain any sub-objects to a multi-instance
-object.</em></p>
+<p><em>Note: The path field contains an Object Path, Command Path, Event
+Path, or Parameter Path without any instance numbers. This path doesn’t
+contain any sub-objects to a multi-instance object.</em></p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:deregister-response-fields">7.5.6.3 Deregister Response
 Fields</h4>
@@ -9714,10 +9903,10 @@ successfully or unsuccessfully). These operations may also trigger other
 Events defined in the data model (see below).</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:onboardrequest">7.6.3.4 OnBoardRequest</h4>
-<p>An <code>OnBoardRequest</code> notification is used by the Agent when
-it is triggered by an external source to initiate the request in order
-to communicate with a Controller that can provide on-boarding procedures
-and communicate with that Controller (likely for the first time).</p>
+<p>An <code>OnBoardRequest</code> notification is used by the Agent to
+initiate the request in order to communicate with a Controller that can
+provide on-boarding procedures and communicate with that Controller
+(likely for the first time).</p>
 <p><strong><span id="r-not.5"
 class="auto-hoverlink">R-NOT.5</span></strong> - An Agent MUST send an
 <code>OnBoardRequest</code> notify request in the following
@@ -9730,17 +9919,43 @@ operation is defined in the Device:2 Data Model <span class="citation"
 data-cites="TR-181"><a href="#ref-TR-181"
 role="doc-biblioref">[3]</a></span>. This requirement applies only to
 those Controller table instances that have their <code>Enabled</code>
-Parameter set to <code>true</code>.</p></li>
+Parameter set to <code>true</code>. When the implementation supports the
+<code>Device.LocalAgent.Controller.{i}.OnBoardingComplete</code>
+parameter, executing this command will set the parameter value to
+<code>false</code>.</p></li>
 <li><p>When instructed to do so by internal application policy (for
 example, when using DHCP discovery defined above).</p></li>
+<li><p>When the implementation supports the
+<code>Device.LocalAgent.Controller.{i}.OnBoardingComplete</code>
+parameter and its value is set to false as this parameter signifies the
+Controller requires an <code>OnBoardRequest</code>. This parameter
+SHOULD be set to true by the Agent or Controller when the onboarding has
+been completed.</p></li>
 </ol>
+<p>The value of the <code>OnBoardingRestartTime</code> parameter, if
+supported, describes how long the USP Agent must wait to send another
+<code>OnBoardRequest</code> when <code>OnBoardingComplete</code> remains
+<code>false</code>. This timer starts as soon as the Agent receives the
+<code>NotifyResponse</code> message for the original
+<code>OnBoardRequest</code>, because the Notification Retry mechanism
+needs to be completed first.</p>
 <p><em>Note: as defined in the Subscription table, OnBoardRequest is not
 included as one of the enumerated types of a Subscription, i.e., it is
-not intended to be the subject of a Subscription.</em></p>
+not intended to be the subject of a Subscription. However it is
+important that the OnBoardRequest reaches its destination so it MUST be
+sent with <code>send_resp=true</code>. In other words, it behaves as a
+subscription with <code>NotifRetry</code> set to true. Because the
+Controller might be unreachable for a long time, the notification MUST
+not expire, so it MUST behave as a subscripton with
+<code>NotifExpiration</code> set to 0.</em></p>
 <p><strong><span id="r-not.6"
-class="auto-hoverlink">R-NOT.6</span></strong> If a response is
-required, the OnBoardRequest MUST follow the Retry logic defined
+class="auto-hoverlink">R-NOT.6</span></strong> The OnBoardRequest MUST
+be sent with send_resp=true and MUST follow the Retry logic defined
 above.</p>
+<p><strong><span id="r-not.6a"
+class="auto-hoverlink">R-NOT.6a</span></strong> The OnBoardRequest MUST
+be retried until the Controller confirms it has received it with a
+Notify Response message.</p>
 <h4 class="auto-hoverlink" data-info="header" id="sec:event">7.6.3.5
 Event</h4>
 <p>The <code>Event</code> notification is used to indicate that an
@@ -9988,7 +10203,7 @@ id="img:operate-message-flow-for-synchronous-operations"
 alt="Operate Message Flow for Synchronous Operations" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:operate-message-flow-for-synchronous-operations">
-Figure 17: Operate Message Flow for Synchronous Operations
+Figure 17 – Operate Message Flow for Synchronous Operations
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -10035,11 +10250,11 @@ id="img:operate-message-flow-for-asynchronous-operations"
 alt="Operate Message Flow for Asynchronous Operations" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:operate-message-flow-for-asynchronous-operations">
-Figure 18: Operate Message Flow for Asynchronous Operations
+Figure 18 – Operate Message Flow for Asynchronous Operations
 </div></figcaption>
 </figure>
 <h4 class="auto-hoverlink" data-info="header"
-id="sec:persistance-of-asynchronous-operations">7.7.2.1 Persistance of
+id="sec:persistence-of-asynchronous-operations">7.7.2.1 Persistence of
 Asynchronous Operations</h4>
 <p>Synchronous Operations do not persist across a reboot or restart of
 the Agent or its underlying system. It is expected that Asynchronous
@@ -10099,9 +10314,9 @@ permission to do so (i.e., via the
 <code>Device.LocalAgent.Request.{i}.Cancel()</code> operation).</p>
 <h3 class="auto-hoverlink" data-info="header"
 id="sec:operate-examples">7.7.6 Operate Examples</h3>
-<p>In this example, the Controller requests that the Agent initiate the
-SendOnBoardRequest() operation defined in the
-<code>Device.LocalAgent.Controller.</code> Object.</p>
+<p>In this example of a synchronous command, the Controller requests
+that the Agent initiate the SendOnBoardRequest() operation defined in
+the <code>Device.LocalAgent.Controller.</code> Object.</p>
 <pre data-filter="pbv"><code>header {
   msg_id: &quot;42314&quot;
   msg_type: OPERATE
@@ -10117,6 +10332,35 @@ body {
 }</code></pre>
 <pre data-filter="pbv"><code>header {
   msg_id: &quot;42314&quot;
+  msg_type: OPERATE_RESP
+}
+body {
+  response {
+    operate_resp {
+      operation_results {
+        executed_command: &quot;Device.LocalAgent.Controller.1.SendOnBoardRequest()&quot;
+      }
+    }
+  }
+}</code></pre>
+<p>In this example of an asynchronous command, the Controller requests
+that the Agent initiate the SelfDiagnostics() operation defined in the
+<code>Device.</code> object.</p>
+<pre data-filter="pbv"><code>header {
+  msg_id: &quot;42315&quot;
+  msg_type: OPERATE
+}
+body {
+  request {
+    operate {
+      command: &#39;Device.SelfTestDiagnostics()&#39;
+      command_key: &quot;selftest_command_key&quot;
+      send_resp: true
+    }
+  }
+}</code></pre>
+<pre data-filter="pbv"><code>header {
+  msg_id: &quot;42315&quot;
   msg_type: OPERATE_RESP
 }
 body {
@@ -10147,10 +10391,11 @@ class="auto-hoverlink">R-OPR.4</span></strong> - When
 <code>send_resp</code> is set to <code>false</code>, the target Endpoint
 SHOULD NOT send an <code>OperateResp</code> Message to the source
 Endpoint. If an error occurs during the processing of an
-<code>Operate</code> Message, the target Endpoint SHOULD send an
-<code>Error</code> Message to the source Endpoint. If a response is
-still sent, the responding Endpoint MUST expect that any such response
-will be ignored.</p>
+<code>Operate</code> Message, the target Endpoint MAY send an
+<code>OperateResp</code> Message to the source Endpoint containing
+relevant <code>cmd_failure</code> elements. If a response is still sent,
+the responding Endpoint MUST expect that any such response will be
+ignored.</p>
 <p><em>Note: The requirement in the previous versions of the
 specification also discouraged the sending of an <code>Error</code>
 Message, however the Controller issuing the <code>Operate</code> might
@@ -10165,9 +10410,10 @@ passed to the method indicated in the command field.</p>
 class="auto-hoverlink">R-OPR.5</span></strong> - A <code>Command</code>
 can have mandatory <code>input_args</code> as defined in the Supported
 Data Model. When a mandatory Input argument is omitted from the
-<code>input_args</code> field, the Agent MUST respond with an
-<code>Error</code> of type <code>7004 Invalid arguments</code> and stop
-processing the <code>Operate</code> Message.</p>
+<code>input_args</code> field, the Agent MUST, in its
+<code>OperateResp</code>, include a <code>cmd_failure</code> element
+containg an <code>err_code</code> of type <code>7027</code> Invalid
+Command Arguments and stop processing the command.</p>
 <p><strong><span id="r-opr.6"
 class="auto-hoverlink">R-OPR.6</span></strong> - When an unrecognized
 Input argument is included in the <code>input_args</code> field, the
@@ -10263,51 +10509,51 @@ message was not understood by the target Endpoint.</td>
 <tr class="odd">
 <td style="text-align: left;"><code>7002</code></td>
 <td style="text-align: left;">Request denied (no reason specified)</td>
-<td style="text-align: left;">Error Message</td>
+<td style="text-align: left;">Any</td>
 <td style="text-align: left;">This error indicates that the target
-Endpoint cannot or will not process the message.</td>
+Endpoint cannot or will not process the message or operation.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>7003</code></td>
 <td style="text-align: left;">Internal error</td>
-<td style="text-align: left;">Error Message</td>
-<td style="text-align: left;">This error indicates that the message
-failed due to internal hardware or software reasons.</td>
+<td style="text-align: left;">Any</td>
+<td style="text-align: left;">This error indicates that the message or
+operation failed due to internal hardware or software reasons.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>7004</code></td>
 <td style="text-align: left;">Invalid arguments</td>
-<td style="text-align: left;">Error Message</td>
-<td style="text-align: left;">This error indicates that the message
-failed due to invalid values in the USP message.</td>
+<td style="text-align: left;">Any</td>
+<td style="text-align: left;">This error indicates that the message or
+operation failed due to invalid values in the USP message.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>7005</code></td>
 <td style="text-align: left;">Resources exceeded</td>
-<td style="text-align: left;">Error Message</td>
-<td style="text-align: left;">This error indicates that the message
-failed due to memory or processing limitations on the target
+<td style="text-align: left;">Any</td>
+<td style="text-align: left;">This error indicates that the message or
+operation failed due to memory or processing limitations on the target
 Endpoint.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>7006</code></td>
 <td style="text-align: left;">Permission denied</td>
-<td style="text-align: left;">Error Message</td>
+<td style="text-align: left;">Any</td>
 <td style="text-align: left;">This error indicates that the source
 Endpoint does not have the authorization for this action.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>7007</code></td>
 <td style="text-align: left;">Invalid configuration</td>
-<td style="text-align: left;">Error Message</td>
-<td style="text-align: left;">This error indicates that the message
-failed because processing the message would put the target Endpoint in
-an invalid or unrecoverable state.</td>
+<td style="text-align: left;">Any</td>
+<td style="text-align: left;">This error indicates that the message or
+operation failed because processing the message would put the target
+Endpoint in an invalid or unrecoverable state.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>7008</code></td>
 <td style="text-align: left;">Invalid path syntax</td>
-<td style="text-align: left;">any requested_path</td>
+<td style="text-align: left;">Any requested_path</td>
 <td style="text-align: left;">This error indicates that the Path Name
 used was not understood by the target Endpoint.</td>
 </tr>
@@ -10921,7 +11167,7 @@ and <a href="#fig:no-secure-message-exchange" class="figure">Figure
 alt="Receiving a USP Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:receive-record">
-Figure 19: Receiving a USP Record
+Figure 19 – Receiving a USP Record
 </div></figcaption>
 </figure>
 <hr />
@@ -10931,7 +11177,7 @@ id="img:usp-record-without-usp-layer-secure-message-exchange"
 alt="USP Record without USP Layer Secure Message Exchange" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:no-secure-message-exchange">
-Figure 20: USP Record without USP Layer Secure Message Exchange
+Figure 20 – USP Record without USP Layer Secure Message Exchange
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -10950,7 +11196,7 @@ results as in the optional decision flow elements (identified with
 <img src="security/send-record.png" id="img:sending-a-usp-record"
 alt="Sending a USP Record" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:send-record">
-Figure 21: Sending a USP Record
+Figure 21 – Sending a USP Record
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -10977,7 +11223,7 @@ only the first matching CA in the chain will be used.</p>
 <img src="security/check-cert.png" id="img:checking-a-certificate"
 alt="Checking a Certificate" />
 <figcaption><div class="auto-hoverlink" data-anchor="fig:check-cert">
-Figure 22: Checking a Certificate
+Figure 22 – Checking a Certificate
 </div></figcaption>
 </figure>
 <hr />
@@ -10986,7 +11232,7 @@ Figure 22: Checking a Certificate
 alt="Determining the Role" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:determine-role">
-Figure 23: Determining the Role
+Figure 23 – Determining the Role
 </div></figcaption>
 </figure>
 <h3 class="auto-hoverlink" data-info="header"
@@ -11018,7 +11264,7 @@ id="img:trusted-broker-with-received-record"
 alt="Trusted Broker with Received Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:broker-with-received-record">
-Figure 24: Trusted Broker with Received Record
+Figure 24 – Trusted Broker with Received Record
 </div></figcaption>
 </figure>
 <hr />
@@ -11028,7 +11274,7 @@ id="img:trusted-broker-sending-a-record"
 alt="Trusted Broker Sending a Record" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:broker-with-sent-record">
-Figure 25: Trusted Broker Sending a Record
+Figure 25 – Trusted Broker Sending a Record
 </div></figcaption>
 </figure>
 <h2 class="auto-hoverlink" data-info="header"
@@ -11095,9 +11341,10 @@ character represents a permission (“<code>r</code>” for Read,
 “<code>n</code>” for Notify). The 4 characters are always presented in
 the same order in the string (<code>rwxn</code>) and the lack of a
 permission is signified by a “<code>-</code>” character (e.g.,
-<code>r--n</code>). How these permissions are applied to Parameters,
-Objects, and various Messages is described in the data model description
-of these Parameters.</p>
+<code>r--n</code>). How these permissions are applied to the data model,
+be it the Supported Data Model or the Instantiated Data Model, is
+described in the data model description of these Parameters, Objects,
+and various Messages.</p>
 <p>An Agent that wants to allow Controllers to define and modify Roles
 will implement the <code>ControllerTrust.Role.{i}.</code> Object with
 all of the Parameters listed in the data model. In order for a
@@ -11116,6 +11363,74 @@ just the <code>Alias</code> and <code>Role</code> Parameters, and no
 where the Role names convey enough information (e.g., there are only two
 pre-defined Roles named <code>"Untrusted"</code> and
 <code>"FullAccess"</code>).</p>
+<p>In this example, the device is configured with a single role that
+allows a Controller to access the entire Data Model.</p>
+<pre><code>Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Order = 1
+Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Targets = Device
+Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Param = rwxn
+Device.LocalAgent.ControllerTrust.Role.1.Permission.1.Obj = rwxn
+Device.LocalAgent.ControllerTrust.Role.1.Permission.1.InstantiatedObj = rwxn
+Device.LocalAgent.ControllerTrust.Role.1.Permission.1.CommandEvent = rwxn</code></pre>
+<p>The next example builds upon the previous example where the device
+was configured with a role that allows a Controller to access the entire
+Data Model (<code>Permission.1</code>), but in this example there is an
+exception added that prevents the Controller from accessing the
+LocalAgent.ControllerTrust portion of the Data Model
+(<code>Permission.2</code>). The reason this works is due to the Order
+parameter. Since the Order parameter in the <code>Permission.2</code>
+instance (value of 2) is larger than (higher priority) the Order
+parameter in the <code>Permission.1</code> instance (value of 1),
+<code>Permission.2</code> is applied on top of
+<code>Permission.1</code>.</p>
+<pre><code>Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = ----
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = ----
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = ----</code></pre>
+<p>Conversely, that role could have been configured to allow access to
+the permissions, but not allowed access to read, write, or receive
+ValueChange notifications for the <code>Order</code> parameter.</p>
+<pre><code>Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Order = 2
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Targets = Device.LocalAgent.ControllerTrust.Role.*.Permission.*.Order
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Param = ----
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.Obj = rwxn
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.InstantiatedObj = rwxn
+Device.LocalAgent.ControllerTrust.Role.1.Permission.2.CommandEvent = rwxn</code></pre>
+<p>Based on the above example device settings, if a Controller was
+assigned the previously defined role and it attempted to perform an Add
+operation on the Permission table where param_settings included the
+<code>Order</code> parameter as a required setting, the Add operation
+would fail because the Controller does not have write permissions for
+the <code>Order</code> parameter.</p>
+<pre data-filter="pbv" type="Request"><code> add {
+     allow_partial: false
+     create_objs {
+        obj_path: &quot;Device.LocalAgent.ControllerTrust.Role.1.Permission.&quot;
+        param_settings {
+          param: &quot;Order&quot;
+          value: &quot;12&quot;
+          required: true
+        }
+      }
+    }</code></pre>
+<p>Now, if that same Controller attempted to perform that Add operation
+on the Permission table but this time the param_settings included the
+<code>Order</code> parameter as a non-required setting, the Add
+operation would NOT fail due to the lack of write permissions for the
+<code>Order</code> parameter, instead the value requested for the
+<code>Order</code> parameter would be ignored.</p>
+<pre data-filter="pbv" type="Request"><code> add {
+     allow_partial: false
+      create_objs {
+        obj_path: &quot;Device.LocalAgent.ControllerTrust.Role.1.Permission.&quot;
+        param_settings {
+          param: &quot;Order&quot;
+          value: &quot;12&quot;
+          required: false
+       }
+     }
+    }</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:special-roles">8.9.2.2 Special Roles</h4>
 <p>Three special Roles are identified by the <code>UntrustedRole</code>,
@@ -11149,7 +11464,17 @@ Parameters are to be considered as <code>hidden</code>, in which case
 the Agent returns a null value, e.g. an empty string, to this
 Controller, regardless of the actual value. Only Controllers with a
 secured Role assigned (and the appropriate permissions set), are able to
-have access to secured parameter values.</p>
+have access to <code>secured</code> parameter values. When the
+<code>SecuredRoles</code> Parameter references an instance of the Role
+table containing a Target with a Partial Path, then any included
+Parameters that are not identified as <code>secured</code> will be
+ignored. The Agent will have access to all <code>secured</code>
+parameters in that path.</p>
+<p>For example, if a Controller needed access to all
+<code>secured</code> Parameters in the Data Model, then the
+<code>SecuredRoles</code> Parameter could be set to the role that was
+defined in the previous example:</p>
+<pre><code>Device.LocalAgent.ControllerTrust.SecuredRoles = Device.LocalAgent.ControllerTrust.Role.1</code></pre>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:a-controllers-role">8.9.2.3 A Controller’s Role</h4>
 <p>A Controller’s assigned Roles can be conveyed by the
@@ -11174,19 +11499,19 @@ has overlapping <code>Permission.{i}.Targets</code> entries for the same
 Role.</p>
 <p>For example, Given the following
 <code>ControllerTrust.Role.{i}.</code> entries:</p>
-<pre><code>  i=1, Role = &quot;A&quot;; Permission.1.: Targets = &quot;Device.LocalAgent.&quot;, Order = 3, Param = &quot;r---&quot;
-  i=1, Role = &quot;A&quot;; Permission.2.: Targets = &quot;Device.LocalAgent.Controller.&quot;, Order = 55, Param = &quot;r-xn&quot;
-  i=3, Role = &quot;B&quot;; Permission.1: Targets = &quot;Device.LocalAgent.&quot;, Order = 20, Param = &quot;r---&quot;
-  i=3, Role = &quot;B&quot;; Permission.5: Targets = &quot;Device.LocalAgent.Controller.&quot;, Order = 78, Param = &quot;----&quot;</code></pre>
+<pre><code>  i=1, Role = &quot;A&quot;; Permission.1.: Targets = &quot;Device.LocalAgent&quot;, Order = 3, Param = &quot;r---&quot;
+  i=1, Role = &quot;A&quot;; Permission.2.: Targets = &quot;Device.LocalAgent.Controller&quot;, Order = 55, Param = &quot;r-xn&quot;
+  i=3, Role = &quot;B&quot;; Permission.1.: Targets = &quot;Device.LocalAgent&quot;, Order = 20, Param = &quot;r---&quot;
+  i=3, Role = &quot;B&quot;; Permission.5.: Targets = &quot;Device.LocalAgent.Controller&quot;, Order = 78, Param = &quot;----&quot;</code></pre>
 <p>and <code>Device.LocalAgent.Controller.1.AssignedRole</code> =
-“Device.LocalAgent. ControllerTrust.Role.1., Device.LocalAgent.
-ControllerTrust.Role.3.”</p>
+<code>"Device.LocalAgent.ControllerTrust.Role.1", "Device.LocalAgent. ControllerTrust.Role.3"</code></p>
 <p>When determining permissions for the
 <code>Device.LocalAgent.Controller.</code> table, the Agent will first
-determine that for Role A Permission.2 takes precedence over
-Permission.1 (55 &gt; 3). For B, Permission.5 takes precedence over
-Permission.1 (78 &gt; 20). The union of A and B is “r-xn” + “—-” =
-“r-xn”.</p>
+determine that for Role A <code>Permission.2</code> takes precedence
+over <code>Permission.1</code> (55 &gt; 3). For B,
+<code>Permission.5</code> takes precedence over
+<code>Permission.1</code> (78 &gt; 20). The union of A and B is
+<code>r-xn</code> + <code>----</code> = <code>r-xn</code>.</p>
 <h4 class="auto-hoverlink" data-info="header"
 id="sec:role-associated-with-a-credential-or-challenge">8.9.2.4 Role
 Associated with a Credential or Challenge</h4>
@@ -12500,11 +12825,12 @@ data model.</p>
 <p>As the home networking market matures, devices in the home are
 becoming more sophisticated and more complex. One trend in enhanced
 device functionality is the move towards more standardized platforms and
-execution environments (such as Java, Linux, OSGi, Docker, etc.).
-Devices implementing these more robust platforms are often capable of
-downloading new applications dynamically, perhaps even from third-party
-software providers. These new applications might enhance the existing
-capabilities of the device or enable the offering of new services.</p>
+execution environments (such as Java, Linux, Linux Containers, OSGi,
+Docker, crun, runC, etc.). Devices implementing these more robust
+platforms are often capable of downloading new applications dynamically,
+perhaps even from third-party software providers. These new applications
+might enhance the existing capabilities of the device or enable the
+offering of new services.</p>
 <p>This model differs from previous device software architectures that
 assumed one monolithic firmware that was downloaded and applied to the
 device in one action.</p>
@@ -12544,26 +12870,28 @@ tied to any particular platform and enable USP to manage dynamic
 software on a wide range of devices in a wide range of environments.</p>
 <h2 class="appendix2 auto-hoverlink" data-info="header"
 id="sec:software-modules">I.2 Software Modules</h2>
-<p>A Software Module is any software entity that will be installed on a
-device. This includes modules that can be installed/uninstalled and
-those that can be started and stopped. All software on the device is
-considered a software module, with the exception of the primary
-firmware, which plays a different enough role that it is considered a
-separate entity.</p>
+<p>A Software Module, managed through a USP-based Software Module
+Manager, is any software entity that will be installed on a device. This
+includes modules that can be installed/uninstalled and those that can be
+started and stopped. All software on the device is considered a software
+module, with the exception of the primary firmware, which plays a
+different enough role that it is considered a separate entity.</p>
 <p>A software module exists on an Execution Environment (EE), which is a
 software platform that supports the dynamic loading and unloading of
 modules. It might also enable the dynamic sharing of resources among
 entities, but this differs across various execution environments.
-Typical examples include Linux, Docker, OSGi, .NET, Android, and Java
-ME. It is also likely that these environments could be “layered,” i.e.,
-that there could be one primary environment such as Linux on which one
-or more OSGi frameworks are stacked. This is an implementation specific
-decision, however, and USP-based module management does not attempt to
-enable management of this layering beyond exposing which EE a given
-environment is layered on top of (if any). USP-based Software Module
-Management also does not attempt to address the management of the
-primary firmware image, which is expected to be managed via the device’s
-Firmware Image Objects defined in the Root data model.</p>
+Typical examples include Linux Containers, Docker, crun, runC. It is
+also likely that these environments could be “layered,” i.e., that there
+could be one primary environment such as Linux on which one or more
+child environments such as Linux Containers or crun are stacked. It is
+the responsibility of a USP-based Software Module Manager to manage the
+layering and exposing the status of the EE through the Device:2 Data
+Model <span class="citation" data-cites="TR-181"><a href="#ref-TR-181"
+role="doc-biblioref">[3]</a></span>.</p>
+<p>USP-based Software Module Management does not attempt to address the
+management of the primary firmware image, which is expected to be
+managed via the device’s Firmware Image Objects defined in the Root data
+model.</p>
 <p>Software modules come in two types: Deployment Units (DUs) and
 Execution Units (EUs). A DU is an entity that can be deployed on the EE.
 It can consist of resources such as functional EUs, configuration files,
@@ -12595,7 +12923,7 @@ id="img:deployment-unit-state-diagram"
 alt="Deployment Unit State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:deployment-unit-state-diagram">
-Figure 26: Deployment Unit State Diagram
+Figure 26 – Deployment Unit State Diagram
 </div></figcaption>
 </figure>
 <p>This state machine shows 5 individual states (3 of which are
@@ -12617,8 +12945,7 @@ Note that the Controller has the option to choose which EE to install a
 particular DU to, although it can also leave that choice up to the
 device. If the Controller does specify the EE, it is up to the
 Controller to specify one that is compatible with the DU it is
-attempting to Install (e.g., an OSGi framework for an OSGi
-bundle).</p></li>
+attempting to Install (e.g., Docker for an OCI image).</p></li>
 <li><p>In the Installed state, the DU has been successfully downloaded
 and installed on the relevant EE. At this point it might or might not be
 Resolved. If it is Resolved, the associated EUs can be started;
@@ -12775,7 +13102,7 @@ id="img:execution-unit-state-diagram"
 alt="Execution Unit State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:execution-unit-state-diagram">
-Figure 27: Execution Unit State Diagram
+Figure 27 – Execution Unit State Diagram
 </div></figcaption>
 </figure>
 <p>This state machine shows 5 states (3 of them transitory) and four
@@ -12928,7 +13255,7 @@ id="img:possible-multi-execution-environment-implementation"
 alt="Possible Multi-Execution Environment Implementation" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:multi-exec-env">
-Figure 28: Possible Multi-Execution Environment Implementation
+Figure 28 – Possible Multi-Execution Environment Implementation
 </div></figcaption>
 </figure>
 <p>In this example, the device exposes its Linux Operating System as an
@@ -12979,7 +13306,7 @@ id="img:execution-environment-state-diagram"
 alt="Execution Environment State Diagram" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:execution-environment-state-diagram">
-Figure 29: Execution Environment State Diagram
+Figure 29 – Execution Environment State Diagram
 </div></figcaption>
 </figure>
 <p>When an EE instance is disabled by a Controller, the EE itself shuts
@@ -13513,7 +13840,7 @@ class="table">Table 1</a>.</p>
 <table id="tbl:proxy-building-block-functions">
 <caption><div class="auto-hoverlink"
 data-anchor="tbl:proxy-building-block-functions">
-Table 1: Proxy Building Block Functions
+Table 1 – Proxy Building Block Functions
 </div></caption>
 <colgroup>
 <col style="width: 42%" />
@@ -13685,7 +14012,7 @@ constrain implementations.</p>
 <table id="tbl:possible-mtp-proxy-methods">
 <caption><div class="auto-hoverlink"
 data-anchor="tbl:possible-mtp-proxy-methods">
-Table 2: Possible MTP Proxy Methods
+Table 2 – Possible MTP Proxy Methods
 </div></caption>
 <colgroup>
 <col style="width: 6%" />
@@ -13819,7 +14146,7 @@ id="img:example-of-mtp-proxy-in-lan-with-wan-controller"
 alt="Example of MTP Proxy in LAN with WAN Controller" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:example-of-mtp-proxy-in-lan-with-wan-controller">
-Figure 30: Example of MTP Proxy in LAN with WAN Controller
+Figure 30 – Example of MTP Proxy in LAN with WAN Controller
 </div></figcaption>
 </figure>
 <h3 class="appendix3 auto-hoverlink" data-info="header"
@@ -13847,7 +14174,7 @@ id="img:coap-stomp-mtp-proxy-example-flow"
 alt="CoAP-STOMP MTP Proxy Example Flow" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:coap-stomp-mtp-proxy-example-flow">
-Figure 31: CoAP-STOMP MTP Proxy Example Flow
+Figure 31 – CoAP-STOMP MTP Proxy Example Flow
 </div></figcaption>
 </figure>
 <p><strong>Controller connects to the STOMP server</strong></p>
@@ -13958,7 +14285,7 @@ id="sec:iot-data-model-overview">V.2 IoT data model overview</h2>
 alt="IoT Data Model" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-data-model">
-Figure 32: IoT Data Model
+Figure 32 – IoT Data Model
 </div></figcaption>
 </figure>
 <p>The data model defines an IoT Capability table, whose instances
@@ -14042,7 +14369,7 @@ id="img:iot-individual-device-models"
 alt="IoT individual device models" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-individual-device-models">
-Figure 33: IoT individual device models
+Figure 33 – IoT individual device models
 </div></figcaption>
 </figure>
 <p>Each device registers as an individual entity to the USP Controller.
@@ -14059,7 +14386,7 @@ model of the control device’s USP Agent:</p>
 id="img:iot-proxied-device-model" alt="IoT proxied device model" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-proxied-device-model">
-Figure 34: IoT proxied device model
+Figure 34 – IoT proxied device model
 </div></figcaption>
 </figure>
 <p>Each IoT device is represented as a
@@ -14236,7 +14563,7 @@ id="img:iot-threshold-trigger-sensitivity"
 alt="IoT threshold trigger sensitivity" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-sensitivity">
-Figure 35: IoT threshold trigger sensitivity
+Figure 35 – IoT threshold trigger sensitivity
 </div></figcaption>
 </figure>
 <p>The sensitivity value is a relative value in the range 0 to 100
@@ -14258,7 +14585,7 @@ id="img:iot-threshold-trigger-hold-time"
 alt="IoT threshold trigger hold time" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-hold-time">
-Figure 36: IoT threshold trigger hold time
+Figure 36 – IoT threshold trigger hold time
 </div></figcaption>
 </figure>
 <p>If the <code>HoldTime</code> Parameter is not implemented or is set
@@ -14283,7 +14610,7 @@ id="img:iot-threshold-trigger-rest-time"
 alt="IoT threshold trigger rest time" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-rest-time">
-Figure 37: IoT threshold trigger rest time
+Figure 37 – IoT threshold trigger rest time
 </div></figcaption>
 </figure>
 <p>If the <code>RestTime</code> Parameter is not implemented or is set
@@ -14306,7 +14633,7 @@ id="img:iot-threshold-trigger-minimum-duration"
 alt="IoT threshold trigger minimum duration" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:iot-threshold-trigger-minimum-duration">
-Figure 38: IoT threshold trigger minimum duration
+Figure 38 – IoT threshold trigger minimum duration
 </div></figcaption>
 </figure>
 <h4 class="appendix4 auto-hoverlink" data-info="header"
@@ -14916,14 +15243,47 @@ facilitating an easy place for Agents within USP Services to
 connect.</li>
 <li>TLVs are used to encapsulate any headers (e.g. identification,
 length of full message) and the USP Record itself in protobuf form.</li>
-<li>No authentication is needed as the installation of the software
-module itself will essentially grant access (assumption that you should
-only install trusted applications).
-<ul>
-<li>This can be enhanced in later versions.</li>
-</ul></li>
+<li>While authentication is not required in the case of trusted
+applications being installed, there is an optional TLS-based
+authentication mechanism that is defined within the UNIX domain socket
+(UDS) MTP section.</li>
 </ul></li>
 </ul>
+<h3 class="appendix3 auto-hoverlink" data-info="header"
+id="sec:usage-of-the-register-operation">VI.2.1 Usage of the Register
+Operation</h3>
+<p>The following rules detail the usage of the Register Operation by a
+USP Service as well as how that usage impacts other USP Services.</p>
+<ol type="1">
+<li><p>A USP Service cannot register something that is already
+registered by another USP Service. For example: If Service 1 registers
+<strong>Device.WiFi.DataElements</strong> first, then Service 2 attempts
+to register <strong>Device.WiFi.DataElements</strong> - that results in
+a failure.</p></li>
+<li><p>A USP Service cannot register something that has a sub-object
+that is already registered by another USP Service. For example: If
+Service 1 registers <strong>Device.WiFi.DataElements</strong> first,
+then Service 2 attempts to register <strong>Device.WiFi</strong> - that
+results in a failure; Service 2 should only register what it needs to
+instead of attempting to register all of WiFi.</p></li>
+<li><p>A USP Service cannot register something that is a sub-object of
+something that is already registered by another USP Service. For
+example: If Service 1 registers <strong>Device.WiFi</strong> first, then
+Service 2 attempts to register <strong>Device.WiFi.DataElements</strong>
+- that results in a failure; Service 1 should only register what it
+needs to instead of attempting to register all of WiFi.</p></li>
+</ol>
+<p>A USP Service is expected to only register the portion of the data
+model that it is responsible for implementing, but if that USP Service
+expects no overlap then it could register a sub-Object of the root data
+model object. For example, if Service 1 intends to implement all of
+<strong>Device.WiFi</strong> without any overlaps, then it would
+register <strong>Device.WiFi</strong>. However, if Service 1 and Service
+2 expect an overlap at the <strong>Device.WiFi</strong> level (due to
+not implementing the full breadth of the Wi-Fi Object), then Service 1
+would register <strong>Device.WiFi.DataElements</strong> and Service 2
+would register <strong>Device.WiFi.RadioNumberOfEntries</strong>,
+<strong>Device.WiFi.Radio</strong>.</p>
 <h2 class="appendix2 auto-hoverlink" data-info="header"
 id="sec:usp-service-use-cases">VI.3 USP Service Use Cases</h2>
 <p>The following 3 use cases represent 3 unique types of USP
@@ -14972,7 +15332,7 @@ id="img:software-modularization-use-cases"
 alt="Software Modularization Use Cases" />
 <figcaption><div class="auto-hoverlink"
 data-anchor="fig:software-modularization-use-cases">
-Figure 39: Software Modularization Use Cases
+Figure 39 – Software Modularization Use Cases
 </div></figcaption>
 </figure>
 <h2 class="appendix2 auto-hoverlink" data-info="header"
@@ -15158,8 +15518,11 @@ Broker…</p>
 connection to the Controller on the USP Broker and the well-known
 internal path
 <ul>
-<li>Once the UNIX Domain Socket is connected, the USP Service’s Agent
-will initiate the UNIX Domain Socket MTP Handshake mechanism</li>
+<li>Once the UNIX Domain Socket is connected, the USP Agent and USP
+Controller can perform TLS handshaking, if desired</li>
+<li>Once the UNIX Domain Socket is connected (and TLS handshaking is
+complete, if desired), the USP Service’s Agent will initiate the UNIX
+Domain Socket MTP Handshake mechanism</li>
 <li>Once the USP Broker’s Controller receives the UNIX Domain Socket MTP
 Handshake message, it will respond with its own Handshake message</li>
 <li>Once the UNIX Domain Socket MTP Handshake mechanism is successfully
@@ -15179,8 +15542,11 @@ Broker…</p>
 connection to the Controller on the USP Broker and the well-known
 internal path
 <ul>
-<li>Once the UNIX Domain Socket is connected, the USP Service’s Agent
-will initiate the UNIX Domain Socket MTP Handshake mechanism</li>
+<li>Once the UNIX Domain Socket is connected, the USP Agent and USP
+Controller can perform TLS handshaking, if desired</li>
+<li>Once the UNIX Domain Socket is connected (and TLS handshaking is
+complete, if desired), the USP Service’s Agent will initiate the UNIX
+Domain Socket MTP Handshake mechanism</li>
 <li>Once the USP Broker’s Controller receives the UNIX Domain Socket MTP
 Handshake message, it will respond with its own Handshake message</li>
 <li>Once the UNIX Domain Socket MTP Handshake mechanism is successfully
@@ -15307,7 +15673,7 @@ Module</h3>
 the USP  Service to be removed (see <a
 href="#sec:usp-service-shutdown-procedures"
 class="heading">VI.6.3</a>).</p>
-<aside id="footnotes" class="footnotes footnotes-end-of-document"
+<section id="footnotes" class="footnotes footnotes-end-of-document"
 role="doc-endnotes">
 <hr />
 <ol>
@@ -15321,7 +15687,7 @@ transitions caused by the <code>SetRequestedState()</code> or the
 table and does not model the error cases.<a href="#fnref2"
 class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</aside>
+</section>
 </div>
 </body>
 </html>
