@@ -163,7 +163,7 @@ An Event is a set of conditions that, when met, triggers the sending of a Notifi
 
 **Event Path**
 
-A Event Path is a Path Name that addresses an Event of an Object or Object Instance. See [](#sec:path-names).
+An Event Path is a Path Name that addresses an Event of an Object or Object Instance. See [](#sec:path-names).
 
 **Expression**
 
