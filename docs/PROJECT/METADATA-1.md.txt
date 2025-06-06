@@ -194,11 +194,28 @@
       Data model and the Secured Role as applying to "secured" parameter in the path(s), with examples
       of both.
 
+* - [Release 1.3.2][TR-369 Amendment 3 Corrigendum 2]
+  - March 2025
+  - This Corrigendum has the following fixes
+    * Clarify R-SET.2a may also return an Error
+
+* - [Release 1.4.1][TR-369 Amendment 4 Corrigendum 1]
+  - June 2025
+  - Release contains the specification for the User Services Platform 1.4.1
+    
+    * Clarified R-DEL.1 failures for non existant or non deletable entries.
+    * Fixed Operate example trailing period.
+    * Fixed spaces in data model path examples in IoTCapability in IoT, and misc typos.
+    * Clarified GetSupportedDM regarding Path Names, Commands, Events and Parameters.
+    * R-GIN.0 clarified if the Controller doesn't have Read permission should treat the Object Instances as not present.
+    * R.UDS.3 clarified use of SOCK_STREAM in USP for the Unix Socket iMTP.
+    * Clarified R-WS.4 to specifically apply to any two USP endpoints.
+    * Updated R-MQTT.4 profile.
+    * Fixed typo in Bulk Data.
+
 :::
 
 Comments or questions about this Broadband Forum Technical Report should be directed to <info@broadband-forum.org>.
-
-::: nobreak
 
 ### Editors {.unnumbered .unlisted}
 
@@ -225,10 +242,6 @@ Comments or questions about this Broadband Forum Technical Report should be dire
   - Editor/Broadband User Services Work Area Director
 
 :::
-
-:::
-
-::: nobreak
 
 ### Acknowledgments {.unnumbered .unlisted}
 
@@ -278,23 +291,15 @@ Comments or questions about this Broadband Forum Technical Report should be dire
   - AT&T
   - barbara.stark@att.com
 
-* - Matthieu Anne
-  - Orange
-  - matthieu.anne@orange.com
-
-* - Thales Fragoso
-  - Axiros
-  - thales.fragoso@axiros.com
-
-:::
-
 :::
 
 [TR-369 Amendment 1]: https://www.broadband-forum.org/download/TR-369_Amendment-1.pdf
 [TR-369 Amendment 2]: https://www.broadband-forum.org/download/TR-369_Amendment-2.pdf
 [TR-369 Amendment 3]: https://www.broadband-forum.org/download/TR-369_Amendment-3.pdf
 [TR-369 Amendment 3 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-1.pdf
+[TR-369 Amendment 3 Corrigendum 2]: https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-2.pdf
 [TR-369 Amendment 4]: https://www.broadband-forum.org/download/TR-369_Amendment-4.pdf
+[TR-369 Amendment 4 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Amendment-4_Corrigendum-1.pdf
 [TR-369 Corrigendum 1]: https://www.broadband-forum.org/download/TR-369_Corrigendum-1.pdf
 [TR-369 Corrigendum 2]: https://www.broadband-forum.org/download/TR-369_Corrigendum-2.pdf
 [TR-369 Issue 1]: https://www.broadband-forum.org/download/TR-369_Issue-1.pdf

@@ -233,7 +233,7 @@ The [Add](#sec:add), [Set](#sec:set), and [Delete](#sec:delete) requests are use
 
 ### Selecting Objects and Parameters
 
-Each Add, Set, and Delete request operates on one or more Path Names. For the Add request, these Path Names are references to Multi-Instance Objects. For all other requests, these Path Names can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
+Each Add, Set, and Delete request operates on one or more Path Names. For the Add request, these Path Names are references to Multi-Instance Objects. For all other requests, these Path Names can contain either addressing based identifiers that match zero or one Object or search based identifiers that match one or more Objects.
 
 For Add and Set requests, each Object address or search is conveyed in a field that also contains a sub-field listing the Parameters to update in the matched Objects.
 
@@ -318,11 +318,11 @@ to determine that a parameter is `writeOnceReadOnly`.
 
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
-The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether or not the Message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
+The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether the Message should be treated as one complete configuration change, or a set of individual changes, with regard to the success or failure of that configuration.
 
 For Delete, this is straightforward - if `allow_partial` is `true`, the Agent returns a Response Message with `affected_paths` and `unaffected_path_errs` containing the successfully deleted Objects and unsuccessfully deleted Objects, respectively. If `allow_partial` is `false`, the Agent will return an Error Message if any Objects fail to be deleted.
 
-For the Add and Set Messages, Parameter updates contain a field called "`required`". This details whether or not the update or creation of the Object should fail if a required Parameter fails.
+For the Add and Set Messages, Parameter updates contain a field called "`required`". This details whether the update or creation of the Object should fail if a required Parameter fails.
 
 This creates a hierarchy of error conditions for the Add and Set requests, such as:
 
@@ -338,7 +338,7 @@ failures.*
 
 If the Message was at least partially successful, the response will make use of the `oper_success` field to indicate the successfully affected Objects.
 
-The `oper_failure` and `oper_success` fields as well as Error Messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed Parameter updates regardless of whether or not the Agent returned a Response or Error Message.
+The `oper_failure` and `oper_success` fields as well as Error Messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed Parameter updates regardless of whether the Agent returned a Response or Error Message.
 
 The logic can be described as follows:
 
@@ -353,7 +353,7 @@ The logic can be described as follows:
 
 #### Search Paths and allow_partial in Set {#sec:search-paths-in-set}
 
-In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for any one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
+In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
 
 ### The Add Message {#sec:add}
 
@@ -451,7 +451,7 @@ This field contains a repeated set of CreateParamSetting fields.
 
 `string param`
 
-This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or  any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
+This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
 
 *Note: The Parameters that can be set in an Add Message are still governed by the permissions allowed to the Controller. Should a Controller attempt to create an Object when it does not have permission on one or more Parameters of that Object, the expected behavior is as follows:*
 
@@ -470,7 +470,7 @@ This field specifies whether the Agent should treat the creation of the Object s
 
 *Note: Any Unique Key Parameter contained in the Add Message will be considered as required regardless of how this field is set. This is to ensure that Unique Key constraints are met when creating the instance of the Object.*
 
-**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
+**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
 
 **[R-ADD.3]{}** - If the `required` field is set to true, a failure to update this Parameter MUST result in a failure to create the Object.
 
@@ -652,7 +652,7 @@ This field specifies whether the Agent should treat the update of the Object spe
 
 **[R-SET.2]{}** - If the `required` field is set to `true`, a failure to update this Parameter MUST result in a failure to update the Object (see [](#sec:using-allow-partial-and-required-parameters)).
 
-**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a Set Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically, regardless of the value of the `allow_partial` field. That is, if any object that matches the Search Path fails to be updated due to an error, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent MUST return a Set Response with an UpdatedObjectResult containing:
+**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a `Set` Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically. That is, if any object that matches the Search Path fails to be updated due to a failure, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent returns either an `Error` with the appropriate `param_errs` elements or a `Set` Response with an UpdatedObjectResult containing:
 
   * A `requested_path` equal to the `obj_path` in the request.
   * An `oper_status` field containing an OperationFailure message.
@@ -823,7 +823,7 @@ This field tells the Agent how to process the Message in the event that one or m
 
 **[R-DEL.0]{}** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [](#sec:using-allow-partial-and-required-parameters)).
 
-**[R-DEL.1]{}** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete Message to fail and return an Error Message.
+[R-DEL.1]{} - If the allow_partial field is set to false, the Agent treats each entry in obj_path holistically. The following error conditions MUST cause the Delete Message to fail and return an Error Message: any entry that is not an Object Instance Path, any entry that is an Object Instance that does not exist, any entry that is non-deletable as per the the Supported Data Model (e.g., a non-writable multi-instance Object), or any entry that is an Object Instance with no InstantiatedObj Write permission.
 
 `repeated string obj_paths`
 
@@ -1371,7 +1371,7 @@ This field contains one of the Path Names or Search Paths given in `obj_path` of
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the GetInstances to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.
 
-**[R-GIN.0]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter used for matching through the `requested_path` field, any otherwise matched Object MUST be treated as if it is not present in the Agent’s Instantiated Data Model
+**[R-GIN.0]{}** - If the Controller does not have InstantiatedObj Read permission on an Object used for matching through the `requested_path` field, or if it does not have Read permission on any of the Parameters used in a search expression in the `requested_path`, any matched Object Instances MUST be treated as if they are not present in the Agent’s Instantiated Data Model.
 
 `string err_msg`
 
@@ -1403,7 +1403,7 @@ GetSupportedDM (referred to informally as GSDM) is used to retrieve the Objects,
 
 The GetSupportedDM Message is different from other USP Messages in that it only returns information about the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance Objects in the Path Name use the `{i}` identifier to indicate their place in the Path Name as specified in TR-106 [@TR-106].
 
-The `obj_paths` field takes a list of Object Paths, either from the Supported Data Model or the Instantiated Data Model.
+The `obj_paths` field takes a set of Path Names to Objects, Commands, Events, or Parameters, either from the Supported Data Model or the Instantiated Data Model.
 
 For example, a Path Name to the `AssociatedDevice` Object (a child of the `.WiFi.AccessPoint` Object) could be addressed in the Supported Data Model as `Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.` but in addition to this notation the omission of the final `{i}.` is also allowed, such as `Device.WiFi.AccessPoint.{i}.AssociatedDevice.`. Both of these syntaxes are supported and equivalent.
 
@@ -1631,6 +1631,8 @@ The Agent's response would be:
 
 This field contains a repeated set of Path Names to Objects, Commands, Events, or Parameters in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
 
+*Note: The `first_level_only`, `return_commands`, `return_events`, `return_params`, and `return_unique_key_sets` request fields are only applicable when the Path Name contains an Object Path.  Furthermore, if the Path Name contains a Command Path, Event Path, or Parameter Path, the `first_level_only`, `return_commands`, `return_events`, `return_params`, and `return_unique_key_sets` request fields are ignored.*
+
 `bool first_level_only`
 
 This field, if `true`, indicates that the Agent returns only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects. The list of child objects does not include commands, events, or Parameters of the child objects regardless of the values of the following elements:
@@ -1663,6 +1665,8 @@ This field contains a repeated set of messages of type `RequestedObjectResult`.
 
 This field contains one of the Path Names given in `obj_path` of the associated GetSupportedDM Request.
 
+*Note: The `supported_params`, `supported_commands`, `supported_events`, and `unique_key_sets` only contain information related to the Path Name contained in this `req_obj_path` (e.g., if the `req_obj_path` contains a Command Path, then `supported_commands` should only contain the data model command referenced in the `req_obj_path` and no other `supported_params`, `supported_events`, or `unique_key_sets`, even if they exist for the Object Path of the data model command).*
+
 `fixed32 err_code`
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the GetSupportedDM to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.
@@ -1687,7 +1691,7 @@ In the case of a diverging Supported Data Model, only the `supported_obj_path`, 
 
 `string supported_obj_path`
 
-This field contains the Full Object Path Name of the reported Object in Supported Data Model notation.
+This field contains the full Object Path of the reported Object in Supported Data Model notation.
 
 `ObjAccessType access`
 
@@ -2600,7 +2604,7 @@ body {
     operate_resp {
       operation_results {
         executed_command: "Device.SelfTestDiagnostics()"
-        req_obj_path: "Device.LocalAgent.Request.1"
+        req_obj_path: "Device.LocalAgent.Request.1."
       }
     }
   }

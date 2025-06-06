@@ -1,11 +1,5 @@
-// Some definitions presupposed by pandoc's typst output.
-#let horizontalrule = [
-  #line(start: (25%,0%), end: (75%,0%))
-]
+#let horizontalrule = line(start: (25%,0%), end: (75%,0%))
 
-#let endnote(num, contents) = [
-  #stack(dir: ltr, spacing: 3pt, super[#num], contents)
-]
 #show terms: it => {
   it.children
     .map(child => [
@@ -15,12 +9,30 @@
     .join()
 }
 
+#set table(
+  inset: 6pt,
+  stroke: none
+)
+
+#show figure.where(
+  kind: table
+): set figure.caption(position: top)
+
+#show figure.where(
+  kind: image
+): set figure.caption(position: bottom)
+
 #import "typst-template.typ": *
+
+#set smartquote(enabled: false)
 
 #show: doc => conf(
   title: [TR\-369 – The User Services Platform],
-  date: [Issue Date: July 2024],
+  subtitle: [Issue: 1 Amendment 4 Corrigendum 1 #bbf-release[]],
+  date: [Issue Date: June 2025],
+  pagenumbering: none,
   cols: 1,
+  linenumbering: none,
   info: (
     PYTHONDIR: [..\/..\/..\/install\/pandoc\/\/..\/python],
     ROOTDIR: [..],
@@ -36,23 +48,23 @@
     bbfMajor: [1],
     bbfMicro: [0],
     bbfMinor: [4],
-    bbfMonth: [July],
+    bbfMonth: [June],
     bbfNumber: [TR\-369],
-    bbfPatch: [0],
+    bbfPatch: [1],
     bbfProjectStream: [],
     bbfStatus: [],
     bbfTitle: [The User Services Platform],
     bbfType: [Technical Report],
-    bbfVersion: [1 Amendment 4],
+    bbfVersion: [1 Amendment 4 Corrigendum 1],
     bbfWorkArea: [],
-    bbfYear: [2024],
+    bbfYear: [2025],
     citation-style: [bbf.csl],
     comment: [common.yaml contains common definitions shared by
 specification, resources and faq
 
 ],
-    copydate: [2024],
-    date: [Issue Date: July 2024],
+    copydate: [2025],
+    date: [Issue Date: June 2025],
     description: [
 
 == What is USP? <what-is-usp>
@@ -132,7 +144,7 @@ devices, IoT endpoints, user services and home networks],
     shortname: [USP],
     siteurl: [..\/index.html],
     status: [],
-    subtitle: [Issue: 1 Amendment 4 #bbf-release[]<section>],
+    subtitle: [Issue: 1 Amendment 4 Corrigendum 1 #bbf-release[]],
     summary: [See
 #link("https://usp.technology")[https:\/\/usp.technology] for the
 current USP specification.
@@ -169,12 +181,12 @@ networks],
 
 // scale = 1 will size the image at 1px = 1pt
 #let bbf-image-scale = 1
-#let bbf-image(scale: bbf-image-scale, ..args) = style(styles => {
+#let bbf-image(scale: bbf-image-scale, ..args) = context {
   let named = args.named()
   if "width" in named or "height" in named {
     image(..args)
   } else {
-    let (width, height) = measure(image(..args), styles)
+    let (width, height) = measure(image(..args))
     layout(page => {
       // XXX should allow control over this hard-coded (1.0, 0.9)
       let (max_width, max_height) = (1.0 * page.width, 0.9 * page.height)
@@ -192,7 +204,7 @@ networks],
       image(..args, width: new_width, height: new_height)
     })
   }
-})
+}
 
 #bbf-new-page[
 #heading(level: 3, outlined: false)[
@@ -279,6 +291,8 @@ the notices, legends, and other provisions set forth on this page.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (left, left, left),
@@ -545,6 +559,39 @@ the notices, legends, and other provisions set forth on this page.
       permissions applying to Supported and Instantiated Data model and
       the Secured Role as applying to "secured" parameter in the
       path(s), with examples of both.
+    ],
+    [#link("https://www.broadband-forum.org/download/TR-369_Amendment-3_Corrigendum-2.pdf")[Release
+    1.3.2]
+    ],
+    [March 2025
+    ],
+    [This Corrigendum has the following fixes
+    - Clarify R\-SET.2a may also return an Error
+    ],
+    [#link("https://www.broadband-forum.org/download/TR-369_Amendment-4_Corrigendum-1.pdf")[Release
+    1.4.1]
+
+    ],
+    [June 2025
+
+    ],
+    [Release contains the specification for the User Services Platform
+    1.4.1
+
+    - Clarified R\-DEL.1 failures for non existant or non deletable
+      entries.
+    - Fixed Operate example trailing period.
+    - Fixed spaces in data model path examples in IoTCapability in IoT,
+      and misc typos.
+    - Clarified GetSupportedDM regarding Path Names, Commands, Events
+      and Parameters.
+    - R\-GIN.0 clarified if the Controller doesn’t have Read permission
+      should treat the Object Instances as not present.
+    - R.UDS.3 clarified use of SOCK\_STREAM in USP for the Unix Socket
+      iMTP.
+    - Clarified R\-WS.4 to specifically apply to any two USP endpoints.
+    - Updated R\-MQTT.4 profile.
+    - Fixed typo in Bulk Data.
     ]
   )
 ]
@@ -552,8 +599,6 @@ the notices, legends, and other provisions set forth on this page.
 Comments or questions about this Broadband Forum Technical Report should
 be directed to
 #link("mailto:info@broadband-forum.org")[info\@broadband\-forum.org].
-
-#bbf-nobreak[
 
 #heading(level: 3, outlined: false)[
   Editors
@@ -563,6 +608,8 @@ be directed to
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (left, left, left, left),
@@ -602,9 +649,6 @@ be directed to
     ]
   )
 ]
-]
-
-#bbf-nobreak[
 
 #heading(level: 3, outlined: false)[
   Acknowledgments
@@ -614,6 +658,8 @@ be directed to
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (left, left, left),
@@ -684,21 +730,8 @@ be directed to
     [AT&T
     ],
     [barbara.stark\@att.com
-    ],
-    [Matthieu Anne
-    ],
-    [Orange
-    ],
-    [matthieu.anne\@orange.com
-    ],
-    [Thales Fragoso
-    ],
-    [Axiros
-    ],
-    [thales.fragoso\@axiros.com
     ]
   )
-]
 ]
 
 #pagebreak()
@@ -765,7 +798,7 @@ To address this opportunity, use cases supported by USP include:
 - Allowing the user to interact with their devices and services using
   customer portals or control points on their own smart devices.
 - The ability to deploy and manage containerized microservices for
-  end\-users via software modulization and USP\-enabled applications.”
+  end\-users via software modularization and USP\-enabled applications.
 - The ability to have both the application and network service provider
   manage, troubleshoot, and control different aspects of the services
   they are responsible for, and enabling provider partnerships.
@@ -979,19 +1012,44 @@ Identifier (URI): Generic Syntax]];, IETF, 2005]
 ] <ref-RFC3986>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[16\] ]#bbf-csl-right-inline[RFC 5705,
+#bbf-csl-left-margin[\[16\] ]#bbf-csl-right-inline[RFC 4122,
+#emph[#link("https://tools.ietf.org/html/rfc4122")[A Universally Unique
+IDentifier (UUID) URN Namespace]];, IETF, 2005]
+] <ref-RFC4122>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[17\] ]#bbf-csl-right-inline[RFC 4180,
+#emph[#link("https://tools.ietf.org/html/rfc4180")[Common Format and
+MIME Type for Comma\-Separated Values (CSV) Files]];, IETF, 2005]
+] <ref-RFC4180>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[18\] ]#bbf-csl-right-inline[RFC 5246,
+#emph[#link("https://tools.ietf.org/html/rfc5246")[The Transport Layer
+Security (TLS) Protocol Version 1.2]];, IETF, 2008]
+] <ref-RFC5246>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[19\] ]#bbf-csl-right-inline[RFC 5280,
+#emph[#link("https://tools.ietf.org/html/rfc5280")[Internet X.509 Public
+Key Infrastructure Certificate and Certificate Revocation List (CRL)
+Profile]];, IETF, 2008]
+] <ref-RFC5280>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[20\] ]#bbf-csl-right-inline[RFC 5705,
 #emph[#link("https://tools.ietf.org/html/rfc5705")[Keying Material
 Exporters for Transport Layer Security (TLS)]];, IETF, 2010]
 ] <ref-RFC5705>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[17\] ]#bbf-csl-right-inline[RFC 6066,
+#bbf-csl-left-margin[\[21\] ]#bbf-csl-right-inline[RFC 6066,
 #emph[#link("https://tools.ietf.org/html/rfc6066")[Transport Layer
 Security (TLS) Extensions: Extension Definitions]];, IETF, 2011]
 ] <ref-RFC6066>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[18\] ]#bbf-csl-right-inline[RFC 6125,
+#bbf-csl-left-margin[\[22\] ]#bbf-csl-right-inline[RFC 6125,
 #emph[#link("https://tools.ietf.org/html/rfc6125")[Representation and
 Verification of Domain\-Based Application Service Identity within
 Internet Public Key Infrastructure Using X.509 (PKIX) Certificates in
@@ -999,134 +1057,109 @@ the Context of Transport Layer Security (TLS)]];, IETF, 2011]
 ] <ref-RFC6125>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[19\] ]#bbf-csl-right-inline[RFC 6455,
+#bbf-csl-left-margin[\[23\] ]#bbf-csl-right-inline[RFC 6455,
 #emph[#link("https://tools.ietf.org/html/rfc6455")[The WebSocket
 Protocol]];, IETF, 2011]
 ] <ref-RFC6455>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[20\] ]#bbf-csl-right-inline[RFC 6762,
+#bbf-csl-left-margin[\[24\] ]#bbf-csl-right-inline[RFC 6762,
 #emph[#link("https://tools.ietf.org/html/rfc6762")[Multicast DNS]];,
 IETF, 2013]
 ] <ref-RFC6762>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[21\] ]#bbf-csl-right-inline[RFC 6763,
+#bbf-csl-left-margin[\[25\] ]#bbf-csl-right-inline[RFC 6763,
 #emph[#link("https://tools.ietf.org/html/rfc6763")[DNS\-Based Service
 Discovery]];, IETF, 2013]
 ] <ref-RFC6763>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[22\] ]#bbf-csl-right-inline[RFC 6818,
+#bbf-csl-left-margin[\[26\] ]#bbf-csl-right-inline[RFC 6818,
 #emph[#link("https://tools.ietf.org/html/rfc6818")[Updates to the
 Internet X.509 Public Key Infrastructure Certificate and Certificate
 Revocation List (CRL) Profile]];, IETF, 2013]
 ] <ref-RFC6818>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[23\] ]#bbf-csl-right-inline[RFC 6979,
+#bbf-csl-left-margin[\[27\] ]#bbf-csl-right-inline[RFC 6979,
 #emph[#link("https://tools.ietf.org/html/rfc6979")[Deterministic Usage
 of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital
 Signature Algorithm (ECDSA)]];, IETF, 2013]
 ] <ref-RFC6979>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[24\] ]#bbf-csl-right-inline[RFC 8446,
+#bbf-csl-left-margin[\[28\] ]#bbf-csl-right-inline[RFC 7159,
+#emph[#link("https://tools.ietf.org/html/rfc7159")[The JavaScript Object
+Notation (JSON) Data Interchange Format]];, IETF, 2014]
+] <ref-RFC7159>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[29\] ]#bbf-csl-right-inline[RFC 7252,
+#emph[#link("https://tools.ietf.org/html/rfc7252")[The Constrained
+Application Protocol (CoAP)]];, IETF, 2014]
+] <ref-RFC7252>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[30\] ]#bbf-csl-right-inline[RFC 7925,
+#emph[#link("https://tools.ietf.org/html/rfc7925")[Transport Layer
+Security (TLS) \/ Datagram Transport Layer Security (DTLS) Profiles for
+the Internet of Things]];, IETF, 2016]
+] <ref-RFC7925>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[31\] ]#bbf-csl-right-inline[RFC 7959,
+#emph[#link("https://tools.ietf.org/html/rfc7959")[Block\-Wise Transfers
+in the Constrained Application Protocol (CoAP)]];, IETF, 2016]
+] <ref-RFC7959>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[32\] ]#bbf-csl-right-inline[RFC 8446,
 #emph[#link("https://tools.ietf.org/html/rfc8446")[The Transport Layer
 Security (TLS) Protocol Version 1.3]];, IETF, 2018]
 ] <ref-RFC8446>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[25\] ]#bbf-csl-right-inline[FIPS PUB 180\-4,
+#bbf-csl-left-margin[\[33\] ]#bbf-csl-right-inline[RFC 8766,
+#emph[#link("https://tools.ietf.org/html/rfc8766")[Discovery Proxy for
+Multicast DNS\-Based Service Discovery]];, IETF, 2020]
+] <ref-RFC8766>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[\[34\] ]#bbf-csl-right-inline[FIPS PUB 180\-4,
 #emph[#link("https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf")[Secure
 Hash Standard (SHS)]];, NIST]
 ] <ref-FIPS-180.4>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[26\] ]#bbf-csl-right-inline[FIPS PUB 186\-4,
+#bbf-csl-left-margin[\[35\] ]#bbf-csl-right-inline[FIPS PUB 186\-4,
 #emph[#link("https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf")[Digital
 Signature Standard (DSS)]];, NIST]
 ] <ref-FIPS-186.4>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[27\] ]#bbf-csl-right-inline[MQTT 3.1.1,
+#bbf-csl-left-margin[\[36\] ]#bbf-csl-right-inline[MQTT 3.1.1,
 #emph[#link("http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html")[MQ
 Telemetry Transport 3.1.1]];, OASIS]
 ] <ref-MQTT-3-1-1>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[28\] ]#bbf-csl-right-inline[MQTT 5.0,
+#bbf-csl-left-margin[\[37\] ]#bbf-csl-right-inline[MQTT 5.0,
 #emph[#link("https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html")[MQ
 Telemetry Transport 5.0]];, OASIS]
 ] <ref-MQTT-5-0>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[29\] ]#bbf-csl-right-inline[SOAP 1.1,
+#bbf-csl-left-margin[\[38\] ]#bbf-csl-right-inline[SOAP 1.1,
 #emph[#link("https://www.w3.org/TR/2000/NOTE-SOAP-20000508/")[Simple
 Object Access Protocol (SOAP) 1.1]];, W3C, 2000]
 ] <ref-SOAP-1-1>
 
 #bbf-csl-entry[
-#bbf-csl-left-margin[\[30\] ]#bbf-csl-right-inline[XML Schema Part 2,
+#bbf-csl-left-margin[\[39\] ]#bbf-csl-right-inline[XML Schema Part 2,
 #emph[#link("https://www.w3.org/TR/xmlschema-2/")[XML Schema Part 2:
 Datatypes Second Edition]];, W3C, 2004]
 ] <ref-XMLSCHEMA-2>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[31\] ]#bbf-csl-right-inline[RFC 4122,
-#emph[#link("https://tools.ietf.org/html/rfc4122")[A Universally Unique
-IDentifier (UUID) URN Namespace]];, 2005]
-] <ref-RFC4122>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[32\] ]#bbf-csl-right-inline[RFC 4180,
-#emph[#link("https://tools.ietf.org/html/rfc4180")[Common Format and
-MIME Type for Comma\-Separated Values (CSV) Files]];, 2005]
-] <ref-RFC4180>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[33\] ]#bbf-csl-right-inline[RFC 5246,
-#emph[#link("https://tools.ietf.org/html/rfc5246")[The Transport Layer
-Security (TLS) Protocol Version 1.2]];, 2008]
-] <ref-RFC5246>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[34\] ]#bbf-csl-right-inline[RFC 5280,
-#emph[#link("https://tools.ietf.org/html/rfc5280")[Internet X.509 Public
-Key Infrastructure Certificate and Certificate Revocation List (CRL)
-Profile]];, 2008]
-] <ref-RFC5280>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[35\] ]#bbf-csl-right-inline[RFC 7159,
-#emph[#link("https://tools.ietf.org/html/rfc7159")[The JavaScript Object
-Notation (JSON) Data Interchange Format]];, 2014]
-] <ref-RFC7159>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[36\] ]#bbf-csl-right-inline[RFC 7252,
-#emph[#link("https://tools.ietf.org/html/rfc7252")[The Constrained
-Application Protocol (CoAP)]];, 2014]
-] <ref-RFC7252>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[37\] ]#bbf-csl-right-inline[RFC 7925,
-#emph[#link("https://tools.ietf.org/html/rfc7925")[Transport Layer
-Security (TLS) \/ Datagram Transport Layer Security (DTLS) Profiles for
-the Internet of Things]];, 2016]
-] <ref-RFC7925>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[38\] ]#bbf-csl-right-inline[RFC 7959,
-#emph[#link("https://tools.ietf.org/html/rfc7959")[Block\-Wise Transfers
-in the Constrained Application Protocol (CoAP)]];, 2016]
-] <ref-RFC7959>
-
-#bbf-csl-entry[
-#bbf-csl-left-margin[\[39\] ]#bbf-csl-right-inline[RFC 8766,
-#emph[#link("https://tools.ietf.org/html/rfc8766")[Discovery Proxy for
-Multicast DNS\-Based Service Discovery]];, 2020]
-] <ref-RFC8766>
 
 #bbf-csl-entry[
 #bbf-csl-left-margin[\[40\] ]#bbf-csl-right-inline[STOMP\-1\-2,
@@ -1211,7 +1244,7 @@ See also Search Expression.
 #strong[Expression Component];
 
 An Expression Component is the part of a Search Expression that gives
-the matching Parameter criteria for the search. It is comprised of an
+the matching Parameter criteria for the search. It consists of an
 Expression Parameter followed by an Expression Operator followed by an
 Expression Constant.
 
@@ -1349,7 +1382,7 @@ certain Path Name syntax.
 #strong[Record];
 
 The Record is defined as the Message Transfer Protocol (MTP) payload,
-encapsulating a sequence of datagrams that comprise of the Message as
+encapsulating a sequence of datagrams that consists of the Message as
 well as essential protocol information such as the USP version, the
 source Endpoint ID, and the target Endpoint ID. It can also contain
 additional metadata needed for providing integrity protection, payload
@@ -1425,7 +1458,7 @@ to send to a particular Controller.
 
 The Supported Data Model of an Agent represents the complete set of
 Service Elements it is capable of exposing to a Controller. It is
-defined by the union of all of the Device Type Definitions the Agent
+defined by the union of all the Device Type Definitions the Agent
 exposes to the Controller.
 
 #strong[Table];
@@ -1440,7 +1473,7 @@ The Endpoint that was the intended receiver of a message.
 #strong[Trusted Broker];
 
 An intermediary that either (1) ensures the Endpoint ID in all brokered
-Endpoint’s USP Record `from_id` matches the Endpoint ID of those
+Endpoint’s USP Record `from_id` matches the Endpoint ID of this
 Endpoint’s certificates or credentials, before sending on a USP Record
 to another Endpoint, or (2) is part of a closed ecosystem that "knows"
 (certain) Endpoints can be trusted not to spoof the Endpoint ID.
@@ -1454,7 +1487,7 @@ Identifier.
 
 #strong[Unique Key Parameter];
 
-A Parameter that is a member of any of a Multi\-Instance Object’s Unique
+A Parameter that is a member of any Multi\-Instance Object’s Unique
 Keys.
 
 #strong[User Services Platform];
@@ -1490,6 +1523,8 @@ This specification uses the following abbreviations:
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (left, left),
@@ -1625,7 +1660,7 @@ This specification uses the following abbreviations:
     ],
     [TLS
     ],
-    [Tranport Layer Security
+    [Transport Layer Security
     ],
     [TLV
     ],
@@ -1851,6 +1886,8 @@ authority\-scheme requirements outlined in the following table:
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (right, left),
@@ -1932,7 +1969,7 @@ authority\-scheme requirements outlined in the following table:
     [`uuid`
     ],
     [`authority-id` MUST be zero\-length. \
-    `instance-id` is a UUID #link(<ref-RFC4122>)[\[31\]] \
+    `instance-id` is a UUID #link(<ref-RFC4122>)[\[16\]] \
     Example:`uuid::f81d4fae-7dec-11d0-a765-00a0c91e6bf6`
     ],
     [`imei`
@@ -2964,6 +3001,8 @@ between the Agent and a Controller discovered by DHCP.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -3027,7 +3066,7 @@ that was originally defined in the CPE WAN Management Protocol
 #link(<ref-TR-069>)[\[1\]] (CWMP), which provides a way for a CWMP
 Gateway and an End Device to exchange information via DHCP options to
 populate data model objects with their reciprocal information. The
-purpose of populating this information is to provides an ACS or USP
+purpose of populating this information is to provide an ACS or USP
 Controller with the ability to determine whether the Gateway and Device
 are on the same LAN. The USP requirements defined in this section
 identify what USP\-enabled devices (Gateways and End Devices) need to do
@@ -3054,6 +3093,8 @@ Encapsulation Options for requests below.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -3101,11 +3142,11 @@ Forum that follows the format defined below. The IANA Enterprise Number
 for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the
 IANA Private Enterprise Numbers registry).
 
-#strong[#[R\-DIS.2b]<r-dis.2b>]; \- If an Agent recieves the
+#strong[#[R\-DIS.2b]<r-dis.2b>]; \- If an Agent receives the
 encapsulation options for requests above, then it MUST respond with the
 Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER
 and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The
-responses are only included if the request options are recieved.
+responses are only included if the request options are received.
 
 === 3.4.3 DHCP Encapsulated Vendor\-Specific Option\-Data fields for Agent <sec:dhcp-encapsulated-vendor-specific-option-data-fields-for-agent>
 
@@ -3113,6 +3154,8 @@ responses are only included if the request options are recieved.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -3164,16 +3207,16 @@ IANA Private Enterprise Numbers registry).
 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or
 REPLY) with this information, it MUST populate the `Device.GatewayInfo`
 Object as defined in the Device:2 Data Model #link(<ref-TR-181>)[\[3\]].
-Specifically, it MUST set the the parameters `ManufacturerOUI`,
+Specifically, it MUST set the parameters `ManufacturerOUI`,
 `ProductClass` and `SerialNumber`, if present and `ManagementProtocol`
 MUST be set to "CWMP". If any of the parameters are not present then
 they MUST be set to an empty string. If the DHCP release expires, or the
-USP Endpoint doesnt recieve this information, the Parameters in the
+USP Endpoint doesn’t receive this information, the Parameters in the
 `Device.GatewayInfo` Object MUST be set to an empty strings.
 
 #strong[#[R\-DIS.2d]<r-dis.2d>]; \- When an Agent performs mDNS
 discovery (see #link(<sec:discovery>)[Discovery and Advertisement]) and
-recieves a PTR record (see #link(<sec:dns-sd-records>)[DNS\-SD Records])
+receives a PTR record (see #link(<sec:dns-sd-records>)[DNS\-SD Records])
 that match the same IP address as the DHCP response from
 (#link(<r-dis.2c>)[R\-DIS.2c]), it MUST also set the
 `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and
@@ -3184,9 +3227,9 @@ in the PTR record.
 
 #strong[#[R\-DIS.3]<r-dis.3>]; \- If mDNS discovery is supported by a
 USP Endpoint, the USP Endpoint MUST implement mDNS client and server
-functionality as defined in RFC 6762 #link(<ref-RFC6762>)[\[20\]].
+functionality as defined in RFC 6762 #link(<ref-RFC6762>)[\[24\]].
 
-#strong[#[R\-DIS.4]<r-dis.4>]; \- If mDNS advertisement for a MTP is
+#strong[#[R\-DIS.4]<r-dis.4>]; \- If mDNS advertisement for an MTP is
 enabled on an Endpoint, the Endpoint MUST listen for messages using that
 MTP from other Endpoints requesting establishment of USP communication
 over that MTP.
@@ -3194,7 +3237,7 @@ over that MTP.
 #strong[#[R\-DIS.5]<r-dis.5>]; \- If mDNS is enabled, a USP Endpoint
 MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
-In general, the expectation is that Agents will advertise themselves so
+In general, the expectation is that Agents will advertise themselves, so
 they will be discoverable by Controllers. Controllers are not expected
 to advertise themselves, but are expected to discover Agents and respond
 to applicable mDNS requests from Agents. Agents will use mDNS to resolve
@@ -3212,7 +3255,7 @@ DNS resolution.
 
 #strong[#[R\-DIS.6]<r-dis.6>]; \- If DNS is enabled, an Endpoint MUST
 use DNS to request IP address(es) (A and\/or AAAA records, depending on
-confiured IP stacks) for a FQDN with domain other than ones used for
+configured IP stacks) for a FQDN with domain other than ones used for
 mDNS (#link(<r-dis.5>)[R\-DIS.5]).
 
 If the Endpoint is programmatically set to request other resource
@@ -3226,15 +3269,15 @@ to request.
 
 == 3.7 DNS\-SD Records <sec:dns-sd-records>
 
-DNS Service Discovery (DNS\-SD) RFC 6763 #link(<ref-RFC6763>)[\[21\]] is
+DNS Service Discovery (DNS\-SD) RFC 6763 #link(<ref-RFC6763>)[\[25\]] is
 a mechanism for naming and structuring DNS resource records to
 facilitate service discovery. It can be used to create DNS records for
 USP Endpoints, so they can be discoverable via DNS PTR queries RFC 1035
 #link(<ref-RFC1035>)[\[8\]] or Multicast DNS (mDNS) RFC 6762
-#link(<ref-RFC6762>)[\[20\]]. DNS\-SD uses DNS SRV and TXT records to
+#link(<ref-RFC6762>)[\[24\]]. DNS\-SD uses DNS SRV and TXT records to
 express information about "services", and DNS PTR records to help locate
 the SRV and TXT records. To discover these DNS records, DNS or mDNS
-queries can be used. RFC 6762 #link(<ref-RFC6762>)[\[20\]] recommends
+queries can be used. RFC 6762 #link(<ref-RFC6762>)[\[24\]] recommends
 using the query type PTR to get both the SRV and TXT records. A and AAAA
 records will also be returned, for address resolution.
 
@@ -3250,7 +3293,7 @@ Service Instance Name.
 Service Name values
 #link("http://www.broadband-forum.org/assignments")[registered by BBF
 with IANA] used by USP are shown below. As described in RFC 6763
-#link(<ref-RFC6763>)[\[21\]], the `<Service>` part of a Service Instance
+#link(<ref-RFC6763>)[\[25\]], the `<Service>` part of a Service Instance
 Name is constructed from these values as
 "`_<Service Name>._<Transport Protocol>`" (e.g., "`_usp-agt-ws._tcp`").
 
@@ -3260,6 +3303,8 @@ Name is constructed from these values as
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -3494,7 +3539,7 @@ Internet when the device is deployed, then the implementer needs to
 ensure the device supports encryption of all MTP protocols.
 
 MTPs that operate over TCP will be expected to implement, at least, TLS
-1.2 as defined in #link(<ref-RFC5246>)[\[33\]].
+1.2 as defined in #link(<ref-RFC5246>)[\[18\]].
 
 Specific requirements for implementing these are provided in the
 individual MTP sections.
@@ -3826,6 +3871,8 @@ appropriate.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (left, left, left),
@@ -3944,7 +3991,7 @@ progression from being deprecated in USP 1.2.];
 
 The Constrained Application Protocol (CoAP) MTP transfers USP Records
 between USP Endpoints using the CoAP protocol as defined in RFC 7252
-#link(<ref-RFC7252>)[\[36\]]. Messages that are transferred between CoAP
+#link(<ref-RFC7252>)[\[29\]]. Messages that are transferred between CoAP
 clients and servers utilize a request\/response messaging interaction
 based on RESTful architectural principles. The following figure depicts
 the transfer of the USP Records between USP Endpoints.
@@ -3974,7 +4021,7 @@ response will always be sent.
 
 === 4.2.1 Mapping USP Endpoints to CoAP URIs <sec:mapping-usp-endpoints-to-coap-uris>
 
-Section 6 of RFC 7262 #link(<ref-RFC7252>)[\[36\]] discusses the URI
+Section 6 of RFC 7262 #link(<ref-RFC7252>)[\[29\]] discusses the URI
 schemes for identifying CoAP resources and provides a means of locating
 the resource. These resources are organized hierarchically and governed
 by a CoAP server listening for CoAP requests on a given port. USP
@@ -3983,7 +4030,7 @@ discovered.
 
 #strong[#[R\-COAP.0]<r-coap.0>]; \- As the USP Endpoint is a resource
 governed by a CoAP server, the CoAP server MUST also be identified as
-defined in section 6 of RFC 7262 #link(<ref-RFC7252>)[\[36\]].
+defined in section 6 of RFC 7262 #link(<ref-RFC7252>)[\[29\]].
 
 #strong[#[R\-COAP.1]<r-coap.1>]; \- A USP Endpoint MUST be represented
 as a CoAP resource with the following resource attributes:
@@ -4001,7 +4048,7 @@ Endpoint.
 a Uri\-Query option that supplies the CoAP server URI of the Endpoint
 that is the source of the CoAP request, formatted as
 `?reply-to=<coap or coaps uri>`. The coap and coaps URIs are defined in
-sections 6.1 and 6.2 of RFC 7262 #link(<ref-RFC7252>)[\[36\]]. The URI
+sections 6.1 and 6.2 of RFC 7262 #link(<ref-RFC7252>)[\[29\]]. The URI
 MUST NOT include any optional queries at the end.
 
 #strong[#[R\-COAP.2a]<r-coap.2a>]; \- When a USP Endpoint receives a
@@ -4019,11 +4066,11 @@ server identifier (uri\-path).
 #strong[#[R\-COAP.4]<r-coap.4>]; \- In order for USP Records to be
 transferred between a USP Controller and Agent using CoAP, the USP
 Record MUST be encapsulated within the CoAP message as defined in RFC
-7262 #link(<ref-RFC7252>)[\[36\]].
+7262 #link(<ref-RFC7252>)[\[29\]].
 
 #strong[#[R\-COAP.5]<r-coap.5>]; – USP Records that exceed the CoAP
 message size MUST be block encapsulated in accordance with
-#link(<ref-RFC7959>)[\[38\]].
+#link(<ref-RFC7959>)[\[31\]].
 
 USP Records are transferred using the CoAP resource that represents the
 receiving USP Endpoint using the CoAP POST method as defined in RFC
@@ -4047,7 +4094,7 @@ CoAP client (4.xx) or problems with the CoAP server implementation
 
 #strong[#[R\-COAP.8]<r-coap.8>]; \- CoAP clients and servers MUST
 implement the required CoAP response codes defined in section 5.9 of RFC
-7262 #link(<ref-RFC7252>)[\[36\]].
+7262 #link(<ref-RFC7252>)[\[29\]].
 
 #strong[#[R\-COAP.9]<r-coap.9>]; \- When a CoAP client receives a
 failure indication (e.g., timeout) from the underlying transport layer,
@@ -4082,9 +4129,9 @@ response code.
 === 4.2.3 MTP Message Encryption <sec:mtp-message-encryption>
 
 CoAP MTP message encryption is provided using DTLS as described in
-Section 9 of RFC 7262 #link(<ref-RFC7252>)[\[36\]].
+Section 9 of RFC 7262 #link(<ref-RFC7252>)[\[29\]].
 
-In section 9 of RFC 7262 #link(<ref-RFC7252>)[\[36\]], CoAP messages are
+In section 9 of RFC 7262 #link(<ref-RFC7252>)[\[29\]], CoAP messages are
 secured using one of three modes:
 
 - NoSec: DTLS is disabled
@@ -4099,19 +4146,19 @@ secured using one of three modes:
   key pair with an X.509 certificate.
 #strong[#[R\-COAP.14]<r-coap.14>]; \- CoAP clients and servers MUST
 implement the NoSec and Certificate modes of CoAP security as defined in
-RFC 7262 #link(<ref-RFC7252>)[\[36\]].
+RFC 7262 #link(<ref-RFC7252>)[\[29\]].
 
-While section 9 of RFC 7262 #link(<ref-RFC7252>)[\[36\]] provides
+While section 9 of RFC 7262 #link(<ref-RFC7252>)[\[29\]] provides
 guidance on securing CoAP, further guidance related to DTLS
 implementations for the Internet of Things is provided by RFC 7925
-#link(<ref-RFC7925>)[\[37\]].
+#link(<ref-RFC7925>)[\[30\]].
 
 #strong[#[R\-COAP.15]<r-coap.15>]; \- CoAP clients and servers MUST
 implement the mandatory statements of RFC 7925
-#link(<ref-RFC7925>)[\[37\]] with the exception that:
+#link(<ref-RFC7925>)[\[30\]] with the exception that:
 
 - Section 4.4.1 USP Controller certificates can contain domain names
-  with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[18\]]
+  with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[22\]]
   guidance.
 - Section 4.4.2 Client certificate identifiers do not use EUI\-64
   identifier but instead use the identifier defined for Client
@@ -4136,7 +4183,7 @@ requirements and flows in
 == 4.3 WebSocket Binding <sec:websocket>
 
 The WebSockets MTP transfers USP Records between USP Endpoints using the
-WebSocket protocol as defined in RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+WebSocket protocol as defined in RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 Messages that are transferred between WebSocket clients and servers
 utilize a request\/response messaging interaction across an established
 WebSocket session.
@@ -4152,17 +4199,17 @@ type of WebSocket resource that is identified and discovered.
 #strong[#[R\-WS.1]<r-ws.1>]; \- As the USP Endpoint is a resource
 governed by a WebSocket origin server, the WebSocket server MUST also be
 identified as defined in section 3 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.2]<r-ws.2>]; \- A USP Endpoint MUST be represented as a
 WebSocket resource using the path component as defined in section 3 of
-RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.3]<r-ws.3>]; \- When creating DNS\-SD records (see
 #link(<sec:discovery>)[Discovery]), an Endpoint MUST set the DNS\-SD TXT
 record "path" attribute equal to the value of the Websocket resource
 using the path component as defined in section 3 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 === 4.3.2 Handling of the WebSocket Session <sec:handling-of-the-websocket-session>
 
@@ -4188,8 +4235,8 @@ for security reasons. Regardless of which entity establishes the
 WebSocket session, at most one (1) open WebSocket session is utilized
 between the USP Endpoints.
 
-#strong[#[R\-WS.4]<r-ws.4>]; \- USP Endpoints that exchange USP Records
-MUST utilize at most one (1) open WebSocket session.
+#strong[#[R\-WS.4]<r-ws.4>]; \- Any two (2) USP Endpoints that exchange
+USP Records MUST utilize at most one (1) open WebSocket session.
 
 #strong[#[R\-WS.5]<r-ws.5>]; \- USP Agent MUST provide the capability to
 originate the establishment of a WebSocket session.
@@ -4203,11 +4250,11 @@ the in\-home communications use case.];
 
 #strong[#[R\-WS.7]<r-ws.7>]; \- A USP Endpoint MUST implement the
 WebSocket handshake protocol to establish a WebSocket connection as
-defined in section 4 of RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+defined in section 4 of RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.8]<r-ws.8>]; \- A USP Endpoint MUST implement the
 procedures to close a WebSocket connection as defined in section 7 of
-RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 ==== 4.3.2.1 Mapping USP Records to WebSocket Messages <sec:mapping-usp-records-to-websocket-messages>
 
@@ -4258,7 +4305,7 @@ environments.];
 #strong[#[R\-WS.10b]<r-ws.10b>]; \- A WebSocket client MUST include its
 Endpoint ID, via a `key=value` pair, in the query component of the
 request URI in its opening handshake, defined in section 1.3 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]]. The `key` part of the pair MUST have a
+#link(<ref-RFC6455>)[\[23\]]. The `key` part of the pair MUST have a
 value of `eid` and the `value` part MUST be the client’s Endpoint ID.
 This pair MUST be separated from other query data by the `&` character.
 
@@ -4303,7 +4350,7 @@ Data control frame.
 
 #strong[#[R\-WS.13]<r-ws.13>]; \- A USP Endpoint MUST implement the
 WebSocket control frames defined in section 5.5 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 USP Records can be transferred between USP Controllers and USP Agents
 over an established WebSocket session. These USP Records are
@@ -4319,7 +4366,7 @@ its main benefit does not apply for the case of sending USP Records.
 #strong[#[R\-WS.14]<r-ws.14>]; \- In order for USP Records to be
 transferred between a USP Controller and Agent using WebSockets MUST be
 encapsulated within as a binary WebSocket data frame as defined in
-section 5.6 of RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+section 5.6 of RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.14a]<r-ws.14a>]; \- USP Endpoints SHOULD NOT use
 WebSocket message fragmentation for sending USP Records.
@@ -4329,7 +4376,7 @@ message fragmentation in received USP Records.
 
 #strong[#[R\-WS.15]<r-ws.15>]; \- USP Records are transferred between
 USP Endpoints using message body procedures as defined in section 6 of
-RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 ==== 4.3.3.1 Handling Failures to Deliver USP Records <sec:handling-failures-to-deliver-usp-records>
 
@@ -4356,7 +4403,7 @@ control frames.
 #strong[#[R\-WS.17]<r-ws.17>]; \- A USP Agent MUST implement a WebSocket
 keep\-alive mechanism by periodically sending Ping control frames and
 responding to received Ping control frames with Pong control frames as
-described in section 5.5 of RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+described in section 5.5 of RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.18]<r-ws.18>]; \- A USP Agent MUST provide the
 capability to assign a keep\-alive interval in order to send Ping
@@ -4384,6 +4431,8 @@ default values listed in the Default column of the table below.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -4420,6 +4469,8 @@ default values listed in the Default column of the table below.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (right, center, left),
@@ -4506,12 +4557,12 @@ WebSocket Session establishment.
 
 WebSocket MTP message encryption is provided using certificates in TLS
 as described in section 10.5 and section 10.6 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.22]<r-ws.22>]; \- USP Endpoints utilizing WebSockets
 clients and servers for message transport MUST implement the Certificate
 modes of TLS security as defined in sections 10.5 and 10.6 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-WS.23]<r-ws.23>]; \- USP Endpoints capable of obtaining
 absolute time SHOULD wait until it has accurate absolute time before
@@ -4526,7 +4577,7 @@ restrictions.
 
 #strong[#[R\-WS.24]<r-ws.24>]; \- USP Controller certificates MAY
 contain domain names with wildcard characters per RFC 6125
-#link(<ref-RFC6125>)[\[18\]] guidance.
+#link(<ref-RFC6125>)[\[22\]] guidance.
 
 == 4.4 STOMP Binding <sec:stomp-binding>
 
@@ -4905,16 +4956,16 @@ Username\/Password Authentication mechanisms.
 
 STOMP MTP message encryption is provided using certificates in TLS as
 described in section 10.5 and section 10.6 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-STOMP.36]<r-stomp.36>]; \- USP Endpoints utilizing STOMP
 clients for message transport MUST implement TLS 1.2 RFC 5246
-#link(<ref-RFC5246>)[\[33\]] or later with backward compatibility to TLS
+#link(<ref-RFC5246>)[\[18\]] or later with backward compatibility to TLS
 1.2.
 
 #strong[#[R\-STOMP.37]<r-stomp.37>]; \- STOMP server certificates MAY
 contain domain names and those domain names MAY contain domain names
-with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[18\]]
+with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[22\]]
 guidance.
 
 == 4.5 MQTT Binding <sec:mqtt-binding>
@@ -4951,11 +5002,11 @@ this section for their use when MQTT is a USP MTP.
 ] <fig:mqtt-packets>
 #strong[#[R\-MQTT.1]<r-mqtt.1>]; \- USP Endpoints utilizing MQTT clients
 for message transport MUST implement MQTT 5.0
-#link(<ref-MQTT-5-0>)[\[28\]].
+#link(<ref-MQTT-5-0>)[\[37\]].
 
 #strong[#[R\-MQTT.2]<r-mqtt.2>]; \- USP Endpoints utilizing MQTT clients
 for message transport MAY implement MQTT 3.1.1
-#link(<ref-MQTT-3-1-1>)[\[27\]].
+#link(<ref-MQTT-3-1-1>)[\[36\]].
 
 Requirements in this MQTT MTP specification are common to both the MQTT
 3.1.1 and MQTT 5.0 specifications unless an MQTT version is named.
@@ -4982,7 +5033,7 @@ required to ensure interoperability.
 
 #strong[#[R\-MQTT.4]<r-mqtt.4>]; \- USP Agents utilizing MQTT clients
 for message transport MUST support the `MQTTClientCon:1`,
-`MQTTClientSubscribe:1`, `MQTTAgent:1`, and `MQTTController:1` data
+`MQTTClientSubscribe:1`, `MQTTAgent:1`, and `MQTTController:2` data
 model profiles.
 
 #strong[#[R\-MQTT.5]<r-mqtt.5>]; \- USP Agents utilizing MQTT clients
@@ -5200,8 +5251,8 @@ from the MQTT server.
 
 For each Topic listed in a `SUBSCRIBE` packet, the client will also
 provide a desired QoS level. See the MQTT specification (MQTT 3.1.1
-#link(<ref-MQTT-3-1-1>)[\[27\]] or MQTT 5.0
-#link(<ref-MQTT-5-0>)[\[28\]], Section 4.3) for description of the three
+#link(<ref-MQTT-3-1-1>)[\[36\]] or MQTT 5.0
+#link(<ref-MQTT-5-0>)[\[37\]], Section 4.3) for description of the three
 QoS levels (QoS 0, QoS 1, QoS 2). The usefulness of these QoS levels in
 the context of USP depends on the particulars of the MQTT deployment. It
 is therefore up to the implementer \/ deployer to decide which QoS
@@ -5468,10 +5519,10 @@ AAAA records instead of the USP Endpoint’s address information.
 === 4.5.7 MQTT Server Requirements <sec:mqtt-server-requirements>
 
 #strong[#[R\-MQTT.39]<r-mqtt.39>]; \- MQTT servers MUST implement MQTT
-5.0 #link(<ref-MQTT-5-0>)[\[28\]].
+5.0 #link(<ref-MQTT-5-0>)[\[37\]].
 
 #strong[#[R\-MQTT.40]<r-mqtt.40>]; \- MQTT servers SHOULD implement MQTT
-3.1.1 #link(<ref-MQTT-3-1-1>)[\[27\]].
+3.1.1 #link(<ref-MQTT-3-1-1>)[\[36\]].
 
 #strong[#[R\-MQTT.41]<r-mqtt.41>]; \- MQTT servers MUST implement MQTT
 over TCP transport protocol.
@@ -5509,16 +5560,16 @@ least 64 characters length.
 
 MQTT MTP message encryption is provided using certificates in TLS as
 described in section 10.5 and section 10.6 of RFC 6455
-#link(<ref-RFC6455>)[\[19\]].
+#link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-MQTT.48]<r-mqtt.48>]; \- USP Endpoints utilizing MQTT
 clients for message transport MUST implement TLS 1.2
-#link(<ref-RFC5246>)[\[33\]] or later with backward compatibility to TLS
+#link(<ref-RFC5246>)[\[18\]] or later with backward compatibility to TLS
 1.2.
 
 #strong[#[R\-MQTT.49]<r-mqtt.49>]; \- MQTT server certificates MAY
 contain domain names and those domain names MAY contain domain names
-with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[18\]]
+with wildcard characters per RFC 6125 #link(<ref-RFC6125>)[\[22\]]
 guidance.
 
 == 4.6 UNIX Domain Socket Binding <sec:unix-domain-socket>
@@ -5585,7 +5636,8 @@ To get to this point, a connection to the server’s listen socket must be
 made from the USP Endpoint acting as a UNIX domain socket client.
 
 #strong[#[R\-UDS.4]<r-uds.4>]; \- A USP Endpoint acting as a UNIX domain
-socket client MUST connect to a known UNIX domain socket server.
+socket client MUST connect to a known UNIX domain socket server using a
+SOCK\_STREAM connection.
 
 At this point we have a bidirectional UNIX domain socket connection,
 which can be used to send USP Records between a USP Agent and a USP
@@ -5660,6 +5712,8 @@ fields:
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (left, left, left),
@@ -5834,17 +5888,17 @@ Encryption is not required for the UNIX domain socket MTP as all
 messages are exchanged between processes that reside internally within
 the device, but UNIX domain socket MTP message encryption can optionally
 be provided using certificates in TLS as described in section 10.5 and
-section 10.6 of RFC 6455 #link(<ref-RFC6455>)[\[19\]].
+section 10.6 of RFC 6455 #link(<ref-RFC6455>)[\[23\]].
 
 #strong[#[R\-UDS.23a]<r-uds.23a>]; \- USP Endpoints utilizing UNIX
 domain sockets for message transport, that choose to use TLS for MTP
 message encryption, MUST implement TLS 1.2 RFC 5246
-#link(<ref-RFC5246>)[\[33\]] or later with backward compatibility to TLS
+#link(<ref-RFC5246>)[\[18\]] or later with backward compatibility to TLS
 1.2.
 
 #strong[#[R\-UDS.23b]<r-uds.23b>]; \- USP Controller certificates MAY
 contain domain names with wildcard characters per RFC 6125
-#link(<ref-RFC6125>)[\[18\]] guidance.
+#link(<ref-RFC6125>)[\[22\]] guidance.
 
 === 4.6.5 Handling Other UNIX Domain Socket Failures <sec:handling-other-unix-domain-socket-failures>
 
@@ -5928,19 +5982,19 @@ string representations of the TR\-106 Appendix I.4
 
 TR\-106 Appendix I.4 states that "Parameters make use of a limited
 subset of the default SOAP data types". The SOAP 1.1 specification
-#link(<ref-SOAP-1-1>)[\[29\]] states that all SOAP simple types are
+#link(<ref-SOAP-1-1>)[\[38\]] states that all SOAP simple types are
 defined by the XML Schema Part 2: Datatypes specification
-#link(<ref-XMLSCHEMA-2>)[\[30\]], and this is the ultimate reference.
+#link(<ref-XMLSCHEMA-2>)[\[39\]], and this is the ultimate reference.
 
 In practice there should be few surprises, e.g., XML Schema Part 2,
-Section 3.3.22 #link(<ref-XMLSCHEMA-2>)[\[30\]] states that it has a
+Section 3.3.22 #link(<ref-XMLSCHEMA-2>)[\[39\]] states that it has a
 lexical representation consisting of a finite\-length sequence of
 decimal digits (\#x30\-\#x39).
 
 Some of the encoding rules are quite complicated, e.g.~SOAP 1.1, Section
-5.2.3 #link(<ref-SOAP-1-1>)[\[29\]] states that `base64` line length
+5.2.3 #link(<ref-SOAP-1-1>)[\[38\]] states that `base64` line length
 restrictions don’t apply to SOAP, and XML Schema Part 2, Section 3.2.7
-#link(<ref-XMLSCHEMA-2>)[\[30\]] has a lot of detail about which aspects
+#link(<ref-XMLSCHEMA-2>)[\[39\]] has a lot of detail about which aspects
 of ISO 8601 are and are not supported by the `dateTime` data type.
 
 = 6 End to End Message Exchange <sec:e2e-message-exchange>
@@ -6131,6 +6185,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #block(
     width: 100.00%)[
     #table(
@@ -6170,6 +6226,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (right, center, left),
@@ -6491,7 +6549,7 @@ For each USP Message segment the Payload:
   segment the encrypted Message per the maximum allowed TLS record size.
   + If all TLS records + Record header fields are less than the maximum
     allowed USP Record size, then a single USP Record is sent.
-  + Otherwise segmentation of the USP Record will need to be done.
+  + Otherwise, segmentation of the USP Record will need to be done.
     + If the record size of a single TLS record + USP Record header
       fields is less than the maximum allowed USP Record size, exactly
       one TLS record can be included in a USP Record.
@@ -6735,12 +6793,12 @@ Exchange.
 
 This signature method uses the SHA\-256 hash algorithm, as defined in
 FIPS PUB 180\-4 Secure Hash Standard (SHS)
-#link(<ref-FIPS-180.4>)[\[25\]], and the NIST P\-256 curve that
+#link(<ref-FIPS-180.4>)[\[34\]], and the NIST P\-256 curve that
 generates a signature for the hash using the Digital Signature Standard
 (DSS) scheme as defined in FIPS PUB 186\-4 Digital Signature Standard
-(DSS) #link(<ref-FIPS-186.4>)[\[26\]]. To reduce the burden of requiring
+(DSS) #link(<ref-FIPS-186.4>)[\[35\]]. To reduce the burden of requiring
 a strong source of randomness, the signature algorithm may apply the
-method described in RFC 6979 #link(<ref-RFC6979>)[\[23\]] to
+method described in RFC 6979 #link(<ref-RFC6979>)[\[27\]] to
 deterministically derive encryption parameters. The signature must be
 ASN.1 DER\-encoded as described in RFC 3279
 #link(<ref-RFC3279>)[\[12\]], we will refer to this signature scheme as
@@ -6761,22 +6819,22 @@ certificate.
 When the transmitting and receiving USP Endpoints have established a TLS
 session, the transmitting USP Endpoint no longer needs to generate a
 signature or transmit the sender’s certificate with the USP Record.
-Instead the transmitting USP Endpoint generates a MAC that is verified
+Instead, the transmitting USP Endpoint generates a MAC that is verified
 by the receiving USP Endpoint. The MAC ensures the integrity of the
 non\-payload fields of the USP Record. The MAC mechanism used in USP for
 this purpose is the SHA\-256 keyed\-Hash Message Authentication Code
 (HMAC) algorithm. The keys used for the HMAC algorithm are derived in
-accordance with RFC 5705 #link(<ref-RFC5705>)[\[16\]] when using TLS 1.2
+accordance with RFC 5705 #link(<ref-RFC5705>)[\[20\]] when using TLS 1.2
 or in accordance with the updated version found in RFC 8446
-#link(<ref-RFC8446>)[\[24\]] when using TLS 1.3. These procedures
+#link(<ref-RFC8446>)[\[32\]] when using TLS 1.3. These procedures
 require the following inputs: a label, a context and the length of the
 output keying material. The label used must be
 "`EXPORTER-BBF-USP-Record`", the context must be empty (note that, for
-TLS 1.2, an empty context, i.e.~zero length, is different than no
+TLS 1.2, an empty context, i.e.~zero length, is different from no
 context at all) and the output length must be 64 octets, where the first
 32 octets will be used as the client key and the other 32 octets as the
 server key (in TLS terms). When using TLS 1.2, the PRF used must be the
-one defined in RFC 5246 #link(<ref-RFC5246>)[\[33\]] with SHA\-256 Hash.
+one defined in RFC 5246 #link(<ref-RFC5246>)[\[18\]] with SHA\-256 Hash.
 
 #strong[#[R\-E2E.32]<r-e2e.32>]; – When generating or validating the MAC
 or signature to protect the integrity of the USP Record, the sequence of
@@ -6810,8 +6868,8 @@ proceeding from lowest to highest.
 #strong[#[R\-E2E.35]<r-e2e.35>]; – If using the TLS MAC method to
 protect the integrity of a USP Record, when generating or validating the
 MAC of the USP Record, the USP Endpoint MUST derive the keys in
-accordance with RFC 5705 #link(<ref-RFC5705>)[\[16\]] when using TLS 1.2
-or with accordance with RFC 8446 #link(<ref-RFC8446>)[\[24\]] when using
+accordance with RFC 5705 #link(<ref-RFC5705>)[\[20\]] when using TLS 1.2
+or with accordance with RFC 8446 #link(<ref-RFC8446>)[\[32\]] when using
 TLS 1.3.
 
 #strong[#[R\-E2E.36]<r-e2e.36>]; – If using the TLS MAC method to
@@ -6827,7 +6885,7 @@ keying material.
 #strong[#[R\-E2E.38]<r-e2e.38>]; – If using the TLS MAC method to
 protect the integrity of a USP Record, when generating or validating the
 MAC of the USP Record, the USP Endpoint MUST use the TLS PRF defined in
-RFC 5246 #link(<ref-RFC5246>)[\[33\]] with SHA\-256 Hash when using TLS
+RFC 5246 #link(<ref-RFC5246>)[\[18\]] with SHA\-256 Hash when using TLS
 1.2 for End\-to\-End security.
 
 #strong[#[R\-E2E.39]<r-e2e.39>]; – If using the TLS MAC method to
@@ -7274,7 +7332,7 @@ Each Add, Set, and Delete request operates on one or more Path Names.
 For the Add request, these Path Names are references to Multi\-Instance
 Objects. For all other requests, these Path Names can contain either
 addressing based identifiers that match zero or one Object or search
-based identifiers that matches one or more Objects.
+based identifiers that match one or more Objects.
 
 For Add and Set requests, each Object address or search is conveyed in a
 field that also contains a sub\-field listing the Parameters to update
@@ -7387,10 +7445,9 @@ Controller. The expected behavior is otherwise as follows:
 === 7.4.4 Using Allow Partial and Required Parameters <sec:using-allow-partial-and-required-parameters>
 
 The Add, Set, and Delete requests contain a field called
-"`allow_partial`". This field determines whether or not the Message
-should be treated as one complete configuration change, or a set of
-individual changes, with regards to the success or failure of that
-configuration.
+"`allow_partial`". This field determines whether the Message should be
+treated as one complete configuration change, or a set of individual
+changes, with regard to the success or failure of that configuration.
 
 For Delete, this is straightforward \- if `allow_partial` is `true`, the
 Agent returns a Response Message with `affected_paths` and
@@ -7400,8 +7457,8 @@ unsuccessfully deleted Objects, respectively. If `allow_partial` is
 be deleted.
 
 For the Add and Set Messages, Parameter updates contain a field called
-"`required`". This details whether or not the update or creation of the
-Object should fail if a required Parameter fails.
+"`required`". This details whether the update or creation of the Object
+should fail if a required Parameter fails.
 
 This creates a hierarchy of error conditions for the Add and Set
 requests, such as:
@@ -7430,8 +7487,8 @@ Objects.
 The `oper_failure` and `oper_success` fields as well as Error Messages
 contain a field called `param_errs`, which contains fields of type
 `ParameterError` or `ParamError`. This is so that the Controller will
-receive the details of failed Parameter updates regardless of whether or
-not the Agent returned a Response or Error Message.
+receive the details of failed Parameter updates regardless of whether
+the Agent returned a Response or Error Message.
 
 The logic can be described as follows:
 
@@ -7439,6 +7496,8 @@ The logic can be described as follows:
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto, auto, auto, auto),
     align: (right, center, center, center, center, center, left),
@@ -7550,7 +7609,7 @@ The logic can be described as follows:
 In a Set Request that specifies a Search Path that matches multiple
 objects, it is intended that the Agent treats the requested path
 holistically regardless of the value of allow\_partial. This represents
-a special case. Information about the failure reason for any one or more
+a special case. Information about the failure reason for one or more
 objects that failed to be created or updated is still desired, but would
 be lost if an Error message was returned rather than a Response message
 containing OperationFailure elements. See #link(<r-set.2a>)[R\-SET.2a]
@@ -7673,7 +7732,7 @@ This field contains a repeated set of CreateParamSetting fields.
 `string param`
 
 This field contains a Relative Path to a Parameter of the Object
-specified in `obj_path`, or ~any Parameter in a nested tree of single
+specified in `obj_path`, or any Parameter in a nested tree of single
 instance Sub\-Objects of the Object specified in `obj_path`.
 
 #emph[Note: The Parameters that can be set in an Add Message are still
@@ -7710,7 +7769,7 @@ to ensure that Unique Key constraints are met when creating the instance
 of the Object.];
 
 #strong[#[R\-ADD.2a]<r-add.2a>]; \- If the `allow_partial` field is set
-to `false` and and the `obj_path` field contains a Search Expression, a
+to `false` and the `obj_path` field contains a Search Expression, a
 failure in any of the Paths matched by the Search Expression MUST result
 in a failure and the state of the Data Model MUST NOT change.
 
@@ -7943,13 +8002,13 @@ update the Object (see
 #link(<sec:using-allow-partial-and-required-parameters>)[Using Allow Partial and Required Parameters]).
 
 #strong[#[R\-SET.2a]<r-set.2a>]; \- If the `obj_path` field in the
-`UpdateObject` message of a Set Request contains a Search Path matching
-more than one object, the Agent MUST treat the results of that
-`obj_path` holistically, regardless of the value of the `allow_partial`
-field. That is, if any object that matches the Search Path fails to be
-updated due to an error, the Agent MUST undo any changes that were
-already processed due to this `obj_path`, and the Agent MUST return a
-Set Response with an UpdatedObjectResult containing:
+`UpdateObject` message of a `Set` Request contains a Search Path
+matching more than one object, the Agent MUST treat the results of that
+`obj_path` holistically. That is, if any object that matches the Search
+Path fails to be updated due to a failure, the Agent MUST undo any
+changes that were already processed due to this `obj_path`, and the
+Agent returns either an `Error` with the appropriate `param_errs`
+elements or a `Set` Response with an UpdatedObjectResult containing:
 
 - A `requested_path` equal to the `obj_path` in the request.
 - An `oper_status` field containing an OperationFailure message.
@@ -8158,11 +8217,14 @@ of valid Objects regardless of the inability to delete one or more
 Objects (see
 #link(<sec:using-allow-partial-and-required-parameters>)[Using Allow Partial and Required Parameters]).
 
-#strong[#[R\-DEL.1]<r-del.1>]; \- If the `allow_partial` field is set to
-false, the Agent treats each entry in `obj_path` holistically. Any entry
-referring to an Object which is non\-deletable or doesn’t exist in the
-supported data model MUST cause the Delete Message to fail and return an
-Error Message.
+#[R\-DEL.1]<r-del.1> \- If the allow\_partial field is set to false, the
+Agent treats each entry in obj\_path holistically. The following error
+conditions MUST cause the Delete Message to fail and return an Error
+Message: any entry that is not an Object Instance Path, any entry that
+is an Object Instance that does not exist, any entry that is
+non\-deletable as per the the Supported Data Model (e.g., a
+non\-writable multi\-instance Object), or any entry that is an Object
+Instance with no InstantiatedObj Write permission.
 
 `repeated string obj_paths`
 
@@ -8336,6 +8398,8 @@ values of the `max_depth` Get request field.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (right, center, left),
@@ -8900,11 +8964,12 @@ This field contains a numeric code
 that caused the GetInstances to fail on this Path Name. A value of 0
 indicates the Path Name could be read successfully.
 
-#strong[#[R\-GIN.0]<r-gin.0>]; \- If the Controller making the Request
-does not have Read permission on an Object or Parameter used for
-matching through the `requested_path` field, any otherwise matched
-Object MUST be treated as if it is not present in the Agent’s
-Instantiated Data Model
+#strong[#[R\-GIN.0]<r-gin.0>]; \- If the Controller does not have
+InstantiatedObj Read permission on an Object used for matching through
+the `requested_path` field, or if it does not have Read permission on
+any of the Parameters used in a search expression in the
+`requested_path`, any matched Object Instances MUST be treated as if
+they are not present in the Agent’s Instantiated Data Model.
 
 `string err_msg`
 
@@ -8952,8 +9017,9 @@ contain Multi\-Instance Objects in the Path Name use the `{i}`
 identifier to indicate their place in the Path Name as specified in
 TR\-106 #link(<ref-TR-106>)[\[2\]].
 
-The `obj_paths` field takes a list of Object Paths, either from the
-Supported Data Model or the Instantiated Data Model.
+The `obj_paths` field takes a set of Path Names to Objects, Commands,
+Events, or Parameters, either from the Supported Data Model or the
+Instantiated Data Model.
 
 For example, a Path Name to the `AssociatedDevice` Object (a child of
 the `.WiFi.AccessPoint` Object) could be addressed in the Supported Data
@@ -9203,6 +9269,14 @@ Events, or Parameters in the Agent’s Supported or Instantiated Data
 Model. For Path Names from the Supported Data Model the omission of the
 final `{i}.` is allowed.
 
+#emph[Note: The `first_level_only`, `return_commands`, `return_events`,
+`return_params`, and `return_unique_key_sets` request fields are only
+applicable when the Path Name contains an Object Path. Furthermore, if
+the Path Name contains a Command Path, Event Path, or Parameter Path,
+the `first_level_only`, `return_commands`, `return_events`,
+`return_params`, and `return_unique_key_sets` request fields are
+ignored.];
+
 `bool first_level_only`
 
 This field, if `true`, indicates that the Agent returns only those
@@ -9249,6 +9323,14 @@ This field contains a repeated set of messages of type
 This field contains one of the Path Names given in `obj_path` of the
 associated GetSupportedDM Request.
 
+#emph[Note: The `supported_params`, `supported_commands`,
+`supported_events`, and `unique_key_sets` only contain information
+related to the Path Name contained in this `req_obj_path` (e.g., if the
+`req_obj_path` contains a Command Path, then `supported_commands` should
+only contain the data model command referenced in the `req_obj_path` and
+no other `supported_params`, `supported_events`, or `unique_key_sets`,
+even if they exist for the Object Path of the data model command).];
+
 `fixed32 err_code`
 
 This field contains a numeric code
@@ -9284,7 +9366,7 @@ In the case of a diverging Supported Data Model, only the
 
 `string supported_obj_path`
 
-This field contains the Full Object Path Name of the reported Object in
+This field contains the full Object Path of the reported Object in
 Supported Data Model notation.
 
 `ObjAccessType access`
@@ -9972,6 +10054,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -10008,6 +10092,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (right, center, left),
@@ -10656,7 +10742,7 @@ body {
     operate_resp {
       operation_results {
         executed_command: "Device.SelfTestDiagnostics()"
-        req_obj_path: "Device.LocalAgent.Request.1"
+        req_obj_path: "Device.LocalAgent.Request.1."
       }
     }
   }
@@ -10791,6 +10877,8 @@ be implemented) are defined in the message descriptions below.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (left, left, left, left),
@@ -11152,8 +11240,8 @@ end\-to\-end ecosystem.
 == 8.1 Authentication <sec:authentication-1>
 
 Authentication of Controllers is done using X.509 certificates as
-defined in #link(<ref-RFC5280>)[\[34\]] and
-#link(<ref-RFC6818>)[\[22\]]. Authentication of Agents is done either by
+defined in #link(<ref-RFC5280>)[\[19\]] and
+#link(<ref-RFC6818>)[\[26\]]. Authentication of Agents is done either by
 using X.509 certificates or shared secrets. X.509 certificates, at a
 minimum, need to be usable for #link(<sec:securing-mtps>)[Securing MTPs]
 with TLS or DTLS protocols. It is recommended that Agents implement the
@@ -12121,9 +12209,9 @@ configuring the bulk data collection mechanism on an Agent:
   Data Collection mechanism utilizes the MQTT protocol, and the
   USPEventNotif Bulk Data collection mechanism utilizes the existing USP
   communications channel related to the USP Controller that owns the
-  bulk data profile. From a data encoding perspective, both Bulk Data
+  bulk data profile. From a data encoding perspective, all Bulk Data
   collection mechanisms support the #emph[CSV]; and #emph[JSON]; options
-  as described later. From a data formatting perspective, both Bulk Data
+  as described later. From a data formatting perspective, all Bulk Data
   collection mechanisms support the #emph[Object Hierarchy]; and
   #emph[Name Value Pair]; report formats, also described later.
 The Bulk Data collection mechanism is configured within an Agent by
@@ -12287,6 +12375,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (right, center, center, left),
@@ -12323,6 +12413,8 @@ the appropriate permissions at any time.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto),
     align: (right, center, left),
@@ -12462,7 +12554,7 @@ the Agent to establish a secure connection to the Collection Server.];
 #emph[Note: TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA is the only mandatory TLS
 1.2 cipher suite.];
 
-- The Agent SHOULD use the #link(<ref-RFC6066>)[\[17\]] Server Name TLS
+- The Agent SHOULD use the #link(<ref-RFC6066>)[\[21\]] Server Name TLS
   extension to send the host portion of the Collection Server URL as the
   server name during the TLS handshake.
 - If TLS 1.2 (or a later version) is used, the Agent MUST authenticate
@@ -12479,16 +12571,16 @@ the Agent to establish a secure connection to the Collection Server.];
   URL rather than the pre\-configured Collection Server URL.
 - If the host portion of the Collection Server URL is a DNS name, this
   MUST be done according to the principles of RFC 6125
-  #link(<ref-RFC6125>)[\[18\]], using the host portion of the Collection
+  #link(<ref-RFC6125>)[\[22\]], using the host portion of the Collection
   Server URL as the reference identifier.
 - If the host portion of the Collection Server URL is an IP address,
   this MUST be done by comparing the IP address against any presented
   identifiers that are IP addresses.
 #emph[Note: the terms "reference identifier" and "presented identifier"
-are defined in RFC 6125 #link(<ref-RFC6125>)[\[18\]].];
+are defined in RFC 6125 #link(<ref-RFC6125>)[\[22\]].];
 
 #emph[Note: wildcard certificates are permitted as described in RFC 6125
-#link(<ref-RFC6125>)[\[18\]].];
+#link(<ref-RFC6125>)[\[22\]].];
 
 - An Agent capable of obtaining absolute time SHOULD wait until it has
   accurate absolute time before contacting the Collection Server. If a
@@ -12509,9 +12601,9 @@ are defined in RFC 6125 #link(<ref-RFC6125>)[\[18\]].];
 
 When utilizing the HTTP Bulk Data collection option, the encoding type
 is sent as a media type within the report. For CSV the media type is
-`text/csv` as specified in RFC 4180 #link(<ref-RFC4180>)[\[32\]] and for
+`text/csv` as specified in RFC 4180 #link(<ref-RFC4180>)[\[17\]] and for
 JSON the media type is `application/json` as specified in RFC 7159
-#link(<ref-RFC7159>)[\[35\]]. For example, a CSV encoded report using
+#link(<ref-RFC7159>)[\[28\]]. For example, a CSV encoded report using
 `charset=UTF-8` would have the following Content\-Type header:
 
 ```
@@ -12630,9 +12722,9 @@ When utilizing the MQTT Bulk Data collection option with a MQTT 5.0
 Client connection, the encoding type is sent as a media type within the
 MQTT PUBLISH message header and the Content Type property. For CSV the
 media type is `text/csv` as specified in RFC 4180
-#link(<ref-RFC4180>)[\[32\]] and for JSON the media type is
+#link(<ref-RFC4180>)[\[17\]] and for JSON the media type is
 `application/json` as specified in RFC 7159
-#link(<ref-RFC7159>)[\[35\]]. For example, a CSV encoded report using
+#link(<ref-RFC7159>)[\[28\]]. For example, a CSV encoded report using
 `charset=UTF-8` would have the following Content Type property:
 
 ```
@@ -12890,7 +12982,7 @@ EXCEPT the MultiAPDevice object, the following would be configured:
 === A.7.1 Encoding of CSV Bulk Data <sec:encoding-of-csv-bulk-data>]
 
 #strong[#[R\-BULK.11]<r-bulk.11>]; \- CSV Bulk Data SHOULD be encoded as
-per RFC 4180 #link(<ref-RFC4180>)[\[32\]], MUST contain a header line
+per RFC 4180 #link(<ref-RFC4180>)[\[17\]], MUST contain a header line
 (column headers), and the media type MUST indicate the presence of the
 header line.
 
@@ -12898,7 +12990,7 @@ For example: `Content-Type: text/csv; charset=UTF-8; header=present`
 
 In addition, the characters used to separate fields and rows as well as
 identify the escape character can be configured from the characters used
-in RFC 4180 #link(<ref-RFC4180>)[\[32\]].
+in RFC 4180 #link(<ref-RFC4180>)[\[17\]].
 
 Using the HTTP example above, the following configures the Agent to
 transfer data to the Bulk Data Collector using CSV encoding, separating
@@ -13183,7 +13275,7 @@ trailing period "." of the leaf Object.];
 
 JSON has a number of basic data types that are translated from the base
 data types defined in TR\-106 #link(<ref-TR-106>)[\[2\]]. The encoding
-of JSON Data Types MUST adhere to RFC 7159 #link(<ref-RFC7159>)[\[35\]].
+of JSON Data Types MUST adhere to RFC 7159 #link(<ref-RFC7159>)[\[28\]].
 
 TR\-106 named data types are translated into the underlying base TR\-106
 data types. Lists based on TR\-106 base data types utilize the JSON
@@ -13193,6 +13285,8 @@ String data type.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (right, left),
@@ -13546,7 +13640,7 @@ mechanism (e.g.~UPnP DM). Because the UUID is meant to uniquely identify
 a DU across a population of devices, it is important that the UUID be
 the same whether generated by the Controller or the device. In order to
 ensure this, the UUID is generated (whether by Controller or device)
-according to the rules defined by RFC 4122 #link(<ref-RFC4122>)[\[31\]]
+according to the rules defined by RFC 4122 #link(<ref-RFC4122>)[\[16\]]
 Version 5 (Name\-Based) and the Device:2 Data Model
 #link(<ref-TR-181>)[\[3\]]. The following are some possible scenarios:
 
@@ -13959,7 +14053,7 @@ Finally there are a number of faults related to the DU resource itself.
 These include:
 
 - The UUID in the request not matching the format specified in RFC 4122
-  #link(<ref-RFC4122>)[\[31\]] Version 5 (Name\-based).
+  #link(<ref-RFC4122>)[\[16\]] Version 5 (Name\-based).
 - A corrupted DU resource, or the DU not being installable for other
   reasons, such as not being signed by any trusted entity
 - The installation of the DU requiring more system resources, such as
@@ -14019,7 +14113,7 @@ Finally there are a number of faults related to the DU resource itself.
 These include:
 
 - The UUID in the request not matching the format specified in RFC 4122
-  #link(<ref-RFC4122>)[\[31\]] Version 5 (Name\-Based).
+  #link(<ref-RFC4122>)[\[16\]] Version 5 (Name\-Based).
 - A corrupted DU resource, or the DU not being installable for other
   reasons, such as not being signed by any trusted entity
 - The DU cannot be found in the data model. This fault can occur when
@@ -14059,7 +14153,7 @@ follows:
   occurs when there is no DU with this combination of UUID and version
   on any EE in the data model.
 - The UUID in the request not matching the format specified in RFC 4122
-  #link(<ref-RFC4122>)[\[31\]] Version 5 (Name\- Based).
+  #link(<ref-RFC4122>)[\[16\]] Version 5 (Name\- Based).
 - The DU caused an EE to come into existence on which at least 1 DU is
   Installed.
 
@@ -14346,6 +14440,8 @@ functions described in
   #show table.cell.where(y: 0): strong
   #align(left)[#set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (auto, auto),
@@ -14407,7 +14503,7 @@ functions described in
 A Discovery Proxy simply repeats the exact information that it discovers
 from Endpoints. This is particularly useful in a multi\-segment LAN,
 where mDNS messages do not cross segment boundaries. The DNS\-SD
-Discovery Proxy #link(<ref-RFC8766>)[\[39\]] functionality is
+Discovery Proxy #link(<ref-RFC8766>)[\[33\]] functionality is
 recommended as a component of a Discovery Proxy. When used inside a LAN,
 this would need the #emph[Non\-USP Discovery Function]; and the
 #emph[Non\-USP Advertisement Function]; described in
@@ -14521,6 +14617,8 @@ implementations.
   #show table.cell.where(y: 0): strong
   #align(left)[#set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (auto, auto, auto, auto),
@@ -14832,6 +14930,8 @@ Only one out of the following Sub\-Objects can exist per instance:
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (auto, auto),
@@ -15244,7 +15344,7 @@ With this definition, the remaining load is expressed in percent, here
 to specify fractions for the value:
 
 ```
-    IoTCapability.1.Class = "LevelSensor"
+    IoTCapability.1.Class             = "LevelSensor"
     IoTCapability.1.LevelSensor.Type  = "Battery"
     IoTCapability.1.LevelSensor.Unit  = "%"
     IoTCapability.1.LevelSensor.Value = 63.26
@@ -15265,6 +15365,8 @@ depend on the particular device.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto, auto, auto),
     align: (auto, auto, auto, auto),
@@ -15341,11 +15443,11 @@ related values with the same unit.
 The minimum definition of a "MultiLevelSensor" consists of:
 
 ```
-    IoTCapability.i.Class                   = "MultiLevelSensor"
-    IoTCapability.i.MultiLevelSensor.Type   = ...
-    IoTCapability.i.MultiLevelSensor.Unit   = ...
-    IoTCapability.i.MultiLevelSensor.Values = ...
-    IoTCapability.1.MultiLevelSensor.ValueNames = ...
+    IoTCapability.i.Class                       = "MultiLevelSensor"
+    IoTCapability.i.MultiLevelSensor.Type       = ...
+    IoTCapability.i.MultiLevelSensor.Unit       = ...
+    IoTCapability.i.MultiLevelSensor.Values     = ...
+    IoTCapability.i.MultiLevelSensor.ValueNames = ...
 ```
 An example is a location reading consisting of the two values longitude
 and latitude in decimal degree notation, which have to be read together:

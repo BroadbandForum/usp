@@ -1,60 +1,59 @@
-make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
+make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
 rm -f ./docs/CNAME ./docs/index.htm ./docs/index.html ./docs/index-metadata.yaml ./docs/index.typ ./docs/watermark.txt ./docs/watermark.png ./docs/release.css ./docs/json-defaults.yaml ./docs/docx-defaults.yaml ./docs/pdf-defaults.yaml ./docs/typst-defaults.yaml ./docs/typst-template.typ ./docs/typst-stringify.typ ./docs/bbf.css ./docs/bbflogo-bw.png ./docs/bbflogo-reverse-dark.png ./docs/bee.png ./docs/broadband-forum-logo.png ./docs/extra.css ./docs/github.css ./docs/missing.png ./docs/pencil.png ./docs/permalink.png ./docs/right.png ./docs/tick.png ./docs/toc.css ./docs/watermark-pdf.css ./docs/watermark.css ./docs/index.html 
-rm -f 
 rm -f ./docs/README.md ./docs/CHANGELOG.md ./docs/METADATA-1.yaml ./docs/METADATA.yaml ./docs/METADATA-1.md ./docs/METADATA.md ./docs/METADATA-1.mk ./docs/METADATA.mk  ./docs/PROJECT.yaml.outputs
 rm -f -r  ./docs/PROJECT
-make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
-make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
+make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
+make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
 PYTHONPATH=./../../install/python/ ./../../install/bin/project-parser.py --outdir=./docs --loglevel=1 PROJECT.yaml 2>&1 >docs/PROJECT.yaml.outputs || true
 INFO:project-parser:created WT-369 project (valid)
-INFO:project-parser:find_file usp-data-models /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/usp-data-models/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/usp-data-models/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/usp-data-models/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/usp-data-models/PROJECT.yaml
+INFO:project-parser:find_file usp-data-models /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/usp-data-models/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/usp-data-models/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/usp-data-models/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/usp-data-models/PROJECT.yaml
 INFO:project-parser:created usp-data-models project (depth 1)
-INFO:project-parser:find_file WT-106 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-106/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-106/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-106/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-106/PROJECT.yaml
-INFO:project-parser:created WT-106 project (depth 2)
-INFO:project-parser:find_file WT-181 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-181/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-181/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-181/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-181/PROJECT.yaml
+INFO:project-parser:find_file WT-181 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-181/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-181/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-181/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-181/PROJECT.yaml
 INFO:project-parser:created WT-181 project (depth 2)
-INFO:project-parser:find_file WT-196 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-196/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-196/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-196/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-196/PROJECT.yaml
+INFO:project-parser:find_file WT-106 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-106/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-106/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-106/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-106/PROJECT.yaml
+INFO:project-parser:created WT-106 project (depth 2)
+INFO:project-parser:find_file WT-196 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-196/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-196/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-196/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-196/PROJECT.yaml
 INFO:project-parser:created WT-196 project (depth 2)
-INFO:project-parser:find_file WT-104 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-104/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-104/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-104/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-104/PROJECT.yaml
+INFO:project-parser:find_file WT-104 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-104/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-104/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-104/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-104/PROJECT.yaml
 INFO:project-parser:created WT-104 project (depth 2)
-INFO:project-parser:find_file WT-135 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-135/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-135/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-135/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-135/PROJECT.yaml
+INFO:project-parser:find_file WT-135 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-135/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-135/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-135/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-135/PROJECT.yaml
 INFO:project-parser:created WT-135 project (depth 2)
-INFO:project-parser:find_file WT-140 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-140/PROJECT.yaml
-INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-140/bbf/PROJECT.yaml
-INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-140/PROJECT.yaml
-INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-140/PROJECT.yaml
+INFO:project-parser:find_file WT-140 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-140/PROJECT.yaml
+INFO:project-parser:  (2/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-140/bbf/PROJECT.yaml
+INFO:project-parser:  (3/7) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-140/PROJECT.yaml
+INFO:project-parser:  (4/7) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-140/PROJECT.yaml
 INFO:project-parser:created WT-140 project (depth 2)
-INFO:project-parser:find_file WT-157 /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
-INFO:project-parser:  (1/8) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/components/PROJECT.yaml
-INFO:project-parser:  (2/8) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/WT-181/components/PROJECT.yaml
-INFO:project-parser:  (3/8) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/WT-181/bbf/components/PROJECT.yaml
-INFO:project-parser:  (4/8) not found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-157/PROJECT.yaml
-INFO:project-parser:  (5/8) found in /mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-157/PROJECT.yaml
+INFO:project-parser:find_file WT-157 /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/PROJECT.yaml
+INFO:project-parser:  (1/8) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf/components/PROJECT.yaml
+INFO:project-parser:  (2/8) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/WT-181/components/PROJECT.yaml
+INFO:project-parser:  (3/8) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/WT-181/bbf/components/PROJECT.yaml
+INFO:project-parser:  (4/8) not found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/install/projectyaml/WT-157/PROJECT.yaml
+INFO:project-parser:  (5/8) found in /mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/install/projectyaml/WT-157/PROJECT.yaml
 INFO:project-parser:created WT-157 project (depth 3)
 INFO:project-parser:validated projects
 INFO:project-parser:wrote ./docs/README.md
@@ -107,4 +106,4 @@ cp -p ./docs/METADATA.md docs/PROJECT/METADATA.md.txt
 pandoc --data-dir=./../../install/pandoc/ --standalone --metadata-file=bbf-metadata.yaml --metadata-file=no-title-metadata.yaml --lua-filter=expand-macros.lua --lua-filter=list-table.lua --css=bbf.css ./docs/METADATA.md --output=docs/PROJECT/METADATA.html
 cp -p ./docs/METADATA-1.mk docs/PROJECT/METADATA-1.mk.txt
 cp -p ./docs/METADATA.mk docs/PROJECT/METADATA.mk.txt
-make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-bravo/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'
+make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/USP-USPREL-JOB1/project/bbf'

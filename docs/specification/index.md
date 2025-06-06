@@ -27,7 +27,7 @@ To address this opportunity, use cases supported by USP include:
 * Management of IoT devices through re-usable data model objects.
 * Allowing the user to interact with their devices and services using customer
   portals or control points on their own smart devices.
-* The ability to deploy and manage containerized microservices for end-users via software modulization and USP-enabled applications."
+* The ability to deploy and manage containerized microservices for end-users via software modularization and USP-enabled applications.
 * The ability to have both the application and network service provider manage,
   troubleshoot, and control different aspects of the services they are
   responsible for, and enabling provider partnerships.
@@ -171,7 +171,7 @@ See also Search Expression.
 
 **Expression Component**
 
-An Expression Component is the part of a Search Expression that gives the matching Parameter criteria for the search. It is comprised of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
+An Expression Component is the part of a Search Expression that gives the matching Parameter criteria for the search. It consists of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
 
 **Expression Constant**
 
@@ -267,7 +267,7 @@ A Path Reference is a Parameter data type that contains a Path Name to an Object
 
 **Record**
 
-The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
+The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that consists of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
 **Register**
 
@@ -319,7 +319,7 @@ A Subscription is a set of logic that tells an Agent which Notifications to send
 
 **Supported Data Model**
 
-The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all of the Device Type Definitions the Agent exposes to the Controller.
+The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all the Device Type Definitions the Agent exposes to the Controller.
 
 **Table**
 
@@ -331,7 +331,7 @@ The Endpoint that was the intended receiver of a message.
 
 **Trusted Broker**
 
-An intermediary that either (1) ensures the Endpoint ID in all brokered Endpoint's USP Record `from_id` matches the Endpoint ID of those Endpoint's certificates or credentials, before sending on a USP Record to another Endpoint, or (2) is part of a closed ecosystem that "knows" (certain) Endpoints can be trusted not to spoof the Endpoint ID.
+An intermediary that either (1) ensures the Endpoint ID in all brokered Endpoint's USP Record `from_id` matches the Endpoint ID of this Endpoint's certificates or credentials, before sending on a USP Record to another Endpoint, or (2) is part of a closed ecosystem that "knows" (certain) Endpoints can be trusted not to spoof the Endpoint ID.
 
 **Unique Key**
 
@@ -339,7 +339,7 @@ A Unique Key of a Multi-Instance Object is a set of one or more Parameters that 
 
 **Unique Key Parameter**
 
-A Parameter that is a member of any of a Multi-Instance Object's Unique Keys.
+A Parameter that is a member of any Multi-Instance Object's Unique Keys.
 
 **User Services Platform**
 
@@ -394,7 +394,7 @@ This specification uses the following abbreviations:
 |SOAP| Simple Object Access Protocol |
 |SSID | Service Set Identifier |
 |STOMP | Simple Text-Oriented Messaging Protocol |
-|TLS | Tranport Layer Security |
+|TLS | Transport Layer Security |
 |TLV | Type-Length-Value |
 |TOFU	| Trust on First Use |
 |TR	| Technical Report |
@@ -1262,7 +1262,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 
 
-This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provides an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
+This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provide an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
 
 ### Exchanging DHCP Options
 
@@ -1281,7 +1281,7 @@ This section outlines the DHCP information USP Agents exchange to provide detail
 These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
 
 
-**[R-DIS.2b]{}** - If an Agent recieves the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are recieved.
+**[R-DIS.2b]{}** - If an Agent receives the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are received.
 
 ### DHCP Encapsulated Vendor-Specific Option-Data fields for Agent
 
@@ -1293,25 +1293,25 @@ These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option
 
 These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
 
-**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesnt recieve this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
+**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesn't receive this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
 
-**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and recieves a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record. 
+**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and receives a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record.
 
 ## Using mDNS {#sec:using-mdns}
 
 **[R-DIS.3]{}** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in RFC 6762 [@RFC6762].
 
-**[R-DIS.4]{}** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
+**[R-DIS.4]{}** - If mDNS advertisement for an MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
 **[R-DIS.5]{}** - If mDNS is enabled, a USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
-In general, the expectation is that Agents will advertise themselves so they will be discoverable by Controllers. Controllers are not expected to advertise themselves, but are expected to discover Agents and respond to applicable mDNS requests from Agents. Agents will use mDNS to resolve a Controller "`.local.`" FQDN (and get DNS-SD records) when the Agent needs to send a Notification to that Controller.
+In general, the expectation is that Agents will advertise themselves, so they will be discoverable by Controllers. Controllers are not expected to advertise themselves, but are expected to discover Agents and respond to applicable mDNS requests from Agents. Agents will use mDNS to resolve a Controller "`.local.`" FQDN (and get DNS-SD records) when the Agent needs to send a Notification to that Controller.
 
 ## Using DNS {#sec:using-dns}
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
 
-**[R-DIS.6]{}** - If DNS is enabled, an Endpoint MUST use DNS to request IP address(es) (A and/or AAAA records, depending on confiured IP stacks) for a FQDN with domain other than ones used for mDNS ([R-DIS.5]()).
+**[R-DIS.6]{}** - If DNS is enabled, an Endpoint MUST use DNS to request IP address(es) (A and/or AAAA records, depending on configured IP stacks) for a FQDN with domain other than ones used for mDNS ([R-DIS.5]()).
 
 If the Endpoint is programmatically set to request other resource records, it will request those, too.
 
@@ -1323,7 +1323,7 @@ DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and
 
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is "`<Instance>.<Service>.<Domain>`". `<Instance>` will be the USP Endpoint Identifier of the USP Endpoint.
 
-**[R-DIS.8]{}** -  USP Endpoint DNS-SD records MUST include the USP Endpoint Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
+**[R-DIS.8]{}** - USP Endpoint DNS-SD records MUST include the USP Endpoint Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
 
 Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in RFC 6763 [@RFC6763], the `<Service>` part of a Service Instance Name is constructed from these values as "`_<Service Name>._<Transport Protocol>`" (e.g., "`_usp-agt-ws._tcp`").
 
@@ -1514,7 +1514,7 @@ Optional. When integrity protection of non-payload fields is performed, this is 
 
 `bytes sender_cert`
 
-Optional. The PEM encoded certificate, or certificate chain, of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`.
+Optional. The PEM encoded certificate, or certificate chain, of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn't provide the mechanism to generate the `mac_signature`.
 
 `oneof record_type`
 
@@ -1796,7 +1796,7 @@ When exchanging the USP Records across WebSockets MTPs, the two USP Endpoints es
 
 While WebSocket sessions can be established by either USP Controllers or USP Agents in many deployment scenarios (e.g. communication between USP Endpoints across the Internet), in general, USP Agents will establish the WebSocket session and not expose an open port toward the Internet for security reasons. Regardless of which entity establishes the WebSocket session, at most one (1) open WebSocket session is utilized between the USP Endpoints.
 
-**[R-WS.4]{}** - USP Endpoints that exchange USP Records MUST utilize at most one (1) open WebSocket session.
+**[R-WS.4]{}** - Any two (2) USP Endpoints that exchange USP Records MUST utilize at most one (1) open WebSocket session.
 
 **[R-WS.5]{}** - USP Agent MUST provide the capability to originate the establishment of a WebSocket session.
 
@@ -2115,7 +2115,7 @@ The MQTT specifications are very complete and comprehensive in describing syntax
 
 The MQTT specification also describes how MQTT can run over WebSockets. Deployments can choose to use MQTT over WebSockets, if they use MQTT clients and servers with support for this option. The TCP option is required to ensure interoperability.
 
-**[R-MQTT.4]{}** - USP Agents utilizing MQTT clients for message transport MUST support the `MQTTClientCon:1`, `MQTTClientSubscribe:1`, `MQTTAgent:1`, and `MQTTController:1` data model profiles.
+**[R-MQTT.4]{}** - USP Agents utilizing MQTT clients for message transport MUST support the `MQTTClientCon:1`, `MQTTClientSubscribe:1`, `MQTTAgent:1`, and `MQTTController:2` data model profiles.
 
 **[R-MQTT.5]{}** - USP Agents utilizing MQTT clients for message transport SHOULD support the `MQTTClientExtended:1` data model profile.
 
@@ -2370,7 +2370,7 @@ This section contains requirements related to setting up a UNIX domain socket co
 
 To get to this point, a connection to the server's listen socket must be made from the USP Endpoint acting as a UNIX domain socket client.
 
-**[R-UDS.4]{}** - A USP Endpoint acting as a UNIX domain socket client MUST connect to a known UNIX domain socket server.
+**[R-UDS.4]{}** - A USP Endpoint acting as a UNIX domain socket client MUST connect to a known UNIX domain socket server using a SOCK_STREAM connection.
 
 At this point we have a bidirectional UNIX domain socket connection, which can be used to send USP Records between a USP Agent and a USP Controller.
 
@@ -2549,7 +2549,7 @@ USP Messages are exchanged between Controllers and Agents. In some deployment sc
   * Segmentation and reassembly of E2E Messages that would be too large to transfer through the intermediate MTP Proxies.
 * Exchange of USP Records without an E2E Session Context that allows for:
   * Integrity protection for non-payload fields
-  * Unprotected payloads or protected payloads where the payload protection security mechanism doesn’t require a concept of a session (e.g., COSE)
+  * Unprotected payloads or protected payloads where the payload protection security mechanism doesn't require a concept of a session (e.g., COSE)
 
 Protected payloads provide a secure message exchange (confidentiality, integrity and identity authentication) through exchange of USP Messages that are secured by the originating and receiving USP Endpoints.
 
@@ -2746,7 +2746,7 @@ For each USP Message segment the Payload:
 1. Compose the USP Message.
 2. If `payload_security` is `TLS12`, encrypt the USP Message. TLS will segment the encrypted Message per the maximum allowed TLS record size.
     1. If all TLS records + Record header fields are less than the maximum allowed USP Record size, then a single USP Record is sent.
-    2. Otherwise segmentation of the USP Record will need to be done.
+    2. Otherwise, segmentation of the USP Record will need to be done.
         1. If the record size of a single TLS record + USP Record header fields is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
         2. If the TLS record size + Record header fields is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
 3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header fields are greater than the maximum allowed USP Record size, the USP Record is segmented.
@@ -2891,7 +2891,7 @@ This signature method uses the SHA-256 hash algorithm, as defined in FIPS PUB 18
 
 ### Using TLS to Validate the Integrity of USP Records
 
-When the transmitting and receiving USP Endpoints have established a TLS session, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Endpoint generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The keys used for the HMAC algorithm are derived in accordance with RFC 5705 [@RFC5705] when using TLS 1.2 or in accordance with the updated version found in RFC 8446 [@RFC8446] when using TLS 1.3. These procedures require the following inputs: a label, a context and the length of the output keying material. The label used must be "`EXPORTER-BBF-USP-Record`", the context must be empty (note that, for TLS 1.2, an empty context, i.e. zero length, is different than no context at all) and the output length must be 64 octets, where the first 32 octets will be used as the client key and the other 32 octets as the server key (in TLS terms). When using TLS 1.2, the PRF used must be the one defined in RFC 5246 [@RFC5246] with SHA-256 Hash.
+When the transmitting and receiving USP Endpoints have established a TLS session, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead, the transmitting USP Endpoint generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The keys used for the HMAC algorithm are derived in accordance with RFC 5705 [@RFC5705] when using TLS 1.2 or in accordance with the updated version found in RFC 8446 [@RFC8446] when using TLS 1.3. These procedures require the following inputs: a label, a context and the length of the output keying material. The label used must be "`EXPORTER-BBF-USP-Record`", the context must be empty (note that, for TLS 1.2, an empty context, i.e. zero length, is different from no context at all) and the output length must be 64 octets, where the first 32 octets will be used as the client key and the other 32 octets as the server key (in TLS terms). When using TLS 1.2, the PRF used must be the one defined in RFC 5246 [@RFC5246] with SHA-256 Hash.
 
 **[R-E2E.32]{}** – When generating or validating the MAC or signature to protect the integrity of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record’s protobuf specification proceeding from lowest to highest. The non-payload fields in the Record definition (other than the `mac_signature` field itself) MUST be used first and then the fields of the `SessionContextRecord` if applicable.
 
@@ -3192,7 +3192,7 @@ The [Add](#sec:add), [Set](#sec:set), and [Delete](#sec:delete) requests are use
 
 ### Selecting Objects and Parameters
 
-Each Add, Set, and Delete request operates on one or more Path Names. For the Add request, these Path Names are references to Multi-Instance Objects. For all other requests, these Path Names can contain either addressing based identifiers that match zero or one Object or search based identifiers that matches one or more Objects.
+Each Add, Set, and Delete request operates on one or more Path Names. For the Add request, these Path Names are references to Multi-Instance Objects. For all other requests, these Path Names can contain either addressing based identifiers that match zero or one Object or search based identifiers that match one or more Objects.
 
 For Add and Set requests, each Object address or search is conveyed in a field that also contains a sub-field listing the Parameters to update in the matched Objects.
 
@@ -3277,11 +3277,11 @@ to determine that a parameter is `writeOnceReadOnly`.
 
 ### Using Allow Partial and Required Parameters {#sec:using-allow-partial-and-required-parameters}
 
-The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether or not the Message should be treated as one complete configuration change, or a set of individual changes, with regards to the success or failure of that configuration.
+The Add, Set, and Delete requests contain a field called "`allow_partial`". This field determines whether the Message should be treated as one complete configuration change, or a set of individual changes, with regard to the success or failure of that configuration.
 
 For Delete, this is straightforward - if `allow_partial` is `true`, the Agent returns a Response Message with `affected_paths` and `unaffected_path_errs` containing the successfully deleted Objects and unsuccessfully deleted Objects, respectively. If `allow_partial` is `false`, the Agent will return an Error Message if any Objects fail to be deleted.
 
-For the Add and Set Messages, Parameter updates contain a field called "`required`". This details whether or not the update or creation of the Object should fail if a required Parameter fails.
+For the Add and Set Messages, Parameter updates contain a field called "`required`". This details whether the update or creation of the Object should fail if a required Parameter fails.
 
 This creates a hierarchy of error conditions for the Add and Set requests, such as:
 
@@ -3297,7 +3297,7 @@ failures.*
 
 If the Message was at least partially successful, the response will make use of the `oper_success` field to indicate the successfully affected Objects.
 
-The `oper_failure` and `oper_success` fields as well as Error Messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed Parameter updates regardless of whether or not the Agent returned a Response or Error Message.
+The `oper_failure` and `oper_success` fields as well as Error Messages contain a field called `param_errs`, which contains fields of type `ParameterError` or `ParamError`. This is so that the Controller will receive the details of failed Parameter updates regardless of whether the Agent returned a Response or Error Message.
 
 The logic can be described as follows:
 
@@ -3312,7 +3312,7 @@ The logic can be described as follows:
 
 #### Search Paths and allow_partial in Set {#sec:search-paths-in-set}
 
-In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for any one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
+In a Set Request that specifies a Search Path that matches multiple objects, it is intended that the Agent treats the requested path holistically regardless of the value of allow_partial. This represents a special case. Information about the failure reason for one or more objects that failed to be created or updated is still desired, but would be lost if an Error message was returned rather than a Response message containing OperationFailure elements. See [R-SET.2a]() and [R-SET.2b]() for the specific requirements.
 
 ### The Add Message {#sec:add}
 
@@ -3410,7 +3410,7 @@ This field contains a repeated set of CreateParamSetting fields.
 
 `string param`
 
-This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or  any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
+This field contains a Relative Path to a Parameter of the Object specified in `obj_path`, or any Parameter in a nested tree of single instance Sub-Objects of the Object specified in `obj_path`.
 
 *Note: The Parameters that can be set in an Add Message are still governed by the permissions allowed to the Controller. Should a Controller attempt to create an Object when it does not have permission on one or more Parameters of that Object, the expected behavior is as follows:*
 
@@ -3429,7 +3429,7 @@ This field specifies whether the Agent should treat the creation of the Object s
 
 *Note: Any Unique Key Parameter contained in the Add Message will be considered as required regardless of how this field is set. This is to ensure that Unique Key constraints are met when creating the instance of the Object.*
 
-**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
+**[R-ADD.2a]{}** - If the `allow_partial` field is set to `false` and the `obj_path` field contains a Search Expression, a failure in any of the Paths matched by the Search Expression MUST result in a failure and the state of the Data Model MUST NOT change.
 
 **[R-ADD.3]{}** - If the `required` field is set to true, a failure to update this Parameter MUST result in a failure to create the Object.
 
@@ -3611,7 +3611,7 @@ This field specifies whether the Agent should treat the update of the Object spe
 
 **[R-SET.2]{}** - If the `required` field is set to `true`, a failure to update this Parameter MUST result in a failure to update the Object (see [](#sec:using-allow-partial-and-required-parameters)).
 
-**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a Set Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically, regardless of the value of the `allow_partial` field. That is, if any object that matches the Search Path fails to be updated due to an error, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent MUST return a Set Response with an UpdatedObjectResult containing:
+**[R-SET.2a]{}** - If the `obj_path` field in the `UpdateObject` message of a `Set` Request contains a Search Path matching more than one object, the Agent MUST treat the results of that `obj_path` holistically. That is, if any object that matches the Search Path fails to be updated due to a failure, the Agent MUST undo any changes that were already processed due to this `obj_path`, and the Agent returns either an `Error` with the appropriate `param_errs` elements or a `Set` Response with an UpdatedObjectResult containing:
 
   * A `requested_path` equal to the `obj_path` in the request.
   * An `oper_status` field containing an OperationFailure message.
@@ -3782,7 +3782,7 @@ This field tells the Agent how to process the Message in the event that one or m
 
 **[R-DEL.0]{}** - If the `allow_partial` field is set to true, and no other exceptions are encountered, the Agent treats each entry in `obj_path` independently. The Agent MUST complete the deletion of valid Objects regardless of the inability to delete one or more Objects (see [](#sec:using-allow-partial-and-required-parameters)).
 
-**[R-DEL.1]{}** - If the `allow_partial` field is set to false, the Agent treats each entry in `obj_path` holistically. Any entry referring to an Object which is non-deletable or doesn't exist in the supported data model MUST cause the Delete Message to fail and return an Error Message.
+[R-DEL.1]{} - If the allow_partial field is set to false, the Agent treats each entry in obj_path holistically. The following error conditions MUST cause the Delete Message to fail and return an Error Message: any entry that is not an Object Instance Path, any entry that is an Object Instance that does not exist, any entry that is non-deletable as per the the Supported Data Model (e.g., a non-writable multi-instance Object), or any entry that is an Object Instance with no InstantiatedObj Write permission.
 
 `repeated string obj_paths`
 
@@ -4330,7 +4330,7 @@ This field contains one of the Path Names or Search Paths given in `obj_path` of
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the GetInstances to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.
 
-**[R-GIN.0]{}** - If the Controller making the Request does not have Read permission on an Object or Parameter used for matching through the `requested_path` field, any otherwise matched Object MUST be treated as if it is not present in the Agent’s Instantiated Data Model
+**[R-GIN.0]{}** - If the Controller does not have InstantiatedObj Read permission on an Object used for matching through the `requested_path` field, or if it does not have Read permission on any of the Parameters used in a search expression in the `requested_path`, any matched Object Instances MUST be treated as if they are not present in the Agent’s Instantiated Data Model.
 
 `string err_msg`
 
@@ -4362,7 +4362,7 @@ GetSupportedDM (referred to informally as GSDM) is used to retrieve the Objects,
 
 The GetSupportedDM Message is different from other USP Messages in that it only returns information about the Agent's Supported Data Model. This means that Path Names to Multi-Instance Objects only address the Object itself, rather than Instances of the Object, and those Path Names that contain Multi-Instance Objects in the Path Name use the `{i}` identifier to indicate their place in the Path Name as specified in TR-106 [@TR-106].
 
-The `obj_paths` field takes a list of Object Paths, either from the Supported Data Model or the Instantiated Data Model.
+The `obj_paths` field takes a set of Path Names to Objects, Commands, Events, or Parameters, either from the Supported Data Model or the Instantiated Data Model.
 
 For example, a Path Name to the `AssociatedDevice` Object (a child of the `.WiFi.AccessPoint` Object) could be addressed in the Supported Data Model as `Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.` but in addition to this notation the omission of the final `{i}.` is also allowed, such as `Device.WiFi.AccessPoint.{i}.AssociatedDevice.`. Both of these syntaxes are supported and equivalent.
 
@@ -4590,6 +4590,8 @@ The Agent's response would be:
 
 This field contains a repeated set of Path Names to Objects, Commands, Events, or Parameters in the Agent's Supported or Instantiated Data Model. For Path Names from the Supported Data Model the omission of the final `{i}.` is allowed.
 
+*Note: The `first_level_only`, `return_commands`, `return_events`, `return_params`, and `return_unique_key_sets` request fields are only applicable when the Path Name contains an Object Path.  Furthermore, if the Path Name contains a Command Path, Event Path, or Parameter Path, the `first_level_only`, `return_commands`, `return_events`, `return_params`, and `return_unique_key_sets` request fields are ignored.*
+
 `bool first_level_only`
 
 This field, if `true`, indicates that the Agent returns only those objects matched by the Path Name or Search Path in `obj_path` and its immediate (i.e., next level) child objects. The list of child objects does not include commands, events, or Parameters of the child objects regardless of the values of the following elements:
@@ -4622,6 +4624,8 @@ This field contains a repeated set of messages of type `RequestedObjectResult`.
 
 This field contains one of the Path Names given in `obj_path` of the associated GetSupportedDM Request.
 
+*Note: The `supported_params`, `supported_commands`, `supported_events`, and `unique_key_sets` only contain information related to the Path Name contained in this `req_obj_path` (e.g., if the `req_obj_path` contains a Command Path, then `supported_commands` should only contain the data model command referenced in the `req_obj_path` and no other `supported_params`, `supported_events`, or `unique_key_sets`, even if they exist for the Object Path of the data model command).*
+
 `fixed32 err_code`
 
 This field contains a numeric code ([](#sec:error-codes)) indicating the type of error that caused the GetSupportedDM to fail on this Path Name. A value of 0 indicates the Path Name could be read successfully.
@@ -4646,7 +4650,7 @@ In the case of a diverging Supported Data Model, only the `supported_obj_path`, 
 
 `string supported_obj_path`
 
-This field contains the Full Object Path Name of the reported Object in Supported Data Model notation.
+This field contains the full Object Path of the reported Object in Supported Data Model notation.
 
 `ObjAccessType access`
 
@@ -5559,7 +5563,7 @@ body {
     operate_resp {
       operation_results {
         executed_command: "Device.SelfTestDiagnostics()"
-        req_obj_path: "Device.LocalAgent.Request.1"
+        req_obj_path: "Device.LocalAgent.Request.1."
       }
     }
   }
@@ -6078,7 +6082,7 @@ The general concept behind the USP Bulk Data collection mechanism is that a USP 
 
 * **Where does the data need to be sent** :: The destination of where the report needs to be delivered after it has been generated.  This is specific to the Bulk Data collection mechanism being used: HTTP vs MQTT vs USP Event Notification.
 
-* **How does the data get sent** :: The protocol used to send the data across the wire, the encoding of the data, and the format of the data. From a Protocol perspective, the HTTP Bulk Data collection mechanism utilizes either the HTTP or HTTPS protocols, the MQTT Bulk Data Collection mechanism utilizes the MQTT protocol, and the USPEventNotif Bulk Data collection mechanism utilizes the existing USP communications channel related to the USP Controller that owns the bulk data profile. From a data encoding perspective, both Bulk Data collection mechanisms support the *CSV* and *JSON* options as described later. From a data formatting perspective, both Bulk Data collection mechanisms support the *Object Hierarchy* and *Name Value Pair* report formats, also described later.
+* **How does the data get sent** :: The protocol used to send the data across the wire, the encoding of the data, and the format of the data. From a Protocol perspective, the HTTP Bulk Data collection mechanism utilizes either the HTTP or HTTPS protocols, the MQTT Bulk Data Collection mechanism utilizes the MQTT protocol, and the USPEventNotif Bulk Data collection mechanism utilizes the existing USP communications channel related to the USP Controller that owns the bulk data profile. From a data encoding perspective, all Bulk Data collection mechanisms support the *CSV* and *JSON* options as described later. From a data formatting perspective, all Bulk Data collection mechanisms support the *Object Hierarchy* and *Name Value Pair* report formats, also described later.
 
 The Bulk Data collection mechanism is configured within an Agent by creating a Bulk Data Profile.  A Bulk Data Profile defines the configuration of the four key aspects (as mentioned above) for a given Bulk Data Report.  Meaning, the Bulk Data Profile defines the protocol to use (HTTP vs MQTT vs USPEventNotif), the data encoding to use (CSV vs JSON), the report format to use (Object Hierarchy vs Name Value Pair), the destination of the report, the frequency of the report generation, and the set of Parameters to include in the report. Furthermore, the Bulk Data Profile has a `Controller` Parameter that is a read-only Parameter and is set by the Agent based on the Controller that created the Bulk Data Profile.  The Controller Parameter represents the owner of the Profile, which is used when determining permissions. When the Agent generates the Bulk Data Report it uses the permissions associated with the referenced Controller to determine what is included in the Report (Objects and Parameters that fail the permissions check are simply filtered out of the Report).
 
@@ -7528,7 +7532,7 @@ With this definition, the remaining load is expressed in percent, here 63 percen
 Since the unit value is a decimal type it is also possible to specify fractions for the value:
 
 ```
-    IoTCapability.1.Class = "LevelSensor"
+    IoTCapability.1.Class             = "LevelSensor"
     IoTCapability.1.LevelSensor.Type  = "Battery"
     IoTCapability.1.LevelSensor.Unit  = "%"
     IoTCapability.1.LevelSensor.Value = 63.26
@@ -7569,11 +7573,11 @@ A `MultiLevelSensor` instance models sensors, which provide a set of related val
 The minimum definition of a "MultiLevelSensor" consists of:
 
 ```
-    IoTCapability.i.Class                   = "MultiLevelSensor"
-    IoTCapability.i.MultiLevelSensor.Type   = ...
-    IoTCapability.i.MultiLevelSensor.Unit   = ...
-    IoTCapability.i.MultiLevelSensor.Values = ...
-    IoTCapability.1.MultiLevelSensor.ValueNames = ...
+    IoTCapability.i.Class                       = "MultiLevelSensor"
+    IoTCapability.i.MultiLevelSensor.Type       = ...
+    IoTCapability.i.MultiLevelSensor.Unit       = ...
+    IoTCapability.i.MultiLevelSensor.Values     = ...
+    IoTCapability.i.MultiLevelSensor.ValueNames = ...
 ```
 
 An example is a location reading consisting of the two values longitude and latitude in decimal degree notation, which have to be read together:

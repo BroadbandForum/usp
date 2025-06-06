@@ -38,6 +38,7 @@ filters:
   - auto-identifiers.lua
   - pandoc-crossref-basic.lua
   - special-headers.lua
+  - fix-references.lua
   - auto-references.lua
   - citeproc
   - add-hyperlinks.lua

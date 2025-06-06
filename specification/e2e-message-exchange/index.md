@@ -8,7 +8,7 @@ USP Messages are exchanged between Controllers and Agents. In some deployment sc
   * Segmentation and reassembly of E2E Messages that would be too large to transfer through the intermediate MTP Proxies.
 * Exchange of USP Records without an E2E Session Context that allows for:
   * Integrity protection for non-payload fields
-  * Unprotected payloads or protected payloads where the payload protection security mechanism doesn’t require a concept of a session (e.g., COSE)
+  * Unprotected payloads or protected payloads where the payload protection security mechanism doesn't require a concept of a session (e.g., COSE)
 
 Protected payloads provide a secure message exchange (confidentiality, integrity and identity authentication) through exchange of USP Messages that are secured by the originating and receiving USP Endpoints.
 
@@ -205,7 +205,7 @@ For each USP Message segment the Payload:
 1. Compose the USP Message.
 2. If `payload_security` is `TLS12`, encrypt the USP Message. TLS will segment the encrypted Message per the maximum allowed TLS record size.
     1. If all TLS records + Record header fields are less than the maximum allowed USP Record size, then a single USP Record is sent.
-    2. Otherwise segmentation of the USP Record will need to be done.
+    2. Otherwise, segmentation of the USP Record will need to be done.
         1. If the record size of a single TLS record + USP Record header fields is less than the maximum allowed USP Record size, exactly one TLS record can be included in a USP Record.
         2. If the TLS record size + Record header fields is greater than the maximum allowed USP Record size, the TLS record is segmented across multiple USP Records.
 3. If the Message is transmitted using `PLAINTEXT` and the Message + Record header fields are greater than the maximum allowed USP Record size, the USP Record is segmented.
@@ -350,7 +350,7 @@ This signature method uses the SHA-256 hash algorithm, as defined in FIPS PUB 18
 
 ### Using TLS to Validate the Integrity of USP Records
 
-When the transmitting and receiving USP Endpoints have established a TLS session, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead the transmitting USP Endpoint generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The keys used for the HMAC algorithm are derived in accordance with RFC 5705 [@RFC5705] when using TLS 1.2 or in accordance with the updated version found in RFC 8446 [@RFC8446] when using TLS 1.3. These procedures require the following inputs: a label, a context and the length of the output keying material. The label used must be "`EXPORTER-BBF-USP-Record`", the context must be empty (note that, for TLS 1.2, an empty context, i.e. zero length, is different than no context at all) and the output length must be 64 octets, where the first 32 octets will be used as the client key and the other 32 octets as the server key (in TLS terms). When using TLS 1.2, the PRF used must be the one defined in RFC 5246 [@RFC5246] with SHA-256 Hash.
+When the transmitting and receiving USP Endpoints have established a TLS session, the transmitting USP Endpoint no longer needs to generate a signature or transmit the sender’s certificate with the USP Record. Instead, the transmitting USP Endpoint generates a MAC that is verified by the receiving USP Endpoint. The MAC ensures the integrity of the non-payload fields of the USP Record. The MAC mechanism used in USP for this purpose is the SHA-256 keyed-Hash Message Authentication Code (HMAC) algorithm. The keys used for the HMAC algorithm are derived in accordance with RFC 5705 [@RFC5705] when using TLS 1.2 or in accordance with the updated version found in RFC 8446 [@RFC8446] when using TLS 1.3. These procedures require the following inputs: a label, a context and the length of the output keying material. The label used must be "`EXPORTER-BBF-USP-Record`", the context must be empty (note that, for TLS 1.2, an empty context, i.e. zero length, is different from no context at all) and the output length must be 64 octets, where the first 32 octets will be used as the client key and the other 32 octets as the server key (in TLS terms). When using TLS 1.2, the PRF used must be the one defined in RFC 5246 [@RFC5246] with SHA-256 Hash.
 
 **[R-E2E.32]{}** – When generating or validating the MAC or signature to protect the integrity of the USP Record, the sequence of the non-payload fields MUST use the field identifier of the USP Record’s protobuf specification proceeding from lowest to highest. The non-payload fields in the Record definition (other than the `mac_signature` field itself) MUST be used first and then the fields of the `SessionContextRecord` if applicable.
 

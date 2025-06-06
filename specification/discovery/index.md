@@ -61,7 +61,7 @@ ISPs are advised to limit the use of DHCP for configuration of a Controller to s
 
 
 
-This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provides an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
+This section contains a set of USP requirements related to a mechanism that was originally defined in the CPE WAN Management Protocol [@TR-069] (CWMP), which provides a way for a CWMP Gateway and an End Device to exchange information via DHCP options to populate data model objects with their reciprocal information. The purpose of populating this information is to provide an ACS or USP Controller with the ability to determine whether the Gateway and Device are on the same LAN.  The USP requirements defined in this section identify what USP-enabled devices (Gateways and End Devices) need to do to interoperate with CWMP-enabled devices without changing any CWMP functionality, so it is mostly a replication of those CWMP requirements from a USP-enabled device perspective.
 
 ### Exchanging DHCP Options
 
@@ -80,7 +80,7 @@ This section outlines the DHCP information USP Agents exchange to provide detail
 These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
 
 
-**[R-DIS.2b]{}** - If an Agent recieves the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are recieved.
+**[R-DIS.2b]{}** - If an Agent receives the encapsulation options for requests above, then it MUST respond with the Encapsulated Options for a response in the DHCPv4 responses (DHCPOFFER and DHCPACK) and DHCPv6 responses (ADVERTISE and REPLY) below. The responses are only included if the request options are received.
 
 ### DHCP Encapsulated Vendor-Specific Option-Data fields for Agent
 
@@ -92,25 +92,25 @@ These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option
 
 These Encapsulated Options are carried in DHCPv4 V-I Vendor Class Option (option 125) or DHCPv6 V-I Vendor Class Option (option 17) with an element identified with the IANA Enterprise Number for the Broadband Forum that follows the format defined below. The IANA Enterprise Number for the Broadband Forum is 3561 in decimal (the ADSL Forum entry in the IANA Private Enterprise Numbers registry).
 
-**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesnt recieve this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
+**[R-DIS.2c]{}** - When an Agent receives a DHCPv4 response (DHCPOFFER or DHCPACK) or a DHCPv6 response (ADVERTISE or REPLY) with this information, it MUST populate the `Device.GatewayInfo` Object as defined in the Device:2 Data Model [@TR-181]. Specifically, it MUST set the parameters `ManufacturerOUI`, `ProductClass` and `SerialNumber`, if present and `ManagementProtocol` MUST be set to "CWMP". If any of the parameters are not present then they MUST be set to an empty string. If the DHCP release expires, or the USP Endpoint doesn't receive this information, the Parameters in the `Device.GatewayInfo` Object MUST be set to an empty strings.
 
-**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and recieves a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record. 
+**[R-DIS.2d]{}** - When an Agent performs mDNS discovery (see [](#sec:discovery)) and receives a PTR record (see [](#sec:dns-sd-records)) that match the same IP address as the DHCP response from ([R-DIS.2c]()), it MUST also set the `Device.GatewayInfo.ManagementProtocol` Parameter to "USP", and `Device.GatewayInfo.EndpointID` Parameter to the USP EndpointID received in the PTR record.
 
 ## Using mDNS {#sec:using-mdns}
 
 **[R-DIS.3]{}** - If mDNS discovery is supported by a USP Endpoint, the USP Endpoint MUST implement mDNS client and server functionality as defined in RFC 6762 [@RFC6762].
 
-**[R-DIS.4]{}** - If mDNS advertisement for a MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
+**[R-DIS.4]{}** - If mDNS advertisement for an MTP is enabled on an Endpoint, the Endpoint MUST listen for messages using that MTP from other Endpoints requesting establishment of USP communication over that MTP.
 
 **[R-DIS.5]{}** - If mDNS is enabled, a USP Endpoint MUST use mDNS to resolve a FQDN with domain "`.local.`".
 
-In general, the expectation is that Agents will advertise themselves so they will be discoverable by Controllers. Controllers are not expected to advertise themselves, but are expected to discover Agents and respond to applicable mDNS requests from Agents. Agents will use mDNS to resolve a Controller "`.local.`" FQDN (and get DNS-SD records) when the Agent needs to send a Notification to that Controller.
+In general, the expectation is that Agents will advertise themselves, so they will be discoverable by Controllers. Controllers are not expected to advertise themselves, but are expected to discover Agents and respond to applicable mDNS requests from Agents. Agents will use mDNS to resolve a Controller "`.local.`" FQDN (and get DNS-SD records) when the Agent needs to send a Notification to that Controller.
 
 ## Using DNS {#sec:using-dns}
 
 Requirements for implementation of a DNS client and configuration of the DNS client with DNS server address(es) (through static configuration, DHCPv4, DHCPv6, or Router Solicitation) are not provided. These are sufficiently well-known that they were not considered necessary for this specification. If the Agent knows of no DNS Server, it cannot do DNS resolution.
 
-**[R-DIS.6]{}** - If DNS is enabled, an Endpoint MUST use DNS to request IP address(es) (A and/or AAAA records, depending on confiured IP stacks) for a FQDN with domain other than ones used for mDNS ([R-DIS.5]()).
+**[R-DIS.6]{}** - If DNS is enabled, an Endpoint MUST use DNS to request IP address(es) (A and/or AAAA records, depending on configured IP stacks) for a FQDN with domain other than ones used for mDNS ([R-DIS.5]()).
 
 If the Endpoint is programmatically set to request other resource records, it will request those, too.
 
@@ -122,7 +122,7 @@ DNS Service Discovery (DNS-SD) RFC 6763 [@RFC6763] is a mechanism for naming and
 
 The format of a DNS-SD Service Instance Name (which is the resource record (RR) Name of the DNS SRV and TXT records) is "`<Instance>.<Service>.<Domain>`". `<Instance>` will be the USP Endpoint Identifier of the USP Endpoint.
 
-**[R-DIS.8]{}** -  USP Endpoint DNS-SD records MUST include the USP Endpoint Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
+**[R-DIS.8]{}** - USP Endpoint DNS-SD records MUST include the USP Endpoint Identifier of the USP Endpoint as the DNS-SD Service Instance Name.
 
 Service Name values [registered by BBF with IANA](http://www.broadband-forum.org/assignments) used by USP are shown below. As described in RFC 6763 [@RFC6763], the `<Service>` part of a Service Instance Name is constructed from these values as "`_<Service Name>._<Transport Protocol>`" (e.g., "`_usp-agt-ws._tcp`").
 

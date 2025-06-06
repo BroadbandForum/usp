@@ -1,5 +1,23 @@
 #import "typst-stringify.typ": stringify
 
+// XXX missing fonts now generate warnings, so restrict the list
+//
+// previous values:
+//   default-font = ("Arial", "Liberation Sans", "Nimbus Sans", "DejaVu Sans"),
+//   bbf-raw-font = ("Courier New", "Courier", "Liberation Mono", "monospace")
+//
+// embedded in the CLI (no Sans fonts):
+//   Libertinus Serif, New Computer Modern, New Computer Modern Math,
+//   DejaVu Sans Mono
+//
+// should probably arrange to load some fonts so can guarantee availability
+
+// Arial is available on macOS and Liberation Sans on Linux
+#let default-font = ("Arial", "Liberation Sans")
+
+// DejaVu Sans Mono is embedded
+#let bbf-raw-font = ("DejaVu Sans Mono")
+
 // XXX should filter out things that need to be ignored
 #let bbf-passthrough(content) = { content }
 
@@ -12,7 +30,11 @@
 #let bbf-spacer = bbf-passthrough
 
 // pagebreak() can only be used at the outer level
-#let bbf-new-page(content) = { pagebreak(weak: true); content }
+// XXX need the v() to prevent the header and footer from inheriting settings
+//     from the first content on the page; Typst bug?
+// XXX for some reason it doesn't seem to work to insert a v() in bbf-alert()
+//     output, so may need add the .new-page class to the first alert
+#let bbf-new-page(content) = { pagebreak(weak: true); v(0em); content }
 
 // acknowledgments, editors etc.
 #let bbf-acknowledgments = bbf-passthrough
@@ -61,13 +83,13 @@
 #let bbf-clear = (..args) => {
   set table(columns: (50%, 50%), stroke: 1pt + black.lighten(95%),
             ..args.named())
-  locate(loc => {
-    let left_content = state("bbf-left").at(loc)
-    let right_content = state("bbf-right").at(loc)
+  context {
+    let left_content = state("bbf-left").at(here())
+    let right_content = state("bbf-right").at(here())
     if left_content != none and right_content != none {
       table(left_content, right_content)
     }
-  })
+  }
   bbf-left(none)
   bbf-right(none)
   args.pos().join()
@@ -109,7 +131,6 @@
 #let bbf-emphasis(content) = { emph(content) }
 
 #let bbf-raw-size = 0.8em
-#let bbf-raw-font = ("Courier New", "Courier", "Liberation Mono", "monospace")
 #let bbf-code(content) = { set text(size: bbf-raw-size, font: bbf-raw-font);
                            content}
 // XXX need to review this
@@ -119,26 +140,32 @@
 #let bbf-nobreak = block.with(breakable: false, above: 0.6em, below: 0.6em)
 
 // alerts
-#let bbf-alert(width: 100%, inset: 0.5em, radius: 0.3em, color: black,
-               gutter: 0.8em, icon: none, iheight: 0.8em, label: none,
-               content) = {
+#let bbf-alert(width: 100%, inset: 0.2em, radius: 0.3em, spacing: 1.2em,
+               color: black, gutter: 0.3em, icon: none, iheight: 1.3em,
+               vinset: 0.3em, label: none, content) = {
   let fcolor = color.lighten(95%)
   let scolor = color.lighten(60%)
-  set block(width: width, inset: inset, radius: radius, fill: fcolor,
-            stroke: scolor)
+  set block(width: width, inset: inset, radius: radius, spacing: spacing,
+            fill: fcolor)
 
   set image(height: iheight)
   let thumb = if icon != none {image(icon)} else {none}
 
-  let cgutt = if thumb != none {gutter} else {0.0em}
-  set grid(columns: 2, gutter: gutter, column-gutter: cgutt)
+  let gcolor = none
+  // XXX can uncomment this for debugging layout
+  // let gcolor = scolor
 
-  let hfill = [#h(1fr)]
+  let cgutt = if thumb != none {gutter} else {0.0em}
+  set grid(columns: 2, gutter: gutter, column-gutter: cgutt, stroke: gcolor)
+
+  let ginset = (top: vinset, bottom: vinset, left: 0.0em, right: 0.0em)
+  let ccell = grid.cell(inset: ginset, content)
 
   if label == none {
-    block(grid(thumb, content + hfill))
+    block(stroke: scolor, grid(thumb, ccell))
   } else {
-    block(grid(thumb, label, none, content + hfill))
+    let lcell = grid.cell(inset: ginset, label)
+    block(stroke: scolor, grid(grid.cell(rowspan: 2, thumb), lcell, ccell))
   }
 }
 
@@ -172,9 +199,10 @@
   content
 }
 
-// XXX some of these are ignored, e.g. authors and abstract
+// XXX some of these are ignored, e.g. subtitle, authors and abstract
 #let conf(
   title: none,
+  subtitle: none,
   authors: none,
   date: none,
   abstract: none,
@@ -183,9 +211,11 @@
   paper: "us-letter",
   lang: "en",
   region: "US",
-  font: ("Arial", "Liberation Sans", "Nimbus Sans", "DejaVu Sans"),
+  font: default-font,
   fontsize: 10pt,
   sectionnumbering: none,
+  pagenumbering: none,
+  linenumbering: none,
   info: (),
   doc,
 ) = {
@@ -208,7 +238,7 @@
 
   // these approximate the WT-210 recommendations
   show heading: set block(above: 18pt, below: 12pt)
-  show par: set block(spacing: 12pt)
+  set par(spacing: 12pt)
 
   show heading.where(level: 1): set text(size: fontsize * 2.0)
   show heading.where(level: 2): set text(size: fontsize * 1.5)
@@ -229,16 +259,25 @@
                     sym.circle.stroked.tiny))
 
   // XXX these are rather small
-  let bullet = str.from-unicode(0x2022)
-  let white-bullet = str.from-unicode(0x25E6)
-  let black-very-small-square = str.from-unicode(0x2B1D)
-  //#set list(marker: (bullet, white-bullet, black-very-small-square))
+  // let bullet = str.from-unicode(0x2022)
+  // let white-bullet = str.from-unicode(0x25E6)
+  // let black-very-small-square = str.from-unicode(0x2B1D)
+  // set list(marker: (bullet, white-bullet, black-very-small-square))
 
   // TOOLS-201: do the same for figure captions
   show figure.caption: set text(fill: rgb("#204F57"))
 
   // TOOLS-202: use narrower table stroknes
   set table(stroke: 0.5pt + black)
+
+  // line numbering (linenumbering will be a string or none; treat the values
+  // "false" and "true" specially)
+  if linenumbering == "false" {
+    linenumbering = none
+  } else if linenumbering == "true" {
+    linenumbering = "1"
+  }
+  set par.line(numbering: linenumbering)
 
   set outline(indent: 1em)
 
@@ -271,7 +310,7 @@
 
   // XXX don't use bbf-raw-size here; it makes it too small; why?
   show raw.where(block: true): it => {
-    set text(font: bbf-raw-font)
+    set text(font: bbf-raw-font, fallback: true)
     it
   }
 
@@ -306,6 +345,8 @@
   let copyright = [#sym.copyright The Broadband Forum. All rights reserved]
 
   // set the page properties
+  // XXX smallcaps doesn't work for all fonts (sometimes you need to use a different font);
+  //     in a future Typst version, missing smallcaps will be emulated
   set page(
     paper: paper,
     margin: margin,
@@ -316,19 +357,19 @@
           72pt, fill: black.lighten(90%), smallcaps(bbf-status))),
         v(15.0em)
       ),
-    header: locate(loc => {
+    header: context {
       set text(size: 0.9em)
-      if loc.page() > 1 [
+      if here().page() > 1 [
         #bbf-title #h(1fr) #bbf-number #bbf-issue #bbf-version]
-    }),
-    footer: locate(loc => {
+    },
+    footer: context {
       set text(size: 0.9em)
       [
-        #if loc.page() > 1 [#bbf-month #bbf-year]
+        #if here().page() > 1 [#bbf-month #bbf-year]
         #h(1fr) #copyright #h(1fr)
-        #if loc.page() > 1 [#counter(page).display("1 of 1", both: true)]
+        #if here().page() > 1 [#counter(page).display("1 of 1", both: true)]
       ]
-    })
+    }
   )
 
   set par(justify: justify)

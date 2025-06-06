@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="0" tests="33" time="0.0">
-	<testsuite disabled="0" errors="0" failures="0" name="pandoc" skipped="0" tests="33" time="0">
+<testsuites disabled="0" errors="0" failures="0" tests="34" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="pandoc" skipped="0" tests="34" time="0">
 		<testcase name="cant-expand-string-macro-in"/>
 		<testcase name="cant-expand-string-macro-in-2"/>
 		<testcase name="cant-find-file"/>
@@ -17,6 +17,7 @@
 		<testcase name="code-block-filter-pbv-failed-parse-failed-expected-5-1"/>
 		<testcase name="code-block-filter-pbv-failed-parse-failed-message-type-has-no-field-named"/>
 		<testcase name="error-yaml-line"/>
+		<testcase name="fixed-published-publisher"/>
 		<testcase name="invalid-figure-identifier-must-start-with-fig"/>
 		<testcase name="invalid-table-identifier-must-start-with-tbl"/>
 		<testcase name="invalid-table-identifier-must-start-with-tbl-2"/>

@@ -27,7 +27,7 @@ To address this opportunity, use cases supported by USP include:
 * Management of IoT devices through re-usable data model objects.
 * Allowing the user to interact with their devices and services using customer
   portals or control points on their own smart devices.
-* The ability to deploy and manage containerized microservices for end-users via software modulization and USP-enabled applications."
+* The ability to deploy and manage containerized microservices for end-users via software modularization and USP-enabled applications.
 * The ability to have both the application and network service provider manage,
   troubleshoot, and control different aspects of the services they are
   responsible for, and enabling provider partnerships.
@@ -171,7 +171,7 @@ See also Search Expression.
 
 **Expression Component**
 
-An Expression Component is the part of a Search Expression that gives the matching Parameter criteria for the search. It is comprised of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
+An Expression Component is the part of a Search Expression that gives the matching Parameter criteria for the search. It consists of an Expression Parameter followed by an Expression Operator followed by an Expression Constant.
 
 **Expression Constant**
 
@@ -267,7 +267,7 @@ A Path Reference is a Parameter data type that contains a Path Name to an Object
 
 **Record**
 
-The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that comprise of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
+The Record is defined as the Message Transfer Protocol (MTP) payload, encapsulating a sequence of datagrams that consists of the Message as well as essential protocol information such as the USP version, the source Endpoint ID, and the target Endpoint ID. It can also contain additional metadata needed for providing integrity protection, payload protection and delivery of fragmented Messages.
 
 **Register**
 
@@ -319,7 +319,7 @@ A Subscription is a set of logic that tells an Agent which Notifications to send
 
 **Supported Data Model**
 
-The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all of the Device Type Definitions the Agent exposes to the Controller.
+The Supported Data Model of an Agent represents the complete set of Service Elements it is capable of exposing to a Controller. It is defined by the union of all the Device Type Definitions the Agent exposes to the Controller.
 
 **Table**
 
@@ -331,7 +331,7 @@ The Endpoint that was the intended receiver of a message.
 
 **Trusted Broker**
 
-An intermediary that either (1) ensures the Endpoint ID in all brokered Endpoint's USP Record `from_id` matches the Endpoint ID of those Endpoint's certificates or credentials, before sending on a USP Record to another Endpoint, or (2) is part of a closed ecosystem that "knows" (certain) Endpoints can be trusted not to spoof the Endpoint ID.
+An intermediary that either (1) ensures the Endpoint ID in all brokered Endpoint's USP Record `from_id` matches the Endpoint ID of this Endpoint's certificates or credentials, before sending on a USP Record to another Endpoint, or (2) is part of a closed ecosystem that "knows" (certain) Endpoints can be trusted not to spoof the Endpoint ID.
 
 **Unique Key**
 
@@ -339,7 +339,7 @@ A Unique Key of a Multi-Instance Object is a set of one or more Parameters that 
 
 **Unique Key Parameter**
 
-A Parameter that is a member of any of a Multi-Instance Object's Unique Keys.
+A Parameter that is a member of any Multi-Instance Object's Unique Keys.
 
 **User Services Platform**
 
@@ -394,7 +394,7 @@ This specification uses the following abbreviations:
 |SOAP| Simple Object Access Protocol |
 |SSID | Service Set Identifier |
 |STOMP | Simple Text-Oriented Messaging Protocol |
-|TLS | Tranport Layer Security |
+|TLS | Transport Layer Security |
 |TLV | Type-Length-Value |
 |TOFU	| Trust on First Use |
 |TR	| Technical Report |

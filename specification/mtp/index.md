@@ -93,7 +93,7 @@ Optional. When integrity protection of non-payload fields is performed, this is 
 
 `bytes sender_cert`
 
-Optional. The PEM encoded certificate, or certificate chain, of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn’t provide the mechanism to generate the `mac_signature`.
+Optional. The PEM encoded certificate, or certificate chain, of the sending USP Endpoint used to provide the signature in the `mac_signature` field, when integrity protection is used and the payload security mechanism doesn't provide the mechanism to generate the `mac_signature`.
 
 `oneof record_type`
 

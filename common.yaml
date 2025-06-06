@@ -158,28 +158,28 @@ references:
 - id: RFC4033
   call-number: RFC 4033
   title: DNS Security Introduction and Requirements
-  published: IETF
+  publisher: IETF
   issued: {year: 2005}
   URL: https://tools.ietf.org/html/rfc4033
 
 - id: RFC4122
   call-number: RFC 4122
   title: A Universally Unique IDentifier (UUID) URN Namespace
-  published: IETF
+  publisher: IETF
   issued: {year: 2005}
   URL: https://tools.ietf.org/html/rfc4122
 
 - id: RFC4180
   call-number: RFC 4180
   title: Common Format and MIME Type for Comma-Separated Values (CSV) Files
-  published: IETF
+  publisher: IETF
   issued: {year: 2005}
   URL: https://tools.ietf.org/html/rfc4180
 
 - id: RFC5246
   call-number: RFC 5246
   title: The Transport Layer Security (TLS) Protocol Version 1.2
-  published: IETF
+  publisher: IETF
   issued: {year: 2008}
   URL: https://tools.ietf.org/html/rfc5246
 
@@ -188,7 +188,7 @@ references:
   call-number: RFC 5280
   title: Internet X.509 Public Key Infrastructure Certificate and
          Certificate Revocation List (CRL) Profile
-  published: IETF
+  publisher: IETF
   issued: {year: 2008}
   URL: https://tools.ietf.org/html/rfc5280
 
@@ -269,42 +269,42 @@ references:
 - id: RFC7159
   call-number: RFC 7159
   title: The JavaScript Object Notation (JSON) Data Interchange Format
-  published: IETF
+  publisher: IETF
   issued: {year: 2014}
   URL: https://tools.ietf.org/html/rfc7159
 
 - id: RFC7228
   call-number: RFC 7228
   title: Terminology for Constrained-Node Networks
-  published: IETF
+  publisher: IETF
   issued: {year: 2013}
   URL: https://tools.ietf.org/html/rfc7228
 
 - id: RFC7252
   call-number: RFC 7252
   title: The Constrained Application Protocol (CoAP)
-  published: IETF
+  publisher: IETF
   issued: {year: 2014}
   URL: https://tools.ietf.org/html/rfc7252
 
 - id: RFC7390
   call-number: RFC 7390
   title: Group Communication for the Constrained Application Protocol (CoAP)
-  published: IETF
+  publisher: IETF
   issued: {year: 2014}
   URL: https://tools.ietf.org/html/rfc7390
 
 - id: RFC7925
   call-number: RFC 7925
   title: Transport Layer Security (TLS) / Datagram Transport Layer Security (DTLS) Profiles for the Internet of Things
-  published: IETF
+  publisher: IETF
   issued: {year: 2016}
   URL: https://tools.ietf.org/html/rfc7925
 
 - id: RFC7959
   call-number: RFC 7959
   title: Block-Wise Transfers in the Constrained Application Protocol (CoAP)
-  published: IETF
+  publisher: IETF
   issued: {year: 2016}
   URL: https://tools.ietf.org/html/rfc7959
 
@@ -318,7 +318,7 @@ references:
 - id: RFC8766
   call-number: RFC 8766
   title: Discovery Proxy for Multicast DNS-Based Service Discovery
-  published: IETF
+  publisher: IETF
   issued: {year: 2020}
   URL: https://tools.ietf.org/html/rfc8766
 

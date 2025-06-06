@@ -28,7 +28,7 @@ This section contains requirements related to setting up a UNIX domain socket co
 
 To get to this point, a connection to the server's listen socket must be made from the USP Endpoint acting as a UNIX domain socket client.
 
-**[R-UDS.4]{}** - A USP Endpoint acting as a UNIX domain socket client MUST connect to a known UNIX domain socket server.
+**[R-UDS.4]{}** - A USP Endpoint acting as a UNIX domain socket client MUST connect to a known UNIX domain socket server using a SOCK_STREAM connection.
 
 At this point we have a bidirectional UNIX domain socket connection, which can be used to send USP Records between a USP Agent and a USP Controller.
 

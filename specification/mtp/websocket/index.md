@@ -20,7 +20,7 @@ When exchanging the USP Records across WebSockets MTPs, the two USP Endpoints es
 
 While WebSocket sessions can be established by either USP Controllers or USP Agents in many deployment scenarios (e.g. communication between USP Endpoints across the Internet), in general, USP Agents will establish the WebSocket session and not expose an open port toward the Internet for security reasons. Regardless of which entity establishes the WebSocket session, at most one (1) open WebSocket session is utilized between the USP Endpoints.
 
-**[R-WS.4]{}** - USP Endpoints that exchange USP Records MUST utilize at most one (1) open WebSocket session.
+**[R-WS.4]{}** - Any two (2) USP Endpoints that exchange USP Records MUST utilize at most one (1) open WebSocket session.
 
 **[R-WS.5]{}** - USP Agent MUST provide the capability to originate the establishment of a WebSocket session.
 
