@@ -9,7 +9,7 @@ lomond==0.3.3
 mccabe==0.6.1
 nose2==0.7.3
 nose2-cov==1.0a4
-pylint==2.3.1
+pylint==4.0.9
 simple-websocket-server==0.4.0
 six==1.11.0
 stomp.py==4.1.19
